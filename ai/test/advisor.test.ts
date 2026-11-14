@@ -63,6 +63,14 @@ describe('askAdvisor, rules path', () => {
   });
 });
 
+describe('askAdvisor, real pack texts', () => {
+  it('does not double the full stop when a supplier text already ends with one', async () => {
+    const pack = { ...cafePack, suppliers: cafePack.suppliers.map(s => ({ ...s, whereToFind: `${s.whereToFind.replace(/\.$/, '')}.` })) };
+    const a = await askAdvisor({ question: 'Where do I find a coffee supplier?', business, analytics, pack, common: commonPack });
+    expect(a.answer).not.toContain('..');
+  });
+});
+
 describe('askAdvisor, AI path', () => {
   it('uses a grounded short AI answer and maps sources', async () => {
     setProvider(mockProvider({ advisor: () => ({ answer: 'You lost about 410 orders this month. A barista costs about $2,380 a month, so a third one pays off only if the queue stays.', usedIds: ['staff:barista', 'rule:tipped_wage', 'rule:made_up'] }) }));

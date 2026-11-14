@@ -6,5 +6,5 @@ export { THEMES } from './events/themes';
 export { askAdvisor } from './advisor';
 export { interpretIdea } from './idea';
 export { writeDebrief } from './debrief';
-export { aiConfig, aiLog, resetAi, setProvider, mockProvider, DEFAULT_MODEL } from './provider';
-export type { AiProvider, AiRequest, AiLogEntry } from './provider';
+export { aiConfig, aiLog, resetAi, setProvider, providerChain, mockProvider, geminiProvider, grokProvider, DEFAULT_MODEL, GEMINI_DEFAULT_MODEL, GROK_DEFAULT_MODEL, PROVIDERS } from './provider';
+export type { AiProvider, AiRequest, AiLogEntry, ChainLink, ProviderName } from './provider';

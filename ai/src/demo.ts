@@ -1,7 +1,7 @@
 // Demo: a year of NYC weather and city events, plus one advisor answer, idea match and debrief.
 // Run from the repo root: npx tsx ai/src/demo.ts [seed]
-// Without ANTHROPIC_API_KEY (or with AI_PROVIDER=mock) everything comes from the deck and templates.
-// With a key, the first AI_DEMO_WEEKS weeks (default 4) ask the model for events; the rest use the deck.
+// Without GEMINI_API_KEY / XAI_API_KEY (or with AI_PROVIDER=mock) everything comes from the deck and templates.
+// With a key, the first AI_DEMO_WEEKS weeks (default 4) ask the model chain for events; the rest use the deck.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -46,8 +46,9 @@ async function main() {
   const seed = Number(process.argv[2]) || 2026;
   const cfg = aiConfig();
   const { ctx, source } = loadCity();
-  const aiWeeks = cfg.provider === 'anthropic' ? Math.max(0, Number(process.env.AI_DEMO_WEEKS ?? 4)) : 0;
-  console.log(`First Year — AI service demo. seed ${seed}, provider ${cfg.provider}${cfg.provider === 'anthropic' ? ` (${cfg.model})` : ' (no network)'}, data: ${source}\n`);
+  const aiWeeks = cfg.chain.length > 0 ? Math.max(0, Number(process.env.AI_DEMO_WEEKS ?? 4)) : 0;
+  const chain = cfg.chain.length > 0 ? cfg.chain.map(l => `${l.name} (${l.model})`).join(' → ') + ' → rules' : 'rules only (no network)';
+  console.log(`First Year — AI service demo. seed ${seed}, chain ${chain}, data: ${source}\n`);
 
   console.log('WEATHER — Central Park normals 1991-2020, one game year');
   console.log('month  avg high  wet days  snow  storms  heat');
