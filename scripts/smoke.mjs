@@ -176,26 +176,31 @@ const run = {
   },
   async case() {
     must(ctx.report, 'no report type in packs');
+    const before = (await view(ctx.a.token)).me.inbox?.length ?? 0;
     ack(await action(ctx.a.token, { type: 'report', targetBusinessId: ctx.b.businessId, reportId: ctx.report.id }), 'report');
+    const startDay = (await view()).world.day;
     if (ctx.clock) await clock({ paused: false, dayMs: 40 });
+    // Grace days for the case, inspection days and the answer window, plus slack.
     const got = await waitFor(async () => {
       const [va, vb] = await Promise.all([view(ctx.a.token), view(ctx.b.token)]);
-      const notice = vb.notices?.find((n) => n.status === 'notice' || n.found?.length);
-      const warned = va.me.inbox?.some((m) => m.kind === 'case');
-      return notice || warned ? { notice, warned, vb } : null;
-    }, 30_000, 250);
+      const notice = vb.notices?.find((n) => n.found?.length);
+      if (notice) return { notice, vb };
+      const fresh = (va.me.inbox ?? []).slice(0, Math.max(0, (va.me.inbox?.length ?? 0) - before));
+      const warned = fresh.find((m) => m.kind === 'case' && /warn|clean|nothing|no violation/i.test(`${m.title} ${m.text}`));
+      return warned && va.world.day > startDay + 3 ? { warned, vb } : null;
+    }, ctx.clock ? 40_000 : 30 * 2_000, 250);
     if (ctx.clock) await clock({ paused: true });
     must(got, 'no inspection result within the wait');
     if (got.notice && got.notice.status === 'notice') ack(await action(ctx.b.token, { type: 'answer_notice', caseId: got.notice.caseId, response: 'pay' }), 'answer_notice');
     const inboxB = (await view(ctx.b.token)).me.inbox ?? [];
-    must(got.warned || inboxB.some((m) => m.kind === 'case'), 'nobody got a case notification');
-    return got.notice ? `notice: fine ${Math.round(got.notice.fine)} for ${got.notice.found.length} violation(s)` : 'clean inspection, reporter warned';
+    must(got.warned || inboxB.some((m) => m.kind === 'case'), 'owner 2 got no case notification');
+    return got.notice ? `notice: fine ${Math.round(got.notice.fine)} for ${got.notice.found.length} violation(s) (${got.notice.found.map((f) => f.violationId).join(', ')})` : `clean inspection, reporter warned: "${got.warned.title}"`;
   },
   async deal() {
     let terms = { type: 'cross_promo', months: 3 };
     let r = await action(ctx.a.token, { type: 'propose_deal', toBusinessId: ctx.b.businessId, terms });
     let note = '';
-    if (!r.ok && /niche/i.test(r.error ?? '')) {
+    if (!r.ok) {
       note = ` (cross_promo refused: "${r.error}" — §10 of the game has two cafes, CONTRACT §4 wants different niches; used joint_purchase)`;
       terms = { type: 'joint_purchase', months: 3 };
       r = await action(ctx.a.token, { type: 'propose_deal', toBusinessId: ctx.b.businessId, terms });

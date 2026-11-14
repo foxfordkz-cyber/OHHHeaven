@@ -18,6 +18,9 @@ export const NICHE_HOOKS: Partial<Record<NicheId, NicheHooks>> = {
   // barbershop,
 };
 
+/** Same registry under the name agent 02's economy imports. */
+export const nicheHooks = NICHE_HOOKS;
+
 const NO_HOOKS: NicheHooks = {};
 
 /** Hooks for a niche; an empty object when the niche has none yet. */
