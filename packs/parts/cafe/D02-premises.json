@@ -3,7 +3,7 @@
   "part": "D02",
   "theme": "Premises and the physics of the room",
   "checked": "2026-11-14",
-  "howNumbersWereChecked": "",
+  "howNumbersWereChecked": "November 14, 2026. This session could run web searches but could not open pages: every direct request was refused by the session's network policy. So 'verified' here has a narrower meaning than in the main pack: the number was shown by the search tool in an excerpt of the primary source itself (text of the law or rule, a nyc.gov or 311 page, a City Council report, a retailer's own price page). Every such record carries \"checkedVia\": \"search_excerpt\" so the merger can downgrade them in one pass. 'estimate' = a number from secondary sources (contractor and vendor guides, press), from the research notes, from memory (always said so in the note) or my own arithmetic, with the calculation in the note. Effects of levers and events (demand, quality, seat turns) are game-balance values unless the note cites a study.",
   "sizing": {
     "unitName": "seat",
     "min": 6,
@@ -15,7 +15,7 @@
     "cleaningCostPerSizeMonth": 15,
     "crowdPenaltyAbove": 0.85,
     "emptyPenaltyBelow": 0.3,
-    "source": "https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-10-means-of-egress",
+    "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
     "confidence": "estimate",
     "note": "Revised by D02. sqftPerUnit 18 -> 21: the engine divides 60% of the floor by this number, and 18 put 26 seats into 800 sq ft, above the research notes' own 15-25. Floor budget for 800 sq ft (extra.floorPlan): service bar 120, queue and pickup 70, accessible restroom 60, back of house 120, entry 25 = 395 sq ft that never holds a chair; 405 sq ft is left for seating; at 18 net sq ft per seat that is 22 seats, and 480 / 22 = 21. Anchors: the building code counts 15 net sq ft per person at tables and chairs and 5 net sq ft per standing person (Table 1004.5; NY State and model code values, the NYC 2022 table was not opened); vendor seating charts give 11-14 sq ft per seat for fast food, 12-15 full service, 18-20 fine dining; a Russian planning guide gives 1.6 sq m (17 sq ft) per guest. unitsServedPerSizeMonth stays 170, now with a derivation: 12 open hours, mean seat occupancy 47%, mean stay 60 minutes (70% short stays of 35 minutes, 30% laptop stays of 120 minutes) = 5.6 seated orders per seat a day. Stay lengths: Bloom Intelligence Wi-Fi data, 25 US coffee shops, June-September 2026: 32 minutes for a one-time visitor, almost two hours for the most frequent ones. takeawayShare stays 0.6: no public to-go split exists for independent cafes; the National Restaurant Association puts off-premises at nearly 75% of all restaurant traffic, drive-thru included. crowdPenaltyAbove 0.9 -> 0.85: solo guests hold two-tops, so a room is full when well under all chairs are taken (see extra.mechanics effective_seats_and_table_mix). emptyPenaltyBelow 0.4 -> 0.3: evidence that an empty room repels coffee buyers is weak (one 2025 survey study on crowding as social proof), so the penalty should start later. Both thresholds stay game-balance values."
   },
@@ -577,7 +577,7 @@
     {
       "id": "skip_restroom_upkeep",
       "name": "Stop restocking and checking the restroom",
-      "what": "Nobody checks paper, soap, the bin or the door closer during the shift: about $60 a month of supplies and time saved. An inspector who finds the restroom not properly supplied writes $200.",
+      "what": "Nobody checks the paper, the bin or the door closer during the shift: about $60 a month of supplies and time saved. An inspector who finds the restroom not properly supplied writes $200.",
       "saves": {
         "basis": "fixed",
         "amount": 60
@@ -708,7 +708,7 @@
       "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
       "confidence": "verified",
       "checkedVia": "search_excerpt",
-      "note": "Penalty schedule, seen in a search excerpt: code 10A, general violation, \"Toilet facility not properly supplied\" (81.22(c)) $200. In practice: no toilet paper, no soap or towels, no covered bin, door that does not close by itself."
+      "note": "Penalty schedule, seen in a search excerpt: code 10A, general violation, \"Toilet facility not properly supplied\" (81.22(c)) $200. In practice, in the words of published inspection records: toilet facility not maintained and provided with toilet paper, waste receptacle and self-closing door."
     },
     {
       "id": "ventilation_inadequate",
@@ -1123,7 +1123,7 @@
     {
       "id": "toilet_not_supplied",
       "title": "A stocked restroom",
-      "text": "A restroom without toilet paper, soap, a covered bin or a self-closing door is \"not properly supplied\": $200. A one-person restroom must also carry an all-gender sign on the wall next to the door (Local Law 79 of 2016).",
+      "text": "A restroom without toilet paper, a waste bin or a self-closing door is \"not properly supplied\": $200. A one-person restroom must also carry an all-gender sign on the wall next to the door (Local Law 79 of 2016).",
       "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/single-occupant-toilet-signage.page"
     },
     {
@@ -1153,7 +1153,7 @@
     {
       "id": "accessibility_barrier",
       "title": "One step at the door",
-      "text": "The Americans with Disabilities Act asks an existing business to remove barriers where it is readily achievable. A step with no ramp or bell invites a lawsuit: damages of up to $1,000, the other side's legal fees and the fix. Federal courts saw 8,667 such suits in 2025.",
+      "text": "Federal law asks an existing business to remove barriers where readily achievable. A step with no ramp or bell invites a lawsuit: up to $1,000 in damages, the other side's legal fees and the fix. Federal courts took 8,667 disability-access suits in 2025, websites included.",
       "source": "https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/"
     },
     {
@@ -1189,7 +1189,7 @@
     {
       "id": "landmark_storefront",
       "title": "Landmark blocks",
-      "text": "In a historic district any change to the outside of a storefront needs a Landmarks permit first: sign, awning, lighting, paint. Staff permits take about 10 to 15 business days. Planters and A-frames that are not fixed to the building need none.",
+      "text": "In a historic district any change to the outside of a storefront needs a Landmarks permit first: sign, awning, lighting. Staff permits take about 10 to 15 business days. Planters and A-frames that are not fixed to the building need none.",
       "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
     },
     {
@@ -1207,8 +1207,8 @@
     {
       "id": "sidewalk_cafe_geometry",
       "title": "How much sidewalk you can use",
-      "text": "A sidewalk cafe must leave walkers a clear path of 8 feet or half the sidewalk, whichever is more, 9 feet at a corner and 15 feet from a subway stair or bus shelter, plus a 36-inch service aisle. Prices outside must equal prices inside.",
-      "source": "https://www.diningoutnyc.info/rules/sidewalk/siting-clearances"
+      "text": "A sidewalk cafe must leave walkers a clear path: 8 feet on most streets, 10 on regional corridors, 12 on the busiest ones, and stay 15 feet from a subway stair. On a 12-foot side-street sidewalk that leaves one row of small tables at most.",
+      "source": "https://www.nycstreetdesign.info/furniture/clear-path"
     },
     {
       "id": "outdoor_dining_fees",
@@ -1249,7 +1249,7 @@
     {
       "id": "cellar_doors",
       "title": "Sidewalk cellar doors",
-      "text": "Sidewalk cellar doors may stand open during a delivery only while a person guards the opening. The city inspects doors that are bent, wobbly or left open, and the owner answers for anyone who falls in.",
+      "text": "Sidewalk cellar doors may stand open during a delivery only while a person guards the opening. The city inspects doors that are bent, wobbly or left open and unprotected. A fall through an open hatch is a claim against whoever kept it.",
       "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02292"
     },
     {
@@ -1306,7 +1306,7 @@
       "id": "check_landmark_and_sign_rules",
       "title": "Find out if the block is landmarked before you design the front",
       "kind": "permit",
-      "text": "In a historic district every outside change needs a Landmarks permit before the Buildings Department will act: sign, awning, lighting, even paint. Outside one, a sign over 6 sq ft or with lights still needs a permit and a licensed sign hanger.",
+      "text": "In a historic district every outside change needs a Landmarks permit before the Buildings Department will act: sign, awning, lighting. Outside one, a sign over 6 sq ft or with lights still needs a permit and a licensed sign hanger.",
       "setupItemId": "landmarks_storefront_permit",
       "fee": 0,
       "waitDays": 21,
@@ -1376,6 +1376,105 @@
     }
   ],
   "extra": {
+    "seatThresholds": [
+      {
+        "seats": 20,
+        "rule": "A customer toilet is required at a seating capacity of 20 or more, indoor and outdoor seats and shared seating counted together; premises that held a food permit on or before December 5, 1977 are exempt until a renovation that needs a Buildings permit",
+        "law": "NYC Health Code §81.22(b)",
+        "setupItemId": "customer_restroom",
+        "penalty": "Code 05E, critical: $300 at each inspection ($350 on default)",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+        "confidence": "verified",
+        "checkedVia": "search_excerpt"
+      },
+      {
+        "seats": 48,
+        "persons": 75,
+        "rule": "75 or more people (the occupant load on the Certificate of Occupancy, not chairs) make the room a place of assembly: Place of Assembly Certificate of Operation, yearly Fire Department permit, a second exit. Below 75 a cafe is business use (Group B) and one exit may serve up to 74",
+        "law": "NYC Building Code §303.1.2 and Table 1006.2.1; NYC Administrative Code §28-117.1",
+        "setupItemId": "place_of_assembly_certificate",
+        "source": "https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-3-use-and-occupancy-classification",
+        "confidence": "estimate",
+        "note": "Corrects the pack's entry, which read the line as 75 seats. The law counts people: seating area / 15 sq ft + standing area / 5 sq ft + staff. 48 seats is my conversion for a room laid out at 18 sq ft a seat with a 70 sq ft queue and 3 staff: 48 x 18 / 15 = 58, + 14 + 3 = 75. The pack's maximum of 40 seats stays under it (48 + 14 + 3 = 65); a standing event does not."
+      }
+    ],
+    "floorPlan": {
+      "note": "Where the floor goes in a counter-service cafe. The fixed core barely changes with the size of the space, which is why small rooms lose a far larger share to it than the engine's flat 60% assumes. All zone sizes are my estimates from the cited rules of thumb; none is a legal minimum except where said.",
+      "zones": [
+        {
+          "id": "service_bar",
+          "sqft": 120,
+          "basis": "About 16 ft of counter x 7.5 ft deep (front counter, work aisle, back counter). Guides ask for at least 8 linear feet of counter; a Russian guide gives 2-3 m of bar and no more than three steps per drink.",
+          "source": "https://therestaurantwarehouse.com/blogs/restaurant-equipment/coffee-shop-layout"
+        },
+        {
+          "id": "queue_and_pickup",
+          "sqft": 70,
+          "basis": "Ten people at about 7 sq ft each; the code counts 5 net sq ft per standing person when it computes occupancy.",
+          "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf"
+        },
+        {
+          "id": "restroom",
+          "sqft": 60,
+          "basis": "Accessible single-user room: 35 sq ft in the Access Board's smallest sample plan (7 ft x 5 ft), about 48 typical, plus the door approach. An employee toilet is required at any size (Health Code 81.22(a)).",
+          "source": "https://www.access-board.gov/ada/guides/chapter-6-toilet-rooms/"
+        },
+        {
+          "id": "back_of_house",
+          "sqft": 120,
+          "basis": "15% of 800 sq ft: three-compartment sink, hand sink, mop sink, water heater, dry storage, trash and recycling bins. Guides give 15%-25% for the back of house.",
+          "source": "https://pos.toasttab.com/blog/on-the-line/coffee-shop-floor-plans"
+        },
+        {
+          "id": "entry",
+          "sqft": 25,
+          "basis": "Door swing and the 5 ft x 5 ft a wheelchair needs to turn inside the door.",
+          "source": "https://www.corada.com/documents/2010ADAStandards/226"
+        }
+      ],
+      "fixedCoreSqft": 395,
+      "fixedCoreSqftWithCellarStorage": 335,
+      "netSqftPerSeat": {
+        "tight": 15,
+        "comfortable": 18,
+        "lounge": 22
+      },
+      "seatsBySpace": [
+        {
+          "sqft": 400,
+          "seatsComfortable": 0,
+          "seatsEngineToday": 13,
+          "comment": "To-go only; three window stools if storage goes to the cellar"
+        },
+        {
+          "sqft": 500,
+          "seatsComfortable": 5,
+          "seatsEngineToday": 16
+        },
+        {
+          "sqft": 600,
+          "seatsComfortable": 11,
+          "seatsEngineToday": 20
+        },
+        {
+          "sqft": 800,
+          "seatsComfortable": 22,
+          "seatsEngineToday": 26
+        },
+        {
+          "sqft": 1000,
+          "seatsComfortable": 33,
+          "seatsEngineToday": 33
+        },
+        {
+          "sqft": 1200,
+          "seatsComfortable": 44,
+          "seatsEngineToday": 40
+        }
+      ],
+      "formula": "seats = floor((sqft - fixedCoreSqft) / netSqftPerSeat); seatsEngineToday = min(40, floor(sqft x 0.6 / 18))",
+      "confidence": "estimate"
+    },
     "eventCatalog": [
       {
         "id": "saturday_room_full",
@@ -2277,7 +2376,7 @@
         "tier": "deep",
         "source": "https://www.diningoutnyc.info/enforcement",
         "confidence": "estimate",
-        "note": "The 30-day cure for a licensed cafe is from the pack's existing enforcement source; the walkers' clear path is 8 feet or half the sidewalk, whichever is more."
+        "note": "The 30-day cure for a licensed cafe is from the pack's existing enforcement source; the walkers' clear path is 8 feet on most streets, 10 on regional corridors and 12 on global corridors."
       },
       {
         "id": "ac_fails_in_heat_wave",
@@ -3096,7 +3195,1209 @@
         "confidence": "estimate",
         "note": "Bill text seen only in a garbled search excerpt of the Council record; do not switch it on until the status is checked."
       }
+    ],
+    "mechanics": [
+      {
+        "id": "floor_plan_budget",
+        "title": "The floor is a budget: a fixed core, then seats",
+        "playerDecision": "Which address to take and how to spend its floor: bar length, storage upstairs or in the cellar, a customer restroom or 19 seats, comfortable or tight tables.",
+        "engineMath": "Replace maxSizeFor = floor(sqft x 0.6 / sqftPerUnit) with floor((sqft - fixedCoreSqft) / netSqftPerSeat x seatsFitMult). fixedCoreSqft is 395 (335 with cellar storage); netSqftPerSeat is 18, or 15 / 22 by the seating_layout lever. The flat 60% overstates small rooms (400 sq ft: 13 seats today, none in reality) and understates large ones. Until the engine changes, sizing.sqftPerUnit = 21 makes the two formulas agree at 800 sq ft.",
+        "fieldsNeeded": [
+          "sizing.fixedCoreSqft",
+          "sizing.netSqftPerSeat",
+          "place.cellarSqft",
+          "lever option field seatsFitMult"
+        ],
+        "numbers": [
+          {
+            "what": "Occupant load factor, tables and chairs, net sq ft per person (model code and NY State table; NYC 2022 table not opened)",
+            "value": 15,
+            "source": "https://up.codes/viewer/new_york/ibc-2018/chapter/10/means-of-egress",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Occupant load factor, standing space, net sq ft per person",
+            "value": 5,
+            "source": "https://up.codes/viewer/new_york/ibc-2018/chapter/10/means-of-egress",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Vendor seating chart: fast food, sq ft per seat (low end of 11-14)",
+            "value": 11,
+            "source": "https://www.gofoodservice.com/guides/designing-your-restaurant-seating-layout",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Vendor seating chart: fine dining, sq ft per seat (top of 18-20)",
+            "value": 20,
+            "source": "https://www.gofoodservice.com/guides/designing-your-restaurant-seating-layout",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Russian planning guide: sq m of room per guest (17 sq ft)",
+            "value": 1.6,
+            "source": "https://www.sberbank.ru/start/articles/coffee/prepare_to_open",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Smallest sample accessible single-user toilet room, sq ft (7 ft x 5 ft)",
+            "value": 35,
+            "source": "https://www.access-board.gov/ada/guides/chapter-6-toilet-rooms/",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Fixed core of an 800 sq ft cafe, sq ft (sum of extra.floorPlan zones)",
+            "value": 395,
+            "source": "https://pos.toasttab.com/blog/on-the-line/coffee-shop-floor-plans",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "effective_seats_and_table_mix",
+        "title": "Chairs are not seats: tables fill before chairs do",
+        "playerDecision": "The mix of two-tops, four-tops, communal table and bar stools.",
+        "engineMath": "effectiveSeats = seats x tableUse, where tableUse is 0.75 for a room of two- and four-tops and 0.9 with a communal table and a window bar (lever seating_layout). Utilization, the crowding penalty and lost seated orders are computed against effectiveSeats. One wheelchair-usable place per 20 seats (5%) must stay free of fixed stools.",
+        "fieldsNeeded": [
+          "lever option field tableUse or seatTurnsMult",
+          "sizing.accessibleSeatShare"
+        ],
+        "numbers": [
+          {
+            "what": "Seats one solo laptop guest takes up, low end (2 to 4, per a cafe chief executive quoted in the press)",
+            "value": 2,
+            "source": "https://www.yahoo.com/lifestyle/heres-exactly-long-sit-coffee-070007503.html",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of seating that must be accessible",
+            "value": 0.05,
+            "source": "https://www.corada.com/documents/2010ADAStandards/226",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "tableUse for two- and four-tops (my estimate: half the two-tops hold one guest)",
+            "value": 0.75,
+            "source": "https://www.yahoo.com/lifestyle/heres-exactly-long-sit-coffee-070007503.html",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "crowding_curve",
+        "title": "Crowded and empty are slopes, not switches",
+        "playerDecision": "Seat count against demand, month by month: add or remove chairs, change the layout, send people outside.",
+        "engineMath": "Today: one flag above crowdPenaltyAbove (-0.08 quality) and one below emptyPenaltyBelow (-0.1 reputation target). Proposed: u = seated orders / seat capacity. Walk-outs (people who see no table and leave without ordering) = 0 below u = 0.7, rising linearly to 5% of all demand at u = 0.85 and 12% at u = 1.0. Quality loss rises from 0 at 0.7 to 0.08 at 1.0. The empty-room penalty starts below u = 0.3 and is at most -0.03 reputation, because 60% of buyers never look for a seat. All four numbers are game values anchored to the cited studies, not measurements.",
+        "fieldsNeeded": [
+          "sizing.walkoutStartsAt",
+          "sizing.walkoutShareAtFull",
+          "sizing.emptyReputationHit"
+        ],
+        "numbers": [
+          {
+            "what": "Table spacing, inches, at or under which a field study found lower satisfaction and fewer return visits",
+            "value": 20,
+            "source": "https://www.hospitalitynet.org/news/4039649.html",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Respondents in the 2011 Cornell table-spacing survey (tables 6, 12 and 24 inches apart)",
+            "value": 1000,
+            "source": "https://journals.sagepub.com/doi/10.1177/1938965511410310",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Walk-out share of demand at a full room (game value)",
+            "value": 0.12,
+            "source": "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "queue_balking",
+        "title": "The line people see decides whether they join it",
+        "playerDecision": "Queue layout, a pickup shelf, order-ahead, a second pair of hands at the peak.",
+        "engineMath": "The month hides the rush, so compute one peak hour a day: arrivals = daily orders x peakHourShare; made = baristas on the bar x drinks per barista-hour. The backlog is the visible line. While the line fits the queue zone (queueSqft / 7 people) nobody is lost; each further 5 people in view costs 5% of that hour's arrivals (the deli study's price equivalence applied through the pack's elasticity). A line past the door adds the sidewalk problem. Lever queue_setup hides part of the line (waiting moves to the pickup shelf) and order-ahead removes people from the line but adds their drinks to the bar.",
+        "fieldsNeeded": [
+          "market.peakHourShare (from D06)",
+          "capacity.drinksPerBaristaHour (from D06)",
+          "sizing.queueSqft",
+          "sizing.queueSqftPerPerson"
+        ],
+        "numbers": [
+          {
+            "what": "Sales loss from a moderately longer line, as an equivalent price increase (working paper of the Management Science study)",
+            "value": 0.05,
+            "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of US adults who will wait at most 15 minutes in a physical line (2024 survey, 1,202 adults, by a queue-software vendor)",
+            "value": 0.7,
+            "source": "https://waitwhile.com/blog/consumer-survey-waiting-in-line-2024/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share who have left a line before their turn (same survey)",
+            "value": 0.61,
+            "source": "https://waitwhile.com/blog/consumer-survey-waiting-in-line-2024/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Starbucks target for an in-store order, minutes",
+            "value": 4,
+            "source": "https://www.geekwire.com/2024/on-his-first-earnings-call-starbucks-ceo-lays-out-plan-to-bring-order-to-mobile-ordering/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Queue space per person, sq ft (my planning value; the code's occupancy count uses 5)",
+            "value": 7,
+            "source": "https://up.codes/viewer/new_york/ibc-2018/chapter/10/means-of-egress",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "seat_camping_dwell_mix",
+        "title": "Who sits how long: the stay-length mix sets what a seat earns",
+        "playerDecision": "Laptop and Wi-Fi policy, music, seat comfort, outlets.",
+        "engineMath": "unitsServedPerSizeMonth = openHours x 60 x meanOccupancy / meanStayMinutes x 30. With 12 hours, 47% occupancy and a mean stay of 60 minutes (70% of seated guests x 35 min + 30% x 120 min) this gives 170. Levers change the mix through seatTurnsMult: laptop_policy peak_limits 1.2, no_wifi 1.4; music calm 0.9, upbeat 1.1; lounge seating 0.85; communal 1.15. Multiply them, cap the product at 1.6. Each restrictive option also takes a slice of demand (its 'effects.demand').",
+        "fieldsNeeded": [
+          "lever option field seatTurnsMult",
+          "sizing.meanStayMinutes (optional, for the analytics screen)"
+        ],
+        "numbers": [
+          {
+            "what": "Minutes on site, one-time visitor (Wi-Fi presence, 25 US coffee shops, June-September 2026)",
+            "value": 32,
+            "source": "https://bloomintelligence.com/coffee-shop-marketing/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Minutes on site, most frequent visitors (same data: nearly two hours)",
+            "value": 120,
+            "source": "https://bloomintelligence.com/coffee-shop-marketing/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Minutes a $6 drink 'buys' in the view of a cafe chief executive",
+            "value": 90,
+            "source": "https://www.yahoo.com/lifestyle/heres-exactly-long-sit-coffee-070007503.html",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Stay under slow music, minutes (restaurant field experiment, 2024)",
+            "value": 80,
+            "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Stay under fast music, minutes (same experiment; the bill did not differ)",
+            "value": 57,
+            "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "occupancy_thresholds",
+        "title": "Two lines in the law: seat 20 and person 75",
+        "playerDecision": "Stop at 19 seats, or pay for a customer restroom; keep events under 75 people, or buy a temporary permit, or become a place of assembly.",
+        "engineMath": "Seats for the 20 line = indoor + outdoor seats (extra.seatThresholds[0]; the engine already blocks a resize without the item). People for the 75 line = seatingSqft / 15 + standingSqft / 5 + staff on shift; it matters only for events or rooms above about 48 seats. A resize that crosses 20 should also take 60 sq ft out of the seating area for the restroom, which is why the step from 19 to 20 seats can leave fewer seats than before.",
+        "fieldsNeeded": [
+          "business.outdoorSeats",
+          "place.premisesHadFoodPermitBefore1977 (exotic)",
+          "sizing.restroomSqft"
+        ],
+        "numbers": [
+          {
+            "what": "Seating capacity from which a customer toilet is required",
+            "value": 20,
+            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Penalty for no customer toilet, per inspection, USD",
+            "value": 300,
+            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "People from which a room is a place of assembly",
+            "value": 75,
+            "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Largest occupant load one exit may serve in business use (Group B)",
+            "value": 74,
+            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-173045",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Temporary Place of Assembly fee for one event, USD",
+            "value": 250,
+            "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "outdoor_seating_season",
+        "title": "Outdoor seats: geometry, license, season",
+        "playerDecision": "Apply for a sidewalk or roadway cafe (and wait), run tables without a license (existing shortcut), or do without.",
+        "engineMath": "Whether the address can have a sidewalk cafe at all is geometry: cafeDepth = sidewalkWidth - clearPath - curbZone, with clearPath = 8 ft on most streets, 10 ft on regional corridors and 12 ft on global corridors (the codified rule also speaks of half the sidewalk; that part was not read clearly); 15 ft from a subway stair, smaller set distances from hydrants, trees and other street elements. outdoorSeats = floor(cafeDepth x frontage / 15). Seats are usable in monthsActive; yearly fee = outdoorSqft x sector rate (place tier prime $31, mid $10-$18, cheap $6); they count toward the 20-seat line. The license arrives after waitDays (sidewalk 180-240, roadway 90-150).",
+        "fieldsNeeded": [
+          "place.sidewalkWidthFt",
+          "place.frontageFt",
+          "place.outdoorSector",
+          "business.outdoorSeats",
+          "lever option fields outdoorSeats and monthsActive"
+        ],
+        "numbers": [
+          {
+            "what": "Clear path for walkers on most streets, feet",
+            "value": 8,
+            "source": "https://www.nycstreetdesign.info/furniture/clear-path",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Clear path on regional corridors, feet",
+            "value": 10,
+            "source": "https://www.nycstreetdesign.info/furniture/clear-path",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Clear path on global corridors, feet",
+            "value": 12,
+            "source": "https://www.nycstreetdesign.info/furniture/clear-path",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Sidewalk cafe fee, cheapest sector, USD per sq ft a year",
+            "value": 6,
+            "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Sidewalk cafe fee, top sector, USD per sq ft a year",
+            "value": 31,
+            "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Roadway cafe fee, top sector, USD per sq ft a year",
+            "value": 25,
+            "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Months a sidewalk cafe application takes (six to eight; Charter Revision Commission, 2026)",
+            "value": 7,
+            "source": "https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Months a roadway cafe application takes (three to five)",
+            "value": 4,
+            "source": "https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Cost of a roadway setup with fees, construction and insurance, USD (\"easily more than\")",
+            "value": 35000,
+            "source": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Curb (furnishing) zone width, feet: not found, my placeholder",
+            "value": 3,
+            "source": "https://www.diningoutnyc.info/rules/sidewalk/siting-setup-area",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "utility_capacity_budget",
+        "title": "Amps and peak kilowatts: the room's power is a budget too",
+        "playerDecision": "Which equipment to add, whether to pay for a circuit or a service upgrade (and wait for the utility), gas or all-electric at build-out.",
+        "engineMath": "Each equipment item carries amps; the address carries panelAmps (100 or 200). If the sum of amps of owned items exceeds 80% of panelAmps, the event breaker_trips_at_peak is on until a service upgrade ($8,000, 84 days) is finished. Monthly electricity = kWh x price, with kWh = sqft x 2.4 to 5.2 a month by equipment load (CBECS food service 29.0 to 62.8 kWh per sq ft a year). A gas appliance exposes the shop to building_gas_shutoff; an all-electric build does not.",
+        "fieldsNeeded": [
+          "place.panelAmps",
+          "setup item field amps",
+          "setup item field fuel"
+        ],
+        "numbers": [
+          {
+            "what": "Dedicated circuit for a two-group espresso machine, amps at 208-240V",
+            "value": 30,
+            "source": "https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Circuit for a three-group machine, amps",
+            "value": 40,
+            "source": "https://foodservicenerd.com/guides/how-to-choose-a-commercial-espresso-machine/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Food service buildings, kWh per sq ft a year (CBECS 2018, read from secondary summaries)",
+            "value": 43.8,
+            "source": "https://commercialenergyadvisors.com/resources/how-much-commercial-electricity-cost-2026/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Combined water and sewer charge, USD per 100 cubic feet, year from July 1, 2025",
+            "value": 13.07,
+            "source": "https://www.nyc.gov/site/dep/pay-my-bills/how-we-bill-you.page",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Weeks for a Con Edison service upgrade (range 4 to 24 across two contractor guides)",
+            "value": 12,
+            "source": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Weeks a Manhattan restaurant had been without gas when the press reported it",
+            "value": 6,
+            "source": "https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "accessibility_exposure",
+        "title": "A step at the door is a standing liability",
+        "playerDecision": "Fix the entrance now (portable ramp and bell, or a permanent ramp, or a door opener) or leave it.",
+        "engineMath": "The address carries entranceStepInches (0 for most new storefronts). With a step and the lever on 'ignore', the business holds the open trail accessibility_barrier. Nothing happens until the announced event accessibility_suit_wave or a rival's report; then the claim ($1,000) and legal fees are charged and the fix is forced. A compliant ramp needs stepInches feet of length; on the sidewalk it needs a city consent. Access spending between $250 and $10,250 a year earns a 50% federal credit (cap $5,000).",
+        "fieldsNeeded": [
+          "place.entranceStepInches",
+          "taxes: one-off credit line"
+        ],
+        "numbers": [
+          {
+            "what": "Portable threshold ramp, 6-inch rise, USD",
+            "value": 112.99,
+            "source": "https://reliableramps.com/products/alumiramp-threshold-ramp-tr06n",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Maximum ramp slope: inches of run per inch of rise",
+            "value": 12,
+            "source": "https://www.accessibilitychecker.org/blog/ada-requirements-for-ramps/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Furthest a ramp may project past the street line for a building older than December 6, 1969, inches",
+            "value": 44,
+            "source": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Damages asked per suit in the 2019 NYC wave, USD (plus attorney's fees)",
+            "value": 1000,
+            "source": "https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Federal ADA Title III lawsuits filed in 2025",
+            "value": 8667,
+            "source": "https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Disabled Access Credit, yearly cap, USD (the 50% of $250-$10,250 formula is from memory of the tax code)",
+            "value": 5000,
+            "source": "https://www.irs.gov/pub/irs-pdf/f8826.pdf",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "frontage_visibility",
+        "title": "What the street sees: sign, awning, glass",
+        "playerDecision": "Spend on a permitted sign and awning, put an A-frame out, keep the glass clear; or save and hang something without a permit.",
+        "engineMath": "captureMult on extra.footfall.captureRate: +0.05 for a new or upgraded permitted sign or awning (half of the average gain reported in the signage study), +0.01 for an A-frame within 3 feet of the wall; x0.9 while a sidewalk shed covers the front (existing event). In a historic district every change waits for the Landmarks permit. The same sign without a permit gives the same lift and opens the trail sign_without_permit.",
+        "fieldsNeeded": [
+          "place.frontageFt",
+          "place.corner (exists on the map)",
+          "place.historicDistrict",
+          "setup item field captureBonus"
+        ],
+        "numbers": [
+          {
+            "what": "Share of businesses reporting higher sales after changing a sign (University of Cincinnati for the Signage Foundation, 2012; read from secondary summaries)",
+            "value": 0.6,
+            "source": "https://federalheath.com/company/news-insights/how-important-are-signs-anyway",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Average increase they reported",
+            "value": 0.1,
+            "source": "https://federalheath.com/company/news-insights/how-important-are-signs-anyway",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Largest wall sign that needs no permit, sq ft (already in the pack)",
+            "value": 6,
+            "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Furthest an A-frame sign may stand from the building, feet",
+            "value": 3,
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Illegal-sign complaints to the Buildings Department in 2018 (310 in 2017)",
+            "value": 1046,
+            "source": "https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "cellar_storage",
+        "title": "The cellar: free square feet with strings attached",
+        "playerDecision": "Keep stock on the ground floor (fewer seats) or in the cellar (more seats, slower restock, flood risk, an open hatch to guard).",
+        "engineMath": "With cellar storage: fixedCoreSqft falls by 60 (about three more seats), staff capacity x0.97, and the business is exposed to cloudburst_floods_cellar (announced a day ahead: carry the stock up, losing a few hours, or lose half the inventory and two days). The cellar never adds customer seats: that is the shortcut cellar_seating.",
+        "fieldsNeeded": [
+          "place.cellarSqft",
+          "business.storageInCellar"
+        ],
+        "numbers": [
+          {
+            "what": "Share of NYC sewers that carry storm water and sewage in one pipe",
+            "value": 0.6,
+            "source": "https://www.nyc.gov/assets/dep/downloads/pdf/water/wastewater/sbu-report.pdf",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Hours after which soaked items that cannot be dried must be thrown out (24 to 48)",
+            "value": 48,
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02997",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          },
+          {
+            "what": "Staff capacity kept with cellar storage (my estimate)",
+            "value": 0.97,
+            "source": "https://alataucitybank.kz/business/osim/articles/sem-fundamentalnykh-printsipov-proektirovki-kofeynogo-bara",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "deferred_building_maintenance",
+        "title": "Every skipped service has a fuse",
+        "playerDecision": "Pay for the air conditioning contract, the backflow test, the grease pump-out and restroom upkeep, or skip them.",
+        "engineMath": "No dice. Each skipped item starts a counter of months; when it reaches the fuse and the trigger condition is met, the event fires. Air conditioning: 12 months, fires in the first July or August after; grease interceptor: 3 months; backflow test: 12 months; restroom upkeep: 3 months. Paying again resets the counter. The same pattern should serve D03's equipment.",
+        "fieldsNeeded": [
+          "business.neglect: months skipped per item",
+          "event field fuseMonths",
+          "event field triggerMonths"
+        ],
+        "numbers": [
+          {
+            "what": "Service contract for one rooftop unit, USD a year (range $500-$2,500)",
+            "value": 1200,
+            "source": "https://oxmaint.com/industries/hvac/hvac-maintenance-budget-planning-optimizing-spend",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Replacing a small commercial unit in NYC, USD (range $8,000-$40,000)",
+            "value": 15000,
+            "source": "https://www.vincomechanical.com/hvac-replacement-cost-nyc",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Months between required backflow tests",
+            "value": 12,
+            "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+            "confidence": "verified",
+            "checkedVia": "search_excerpt"
+          }
+        ],
+        "tier": "deep"
+      }
+    ],
+    "nonObvious": [
+      {
+        "text": "The 75 line that turns a cafe into a place of assembly counts people, not chairs, and the code counts a standing person at 5 sq ft: a 70 sq ft queue area is 14 people on paper.",
+        "why": "An owner who thinks '75 seats, never my problem' can cross the line with 48 seats, or with one standing-room event.",
+        "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page"
+      },
+      {
+        "text": "Seat number 20 is the most expensive chair in the shop: it brings the duty to give customers a toilet. Outdoor seats and seating shared with a neighbor count toward it.",
+        "why": "Two sidewalk tables can turn a legal 18-seat room into a violation.",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01351"
+      },
+      {
+        "text": "A premises that held a food permit on or before December 5, 1977 is exempt from the customer-toilet rule, and loses the exemption the day it does a renovation that needs a Buildings permit.",
+        "why": "Taking over an old luncheonette as-is can be legal with 30 seats and no customer restroom; renovating it is what triggers the restroom.",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264"
+      },
+      {
+        "text": "A shared staff-and-customer toilet is legal only if customers do not walk through the kitchen, prep, storage or dishwashing area to reach it.",
+        "why": "The position of one door decides whether the existing toilet counts.",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264"
+      },
+      {
+        "text": "About 400 sq ft of any cafe never holds a chair: bar, line, restroom, sinks and storage, door. A 500 sq ft space has room for about six seats, not the sixteen a flat '60% is seating' rule suggests.",
+        "why": "Rent is paid on all 500.",
+        "source": "https://pos.toasttab.com/blog/on-the-line/coffee-shop-floor-plans"
+      },
+      {
+        "text": "One guest with a laptop takes two to four seats, so a room of two- and four-tops is full when well under half its chairs are occupied.",
+        "why": "The owner counts 20 seats; the customer at the door sees no free table.",
+        "source": "https://www.yahoo.com/lifestyle/heres-exactly-long-sit-coffee-070007503.html"
+      },
+      {
+        "text": "A bakery cafe that switched off Wi-Fi and banned screens at lunch saw sales go up, not down: people had been coming in, finding no table and leaving.",
+        "why": "The lost customers are invisible: they never reach the register.",
+        "source": "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales"
+      },
+      {
+        "text": "Buyers react to how long a line looks, not to how fast it moves. Merging two short lines into one long fast one can lose sales.",
+        "why": "Speeding the bar is not enough; where the waiting people stand matters.",
+        "source": "https://pubsonline.informs.org/doi/abs/10.1287/mnsc.1120.1686"
+      },
+      {
+        "text": "Order-ahead can cut capacity instead of adding it: at Starbucks a mid-teens percent of mobile orders went uncompleted in spring 2024 because the bars were buried.",
+        "why": "The app adds drinks to the same two hands at the same minute.",
+        "source": "https://www.customerexperiencedive.com/news/4-takeaways-starbucks-customer-experience/756355/"
+      },
+      {
+        "text": "Guests at tables 20 inches or less apart leave sooner, which looks like better turnover, and are significantly less likely to come back.",
+        "why": "The squeeze pays this month and costs next quarter.",
+        "source": "https://www.hospitalitynet.org/news/4039649.html"
+      },
+      {
+        "text": "Slow music lengthened restaurant stays from 57 to 80 minutes in a 2024 experiment and the bill did not change.",
+        "why": "The playlist is a seat-turnover control that costs nothing.",
+        "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/"
+      },
+      {
+        "text": "Keeping the door open with the air conditioning on is illegal for every NYC business, not just chains: $250 per open door or window. The city made nearly 6,300 such inspections in 2024.",
+        "why": "The open door is a classic way to pull in passers-by in July.",
+        "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and"
+      },
+      {
+        "text": "Sign complaints can be anonymous 311 calls. In 2018 they tripled to more than a thousand and left small shops with $6,000 fines for signs that had hung for years.",
+        "why": "A sign is the easiest thing for a rival or an angry neighbor to report.",
+        "source": "https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings"
+      },
+      {
+        "text": "An awning may carry only the shop's name and address, in letters no taller than 12 inches and 12 sq ft in all. Menus, photos and phone numbers on the fabric are violations.",
+        "why": "Most awning shops will print anything the owner asks for.",
+        "source": "https://www.lisc.org/media/filer_public/1b/91/1b916163-0300-4298-9439-4981884e9abd/corridor_challenge_storefront_improvement_design_guidelines_-___final.pdf"
+      },
+      {
+        "text": "In 2026 a law from 2009 was about to force every shop to replace solid roll-down gates by July 1; owners were quoted $6,000-$7,000. The Council repealed the deadline on June 30, one day before.",
+        "why": "Some owners paid in spring for something that was never required.",
+        "source": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates"
+      },
+      {
+        "text": "An A-frame sign is tolerated only within 3 feet of your own wall and under 5 feet tall. Past that it is a sidewalk obstruction like any crate.",
+        "why": "Owners put the sign at the curb, where walkers see it; that is the illegal spot.",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+      },
+      {
+        "text": "A winter vestibule is legal only from November 15 to April 15 and only 18 inches past the building line.",
+        "why": "It costs $4,500 or more every season and has to be stored all summer.",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02227"
+      },
+      {
+        "text": "In a historic district even a new sign or awning needs a Landmarks permit before the Buildings permit, and staff will not approve more than three kinds of signs on one storefront.",
+        "why": "Two agencies in sequence; the rent does not wait.",
+        "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
+      },
+      {
+        "text": "Most small leases make the tenant repair and replace the air conditioning unit that serves the space. A dead unit is an $8,000-$40,000 bill in NYC.",
+        "why": "New tenants assume the building's equipment is the landlord's.",
+        "source": "https://www.vincomechanical.com/hvac-replacement-cost-nyc"
+      },
+      {
+        "text": "A Con Edison electrical service upgrade takes 3 to 6 months by contractors' accounts. A space with too small a panel is months of rent away from running a second espresso machine.",
+        "why": "Nobody checks the panel at the showing.",
+        "source": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/"
+      },
+      {
+        "text": "When the utility finds a leak anywhere in the building's gas piping it locks the whole building's gas, and the tenant waits for the landlord's plumber: six weeks in one 2025-2026 press case, four months in another.",
+        "why": "A cafe that needs no gas at all is immune; that choice is made at build-out.",
+        "source": "https://w42st.com/post/gas-shutoff-drags-on-at-sesamo-leaving-restaurant-in-limbo-for-over-a-month/"
+      },
+      {
+        "text": "The backflow device on the water line must be tested by a certified tester every year, and the city can disconnect the water of a business that does not.",
+        "why": "It is a part most owners have never seen, behind a panel in the cellar.",
+        "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page"
+      },
+      {
+        "text": "Food waste grinders are banned in NYC businesses, and a coffee shop needs a grease interceptor even with no cooking.",
+        "why": "Milk fat is grease to the sewer department.",
+        "source": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page"
+      },
+      {
+        "text": "The Health Code sets light levels: 50 foot-candles at the prep counter, 20 at the hand sink. A fashionably dark bar fails an inspection.",
+        "why": "Designers light for mood, inspectors carry a meter.",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238"
+      },
+      {
+        "text": "Music is measured in the neighbor's bedroom, not in your room: 42 decibels there is the limit. A first violation is $2,000 and drops to $0 only if you prove the fix.",
+        "why": "A ground-floor cafe under apartments shares a ceiling with its complainants.",
+        "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf"
+      },
+      {
+        "text": "About 60% of NYC sewers are combined; in a cloudburst they back up through cellar drains. Any food that touched that water must be thrown out, and ordinary insurance does not cover sewer backup without a separate endorsement.",
+        "why": "The cellar is where a small cafe keeps its stock.",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02997"
+      },
+      {
+        "text": "Sidewalk cellar doors may be open only while a person stands guard.",
+        "why": "The morning delivery arrives during the rush, when nobody can leave the bar.",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02292"
+      },
+      {
+        "text": "A sidewalk cafe must leave walkers a clear path of 8 feet on most streets, 10 on regional corridors and 12 on the busiest. On an ordinary 12-15 foot side-street sidewalk that leaves room for one row of small tables or none.",
+        "why": "Owners budget for outdoor seats before measuring the sidewalk.",
+        "source": "https://www.nycstreetdesign.info/furniture/clear-path"
+      },
+      {
+        "text": "A roadway cafe can easily cost more than $35,000 to set up and about $10,000 a year in city fees at full size; until the 2026 law it also had to be dismantled every November.",
+        "why": "The pandemic-era free shed is gone; outdoor dining shrank by more than 80% under the permanent rules.",
+        "source": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants"
+      },
+      {
+        "text": "A $113 portable ramp does not make a 7-inch step compliant: the standard asks for a foot of ramp per inch of height, and a ramp on the sidewalk needs a city consent.",
+        "why": "The cheap fix shows good faith but is not the end of the exposure.",
+        "source": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf"
+      },
+      {
+        "text": "A one-person restroom must have an all-gender sign on the wall next to the door.",
+        "why": "'Men' and 'Women' signs on single-occupant rooms have been illegal in NYC since 2017.",
+        "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/single-occupant-toilet-signage.page"
+      },
+      {
+        "text": "Since January 27, 2025 the largest coffee chain requires a purchase to use its restrooms. Under 20 seats an independent cafe owes the public nothing either, but it is the one people ask.",
+        "why": "Restroom traffic is a cost line and a seat blocker nobody budgets.",
+        "source": "https://www.cnn.com/2025/01/14/food/starbucks-restroom-policy"
+      },
+      {
+        "text": "A hit product can put a line across the neighbors' stoops, and then the complaints are about the sidewalk, not the coffee.",
+        "why": "Success creates a new kind of inspection risk.",
+        "source": "https://greenpointers.com/2024/04/01/radio-bakery-stoop-sale/"
+      },
+      {
+        "text": "One big event needs its own permit: a Temporary Place of Assembly certificate is $250, filed at least 10 business days ahead, plus $100 for each day late.",
+        "why": "The legal path is cheap; ignoring it is a $2,400 immediately hazardous violation.",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation"
+      },
+      {
+        "text": "The electric bill has a part that depends on your single highest half hour of the month. An oven that runs twenty minutes a day can raise the bill more than its energy use explains.",
+        "why": "Owners compare kWh; larger commercial accounts are also billed on peak kW.",
+        "source": "https://nectarclimate.com/rates/consolidated-edison-coned"
+      }
     ]
   },
-  "sources": []
+  "sources": [
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+      "title": "NYC Health Code §81.22 Employee and Patron Toilets (American Legal Publishing)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "title": "24 RCNY Chapter 23, Appendix 23-C: Food Service Establishment Penalty Schedule",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238",
+      "title": "NYC Health Code §81.19 Lighting and Ventilation",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "title": "NYC Health Department, Chapter 23: Food Service Establishment Sanitary Inspection Procedures and Letter Grading",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01351",
+      "title": "NYC311: Restaurant Bathroom Rules",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-3-use-and-occupancy-classification",
+      "title": "2022 NYC Building Code, Chapter 3: Use and Occupancy Classification (ICC)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
+      "title": "2022 NYC Building Code, Chapter 10: Means of Egress (NYC Buildings)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-173045",
+      "title": "NYC Building Code §1006.2.1 and Table 1006.2.1: spaces with one exit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://up.codes/viewer/new_york/ibc-2018/chapter/10/means-of-egress",
+      "title": "New York State Building Code 2020, Chapter 10, Table 1004.5 (UpCodes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page",
+      "title": "NYC Buildings: Place of Assembly Certificate of Operation",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/pdf/pa_guide.pdf",
+      "title": "NYC Buildings: Place of Assembly guide (older edition)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+      "title": "NYC Business: Temporary Place of Assembly Certificate of Operation",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+      "title": "FDNY Restaurant Fire Safety Guide",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf",
+      "title": "OATH/ECB Buildings Penalty Schedule",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf",
+      "title": "1 RCNY §102-01: Buildings violation classification and penalties",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.corada.com/documents/2010ADAStandards/226",
+      "title": "2010 ADA Standards §226: Dining Surfaces and Work Surfaces",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.access-board.gov/ada/guides/chapter-6-toilet-rooms/",
+      "title": "U.S. Access Board: Guide to the ADA Standards, Chapter 6: Toilet Rooms",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.accessibilitychecker.org/blog/ada-requirements-for-ramps/",
+      "title": "ADA requirements for ramps (secondary summary)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf",
+      "title": "NYC Buildings: Storefront Accessibility (presentation)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/pub/irs-pdf/f8826.pdf",
+      "title": "IRS Form 8826: Disabled Access Credit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://reliableramps.com/products/alumiramp-threshold-ramp-tr06n",
+      "title": "Reliable Ramps: AlumiRamp threshold ramp price list",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://ufiredoors.com/blog/ada-door-operator-cost/",
+      "title": "ADA door operator cost guide (vendor)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny",
+      "title": "NY1: Surge in lawsuits by a small group of plaintiffs with disabilities draws scrutiny (2019)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/",
+      "title": "Seyfarth Shaw ADA Title III blog: 2025 federal filing counts",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and",
+      "title": "NYC DCWP press release, April 2025: Shut the Front Door",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings",
+      "title": "CBS New York: City Council approves moratorium on fines for awnings and signs",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/",
+      "title": "The Brooklyn Home Reporter: Hard stop on signage fees as Council secures new Awning Act (2018)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+      "title": "NYC Buildings: project requirements for signs",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650",
+      "title": "NYC Administrative Code Table 28-112.2: Buildings fees (from the research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.lisc.org/media/filer_public/1b/91/1b916163-0300-4298-9439-4981884e9abd/corridor_challenge_storefront_improvement_design_guidelines_-___final.pdf",
+      "title": "LISC NYC Commercial Corridor Challenge: storefront improvement design guidelines",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sinra.ai/projects/permits/general-construction-153-second-avenue-manhattan-850583358",
+      "title": "Permit aggregator: storefront awning filing, East Village (declared job cost)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "title": "NYC Landmarks Preservation Commission: storefront applications",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/pdf/security_grille-sn.pdf",
+      "title": "NYC Buildings service notice, February 17, 2026: security grille visibility",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates",
+      "title": "NY1: City Council votes to repeal deadline for new roll-down security gates (July 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://gothamist.com/news/nyc-council-scrambles-to-reverse-impending-ban-on-metal-storefront-security-gates",
+      "title": "Gothamist: Council scrambles to reverse impending ban on metal storefront security gates (2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.insightglass.com/how-much-do-storefront-windows-cost/",
+      "title": "Glazier guide: storefront window cost",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
+      "title": "NYC311: Blocked Sidewalk or Street",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-99532",
+      "title": "16 RCNY §19-103: Sanitation Penalty Schedule",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02227",
+      "title": "NYC311: Awning, Canopy, Marquee or Storm Enclosure Complaint",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.signsny.com/outdoor/winter-vestibules",
+      "title": "NYC fabricator: winter vestibules, prices",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.pickcomfort.com/cost-air-curtain-typical-prices-what-affects-quote/",
+      "title": "Cost guide: air curtains",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://achrnews.com/articles/159663-michigan-eatery-eliminates-cold-complaints-with-air-curtains",
+      "title": "ACHR News: eatery eliminates cold complaints with air curtains",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.diningoutnyc.info/rules/sidewalk/siting-clearances",
+      "title": "Dining Out NYC: sidewalk cafe siting clearances",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.diningoutnyc.info/rules/sidewalk/siting-setup-area",
+      "title": "Dining Out NYC: sidewalk cafe setup area",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.diningoutnyc.info/apply",
+      "title": "Dining Out NYC: eligibility and application",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.diningoutnyc.info/enforcement",
+      "title": "Dining Out NYC: enforcement (already in the pack)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nycstreetdesign.info/furniture/clear-path",
+      "title": "NYC DOT Street Design Manual: Clear Path",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.diningoutnyc.info/sites/default/files/2024-03/sidewalk-cafe-site-plan-form.pdf",
+      "title": "Dining Out NYC: sidewalk cafe site plan form (corridor types and clearances)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+      "title": "NYC Council report: Understanding Delays in New York City's Permanent Outdoor Dining Program (April 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html",
+      "title": "NYC Charter Revision Commission: adopted final report, 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+      "title": "NYC311: Outdoor Dining Information and Application",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants",
+      "title": "Streetsblog NYC: Here's how much outdoor dining costs restaurants (April 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc.streetsblog.org/2026/08/13/year-round-outdoor-dining-poised-to-return-under-council-bill",
+      "title": "Streetsblog NYC: Year-round outdoor dining poised to return under Council bill (August 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.thecityreporter.nyc/2026/08/13/nyc-outdoor-dining-roadside-sheds-new-laws-restaraunts/",
+      "title": "The City Reporter: year-round roadside dining set to return under newly passed bills (August 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+      "title": "NYC DEP: Backflow Prevention Frequently Asked Questions",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page",
+      "title": "NYC DEP: Disposing of Grease as a Business",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dep/pay-my-bills/how-we-bill-you.page",
+      "title": "NYC DEP: How We Bill You (water and sewer rates)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dep/downloads/pdf/water/wastewater/sbu-report.pdf",
+      "title": "NYC DEP: sewer backup report",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02997",
+      "title": "NYC311: Sewage or Flood Clean-Up",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02292",
+      "title": "NYC311: Sidewalk Cellar Door Complaint",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
+      "title": "NYC DEP: commercial music noise violation, zero penalty for a first offense",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/single-occupant-toilet-signage.page",
+      "title": "NYC Buildings: Single-Occupant Toilet Signage (Local Law 79 of 2016)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
+      "title": "1st-line Equipment: commercial espresso machine basic requirements",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://foodservicenerd.com/guides/how-to-choose-a-commercial-espresso-machine/",
+      "title": "Commercial espresso machine buyer's guide (circuit sizes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/",
+      "title": "NYC electrical contractor: Con Edison service upgrade guide, 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nectarclimate.com/rates/consolidated-edison-coned",
+      "title": "Third-party summary of Con Edison commercial rates",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://commercialenergyadvisors.com/resources/how-much-commercial-electricity-cost-2026/",
+      "title": "Secondary summary of CBECS electricity intensity by building type",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.vincomechanical.com/hvac-replacement-cost-nyc",
+      "title": "NYC contractor: commercial HVAC replacement cost, 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://oxmaint.com/industries/hvac/hvac-maintenance-budget-planning-optimizing-spend",
+      "title": "HVAC maintenance budget guide (vendor)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://w42st.com/post/gas-shutoff-drags-on-at-sesamo-leaving-restaurant-in-limbo-for-over-a-month/",
+      "title": "W42ST: gas shutoff leaves a Hell's Kitchen restaurant in limbo for over a month",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/",
+      "title": "ABC7 New York: restaurant cooking without gas for over a month after an inspection found a leak",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.hospitalitynet.org/news/4039649.html",
+      "title": "Cornell restaurant research: diners are dissatisfied with close-set tables (2009)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://journals.sagepub.com/doi/10.1177/1938965511410310",
+      "title": "Robson, Kimes, Becker, Evans: Consumers' Responses to Table Spacing in Restaurants, Cornell Hospitality Quarterly 52(3), 2011",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://pubsonline.informs.org/doi/abs/10.1287/mnsc.1120.1686",
+      "title": "Lu, Musalem, Olivares, Schilkrut: Measuring the Effect of Queues on Customer Purchases, Management Science 59(8), 2013",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+      "title": "Working paper version of the queue study (Columbia Business School, 2011)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://waitwhile.com/blog/consumer-survey-waiting-in-line-2024/",
+      "title": "Waitwhile consumer survey: the state of waiting in line, 2024",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.customerexperiencedive.com/news/4-takeaways-starbucks-customer-experience/756355/",
+      "title": "Customer Experience Dive: takeaways from Starbucks' customer experience plans",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.geekwire.com/2024/on-his-first-earnings-call-starbucks-ceo-lays-out-plan-to-bring-order-to-mobile-ordering/",
+      "title": "GeekWire: Starbucks CEO on bringing order to mobile ordering (2024)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cnn.com/2025/01/14/food/starbucks-restroom-policy",
+      "title": "CNN: Starbucks ends its open-door policies (January 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales",
+      "title": "NPR: No laptops, no Wi-Fi: how one cafe fired up sales (2014)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.npr.org/sections/health-shots/2017/05/08/526523520/public-restrooms-become-ground-zero-in-the-opioid-epidemic",
+      "title": "NPR: public restrooms and business owners (2017)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://bloomintelligence.com/coffee-shop-marketing/",
+      "title": "Bloom Intelligence: coffee shop data, Wi-Fi presence at 25 US coffee shops (2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.yahoo.com/lifestyle/heres-exactly-long-sit-coffee-070007503.html",
+      "title": "Syndicated article: how long you can sit in a coffee shop (cafe chief executive quoted)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/",
+      "title": "How does background music affect dining duration, tips and bill amounts? A field experiment (2024)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.mdpi.com/2071-1050/17/18/8400",
+      "title": "Revisiting crowded restaurants in the post-pandemic era, Sustainability 17(18), 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://federalheath.com/company/news-insights/how-important-are-signs-anyway",
+      "title": "Secondary summary of the University of Cincinnati signage study (2012)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.gofoodservice.com/guides/designing-your-restaurant-seating-layout",
+      "title": "Vendor guide: restaurant seating layout, square feet per seat",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://pos.toasttab.com/blog/on-the-line/coffee-shop-floor-plans",
+      "title": "Toast: how to design a coffee shop floor plan",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://therestaurantwarehouse.com/blogs/restaurant-equipment/coffee-shop-layout",
+      "title": "Coffee shop layout guide (vendor)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.sberbank.ru/start/articles/coffee/prepare_to_open",
+      "title": "Sber: preparing to open a coffee shop (in Russian; 1.6 sq m per guest)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://alataucitybank.kz/business/osim/articles/sem-fundamentalnykh-printsipov-proektirovki-kofeynogo-bara",
+      "title": "Seven principles of designing a coffee bar (in Russian)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://greenpointers.com/2024/04/01/radio-bakery-stoop-sale/",
+      "title": "Greenpointers: a bakery line blocked neighbors' homes (2024)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tfp1.com/blog/fdny-violation-codes/",
+      "title": "Fire protection company summary of Fire Department violation categories and penalties (2026)",
+      "checked": "2026-11-14"
+    }
+  ]
 }
