@@ -11,7 +11,8 @@ const repo = resolve(here, '../../..');
 export default defineConfig({
   root: here,
   plugins: [react()],
-  resolve: { dedupe: ['react', 'react-dom'] },
+  // screens/city lives outside this package: resolve its imports from here
+  resolve: { dedupe: ['react', 'react-dom', 'maplibre-gl', 'qrcode-generator'] },
   server: { host: true, port: 5179, fs: { allow: [repo] } },
   preview: { host: true, port: 5179 },
   build: {
@@ -19,5 +20,6 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: { input: { map: resolve(here, 'dev/map/index.html'), city: resolve(here, 'dev/city/index.html') } },
   },
-  test: { environment: 'node', include: ['**/*.test.ts', '../screens/city/**/*.test.ts'], root: here },
+  // tests of both folders this agent owns: client/src/map and client/src/screens/city
+  test: { environment: 'node', root: resolve(here, '..'), include: ['map/**/*.test.ts', 'screens/city/**/*.test.ts'], exclude: ['**/node_modules/**'] },
 });

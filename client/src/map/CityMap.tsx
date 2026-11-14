@@ -135,6 +135,26 @@ function updatePin(el: HTMLElement, m: BizMarker) {
   el.setAttribute('aria-label', `${m.name}, ${NICHE_META[m.niche].label}, rank ${m.rank}${m.isAi ? ', AI' : ''}`);
 }
 
+/** Hide name pins that would overlap a more important one (own business, then rank). Runs after moves. */
+function declutter(map: MapLibreMap, pins: Map<string, Marker>, markers: BizMarker[]) {
+  const order = [...markers].sort((x, y) =>
+    Number(y.mine) - Number(x.mine) || Number(x.dim) - Number(y.dim) || x.rank - y.rank || x.name.localeCompare(y.name));
+  const placed: { x: number; y: number; w: number; h: number }[] = [];
+  // read every size first, then write classes: no layout thrash
+  const measured = order.map((m) => {
+    const el = pins.get(m.id)?.getElement();
+    return { m, el, w: el ? el.offsetWidth || Math.min(180, 40 + m.name.length * 6.4) : 0, h: el ? el.offsetHeight || 24 : 0 };
+  });
+  for (const { m, el, w, h } of measured) {
+    if (!el) continue;
+    const p = map.project([m.lng, m.lat]);
+    const r = { x: p.x - w / 2, y: p.y - 10 - h, w, h };
+    const hit = placed.some((q) => r.x < q.x + q.w + 4 && q.x < r.x + r.w + 4 && r.y < q.y + q.h + 2 && q.y < r.y + r.h + 2);
+    el.classList.toggle('cm-pin--hidden', hit && !m.mine);
+    if (!hit || m.mine) placed.push(r);
+  }
+}
+
 export function CityMap(props: CityMapProps) {
   const {
     places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness,
@@ -144,6 +164,7 @@ export function CityMap(props: CityMapProps) {
   const mapRef = useRef<MapLibreMap | null>(null);
   const pinsRef = useRef(new Map<string, Marker>());
   const closedPinsRef = useRef<Marker[]>([]);
+  const markersRef = useRef<BizMarker[]>([]);
   const handlersRef = useRef({ onPick, onOpenBusiness, mode });
   handlersRef.current = { onPick, onOpenBusiness, mode };
   const [styleEpoch, setStyleEpoch] = useState(0);
@@ -220,6 +241,7 @@ export function CityMap(props: CityMapProps) {
     const onZoom = () => setZoomedOut(map.getZoom() < 15.2);
     map.on('zoomend', onZoom);
     onZoom();
+    map.on('moveend', () => declutter(map, pinsRef.current, markersRef.current));
 
     // fly-over on open, then optional orbit
     let orbitRaf = 0, idleUntil = 0, lastT = 0;
@@ -292,6 +314,7 @@ export function CityMap(props: CityMapProps) {
     if (!map) return;
     const pins = pinsRef.current;
     const wanted = mode === 'live' ? markers : [];
+    markersRef.current = wanted;
     const keep = new Set(wanted.map((m) => m.id));
     for (const [id, marker] of pins) if (!keep.has(id)) { marker.remove(); pins.delete(id); }
     for (const m of wanted) {
@@ -301,6 +324,8 @@ export function CityMap(props: CityMapProps) {
         .setLngLat([m.lng, m.lat]).addTo(map);
       pins.set(m.id, marker);
     }
+    const raf = requestAnimationFrame(() => declutter(map, pins, wanted));
+    return () => cancelAnimationFrame(raf);
   }, [markers, mode]);
 
   // "Road closed" tags in the middle of closed streets
