@@ -11,11 +11,11 @@ export interface NicheHooks {
 }
 
 // import { hooks as cafe } from './cafe';
-// import { hooks as barbershop } from './barbershop';
+import { hooks as barbershop } from './barbershop';
 
 export const NICHE_HOOKS: Partial<Record<NicheId, NicheHooks>> = {
   // cafe,
-  // barbershop,
+  barbershop,
 };
 
 /** Same registry under the name agent 02's economy imports. */

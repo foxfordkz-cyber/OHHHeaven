@@ -136,6 +136,7 @@ export function analyticsFrom(b: BusinessState, w: WorldState, ctx: EngineCtx, b
     taxDueNext, exposure: exposureOf(b, ctx),
     benchmarks: benchmarksOf(pack, parts, revenue),
     nicheKpis: hook ?? defaultKpis(b, pack, place, basis, priceEff),
+    nicheAvgPrice: nicheAvgPriceOf(b, w),
   };
 }
 
@@ -148,4 +149,11 @@ export function analyze(b: BusinessState, w: WorldState, ctx: EngineCtx): Analyt
     daysIntoMonth: basis.source === 'mtd' ? basis.daysCounted : 0,
     toDateShare: basis.source === 'mtd' ? basis.daysCounted / RULES.DAYS_PER_MONTH : 0,
   });
+}
+
+/** Average price of open businesses of the same niche (the business itself included). */
+function nicheAvgPriceOf(b: BusinessState, w: WorldState): number {
+  const open = w.businesses.filter((x) => x.niche === b.niche && x.status === 'open');
+  if (!open.length) return b.orders.price;
+  return Math.round((open.reduce((sum, x) => sum + x.orders.price, 0) / open.length) * 100) / 100;
 }

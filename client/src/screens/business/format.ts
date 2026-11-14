@@ -86,6 +86,8 @@ const TARGET_TEXT: Record<EventEffect['target'], string> = {
   utilities: 'utility bills',
   deliveryShare: 'delivery orders',
   rent: 'rent',
+  wages: 'wages',
+  inspections: 'city inspections',
 };
 
 /** One effect in words: "+15% cost per order". */

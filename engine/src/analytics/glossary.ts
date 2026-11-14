@@ -30,6 +30,7 @@ export const GLOSSARY: Record<keyof Analytics, GlossaryEntry> = {
   setupInvested: { label: 'Invested to open', tip: 'Everything you spent before opening: equipment, furniture, build-out, deposit and permits.' },
   paybackMonths: { label: 'Payback period', tip: 'Months of current profit needed to earn back what you invested to open; empty while you are losing money.' },
   taxDueNext: { label: 'Next tax payment', tip: 'The next tax bill and its due day; New York sales tax is filed every quarter, 20 days after the quarter ends.' },
+  nicheAvgPrice: { label: 'Niche average price', tip: 'The average price of open businesses of your kind in the city: far above it you lose customers, far below it you give away margin.' },
   exposure: { label: 'Risk if inspected', tip: 'The fines you would owe today if inspectors found every corner you are cutting; they grow every month it continues.' },
   benchmarks: { label: 'You vs the industry', tip: 'Your cost shares and margin next to typical numbers for this kind of business.' },
   nicheKpis: { label: 'Key numbers', tip: 'The numbers owners of this kind of business watch daily: average ticket, sales per day, seat turnover, sales per square foot and per labor hour.' },
