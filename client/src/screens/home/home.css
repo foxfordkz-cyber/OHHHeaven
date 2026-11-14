@@ -138,3 +138,55 @@
 @media (min-width: 1000px) and (max-height: 760px) {
   .home-hero { min-height: 640px; }
 }
+
+/* ───────── the picture goes to the very top: the map runs under the header, edge to edge, on every width.
+   Phones: map on top, the page below it. Computers: the map is the whole first screen, glass panels float on it. ───────── */
+.home { --pad: 20px; --gap: 20px; max-width: none; }
+/* -8px: the shell's status strip above the screen is empty here, the picture starts at the very top */
+.home.screen { margin-top: -8px; padding-top: 0; padding-left: var(--pad); padding-right: var(--pad); gap: var(--gap); }
+.home > :not(.home-hero) { width: 100%; max-width: 1496px; margin-left: auto; margin-right: auto; }
+.home-nav { top: 10px; height: 56px; margin-top: 10px; margin-bottom: calc(-66px - var(--gap)); }
+.home-nav__mark { background: var(--primary); color: var(--on-primary); box-shadow: none; border-radius: 9px; }
+
+.home-hero {
+  position: relative; display: flex; flex-direction: column; isolation: isolate;
+  margin: 0 calc(-1 * var(--pad)); padding: 0; min-height: 0;
+  border: 0; border-radius: 0; background: transparent; overflow: visible;
+}
+.home-hero__map { position: relative; order: -1; height: 56dvh; min-height: 360px; }
+.home-hero__map > .glass-frame { height: 100% !important; min-height: 0; border: 0; border-radius: 0; box-shadow: none; }
+/* the picture dissolves into the page instead of ending with an edge */
+.home-hero__map::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 64px; z-index: 5; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+}
+.home-hero .cm-top { top: 78px; left: var(--pad); right: var(--pad); }
+.home-hero .cm-legend { left: var(--pad); bottom: 100px; }
+.home-hero .maplibregl-ctrl-bottom-right { bottom: 60px; }
+.home-hero__strip, .home-hero__lead { width: auto; padding: 0 var(--pad); margin-top: var(--gap); }
+
+@media (min-width: 768px) {
+  .home { --pad: 32px; --gap: 28px; }
+  .home.screen { padding-bottom: 56px; }
+}
+
+@media (min-width: 1000px) {
+  .home-hero {
+    --inset: max(var(--pad), calc((100% - 1496px) / 2));
+    display: block; overflow: hidden;
+    min-height: min(100dvh, 940px);
+    padding: 92px var(--inset) 84px;
+  }
+  .home-hero__map { position: absolute; inset: 0; height: auto; min-height: 0; z-index: 0; }
+  .home-hero__map::after { height: 96px; }
+  .home-hero__strip,
+  .home-hero__lead { position: relative; z-index: 6; width: min(440px, 38%); margin-top: 0; padding: 18px 20px; }
+  .home-hero__lead { margin-top: 12px; gap: 16px; }
+  .home-hero__lead .stack-sm { flex-direction: column; }
+  .home-pitch .h1 { font-size: 30px; line-height: 1.12; letter-spacing: -0.024em; }
+  .home-pitch__sub { font-size: 16px; }
+  .home-hero .cm-top { top: 92px; left: calc(var(--inset) + min(440px, 38%) + 16px); right: calc(var(--inset) + 60px); }
+  .home-hero .cm-legend { left: calc(var(--inset) + min(440px, 38%) + 16px); bottom: 104px; }
+  .home-hero .maplibregl-ctrl-bottom-right { bottom: 92px; right: calc(var(--inset) - 10px); }
+  .home-hero .cm-ctl { right: var(--inset); }
+}

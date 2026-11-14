@@ -38,7 +38,7 @@ export function WeatherLayer({ condition }: { condition?: WeatherCondition }) {
       last = now;
       ctx.clearRect(0, 0, w, h);
       if (particles === 'rain') {
-        ctx.strokeStyle = document.documentElement.dataset.theme === 'light' ? 'rgba(52, 78, 110, 0.42)' : 'rgba(190, 205, 225, 0.38)';
+        ctx.strokeStyle = document.documentElement.dataset.theme === 'light' ? 'rgba(52, 78, 110, 0.2)' : 'rgba(190, 205, 225, 0.22)';
         ctx.lineWidth = 1.1;
         ctx.beginPath();
         for (const d of drops) {

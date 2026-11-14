@@ -1,10 +1,10 @@
 // Light and dark theme. The choice lives in <html data-theme> (set before first paint by the inline script
-// in index.html), is remembered in localStorage and follows the system setting until the user picks one.
+// in index.html) and is remembered in localStorage. Light is the default.
 import { useSyncExternalStore } from 'react';
 
 export type Theme = 'light' | 'dark';
 
-const KEY = 'fy-theme';
+const KEY = 'fy-theme-2';
 const EVENT = 'fy-theme-change';
 const PAGE_BG: Record<Theme, string> = { dark: '#0f0f0e', light: '#f3f1ea' };
 
@@ -19,14 +19,13 @@ function stored(): Theme | null {
   }
 }
 
-function systemTheme(): Theme {
-  return typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-}
+/** Light is the look of the product; dark is there for those who switch to it. */
+const DEFAULT: Theme = 'light';
 
 export function getTheme(): Theme {
   if (!hasDom()) return 'dark';
   const v = document.documentElement.dataset.theme;
-  return v === 'light' || v === 'dark' ? v : stored() ?? systemTheme();
+  return v === 'light' || v === 'dark' ? v : stored() ?? DEFAULT;
 }
 
 function apply(theme: Theme) {
@@ -46,13 +45,10 @@ export function toggleTheme() {
   setTheme(getTheme() === 'dark' ? 'light' : 'dark');
 }
 
-/** Called once at start-up: applies the theme and follows the system setting until the user chooses. */
+/** Called once at start-up: applies the stored theme, or the default one. */
 export function initTheme() {
   if (!hasDom()) return;
   apply(getTheme());
-  window.matchMedia?.('(prefers-color-scheme: light)').addEventListener?.('change', () => {
-    if (!stored()) apply(systemTheme());
-  });
 }
 
 function subscribe(onChange: () => void) {
