@@ -101,8 +101,17 @@ describe('the free month, then autopilot', () => {
     await request(app).post('/api/worlds/demo/action').set(auth).send({ type: 'set_orders', orders: { price: biz.orders.price + 0.25 } }).expect(200);
     await request(app).post('/api/worlds/demo/query').set(auth).send({ type: 'real_world_plan' }).expect(200);
 
+    const inbox = async () => ((await request(app).get('/api/worlds/demo/view').set(auth).expect(200)).body as { me: { inbox: { id: string; title: string; text: string }[] } }).me.inbox;
+    const freeMail = (await inbox()).filter((i) => i.id.startsWith('billing:'));
+    expect(freeMail.map((i) => i.title)).toEqual([`Free until day ${ends}`]);
+    expect(freeMail[0].text).toContain('/pro');
+
     rt.advance(ends - rt.world.day + 1);
     expect(rt.world.day).toBe(ends + 1);
+    await inbox();
+    const mail = (await inbox()).filter((i) => i.id.startsWith('billing:'));
+    expect(mail.map((i) => i.id)).toEqual([`billing:free:${playerId}`, `billing:autopilot:${playerId}`]);
+    expect(mail[1].text).toContain('/pro');
     const after = (await billing(app, token).expect(200)).body.data;
     expect(after).toMatchObject({ stage: 'autopilot', canManage: false });
     expect(after.locked).toEqual(expect.arrayContaining(['decisions', 'plan']));
@@ -122,6 +131,9 @@ describe('the free month, then autopilot', () => {
     expect(buy.body.data.status).toMatchObject({ plan: 'pro', stage: 'pro', canManage: true, locked: [] });
     await request(app).post('/api/worlds/demo/action').set(auth).send({ type: 'set_orders', orders: { price: biz.orders.price } }).expect(200);
     await request(app).post('/api/worlds/demo/query').set(auth).send({ type: 'real_world_plan' }).expect(200);
+    // Pro survives the days that follow (the engine copies players with their extra)
+    rt.advance(5);
+    expect((await billing(app, token).expect(200)).body.data.plan).toBe('pro');
     // the mark lives with the player inside the world, so it is in every snapshot
     const snap = rt.snapshot();
     const me = snap.world.players.find((p) => p.id === playerId) as { extra?: { billing?: { plan: string; via: string } } };
