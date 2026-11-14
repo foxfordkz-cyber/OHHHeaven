@@ -2,8 +2,8 @@ import type { IdeaMatch, NicheId, PlaceTier } from '@ohh/shared/types';
 
 /** Offline fallback for the `idea` query: keyword rules. Online the server asks @ohh/ai (agent 05). */
 const RULES: { niche: NicheId; words: RegExp; name: string; tier: PlaceTier; note: string }[] = [
-  { niche: 'cafe', words: /\b(coffee|caf[eé]|espresso|latte|bakery|pastr(y|ies)|tea|brunch|donut|bagel)/i, name: 'Morning Cup', tier: 'mid', note: 'Coffee shops live on morning foot traffic: a spot near a subway exit matters more than size.' },
-  { niche: 'barbershop', words: /\b(barber|hair|haircut|fade|salon|beard|shave|stylist)/i, name: 'Sharp Corner Barbers', tier: 'cheap', note: 'Barbershops sell repeat visits: loyal regulars matter more than the busiest corner.' },
+  { niche: 'cafe', words: /\b(coffee|caf[eé]|espresso|latte|bakery|pastr(y|ies)|tea|brunch|donut|bagel)|кофе|кафе|пекарн|выпечк|чай/i, name: 'Morning Cup', tier: 'mid', note: 'Coffee shops live on morning foot traffic: a spot near a subway exit matters more than size.' },
+  { niche: 'barbershop', words: /\b(barber|hair|haircut|fade|salon|beard|shave|stylist)|барбер|парикмахер|стрижк|бород/i, name: 'Sharp Corner Barbers', tier: 'cheap', note: 'Barbershops sell repeat visits: loyal regulars matter more than the busiest corner.' },
   { niche: 'bodega', words: /\b(bodega|deli|grocery|corner store|convenience|market|snacks)/i, name: 'Corner Market', tier: 'mid', note: 'A corner store wins on hours and location; margins are thin.' },
   { niche: 'guesthouse', words: /\b(hotel|guest ?house|b&b|bed and breakfast|hostel|rooms for tourists)/i, name: 'Little Guesthouse', tier: 'mid', note: 'Short stays are tightly regulated in New York City: check the rules before anything else.' },
   { niche: 'rentals', words: /\b(apartment|rent(al)?s?|landlord|lease out|property|airbnb)/i, name: 'Block Rentals', tier: 'cheap', note: 'Long-term rentals: steady income, heavy upfront money and tenant law to learn.' },
