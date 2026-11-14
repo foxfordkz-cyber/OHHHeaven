@@ -37,14 +37,14 @@ const files = {
 const isReal = (m) => (['economy', 'law', 'deals', 'analytics'].includes(m) ? files.engine === 'real' && files[m] === 'real' : files[m] === 'real');
 
 const STEPS = [
-  { id: 'health', title: 'Server starts, GET /api/health', deps: ['server'] },
-  { id: 'world', title: 'Create a demo city', deps: ['server', 'host'] },
-  { id: 'join', title: 'Two owners join', deps: ['server', 'host'] },
-  { id: 'open', title: 'Both open a cafe with the recommended kit', deps: ['server', 'host', 'engine', 'economy', 'analytics', 'cafePack', 'places'] },
-  { id: 'month', title: 'City runs 35 days, both have a MonthReport', deps: ['server', 'host', 'engine', 'economy'] },
-  { id: 'case', title: 'Owner 1 reports owner 2 → case, inspection, notice', deps: ['server', 'host', 'engine', 'law', 'cafePack'] },
-  { id: 'deal', title: 'Cross-promo between them is accepted', deps: ['server', 'host', 'engine', 'deals'] },
-  { id: 'analytics', title: 'Both views carry analytics', deps: ['server', 'host', 'engine', 'analytics'] },
+  { id: 'health', title: 'Server starts, GET /api/health', deps: ['server'], needs: [] },
+  { id: 'world', title: 'Create a demo city', deps: ['server', 'host'], needs: ['health'] },
+  { id: 'join', title: 'Two owners join', deps: ['server', 'host'], needs: ['world'] },
+  { id: 'open', title: 'Both open a cafe with the recommended kit', deps: ['server', 'host', 'engine', 'economy', 'analytics', 'cafePack', 'places'], needs: ['join'] },
+  { id: 'month', title: 'City runs 35 days, both have a MonthReport', deps: ['server', 'host', 'engine', 'economy'], needs: ['open'] },
+  { id: 'case', title: 'Owner 1 reports owner 2 → case, inspection, notice', deps: ['server', 'host', 'engine', 'law', 'cafePack'], needs: ['month'] },
+  { id: 'deal', title: 'Cross-promo between them is accepted', deps: ['server', 'host', 'engine', 'deals'], needs: ['open'] },
+  { id: 'analytics', title: 'Both views carry analytics', deps: ['server', 'host', 'engine', 'analytics'], needs: ['open'] },
 ];
 
 // ───────────── HTTP ─────────────
@@ -217,18 +217,19 @@ const run = {
 };
 
 let red = false;
-let broken = null;
+const passed = new Set();
 try {
   for (const s of STEPS) {
     const stubs = s.deps.filter((d) => !isReal(d));
     const mode = stubs.length ? `stub: ${stubs.join(', ')}` : 'REAL';
-    if (broken) { results.push({ s, status: 'skip', mode, detail: `after '${broken}' failed` }); continue; }
+    const missing = s.needs.filter((n) => !passed.has(n));
+    if (missing.length) { results.push({ s, status: 'skip', mode, detail: `needs '${missing.join("', '")}'` }); continue; }
     try {
       const detail = await run[s.id]();
+      passed.add(s.id);
       results.push({ s, status: 'pass', mode, detail: String(detail ?? '') });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
-      broken = s.id;
       if (stubs.length) results.push({ s, status: 'stub-fail', mode, detail: msg });
       else { red = true; results.push({ s, status: 'FAIL', mode, detail: msg }); }
     }
