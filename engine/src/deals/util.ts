@@ -10,7 +10,8 @@ export const toCents = (x: Money): number => Math.round(x * 100);
 export const fromCents = (c: number): Money => c / 100;
 
 export function fmtMoney(x: Money): string {
-  const s = Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  const whole = Number.isInteger(Math.round(Math.abs(x) * 100) / 100);
+  const s = Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: 2 });
   return `${x < 0 ? '-' : ''}$${s}`;
 }
 
