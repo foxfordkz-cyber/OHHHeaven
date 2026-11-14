@@ -28,6 +28,21 @@ describe('the ladder', () => {
     expect(l.toPrize).toBe(0);
     expect(l.me?.prize).toBeGreaterThan(0);
     expect(ladderLine(l)).toContain('prize places today');
+    expect(l.chaser).toBeNull();
+  });
+
+  it('in the prize places, the chaser is the nearest person below, not an AI', () => {
+    const board = [
+      ...ownerView.leaderboards.cafe!,
+      { businessId: 'b_tompkins', niche: 'cafe' as const, rank: 4, netWorth: 23_000, isAi: true, bankrupt: false },
+      { businessId: 'b_les2', niche: 'cafe' as const, rank: 5, netWorth: 21_600, isAi: false, bankrupt: false },
+    ];
+    const neighbors = [...ownerView.neighbors, { ...biz('b_cuppa'), id: 'b_les2', name: 'Second Shot', placeId: 'p_e4_bow' }];
+    const view: OwnerView = { ...ownerView, leaderboards: { cafe: board }, neighbors };
+    const l = ladderOf(view)!;
+    expect(l.below?.businessId).toBe('b_tompkins');
+    expect(l.chaser?.businessId).toBe('b_les2');
+    expect(ladderLine(l)).toBe('You are in the prize places today. Second Shot is $2,500 behind you and can take it.');
   });
 
   it('a fourth human above me pushes me out: the gap to the last prize place is shown', () => {
@@ -132,6 +147,24 @@ describe('the neighbors feed, with what it means for me', () => {
   it('a joint purchase between rivals means they buy cheaper', () => {
     const news = rivalNews(withFeed([{ id: 'j', day: 46, kind: 'deal', text: 'Tompkins Grind and Cuppa Joe East started a joint purchasing deal.', businessId: 'b_tompkins' }]), places, packs);
     expect(news[0].meaning).toBe('They now buy 6% cheaper: room to cut prices against you.');
+  });
+});
+
+describe('the feed stays readable on a real city', () => {
+  it('the same line about the same business is one row with a count', () => {
+    const line = (id: string, day: number): FeedItem => ({ id, day, kind: 'report', text: 'Someone reported Fade Factory to the city', businessId: 'b_fade' });
+    const news = rivalNews(withFeed([line('r1', 40), line('r2', 42), line('r3', 45)]), places, packs);
+    expect(news).toHaveLength(1);
+    expect(news[0]).toMatchObject({ id: 'r3', day: 45, count: 3 });
+  });
+
+  it('a one-cent nudge by a far cafe is not news; a 30-cent cut next door is', () => {
+    const prev = { ...snapshotOf(ownerView), day: 40 };
+    prev.prices.b_tompkins = 5.51;   // far: $5.51 → $5.50
+    prev.prices.b_cuppa = 4.99;      // next door: $4.99 → $4.95, under 5 cents
+    expect(changesSince(ownerView, places, packs, prev)).toEqual([]);
+    prev.prices.b_cuppa = 5.0;       // next door: exactly 5 cents
+    expect(changesSince(ownerView, places, packs, prev).map((n) => n.businessId)).toEqual(['b_cuppa']);
   });
 });
 

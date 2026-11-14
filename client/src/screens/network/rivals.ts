@@ -42,6 +42,8 @@ export interface Ladder {
   below: LadderRow | null;
   /** The last row that would win a prize today, when it is not me. */
   cutoff: LadderRow | null;
+  /** The nearest person below me: the one who can take my prize place (AI never takes prizes). */
+  chaser: LadderRow | null;
   /** Net worth I need to pass the cutoff; 0 when I would win a prize today; null when nobody can win yet. */
   toPrize: number | null;
   /** Prize fund of the niche today (bank × prize share, split by human owners). */
@@ -72,6 +74,7 @@ export function ladderOf(view: OwnerView): Ladder | null {
     above: i > 0 ? toRow(rows[i - 1]) : null,
     below: i >= 0 && i < rows.length - 1 ? toRow(rows[i + 1]) : null,
     cutoff,
+    chaser: i >= 0 ? (rows.slice(i + 1).find((r) => !r.isAi) ? toRow(rows.slice(i + 1).find((r) => !r.isAi)!) : null) : null,
     toPrize: iWin ? 0 : cutoff && mine ? round2(Math.max(0, cutoff.netWorth - mine.netWorth)) : null,
     pool: board.pool,
     prizePlaces: view.world.config.nichePrizeTable.length,
@@ -98,8 +101,9 @@ export function msToMonthClose(view: Pick<OwnerView, 'world'>): number | null {
 export function ladderLine(l: Ladder): string {
   if (!l.me) return 'You are not in the table yet: it counts net worth once your doors are open.';
   if (l.toPrize === 0) {
-    const chaser = l.below ? ` ${l.below.name} is ${money(l.me.netWorth - l.below.netWorth)} behind you.` : '';
-    return `You are in the prize places today.${chaser}`;
+    const chaser = l.chaser ? ` ${l.chaser.name} is ${money(l.me.netWorth - l.chaser.netWorth)} behind you and can take it.` : '';
+    const ai = l.above?.isAi ? ' AI businesses above you never take prizes.' : '';
+    return `You are in the prize places today.${ai}${chaser}`;
   }
   if (l.cutoff && l.toPrize !== null) return `${money(l.toPrize)} more net worth and you pass ${l.cutoff.name} into the prize places.`;
   return `Only owners who are people win prizes: top ${l.prizePlaces} of the niche at the end of the season.`;
@@ -168,7 +172,7 @@ export function mainRival(view: OwnerView, places: Place[], packs: PackSet | nul
 
 // ───────────── two moves with any neighbor ─────────────
 
-export interface TeamUpMove { allowed: boolean; kind: DealKind | null; title: string; value: string; reason?: string }
+export interface TeamUpMove { allowed: boolean; kind: DealKind | null; title: string; name: string; value: string; reason?: string }
 
 /** Deal kinds in the order they suit a neighbor: same trade buys together, a different trade nearby swaps customers. */
 const TEAM_UP_ORDER: DealKind[] = ['joint_purchase', 'cross_promo', 'loan'];
@@ -180,14 +184,14 @@ export function teamUpMove(view: OwnerView, target: PublicBusiness, distanceM: n
   const kind = TEAM_UP_ORDER.find((k) => avail[k].allowed) ?? null;
   if (!kind || !me) {
     const reason = avail[TEAM_UP_ORDER[0]].reason ?? avail.cross_promo.reason ?? 'No deal fits right now';
-    return { allowed: false, kind: null, title: 'Team up', value: reason, reason };
+    return { allowed: false, kind: null, title: 'Team up', name: '', value: reason, reason };
   }
   const effect = dealEffect(defaultTerms(kind, me), 'from', monthBase(me, view.analytics));
   let value: string;
   if (kind === 'joint_purchase') value = effect.monthly !== null ? `${money(effect.monthly, { signed: true })}/mo for you: ingredients −${pct(1 - RULES.JOINT_PURCHASE_COGS_MULT)}` : `Ingredients −${pct(1 - RULES.JOINT_PURCHASE_COGS_MULT)} for both`;
   else if (kind === 'cross_promo') value = effect.monthly !== null ? `${money(effect.monthly, { signed: true })}/mo for you: +${pct(RULES.CROSS_PROMO_DEMAND_MULT - 1)} guests` : `+${pct(RULES.CROSS_PROMO_DEMAND_MULT - 1)} guests for both`;
   else value = effect.lines[0] ?? 'Lend them cash at interest';
-  return { allowed: true, kind, title: `Team up: ${KIND_NAME[kind].toLowerCase()}`, value };
+  return { allowed: true, kind, title: `Team up: ${KIND_NAME[kind].toLowerCase()}`, name: KIND_NAME[kind], value };
 }
 
 export interface ReportMove { allowed: boolean; reason?: string; ifRight: string; ifWrong: string }
@@ -216,7 +220,7 @@ export function reportMove(view: View, packs: PackSet | null, target: PublicBusi
 // ───────────── the neighbors' feed, with what it means for me ─────────────
 
 export type NewsTone = 'good' | 'bad' | 'info';
-export interface RivalNews { id: string; day: number; text: string; meaning: string; tone: NewsTone; businessId?: string; icon: 'store' | 'badge' | 'flag' | 'alert' | 'handshake' | 'money' | 'trophy' }
+export interface RivalNews { id: string; day: number; text: string; meaning: string; tone: NewsTone; businessId?: string; count?: number; icon: 'store' | 'badge' | 'flag' | 'alert' | 'handshake' | 'money' | 'trophy' }
 
 interface Ctx { me: BusinessState; places: Place[]; radius: number; byId: Map<string, PublicBusiness> }
 
@@ -286,7 +290,11 @@ export function rivalNews(view: OwnerView, places: Place[], packs: PackSet | nul
   const c: Ctx = { me, places, radius: footfallRadius(packs, me.niche), byId: new Map(view.neighbors.map((n) => [n.id, n])) };
   const block = places.find((p) => p.id === me.placeId)?.block;
   const out: RivalNews[] = [];
+  const seen = new Map<string, RivalNews>();
   for (const item of [...view.feed].sort((a, b) => b.day - a.day)) {
+    // the same line about the same business (residents report the same shop again and again): one row with a count
+    const same = seen.get(`${item.kind}|${item.businessId ?? ''}|${item.text}`);
+    if (same) { same.count = (same.count ?? 1) + 1; continue; }
     if (!item.businessId) {
       if (item.kind === 'deal' && block && item.text.startsWith(`${block}:`)) {
         out.push({ id: item.id, day: item.day, text: item.text, tone: 'good', icon: 'handshake', meaning: 'Your block: more people walking past your door next month.' });
@@ -294,7 +302,10 @@ export function rivalNews(view: OwnerView, places: Place[], packs: PackSet | nul
       continue;
     }
     const m = meaningOf(item, c);
-    if (m) out.push({ id: item.id, day: item.day, text: item.text, businessId: item.businessId, ...m });
+    if (!m) continue;
+    const row: RivalNews = { id: item.id, day: item.day, text: item.text, businessId: item.businessId, ...m };
+    seen.set(`${item.kind}|${item.businessId ?? ''}|${item.text}`, row);
+    out.push(row);
   }
   return out.slice(0, limit);
 }
@@ -325,6 +336,10 @@ export function lastLook(stored: unknown, today: number): Snapshot | null {
   return { day: s.day, prices: s.prices, ranks: s.ranks ?? {}, myRank: typeof s.myRank === 'number' ? s.myRank : null };
 }
 
+/** Smallest price move worth a line: 5 cents next door, 5% elsewhere (AI managers nudge prices by a cent). */
+export const PRICE_STEP_STREET = 0.05;
+export const PRICE_STEP_CITY = 0.05;
+
 /** Price cuts and raises of my rivals and my own move in the table since the last game day I looked. */
 export function changesSince(view: OwnerView, places: Place[], packs: PackSet | null, prev: Snapshot | null): RivalNews[] {
   const me = view.business;
@@ -335,9 +350,11 @@ export function changesSince(view: OwnerView, places: Place[], packs: PackSet | 
   for (const n of view.neighbors) {
     if (n.niche !== me.niche || !alive(n)) continue;
     const was = prev.prices[n.id];
-    if (was === undefined || Math.abs(was - n.price) < 0.005) continue;
+    if (was === undefined) continue;
     const d = distanceBetween(places, me.placeId, n.placeId);
     const street = d !== null && d <= radius;
+    // a rival on my street: from 5 cents; anyone else in my niche: only a real move of 5% or more
+    if (Math.abs(was - n.price) < (street ? PRICE_STEP_STREET : was * PRICE_STEP_CITY) - 1e-9) continue;
     const cut = n.price < was;
     const text = `${n.name} ${cut ? 'cut' : 'raised'} its price: ${money(was, { cents: true })} → ${money(n.price, { cents: true })}`;
     const vsMe = typeof myPrice === 'number' && myPrice > 0 ? n.price - myPrice : null;
@@ -370,7 +387,7 @@ export interface Choice { label: string; outcome: string }
 export function offerChoices(deal: Deal, view: OwnerView): Choice[] {
   const effect = dealEffect(deal.terms, 'to', monthBase(view.business, view.analytics));
   return [
-    { label: 'Accept', outcome: [...effect.lines, 'Keep it to the end and both records show one more kept deal.'].join(' ') },
+    { label: 'Accept', outcome: sentences([...effect.lines, 'Keep it to the end and both records show one more kept deal']) },
     { label: 'Decline', outcome: 'Nothing changes for you. Declining leaves no mark on your record.' },
   ];
 }
@@ -392,3 +409,6 @@ export function nextReportDayLabel(view: View): string | null {
 }
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
+
+/** Lines from dealEffect have no full stops: one paragraph of sentences. */
+const sentences = (lines: string[]): string => lines.map((l) => (/[.!?]$/.test(l) ? l : `${l}.`)).join(' ');
