@@ -1,5 +1,5 @@
 // Helpers to build worlds for tests and the demo: places on one block, players, opening businesses.
-import type { Action, Pack, PackSet, Place, Player, WorldConfig, WorldState } from '../../../shared/src/types';
+import type { Action, Pack, PackSet, Place, Player, WorldConfig, WorldState } from '@ohh/shared';
 import { applyAction, createWorld, tickDay, type EngineCtx } from '../../src/index';
 import { packs as fixturePacks } from './common';
 
@@ -47,7 +47,7 @@ export function cafeCity(n: number, opts: { kit?: 'lean' | 'standard' | 'premium
     const kit = pack.kits.find((k) => k.id === (opts.kit ?? 'standard'))!;
     w = act(w, ctx, `pl${i}`, { type: 'open_business', niche: 'cafe', placeId: `p${i}`, name: `Cafe ${i}`, kitId: kit.id, size: opts.size ?? kit.size });
   }
-  const launchDay = opts.launchDay ?? 21;
+  const launchDay = opts.launchDay ?? 22;   // created on day 1: the 21-day food permit is ready on day 22
   while (w.day < launchDay) w = tickDay(w, ctx);
   if (opts.launch !== false) for (let i = 1; i <= n; i++) w = act(w, ctx, `pl${i}`, { type: 'launch' });
   return { w, ctx };

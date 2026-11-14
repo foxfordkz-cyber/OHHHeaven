@@ -1,9 +1,9 @@
 // Stub of engine/src/law/index.ts (agent 03). Same signatures as build/CONTRACT.md, section 3.
 // What it does: savings from shortcuts by `saves`, trails for shortcuts, lever options with `causes`
 // and days open without a ready permit. No cases, no inspections, no fines.
-import type { ActionResult, Action, BusinessState, Money, Pack, PackShortcut, PnlLine, ViolationTrail, WorldState } from '../../../shared/src/types';
+import type { ActionResult, Action, BusinessState, Money, Pack, PackShortcut, PnlLine, ViolationTrail, WorldState } from '@ohh/shared';
 import type { EngineCtx } from '../index';
-import { RULES } from '../../../shared/src/rules';
+import { RULES } from '@ohh/shared';
 
 export function lawActions(_w: WorldState, _ctx: EngineCtx, _playerId: string, a: Action): ActionResult | null {
   void a;

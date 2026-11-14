@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { RULES } from '../../../shared/src/rules';
+import { RULES } from '@ohh/shared';
 import { applyAction, createWorld, tickDay } from '../../src/index';
 import { itemsCost } from '../../src/economy/actions';
 import { econOf } from '../../src/economy/util';
@@ -23,7 +23,7 @@ describe('open_business and launch', () => {
     expect(b.cash).toBe(cafePack.startCapital - cost);
     expect(b.items.find((i) => i.id === 'seat')!.qty).toBe(20);
     expect(b.status).toBe('setup');
-    expect(b.permits.map((p) => [p.itemId, p.readyDay])).toEqual([['fse_permit', 21], ['food_protection_cert', 7]]);
+    expect(b.permits.map((p) => [p.itemId, p.readyDay])).toEqual([['fse_permit', 22], ['food_protection_cert', 8]]);
     expect(b.mtd.lines[0]).toMatchObject({ kind: 'setup', amount: -cost });
   });
 
@@ -45,9 +45,9 @@ describe('open_business and launch', () => {
   });
 
   it('launch opens the doors once and posts to the feed', () => {
-    let { w } = cafeCity(1, { launchDay: 21 });
+    let { w } = cafeCity(1, { launchDay: 22 });
     expect(w.businesses[0].status).toBe('open');
-    expect(w.businesses[0].openedDay).toBe(21);
+    expect(w.businesses[0].openedDay).toBe(22);
     expect(w.feed.at(-1)!.kind).toBe('opening');
     const ctx = ctxWith([place(1)]);
     expect(applyAction(w, ctx, 'pl1', { type: 'launch' }).error).toMatch(/already open/);

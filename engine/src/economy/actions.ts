@@ -1,6 +1,6 @@
 // Owner actions handled by the economy: build/CONTRACT.md, section 3 (economyActions).
-import type { Action, ActionResult, BusinessState, Pack, PermitState, Player, StandingOrders, WorldState } from '../../../shared/src/types';
-import { RULES } from '../../../shared/src/rules';
+import type { Action, ActionResult, BusinessState, Pack, PermitState, Player, StandingOrders, WorldState } from '@ohh/shared';
+import { RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { defaultLeverOption } from './effects';
 import { activeBusinessOf, addLine, clamp, econOf, emptyMtd, itemDef, maxSizeFor, placeOf, replaceBusiness, round2, staffCount, withEcon, type EconExtra } from './util';

@@ -1,6 +1,6 @@
 // Test _common pack until agent 14's packs/_common.json lands. Employer payroll taxes and owner profit taxes,
 // simplified to flat rates (confidence: 'estimate'); the real scheme comes from _common.extra.simplifiedScheme.
-import type { CommonPack, PackSet } from '../../../shared/src/types';
+import type { CommonPack, PackSet } from '@ohh/shared';
 import { cafePack } from './cafe';
 
 const EST = 'estimate' as const;

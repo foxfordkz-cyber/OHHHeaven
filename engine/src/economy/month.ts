@@ -1,7 +1,7 @@
 // Month close: build/CONTRACT.md, section 3, step 5 (economy part). Every dollar is a PnlLine;
 // the lines of a month add up to the change of cash over that month.
-import type { BusinessState, FeedItem, InboxItem, MonthReport, Pack, PnlLine, ViolationTrail, WorldState } from '../../../shared/src/types';
-import { dateOf, RULES } from '../../../shared/src/rules';
+import type { BusinessState, FeedItem, InboxItem, MonthReport, Pack, PnlLine, ViolationTrail, WorldState } from '@ohh/shared';
+import { dateOf, RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { payDue } from './day';
 import { shortcutSavings } from './deps';
@@ -49,9 +49,11 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
     cash = round2(cash + amount);
   };
 
-  // rent runs from the first day, open or not
+  // rent runs from the day the lease is signed (the business is created), open or not
+  const monthStart = (month - 1) * D + 1;
+  const rentDays = Math.max(0, day - Math.max(b.createdDay, monthStart) + 1);
   const rentMult = m.daysAlive > 0 ? m.rentMultSum / m.daysAlive : 1;
-  const rent = round2(monthlyRentOf(b, pack, ctx) * rentMult * (m.daysAlive / D));
+  const rent = round2(monthlyRentOf(b, pack, ctx) * rentMult * (rentDays / D));
   add({ id: 'rent', label: 'Rent', kind: 'rent', amount: -rent });
 
   // payroll from worker-days actually employed this month

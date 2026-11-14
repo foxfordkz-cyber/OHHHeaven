@@ -1,4 +1,4 @@
-import type { BusinessState, Money, NicheId, Pack, PackSetupItem, Place, PnlLine, WorldState } from '../../../shared/src/types';
+import type { BusinessState, Money, NicheId, Pack, PackSetupItem, Place, PnlLine, WorldState } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 
 export const round2 = (x: number): number => Math.round((x + Number.EPSILON) * 100) / 100;

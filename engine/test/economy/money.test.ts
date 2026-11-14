@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { WorldState } from '../../../shared/src/types';
+import type { WorldState } from '@ohh/shared';
 import { tickDay } from '../../src/index';
 import { act, cafeCity, run } from '../fixtures/world';
 

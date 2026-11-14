@@ -1,6 +1,6 @@
 // One game day for every business: build/CONTRACT.md, section 3, step 4.
-import type { BusinessState, DayReport, FeedItem, InboxItem, NicheId, Pack, Place, PnlLine, TaxLiability, WorldState } from '../../../shared/src/types';
-import { dateOf, RULES } from '../../../shared/src/rules';
+import type { BusinessState, DayReport, FeedItem, InboxItem, NicheId, Pack, Place, PnlLine, TaxLiability, WorldState } from '@ohh/shared';
+import { dateOf, RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { monthlyDemand, marketParams, type DemandInput } from './demand';
 import { activeEvents, eventMult, itemsQuality, leverEffects, MARKETING_DECAY_DAY, TRAINING_DECAY_DAY, trainingBoost, weekdayMult } from './effects';

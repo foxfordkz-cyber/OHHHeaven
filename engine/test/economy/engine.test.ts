@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import type { GameEvent, WorldState } from '../../../shared/src/types';
+import type { GameEvent, WorldState } from '@ohh/shared';
 import { applyAction, createWorld, netWorth, tickDay } from '../../src/index';
-import { nicheHooks } from '../../src/__stubs__/niches';
+import { NICHE_HOOKS } from '../../src/niches/index';
 import { cafePack } from '../fixtures/cafe';
 import { act, cafeCity, config, ctxWith, deepFreeze, owner, places, run } from '../fixtures/world';
 
 describe('createWorld, applyAction, tickDay, netWorth', () => {
-  it('creates an empty running world at day 0', () => {
+  it('creates an empty running world on day 1 (the opening day; tickDay computes day 2 next)', () => {
     const w = createWorld(config());
-    expect(w.day).toBe(0);
+    expect(w.day).toBe(1);
     expect(w.phase).toBe('running');
     expect(w.businesses).toEqual([]);
   });
@@ -116,7 +116,7 @@ describe('day: weather, events, weekday, closures, hooks', () => {
   it('niche hooks change demand, capacity, month lines and notes; without hooks the default applies', () => {
     const { w, ctx } = base();
     const plain = demandNext(w, ctx);
-    nicheHooks.cafe = {
+    NICHE_HOOKS.cafe = {
       demandMult: () => 1.1,
       capacityDay: () => 50,
       notes: () => ['Morning rush'],
@@ -130,7 +130,7 @@ describe('day: weather, events, weekday, closures, hooks', () => {
       const closed = run(w, ctx, 30 - w.day + 30);
       expect(closed.businesses[0].history.at(-1)!.lines.some((l) => l.id === 'hook_line')).toBe(true);
     } finally {
-      delete nicheHooks.cafe;
+      delete NICHE_HOOKS.cafe;
     }
   });
 });
@@ -147,7 +147,7 @@ describe('opening and permits', () => {
   });
 
   it('opening after the permits are ready leaves no trail', () => {
-    let { w, ctx } = cafeCity(1, { launchDay: 21 });
+    let { w, ctx } = cafeCity(1, { launchDay: 22 });
     w = run(w, ctx, 30 - w.day);
     expect(w.businesses[0].trails).toEqual([]);
   });
