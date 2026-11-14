@@ -10,7 +10,7 @@
 2. Каждое событие получило `effects`, `months`, `durationMonths`, условие срабатывания (`trigger`), пример в долларах на эталонном кафе и ходы игрока с ценой и результатом. Бесплатных ходов нет: у хода с нулевой ценой в деньгах есть поле `price` с ценой в днях, спросе, местах или риске.
 3. Главная денежная ось темы — **время до открытия**. День задержки до открытия стоит $230 (аренда $200 и накладные расходы $30). День закрытия работающего кафе стоит $1 258 валовой маржи плюс аренда. Через эти две цены выражены почти все события ремонта, разрешений и коммуникаций.
 4. Исправлено 11 событий. Три противоречия между фрагментами сведены к одной модели: продление аренды (×2, ×1,5 и ×1,25 → центральный случай ×1,3), счёт за налог на недвижимость (×1,02, ×1,3 и +$60 → +$60 в месяц или разовые $1 800), потеря постоянных гостей при смене названия (×0,5 → ×0,7). Одно событие устарело: требование «прозрачных» роллет отменено 30 июня 2026 года.
-5. Что не удалось: четыре события отданы другим темам (D16, D18, D19). Ещё не найдены точные суммы штрафов FDNY за загромождённый выход, штрафа по Air Code за запах и современная статистика сроков подключения газа (последняя — опрос 2017 года).
+5. Что не удалось: четыре события отданы другим темам (D16, D18, D19). Нет современной статистики сроков подключения газа (последние опросы — 2015 и 2017 годов) и статистики роста аренды при продлении. Суммы штрафов FDNY за выход и по Air Code за запах найдены, но подписи колонок в таблицах не видны.
 
 ## 2. Что сделано
 
@@ -80,13 +80,12 @@
 
 ## 6. Не найдено
 
-- Сроки подключения газа Con Edison новее опроса сената штата 2017 года (в среднем 68 дней). Общего срока от заявки до подачи электричества в источниках тоже нет: есть только «около недели до ответа» и «около 20 дней на проверку мощности» в пилоте HPD.
+- Сроки подключения газа Con Edison новее опросов 2015–2017 годов. По опросу 2015 года 69% ресторанов ждали газ не меньше 30 дней, по опросу 2017 года среднее ожидание — 68 дней. Общего срока от заявки до подачи электричества в источниках нет: есть только «около недели до ответа» и «около 20 дней на проверку мощности» в пилоте HPD.
 - Статистика роста аренды при продлении для кафе и магазинов Нью-Йорка: нашлись только отдельные истории и рост запрашиваемых аренд.
 - Типичное число бесплатных месяцев для торговых помещений Нью-Йорка. Есть только данные по офисам (около 10–12 месяцев на договор в 2026 году), к кафе они не применимы.
-- Сумма штрафа FDNY за загромождённый выход: строку таблицы 3 RCNY 109-03 прочитать не удалось.
-- Штраф по Air Code за запах из кухни. Нашлись только приказ OATH о прекращении нарушения и штраф штата $25 300 пиццерии.
+- Точные подписи колонок в таблицах штрафов FDNY (группа VC 9 «выходы») и Air Code (24-141, запах). Суммы найдены — $950 / $475 / $1 000 и $400 / $620 / $1 000 — и уже стоят в событиях `d00_premises_exit_storage` и `d00_premises_odor_home`. Но соответствие колонок я вывел из порядка чисел, поэтому пометка `estimate`. Таблица Air Code датирована 2010 годом.
 - Нижняя граница штрафа по закону о преследовании коммерческих арендаторов: в одних источниках $1 000–10 000, в других до $50 000.
-- Цена доработки системы пожаротушения под вытяжкой и ремонта выхлопа от запаха — в данных стоят мои оценки.
+- Цена доработки системы пожаротушения под вытяжкой и ремонта выхлопа от запаха — в данных стоят мои оценки ($2 500 и $8 000).
 - Фактические сроки изменения разрешения на использование помещения (amended CO) — оценка 90 дней.
 
 ## 7. Главные источники
@@ -111,7 +110,8 @@
 - **Помещение и соседи.**
   - Доступность: [Стандарты ADA 2010](https://www.ada.gov/law-and-regs/design-standards/2010-stds/), [мировое соглашение E.D.N.Y.](https://www.adatitleiii.com/wp-content/uploads/sites/25/2025/02/2-NATOSHA-DUNSTON-Plaintiff-v-243-DEKALB-AVE-LLC-and-243-DEKALB-AVE-REST-CORP_-003.pdf), [цена пандуса S.D.N.Y.](https://law.justia.com/cases/federal/district-courts/new-york/nysdce/1:2010cv07592/369172/53).
   - Штрафы за шум — [таблица штрафов](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-30850).
-  - Запах — [OATH](https://www.nyc.gov/assets/oath/downloads/pdf/oath-ecb-boardmeeting-12082022.pdf).
+  - Запах: [таблица штрафов Air Code](https://www.nyc.gov/html/ecb/downloads/pdf/AirCodePenaltySchedule.pdf), [OATH](https://www.nyc.gov/assets/oath/downloads/pdf/oath-ecb-boardmeeting-12082022.pdf).
+  - Выходы — [таблица штрафов FDNY](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214).
   - Отмена закона о роллетах — [News 12, 3 июля 2026](https://brooklyn.news12.com/2026/07/03/see-through-security-gate-requirement-repealed-for-businesses-as-part-of-city-budget/MkkqJRrsd0jocdLjctpIt).
 
 Полный перечень источников — в полях `source` и `supportingSources` каждого события JSON.
@@ -134,7 +134,7 @@
 | D00 | core | new | `d00_premises_early_stock` | cash −$500; openingDelayDays +7 | круглый год; 1 мес. | −2,110 | [nyc.gov](https://www.nyc.gov/site/sbs/businesses/food-establishment-form.page) e |
 | D00 | core | new | `d00_premises_entrance_step` | violationExposure → accessibility_barrier; demand ×0.99 | круглый год; 1 мес. | −4,529 | [ada.gov](https://www.ada.gov/resources/title-iii-primer/) e |
 | D00 | core | new | `d00_premises_exemption_scope` | cash −$1,250; openingDelayDays +21 | круглый год; 1 мес. | −6,080 | [home4.nyc.gov](https://home4.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-storefronts.page) e |
-| D00 | core | new | `d00_premises_exit_storage` | violationExposure → blocked_egress | круглый год; 1 мес. | 0 | [codelibrary.amlegal.com](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-144597) e |
+| D00 | core | new | `d00_premises_exit_storage` | violationExposure → blocked_egress; cash −$950 (если FDNY finds the blocked route) | круглый год; 1 мес. | −950 | [codelibrary.amlegal.com](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214) e |
 | D00 | core | new | `d00_premises_gas_sequence` | openingDelayDays +68 | круглый год; 3 мес. | −15,640 | [nyc-business.nyc.gov](https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment) e |
 | D00 | core | new | `d00_premises_guaranty_scope` | exitLiability = remaining_lease_rent | круглый год; 1 мес. | −576,000 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) e |
 | D00 | core | new | `d00_premises_hood_rearrange` | setupCost +$2,500 | круглый год; 1 мес. | −2,500 | [nyc-business.nyc.gov](https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems) e |
@@ -146,7 +146,7 @@
 | D00 | core | new | `d00_premises_lease_rent_start` | rent ×1.0 | круглый год; 3 мес. | −6,600 | [jdsupra.com](https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/) e |
 | D00 | core | new | `d00_premises_lpc_incomplete` | openingDelayDays +21 | круглый год; 1 мес. | −4,830 | [nyc.gov](https://www.nyc.gov/site/lpc/applications/lpc-business-express.page) e |
 | D00 | core | new | `d00_premises_meter_not_live` | openingDelayDays +14 | круглый год; 1 мес. | −3,220 | [coned.com](https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide) e |
-| D00 | core | new | `d00_premises_odor_home` | cash −$2,000; inspections ×1.2 | круглый год; 2 мес. | −10,000 | [nyc.gov](https://www.nyc.gov/assets/oath/downloads/pdf/oath-ecb-boardmeeting-12082022.pdf) e |
+| D00 | core | new | `d00_premises_odor_home` | cash −$400; inspections ×1.2 | круглый год; 2 мес. | −8,400 | [nyc.gov](https://www.nyc.gov/html/ecb/downloads/pdf/AirCodePenaltySchedule.pdf) e |
 | D00 | core | new | `d00_premises_old_legal_use` | openingDelayDays +30; setupCost +$2,630 | круглый год; 1 мес. | −9,530 | [nyc.gov](https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page) v |
 | D00 | core | new | `d00_premises_permit_transfer` | closureDays +22 | круглый год; 1 мес. | −27,676 | [tax.ny.gov](https://www.tax.ny.gov/bus/doingbus/buy.htm) e |
 | D00 | core | new | `d00_premises_pest_door_gap` | inspections ×1.1; violationExposure → pest_activity | круглый год; 1 мес. | −150 | [codelibrary.amlegal.com](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46269) e |

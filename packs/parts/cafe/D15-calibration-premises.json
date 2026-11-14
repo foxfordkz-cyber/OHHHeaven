@@ -9736,8 +9736,8 @@
     "effects": [
      {
       "field": "cash",
-      "add": -2000,
-      "note": "DEP violation (my estimate)"
+      "add": -400,
+      "note": "Air Code 24-141 summons: first offense; $620 second, $1,000 third"
      },
      {
       "field": "inspections",
@@ -9778,12 +9778,14 @@
       }
      }
     ],
-    "source": "https://www.nyc.gov/assets/oath/downloads/pdf/oath-ecb-boardmeeting-12082022.pdf",
+    "source": "https://www.nyc.gov/html/ecb/downloads/pdf/AirCodePenaltySchedule.pdf",
     "confidence": "estimate",
-    "note": "DEP pursues repeated restaurant odor complaints up to cease-and-desist orders at OATH (2022 board meeting); a state DEC smoke and odor case against a pizzeria ended in a $25,300 civil penalty with part suspended for relocating vents. City Air Code fine amounts not found: $2,000 is my estimate.",
-    "cashExampleUSD": -10000,
+    "note": "Air Code 24-141 bans odorous emissions that cause detriment or discomfort, and food processing is a listed source. ECB penalty schedule row for 24-141 reads 400 / 400 / 620 / 620 / 1,000: read as $400 first, $620 second, $1,000 third offense (column labels not visible; schedule dated 2010). DEP pursues repeat restaurant odor cases to cease-and-desist orders at OATH (2022); a state DEC smoke and odor case ended in a $25,300 penalty. The fix cost is my estimate.",
+    "cashExampleUSD": -8400,
     "supportingSources": [
-     "https://extapps.dec.ny.gov/docs/legal_protection_pdf/originalpizzao.pdf"
+     "https://www.nyc.gov/assets/oath/downloads/pdf/oath-ecb-boardmeeting-12082022.pdf",
+     "https://extapps.dec.ny.gov/docs/legal_protection_pdf/originalpizzao.pdf",
+     "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-43363"
     ],
     "tier": "core",
     "name": "Cafe exhaust enters a neighboring home"
@@ -10162,6 +10164,12 @@
      {
       "field": "violationExposure",
       "id": "blocked_egress"
+     },
+     {
+      "field": "cash",
+      "add": -950,
+      "onlyIf": "FDNY finds the blocked route",
+      "note": "$475 if corrected by the hearing, $1,000 on default; repeat $2,375 / $5,000"
      }
     ],
     "playerMoves": [
@@ -10196,12 +10204,12 @@
       }
      }
     ],
-    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-144597",
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214",
     "confidence": "estimate",
-    "note": "FDNY penalty schedule (3 RCNY 109-03) prices egress violations by tier; the exact row was not readable. Uses the D02 violation blocked_egress.",
-    "cashExampleUSD": 0,
+    "note": "FDNY penalty schedule (3 RCNY 109-03), category VC 9 'Rooftop Access and Means of Egress': row 950 / 475 / 1,000 / 2,375 / 1,185 / 5,000, read as first violation $950 standard, $475 if corrected, $1,000 on default, then $2,375 / $1,185 / $5,000 for repeats (column labels not visible in the excerpt). Fire Code: aisles at least 3 ft kept free of obstructions. Uses the D02 violation blocked_egress.",
+    "cashExampleUSD": -950,
     "supportingSources": [
-     "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
+     "https://up.codes/s/penalty-schedule-for-fdny-summonses"
     ],
     "tier": "core",
     "name": "Bulk supplies consume the exit passage"
