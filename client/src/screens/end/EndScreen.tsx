@@ -78,12 +78,16 @@ export function EndScreen({ view, ask, cards, planHref = '/end/plan' }: { view: 
           <>
             {debrief.headline && <p className="h3" style={{ margin: 0 }}>{debrief.headline}</p>}
             <LostMoney items={debrief.lostMoneyOn} cards={ruleCards} />
-            <Card title="What worked">
-              <ul className="end-list">{debrief.didWell.map((d) => <li key={d}>{d}</li>)}</ul>
-            </Card>
-            <Card title="Next time">
-              <ol className="end-list">{debrief.nextTime.map((d) => <li key={d}>{d}</li>)}</ol>
-            </Card>
+            {debrief.didWell.length > 0 && (
+              <Card title="What worked">
+                <ul className="end-list">{debrief.didWell.map((d) => <li key={d}>{d}</li>)}</ul>
+              </Card>
+            )}
+            {debrief.nextTime.length > 0 && (
+              <Card title="Next time">
+                <ol className="end-list">{debrief.nextTime.map((d) => <li key={d}>{d}</li>)}</ol>
+              </Card>
+            )}
           </>
         )}
       </section>

@@ -32,6 +32,13 @@ function Row({ r, testMoney }: { r: BoardRow; testMoney: boolean }) {
   );
 }
 
+/** "Top 3 human businesses split it 50 / 30 / 20." — or the split used when fewer can win. */
+export function splitText(split: number[]): string {
+  if (split.length === 0) return 'No human business can win it yet.';
+  if (split.length === 1) return 'The only human business that can win takes it all.';
+  return `Top ${split.length} human businesses split it ${split.join(' / ')}.`;
+}
+
 /** One niche: podium highlighted, prize per place, AI marked without prize, my row pinned at the bottom if it is far down. */
 export function NicheTable({ board, testMoney, limit }: { board: NicheBoard; testMoney: boolean; limit?: number }) {
   const shown = limit ? board.rows.slice(0, limit) : board.rows;
@@ -48,7 +55,7 @@ export function NicheTable({ board, testMoney, limit }: { board: NicheBoard; tes
         </ol>
       )}
       <p className="xsmall faint lb-note">
-        Prize fund of this niche: {money(board.pool, { cents: true })}. Top 3 human businesses split it 50 / 30 / 20. AI businesses run by the city win nothing.
+        Prize fund of this niche: {money(board.pool, { cents: true })}. {splitText(board.split)} AI businesses run by the city win nothing.
       </p>
     </div>
   );

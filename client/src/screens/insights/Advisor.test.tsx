@@ -40,6 +40,8 @@ describe('Ask the advisor card', () => {
     fireEvent.change(screen.getByLabelText('Your question'), { target: { value: 'Where do I find a coffee supplier in real life?' } });
     fireEvent.click(screen.getByRole('button', { name: 'Ask' }));
     expect(screen.getByText(/Thinking/)).toBeTruthy();
+    // RTL turns the act environment off between its own calls; this manual act() needs it on
+    (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
     await act(async () => { await vi.advanceTimersByTimeAsync(5_000); });
     expect(screen.getByText(TIMEOUT_TEXT, { exact: false })).toBeTruthy();
   });

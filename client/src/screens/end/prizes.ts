@@ -10,7 +10,11 @@ export interface BoardRow {
   netWorth: number; prize: number | null; podium: 1 | 2 | 3 | null;
 }
 
-export interface NicheBoard { niche: NicheId; pool: number; rows: BoardRow[]; mine: BoardRow | null }
+export interface NicheBoard {
+  niche: NicheId; pool: number; rows: BoardRow[]; mine: BoardRow | null;
+  /** How the fund is split today, in percent per prize place: 50/30/20, or 62.5/37.5 when only two can win. */
+  split: number[];
+}
 
 /** Niche order of the engine (engine/src/deals/standings.ts): leftover cents go to the first niches. */
 export const NICHE_ORDER: NicheId[] = ['cafe', 'barbershop', 'bodega', 'guesthouse', 'rentals'];
@@ -114,7 +118,8 @@ export function nicheBoard(v: OwnerView, niche: NicheId): NicheBoard {
       podium: (place >= 0 && place < 3 ? ((place + 1) as 1 | 2 | 3) : null),
     };
   });
-  return { niche, pool, rows, mine: rows.find((r) => r.mine) ?? null };
+  const split = pool > 0 ? prizes.map((p) => Math.round((p / pool) * 1000) / 10) : [];
+  return { niche, pool, rows, mine: rows.find((r) => r.mine) ?? null, split };
 }
 
 export function allBoards(v: OwnerView): NicheBoard[] {

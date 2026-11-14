@@ -32,6 +32,12 @@ export function reserveMonths(plan: Pick<RealWorldPlan, 'reserveAdvised' | 'mont
   return `${Number.isInteger(m) ? m : m.toFixed(1)} ${m === 1 ? 'month' : 'months'}`;
 }
 
+/** "Three lessons from your season", or as many as the books gave (the plan shows at most three). */
+export function lessonsTitle(n: number): string {
+  const k = Math.min(3, n);
+  return k === 0 ? 'Lessons from your season' : `${['One lesson', 'Two lessons', 'Three lessons'][k - 1]} from your season`;
+}
+
 /** The page a person takes home. Pure: everything comes from the RealWorldPlan. */
 export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards: Map<string, PackRuleCard>; actions?: ReactNode }) {
   const one = unitWord(plan.niche, 1);
@@ -96,7 +102,7 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
       </section>
 
       <section className="plan-block" aria-labelledby="plan-lessons">
-        <h2 id="plan-lessons" className="h3">Three lessons from your season</h2>
+        <h2 id="plan-lessons" className="h3">{lessonsTitle(plan.lessons.length)}</h2>
         <ol className="plan-lessons">
           {plan.lessons.slice(0, 3).map((l, i) => {
             const card = l.ruleCardId ? cards.get(l.ruleCardId) : undefined;

@@ -141,7 +141,19 @@ export function trendModel(v: OwnerView): { points: TrendPoint[]; marks: TrendMa
     ...v.feed.filter((f) => f.kind === 'inspection' && f.businessId === b.id).map((f) => ({ month: monthOf(f.day), kind: 'inspection' as const, label: f.text })),
     ...b.history.filter((m) => m.fines > 0).map((m) => ({ month: m.month, kind: 'fine' as const, label: `Fine ${money(m.fines)}` })),
   ];
-  return { points, marks };
+  return { points, marks: mergeMarks(marks) };
+}
+
+/** One mark per month and kind: weekly notices of the same event would otherwise stack into a column of dots. */
+export function mergeMarks(marks: TrendMark[]): TrendMark[] {
+  const groups = new Map<string, TrendMark & { labels: string[] }>();
+  for (const m of marks) {
+    const key = `${m.month}:${m.kind}`;
+    const g = groups.get(key) ?? { ...m, labels: [] };
+    if (!g.labels.includes(m.label)) g.labels.push(m.label);
+    groups.set(key, g);
+  }
+  return [...groups.values()].map(({ labels, ...m }) => ({ ...m, label: labels.join(' · ') }));
 }
 
 // ───────────── capacity and lost sales ─────────────
@@ -178,10 +190,21 @@ export function capacityModel(v: OwnerView): CapacityModel | null {
 }
 
 // ───────────── taxes ─────────────
+/** Names of the taxes in the packs (server/fixtures, packs/*.json), for when the pack itself is not at hand. */
 const TAX_LABELS: Record<string, string> = {
-  sales_tax: 'Sales tax', income_tax_estimate: 'Estimated income tax', payroll_tax: 'Payroll taxes', ubt: 'NYC unincorporated business tax',
+  sales_tax: 'Sales tax', employer_fica: 'Employer Social Security and Medicare', ny_unemployment: 'NY unemployment insurance',
+  income_tax: 'Income taxes on profit', income_tax_estimate: 'Estimated income tax', payroll_tax: 'Payroll taxes',
+  nyc_service_sales_tax: 'NYC sales tax on barbering services', retail_sales_tax: 'Sales tax on retail products', ubt: 'NYC unincorporated business tax',
 };
-export const taxLabel = (id: string): string => TAX_LABELS[id] ?? id.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+const ACRONYMS = new Set(['ny', 'nyc', 'nys', 'fica', 'futa', 'suta', 'sui', 'ubt', 'mctmt', 'irs', 'us']);
+/** A tax id as words: the pack's name when known, else "nys_withholding" → "NYS withholding". */
+export function taxLabel(id: string, nameOf?: (id: string) => string | undefined): string {
+  const known = nameOf?.(id) ?? TAX_LABELS[id];
+  if (known) return known;
+  const words = id.split(/[_\s]+/).filter(Boolean).map((w) => (ACRONYMS.has(w.toLowerCase()) ? w.toUpperCase() : w.toLowerCase()));
+  const text = words.join(' ');
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
 
 export interface TaxModel {
   owed: number; enough: boolean | null; shortBy: number;
@@ -189,7 +212,7 @@ export interface TaxModel {
   items: { id: string; label: string; amount: number; due: string }[];
 }
 
-export function taxModel(v: OwnerView): TaxModel | null {
+export function taxModel(v: OwnerView, nameOf?: (taxId: string) => string | undefined): TaxModel | null {
   const b = v.business;
   if (!b) return null;
   const unpaid = b.liabilities.filter((l) => !l.paid).sort((x, y) => x.dueDay - y.dueDay);
@@ -199,24 +222,34 @@ export function taxModel(v: OwnerView): TaxModel | null {
   const enough = next ? b.cash >= next.amount : null;
   return {
     owed, next, enough, shortBy: next && !enough ? Math.round(next.amount - b.cash) : 0,
-    items: unpaid.map((l) => ({ id: l.taxId, label: taxLabel(l.taxId), amount: l.amount, due: dateOf(l.dueDay).label })),
+    items: unpaid.map((l) => ({ id: l.taxId, label: taxLabel(l.taxId, nameOf), amount: l.amount, due: dateOf(l.dueDay).label })),
   };
 }
 
 // ───────────── risk ─────────────
-export interface RiskModel { exposure: number; saved: number; open: { violationId: string; months: number; saved: number }[]; verdict: string; tone: Tone }
+export interface RiskModel {
+  exposure: number; saved: number; verdict: string; tone: Tone;
+  open: { violationId: string; name: string; months: number; saved: number }[];
+}
 
-export function riskModel(v: OwnerView): RiskModel | null {
+/** "no_fse_permit" → "No fse permit" when the pack's name is not at hand. */
+const violationLabel = (id: string) => (id.charAt(0).toUpperCase() + id.slice(1)).replace(/_/g, ' ');
+
+export function riskModel(v: OwnerView, nameOf?: (violationId: string) => string | undefined): RiskModel | null {
   const a = v.analytics;
   const b = v.business;
   if (!a || !b) return null;
-  const open = b.trails.filter((t) => !t.discovered).map((t) => ({ violationId: t.violationId, months: t.months, saved: t.saved }));
+  const open = b.trails.filter((t) => !t.discovered).map((t) => ({
+    violationId: t.violationId, name: nameOf?.(t.violationId) ?? violationLabel(t.violationId), months: t.months, saved: t.saved,
+  }));
   const saved = open.reduce((s, t) => s + t.saved, 0);
   const exposure = a.exposure;
   if (exposure <= 0 && open.length === 0) return { exposure: 0, saved: 0, open, verdict: 'No open violations: an inspection would find nothing.', tone: 'good' };
-  const verdict = exposure > saved
-    ? `If they find it today you pay ${money(exposure)}: ${money(exposure - saved)} more than you saved.`
-    : `You saved ${money(saved)}; fines today would be ${money(exposure)}. The fine grows every month you keep going.`;
+  const verdict = saved <= 0
+    ? `If they find it today you pay ${money(exposure)} in fines.`
+    : exposure > saved
+      ? `If they find it today you pay ${money(exposure)}: ${money(exposure - saved)} more than you saved.`
+      : `You saved ${money(saved)}; fines today would be ${money(exposure)}. The fine grows every month you keep going.`;
   return { exposure, saved, open, verdict, tone: exposure > saved ? 'bad' : 'neutral' };
 }
 
@@ -224,7 +257,10 @@ export function riskModel(v: OwnerView): RiskModel | null {
 export function kpiValue(value: number, unit: string): string {
   if (unit === '$') return money(value, { cents: value < 100 });
   if (unit === '%') return pct(value);
-  return `${Number.isInteger(value) ? int(value) : value.toFixed(1)} ${unit}`;
+  const n = Number.isInteger(value) ? int(value) : value.toFixed(1);
+  // packs name the unit in the singular ("order"); say "1 order", "204 orders"
+  const word = !unit || value === 1 || /s$/i.test(unit) || /\s/.test(unit) ? unit : `${unit}s`;
+  return word ? `${n} ${word}` : n;
 }
 
 // ───────────── questions for the advisor ─────────────

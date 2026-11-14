@@ -41,3 +41,13 @@ describe('end of season', () => {
     expect(Math.round(prizes.reduce((s, x) => s + x, 0) * 100)).toBe(Math.round(cafePool * 100));
   });
 });
+
+describe('end of season with a short debrief', () => {
+  it('hides empty lists instead of showing empty cards', async () => {
+    const short = { ...DEBRIEF, didWell: [], nextTime: [] };
+    render(<MemoryRouter><EndScreen view={cafeEndedView} ask={async () => short} cards={RULE_CARDS} /></MemoryRouter>);
+    expect(await screen.findByText('Not enough seats in February')).toBeTruthy();
+    expect(screen.queryByText('What worked')).toBeNull();
+    expect(screen.queryByText('Next time')).toBeNull();
+  });
+});

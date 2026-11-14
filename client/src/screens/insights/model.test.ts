@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { OwnerView } from '@shared/types';
 import { cafeEndedView, cafeRiskyView, cafeSetupView, cafeStrugglingView, cafeView, MAYA_PLANS, monthLines, monthReport } from './fixtures';
-import { advisorPresets, benchmarkRow, breakEvenModel, capacityModel, costGroups, costModel, headline, metricKey, riskModel, taxModel, trendModel } from './model';
+import { advisorPresets, benchmarkRow, breakEvenModel, capacityModel, costGroups, costModel, headline, kpiValue, mergeMarks, metricKey, riskModel, taxLabel, taxModel, trendModel } from './model';
 
 const VIEWS = { cafeView, cafeStrugglingView, cafeRiskyView, cafeSetupView, cafeEndedView };
 const r2 = (v: number) => Math.round(v * 100) / 100;
@@ -113,6 +113,14 @@ describe('trend, capacity, taxes, risk', () => {
     // at the end of the season past events come from the inbox, as the host sends them
     expect(trendModel(cafeEndedView).marks.map((m) => m.kind).sort()).toEqual(['event', 'event', 'event', 'inspection', 'inspection']);
   });
+  it('one mark per month and kind, however many notices came', () => {
+    expect(mergeMarks([
+      { month: 4, kind: 'event', label: 'Weekend farmers market' }, { month: 4, kind: 'event', label: 'Coffee bean prices jump' },
+      { month: 4, kind: 'event', label: 'Weekend farmers market' }, { month: 4, kind: 'inspection', label: 'Grade A' },
+    ])).toEqual([
+      { month: 4, kind: 'event', label: 'Weekend farmers market · Coffee bean prices jump' }, { month: 4, kind: 'inspection', label: 'Grade A' },
+    ]);
+  });
   it('marks a month with a fine', () => {
     const b = cafeView.business!;
     const v: OwnerView = { ...cafeView, business: { ...b, history: b.history.map((m) => (m.month === 3 ? { ...m, fines: 300 } : m)) } };
@@ -138,6 +146,37 @@ describe('trend, capacity, taxes, risk', () => {
     expect(r).toMatchObject({ exposure: 13312, saved: 5656, tone: 'bad' });
     expect(r.verdict).toBe('If they find it today you pay $13,312: $7,656 more than you saved.');
     expect(riskModel(cafeView)!.tone).toBe('good');
+  });
+  it('names open violations from the packs and does not compare with savings that are not there', () => {
+    const b = cafeView.business!;
+    const v: OwnerView = {
+      ...cafeView, analytics: { ...cafeView.analytics!, exposure: 1500 },
+      business: { ...b, trails: [{ violationId: 'no_fse_permit', months: 1, saved: 0, lastActiveMonth: 1, discovered: false }] },
+    };
+    const r = riskModel(v, (id) => (id === 'no_fse_permit' ? 'Operating without a food service permit' : undefined))!;
+    expect(r.open).toEqual([{ violationId: 'no_fse_permit', name: 'Operating without a food service permit', months: 1, saved: 0 }]);
+    expect(r.verdict).toBe('If they find it today you pay $1,500 in fines.');
+    expect(riskModel(v)!.open[0].name).toBe('No fse permit');
+  });
+  it('says taxes by name: the pack’s, then a known one, then the id in words', () => {
+    expect(taxLabel('sales_tax', () => 'NYC sales tax')).toBe('NYC sales tax');
+    expect(taxLabel('employer_fica')).toBe('Employer Social Security and Medicare');
+    expect(taxLabel('nys_withholding_tax')).toBe('NYS withholding tax');
+    const b = cafeStrugglingView.business!;
+    const v: OwnerView = { ...cafeStrugglingView, business: { ...b, liabilities: [...b.liabilities, { taxId: 'ny_unemployment', amount: 1602, dueDay: 110, paid: false }] } };
+    expect(taxModel(v)!.items.map((i) => i.label)).toEqual(['Sales tax', 'NY unemployment insurance', 'Sales tax']);
+  });
+});
+
+describe('niche numbers', () => {
+  it('formats money, shares and counts; units from the packs come in the singular', () => {
+    expect(kpiValue(7.5, '$')).toBe('$7.50');
+    expect(kpiValue(242, '$')).toBe('$242');
+    expect(kpiValue(0.6542, '%')).toBe('65%');
+    expect(kpiValue(204, 'order')).toBe('204 orders');
+    expect(kpiValue(5.7, 'order')).toBe('5.7 orders');
+    expect(kpiValue(1, 'order')).toBe('1 order');
+    expect(kpiValue(208, 'orders')).toBe('208 orders');
   });
 });
 

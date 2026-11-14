@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import { PLAN, RULE_CARDS } from '../insights/fixtures';
-import { PlanView, reserveMonths } from './PlanScreen';
+import { lessonsTitle, PlanView, reserveMonths } from './PlanScreen';
 import { PLAN_PRINT_CSS as css } from './print';
 
 afterEach(cleanup);
@@ -41,6 +41,9 @@ describe('real-world plan', () => {
     expect(reserveMonths({ reserveAdvised: 6 * 30459, monthlyTotal: 30459 })).toBe('6 months');   // agent 04: six months of fixed costs
     expect(reserveMonths({ reserveAdvised: 30459, monthlyTotal: 30459 })).toBe('1 month');
     expect(reserveMonths({ reserveAdvised: 1000, monthlyTotal: 0 })).toBeNull();
+  });
+  it('counts the lessons it has', () => {
+    expect([3, 2, 1, 0, 5].map(lessonsTitle)).toEqual(['Three lessons from your season', 'Two lessons from your season', 'One lesson from your season', 'Lessons from your season', 'Three lessons from your season']);
   });
   it('sums: the budget rows add up to the totals shown', () => {
     expect(PLAN.startupBudget.reduce((s, r) => s + r.amount, 0)).toBe(PLAN.startupTotal);

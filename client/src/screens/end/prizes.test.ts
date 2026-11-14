@@ -37,6 +37,12 @@ describe('prize fund', () => {
     expect(nichePools(withHumanBarber(v))).toEqual({ cafe: 40.91, barbershop: 4.09 });
     expect(myResult(v)!.of).toBe(20);
   });
+  it('the board says how the fund is split today', () => {
+    expect(nicheBoard(cafeView, 'cafe').split).toEqual([50, 30, 20]);
+    const two = structuredClone(cafeView);
+    two.leaderboards.cafe = two.leaderboards.cafe!.map((s) => (['b-omar', 'b-nora', 'b-grind', 'b-crumb', 'b-ritual', 'b-kiln'].includes(s.businessId) ? { ...s, bankrupt: true } : s));
+    expect(nicheBoard(two, 'cafe').split).toEqual([62.5, 37.5]);
+  });
   it('splits 50/30/20 and scales up when fewer than three can win', () => {
     expect(placePrizes(100, [0.5, 0.3, 0.2], 5)).toEqual([50, 30, 20]);
     expect(placePrizes(100, [0.5, 0.3, 0.2], 2)).toEqual([62.5, 37.5]);
