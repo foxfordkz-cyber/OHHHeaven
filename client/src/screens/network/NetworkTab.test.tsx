@@ -13,12 +13,12 @@ function setup(view: OwnerView = ownerView) {
 }
 
 const openNeighbor = (name: string) => {
-  fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${name}`) }));
+  fireEvent.click(within(screen.getByRole('region', { name: 'Neighbors' })).getByRole('button', { name: new RegExp(`^${name}`) }));
   return screen.getByRole('dialog', { name });
 };
 
 const openDealSheet = (name: string) => {
-  fireEvent.click(within(openNeighbor(name)).getByRole('button', { name: /Propose a deal/ }));
+  fireEvent.click(within(openNeighbor(name)).getByRole('button', { name: /All deal kinds/ }));
   return screen.getByRole('dialog', { name: `Deal with ${name}` });
 };
 
@@ -27,7 +27,7 @@ const kind = (sheet: HTMLElement, title: string) => within(sheet).getByRole('rad
 describe('Network tab: neighbors', () => {
   it('lists neighbors with niche, distance, price, place in niche, deal record and the AI mark', () => {
     setup();
-    const row = screen.getByRole('button', { name: /^Tompkins Grind/ });
+    const row = within(screen.getByRole('region', { name: 'Neighbors' })).getByRole('button', { name: /^Tompkins Grind/ });
     expect(row.textContent).toMatch(/Cafe · \d+ m · \$5\.50 · #6 in cafes/);
     expect(row.textContent).toContain('kept 4 · broke 1');
     expect(within(row).getByText('AI')).toBeTruthy();
@@ -58,7 +58,7 @@ describe('Network tab: neighbors', () => {
     expect(profile.textContent).toContain('Health grade A');
     expect(profile.textContent).toContain('kept 3 · broke 0');
     expect(profile.textContent).toContain('Active partners');
-    expect(within(profile).getByRole('button', { name: /Report to the city/ })).toBeTruthy();
+    expect(within(profile).getByRole('button', { name: /^Report$/ })).toBeTruthy();
   });
 });
 
@@ -166,7 +166,7 @@ describe('Network tab: unavailable deal kinds follow CONTRACT §4', () => {
 describe('Network tab: offers, my deals, block fund', () => {
   it('accepts and declines incoming offers', () => {
     const onAct = setup();
-    const offers = screen.getByRole('region', { name: 'Offers for you' });
+    const offers = screen.getByRole('region', { name: 'Waiting for your answer' });
     const fromFade = offers.querySelector<HTMLElement>('[data-deal="d1"]')!;
     expect(fromFade.textContent).toContain('Fade Factory');
     expect(fromFade.textContent).toContain('kept 1 · broke 0');
@@ -240,7 +240,7 @@ describe('Network tab: report to the city', () => {
 
   it('reports from a neighbor profile', () => {
     const onAct = setup();
-    fireEvent.click(within(openNeighbor('Avenue A Deli & Grocery')).getByRole('button', { name: /Report to the city/ }));
+    fireEvent.click(within(openNeighbor('Avenue A Deli & Grocery')).getByRole('button', { name: /^Report$/ }));
     const sheet = screen.getByRole('dialog', { name: 'Report to the city' });
     expect(sheet.textContent).toContain('About Avenue A Deli & Grocery');
     fireEvent.click(within(sheet).getByRole('button', { name: /Send report/ }));
@@ -253,7 +253,7 @@ describe('Network tab: report to the city', () => {
     expect((within(card).getByRole('button', { name: /Report a business/ }) as HTMLButtonElement).disabled).toBe(true);
     expect(card.textContent).toMatch(/One report a week\. Your next report: \w{3}, Feb \d+/);
     const profile = openNeighbor('Fade Factory');
-    expect((within(profile).getByRole('button', { name: /Report to the city/ }) as HTMLButtonElement).disabled).toBe(true);
+    expect((within(profile).getByRole('button', { name: /^Report$/ }) as HTMLButtonElement).disabled).toBe(true);
   });
 });
 
@@ -265,5 +265,62 @@ describe('Network tab: before the doors open', () => {
     expect(kind(sheet, 'Loan').textContent).toContain('Open your doors first');
     expect(within(sheet).queryByRole('button', { name: 'Send offer' })).toBeNull();
     expect(onAct).not.toHaveBeenCalled();
+  });
+});
+
+describe('Network tab: rivals and prizes in plain sight', () => {
+  it('names the main rival with the two moves and what each gives or costs', () => {
+    const onAct = setup();
+    const card = screen.getByRole('region', { name: 'Your rival' });
+    expect(card.textContent).toContain('Cuppa Joe East');
+    expect(card.textContent).toContain('Run by Maya R.');
+    expect(card.textContent).toContain('Ahead of you by $3,800');
+    expect(card.textContent).toMatch(/split one stream of people/);
+    expect(card.textContent).toContain('If you are right: they pay $300–$1,000');
+    expect(card.textContent).toContain('If you are wrong: you pay $500 and Cuppa Joe East learns your name.');
+    // joint purchasing with Cuppa is already running, so «Team up» opens the deal sheet on a loan
+    fireEvent.click(within(card).getByRole('button', { name: 'Team up' }));
+    const sheet = screen.getByRole('dialog', { name: 'Deal with Cuppa Joe East' });
+    expect(kind(sheet, 'Loan').getAttribute('aria-checked')).toBe('true');
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Send offer' }));
+    expect(onAct).toHaveBeenLastCalledWith(expect.objectContaining({ type: 'propose_deal', toBusinessId: 'b_cuppa', terms: expect.objectContaining({ type: 'loan' }) }));
+  });
+
+  it('reports the rival straight from the rival card', () => {
+    const onAct = setup();
+    fireEvent.click(within(screen.getByRole('region', { name: 'Your rival' })).getByRole('button', { name: 'Report' }));
+    const sheet = screen.getByRole('dialog', { name: 'Report to the city' });
+    fireEvent.click(within(sheet).getByRole('button', { name: /Send report/ }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'report', targetBusinessId: 'b_cuppa', reportId: 'report_unsanitary' });
+  });
+
+  it('shows my place, the prize today and when the month closes', () => {
+    setup();
+    const card = screen.getByRole('region', { name: 'Your place' });
+    expect(card.textContent).toContain('#3 of 4 cafes'); // Lower East Brew is bankrupt and does not count
+    expect(card.textContent).toContain('You are in the prize places today.');
+    expect(card.textContent).toContain('#2 Cuppa Joe East');
+    expect(card.textContent).toContain('$3,800 ahead of you');
+    expect(card.textContent).toMatch(/Month closes in \d+s/);
+  });
+
+  it('every neighbor line says what it means for me', () => {
+    setup();
+    const card = screen.getByRole('region', { name: 'Next door' });
+    expect(card.textContent).toContain('Lower East Brew went bankrupt');
+    expect(card.textContent).toContain('One less cafe splitting your street');
+    expect(card.textContent).toContain('They now buy 6% cheaper');
+    expect(card.textContent).not.toContain('Bowery Cuts opened');
+  });
+
+  it('a fine notice shows what paying and contesting cost, and sends the answer', () => {
+    const notice = { caseId: 'c_fine', role: 'inspector' as const, found: [{ violationId: 'pests', months: 1, fine: 400, closureDays: 2 }], fine: 400, closureDays: 2, answerByDay: TODAY + 2, status: 'notice' as const };
+    const onAct = setup({ ...ownerView, notices: [notice] });
+    const card = screen.getByRole('region', { name: 'Waiting for your answer' }).querySelector<HTMLElement>('[data-case="c_fine"]')!;
+    expect(card.textContent).toContain('Evidence of mice or roaches');
+    expect(card.textContent).toContain('You pay $400 now. Closed for 2 days either way.');
+    expect(card.textContent).toContain('$1,780 in total, $1,380 more than paying');
+    fireEvent.click(within(card).getByRole('button', { name: 'Pay' }));
+    expect(onAct).toHaveBeenLastCalledWith({ type: 'answer_notice', caseId: 'c_fine', response: 'pay' });
   });
 });

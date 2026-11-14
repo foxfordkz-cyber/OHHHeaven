@@ -128,11 +128,15 @@ const events: GameEvent[] = [
   { id: 'e1', kind: 'city', title: 'Street fair on Avenue A', text: 'Saturday street fair brings more people to Avenue A.', announcedDay: 44, startDay: 50, endDay: 50, effects: [{ target: 'footTraffic', mult: 1.2 }], origin: 'deck', block: 'Avenue A, 6th–7th St' },
 ];
 
+/** Feed lines in the engine's own words (engine/src/economy, law, deals), so the meaning lines of the Network tab show. */
 export const feed: FeedItem[] = [
-  { id: 'f1', day: 46, kind: 'inspection', text: 'City inspector closed Ninth & Second Coffee for 2 days', businessId: 'b_ninth' },
-  { id: 'f2', day: 45, kind: 'deal', text: 'Cuppa Joe East and Luna Cafe extended joint purchasing', businessId: 'b_cuppa' },
-  { id: 'f3', day: 43, kind: 'bankruptcy', text: 'Lower East Brew went bankrupt', businessId: 'b_les' },
-  { id: 'f4', day: 41, kind: 'opening', text: 'Bowery Cuts opened on the Bowery', businessId: 'b_bowery' },
+  { id: 'f1', day: 46, kind: 'inspection', text: 'Ninth & Second Coffee is closed for 2 days by city order', businessId: 'b_ninth' },
+  { id: 'f2', day: 45, kind: 'deal', text: 'Tompkins Grind and Ninth & Second Coffee started a joint purchasing deal.', businessId: 'b_tompkins' },
+  { id: 'f5', day: 44, kind: 'report', text: 'Someone reported Fade Factory to the city', businessId: 'b_fade' },
+  { id: 'f3', day: 43, kind: 'bankruptcy', text: "Lower East Brew went bankrupt: it could not cover the month's bills", businessId: 'b_les' },
+  { id: 'f6', day: 42, kind: 'inspection', text: 'City inspector inspected Tompkins Grind: no violations', businessId: 'b_tompkins' },
+  { id: 'f4', day: 41, kind: 'opening', text: 'Bowery Cuts opened its doors at 330 Bowery', businessId: 'b_bowery' },
+  { id: 'f7', day: 12, kind: 'opening', text: 'Cuppa Joe East opened its doors at 118 E 7th St', businessId: 'b_cuppa' },
 ];
 
 const cafeBoard: Standing[] = [
