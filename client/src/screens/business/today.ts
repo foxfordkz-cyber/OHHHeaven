@@ -55,7 +55,9 @@ export function kpiText(k: NicheKpi): string {
     const money = `$${Math.round(Math.abs(v)).toLocaleString('en-US')}`;
     return `${v < 0 ? '−' : ''}${money}${k.unit.slice(1)}`;
   }
-  return k.unit ? `${n}${k.unit.length <= 2 ? '' : ' '}${k.unit}` : n;
+  // short units stay (9.1x, 4 min); a word like "order" repeats the label and is dropped
+  if (!k.unit || k.unit.length > 3) return n;
+  return `${n}${k.unit.length <= 2 ? '' : ' '}${k.unit}`;
 }
 
 /** Bar chart data: last 30 days, served and lost. */

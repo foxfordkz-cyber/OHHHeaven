@@ -38,9 +38,9 @@ export function bottleneckOf(m: MonthReport, unitName = 'seat'): Bottleneck {
   if (top.units / demand >= LOSS_MATTERS) {
     const n = Math.max(1, perDay(top.units));
     const text = top.id === 'staff'
-      ? pick(`Staff: about ${n} a day leave the line — nobody free to serve them.`, `Персонал: около ${n} в день уходят из очереди — некому обслужить.`)
+      ? pick(`About ${n} a day leave the line: nobody free to serve them.`, `Около ${n} в день уходят из очереди: некому обслужить.`)
       : top.id === 'seats'
-        ? pick(`${cap(unitName)}s: about ${n} a day leave — no free ${unitName}.`, `Места: около ${n} в день уходят — нет свободного места.`)
+        ? pick(`About ${n} a day leave: no free ${unitName}.`, `Около ${n} в день уходят: нет свободного места.`)
         : pick(`Closed by the city: about ${n} a day turned away.`, `Закрыто городом: около ${n} в день не обслужены.`);
     return { id: top.id, perDay: n, text };
   }
@@ -48,8 +48,8 @@ export function bottleneckOf(m: MonthReport, unitName = 'seat'): Bottleneck {
   return {
     id: 'demand', perDay: room,
     text: room > 0
-      ? pick(`Customers: your team could serve about ${room} more a day. Price, marketing and reviews bring them.`, `Покупатели: команда могла бы обслужить ещё около ${room} в день. Их приводят цена, реклама и отзывы.`)
-      : pick('Customers: everyone who comes is served.', 'Покупатели: обслуживаешь всех, кто пришёл.'),
+      ? pick(`Your team could serve about ${room} more a day. Price, marketing and reviews bring them.`, `Команда могла бы обслужить ещё около ${room} в день. Их приводят цена, реклама и отзывы.`)
+      : pick('Everyone who comes is served.', 'Обслуживаешь всех, кто пришёл.'),
   };
 }
 
@@ -81,7 +81,6 @@ export function signedCount(n: number): string {
   return n > 0 ? `+${n}` : `−${Math.abs(n)}`;
 }
 
-function cap(s: string): string { return s ? s[0].toUpperCase() + s.slice(1) : s; }
 
 /** Which control the player touched; per-control forecasts ask what_if about that one change only. */
 export type FieldKey = 'price' | `staff:${string}` | `lever:${string}`;

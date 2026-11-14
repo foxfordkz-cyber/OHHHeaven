@@ -22,7 +22,7 @@ describe('forecast: the next 30 days in words', () => {
     expect(o.demandPerDay).toBe(200);
     expect(o.bottleneck.id).toBe('staff');
     expect(o.bottleneck.perDay).toBe(20);
-    expect(o.bottleneck.text).toMatch(/Staff: about 20 a day/);
+    expect(o.bottleneck.text).toMatch(/^About 20 a day leave the line/);
   });
 
   it('seats win when more leave for lack of a seat; tiny losses are noise and demand is the limit', () => {

@@ -1,6 +1,6 @@
 // The forecast next to every decision on Manage: what the next 30 days look like now, and with the draft.
 // Numbers come from what_if (engine/src/analytics/whatif.ts): the screen only divides by days and compares.
-import { dateOf, RULES } from '@ohh/shared/rules';
+import { RULES } from '@ohh/shared/rules';
 import type { StandingOrders } from '@ohh/shared/types';
 import { Card, Stat } from './__stubs__/ui';
 import type { BizDeps } from './deps';
@@ -32,6 +32,8 @@ export function outlookFrom(s: WhatIfState, unitName: string): Outlook | null {
   return s.data ? outlookOf(s.data.projected, unitName) : null;
 }
 
+const NOWRAP = { whiteSpace: 'nowrap' } as const;
+
 const tone = (n: number) => (n > 0 ? 'bz-good-text' : n < 0 ? 'bz-bad-text' : 'bz-muted');
 
 /** Top of Manage: the next 30 days now → with your changes, and what limits sales. */
@@ -43,7 +45,6 @@ export function OutlookCard({ pair, deps }: { pair: OutlookPair; deps: BizDeps }
   const failed = pair.next.status === 'error' ? pair.next.error : pair.base.status === 'error' ? pair.base.error : null;
   const today = deps.view.world.day;
   const end = today + RULES.DAYS_PER_MONTH;
-  const monthEnd = dateOf(today).month * RULES.DAYS_PER_MONTH;
   const order = deps.pack?.unit.name ?? 'order';
   const d = now && next ? deltaOf(now, next) : null;
   const taxDue = pair.next.data?.analytics.taxDueNext;
@@ -58,11 +59,13 @@ export function OutlookCard({ pair, deps }: { pair: OutlookPair; deps: BizDeps }
             <Row label={pick('Profit, 30 days', 'Прибыль за 30 дней')} now={now ? signedUsd(now.profit) : '—'} next={signedUsd(next.profit)} delta={d && pair.changed ? signedUsd(d.profit) : null} deltaTone={d ? tone(d.profit) : ''} />
           </div>
           <p className="bz-forecast-line">
-            {pick('Limit', 'Узкое место')}: <b>{next.bottleneck.text}</b>
-            {d?.bottleneckChanged && now && pair.changed && <span className="bz-small bz-muted"> ({pick('now', 'сейчас')}: {now.bottleneck.text})</span>}
+            {pick('Limit', 'Узкое место')}: {LIMIT_WORD[next.bottleneck.id]()}
+            {d?.bottleneckChanged && now && pair.changed && <span className="bz-small bz-muted"> ({pick('now', 'сейчас')}: {LIMIT_WORD[now.bottleneck.id]()})</span>}
+          </p>
+          <p className="bz-small">{next.bottleneck.text}
           </p>
           <p className="bz-small bz-muted">
-            {pick('cash on', 'касса на')} {shortDate(monthEnd)}: <span className={next.cashEnd < 0 ? 'bz-bad-text' : ''}>{usd(pair.next.data!.projected.cashEnd)}</span>
+            {pick('cash on', 'касса на')} {shortDate(end)}: <span className={next.cashEnd < 0 ? 'bz-bad-text' : ''}>{usd(pair.next.data!.projected.cashEnd)}</span>
             {taxDue && <>{' · '}{pick('tax due', 'налог')} {shortDate(taxDue.day)}: {usd(taxDue.amount)}</>}
             {' · '}{pick('break-even price', 'цена безубыточности')} {pair.next.data!.analytics.breakEvenPrice ? usd2(pair.next.data!.analytics.breakEvenPrice) : '—'}
           </p>
@@ -82,8 +85,8 @@ export function OutlookCard({ pair, deps }: { pair: OutlookPair; deps: BizDeps }
 function Row({ label, now, next, delta, deltaTone }: { label: string; now: string; next: string; delta: string | null; deltaTone: string }) {
   return (
     <Stat label={label}
-      value={delta !== null ? <><span className="bz-muted">{now} → </span>{next}</> : next}
-      sub={delta !== null ? <span className={deltaTone}>{delta}</span> : undefined} />
+      value={delta !== null ? <><span className="bz-muted" style={NOWRAP}>{now} →</span> <span style={NOWRAP}>{next}</span></> : <span style={NOWRAP}>{next}</span>}
+      sub={delta !== null ? <span className={deltaTone} style={NOWRAP}>{delta}</span> : undefined} />
   );
 }
 

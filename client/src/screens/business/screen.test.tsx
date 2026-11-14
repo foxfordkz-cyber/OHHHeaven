@@ -6,6 +6,7 @@ import { fakeWhatIf } from './__stubs__/fakeDeps';
 import { BusinessScreen } from './BusinessScreen';
 import type { BizDeps } from './deps';
 import { DevBiz } from './DevBiz';
+import { shortDate } from './format';
 import { fixture, FIXTURE_NAMES, type FixtureName } from './fixtures';
 import { topRecommendations } from './today';
 import { useWhatIf } from './useWhatIf';
@@ -118,9 +119,10 @@ describe('Manage → Apply', () => {
   });
 
   it('forecast shows numbers from what_if', async () => {
-    const { deps } = makeDeps(fixture('open'));
+    const view = fixture('open');
+    const { deps } = makeDeps(view);
     render(<BusinessScreen deps={deps} initialTab="manage" />);
-    await screen.findByText(/cash on Apr 30/);
+    await screen.findByText(new RegExp(`cash on ${shortDate(view.world.day + 30)}`));
   });
 
   it('price change: forecast now → with the change next to the price, then Apply, then Today keeps the promise', async () => {
@@ -151,8 +153,10 @@ describe('Manage → Apply', () => {
 
   it('paid lever option says it is charged by the day', () => {
     render(<BusinessScreen deps={makeDeps(fixture('open')).deps} initialTab="manage" />);
-    expect(screen.getAllByText(/charged only for the days it is on/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/a day while on/).length).toBeGreaterThan(0);
+    const paid = screen.getAllByRole('radio').filter((r) => /a day while on/.test(r.textContent ?? '') && r.getAttribute('aria-checked') === 'false');
+    expect(paid.length).toBeGreaterThan(0);
+    fireEvent.click(paid[0]);
+    expect(screen.getAllByText(/Charged only for the days it is on: \$[\d.,]+ a day/).length).toBeGreaterThan(0);
   });
 });
 

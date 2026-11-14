@@ -89,9 +89,7 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule, pair }: ManageP
           <Segmented label={l.name} value={draft.levers[l.id] ?? l.options[0].id}
             options={l.options.map((o) => ({ id: o.id, label: o.label, hint: <>{o.monthlyCost > 0 ? `${usd(o.monthlyCost)}/mo · ${usd2(perDayCost(o.monthlyCost))}${pick(' a day while on', ' в день, пока включено')}` : pick('free', 'бесплатно')}{o.causes ? pick(' · breaks a rule', ' · нарушает правило') : ''}</>, warn: !!o.causes }))}
             onChange={(id) => edit(`lever:${l.id}`, setLever(draft, l.id, id, pack))} />
-          {l.options.some((o) => o.monthlyCost > 0) && (
-            <p className="bz-small bz-muted">{pick('A paid option is charged only for the days it is on. Switching it off before the month closes does not erase the days it ran.', 'Платный вариант списывается только за дни, когда он включён. Выключить его перед закрытием месяца — не значит не платить за дни, когда он работал.')}</p>
-          )}
+          <PaidByDay lever={l} chosen={draft.levers[l.id] ?? l.options[0].id} />
           {impact(`lever:${l.id}`)}
           {leverViol.get(`${l.id}:${draft.levers[l.id]}`) && (
             <button type="button" className="bz-linkbtn bz-small bz-bad-text" onClick={() => onRule(leverViol.get(`${l.id}:${draft.levers[l.id]}`)!)}>
@@ -138,6 +136,13 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule, pair }: ManageP
       </Card>
     </div>
   );
+}
+
+/** The chosen paid option is charged by the day it is on (engine/src/economy/day.ts), not by the setting at month close. */
+function PaidByDay({ lever, chosen }: { lever: { options: { id: string; monthlyCost: number }[] }; chosen: string }) {
+  const o = lever.options.find((x) => x.id === chosen);
+  if (!o || o.monthlyCost <= 0) return null;
+  return <p className="bz-small bz-muted">{pick(`Charged only for the days it is on: ${usd2(perDayCost(o.monthlyCost))} a day. Switching it off before the month closes does not erase the days it ran.`, `Списывается только за дни, когда включено: ${usd2(perDayCost(o.monthlyCost))} в день. Выключить перед закрытием месяца — не значит не платить за дни, когда работало.`)}</p>;
 }
 
 function SizeCard({ deps }: { deps: BizDeps }) {
