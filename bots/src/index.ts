@@ -1,15 +1,14 @@
-// @ohh-stub — placeholder by agent 01, interface from build/CONTRACT.md §7. Owner: agent 07 replaces this file.
-import type { Action, NicheId, OfficialRole, WorldState } from '@ohh/shared';
-import type { EngineCtx } from '@ohh/engine';
+// @ohh/bots — AI residents of the city (agent 07). Contract: build/CONTRACT.md §7.
+export { createBotBrain, choosePlace, affordable, rentShare, playableNiches, nicheFromName } from './brain';
+export type { BotBrain, BrainOptions, PopulateEntry } from './brain';
+export { ownerSight, officialSight, publicBusinesses } from './observe';
+export type { OwnerSight, OfficialSight } from './observe';
+export { PROFILES, OFFICIAL_PROFILES, OWNER_STRATEGIES, OFFICIAL_STRATEGIES, ALL_OWNER_STRATEGIES, ownerStrategyFromName, officialStrategyFromName } from './strategies';
+export type { OwnerStrategy, OfficialStrategy, OwnerProfile, OfficialProfile } from './strategies';
+export { mulberry32, hashStr, rngFor, seedFor, shuffle } from './rng';
 
-export interface BotBrain {
-  populate(w: WorldState, ctx: EngineCtx, seed: number): { name: string; kind: 'owner' | 'official'; role?: OfficialRole; niche?: NicheId; placeId?: string; strategy: string }[];
-  ownerActions(w: WorldState, ctx: EngineCtx, playerId: string): Action[];
-  officialActions(w: WorldState, ctx: EngineCtx, playerId: string): Action[];
-}
-
-export const botBrain: BotBrain = {
-  populate: () => [],
-  ownerActions: () => [],
-  officialActions: () => [],
-};
+import { createBotBrain } from './brain';
+/** Default brain for the host (agent 06): `HostDeps.bots`. */
+export const bots = createBotBrain();
+/** Name used by agent 01's skeleton and the host: `import { botBrain } from '@ohh/bots'`. */
+export const botBrain = bots;
