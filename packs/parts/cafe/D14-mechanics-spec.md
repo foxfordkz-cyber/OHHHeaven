@@ -371,7 +371,7 @@ export interface StandingOrders { /* … */ rushStaff?: number }      // ско�
 - Схема зала в Manage: полоса из зон «Bar 120 · Back 280 · Restroom 56 · Seats 18 × 15 sq ft · Line room for 6».
 - Ползунок плотности: «Spacious · Standard · Tight» и сколько мест помещается при каждой.
 - График Today по часам 7–10: столбики «arrived / served / walked away», подпись «Line out the door at 8 am: 10 people, 12 min».
-- Подсказка советника: «Put a third person on the 7–10 am rush: +$1,890 a month in wages, +$4,300 a month in sales».
+- Подсказка советника только там, где окупается: «Put a third person on the 7–10 am rush: +$1,890 a month in wages, +$2,580 a month in margin». При 200 заказах в день советник её не показывает: второй человек вернёт $860.
 
 ---
 

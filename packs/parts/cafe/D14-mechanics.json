@@ -21,7 +21,8 @@
       "rate": 0.0139,
       "source": "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf",
       "confidence": "estimate",
-      "note": "Quoted in a search excerpt of the DOB 2026 fee update: alteration in a building under 7 floors = $280 for the first $3,000 of construction cost + $10.30 per $1,000 above. For a $70,000 light build-out: 280 + 67 x 10.30 = $970 (rate 0.0139 of the build-out reproduces it at $70,000; extra.preOpening.dobFee keeps the exact formula). Wait: the Mayor's Management Report gives 20 days on average from filing to approval in DOB NOW, all applications, FY2025 (https://www.nyc.gov/assets/operations/downloads/pdf/mmr2025/dob.pdf). The wait runs before construction may start; keen-cray's build-out days already include the permit path for a light job, so the engine should not add it twice (see extra.preOpening.dobPermitDays)."
+      "note": "Quoted in a search excerpt of the DOB 2026 fee update: alteration in a building under 7 floors = $280 for the first $3,000 of construction cost + $10.30 per $1,000 above. For a $70,000 light build-out: 280 + 67 x 10.30 = $970 (rate 0.0139 of the build-out reproduces it at $70,000; extra.preOpening.dobFee keeps the exact formula). Wait: the Mayor's Management Report gives 20 days on average from filing to approval in DOB NOW, all applications, FY2025 (https://www.nyc.gov/assets/operations/downloads/pdf/mmr2025/dob.pdf). The wait runs before construction may start; keen-cray's build-out days already include the permit path for a light job, so the engine should not add it twice (see extra.preOpening.dobPermitDays).",
+      "includedInTakeover": true
     },
     {
       "id": "ice_melt_and_shovels",
@@ -67,6 +68,385 @@
       "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
       "confidence": "estimate",
       "note": "Only for buying an operating business. Quoted in search excerpts of NYS Tax Appeals determinations and the DTF bulletin: under Tax Law 1141(c) the buyer files AU-196.10 at least 10 days before paying for or taking possession of the business assets; the state answers within 5 business days (AU-196.2) and may claim the seller's unpaid sales tax within 90 days. A buyer who skips it becomes personally liable for the seller's unpaid sales tax."
+    },
+    {
+      "id": "fse_permit",
+      "name": "Food Service Establishment Permit",
+      "kind": "permit",
+      "cost": 280,
+      "required": true,
+      "waitDays": 22,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "withoutItViolation": "no_fse_permit",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "confidence": "verified",
+      "note": "NYC Business: the permit fee is $280.00 a year; you can open 22 days after you submit the application even if no pre-permit inspection has taken place. The application asks for proof of workers' compensation and disability insurance, a Food Protection Certificate or course registration, and the sales tax Certificate of Authority. Correction (D14): waitDays 21 -> 22. The engine sets readyDay = appliedDay + waitDays, and the page says the doors may open 22 days after the application is submitted; with 21 the game opens one day early. keen-cray's afterBuildout keeps working."
+    }
+  ],
+  "kits": [
+    {
+      "id": "lean",
+      "name": "Lean start",
+      "size": 12,
+      "items": [
+        {
+          "id": "security_deposit",
+          "qty": 1
+        },
+        {
+          "id": "buildout",
+          "qty": 1
+        },
+        {
+          "id": "architect_expediter",
+          "qty": 1
+        },
+        {
+          "id": "lease_lawyer",
+          "qty": 1
+        },
+        {
+          "id": "llc_and_publication",
+          "qty": 1
+        },
+        {
+          "id": "espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "grinder",
+          "qty": 1
+        },
+        {
+          "id": "water_filtration",
+          "qty": 1
+        },
+        {
+          "id": "refrigeration",
+          "qty": 1
+        },
+        {
+          "id": "pastry_case",
+          "qty": 1
+        },
+        {
+          "id": "sinks",
+          "qty": 1
+        },
+        {
+          "id": "prep_table_shelving",
+          "qty": 1
+        },
+        {
+          "id": "pos",
+          "qty": 1
+        },
+        {
+          "id": "smallwares",
+          "qty": 1
+        },
+        {
+          "id": "safety_kit",
+          "qty": 1
+        },
+        {
+          "id": "equipment_delivery_tax",
+          "qty": 1
+        },
+        {
+          "id": "chair",
+          "qty": 12
+        },
+        {
+          "id": "table_share",
+          "qty": 12
+        },
+        {
+          "id": "opening_inventory",
+          "qty": 1
+        },
+        {
+          "id": "hiring_training",
+          "qty": 1
+        },
+        {
+          "id": "insurance_utility_deposits",
+          "qty": 1
+        },
+        {
+          "id": "fse_permit",
+          "qty": 1
+        },
+        {
+          "id": "food_protection_cert",
+          "qty": 1
+        },
+        {
+          "id": "dob_alteration_permit",
+          "qty": 1
+        }
+      ],
+      "pitch": "The legal minimum in a small room: 12 seats, one grinder, hand-washed cups, no sign. Cheapest way to open, but the room fills up at 170 orders a day.",
+      "note": "Correction, same id: adds the required dob_alteration_permit to the kit (D14)."
+    },
+    {
+      "id": "standard",
+      "name": "Standard",
+      "size": 18,
+      "items": [
+        {
+          "id": "security_deposit",
+          "qty": 1
+        },
+        {
+          "id": "buildout",
+          "qty": 1
+        },
+        {
+          "id": "architect_expediter",
+          "qty": 1
+        },
+        {
+          "id": "lease_lawyer",
+          "qty": 1
+        },
+        {
+          "id": "llc_and_publication",
+          "qty": 1
+        },
+        {
+          "id": "espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "grinder",
+          "qty": 1
+        },
+        {
+          "id": "water_filtration",
+          "qty": 1
+        },
+        {
+          "id": "refrigeration",
+          "qty": 1
+        },
+        {
+          "id": "pastry_case",
+          "qty": 1
+        },
+        {
+          "id": "sinks",
+          "qty": 1
+        },
+        {
+          "id": "prep_table_shelving",
+          "qty": 1
+        },
+        {
+          "id": "pos",
+          "qty": 1
+        },
+        {
+          "id": "smallwares",
+          "qty": 1
+        },
+        {
+          "id": "safety_kit",
+          "qty": 1
+        },
+        {
+          "id": "equipment_delivery_tax",
+          "qty": 1
+        },
+        {
+          "id": "chair",
+          "qty": 18
+        },
+        {
+          "id": "table_share",
+          "qty": 18
+        },
+        {
+          "id": "opening_inventory",
+          "qty": 1
+        },
+        {
+          "id": "hiring_training",
+          "qty": 1
+        },
+        {
+          "id": "insurance_utility_deposits",
+          "qty": 1
+        },
+        {
+          "id": "fse_permit",
+          "qty": 1
+        },
+        {
+          "id": "food_protection_cert",
+          "qty": 1
+        },
+        {
+          "id": "batch_brewer",
+          "qty": 1
+        },
+        {
+          "id": "ice_machine",
+          "qty": 1
+        },
+        {
+          "id": "signage",
+          "qty": 1
+        },
+        {
+          "id": "dob_alteration_permit",
+          "qty": 1
+        }
+      ],
+      "pitch": "The usual neighborhood cafe: 18 seats, drip coffee and iced drinks, a proper sign. Sized for 200 orders a day with room to spare.",
+      "note": "Correction, same id: adds the required dob_alteration_permit to the kit (D14)."
+    },
+    {
+      "id": "premium",
+      "name": "Premium",
+      "size": 24,
+      "items": [
+        {
+          "id": "security_deposit",
+          "qty": 1
+        },
+        {
+          "id": "buildout",
+          "qty": 1
+        },
+        {
+          "id": "architect_expediter",
+          "qty": 1
+        },
+        {
+          "id": "lease_lawyer",
+          "qty": 1
+        },
+        {
+          "id": "llc_and_publication",
+          "qty": 1
+        },
+        {
+          "id": "espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "grinder",
+          "qty": 1
+        },
+        {
+          "id": "water_filtration",
+          "qty": 1
+        },
+        {
+          "id": "refrigeration",
+          "qty": 1
+        },
+        {
+          "id": "pastry_case",
+          "qty": 1
+        },
+        {
+          "id": "sinks",
+          "qty": 1
+        },
+        {
+          "id": "prep_table_shelving",
+          "qty": 1
+        },
+        {
+          "id": "pos",
+          "qty": 1
+        },
+        {
+          "id": "smallwares",
+          "qty": 1
+        },
+        {
+          "id": "safety_kit",
+          "qty": 1
+        },
+        {
+          "id": "equipment_delivery_tax",
+          "qty": 1
+        },
+        {
+          "id": "chair",
+          "qty": 24
+        },
+        {
+          "id": "table_share",
+          "qty": 24
+        },
+        {
+          "id": "opening_inventory",
+          "qty": 1
+        },
+        {
+          "id": "hiring_training",
+          "qty": 1
+        },
+        {
+          "id": "insurance_utility_deposits",
+          "qty": 1
+        },
+        {
+          "id": "fse_permit",
+          "qty": 1
+        },
+        {
+          "id": "food_protection_cert",
+          "qty": 1
+        },
+        {
+          "id": "batch_brewer",
+          "qty": 1
+        },
+        {
+          "id": "decaf_grinder",
+          "qty": 1
+        },
+        {
+          "id": "ice_machine",
+          "qty": 1
+        },
+        {
+          "id": "dishwasher",
+          "qty": 1
+        },
+        {
+          "id": "decor_lighting",
+          "qty": 1
+        },
+        {
+          "id": "signage",
+          "qty": 1
+        },
+        {
+          "id": "premium_espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "premium_grinder",
+          "qty": 1
+        },
+        {
+          "id": "customer_restroom",
+          "qty": 1
+        },
+        {
+          "id": "dob_alteration_permit",
+          "qty": 1
+        }
+      ],
+      "pitch": "24 seats, a three-group machine, top grinders, a dishwasher and a customer restroom (required from 20 seats). Higher quality, about $29,000 more up front, and more seats to fill.",
+      "note": "Correction, same id: adds the required dob_alteration_permit to the kit (D14)."
     }
   ],
   "levers": [
