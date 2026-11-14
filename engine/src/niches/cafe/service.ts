@@ -9,11 +9,15 @@ import type { NicheEnv } from '../index';
 import type { CafeDay, CafePart, GuestGroup, StaffPower } from './contract';
 import { guestMix } from './segments';
 import * as staffingModule from './staffing';
-import { staffPower } from './staffing';
 
-// staffing.ts (B03) adds coverage(); until it does, no hours are lost. The type is checked: if coverage arrives with
-// another signature, this file stops compiling instead of guessing.
-interface StaffingApi { part: CafePart; coverage?(d: CafeDay): { lostDemandShare: number } }
+// What this part reads from staffing.ts (B03): staffPower always (the lead's fallback answers until B03 lands) and
+// coverage when it exists (until then no hours are lost). The type is checked: if either arrives with another
+// signature, this file stops compiling instead of guessing.
+interface StaffingApi {
+  part: CafePart;
+  staffPower(d: CafeDay): StaffPower;
+  coverage?(d: CafeDay): { lostDemandShare: number };
+}
 const staffing: StaffingApi = staffingModule;
 
 // ───────────── pack ─────────────
@@ -91,7 +95,7 @@ function guestsOf(d: CafeDay, cfg: ServiceCfg): Guests {
  * for ordersPerPaidHour; otherwise a team the old engine called enough would lose orders here.
  */
 function powerOf(d: CafeDay, cfg: ServiceCfg): StaffPower {
-  const sp = staffPower(d);
+  const sp = staffing.staffPower(d);
   if ((d.pack.extra as { staffing?: unknown } | undefined)?.staffing) return sp;
   const sitRef = 1 - Math.min(0.95, Math.max(0, d.pack.sizing.takeawayShare ?? 0));
   return { ...sp, ordersPerDay: sp.ordersPerDay * (1 + sitRef * (cfg.sitInLaborMult - 1)) };
@@ -303,12 +307,11 @@ export function serviceKpis(b: BusinessState, pack: Pack): NicheKpi[] {
 
 /**
  * How full the room is at the busiest hour: guests who want a seat then, per seat (above 1 — some find none).
- * For the engine's crowded / empty-room judgement when this part sets the day's capacity (agents/r3-B01.md, request 4):
+ * For the engine's crowded / empty-room judgement when this part sets the day's capacity (agents/r3-B01.md, request 3):
  * today the engine judges it by the old seat limit, which calls every busy counter "packed".
  */
 export function seatUseDay(d: CafeDay): number | null {
-  const cfg = serviceCfg(d.pack);
-  const s = cfg ? serviceDay(d) : null;
+  const s = serviceDay(d);
   return s && s.seats.count > 0 ? s.seats.present / s.seats.count : null;
 }
 
@@ -342,7 +345,7 @@ function heldToReport(s: ServiceDay, r: DayReport): ServiceDay | null {
   };
 }
 
-/** The owner's sentences for one day report: why orders were lost today. */
+/** The owner's sentences for one day report: why orders were lost today and what the next step would win back. */
 export function serviceDayNotes(b: BusinessState, r: DayReport, pack: Pack, env?: NicheEnv): string[] {
   const s = dayFromReport(b, r, pack, env?.place);
   if (!s) return [];
@@ -391,7 +394,7 @@ function engineLimitNotes(r: DayReport): string[] {
 /**
  * The part the cafe glue reads. kpis are not in it yet: today a niche's kpis hook replaces the default key numbers
  * (analytics/analyze.ts) instead of adding to them, and the average ticket would disappear. Once the lead changes that
- * (agents/r3-B01.md, request 2), add `kpis: serviceKpis` here.
+ * (agents/r3-B01.md, request 5), add `kpis: serviceKpis` here.
  */
 export const part: CafePart = {
   capacityDay(d) {
