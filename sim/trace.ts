@@ -1,5 +1,5 @@
 // Where the cash of a newcomer goes, month by month, before and after the doors open.
-//   npx tsx sim/trace.ts [seasons] [--niche=cafe] [--json=out.json] [--seed=100] [--capture=…] [--start=…] [--ramp=…] [--no-runway] [--brief]
+//   npx tsx sim/trace.ts [seasons] [--niche=cafe] [--json=out.json] [--seed=100] [--capture=…] [--start=…] [--ramp=…] [--sens=…] [--no-runway] [--brief]
 // --capture/--start/--ramp override pack.extra.footfall for a what-if (nothing is written); --no-runway lets every
 // newcomer open without the cash check of bots/src/runway.ts; --brief prints only the summary.
 // Same city as `sim/calibrate.ts season`: 30 established shops (AI residents) plus ten newcomers who play the
@@ -30,6 +30,7 @@ for (const n of Object.values(packs.niches)) {
   if (flag('capture') != null) f.captureRate = flag('capture')!;
   if (flag('start') != null) f.awarenessStart = flag('start')!;
   if (flag('ramp') != null) f.rampDays = flag('ramp')!;
+  if (flag('sens') != null) f.priceSensitivity = flag('sens')!;
 }
 const places = json<Place[]>('data/places.json');
 const ctx = { packs, places };
@@ -103,7 +104,7 @@ for (let s = 0; s < seasons; s++) {
 const neu = rows.filter((r) => !r.est);
 const est = rows.filter((r) => r.est);
 const fp = (packs.niches[niche]!.extra as { footfall?: Record<string, number> }).footfall;
-console.log(`footfall: captureRate ${fp?.captureRate}, awarenessStart ${fp?.awarenessStart}, rampDays ${fp?.rampDays}; runway check ${argv.includes('--no-runway') ? 'off' : 'on'}; seasons ${seasons} from seed ${seed0}; newcomers of all niches who found no door they would sign for: ${neverOpened}`);
+console.log(`footfall: captureRate ${fp?.captureRate}, awarenessStart ${fp?.awarenessStart}, rampDays ${fp?.rampDays}, priceSensitivity ${fp?.priceSensitivity}; runway check ${argv.includes('--no-runway') ? 'off' : 'on'}; seasons ${seasons} from seed ${seed0}; newcomers of all niches who found no door they would sign for: ${neverOpened}`);
 console.log(`# ${packs.niches[niche]!.name}: newcomers ${neu.length} (closed ${neu.filter((r) => r.bankruptDay != null).length}), established ${est.length} (closed ${est.filter((r) => r.bankruptDay != null).length}), start capital ${usd(packs.niches[niche]!.startCapital)}`);
 for (const r of argv.includes('--brief') ? [] : [...neu, ...est.filter((x) => x.bankruptDay != null)]) {
   console.log(`\n## ${r.est ? 'established' : 'newcomer'} ${r.strat} @ ${r.place} (${r.kind}; ${r.ped} people/day, map says ${r.base} orders/day; rent ${usd(r.rent)}/mo)`);

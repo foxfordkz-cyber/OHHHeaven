@@ -1,5 +1,5 @@
 // Does the money last until the shop pays for itself? Every door a newcomer can afford, before anyone else opens.
-//   npx tsx sim/runway.ts [--niche=cafe] [--capture=0.088] [--start=0.35] [--ramp=75] [--all] [--city]
+//   npx tsx sim/runway.ts [--niche=cafe] [--capture=0.088] [--start=0.35] [--ramp=75] [--sens=2.7] [--all] [--city]
 // --city: the doors as a newcomer sees them on day 1 of a season, with the 30 established shops already trading
 // (the same city as `sim/calibrate.ts season`); without it, an empty city.
 // For each affordable door: the recommended opening (engine analytics), the rent paid while waiting, the losses of
@@ -29,6 +29,7 @@ if (foot) {
   if (opt('capture') != null) foot.captureRate = opt('capture')!;
   if (opt('start') != null) foot.awarenessStart = opt('start')!;
   if (opt('ramp') != null) foot.rampDays = opt('ramp')!;
+  if (opt('sens') != null) foot.priceSensitivity = opt('sens')!;
 }
 const places = json<Place[]>('data/places.json');
 const ctx = { packs, places };
@@ -58,4 +59,8 @@ for (const x of rows.sort((a, b) => a.r!.lowestCash - b.r!.lowestCash)) {
 }
 const broke = rows.filter((x) => x.r!.lowestCash < 0).length;
 const careful = rows.filter((x) => lastsThroughRamp(x.r)).length;
-console.log(`\naffordable doors ${rows.length}: the account goes below zero at ${broke} (${Math.round((100 * broke) / Math.max(1, rows.length))}%; target about 20% for a newcomer who opens anyway); a careful resident signs at ${careful}`);
+// the request to the lead (agents/r3-B11.md): count the rent of the wait as part of the opening bill
+const fair = rows.filter((x) => x.rec.cashLeft - x.r!.waitRent >= 0);
+const fairBroke = fair.filter((x) => x.r!.lowestCash < 0).length;
+console.log(`\nif the rent paid while waiting counted as part of the opening bill: affordable ${fair.length}, the account goes below zero at ${fairBroke} (${Math.round((100 * fairBroke) / Math.max(1, fair.length))}%)`);
+console.log(`affordable doors ${rows.length}: the account goes below zero at ${broke} (${Math.round((100 * broke) / Math.max(1, rows.length))}%; target about 20% for a newcomer who opens anyway); a careful resident signs at ${careful}`);
