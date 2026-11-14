@@ -3,7 +3,7 @@
 import type { Benchmark, DayReport, OwnerView, PnlKind, PnlLine } from '@shared/types';
 import { dateOf, RULES } from '@shared/rules';
 import { compactMoney, int, money, pct, toFraction, unitWord } from './format';
-import { monthAbbr, stackBar, type BreakEvenInput, type Segment, type TrendMark, type TrendPoint } from './charts';
+import { monthAbbr, stackBar, type BreakEvenInput, type Segment, type TrendMark, type TrendPoint } from './chartMath';
 
 export type Tone = 'good' | 'bad' | 'neutral';
 

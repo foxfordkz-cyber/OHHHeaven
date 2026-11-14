@@ -3,15 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "AI service for First Year: NYC weather, city events, advisor, niche matching, debrief",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./pure": "./src/pure.ts"
   },
   "scripts": {
     "test": "vitest run --passWithNoTests",
-    "check": "tsc --noEmit -p tsconfig.json"
+    "check": "tsc --noEmit -p tsconfig.json",
+    "demo": "tsx src/demo.ts",
+    "fetch-climate": "node scripts/fetch-climate.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0",
     "@ohh/engine": "*",
-    "@ohh/shared": "*"
+    "@ohh/shared": "*",
+    "zod": "^4.6.7"
   }
 }

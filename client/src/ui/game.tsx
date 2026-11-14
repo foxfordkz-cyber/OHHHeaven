@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import type { DayWeather, FeedItem, NicheId, WeatherCondition, WorldPublic } from '@shared/types';
-import { dateOf } from '@shared/rules';
+import type { DayWeather, FeedItem, NicheId, WeatherCondition, WorldPublic } from '@ohh/shared/types';
+import { dateOf } from '@ohh/shared/rules';
 import { Icon, type IconName } from './icons';
 import { Badge } from './components';
 

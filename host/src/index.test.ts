@@ -17,7 +17,7 @@ describe('host', () => {
     const { world, playerId } = join(w, { name: 'Ana', kind: 'owner' });
     expect(world.players.find((p) => p.id === playerId)?.name).toBe('Ana');
     const w2 = step(world, ctx, deps);
-    expect(w2.day).toBe(2);
+    expect(w2.day).toBe(world.day + 1);
     expect(viewFor(w2, ctx, null).kind).toBe('city');
   });
 });

@@ -1,8 +1,9 @@
 // Slots for pieces other agents build. Today they render stand-ins; switch one import when the real piece lands.
 // CityMap — agent 09 (client/src/map/). Signature from build/tasks/09-map-city.md.
 import { useMemo } from 'react';
-import type { DayWeather, GameEvent, NicheId, Place, PublicBusiness } from '@shared/types';
+import type { DayWeather, GameEvent, NicheId, Place, PublicBusiness } from '@ohh/shared/types';
 import { Icon, WEATHER_ICON } from '../ui';
+import { CityMap } from '../map';
 
 export interface CityMapProps {
   places: Place[];
@@ -20,9 +21,15 @@ export interface CityMapProps {
   selectedPlaceId?: string;
 }
 
-/** Stand-in for <CityMap> until agent 09's map is in the main branch. Replace with: export { CityMap as CityMapSlot } from '../map'; */
+/** The real map of agent 09 (client/src/map). Under tests (no WebGL) the light stand-in below is used. */
 export function CityMapSlot(props: CityMapProps) {
-  return <StubCityMap {...props} />;
+  if (import.meta.env.MODE === 'test') return <StubCityMap {...props} />;
+  const { height = 240, selectedPlaceId: _selected, ...rest } = props;
+  return (
+    <div style={{ height, borderRadius: 16, overflow: 'hidden' }}>
+      <CityMap {...rest} intro={false} />
+    </div>
+  );
 }
 
 const W = 390;

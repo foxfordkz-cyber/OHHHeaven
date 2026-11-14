@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "AI residents (owners and officials) and the season balance simulator — agent 07",
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
-    "test": "vitest run --passWithNoTests",
-    "check": "tsc --noEmit -p tsconfig.json"
+    "test": "vitest run",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "season": "tsx ../sim/season.ts"
   },
   "dependencies": {
     "@ohh/engine": "*",

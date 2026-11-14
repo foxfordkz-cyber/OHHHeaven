@@ -1,0 +1,60 @@
+{
+  "station": "New York Central Park (Belvedere Castle), GHCN USW00094728",
+  "period": "1991-2020 NOAA climate normals",
+  "updated": "2026-11-14",
+  "license": "NOAA/NWS data are U.S. Government works: public domain, commercial use allowed (17 U.S.C. 105). Open-Meteo free API is non-commercial only, so it is not used.",
+  "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  "daysInMonth": [31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+  "tmaxF": {
+    "values": [39.5, 42.2, 49.9, 61.8, 71.5, 79.7, 84.8, 83.4, 76.3, 64.5, 54.1, 44.4],
+    "confidence": "verified",
+    "source": "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMaxTNormals.pdf",
+    "note": "Monthly normal daily maximum, NWS New York (OKX), 1991-2020."
+  },
+  "tminF": {
+    "values": [27.8, 29.6, 35.8, 45.6, 55.0, 64.4, 70.2, 68.9, 62.3, 51.4, 42.0, 33.9],
+    "confidence": "verified",
+    "source": "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMinTNormals.pdf",
+    "note": "Monthly normal daily minimum, NWS New York (OKX), 1991-2020."
+  },
+  "precipDays": {
+    "values": [10.8, 9.6, 11.1, 11.4, 11.6, 10.8, 10.6, 10.0, 8.8, 9.6, 9.6, 11.4],
+    "confidence": ["verified", "estimate", "verified", "estimate", "estimate", "estimate", "estimate", "verified", "verified", "estimate", "estimate", "verified"],
+    "source": "https://forecast.weather.gov/product.php?site=NWS&product=CLM&issuedby=NYC",
+    "note": "Days with precipitation >= 0.01 in. Jan, Mar, Aug, Sep, Dec are the 1991-2020 normals printed in NWS monthly climate reports (CLM) for Central Park. Other months are estimates from the NOAA normals table as recalled; run scripts/fetch-climate.mjs to replace them."
+  },
+  "snowDays": {
+    "values": [3.7, 3.2, 2.0, 0.2, 0, 0, 0, 0, 0, 0, 0.2, 2.1],
+    "confidence": "verified",
+    "source": "https://en.wikipedia.org/wiki/Climate_of_New_York_City",
+    "note": "Days with snowfall >= 0.1 in, 1991-2020; table in the article cites NOAA. Secondary source until fetch-climate.mjs reads NCEI directly."
+  },
+  "hotDays": {
+    "values": [0, 0, 0, 0, 1, 3, 6, 4, 1, 0, 0, 0],
+    "confidence": "verified",
+    "source": "https://www.weather.gov/media/okx/Climate/CentralPark/90DegreeDays.pdf",
+    "note": "Average days with high >= 90 F by month, NWS Central Park table (1869-present averages, about 15 a year)."
+  },
+  "stormDays": {
+    "values": [0.5, 0.5, 0.4, 0.3, 0.6, 1.0, 1.4, 1.4, 0.8, 0.5, 0.4, 0.4],
+    "confidence": "estimate",
+    "note": "Days with weather bad enough to empty sidewalks: snowstorms Dec-Mar, nor'easters in spring and fall, thunderstorms in summer. Game design estimate; no single NOAA normal exists."
+  },
+  "cloudyShareOfDryDays": {
+    "value": 0.4,
+    "confidence": "estimate",
+    "note": "Share of dry days shown as cloudy. Estimate."
+  },
+  "footTrafficMult": {
+    "values": { "clear": 1.0, "cloudy": 1.0, "rain": 0.9, "snow": 0.85, "heat": 0.95, "storm": 0.7 },
+    "sources": [
+      { "condition": "rain", "url": "https://www.researchgate.net/publication/335735814_Sellin'_in_the_Rain_Adaptation_to_Weather_and_Climate_in_the_Retail_Sector", "note": "Martinez-de-Albeniz and BelKaid: street-front stores lose about 7.4% of traffic on rainy days." },
+      { "condition": "rain", "url": "https://foursquare.com/resources/blog/data/fair-weather-foodies/", "note": "Foursquare with AccuWeather: heavy rain cut restaurant foot traffic by about 10-11% in winter and summer." },
+      { "condition": "snow", "url": "https://www.placer.ai/anchor/articles/how-have-winter-storms-impacted-retail-visits", "note": "Placer.ai: retail visits fell 8.6% nationwide in a storm week, 20-30% in the hardest-hit states." },
+      { "condition": "snow", "url": "https://www.nrn.com/restaurant-insights/winter-chill-hits-restaurants-foot-traffic-drops-3-6-amid-harsh-weather", "note": "Fiserv via Nation's Restaurant News: restaurant foot traffic -3.6% in a stormy second half of January." },
+      { "condition": "storm", "url": "https://geomarketing.com/how-weather-shaped-brick-and-mortar-foot-traffic-in-2016", "note": "Foursquare 2016: up to 40% drop in foot traffic during major weather events; 0.7 sits between storm-week and peak-day losses." },
+      { "condition": "heat", "confidence": "estimate", "note": "No study with a number found; small drop assumed because people stay indoors at midday." },
+      { "condition": "cloudy", "confidence": "estimate", "note": "No measurable effect assumed." }
+    ]
+  }
+}

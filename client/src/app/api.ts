@@ -1,7 +1,7 @@
 import type {
   Ack, Action, ClientView, GameClient, OfficialRole, Query, WorldConfig, WorldState,
-} from '@shared/types';
-import { RULES } from '@shared/rules';
+} from '@ohh/shared/types';
+import { RULES } from '@ohh/shared/rules';
 import { getSession, saveSession, type Mode } from './session';
 import { localRuntime, type LocalRuntime } from './local-host';
 import { interpretIdeaByRules } from './idea-rules';

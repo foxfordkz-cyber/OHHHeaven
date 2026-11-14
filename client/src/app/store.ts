@@ -1,5 +1,5 @@
 import { createContext, createElement, useContext, useEffect, useSyncExternalStore, type ReactNode } from 'react';
-import type { Ack, Action, ClientView, GameClient, OfficialRole, OwnerView, OfficialView, CityView, Query } from '@shared/types';
+import type { Ack, Action, ClientView, GameClient, OfficialRole, OwnerView, OfficialView, CityView, Query } from '@ohh/shared/types';
 import { getClient } from './api';
 import { detectMode, detectWorld, getSession, rememberMode, type Mode } from './session';
 

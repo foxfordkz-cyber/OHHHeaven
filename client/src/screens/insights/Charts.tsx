@@ -1,7 +1,7 @@
 // SVG charts for the Insights tab. Geometry comes from charts.ts; here it is only drawn. viewBox + width 100%
 // keeps every chart readable at 390 px and sharp on any screen.
 import { compactMoney, int, money, pct } from './format';
-import { breakEvenGeometry, dayBars, trendGeometry, type BreakEvenInput, type Segment, type TrendMark, type TrendPoint } from './charts';
+import { breakEvenGeometry, dayBars, trendGeometry, type BreakEvenInput, type Segment, type TrendMark, type TrendPoint } from './chartMath';
 
 export function BreakEvenChart({ input, caption }: { input: BreakEvenInput; caption: string }) {
   const g = breakEvenGeometry(input);

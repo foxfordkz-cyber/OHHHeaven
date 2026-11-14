@@ -1,4 +1,4 @@
-import type { Money } from '@shared/types';
+import type { Money } from '@ohh/shared/types';
 
 const MINUS = '−';
 

@@ -1,5 +1,5 @@
 import { useMemo, type ReactNode } from 'react';
-import type { Action, ClientView, Query } from '@shared/types';
+import type { Action, ClientView, Query } from '@ohh/shared/types';
 import { Toaster } from '../ui';
 import { createStaticStore, StoreProvider, useStoreState, useGameStore, type GameStore } from './store';
 

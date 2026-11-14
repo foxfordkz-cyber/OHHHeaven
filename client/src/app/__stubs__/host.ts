@@ -4,8 +4,8 @@
 import type {
   Action, ActionResult, BusinessState, CityView, ClientView, DayReport, OfficialRole, OfficialView, OpenRecommendation, OwnerView,
   Player, PublicBusiness, Query, RealWorldPlan, RoadmapItem, Standing, WorldConfig, WorldPublic, WorldState,
-} from '@shared/types';
-import { RULES, dateOf } from '@shared/rules';
+} from '@ohh/shared/types';
+import { RULES, dateOf } from '@ohh/shared/rules';
 import type { EngineCtx, HostDeps } from '../host-types';
 import {
   FIXTURE_DAY, fixtureAnalytics, fixtureEvents, fixtureFeed, fixtureOpenRecommendations, fixturePacks, fixturePlaces,
@@ -44,8 +44,22 @@ function fullBusiness(pub: PublicBusiness, i: number): BusinessState {
   };
 }
 
-export function newWorld(config: WorldConfig, _ctx: EngineCtx, deps: HostDeps): WorldState {
-  const businesses = fixtureBusinesses.filter((b) => b.id !== 'b01').map(fullBusiness);
+/** Example businesses sit on the places of the current map (real data/places.json when present). */
+function seatBusinesses(ctx: EngineCtx): PublicBusiness[] {
+  const used = new Set<string>();
+  return fixtureBusinesses.filter((b) => b.id !== 'b01').map((b) => {
+    if (ctx.places.some((p) => p.id === b.placeId)) {
+      used.add(b.placeId);
+      return b;
+    }
+    const spot = ctx.places.find((p) => !used.has(p.id) && p.suitableFor.includes(b.niche)) ?? ctx.places.find((p) => !used.has(p.id));
+    if (spot) used.add(spot.id);
+    return { ...b, placeId: spot?.id ?? b.placeId };
+  });
+}
+
+export function newWorld(config: WorldConfig, ctx: EngineCtx, deps: HostDeps): WorldState {
+  const businesses = seatBusinesses(ctx).map(fullBusiness);
   const players: Player[] = businesses.map((b) => ({
     id: b.managerPlayerId, name: fixtureBusinesses.find((p) => p.id === b.id)!.ownerName, kind: 'owner', isAi: b.isAi, paid: !b.isAi,
     joinedDay: 1, lastSeenDay: FIXTURE_DAY, inbox: [],
@@ -134,12 +148,12 @@ function stubDay(b: BusinessState, w: WorldState): DayReport {
   return { day: w.day, demandUnits: demand, servedUnits: served, lost: { size: demand - served, staff: 0, closure: 0 }, revenue: Math.round(served * b.orders.price), variableCosts: Math.round(served * 2.05), sizeUtilization: Math.min(1, served / Math.max(1, b.size * 11)), weather: weather?.condition ?? 'clear', notes: [] };
 }
 
-export function step(w: WorldState, _ctx: EngineCtx, deps: HostDeps): WorldState {
+export function step(w: WorldState, ctx: EngineCtx, deps: HostDeps): WorldState {
   if (w.phase !== 'running') return w;
   const nextDay = w.day + 1;
   const forecast = deps.forecast(w.config.seed, nextDay, RULES.FORECAST_DAYS + 1);
   const rentPerDay = (b: BusinessState) => {
-    const place = stubCtx.places.find((p) => p.id === b.placeId);
+    const place = ctx.places.find((p) => p.id === b.placeId);
     return place ? Math.round((place.sqft * place.rentPerSqftYear) / 12 / RULES.DAYS_PER_MONTH) : 250;
   };
   const businesses = w.businesses.map((b) => {

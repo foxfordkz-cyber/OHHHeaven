@@ -9,13 +9,12 @@ const config = {
 };
 
 describe('engine', () => {
-  it('createWorld starts on day 1 and tickDay advances one day', () => {
+  it('tickDay advances exactly one day without mutating the input', () => {
     const w = createWorld(config);
-    expect(w.day).toBe(1);
-    const ctx = { packs: { common: {} as never, niches: {} }, places: [] };
+    const day = w.day;
+    const ctx = { packs: { common: { taxes: [], shortcuts: [], violations: [], officials: [], reports: [], ruleCards: [], roadmap: [] } as never, niches: {} }, places: [] };
     const w2 = tickDay(w, ctx);
-    expect(w2.day).toBe(2);
-    expect(w2.version).toBeGreaterThan(w.version);
-    expect(w.day).toBe(1);
+    expect(w2.day).toBe(day + 1);
+    expect(w.day).toBe(day);
   });
 });

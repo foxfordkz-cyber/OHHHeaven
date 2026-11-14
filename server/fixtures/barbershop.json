@@ -1,0 +1,79 @@
+{
+  "id": "barbershop",
+  "version": 0,
+  "name": "Barbershop",
+  "tagline": "Three chairs, walk-ins welcome.",
+  "startCapital": 90000,
+  "unit": { "name": "haircut", "refPrice": 35, "priceMin": 15, "priceMax": 80, "cogsPerUnit": 2.5, "source": "server fixture", "confidence": "estimate", "note": "Placeholder until packs/barbershop.json (agent 15) lands." },
+  "market": { "unitsPerSlotMonth": 900, "priceElasticity": -1.1, "weights": { "price": 0.3, "quality": 0.3, "reputation": 0.25, "location": 0.15 }, "source": "server fixture", "confidence": "estimate" },
+  "capacity": { "unitsPerStaffMonth": 300, "minStaff": 1, "maxStaff": 6, "hardCapUnits": null, "note": "About 12 cuts a day per barber." },
+  "sizing": { "unitName": "chair", "min": 2, "max": 8, "default": 3, "sqftPerUnit": 70, "unitsServedPerSizeMonth": 330, "takeawayShare": 0, "cleaningCostPerSizeMonth": 25, "crowdPenaltyAbove": 0.95, "emptyPenaltyBelow": 0.25, "source": "server fixture", "confidence": "estimate" },
+  "setup": [
+    { "id": "buildout", "name": "Build-out, sinks and lighting", "kind": "buildout", "cost": 16000, "required": true, "lifespanMonths": 120, "source": "server fixture", "confidence": "estimate" },
+    { "id": "security_deposit", "name": "Lease security deposit", "kind": "deposit", "cost": 12000, "required": true, "source": "server fixture", "confidence": "estimate" },
+    { "id": "barber_chair", "name": "Hydraulic barber chair", "kind": "furniture", "cost": 1400, "required": true, "scalesWithSize": true, "lifespanMonths": 96, "source": "server fixture", "confidence": "estimate" },
+    { "id": "station", "name": "Station with mirror", "kind": "furniture", "cost": 900, "required": true, "scalesWithSize": true, "lifespanMonths": 96, "source": "server fixture", "confidence": "estimate" },
+    { "id": "tools", "name": "Clippers, trimmers, sterilizer", "kind": "equipment", "cost": 2500, "required": true, "lifespanMonths": 36, "source": "server fixture", "confidence": "estimate" },
+    { "id": "pos", "name": "POS and booking app", "kind": "equipment", "cost": 900, "required": true, "lifespanMonths": 48, "source": "server fixture", "confidence": "estimate" },
+    { "id": "waiting_area", "name": "Waiting bench and decor", "kind": "furniture", "cost": 1800, "required": false, "lifespanMonths": 72, "qualityBonus": 0.02, "source": "server fixture", "confidence": "estimate" },
+    { "id": "barbershop_license", "name": "Appearance enhancement business license", "kind": "license", "cost": 400, "required": true, "waitDays": 14, "agency": "NYS Department of State", "withoutItViolation": "no_business_license", "source": "server fixture", "confidence": "estimate" }
+  ],
+  "kits": [
+    { "id": "lean", "name": "Lean start", "size": 2, "items": [ { "id": "buildout", "qty": 1 }, { "id": "security_deposit", "qty": 1 }, { "id": "barber_chair", "qty": 1 }, { "id": "station", "qty": 1 }, { "id": "tools", "qty": 1 }, { "id": "pos", "qty": 1 }, { "id": "barbershop_license", "qty": 1 } ], "pitch": "Two chairs, the basics." },
+    { "id": "standard", "name": "Standard", "size": 3, "items": [ { "id": "buildout", "qty": 1 }, { "id": "security_deposit", "qty": 1 }, { "id": "barber_chair", "qty": 1 }, { "id": "station", "qty": 1 }, { "id": "tools", "qty": 1 }, { "id": "pos", "qty": 1 }, { "id": "waiting_area", "qty": 1 }, { "id": "barbershop_license", "qty": 1 } ], "pitch": "Three chairs and a waiting area." },
+    { "id": "premium", "name": "Premium", "size": 5, "items": [ { "id": "buildout", "qty": 1 }, { "id": "security_deposit", "qty": 1 }, { "id": "barber_chair", "qty": 1 }, { "id": "station", "qty": 1 }, { "id": "tools", "qty": 1 }, { "id": "pos", "qty": 1 }, { "id": "waiting_area", "qty": 1 }, { "id": "barbershop_license", "qty": 1 } ], "pitch": "Five chairs for a busy corner." }
+  ],
+  "monthlyCosts": [
+    { "id": "utilities", "name": "Electricity and water", "kind": "utilities", "basis": "fixed", "amount": 550, "source": "server fixture", "confidence": "estimate" },
+    { "id": "insurance", "name": "Liability insurance", "kind": "insurance", "basis": "fixed", "amount": 180, "source": "server fixture", "confidence": "estimate" },
+    { "id": "supplies", "name": "Capes, blades, products", "kind": "supplies", "basis": "per_unit", "amount": 0.8, "source": "server fixture", "confidence": "estimate" },
+    { "id": "card_fees", "name": "Card processing fees", "kind": "fees", "basis": "pct_revenue", "amount": 0.028, "source": "server fixture", "confidence": "estimate" },
+    { "id": "laundry", "name": "Towel laundry", "kind": "cleaning", "basis": "per_size", "amount": 40, "source": "server fixture", "confidence": "estimate" }
+  ],
+  "staff": [
+    { "id": "barber", "name": "Licensed barber", "hourlyWage": 24, "hoursPerMonth": 160, "licenseRequired": "barber_license", "source": "server fixture", "confidence": "estimate" },
+    { "id": "front_desk", "name": "Front desk", "hourlyWage": 17, "hoursPerMonth": 120, "licenseRequired": null, "source": "server fixture", "confidence": "estimate" }
+  ],
+  "taxes": [],
+  "levers": [
+    { "id": "sanitation", "name": "Tool sanitation", "options": [
+      { "id": "standard", "label": "Disinfect between clients", "monthlyCost": 120 },
+      { "id": "minimal", "label": "Rinse only", "monthlyCost": 20, "effects": { "quality": -0.04 }, "causes": "unsanitary_tools" }
+    ] },
+    { "id": "booking", "name": "Booking", "options": [
+      { "id": "walk_in", "label": "Walk-ins only", "monthlyCost": 0 },
+      { "id": "app", "label": "Online booking app", "monthlyCost": 90, "effects": { "demand": 0.05 } }
+    ] }
+  ],
+  "shortcuts": [
+    { "id": "cash_wages", "name": "Pay barbers in cash, off the books", "what": "No payroll taxes this month. Audits recover them with penalties.", "saves": { "basis": "pct_payroll", "amount": 0.11 }, "violation": "off_books_payroll" }
+  ],
+  "violations": [
+    { "id": "off_books_payroll", "name": "Unreported cash payroll", "law": "NY Labor Law and federal payroll tax rules", "official": "tax_auditor", "foundBy": ["audit", "complaint"], "fine": { "base": 1000, "perMonth": 250, "pctOfSaved": 1.5, "max": 40000 }, "closureDays": 0, "reputationHit": 0.08, "source": "server fixture", "confidence": "estimate" },
+    { "id": "unsanitary_tools", "name": "Tools not disinfected", "law": "NYS appearance enhancement rules", "official": "state_inspector", "foundBy": ["inspection", "complaint"], "fine": { "base": 300, "perMonth": 100, "max": 2500 }, "closureDays": 0, "reputationHit": 0.06, "source": "server fixture", "confidence": "estimate" },
+    { "id": "no_business_license", "name": "Operating without a business license", "law": "NYS General Business Law, Article 27", "official": "state_inspector", "foundBy": ["inspection", "complaint"], "fine": { "base": 800, "perMonth": 300, "max": 8000 }, "closureDays": 3, "reputationHit": 0.1, "source": "server fixture", "confidence": "estimate" }
+  ],
+  "officials": [
+    { "id": "state_inspector", "name": "Licensing inspector", "agency": "NYS Department of State", "role": "inspector", "checks": ["unsanitary_tools", "no_business_license"], "source": "server fixture" },
+    { "id": "tax_auditor", "name": "Tax auditor", "agency": "NYS Department of Taxation and Finance", "role": "tax_auditor", "checks": ["off_books_payroll"], "source": "server fixture" }
+  ],
+  "reports": [
+    { "id": "report_unsanitary_tools", "name": "Report dirty tools", "text": "A licensing inspector visits. If you are wrong, you get a warning.", "role": "inspector", "checks": ["unsanitary_tools"] },
+    { "id": "report_no_license", "name": "Report unlicensed shop", "text": "A licensing inspector checks the license.", "role": "inspector", "checks": ["no_business_license"] }
+  ],
+  "events": [],
+  "ruleCards": [
+    { "id": "barber_license_card", "title": "Barber licenses", "text": "In New York every barber needs a state license, and the shop needs its own business license.", "source": "server fixture" }
+  ],
+  "benchmarks": { "cogsPct": 0.08, "laborPct": 0.45, "rentPct": 0.12, "netMarginPct": 0.1, "source": "server fixture", "confidence": "estimate" },
+  "suppliers": [
+    { "id": "barber_supply", "category": "Tools and products", "what": "Clippers, blades, capes, products", "whereToFind": "Professional beauty supply stores", "source": "server fixture", "confidence": "estimate" }
+  ],
+  "roadmap": [
+    { "id": "get_license", "title": "Get the shop license", "text": "Apply to the NYS Department of State.", "kind": "permit", "setupItemId": "barbershop_license", "fee": 400, "waitDays": 14, "agency": "NYS Department of State" },
+    { "id": "hire_barbers", "title": "Hire licensed barbers", "text": "Every chair needs a licensed barber.", "kind": "people" },
+    { "id": "open_doors", "title": "Open your doors", "text": "Open once the license is on the wall.", "kind": "launch" }
+  ],
+  "manager": { "monthlySalary": 4600, "source": "server fixture", "confidence": "estimate" },
+  "sources": [ { "url": "packs/barbershop.json", "title": "Server fixture: replaced by the real pack from agent 15", "checked": "2026-11-14" } ]
+}

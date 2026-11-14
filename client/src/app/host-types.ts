@@ -2,7 +2,7 @@
 // so the client keeps a copy here to talk to @ohh/host in the browser ("Practice offline").
 import type {
   Action, ActionResult, ClientView, DayWeather, GameEvent, NicheId, OfficialRole, PackSet, Place, Query, WorldConfig, WorldState,
-} from '@shared/types';
+} from '@ohh/shared/types';
 
 export interface EngineCtx { packs: PackSet; places: Place[] }
 

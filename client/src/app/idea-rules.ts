@@ -1,4 +1,4 @@
-import type { IdeaMatch, NicheId, PlaceTier } from '@shared/types';
+import type { IdeaMatch, NicheId, PlaceTier } from '@ohh/shared/types';
 
 /** Offline fallback for the `idea` query: keyword rules. Online the server asks @ohh/ai (agent 05). */
 const RULES: { niche: NicheId; words: RegExp; name: string; tier: PlaceTier; note: string }[] = [
