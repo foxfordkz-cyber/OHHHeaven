@@ -2,8 +2,7 @@ import { useMemo, useState } from 'react';
 import type { Action, Deal, OwnerView, PackSet, Place, PublicBusiness } from '../../../../shared/src/types';
 import { RULES, dateOf } from '../../../../shared/src/rules';
 import { AiBadge, Badge, Button, Card, List, ListRow, MoneyText, ProgressBar, SegmentedControl, Sheet, Skeleton, Toggle } from './ui';
-import { CityMapSlot, useGame, useOwnerView } from './deps';
-import { usePacks, usePlaces } from './data';
+import { CityMapSlot, useCatalog, useGame, useOwnerView } from './deps';
 import { Lines, Stars } from './fields';
 import { ProposeDealSheet } from './ProposeDealSheet';
 import { ReportSheet } from './ReportSheet';
@@ -30,12 +29,15 @@ type Panel =
   | { kind: 'end'; dealId: string }
   | null;
 
-/** The Network tab inside /biz, wired to the app store. Places and packs can be passed in (dev pages, tests). */
+const NO_PLACES: Place[] = [];
+
+/** The Network tab inside /biz, wired to the app store and the catalog (places, packs). Dev pages and tests pass their own. */
 export function NetworkTabScreen(props: { places?: Place[]; packs?: PackSet | null }) {
   const view = useOwnerView();
   const game = useGame();
-  const places = usePlaces(props.places);
-  const packs = usePacks(props.packs);
+  const catalog = useCatalog();
+  const places = props.places ?? catalog?.places ?? NO_PLACES;
+  const packs = props.packs !== undefined ? props.packs : catalog?.packs ?? null;
   if (!view) {
     return (
       <div className="stack" aria-busy="true">
