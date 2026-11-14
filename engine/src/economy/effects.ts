@@ -3,9 +3,15 @@ import { clamp } from './util';
 
 export const DEFAULT_WEEKDAY_MULT = [1, 1, 1, 1, 1, 1.15, 0.9]; // Mon..Sun (shared/src/rules.ts: day 1 is a Monday)
 
-export function weekdayMult(pack: Pack, weekday: number): number {
+/**
+ * Day-of-week multiplier: pack.extra.weekdayMult (7 numbers, Mon..Sun) if the pack sets it; otherwise the default
+ * profile, unless the niche hook shapes demand itself (hookOwnsDemand): then 1, so the week is not counted twice.
+ */
+export function weekdayMult(pack: Pack, weekday: number, hookOwnsDemand = false): number {
   const raw = (pack.extra as Record<string, unknown> | undefined)?.weekdayMult;
-  const arr = Array.isArray(raw) && raw.length === 7 && raw.every((x) => typeof x === 'number') ? (raw as number[]) : DEFAULT_WEEKDAY_MULT;
+  const set = Array.isArray(raw) && raw.length === 7 && raw.every((x) => typeof x === 'number');
+  if (!set && hookOwnsDemand) return 1;
+  const arr = set ? (raw as number[]) : DEFAULT_WEEKDAY_MULT;
   return arr[((weekday % 7) + 7) % 7];
 }
 

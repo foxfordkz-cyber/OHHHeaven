@@ -152,3 +152,27 @@ describe('opening and permits', () => {
     expect(w.businesses[0].trails).toEqual([]);
   });
 });
+
+describe('niche hooks: who owns the week and the capacity', () => {
+  it('a hook with demandMult and no pack.extra.weekdayMult turns the default week off; capacityDay replaces staff and room limits', async () => {
+    const { NICHE_HOOKS } = await import('../../src/niches/index');
+    const { cafePack } = await import('../fixtures/cafe');
+    const plainPack = { ...cafePack, extra: { taxableShare: 0.9 } };
+    const { w, ctx } = cafeCity(2, { pack: plainPack });
+    let x = w;
+    while (x.day % 7 !== 5) x = tickDay(x, ctx);   // day d has weekday (d − 1) mod 7, so the next day is a Saturday
+    const satDefault = tickDay(x, ctx).businesses[1].days.at(-1)!.demandUnits;
+    NICHE_HOOKS.cafe = { demandMult: () => 1, capacityDay: () => 100 };
+    try {
+      const sat = tickDay(x, ctx).businesses[1].days.at(-1)!;
+      expect(satDefault / sat.demandUnits).toBeCloseTo(1.15, 1);
+      expect(sat.servedUnits).toBe(100);
+      expect(sat.lost.staff).toBe(sat.demandUnits - 100);   // the hook limit is below the room: not a seat problem
+      NICHE_HOOKS.cafe = { capacityDay: () => 10_000 };
+      const roomy = tickDay(x, ctx).businesses[1].days.at(-1)!;
+      expect(roomy.lost.size + roomy.lost.staff).toBe(0);
+    } finally {
+      delete NICHE_HOOKS.cafe;
+    }
+  });
+});

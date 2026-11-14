@@ -55,11 +55,12 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
       return { id: b.id, price: b.orders.price, quality: b.quality, reputation: b.reputation, footTraffic: placeOf(ctx, b.placeId)?.footTraffic ?? 0.5, marketing: econOf(b).marketing };
     });
     const { demand, pull } = monthlyDemand(params, inputs);
-    const wd = weekdayMult(pack, date.weekday);
+    const nicheHooks = hooksFor(niche);
+    const wd = weekdayMult(pack, date.weekday, typeof nicheHooks.demandMult === 'function');
     idx.forEach((i, k) => {
       const b = start[i];
       const place = placeOf(ctx, b.placeId);
-      const hooks = hooksFor(b.niche);
+      const hooks = nicheHooks;
       const mods = dealModifiers(w, ctx, b.id);
       const lev = leverEffects(b, pack);
       const dayMult = wd * weatherMult * eventMult(events, 'demand', niche, place) * eventMult(events, 'footTraffic', niche, place)
@@ -69,11 +70,13 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
       const perStaff = pack.capacity.unitsPerStaffMonth;
       const staffCap = perStaff == null ? Infinity : (staffN * perStaff / RULES.DAYS_PER_MONTH) * eventMult(events, 'staffAvailability', niche, place) * lev.capacityMult;
       const takeaway = clamp((pack.sizing.takeawayShare ?? 0) * eventMult(events, 'deliveryShare', niche, place), 0, 0.95);
-      const hookCap = hooks.capacityDay?.(b, pack);
-      const sizeCap = typeof hookCap === 'number' ? Math.max(0, hookCap)
-        : (b.size * pack.sizing.unitsServedPerSizeMonth / RULES.DAYS_PER_MONTH) / (1 - takeaway);
+      const sizeCap = (b.size * pack.sizing.unitsServedPerSizeMonth / RULES.DAYS_PER_MONTH) / (1 - takeaway);
       const hardCap = pack.capacity.hardCapUnits ? pack.capacity.hardCapUnits / RULES.DAYS_PER_MONTH : Infinity;
-      const capacity = Math.min(staffCap, sizeCap, hardCap);
+      // a niche hook may return the whole capacity of the day (who can serve and where); it replaces staff and room limits
+      const hookCap = hooks.capacityDay?.(b, pack);
+      const useHook = typeof hookCap === 'number' && Number.isFinite(hookCap);
+      const capacity = useHook ? Math.min(Math.max(0, hookCap as number), hardCap) : Math.min(staffCap, sizeCap, hardCap);
+      const roomBound = useHook ? (hookCap as number) >= sizeCap - 0.5 || hardCap <= (hookCap as number) : sizeCap <= staffCap || hardCap <= staffCap;
       const lost = { size: 0, staff: 0, closure: 0 };
       let served = 0;
       if (b.status === 'closed') {
@@ -82,7 +85,7 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
         served = Math.floor(Math.min(dem, capacity));
         const gone = dem - served;
         if (gone > 0) {
-          if (sizeCap <= staffCap || hardCap <= staffCap) lost.size = gone; else lost.staff = gone;
+          if (roomBound) lost.size = gone; else lost.staff = gone;
         }
       }
       calcs.set(i, {
