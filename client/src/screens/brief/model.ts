@@ -104,7 +104,7 @@ export function happenings(view: OwnerView, since: Since, near: Set<string> | nu
     seen.add(key);
     out.push(h);
   };
-  const inbox = [...since.items, ...view.me.inbox].filter((i) => i.day > since.day || since.items.includes(i));
+  const inbox = [...since.items, ...view.me.inbox].filter((i) => i.day <= today && (i.day > since.day || since.items.includes(i)));
   for (const i of inbox) {
     add({ id: `in:${i.id}`, day: i.day, kind: i.kind, title: i.title, text: i.text, tone: inboxTone(i) });
   }
@@ -121,7 +121,7 @@ export function happenings(view: OwnerView, since: Since, near: Set<string> | nu
   const niche = view.business?.niche;
   const sameNiche = new Set(view.neighbors.filter((n) => n.niche === niche).map((n) => n.id));
   for (const f of view.feed) {
-    if (f.day <= since.day || !f.businessId || !FEED_NEIGHBOR.includes(f.kind)) continue;
+    if (f.day <= since.day || f.day > today || !f.businessId || !FEED_NEIGHBOR.includes(f.kind)) continue;
     const close = near?.has(f.businessId) ?? false;
     if (!close && !(near === null && sameNiche.has(f.businessId))) continue;
     add({ id: `fd:${f.id}`, day: f.day, kind: 'neighbor', title: f.text, text: neighborMeaning(f, close), tone: f.kind === 'bankruptcy' || f.kind === 'opening' ? 'warn' : 'info' });
