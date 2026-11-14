@@ -1,0 +1,199 @@
+/*
+ * First Year — pitch deck.
+ * Colour, type and radius values are the light "paper" theme from client/src/ui/glass.css
+ * (build/DESIGN.md, section 3). The deck is a static page, so the values are copied here,
+ * not imported; keep them in sync with glass.css.
+ * One page = one 1920×1080 <section class="page">. build.mjs prints it to deck.pdf.
+ */
+:root {
+  --bg: #f3f2ee;
+  --card: #ffffff;
+  --border: rgba(20, 21, 19, 0.1);
+  --hairline: rgba(20, 21, 19, 0.08);
+  --fill: rgba(20, 21, 19, 0.06);
+  --text: #141513;
+  --text-2: #4e514b;
+  --text-3: #767972;
+  --primary: #141513;
+  --on-primary: #ffffff;
+  --accent: #765a14;
+  --accent-fill: #e3c260;
+  --accent-ink: #1a1503;
+  --accent-tint: rgba(227, 194, 96, 0.1);
+  --accent-line: rgba(118, 90, 20, 0.32);
+  --profit: #2c7256;
+  --profit-soft: rgba(44, 114, 86, 0.1);
+  --loss: #a2463c;
+  --loss-soft: rgba(162, 70, 60, 0.09);
+  --warn: #85591f;
+  --warn-soft: rgba(133, 89, 31, 0.1);
+  --info: #3a618c;
+  --info-soft: rgba(58, 97, 140, 0.09);
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --r-1: 8px;
+  --r-2: 12px;
+  --r-3: 18px;
+  --r-4: 26px;
+  /* Deck scale: the app's sizes ×2, because a 1920 px page is read from the back of a room. */
+  --fs-xs: 26px;
+  --fs-sm: 28px;
+  --fs-md: 32px;
+  --fs-lg: 38px;
+  --fs-xl: 48px;
+  --fs-2xl: 64px;
+  --fs-3xl: 88px;
+  --pad: 96px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+@page { size: 1920px 1080px; margin: 0; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-md);
+  line-height: 1.35;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  padding: var(--pad) var(--pad) 120px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  background: var(--bg);
+  page-break-after: always;
+  break-after: page;
+}
+.page:last-child { page-break-after: auto; break-after: auto; }
+
+/* Screen preview: pages stacked with a gap, scaled to the window. */
+@media screen {
+  body { padding: 24px 0; }
+  .page { margin: 0 auto 24px; outline: 1px solid var(--border); }
+}
+
+/* Page furniture */
+.foot {
+  position: absolute;
+  left: var(--pad);
+  right: var(--pad);
+  bottom: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+.foot .brand { display: flex; align-items: center; gap: 14px; color: var(--text-2); font-weight: 500; }
+.foot .brand svg { width: 36px; height: 36px; }
+
+.kicker {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+h1 { font-size: var(--fs-3xl); font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; }
+h2 { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; max-width: 1500px; }
+h3 { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.01em; }
+p, li { color: var(--text-2); }
+.lead { font-size: var(--fs-lg); color: var(--text-2); max-width: 1400px; }
+.small { font-size: var(--fs-xs); color: var(--text-3); }
+.num { font-feature-settings: 'tnum'; }
+strong { color: var(--text); font-weight: 600; }
+
+/* Layout */
+.row { display: flex; gap: 40px; }
+.grow { flex: 1; min-width: 0; }
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.fill { flex: 1; min-height: 0; }
+
+/* Content cards: flat, a hairline, no shadow (DESIGN.md, section 2). */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3);
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.card.tint { background: linear-gradient(var(--accent-tint), var(--accent-tint)), var(--card); border-color: var(--accent-line); }
+.card ul { padding-left: 1.1em; display: flex; flex-direction: column; gap: 10px; }
+
+/* Numbers stand on the page: number, then a caption with unit and period (DESIGN.md, rule 6). */
+.kpi b { display: block; font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; font-feature-settings: 'tnum'; color: var(--text); line-height: 1.05; }
+.kpi span { display: block; margin-top: 10px; font-size: var(--fs-xs); color: var(--text-2); }
+.kpi .src { margin-top: 6px; font-size: 20px; color: var(--text-3); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px;
+  border-radius: 10px;
+  font-size: 22px;
+  font-weight: 600;
+  background: var(--fill);
+  color: var(--text-2);
+}
+.badge.accent { background: var(--accent-fill); color: var(--accent-ink); }
+.badge.profit { background: var(--profit-soft); color: var(--profit); }
+.badge.loss { background: var(--loss-soft); color: var(--loss); }
+.badge.warn { background: var(--warn-soft); color: var(--warn); }
+.badge.info { background: var(--info-soft); color: var(--info); }
+
+/* A number that is not in yet: visible on purpose, never a made-up value. */
+.tbd {
+  display: inline-block;
+  padding: 0 10px;
+  border: 2px dashed var(--warn);
+  border-radius: var(--r-1);
+  color: var(--warn);
+  font-weight: 600;
+}
+
+/* Screenshots of the real product */
+.shot {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; min-height: 0; flex: 1; }
+.shot figcaption { padding: 14px 20px; font-size: 22px; color: var(--text-2); border-top: 1px solid var(--hairline); }
+.shot.phone { border-radius: var(--r-4); }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: var(--fs-xs); }
+th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+th { color: var(--text-3); font-weight: 500; }
+td { color: var(--text-2); }
+td:first-child { color: var(--text); font-weight: 500; }
+tr.us td { background: var(--accent-tint); color: var(--text); }
+
+/* Flow of steps */
+.flow { display: flex; gap: 16px; align-items: stretch; }
+.flow .step { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-2); padding: 22px 24px; font-size: var(--fs-xs); color: var(--text-2); }
+.flow .step b { display: block; color: var(--text); font-size: var(--fs-sm); margin-bottom: 6px; }
+
+/* Title page */
+.title-page { justify-content: center; gap: 48px; }
+.title-page .mark { width: 120px; height: 120px; }
+.title-page h1 { font-size: 120px; }
+.title-page .lead { font-size: var(--fs-xl); max-width: 1500px; color: var(--text); }
+.title-page .meta { display: flex; gap: 20px; flex-wrap: wrap; }
