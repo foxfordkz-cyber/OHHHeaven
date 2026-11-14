@@ -940,10 +940,10 @@
         "note": "An espresso bar runs on electricity, so the pack default needs no gas. If a concept adds a gas kitchen in a space that never had food service, Con Edison must bring service from the street. 2017 survey by Sen. Hoylman and the NYC Hospitality Alliance (quoted in search excerpts): 82.1% of members had some delay getting gas turned on, upgraded or adjusted; the average wait was 68 days and up to a year; losses about $140,000 per business. Reported cases: 4 months (The Clam, Greenwich Village), 7 months (Delancey Street, 2015). No 2025-26 figures found. 68 days = the survey average."
       },
       "buildRush": {
-        "costMult": 1.15,
+        "costMult": 1.25,
         "daysMult": 0.75,
         "confidence": "estimate",
-        "note": "Night and weekend shifts: labor is roughly half of a fit-out and overtime pays 1.5x, so a quarter fewer days costs about 15% more. My estimate; no public figure."
+        "note": "Night and weekend shifts. An older study cited on ProQuest: with the overtime premium and lost productivity, each productive hour gained costs about 300% of the straight-time rate (https://www.proquest.com/docview/220434161, quoted in a search excerpt; date and sample not seen). Labor is roughly half of a fit-out; finishing in 75% of the days moves about a quarter of the hours into overtime: 0.5 x 0.25 x (3 - 1) = +25%. My derivation."
       },
       "startupCostDeduction": {
         "immediate": 5000,
@@ -1153,7 +1153,7 @@
         150,
         250
       ],
-      "dsnyFinesNote": "DSNY: $100 first, $150 second, $250 third and later (quoted in search excerpts of the DSNY snow-laws page and a January 2026 DSNY advisory). Schedule maximum $350.",
+      "dsnyFinesNote": "DSNY: $100 first, $150 second, $250 third and later (quoted in search excerpts of the DSNY snow-laws page and a January 2026 DSNY advisory). Schedule maximum $350. Sources disagree: a DSNY one-pager says $100 for the first summons and $350 for every one after (https://www.nyc.gov/assets/em/downloads/pdf/dsny_snow_removal_one_pager.pdf). Who is ticketed: a DSNY spokeswoman said the ticket is probably written to the building owner; most commercial leases shift the duty to the tenant, and the owner recovers the fine from the tenant (amNY, Cohen & Jaffe, quoted in search excerpts). In the game the tenant pays either way.",
       "dsnySweep": {
         "minPedestriansPerDay": 5000,
         "note": "Deterministic stand-in for patrols: DSNY walks the busy commercial corridors after every storm. Blocks at or above the map's median footfall (5,140 a day, keen-cray places) are swept the morning after every snow day; quieter blocks only after a 311 report. My rule; the city does not publish patrol routes. In the 2023-24 season DSNY wrote 9,399 snow tickets to residential, 75 to commercial properties and 21 to vacant lots (City Council hearing, January 2025)."
@@ -1674,7 +1674,7 @@
       {
         "id": "pre_opening_months",
         "title": "Months before opening: rent runs, sales do not",
-        "playerDecision": "Which space (former cafe, food, retail), which lease (0, 3 or 6 free months against the face rent), rush the build-out or not, start work before the permit or not, check gas before signing.",
+        "playerDecision": "Which space (former cafe, food, retail), which lease (0, 3 or 6 free months against the face rent), rush the build-out (+25% cost, -25% days) or not, start work before the permit or not, check gas before signing.",
         "engineMath": "Rent day by day from signing: base rent = faceRent/30 on days after freeUntilDay; additional rent share every day. Before opening, monthly costs with setupCostShares are charged by setup days. Opening is the later of the build-out end and the permits that wait for it. Pre-opening rent and costs go into a start-up bucket for the profit tax (IRC 195): $5,000 in the opening month (less above $50,000), the rest over 180 months.",
         "fieldsNeeded": [
           "extra.preOpening",
