@@ -1,0 +1,82 @@
+{
+  "id": "B01-service",
+  "part": "service",
+  "theme": "Seats and takeaway, the morning rush, the queue (engine/src/niches/cafe/service.ts)",
+  "checked": "2026-11-14",
+  "howNumbersWereChecked": "Every number is the one in packs/parts/cafe/D20-formats.json extra.service (build/FORMATS.md, table 3.2) with its source and confidence; three fallbacks added by B01 carry their own note.",
+  "extra": {
+    "service": {
+      "note": "Seats limit only guests who sit; takeaway is limited by the team's speed; the morning rush is where orders are lost. Replaces the engine's seat limit, which divided by (1 - takeaway) and so cut takeaway orders too (D14).",
+      "source": "packs/parts/cafe/D14-mechanics.json (extra.floorZones), packs/parts/cafe/D06-demand.json (extra.queue, extra.hourCurve)",
+      "confidence": "estimate",
+      "rushHours": [
+        7,
+        8,
+        9
+      ],
+      "rushHourWeights": [
+        0.31,
+        0.38,
+        0.31
+      ],
+      "rushNote": "D14 hourProfile: 12%, 15% and 12% of the day's orders at 7, 8 and 9 am; as shares of the rush: 0.12 / 0.39 = 0.31, 0.15 / 0.39 = 0.38. How much of the day falls into the rush comes from the guests (guestSegments.morningShare), not from here.",
+      "peak15Factor": 0.75,
+      "peak15Note": "D14: the busiest quarter-hour carries a third of the hour (commuter waves off the trains). An estimate; traffic engineering uses 0.85-0.95 for cars.",
+      "machineOrdersPerHour": 90,
+      "machineNote": "D14: ceiling of one two-group machine and its grinders, in orders (about 108 drinks at 1.2 drinks an order). D06: 100 drinks an hour is the practical top of a two-group machine. https://www.seattlecoffeegear.com/blogs/scg-blog/drinks-per-hour",
+      "walkAwayByLine": [
+        {
+          "line": 5,
+          "share": 0
+        },
+        {
+          "line": 10,
+          "share": 0.1
+        },
+        {
+          "line": 15,
+          "share": 0.3
+        },
+        {
+          "line": 20,
+          "share": 0.5
+        }
+      ],
+      "walkAwayNote": "Share of arriving customers who walk on when this many people stand in line; straight lines between the points, 0 below 5, 0.5 above 20. D06 extra.queue.walkAwayByPeopleAhead with the steps joined: up to five people nobody leaves (Lu, Musalem, Olivares, Schilkrut, deli counter study, paper opened by D06); a line of 10 costs like a 3.2% price rise and a line of 15 like 11.5%, which D06 converts to 10% and 30% of buyers. These are shares of the flow, not chances: the day's result is fixed by its inputs.",
+      "walkAwaySource": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+      "seatPeakHourShare": 0.14,
+      "seatPeakNote": "Share of a day's seated guests who arrive in the busiest hour: the peak of the D06 neighborhood hour curve (0.14 at 8 am).",
+      "seatFill": 0.85,
+      "seatFillNote": "Share of seats that can be filled at once: a table for two often holds one guest. My estimate.",
+      "seatBusyHours": 3,
+      "seatBusyNote": "Hours a day a full room stays full. My estimate: the D06 neighborhood curve has three hours at or above 0.10 of the day.",
+      "noSeatTakesAway": 0.6,
+      "noSeatNote": "D14: of the guests who find no seat, 60% take the order away and 40% leave. An estimate.",
+      "sitInLaborMult": 1.8,
+      "sitInLaborNote": "Work per seated order against a takeaway order: ceramic, the table, the dishes, the restroom. My estimate: in a cafe where 40% of orders are seated (pack.sizing.takeawayShare 0.6) one person in four works the room, not the bar: seated order = (0.75 + 0.25 / 0.4) / 0.75 = 1.83, rounded to 1.8.",
+      "crowdAbove": 0.9,
+      "crowdQualityDrop": 0.08,
+      "crowdNote": "The pack's sizing.crowdPenaltyAbove and the engine's 0.08 quality drop, judged by seats in use at the busiest hour, not by the day's average.",
+      "fixedCoreSqft": 395,
+      "sqftPerSeat": 18,
+      "floorNote": "Seats that fit = floor((sqft - fixedCoreSqft) / sqftPerSeat). D02 extra.floorPlan: the fixed core of a counter-service cafe is 395 sq ft (bar 120, line and pickup 70, restroom 60, back of house 120, entry 25) and barely changes with the size of the space; 18 net sq ft a seat is D02's 'comfortable' and pack.sizing.sqftPerUnit. A 500 sq ft door fits 5 seats, 600 fits 11, 830 fits 24. Seats above that number do not exist for the service part.",
+      "floorSource": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
+      "defaultMorningShare": 0.39,
+      "defaultMorningNote": "Used only while segments.ts gives the plain one-group mix (morningShare 0). D14 hourProfile: 12%, 15% and 12% of the day's orders at 7, 8 and 9 am, 0.39 in all. Once guestSegments is in the pack, each group's own morningShare is used instead.",
+      "defaultDwellHours": 0.85,
+      "defaultDwellNote": "Used only when no group gives its own dwellHours. Seat-weighted dwell of the residential mix in guestSegments (mixByBlock.residential × sitShare × dwellHours): residents 0.75 h, students 1.5 h, tourists 0.5 h, office 0.25 h -> 0.449 / 0.525 = 0.855 h, rounded to 0.85. An estimate built on D20 estimates.",
+      "offsetEngineCrowd": true,
+      "offsetEngineCrowdNote": "day.ts still calls a cafe 'packed' when served / (size x 170 / 30 / 0.4) > 0.9 and takes 0.08 off quality: an 8-seat to-go counter with 250 orders is 'packed' every day. While true, the service part gives the 0.08 back on days its own busiest-hour seat count says the room is not packed, and does not take a second 0.08 when both agree. Set to false when day.ts reads seat use from the part (build/FORMATS.md, request 5)."
+    }
+  },
+  "sources": [
+    {
+      "url": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+      "what": "line length and walk-away (Lu, Musalem, Olivares, Schilkrut)"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
+      "what": "NYC Building Code, chapter 10, egress: floor per seat"
+    }
+  ]
+}
