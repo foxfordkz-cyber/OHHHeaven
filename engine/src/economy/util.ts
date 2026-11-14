@@ -12,6 +12,7 @@ export interface EconMtd {
   daysAlive: number; daysOpen: number; managerDays: number;
   rentMultSum: number; utilitiesMultSum: number;
   staffDays: Record<string, number>;   // role id → worker-days this month (open days only)
+  wagesExtra?: number;                 // Σ over open days of workers × (wages event multiplier − 1); absent = 0
 }
 export interface EconExtra {
   marketing: Money;      // decaying stock of ad spend

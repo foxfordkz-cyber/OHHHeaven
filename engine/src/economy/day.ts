@@ -14,7 +14,7 @@ interface Calc {
   demand: number; served: number; lost: { size: number; staff: number; closure: number };
   capacity: number; sizeCap: number; pull: number; spillIn: number;
   priceMult: number; cogsMult: number; staffN: number;
-  rentMult: number; utilitiesMult: number; notes: string[];
+  rentMult: number; utilitiesMult: number; wagesMult: number; notes: string[];
 }
 
 const QUALITY_INERTIA = 0.1;      // share of the gap to target closed per day
@@ -91,7 +91,8 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
       calcs.set(i, {
         b, pack, place, demand: dem, served, lost, capacity, sizeCap, pull: pull[k], spillIn: 0,
         priceMult: mods.priceMult, cogsMult: eventMult(events, 'cogs', niche, place) * mods.cogsMult, staffN,
-        rentMult: eventMult(events, 'rent', niche, place), utilitiesMult: eventMult(events, 'utilities', niche, place), notes: [],
+        rentMult: eventMult(events, 'rent', niche, place), utilitiesMult: eventMult(events, 'utilities', niche, place),
+        wagesMult: eventMult(events, 'wages', niche, place), notes: [],
       });
     });
 
@@ -116,7 +117,7 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
     const pack = ctx.packs.niches[b.niche];
     if (!pack) return b;
     const c = calcs.get(i);
-    const next = c ? tradeDay(c, w, ctx, day, date.month, events.map((e) => e.title), weather) : setupDay(b, pack, ctx, day, events, w);
+    const next = c ? tradeDay(c, ctx, day, date.month, events.map((e) => e.title), weather) : setupDay(b, pack, ctx, day, events, w);
     return payDue(next, ctx, pack, day, feed, inbox, w);
   });
 
@@ -127,7 +128,7 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
   return { ...w, businesses, players, feed: feed.length ? [...w.feed, ...feed] : w.feed };
 }
 
-function tradeDay(c: Calc, w: WorldState, ctx: EngineCtx, day: number, month: number, eventTitles: string[], weather: WorldState['weather'][number] | undefined): BusinessState {
+function tradeDay(c: Calc, ctx: EngineCtx, day: number, month: number, eventTitles: string[], weather: WorldState['weather'][number] | undefined): BusinessState {
   const { b, pack } = c;
   const econ = econOf(b);
   const price = b.orders.price;
@@ -190,7 +191,9 @@ function tradeDay(c: Calc, w: WorldState, ctx: EngineCtx, day: number, month: nu
 
   const m = econ.mtd;
   const staffDays = { ...m.staffDays };
-  for (const [role, n] of Object.entries(b.orders.staff)) if (n > 0) staffDays[role] = (staffDays[role] ?? 0) + n;
+  let workers = 0;
+  for (const [role, n] of Object.entries(b.orders.staff)) if (n > 0) { staffDays[role] = (staffDays[role] ?? 0) + n; workers += n; }
+  const wagesExtra = (m.wagesExtra ?? 0) + workers * (c.wagesMult - 1);
   const capUnits = Number.isFinite(c.capacity) ? c.capacity : c.demand;
   const econNext: EconExtra = {
     ...econ,
@@ -201,6 +204,7 @@ function tradeDay(c: Calc, w: WorldState, ctx: EngineCtx, day: number, month: nu
       capacityUnits: m.capacityUnits + capUnits, utilSum: m.utilSum + util, utilDays: m.utilDays + 1,
       daysAlive: m.daysAlive + 1, daysOpen: m.daysOpen + 1, managerDays: m.managerDays + (b.orders.autopilot === 'manager' ? 1 : 0),
       rentMultSum: m.rentMultSum + c.rentMult, utilitiesMultSum: m.utilitiesMultSum + c.utilitiesMult, staffDays,
+      ...(wagesExtra !== 0 ? { wagesExtra } : {}),
     },
   };
   return withEcon({

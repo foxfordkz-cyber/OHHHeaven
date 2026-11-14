@@ -56,15 +56,16 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
   const rent = round2(monthlyRentOf(b, pack, ctx) * rentMult * (rentDays / D));
   add({ id: 'rent', label: 'Rent', kind: 'rent', amount: -rent });
 
-  // payroll from worker-days actually employed this month
+  // payroll from worker-days actually employed this month; a 'wages' event raises or lowers hourly pay (not the manager's salary)
   let payroll = 0;
   let staffDaysTotal = 0;
+  for (const role of pack.staff) staffDaysTotal += Math.max(0, m.staffDays[role.id] ?? 0);
+  const wagesMult = staffDaysTotal > 0 ? Math.max(0, 1 + (m.wagesExtra ?? 0) / staffDaysTotal) : 1;
   for (const role of pack.staff) {
     const days = m.staffDays[role.id] ?? 0;
     if (days <= 0) continue;
-    staffDaysTotal += days;
     const wage = role.tipped && role.cashWage != null ? role.cashWage : role.hourlyWage;
-    const amt = round2((days / D) * wage * role.hoursPerMonth);
+    const amt = round2((days / D) * wage * role.hoursPerMonth * wagesMult);
     payroll = round2(payroll + amt);
     const avg = Math.round((days / Math.max(1, m.daysOpen)) * 10) / 10;
     add({ id: `payroll_${role.id}`, label: `${role.name} wages (${avg} on staff)`, kind: 'payroll', amount: -amt });
@@ -161,6 +162,7 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
   const econNext: EconExtra = { ...econ, lossCarry: carry, cashStart: cash, mtd: emptyMtd(), taxYtd, maxStaff };
   const closed: BusinessState = withEcon({
     ...paidState,
+    staffPrev: { ...b.orders.staff },   // headcount at the end of the month, for niche hooks (e.g. a barber who left)
     history: [...b.history, report],
     mtd: { lines: [], demandUnits: 0, servedUnits: 0, lost: { size: 0, staff: 0, closure: 0 } },
   }, econNext);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { WorldState } from '@ohh/shared';
+import type { GameEvent, MonthReport, WorldState } from '@ohh/shared';
 import { tickDay } from '../../src/index';
 import { act, cafeCity, run } from '../fixtures/world';
 
@@ -154,5 +154,27 @@ describe('payroll taxes with a wage base per worker', () => {
     expect(accrued('ny_sui')).toBeCloseTo(0.041 * 17600 * staff, 0);
     const payroll = b.history.reduce((a, m) => a + m.lines.filter((l) => l.kind === 'payroll').reduce((x, l) => x - l.amount, 0), 0);
     expect(accrued('ny_sui')).toBeLessThan(0.041 * payroll);
+  });
+});
+
+describe("'wages' events and the headcount at the month end", () => {
+  it("a 'wages' event raises hourly pay for the days it lasts, not the manager's salary; staffPrev keeps the month-end staff", () => {
+    const { w, ctx } = cafeCity(1);
+    let x = act(w, ctx, 'pl1', { type: 'set_orders', orders: { autopilot: 'manager' } });
+    x = run(x, ctx, 30 - x.day);                                   // month 1 closed on day 30
+    const b = x.businesses[0];
+    expect(b.staffPrev).toEqual(b.orders.staff);
+    const hike: GameEvent = { id: 'mw', kind: 'regulation', title: 'Minimum wage goes up', text: '', announcedDay: 25, startDay: 31, endDay: 45, effects: [{ target: 'wages', mult: 1.2 }], origin: 'deck' };
+    const plain = run(x, ctx, 30).businesses[0].history.at(-1)!;
+    const raised = run({ ...x, events: [hike] }, ctx, 30).businesses[0].history.at(-1)!;
+    const pay = (m: MonthReport, id: string) => -(m.lines.find((l) => l.id === id)?.amount ?? 0);
+    expect(plain.month).toBe(2);
+    for (const role of ctx.packs.niches.cafe!.staff) {
+      if (pay(plain, `payroll_${role.id}`) === 0) continue;
+      expect(pay(raised, `payroll_${role.id}`) / pay(plain, `payroll_${role.id}`)).toBeCloseTo(1 + 0.2 * 15 / 30, 3);   // 15 of 30 days at +20%
+    }
+    expect(pay(plain, 'payroll_manager')).toBeGreaterThan(0);
+    expect(pay(raised, 'payroll_manager')).toBe(pay(plain, 'payroll_manager'));
+    expect(sumLines(raised.lines)).toBeCloseTo(raised.cashEnd - raised.cashStart, 2);
   });
 });

@@ -3,7 +3,7 @@ import type { GameEvent, WorldState } from '@ohh/shared';
 import { applyAction, createWorld, netWorth, tickDay } from '../../src/index';
 import { NICHE_HOOKS } from '../../src/niches/index';
 import { cafePack } from '../fixtures/cafe';
-import { act, cafeCity, config, ctxWith, deepFreeze, owner, places, run } from '../fixtures/world';
+import { cafeCity, config, deepFreeze, run } from '../fixtures/world';
 
 describe('createWorld, applyAction, tickDay, netWorth', () => {
   it('creates an empty running world on day 1 (the opening day; tickDay computes day 2 next)', () => {
@@ -154,9 +154,7 @@ describe('opening and permits', () => {
 });
 
 describe('niche hooks: who owns the week and the capacity', () => {
-  it('a hook with demandMult and no pack.extra.weekdayMult turns the default week off; capacityDay replaces staff and room limits', async () => {
-    const { NICHE_HOOKS } = await import('../../src/niches/index');
-    const { cafePack } = await import('../fixtures/cafe');
+  it('a hook with demandMult and no pack.extra.weekdayMult turns the default week off; capacityDay replaces staff and room limits', () => {
     const plainPack = { ...cafePack, extra: { taxableShare: 0.9 } };
     const { w, ctx } = cafeCity(2, { pack: plainPack });
     let x = w;
