@@ -4,6 +4,497 @@
  "theme": "Premises, build-out, entry into the business, lease: numbers for the events",
  "checked": "2026-11-14",
  "basedOn": "packs/parts/cafe/ from all branches: D00 (research/d00-cafe-total-search), D01, D02, D08, D09, D10, D13, D14; packs/cafe.json of claude/keen-cray-yytcbp",
+ "levers": [
+  {
+   "id": "lease_negotiation",
+   "name": "Lease clauses you negotiate before signing",
+   "note": "One-time choices made at signing (monthlyCost 0); each costs about an hour of the lease lawyer already in setup (lease_lawyer, $3,500). Several options can be chosen together: the engine should treat this lever as a set of flags, not one option.",
+   "options": [
+    {
+     "id": "standard_form",
+     "label": "Sign the landlord's form",
+     "monthlyCost": 0,
+     "effects": {}
+    },
+    {
+     "id": "two_percent_steps",
+     "label": "2% yearly steps instead of 3%",
+     "monthlyCost": 282,
+     "effects": {
+      "rent": 1.047,
+      "rentStepPct": 0.02
+     },
+     "note": "landlord-neutral over 10 years: start 4.7% higher (SBS: steps typically 2-3%)"
+    },
+    {
+     "id": "cap_escalation",
+     "label": "Cap the tax pass-through at 5% a year",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {
+      "taxEscalationCapPct": 0.05
+     }
+    },
+    {
+     "id": "true_good_guy",
+     "label": "Good guy guaranty without repayment of concessions",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {
+      "surrenderClawback": 0
+     },
+     "note": "SBS guide: a guaranty that repays free rent, allowance or broker's commission is not a true good guy"
+    },
+    {
+     "id": "consent_not_unreasonably_withheld",
+     "label": "Landlord may not unreasonably refuse an assignment",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {
+      "assignmentRentMult": 1.0
+     }
+    },
+    {
+     "id": "abatement_clause",
+     "label": "Rent abates after 3 days without building services",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {
+      "rentAbatesWhenBuildingFails": true
+     }
+    },
+    {
+     "id": "structural_carveout",
+     "label": "Structure and base building are the landlord's",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {
+      "structuralDelayRentFree": true
+     }
+    },
+    {
+     "id": "landlord_base_building",
+     "label": "Facade, sidewalk and risers are the landlord's",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {
+      "outsideScopeCostShare": 0
+     }
+    },
+    {
+     "id": "repair_deadline",
+     "label": "Landlord repairs within 10 days of notice",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {}
+    },
+    {
+     "id": "landlord_pest_clause",
+     "label": "Landlord treats common areas and cellar",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {}
+    },
+    {
+     "id": "no_operating_covenant",
+     "label": "No minimum opening hours",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {}
+    },
+    {
+     "id": "outdoor_rights",
+     "label": "Outdoor area written into the lease",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {}
+    },
+    {
+     "id": "allowance_as_rent_credit",
+     "label": "Take the allowance as free rent",
+     "monthlyCost": 0,
+     "effects": {
+      "tiAllowance": 0
+     }
+    },
+    {
+     "id": "renewal_right",
+     "label": "Renewal right in a shop-in-shop or license agreement",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {}
+    }
+   ],
+   "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+   "confidence": "estimate"
+  },
+  {
+   "id": "permit_help",
+   "name": "Free help before filing",
+   "options": [
+    {
+     "id": "none",
+     "label": "File on your own",
+     "monthlyCost": 0,
+     "effects": {}
+    },
+    {
+     "id": "dob_walk_in",
+     "label": "DOB walk-in / SBS project manager before filing",
+     "monthlyCost": 0,
+     "effects": {
+      "permitWaitDays": 0.9,
+      "openingDelayDays": 5
+     }
+    },
+    {
+     "id": "lpc_preapplication",
+     "label": "LPC staff meeting before applying",
+     "monthlyCost": 0,
+     "effects": {
+      "openingDelayDays": 7,
+      "lpcCycles": 1
+     }
+    }
+   ],
+   "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+   "confidence": "estimate",
+   "note": "MMR FY2026: 0.72 correction cycles per DOB NOW job, about 19 days each; 0.9 is a design value."
+  },
+  {
+   "id": "takeover_terms",
+   "name": "Terms of a business purchase",
+   "options": [
+    {
+     "id": "cash",
+     "label": "Pay in full at closing",
+     "monthlyCost": 0,
+     "effects": {}
+    },
+    {
+     "id": "seller_note",
+     "label": "Seller finances up to half over 60 months at 8%",
+     "monthlyCost": 2362,
+     "effects": {
+      "sellerNoteShare": 0.5
+     }
+    },
+    {
+     "id": "seller_note_standby",
+     "label": "Seller note on full standby (counts toward the SBA 10%)",
+     "monthlyCost": 0,
+     "effects": {
+      "equityInjectionCovered": 0.5
+     }
+    },
+    {
+     "id": "price_allocation",
+     "label": "Allocate the price: equipment, goodwill, lease",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {}
+    },
+    {
+     "id": "credit_for_accruals",
+     "label": "Deduct staff sick-time balances from the price",
+     "monthlyCost": 0,
+     "effects": {
+      "inheritedSickLeave": 0
+     }
+    }
+   ],
+   "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+   "confidence": "estimate"
+  },
+  {
+   "id": "exit_terms",
+   "name": "Terms when you sell or assign",
+   "options": [
+    {
+     "id": "plain_assignment",
+     "label": "Assign the lease as it is",
+     "monthlyCost": 0,
+     "effects": {
+      "stillLiableAfterSale": true
+     }
+    },
+    {
+     "id": "release_at_assignment",
+     "label": "Ask the landlord to release you",
+     "monthlyCost": 0,
+     "effects": {
+      "salePrice": 0.95,
+      "stillLiableAfterSale": false
+     }
+    }
+   ],
+   "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+   "confidence": "estimate",
+   "note": "SBS guide: whether you assign or sublet, you still have obligations."
+  },
+  {
+   "id": "free_rent_deal",
+   "addsOptionsTo": "D01",
+   "options": [
+    {
+     "id": "no_free_lower_rent",
+     "label": "No free months, rent 2.5% lower",
+     "monthlyCost": -150,
+     "effects": {
+      "freeRentMonths": 0,
+      "rent": 0.975
+     },
+     "note": "D14 formula market x 117/120"
+    }
+   ]
+  },
+  {
+   "id": "lease_contingencies",
+   "addsOptionsTo": "D01",
+   "options": [
+    {
+     "id": "landlord_cooperation_clause",
+     "label": "Landlord signs filings within 10 days",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {}
+    },
+    {
+     "id": "landlord_delivers_acm_free",
+     "label": "Space delivered free of asbestos",
+     "monthlyCost": 0,
+     "oneTimeCost": 500,
+     "effects": {
+      "asbestosCostShare": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "site_due_diligence",
+   "addsOptionsTo": "D01",
+   "options": [
+    {
+     "id": "bid_before_lease",
+     "label": "Two contractor bids before signing",
+     "monthlyCost": 0,
+     "oneTimeCost": 3000,
+     "effects": {
+      "leaseSigningDelayDays": 21,
+      "bidSurprise": 1.0
+     }
+    },
+    {
+     "id": "contractor_walkthrough",
+     "label": "Contractor opens test holes",
+     "monthlyCost": 0,
+     "oneTimeCost": 1500,
+     "effects": {
+      "hiddenConditionsMult": 1.05
+     }
+    }
+   ]
+  },
+  {
+   "id": "contractor_choice",
+   "addsOptionsTo": "D01",
+   "options": [
+    {
+     "id": "fixed_price",
+     "label": "Fixed price on a frozen drawing set",
+     "monthlyCost": 0,
+     "effects": {
+      "buildoutCost": 1.03,
+      "changeOrderShare": 0.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "takeover_transition",
+   "addsOptionsTo": "D01",
+   "options": [
+    {
+     "id": "seller_stays_two_weeks",
+     "label": "Seller works the bar for two weeks",
+     "monthlyCost": 0,
+     "oneTimeCost": 2000,
+     "effects": {
+      "awareness": 0.8
+     }
+    }
+   ]
+  },
+  {
+   "id": "laptop_policy",
+   "addsOptionsTo": "D02",
+   "options": [
+    {
+     "id": "weekend_no_laptops",
+     "label": "No laptops on weekends",
+     "monthlyCost": 0,
+     "effects": {
+      "reputation": -0.01
+     }
+    },
+    {
+     "id": "minimum_spend",
+     "label": "One order per 90 minutes",
+     "monthlyCost": 0,
+     "effects": {
+      "seatTurns": 0.95
+     }
+    }
+   ]
+  },
+  {
+   "id": "seating_layout",
+   "addsOptionsTo": "D02",
+   "options": [
+    {
+     "id": "more_twos",
+     "label": "Two-tops instead of four-tops",
+     "monthlyCost": 0,
+     "oneTimeCost": 400,
+     "effects": {
+      "effectiveSeats": 1.15
+     }
+    },
+    {
+     "id": "bar_rail",
+     "label": "Window bar rail for solo guests",
+     "monthlyCost": 0,
+     "oneTimeCost": 1200,
+     "effects": {}
+    },
+    {
+     "id": "accessible_route",
+     "label": "Keep a 36-inch route to counter and toilet",
+     "monthlyCost": 0,
+     "effects": {
+      "seats": -2,
+      "accessExposure": 0
+     }
+    }
+   ]
+  }
+ ],
+ "events": [
+  {
+   "id": "annual_rent_step",
+   "name": "Rent goes up 3%",
+   "text": "Your lease anniversary: the rent steps up by the percentage written in the lease.",
+   "effect": {
+    "field": "rent",
+    "mult": 1.03
+   },
+   "months": 12,
+   "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+   "confidence": "verified",
+   "note": "SBS guide: fixed increase typically 2-3% each year."
+  },
+  {
+   "id": "asking_rents_climb",
+   "name": "Store rents keep climbing",
+   "text": "New leases on Manhattan corridors cost more each quarter.",
+   "effect": {
+    "field": "rent",
+    "mult": 1.0125
+   },
+   "months": 3,
+   "source": "https://www.cbre.com/insights/figures/manhattan-retail-figures-q3-2026",
+   "confidence": "estimate",
+   "note": "CBRE Q3 2026: +5% a year; one quarter. Applies to leases signed while active."
+  },
+  {
+   "id": "vacancy_leverage",
+   "name": "Empty storefronts give tenants leverage",
+   "text": "On a block with many empty stores, landlords cut rent for new tenants.",
+   "effect": {
+    "field": "rent",
+    "mult": 0.9
+   },
+   "months": 12,
+   "source": "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail",
+   "confidence": "estimate",
+   "note": "Cheap tier only; Manhattan availability at a record low 9.8% in Q3 2026."
+  },
+  {
+   "id": "holdover_after_expiry",
+   "name": "Staying past the end of the lease",
+   "text": "The lease ran out during talks. Every month is billed at the holdover rate.",
+   "effect": {
+    "field": "rent",
+    "mult": 1.5
+   },
+   "months": 1,
+   "source": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+   "confidence": "estimate"
+  },
+  {
+   "id": "lease_renewal_offer",
+   "name": "The renewal letter",
+   "text": "Six months before the lease ends the landlord names the new rent at today's market.",
+   "effect": {
+    "field": "rent",
+    "mult": 1.2
+   },
+   "months": 60,
+   "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+   "confidence": "estimate",
+   "note": "Mid tier; prime 1.3, cheap 1.05 (eventCatalog)."
+  },
+  {
+   "id": "d00_street_hidden_sign",
+   "name": "A shed hides your sign",
+   "text": "A sidewalk shed goes up and covers your sign.",
+   "effect": {
+    "field": "footTraffic",
+    "mult": 0.9
+   },
+   "months": 12,
+   "source": "https://www.nyc.gov/site/buildings/safety/sidewalk-sheds.page",
+   "confidence": "estimate"
+  },
+  {
+   "id": "sign_complaint_wave",
+   "name": "Someone reports every sign on the avenue",
+   "text": "Dozens of sign complaints: Buildings inspectors walk the block.",
+   "effect": {
+    "field": "inspections",
+    "mult": 1.5
+   },
+   "months": 1,
+   "source": "https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page",
+   "confidence": "estimate",
+   "note": "Accessory storefront signs up to 150 sq ft carry no penalty under Local Law 15 of 2026."
+  },
+  {
+   "id": "dob_enforcement_sweep",
+   "name": "Buildings sweep for unpermitted work",
+   "text": "Inspectors check every build-out on the block without waiting for a complaint.",
+   "effect": {
+    "field": "inspections",
+    "mult": 1.5
+   },
+   "months": 1,
+   "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+   "confidence": "verified",
+   "note": "MMR FY2026: stop work orders +19% from proactive enforcement."
+  },
+  {
+   "id": "peak_kw_bill_jump",
+   "name": "The electric bill jumps",
+   "text": "New equipment pushed your peak load into demand charges.",
+   "effect": {
+    "field": "utilities",
+    "mult": 1.1
+   },
+   "months": 12,
+   "source": "https://nectarclimate.com/rates/consolidated-edison-coned",
+   "confidence": "estimate"
+  }
+ ],
  "extra": {
   "calibrationReference": {
    "note": "Money effects in notes are computed for the pack reference shop: 800 sq ft, $6,000 rent, $51,000 sales and $9,719 profit a month (packs/cafe.json extra.referenceMonth); build-out classes of keen-cray extra.buildout. A day closed loses about $1,700 of sales and $1,200 of contribution; a day of rent is $200.",
@@ -82,7 +573,7 @@
      {
       "kind": "lever",
       "id": "free_rent_deal",
-      "optionId": "long_free",
+      "optionId": "six_months_higher_rent",
       "label": "Ask for 6 free months",
       "cost": {
        "faceRentMult": 1.026
@@ -101,8 +592,8 @@
      },
      {
       "kind": "lever",
-      "id": "lease_contingencies",
-      "optionId": "rent_from_permits",
+      "id": "free_rent_deal",
+      "optionId": "starts_with_permits",
       "label": "Rent starts at DOB approval + 90 days, not at signing",
       "cost": {
        "cash": 0,
@@ -113,7 +604,7 @@
      {
       "kind": "lever",
       "id": "construction_pace",
-      "optionId": "rush",
+      "optionId": "after_hours",
       "label": "Night and weekend shifts",
       "cost": {
        "buildoutCostMult": 1.25,
@@ -169,7 +660,7 @@
      {
       "kind": "lever",
       "id": "construction_pace",
-      "optionId": "rush",
+      "optionId": "after_hours",
       "label": "Speed up the last weeks",
       "cost": {
        "buildoutCostMult": 1.25
@@ -225,8 +716,8 @@
     "playerMoves": [
      {
       "kind": "lever",
-      "id": "lease_contingencies",
-      "optionId": "rent_from_permits",
+      "id": "free_rent_deal",
+      "optionId": "starts_with_permits",
       "label": "Tie rent start to permits",
       "cost": {
        "faceRentMult": 1.01
@@ -287,7 +778,7 @@
      {
       "kind": "lever",
       "id": "lease_contingencies",
-      "optionId": "outside_delivery_date",
+      "optionId": "delivery_and_permit_clause",
       "label": "Outside delivery date: cancel and get money back",
       "cost": {
        "cash": 0
@@ -297,7 +788,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "walk_through",
+      "optionId": "survey_first",
       "label": "Sign only a vacant, broom-clean space",
       "cost": {
        "cash": 0,
@@ -350,7 +841,7 @@
      {
       "kind": "lever",
       "id": "guaranty_type",
-      "optionId": "full",
+      "optionId": "full_personal",
       "label": "Sign a full personal guaranty",
       "cost": {
        "personalExposure": "all rent to the end of the term"
@@ -487,7 +978,7 @@
      {
       "kind": "lever",
       "id": "free_rent_deal",
-      "optionId": "long_free",
+      "optionId": "six_months_higher_rent",
       "label": "Ask for more free months",
       "cost": {
        "faceRentMult": 1.0
@@ -722,8 +1213,8 @@
      },
      {
       "kind": "lever",
-      "id": "lease_negotiation",
-      "optionId": "renewal_option_cap",
+      "id": "lease_terms",
+      "optionId": "ten_with_option",
       "label": "At signing: 5-year renewal option at 95% of market",
       "cost": {
        "faceRentMult": 1.0,
@@ -1367,8 +1858,8 @@
     "playerMoves": [
      {
       "kind": "lever",
-      "id": "lease_negotiation",
-      "optionId": "renewal_option_cap",
+      "id": "lease_terms",
+      "optionId": "ten_with_option",
       "label": "Renewal option already in the lease",
       "cost": {},
       "result": "binds the new owner"
@@ -1431,7 +1922,7 @@
      {
       "kind": "lever",
       "id": "guaranty_type",
-      "optionId": "full",
+      "optionId": "full_personal",
       "label": "Full guaranty",
       "cost": {},
       "result": "exposure to the end of the term"
@@ -1439,7 +1930,7 @@
      {
       "kind": "lever",
       "id": "guaranty_type",
-      "optionId": "none_big_deposit",
+      "optionId": "no_guaranty_big_deposit",
       "label": "No guaranty, 6-month deposit",
       "cost": {
        "depositMonthsAdd": 3
@@ -2273,8 +2764,8 @@
     "playerMoves": [
      {
       "kind": "lever",
-      "id": "insurance",
-      "optionId": "business_interruption",
+      "id": "insurance_package",
+      "optionId": "full_cover",
       "label": "Business interruption cover",
       "cost": {
        "monthly": 40
@@ -2940,7 +3431,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "asbestos_survey_before_lease",
+      "optionId": "survey_first",
       "label": "Survey before signing",
       "cost": {
        "cash": 1000
@@ -3006,7 +3497,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "asbestos_survey_before_lease",
+      "optionId": "survey_first",
       "label": "Survey the full scope",
       "cost": {
        "cash": 1000
@@ -3061,7 +3552,7 @@
      {
       "kind": "lever",
       "id": "contingency_level",
-      "optionId": "fifteen_percent",
+      "optionId": "standard",
       "label": "Hold a 15% reserve",
       "cost": {
        "cashHeld": 10500
@@ -3307,7 +3798,7 @@
      {
       "kind": "lever",
       "id": "contractor_choice",
-      "optionId": "lien_waivers",
+      "optionId": "food_service_specialist",
       "label": "Pay only against lien waivers",
       "cost": {
        "cash": 0
@@ -3359,7 +3850,7 @@
      {
       "kind": "lever",
       "id": "contractor_choice",
-      "optionId": "lien_waivers",
+      "optionId": "food_service_specialist",
       "label": "Pay against lien waivers",
       "cost": {},
       "result": "no lien"
@@ -3613,7 +4104,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "check_co_before_lease",
+      "optionId": "survey_first",
       "label": "Read the CO before signing",
       "cost": {
        "cash": 0
@@ -3679,7 +4170,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "check_co_before_lease",
+      "optionId": "survey_first",
       "label": "Check the CO",
       "cost": {},
       "result": "avoid"
@@ -3733,7 +4224,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "check_co_before_lease",
+      "optionId": "survey_first",
       "label": "Ask the landlord for proof of legal use",
       "cost": {},
       "result": "landlord's job before signing"
@@ -3785,7 +4276,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "check_co_before_lease",
+      "optionId": "survey_first",
       "label": "Proof of legal use first",
       "cost": {},
       "result": "avoid"
@@ -3938,7 +4429,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "check_dob_violations",
+      "optionId": "survey_first",
       "label": "Search the building's open violations",
       "cost": {
        "cash": 0
@@ -3995,7 +4486,7 @@
      {
       "kind": "lever",
       "id": "contractor_choice",
-      "optionId": "licensed_trades",
+      "optionId": "food_service_specialist",
       "label": "Licensed plumber and electrician",
       "cost": {},
       "result": "passes"
@@ -4194,7 +4685,7 @@
      {
       "kind": "lever",
       "id": "contractor_choice",
-      "optionId": "insured_contractor",
+      "optionId": "food_service_specialist",
       "label": "Contractor's insurance names you and the owner",
       "cost": {
        "buildoutCostMult": 1.05
@@ -4920,7 +5411,7 @@
      {
       "kind": "lever",
       "id": "construction_pace",
-      "optionId": "rush_with_variance",
+      "optionId": "after_hours",
       "label": "Get an after-hours variance",
       "cost": {
        "cash": 500
@@ -4930,7 +5421,7 @@
      {
       "kind": "lever",
       "id": "construction_pace",
-      "optionId": "standard",
+      "optionId": "standard_hours",
       "label": "Weekday hours only",
       "cost": {},
       "result": "no complaint"
@@ -5352,7 +5843,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "load_letter_before_lease",
+      "optionId": "survey_first",
       "label": "Electrician's load calculation before signing",
       "cost": {
        "cash": 750
@@ -5420,7 +5911,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "load_letter_before_lease",
+      "optionId": "survey_first",
       "label": "Check the load first",
       "cost": {
        "cash": 750
@@ -5719,7 +6210,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "check_backflow",
+      "optionId": "survey_first",
       "label": "Ask if the building already has an approved device",
       "cost": {},
       "result": "often already installed in former food spaces"
@@ -6362,13 +6853,14 @@
     ],
     "playerMoves": [
      {
-      "kind": "choice",
-      "id": "apply_before_closing",
+      "kind": "lever",
+      "id": "takeover_permit_timing",
       "label": "Apply 22 days before closing",
       "cost": {
        "cash": 280
       },
-      "result": "open on the day you take over"
+      "result": "open on the day you take over",
+      "optionId": "apply_before_closing"
      }
     ],
     "realFrequency": "Every takeover where the buyer waits",
@@ -6416,13 +6908,14 @@
     ],
     "playerMoves": [
      {
-      "kind": "choice",
-      "id": "apply_before_closing",
+      "kind": "lever",
+      "id": "takeover_permit_timing",
       "label": "Apply early",
       "cost": {
        "cash": 280
       },
-      "result": "no gap"
+      "result": "no gap",
+      "optionId": "apply_before_closing"
      }
     ],
     "realFrequency": "Every takeover",
@@ -8012,7 +8505,7 @@
      {
       "kind": "lever",
       "id": "order_ahead",
-      "optionId": "on",
+      "optionId": "open",
       "label": "Order-ahead app",
       "cost": {
        "pctRevenue": 0.03
@@ -8776,9 +9269,8 @@
       "result": "first penalty $0"
      },
      {
-      "kind": "lever",
-      "id": "music_level",
-      "optionId": "low",
+      "kind": "choice",
+      "id": "keep_music_low",
       "label": "Keep music low",
       "cost": {},
       "result": "no violation"
@@ -8996,7 +9488,7 @@
      {
       "kind": "lever",
       "id": "site_due_diligence",
-      "optionId": "check_co_before_lease",
+      "optionId": "survey_first",
       "label": "Check the CO for the yard",
       "cost": {},
       "result": "price the yard at zero"
@@ -9153,11 +9645,1824 @@
     "supportingSources": [],
     "confidence": "estimate",
     "note": "Qualitative."
+   },
+   {
+    "id": "storefront_glass_broken",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Break-ins on the avenue",
+    "text": "Police report a run of overnight smash-and-grabs on your strip. Shops without a gate are the easy ones.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "announced: a run of break-ins on the strip; shops without a gate or film",
+    "realSignal": "Burglary complaints in the precinct over the last 28 days (NYPD weekly crime statistics)",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1150,
+      "note": "one glass panel"
+     },
+     {
+      "field": "closureDays",
+      "add": 1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "security_film",
+      "label": "Security film on the glass",
+      "cost": {
+       "cash": 800
+      },
+      "result": "glass holds; closure 0, estimate"
+     },
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "optionId": "full_cover",
+      "label": "Glass and crime cover",
+      "cost": {
+       "monthly": 40
+      },
+      "result": "loss above the deductible paid"
+     }
+    ],
+    "realFrequency": "Waves reported by precincts",
+    "source": "https://www.insightglass.com/how-much-do-storefront-windows-cost/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 values; film price is my estimate. Note: the 2009 law requiring see-through gates was repealed in 2026 (roll_down_gate_deadline), so solid gates stay legal."
+   },
+   {
+    "id": "sign_complaint_wave",
+    "sourceFragment": "D02",
+    "group": "buildout_permits",
+    "name": "Somebody is reporting every sign on the strip",
+    "text": "Anonymous 311 calls about storefront signs triple. Buildings inspectors must answer each one.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "announced: dozens of 311 sign complaints on the block",
+    "realSignal": "Buildings Department illegal-sign complaints per year: 310 in 2017, 1,046 in 2018",
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.5
+     },
+     {
+      "field": "fine",
+      "add": 0,
+      "appliesIf": "accessory storefront sign up to 150 sq ft and 1,200 lb",
+      "note": "Local Law 15 of 2026: no work-without-permit penalty"
+     },
+     {
+      "field": "fine",
+      "add": 6000,
+      "appliesIf": "larger or unsafe sign"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "small_wall_sign",
+      "label": "Wall sign of 6 sq ft or less",
+      "cost": {},
+      "result": "no permit, no exposure"
+     },
+     {
+      "kind": "choice",
+      "id": "licensed_sign_hanger",
+      "label": "Permit through a licensed sign hanger",
+      "cost": {
+       "cash": 1500
+      },
+      "result": "legal"
+     }
+    ],
+    "realFrequency": "Waves on commercial strips (D02, D08)",
+    "source": "https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page",
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+     "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "Correction to D08 ('signs without permits get $6,000 fines'): Local Law 15 of 2026 (DOB page, search excerpt) extends the protections for business storefront accessory signs: no work-without-permit penalty, and past penalties since December 28, 2017 waived for signs up to 150 sq ft and 1,200 lb, unless the sign is an imminent threat. DOB still inspects and can order an unsafe sign removed. $6,000 = the 1 RCNY §102-04 floor for other signs."
+   },
+   {
+    "id": "landmark_notice",
+    "sourceFragment": "D02",
+    "group": "buildout_permits",
+    "name": "Warning from the Landmarks Commission",
+    "text": "You changed the sign on a landmark block without a permit. The Commission wants an application, and possibly the old look back.",
+    "tier": "exotic",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: sign or awning changed on a landmark block without an LPC permit",
+    "realSignal": "Whether the address lies in a historic district (Landmarks map)",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -2600,
+      "note": "remake the awning to the approved design"
+     },
+     {
+      "field": "permitWaitDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "apply_pmw_first",
+      "label": "Permit for Minor Work first",
+      "cost": {
+       "days": 14
+      },
+      "result": "no notice"
+     }
+    ],
+    "realFrequency": "LPC took 566 enforcement actions in FY2026 (MMR)",
+    "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/lpc.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "D02 value; 14 days from the LPC timeliness figure (90% within 10 business days)."
+   },
+   {
+    "id": "accessibility_suit_wave",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Accessibility suits reach your avenue",
+    "text": "A law firm is filing suits against every shop on the strip with a step at the door. Papers arrive next month.",
+    "tier": "core",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "announced a month ahead: suits against every shop with a step on the strip",
+    "realSignal": "Federal ADA Title III filings in New York courts (yearly count by Seyfarth Shaw: 8,667 nationwide in 2025)",
+    "mergedWith": "d00_premises_entrance_step",
+    "effects": [
+     {
+      "field": "accessExposure",
+      "add": 15000,
+      "appliesIf": "step and no alternative"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "portable_ramp",
+      "label": "Ramp and bell this month",
+      "cost": {
+       "cash": 600
+      },
+      "result": "exposure x 0.3"
+     }
+    ],
+    "realFrequency": "New York: 1,471 federal ADA Title III suits in 2025",
+    "source": "https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny",
+    "supportingSources": [
+     "https://www.jdsupra.com/legalnews/ada-title-iii-federal-lawsuit-filings-2632226/"
+    ],
+    "confidence": "estimate",
+    "note": "Same numbers as d00_premises_entrance_step."
+   },
+   {
+    "id": "sidewalk_cafe_season",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Outdoor season",
+    "text": "From April the sidewalk tables fill before the room does.",
+    "tier": "core",
+    "scale": "city",
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "durationMonths": 7,
+    "trigger": "calendar: outdoor months for a shop with an outdoor dining license",
+    "realSignal": "Months when the average daily high is above about 60 degrees F",
+    "effects": [
+     {
+      "field": "seats",
+      "add": 10
+     },
+     {
+      "field": "demand",
+      "mult": 1.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "sidewalk_cafe_license",
+      "label": "Dining Out NYC license",
+      "cost": {
+       "cash": 1050,
+       "note": "four-year license, plus a yearly revocable consent fee by location and size"
+      },
+      "result": "10 outdoor seats"
+     },
+     {
+      "kind": "choice",
+      "id": "stay_under_20",
+      "label": "Count outdoor seats toward 20",
+      "cost": {},
+      "result": "10 inside + 10 outside = 20: customer toilet required"
+     }
+    ],
+    "realFrequency": "Yearly",
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+    "supportingSources": [
+     "https://www.diningoutnyc.info/apply/fees"
+    ],
+    "confidence": "estimate",
+    "note": "NYC311 (fetched): sidewalk setups are allowed year-round; a $1,050 license covers the four-year term for roadway or sidewalk dining ($2,100 for both); plus an annual revocable consent fee by location and size. The pack's sidewalk_cafe_license is $2,550: check against these. Seats and demand are D02's game values; outdoor seats count toward the 20-seat toilet line (Health Code §81.22)."
+   },
+   {
+    "id": "community_board_review",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "The community board reads your sidewalk plan",
+    "text": "Neighbors object to tables under their windows. If the board recommends against you, the city holds a hearing and you pay for the notice.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "decision: outdoor dining application that draws objections (all roadway applications get a hearing)",
+    "realSignal": "Community board recommendation on the application",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 60,
+      "appliesIf": "hearing"
+     },
+     {
+      "field": "cash",
+      "add": -900,
+      "appliesIf": "hearing notice costs"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "trim_plan",
+      "label": "Fewer tables, earlier closing",
+      "cost": {
+       "seats": -4
+      },
+      "result": "no hearing for a sidewalk setup"
+     }
+    ],
+    "realFrequency": "All roadway applications; some sidewalk ones",
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+    "supportingSources": [
+     "https://www.diningoutnyc.info/apply/publichearing"
+    ],
+    "confidence": "estimate",
+    "note": "NYC311 (fetched): DOT must hold a public hearing on all roadway cafe applications and, in some cases, on sidewalk cafe applications. $900 and 60 days are D02's values."
+   },
+   {
+    "id": "roadway_cafes_go_year_round",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Roadway cafes may stay all winter",
+    "text": "A new city law ends the yearly teardown: a roadway cafe no longer has to vanish on November 29.",
+    "tier": "deep",
+    "scale": "city",
+    "months": [
+     9
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: year-round roadway dining law; applications open early September 2026",
+    "realSignal": "Year-round roadway licenses offered from September 2026 (NYC311 and the program's fee table)",
+    "effects": [
+     {
+      "field": "roadwayMonthsActive",
+      "set": 12
+     },
+     {
+      "field": "monthlyFees",
+      "mult": 1.2,
+      "appliesTo": "year-round roadway license",
+      "note": "higher fees, amount not found"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "year_round_roadway",
+      "label": "Choose the year-round license",
+      "cost": {
+       "monthlyFeesMult": 1.2
+      },
+      "result": "winter outdoor seats"
+     }
+    ],
+    "realFrequency": "One change",
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+    "supportingSources": [
+     "https://www.thecityreporter.nyc/2026/08/13/nyc-outdoor-dining-roadside-sheds-new-laws-restaraunts/"
+    ],
+    "confidence": "verified",
+    "note": "NYC311 (fetched): the Council passed year-round roadway dining; applications open in early September 2026; new applicants can choose a year-round license with higher fees. 1.2 is my placeholder for 'higher'."
+   },
+   {
+    "id": "outdoor_setup_out_of_bounds",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Your tables are over the line",
+    "text": "An inspector measures the sidewalk cafe: two tables sit in the clear path. You have 30 days to pull them back.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: tables placed in the pedestrian clear path",
+    "realSignal": "Transportation Department inspection or a 311 complaint",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 200,
+      "unit": "after a 30-day corrective action request; $500 for later offenses"
+     },
+     {
+      "field": "seats",
+      "add": -4
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "mark_the_line",
+      "label": "Paint the clear-path line",
+      "cost": {
+       "cash": 50
+      },
+      "result": "no violation"
+     }
+    ],
+    "realFrequency": "Summer inspections",
+    "source": "https://www.diningoutnyc.info/enforcement",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 (program enforcement page opened by D02): corrective action with 30 days, then $200 first and $500 later offenses; not reopened here (host blocked)."
+   },
+   {
+    "id": "cafe_fees_by_quarter",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Outdoor dining fees can be paid by the quarter",
+    "text": "A new law lets cafes pay the yearly sidewalk and roadway fee in four installments.",
+    "tier": "exotic",
+    "scale": "city",
+    "months": [
+     5
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: quarterly installments for outdoor dining fees",
+    "realSignal": "Enacted September 12, 2026; effective 240 days later",
+    "effects": [
+     {
+      "field": "cashTiming",
+      "set": "quarterly"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "pay_quarterly",
+      "label": "Pay by the quarter",
+      "cost": {},
+      "result": "less cash up front"
+     }
+    ],
+    "realFrequency": "One change",
+    "source": "https://www.thecityreporter.nyc/2026/08/13/nyc-outdoor-dining-roadside-sheds-new-laws-restaraunts/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 values."
+   },
+   {
+    "id": "cellar_hatch_left_open",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "The sidewalk hatch stands open",
+    "text": "The delivery came at 8am and nobody stood by the open cellar doors. A passer-by photographs it for 311.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: delivery through the sidewalk hatch with nobody guarding it",
+    "realSignal": "311 sidewalk cellar door complaints for the address",
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.1
+     },
+     {
+      "field": "accessExposure",
+      "add": 0,
+      "note": "a fall would be a liability claim (see slip_claim_letter)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "guard_the_hatch",
+      "label": "One person stands at the hatch",
+      "cost": {
+       "staffMinutes": 15
+      },
+      "result": "no complaint"
+     }
+    ],
+    "realFrequency": "Daily deliveries",
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02292",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "NYC311 (D02): cellar doors may be open during a delivery if a person guards them."
+   },
+   {
+    "id": "d00_closures_nyc_event_sprinkler_stock",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Sprinkler water reaches stock and walls",
+    "text": "A disclosed building incident has soaked stock and interior materials.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: building sprinkler or pipe failure above the shop",
+    "realSignal": "Documented water exposure in the common scenario and a remediation inspection.",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -4000,
+      "note": "stock and finishes, estimate"
+     },
+     {
+      "field": "closureDays",
+      "add": 5
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "optionId": "full_cover",
+      "label": "Property and interruption cover",
+      "cost": {
+       "monthly": 40
+      },
+      "result": "loss paid above the deductible"
+     }
+    ],
+    "realFrequency": "Closure stories",
+    "source": "https://tollbit.gothamist.com/2017/05/24/kushner_evict_pudge_knuckles.php",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/RPP/227"
+    ],
+    "confidence": "estimate",
+    "note": "Estimates."
+   },
+   {
+    "id": "d00_closures_nyc_event_repair_reopening_notice",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Reopening date cannot yet be promised",
+    "text": "After an announced nonfatal equipment-fire incident, inspection and repair completion are unconfirmed.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "state: after a small fire, FDNY and DOB sign-offs pending",
+    "realSignal": "The published incident scenario starts with the premises closed and no authorized reopening date.",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "architect_expediter",
+      "label": "Expediter books the inspections",
+      "cost": {
+       "cash": 2000
+      },
+      "result": "closure 21 days, estimate"
+     }
+    ],
+    "realFrequency": "Closure stories",
+    "source": "https://ny.eater.com/2019/3/7/18254534/fire-nolita-black-seed-bagels",
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    ],
+    "confidence": "estimate",
+    "note": "Estimates."
+   },
+   {
+    "id": "d00_closures_nyc_event_reopen_after_peak",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Repairs consume the busy season",
+    "text": "The revised completion date falls after the cafe’s measured peak season.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "state: repair finish date moves past the fall-winter peak",
+    "realSignal": "Contractor’s revised schedule compared with historical seasonal sales.",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.7,
+      "appliesTo": "months reopened after the peak"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "temporary_cart",
+      "label": "Sell from a cart at the door",
+      "cost": {
+       "monthly": 1500
+      },
+      "result": "part of the regulars kept"
+     }
+    ],
+    "realFrequency": "Closure stories",
+    "source": "https://tollbit.gothamist.com/2017/05/24/kushner_evict_pudge_knuckles.php",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   },
+   {
+    "id": "d00_world_event_storefront_collision",
+    "sourceFragment": "D00",
+    "group": "room",
+    "name": "A vehicle damages the closed storefront",
+    "text": "A common announced non-injury property incident makes the entrance unavailable.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: vehicle strikes the closed storefront (announced incident)",
+    "realSignal": "The disclosed site scenario identifies the affected frontage and required assessment.",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 7
+     },
+     {
+      "field": "cash",
+      "add": -2500,
+      "note": "deductible, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "optionId": "full_cover",
+      "label": "Property cover",
+      "cost": {
+       "monthly": 40
+      },
+      "result": "repair paid"
+     }
+    ],
+    "realFrequency": "Rare",
+    "source": "https://www.kbtx.com/2023/07/09/college-station-coffee-cafe-closed-after-vehicle-hits-building/",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/RPP/227"
+    ],
+    "confidence": "estimate",
+    "note": "Estimates."
+   },
+   {
+    "id": "d00_world_event_fan_setting_recheck",
+    "sourceFragment": "D00",
+    "group": "room",
+    "name": "The first extractor adjustment does not solve the complaint",
+    "text": "Post-adjustment monitoring still identifies excessive equipment noise.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     6,
+     7,
+     8,
+     9
+    ],
+    "durationMonths": 2,
+    "trigger": "state: second complaint after the first fix",
+    "realSignal": "A documented specialist follow-up measures the chosen fan configuration after mitigation.",
+    "mergedWith": "d00_premises_ac_neighbor",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 1120,
+      "note": "second offense within two years"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "condenser_enclosure",
+      "label": "Proper enclosure",
+      "cost": {
+       "cash": 4000
+      },
+      "result": "below 42 dB(A)"
+     }
+    ],
+    "realFrequency": "Follows a weak first fix",
+    "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "DEP schedule (opened): circulation device, second offense $1,120."
+   },
+   {
+    "id": "d00_world_event_furniture_impact_noise",
+    "sourceFragment": "D00",
+    "group": "room",
+    "name": "Furniture movement disturbs the upstairs neighbor",
+    "text": "The cafe has no music, but scraping and impact noise remain audible upstairs.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: hard floor, metal chairs, apartment above",
+    "realSignal": "An acoustic inspection identifies chair and table movement as the documented source.",
+    "effects": [
+     {
+      "field": "reputation",
+      "add": -0.01
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "chair_glides",
+      "label": "Felt glides on chairs",
+      "cost": {
+       "cash": 100
+      },
+      "result": "complaint ends"
+     }
+    ],
+    "realFrequency": "Mixed-use buildings",
+    "source": "https://www.europeanacustica.com/insonorizar-cafeteria/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Not a DEP-measured source in NYC; neighbor relations only. Estimate."
+   },
+   {
+    "id": "d00_world_event_roast_odor_complaint",
+    "sourceFragment": "D00",
+    "group": "room",
+    "name": "Moving the roaster creates a neighbor complaint",
+    "text": "The player relocates roasting into the cafe without resolving the documented neighboring-use constraint.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "decision: roaster installed in the cafe without an afterburner",
+    "realSignal": "A neighbor complaint identifies the new roasting operation and the site assessment confirms a mitigation need.",
+    "mergedWith": "d00_premises_odor_home",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 5000
+     },
+     {
+      "field": "fine",
+      "add": 560
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "no_roasting",
+      "label": "Buy roasted beans",
+      "cost": {
+       "cogsMult": 1.02
+      },
+      "result": "no odor"
+     }
+    ],
+    "realFrequency": "Rare",
+    "source": "https://www.indailysa.com.au/citymag/food-drink/2024/05/21/bitter-brew-cbd-coffee-spot-to-close-doors",
+    "supportingSources": [
+     "https://portal.311.nyc.gov/article/?kanumber=KA-02313"
+    ],
+    "confidence": "estimate",
+    "note": "Estimates; same numbers as d00_premises_odor_home."
+   },
+   {
+    "id": "d00_premises_medical_restroom",
+    "sourceFragment": "D00",
+    "group": "room",
+    "name": "A visitor requests urgent medical restroom access",
+    "text": "The employee-only policy must account for the statutory conditional right.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "state: a guest with an eligible medical condition asks to use the staff toilet while 2+ employees are on shift",
+    "realSignal": "Visitor requests access under the medical-condition rule and staff assess its conditions.",
+    "effects": [
+     {
+      "field": "obligation",
+      "add": 1,
+      "note": "must allow access; no extra cost"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "allow_access",
+      "label": "Let the guest use it",
+      "cost": {},
+      "result": "complies"
+     }
+    ],
+    "realFrequency": "Occasional",
+    "source": "https://www.nysenate.gov/legislation/laws/GBS/492",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "GBL §492 (opened): a place of business open to the public with an employee toilet must let a customer with an eligible medical condition or ostomy device use it if two or more employees are working, it is not a safety or security risk and no public restroom is immediately accessible. No penalty amount is stated in the section."
+   },
+   {
+    "id": "d00_world_event_insurance_claim_dependencies",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "An insurance dependency delays reopening",
+    "text": "The repair plan cannot finish while a documented claim decision is pending.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "state: repair waits for the insurer's adjuster",
+    "realSignal": "A common announced insured-damage scenario reaches a required insurer authorization step.",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 21
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "start_repairs_documented",
+      "label": "Photograph and start the repair",
+      "cost": {
+       "cash": 3000
+      },
+      "result": "closure 7 days, estimate"
+     }
+    ],
+    "realFrequency": "After casualty",
+    "source": "https://www.kptv.com/2023/11/08/historic-diner-reopens-downtown-portland-months-after-kitchen-fire/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimates."
+   },
+   {
+    "id": "dob_enforcement_sweep",
+    "sourceFragment": "D15",
+    "group": "buildout_permits",
+    "name": "Buildings inspectors sweep the avenue for unpermitted work",
+    "text": "The Buildings Department's enforcement unit walks the block without waiting for complaints. Any build-out without a permit gets a stop work order today.",
+    "tier": "core",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "announced a month ahead for one block: proactive DOB sweep",
+    "realSignal": "DOB Strategic Enforcement Division (Local Law 74 of 2024) proactive inspections; stop work orders +19% in FY2026",
+    "effects": [
+     {
+      "field": "discoveredBy",
+      "set": "inspection",
+      "appliesTo": "shortcut start_work_before_permit",
+      "note": "found without a complaint"
+     },
+     {
+      "field": "fine",
+      "add": 15000,
+      "appliesIf": "work without a permit found"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 32,
+      "appliesIf": "work without a permit found"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "shortcut",
+      "id": "start_work_before_permit",
+      "label": "Stop the unpermitted work before the sweep",
+      "cost": {
+       "days": 20
+      },
+      "result": "nothing found; the 20 days are lost"
+     },
+     {
+      "kind": "choice",
+      "id": "legalize_now",
+      "label": "File to legalize before a violation",
+      "cost": {
+       "fine": 6000
+      },
+      "result": "$6,000 instead of $15,000"
+     }
+    ],
+    "realFrequency": "DOB issued 7,882 stop work orders in FY2026; the increase reflects proactive inspections focused on work without a permit",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf"
+    ],
+    "confidence": "verified",
+    "note": "MMR FY2026 (opened): stop work orders up 19% to 7,882, reflecting the Strategic Enforcement Division created by Local Law 74 of 2024, which conducts proactive inspections focused on work without a permit and unlicensed activity. The shortcut start_work_before_permit (D14) is otherwise found only by a neighbor's complaint: this event is the city's own way to find it. Penalties from 1 RCNY §102-04 (opened): legalization before a violation $6,000.",
+    "newInD15": true
+   },
+   {
+    "id": "asking_rents_climb",
+    "sourceFragment": "D15",
+    "group": "lease",
+    "name": "Store rents keep climbing",
+    "text": "Brokers' quarterly reports are out: asking rents on Manhattan's shopping corridors are up again and empty stores are at a record low.",
+    "tier": "deep",
+    "scale": "city",
+    "months": [
+     1,
+     4,
+     7,
+     10
+    ],
+    "durationMonths": 3,
+    "trigger": "announced: quarterly broker reports",
+    "realSignal": "CBRE average asking rent across Manhattan corridors ($707 per sq ft in Q3 2026, +5% a year); Cushman & Wakefield availability 9.8%",
+    "tiers": [
+     "prime",
+     "mid"
+    ],
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.0125,
+      "appliesTo": "leases signed while active (one quarter of +5% a year)"
+     },
+     {
+      "field": "freeRentMonths",
+      "add": -1,
+      "appliesTo": "prime tier leases signed while active"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "sign_now",
+      "label": "Sign before the next report",
+      "cost": {},
+      "result": "today's rent"
+     },
+     {
+      "kind": "choice",
+      "id": "cheaper_block",
+      "label": "Look at a cheap-tier block",
+      "cost": {
+       "footTrafficMult": 0.8
+      },
+      "result": "free months still offered"
+     }
+    ],
+    "realFrequency": "Quarterly in 2025-2026",
+    "source": "https://www.cbre.com/insights/figures/manhattan-retail-figures-q3-2026",
+    "supportingSources": [
+     "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail"
+    ],
+    "confidence": "estimate",
+    "note": "Search excerpts: CBRE Q3 2026 average asking rent $707 per sq ft, +4% on the quarter and +5% on the year; Cushman & Wakefield Q3 2026 availability 9.8%, a record low. Corridor rents are far above the pack's $90 per sq ft side-street storefronts; only the growth rate is used.",
+    "newInD15": true
+   },
+   {
+    "id": "sign_moratorium_ll15",
+    "sourceFragment": "D15",
+    "group": "buildout_permits",
+    "name": "The city forgives storefront sign penalties",
+    "text": "A new city law extends protection for small business signs: no penalty for an accessory storefront sign put up without a permit, and old sign penalties waived.",
+    "tier": "deep",
+    "scale": "city",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: Local Law 15 of 2026 in force",
+    "realSignal": "Local Law 15 of 2026, DOB accessory sign outreach page",
+    "effects": [
+     {
+      "field": "fine",
+      "mult": 0.0,
+      "appliesTo": "work-without-permit penalties for accessory storefront signs up to 150 sq ft and 1,200 lb"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "file_waiver",
+      "label": "File the L2 waiver request for an old penalty",
+      "cost": {
+       "cash": 0
+      },
+      "result": "penalty waived"
+     }
+    ],
+    "realFrequency": "One change",
+    "source": "https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page",
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page"
+    ],
+    "confidence": "estimate",
+    "note": "DOB page (search excerpt): outstanding penalties imposed on or after December 28, 2017 waived for business storefront signs up to 150 sq ft and 1,200 lb unless an imminent threat; no WWP penalty for an accessory sign; DOB still answers 311 complaints and an unsafe sign must come down.",
+    "newInD15": true
+   },
+   {
+    "id": "building_gas_inspection_due",
+    "sourceFragment": "D15",
+    "group": "utilities",
+    "name": "The building's gas pipes are due for inspection",
+    "text": "The landlord's plumber must inspect the building's gas piping this year. If the test finds a leak, the utility locks the gas until it is fixed.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "schedule: the building's LL152 deadline year; if the hidden attribute 'gasLeak' is true the inspection triggers gas_red_tag",
+    "realSignal": "Local Law 152 cycle by community district: Cycle 2 due January 1 - December 31, 2026 for CDs 4, 6, 8, 9, 16; 2027 for CDs 11, 12, 14, 15, 17",
+    "effects": [
+     {
+      "field": "triggers",
+      "set": "gas_red_tag",
+      "appliesIf": "hidden attribute gasLeak revealed by the inspection"
+     },
+     {
+      "field": "ownerFine",
+      "add": 5000,
+      "appliesIf": "owner skips the inspection",
+      "note": "the landlord's fine, not the tenant's"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "utility_concept",
+      "optionId": "all_electric",
+      "label": "All-electric cafe",
+      "cost": {
+       "setupCost": 2000
+      },
+      "result": "a gas lockout does not close you"
+     },
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "survey_first",
+      "label": "Ask for the building's last gas inspection",
+      "cost": {
+       "cash": 2500
+      },
+      "result": "gasLeak known before signing"
+     }
+    ],
+    "realFrequency": "Every four years per building",
+    "source": "https://www.nyc.gov/assets/buildings/pdf/gas_piping-sn.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf"
+    ],
+    "confidence": "verified",
+    "note": "DOB service notice (opened): owners of buildings other than R-3 must submit a Gas Piping System Periodic Inspection Certification by the cycle deadline; failure brings a $5,000 penalty ($1,500 for 3-family); the notice lists the cycle years by community district. Turns the random 'gas shut off' into a dated, deterministic risk.",
+    "newInD15": true
+   },
+   {
+    "id": "dob_subsequent_filing_fee",
+    "sourceFragment": "D15",
+    "group": "buildout_permits",
+    "name": "Plan amendments now cost by the dollar",
+    "text": "From February 2, 2026 a subsequent filing on an Alteration-CO job is priced on its construction cost, not a flat $130.",
+    "tier": "exotic",
+    "scale": "city",
+    "months": [
+     2
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: fee change from February 2, 2026",
+    "realSignal": "DOB service notice of January 8, 2026",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 325,
+      "appliesTo": "each subsequent filing on an Alteration-CO job of $20,000 in a building under 7 floors",
+      "note": "$455.10 instead of $130"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "file_complete_scope",
+      "label": "File the whole scope at once",
+      "cost": {},
+      "result": "no subsequent filing"
+     }
+    ],
+    "realFrequency": "One change",
+    "source": "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "DOB service notice (opened): subsequent filings on an Alt-CO with existing elements to remain are charged on reported cost: below 7 floors $280 for the first $3,000 plus $10.30 per $1,000; example $20,000 -> $455.10; before, a flat $130.",
+    "newInD15": true
    }
+  ],
+  "effectFields": {
+   "note": "Fields used in effects of this fragment. 'engine' = already an EffectTarget in shared/src/types.ts (mult only, clamped 0.5-1.5); 'D01' = proposed by D01 (newEffectFields); 'D02'/'D14' = used by those fragments; 'D15' = new here. add = additive, mult = multiplier, set = assignment.",
+   "engine": {
+    "rent": "mult",
+    "demand": "mult",
+    "footTraffic": "mult",
+    "utilities": "mult",
+    "inspections": "mult",
+    "staffAvailability": "mult"
+   },
+   "D01": {
+    "openingDelayDays": "add days on the pre-opening track",
+    "leaseSigningDelayDays": "add",
+    "closingDelayDays": "add",
+    "buildoutCost": "mult or add $",
+    "setupCost": "mult or add $ before opening",
+    "permitWaitDays": "mult or add",
+    "freeRentMonths": "add",
+    "depositMonths": "add",
+    "cash": "add $ once",
+    "closureDays": "add days without sales",
+    "awareness": "mult or set",
+    "monthlyFees": "add or mult $/month",
+    "revenueShare": "mult on revenue kept",
+    "fines": "mult",
+    "payrollTax": "add rate",
+    "minOwnCashShare": "add",
+    "cartPermitWaitMonths": "add",
+    "reputation": "add"
+   },
+   "D02": {
+    "seats": "add or mult",
+    "seatTurns": "mult",
+    "quality": "add"
+   },
+   "D15": {
+    "setupRentDays": "add: days of full base rent before the first sale (by build-out class)",
+    "rentAdd": "add $/month of additional rent (tax pass-through)",
+    "fine": "add $ when the violation is found",
+    "liability": "add $ owed to the state or staff",
+    "personalLiability": "add $ owed by the owner personally at closure (by guaranty type)",
+    "escrowHeld": "add $ withheld from the price for durationDays",
+    "takeoverPrice": "mult",
+    "askingPrice": "formula",
+    "salePrice": "mult or formula",
+    "overpaid": "info: $ paid above fair value",
+    "accessExposure": "add $ of an accessibility claim if one is filed",
+    "depositRefund": "add $ (negative) at exit",
+    "depositRefundDelayDays": "add",
+    "evictionClockDays": "add",
+    "renewalRentMult": "add to the renewal multiplier",
+    "leaseEndsInMonths": "set",
+    "capexValueLost": "mult share of an improvement lost",
+    "buildoutValue": "mult",
+    "cashFloat": "add $ temporarily out of cash for durationDays",
+    "ownerEarnings": "mult on the seller's claimed earnings",
+    "inspectionPoints": "add",
+    "tax": "add or rate",
+    "discoveredBy": "set: how a violation is found",
+    "ownerFine": "info: landlord's fine",
+    "triggers": "set: event id this one triggers",
+    "obligation": "info",
+    "cashTiming": "set",
+    "roadwayMonthsActive": "set",
+    "leaseAvailable": "set",
+    "defaultNotice": "add",
+    "inbox": "add"
+   }
+  },
+  "mechanics": [
+   {
+    "id": "d15_effect_field_registry",
+    "title": "One vocabulary for event effects",
+    "playerDecision": "none",
+    "engineMath": "Read effects[].field against this registry; engine targets already exist; D01/D15 fields need code.",
+    "fieldsNeeded": [
+     "see extra.effectFields"
+    ],
+    "numbers": [],
+    "tier": "core"
+   },
+   {
+    "id": "setup_rent_days",
+    "title": "Rent paid before the first sale",
+    "playerDecision": "Lease option (free months), build-out class of the space, rush or not",
+    "engineMath": "openDay = buildoutDays(class) x (0.75 if rush) + dobApprovalDays (25) + fsePermitDays (22). paidSetupDays = max(0, openDay - freeRentDays). Rent line in setup = paidSetupDays x faceRent / 30. Today keen-cray omits the 25 DOB days.",
+    "fieldsNeeded": [
+     "extra.preOpening.dobPermitDays = 25 (D14 had 20)",
+     "setup.fse_permit.waitDays = 22 (pack has 21)"
+    ],
+    "numbers": [
+     {
+      "what": "DOB NOW filing to approval FY2026",
+      "value": 25.4,
+      "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+      "confidence": "verified"
+     },
+     {
+      "what": "Health permit: open after",
+      "value": 22,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "confidence": "verified"
+     },
+     {
+      "what": "paid days with 3 free months: light / standard / heavy",
+      "value": [
+       17,
+       47,
+       137
+      ],
+      "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+      "confidence": "estimate"
+     }
+    ],
+    "tier": "core"
+   },
+   {
+    "id": "work_without_permit_penalty",
+    "title": "The real price of starting before the permit",
+    "playerDecision": "Shortcut start_work_before_permit",
+    "engineMath": "fine = clamp(21 x permitFee, 6000, 15000) for the whole job; partial work: prorated but >= 6000; legalize before a violation: 6000; repeat within 12 months: x2; one waiver per small business (fewer than 100 employees) on request, fine 0 but the stop work order and the delay stay. Working against the SWO: +6000 (then 12000). Found by a neighbor's 311 complaint (DOB answers non-emergency complaints in 21.5 days on average) or by dob_enforcement_sweep.",
+    "fieldsNeeded": [
+     "violations.work_without_permit.fine: base 6000, max 15000, formula 21 x fee",
+     "businessState.extra.law.smallBusinessWaiverUsed: boolean"
+    ],
+    "numbers": [
+     {
+      "what": "multiplier of the permit fee",
+      "value": 21,
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+      "confidence": "verified"
+     },
+     {
+      "what": "minimum",
+      "value": 6000,
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+      "confidence": "verified"
+     },
+     {
+      "what": "maximum",
+      "value": 15000,
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+      "confidence": "verified"
+     },
+     {
+      "what": "SWO violation, first",
+      "value": 6000,
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+      "confidence": "verified"
+     },
+     {
+      "what": "average days to respond to Priority B complaints",
+      "value": 21.5,
+      "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+      "confidence": "verified"
+     }
+    ],
+    "tier": "core"
+   },
+   {
+    "id": "guaranty_exposure_at_closure",
+    "title": "What the owner still owes when the cafe closes",
+    "playerDecision": "guaranty_type at signing; lease_negotiation.true_good_guy",
+    "engineMath": "On bankruptcy or closure with lease time left: full guaranty -> remaining base rent x months left (no mitigation: New York commercial landlords have no duty to re-let); good guy -> rent until surrender + notice months (3-6); clawback clause -> + free rent given + broker commission (21% of one year's rent in the SBS example); no guaranty -> deposit forfeited. Shown in the final score as personal debt.",
+    "fieldsNeeded": [
+     "lease.guarantyType",
+     "lease.noticeMonths",
+     "lease.clawback"
+    ],
+    "numbers": [
+     {
+      "what": "broker commission example: 5% year 1 + 4% years 2-5",
+      "value": 0.21,
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "confidence": "verified"
+     },
+     {
+      "what": "landlord duty to mitigate (dwellings only)",
+      "value": 0,
+      "source": "https://www.nysenate.gov/legislation/laws/RPP/227-E",
+      "confidence": "verified"
+     }
+    ],
+    "tier": "core"
+   },
+   {
+    "id": "bulk_sale_escrow",
+    "title": "The state's claim in a business purchase",
+    "playerDecision": "File AU-196.10 10 days before closing, or skip (shortcut skip_bulk_sale_notice)",
+    "engineMath": "Filed: the state answers in 5 business days; if the seller owes, the buyer holds that amount from the price for up to 90 days and pays the state. Not filed: seller's unpaid sales tax becomes the buyer's personal liability, capped at the price, with interest at >= 14.5% a year.",
+    "fieldsNeeded": [
+     "takeover.noticeFiled",
+     "liabilities[] copied from the seller"
+    ],
+    "numbers": [
+     {
+      "what": "notice days before closing",
+      "value": 10,
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1141",
+      "confidence": "verified"
+     },
+     {
+      "what": "days for the state to name the amount",
+      "value": 90,
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1141",
+      "confidence": "verified"
+     },
+     {
+      "what": "interest rate floor on unpaid tax",
+      "value": 0.145,
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+      "confidence": "verified"
+     }
+    ],
+    "tier": "core"
+   },
+   {
+    "id": "building_cycles_as_signals",
+    "title": "Dated building risks instead of random ones",
+    "playerDecision": "survey_first before signing; all-electric concept",
+    "engineMath": "Each place gets hidden attributes revealed by survey_first: builtBefore1987 (asbestos assessment), coUse (eating and drinking or not), gasLeak + LL152 cycle year (from the community district), openWwpPenalty (blocks permits), historicDistrict. Events fire from these attributes on known dates, never by chance.",
+    "fieldsNeeded": [
+     "Place.builtYear",
+     "Place.communityDistrict",
+     "Place.historicDistrict",
+     "Place.coUse",
+     "Place.hidden.gasLeak",
+     "Place.hidden.openWwpPenalty"
+    ],
+    "numbers": [
+     {
+      "what": "LPC protected buildings and sites",
+      "value": 38550,
+      "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/lpc.pdf",
+      "confidence": "verified"
+     },
+     {
+      "what": "LL152 missed-filing penalty",
+      "value": 5000,
+      "source": "https://www.nyc.gov/assets/buildings/pdf/gas_piping-sn.pdf",
+      "confidence": "verified"
+     }
+    ],
+    "tier": "deep"
+   },
+   {
+    "id": "lease_clauses_as_flags",
+    "title": "Lease clauses are one-time flags, not a monthly lever",
+    "playerDecision": "lease_negotiation options at signing",
+    "engineMath": "Store chosen clauses in BusinessState.lease.clauses[]; each event checks its clause (abatement_clause, structural_carveout, cap_escalation...) and switches its effect off or on. Cost: one-time lawyer time, already in lease_lawyer; some clauses raise face rent (two_percent_steps x1.047).",
+    "fieldsNeeded": [
+     "BusinessState.lease.clauses: string[]"
+    ],
+    "numbers": [],
+    "tier": "deep"
+   },
+   {
+    "id": "crt_gate",
+    "title": "Commercial Rent Tax only above $250,000",
+    "playerDecision": "none for one cafe",
+    "engineMath": "If place is in Manhattan south of 96th Street and rent x 12 >= 250,000: tax = 3.9% x rent, minus the small business credit (full credit when total income <= $5M and base rent < $500,000). A single cafe is always below; keep the filing cost only.",
+    "fieldsNeeded": [
+     "Place.manhattanBelow96th"
+    ],
+    "numbers": [
+     {
+      "what": "effective rate",
+      "value": 0.039,
+      "source": "https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page",
+      "confidence": "verified"
+     }
+    ],
+    "tier": "exotic"
+   }
+  ],
+  "corrections": [
+   {
+    "target": "D14 extra.preOpening / violations.work_without_permit",
+    "was": "14 x permit fee or $5,000, whichever is greater",
+    "now": "21 x permit fee capped at $15,000, floor $6,000; legalization before a violation $6,000; one small-business waiver",
+    "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+    "why": "1 RCNY §102-04 in force (PDF opened)"
+   },
+   {
+    "target": "D14 extra.preOpening.dobPermitDays",
+    "was": 20,
+    "now": 25,
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+    "why": "FY2026 average filing-to-approval is 25.4 days (20.3 was FY2025)"
+   },
+   {
+    "target": "packs/cafe.json setup.fse_permit.waitDays",
+    "was": 21,
+    "now": 22,
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "why": "'you can open 22 days after you submit your application'"
+   },
+   {
+    "target": "D02 event roll_down_gate_deadline",
+    "was": "cash -$6,500 by July 1, 2026",
+    "now": "cancelled: deadline repealed (Intro 910-A, Council 51-0, June 30, 2026)",
+    "source": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates",
+    "why": "the law changed before the deadline"
+   },
+   {
+    "target": "D08 event sign_complaint_wave",
+    "was": "signs without permits get $6,000 fines",
+    "now": "no work-without-permit penalty for accessory storefront signs up to 150 sq ft / 1,200 lb (Local Law 15 of 2026); $6,000 only for other signs",
+    "source": "https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page",
+    "why": "2026 sign moratorium"
+   },
+   {
+    "target": "D02 event neighbor_noise_complaint",
+    "was": "first violation $2,000 -> $0",
+    "now": "§24-231(a): $3,200 first ($8,000 default), $6,400, $9,600; $0 for a first offense if compliance is certified within 30 days",
+    "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
+    "why": "current DEP penalty schedule (PDF opened)"
+   },
+   {
+    "target": "D01 event vacancy_leverage",
+    "was": "all blocks",
+    "now": "cheap tier only; prime and mid get asking_rents_climb instead",
+    "source": "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail",
+    "why": "Manhattan retail availability at a record low 9.8% in Q3 2026"
+   },
+   {
+    "target": "D01 event hidden_conditions",
+    "was": "buildoutCost x1.12",
+    "now": "x1.10",
+    "source": "https://www.rhumbix.com/blog/how-much-are-change-orders-costing-your-construction-business",
+    "why": "published average of change orders is about 10%"
+   },
+   {
+    "target": "D01 event landlord_late_delivery",
+    "was": "+60 days",
+    "now": "+45 days, rent does not run until delivery",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "why": "SBS guide: 'weeks or months'; you start paying once the space is available"
+   },
+   {
+    "target": "D01 event fit_out_prices_rise",
+    "was": "x1.07 (retail fit-out guide)",
+    "now": "x1.05",
+    "source": "https://www.commercialsearch.com/news/will-construction-costs-go-up-in-2026/",
+    "why": "2026 bid-price forecasts 4.25-5%"
+   },
+   {
+    "target": "D14 extra.takeoverRules.earningsMultiple",
+    "was": 2.0,
+    "now": "2.2 for the ask, sale at 90% (= 2.0)",
+    "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+    "why": "BizBuySell average earnings multiple 2.20; D14's acceptance rule already gives 2.0 on the sale"
+   },
+   {
+    "target": "packs/cafe.json setup.sidewalk_cafe_license",
+    "was": 2550,
+    "now": "check: $1,050 license for the four-year term plus a yearly revocable consent fee by location and size",
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+    "why": "NYC311 outdoor dining page"
+   },
+   {
+    "target": "D00 eventCatalog (premises_law shard and others)",
+    "was": "effects [], months []",
+    "now": "calibrated in this file under the same ids",
+    "source": "",
+    "why": "task D15"
+   }
+  ],
+  "verifiedFacts": [
+   {
+    "fact": "Rent demand before a nonpayment case: at least 14 days' written notice",
+    "source": "https://www.nysenate.gov/legislation/laws/RPA/711",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Marshal's notice before eviction: at least 14 days",
+    "source": "https://www.nysenate.gov/legislation/laws/RPA/749",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Lease implies delivery of possession at the start of the term; if not, the tenant may rescind and recover what was paid",
+    "source": "https://www.nysenate.gov/legislation/laws/RPP/223-A",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Untenantable building without the tenant's fault: tenant may surrender and owes no further rent unless the lease says otherwise",
+    "source": "https://www.nysenate.gov/legislation/laws/RPP/227",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Landlord's duty to mitigate is written into law only for dwellings",
+    "source": "https://www.nysenate.gov/legislation/laws/RPP/227-E",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Right to sublet or assign by statute: residential tenants only",
+    "source": "https://www.nysenate.gov/legislation/laws/RPP/226-B",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Rent accepted after the term creates a month-to-month tenancy",
+    "source": "https://www.nysenate.gov/legislation/laws/RPP/232-C",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Mechanic's lien: filed during the work or within 8 months after the last work",
+    "source": "https://www.nysenate.gov/legislation/laws/LIE/10",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Lien discharged by a bond of 110% of the lien",
+    "source": "https://www.nysenate.gov/legislation/laws/LIE/19",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Bulk sale: notice 10 days ahead; 90 days for the state's claim; buyer personally liable if no notice, capped at the price",
+    "source": "https://www.nysenate.gov/legislation/laws/TAX/1141",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Sales tax return penalty never under $50 for a registered vendor; interest 14.5% a year or more",
+    "source": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Franchise prospectus in New York: at the first personal meeting or 10 business days before signing",
+    "source": "https://www.nysenate.gov/legislation/laws/GBS/683",
+    "confidence": "verified"
+   },
+   {
+    "fact": "UI experience transfers to a buyer who takes the business, goodwill and the same workers",
+    "source": "https://www.nysenate.gov/legislation/laws/LAB/581",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Customer with an eligible medical condition may use the staff toilet when 2+ employees are working",
+    "source": "https://www.nysenate.gov/legislation/laws/GBS/492",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Work without a permit: max(21 x fee, $6,000), cap $15,000; legalization $6,000; repeat x2; small business waiver once",
+    "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Alteration fee below 7 floors: $280 for the first $3,000 + $10.30 per $1,000",
+    "source": "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf",
+    "confidence": "verified"
+   },
+   {
+    "fact": "DOB FY2026: filing to approval 25.4 days; first review minor 4.4, major 8.4 days; 111,842 resubmissions on 156,389 first reviews; 7,882 stop work orders; Priority B complaints answered in 21.5 days",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+    "confidence": "verified"
+   },
+   {
+    "fact": "LPC FY2026: 38,550 buildings, 159 districts; 90% of PMWs and CNEs in 10 business days; 566 enforcement actions",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/lpc.pdf",
+    "confidence": "verified"
+   },
+   {
+    "fact": "SBS lease guide: deposit commonly 2 months, refunded 30-45 days after vacating; steps 2-3%; 10 years + 5-year option; good guy rules; broker 5% + 4%",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Gas delays (2017): 82.1% delayed, 17% on time, about 68 days on average, $140,000 lost per business",
+    "source": "https://www.nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Noise: circulation device >42 dB(A) $560/$1,120/$1,680; commercial music $3,200/$6,400/$9,600, first can be $0",
+    "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
+    "confidence": "verified"
+   },
+   {
+    "fact": "LL152 missed gas piping certification: $5,000 (other than 3-family); cycle years by community district",
+    "source": "https://www.nyc.gov/assets/buildings/pdf/gas_piping-sn.pdf",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Con Edison needs about 20 days to evaluate a load letter",
+    "source": "https://www.nyc.gov/assets/hpd/downloads/pdfs/services/hpd-pilot-coned-load-letter.pdf",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Stop work order: working against it $6,000 then $12,000; not rescinded until penalties are paid",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+    "confidence": "verified"
+   },
+   {
+    "fact": "CO: change of use, egress or occupancy needs an amended CO; CO never expires",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
+    "confidence": "verified"
+   },
+   {
+    "fact": "TCO: typically expires after 90 days, $130, renewable; new TCO if unoccupied more than 30 days",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Asbestos assessment before a permit in buildings built before April 1, 1987 unless no materials are disturbed",
+    "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Signs: wall sign up to 6 sq ft needs no permit; up to 75 sq ft and 25 lb without a licensed sign hanger",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Class 4 property tax rate 10.848% (tax year 2026); FY2027 tentative roll: Class 4 market value +4.3%, assessed +5.8%",
+    "source": "https://www.nyc.gov/site/finance/about/press/press-release-fy27-tentative-assessment-roll.page",
+    "confidence": "verified"
+   },
+   {
+    "fact": "CRT: Manhattan below 96th St, rent >= $250,000, 3.9% effective; full small business credit at income <= $5M and rent < $500,000",
+    "source": "https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page",
+    "confidence": "verified"
+   },
+   {
+    "fact": "2,200 new supervisory vending licenses a year from July 1, 2026 for 5 years; carts must be stored at a commissary",
+    "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Health permit $280; open 22 days after applying; pay outstanding Health fines before applying",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "confidence": "verified"
+   },
+   {
+    "fact": "Outdoor dining: sidewalk year-round; $1,050 four-year license ($2,100 both); DOT hearing on every roadway application",
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+    "confidence": "verified"
+   }
+  ],
+  "notFound": [
+   "Number of free-rent months in 2025-2026 NYC restaurant leases from a market survey (only law-firm and broker statements: 3-6, up to 12).",
+   "DEP's notice period before asbestos abatement and the abatement price per sq ft from a NYC source (title 15 rules PDF returned 404; amlegal blocked).",
+   "Con Edison's own timeline for a small commercial electric service upgrade; the EV make-ready sheet that gives 6-24 months was unreachable.",
+   "Fresh (after 2017) measurement of NYC gas turn-on delays.",
+   "Typical private ADA Title III settlement for a small NYC restaurant with a step (only a $20,000 government penalty for Katz's Deli and court remarks).",
+   "Property tax per sq ft attributable to a small storefront (used $20, an assumption).",
+   "Price of an after-hours variance (AHV) for a small job; DOB's 2026 notice mentions a standard fee without the amount on the pages read.",
+   "Dining Out NYC revocable consent fee per sq ft for 2026 (diningoutnyc.info blocked in this session).",
+   "Letter of No Objection fee and time for buildings without a CO.",
+   "Typical consent fee a NYC landlord charges for a lease assignment.",
+   "Fire Department penalty for storage in an exit path; DEP odor violation amount.",
+   "Signature status of Intro 910-A (repeal of the roll-down gate law) and of Local Law 15 of 2026's effective date."
   ],
   "notCalibrated": []
  },
  "sources": [
+  {
+   "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+   "title": "NYC311, outdoor dining (Dining Out NYC) licenses and seasons",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
   {
    "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-23455",
    "title": "15 RCNY Chapter 1 (asbestos), ACP-7 fee tiers",
@@ -9165,8 +11470,20 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://www.europeanacustica.com/insonorizar-cafeteria/",
+   "title": "European Acustica, soundproofing a cafe (Spain)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.ada.gov/law-and-regs/design-standards/2010-stds/",
    "title": "2010 ADA Standards for Accessible Design",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny",
+   "title": "NY1, surge in ADA lawsuits by a small group of filers (2019)",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -9219,8 +11536,20 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://www.kbtx.com/2023/07/09/college-station-coffee-cafe-closed-after-vehicle-hits-building/",
+   "title": "KBTX, cafe closed after a vehicle hits the building (2023)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.cbre.com/insights/figures/manhattan-retail-figures-q3-2026",
    "title": "CBRE, Manhattan Retail Figures Q3 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02292",
+   "title": "NYC311, open cellar doors",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -9315,6 +11644,18 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://www.diningoutnyc.info/enforcement",
+   "title": "Dining Out NYC, enforcement",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.diningoutnyc.info/apply/fees",
+   "title": "Dining Out NYC, fees",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page",
    "title": "NYC DOF, Commercial Rent Tax",
    "checked": "2026-11-14",
@@ -9331,6 +11672,12 @@
    "title": "NYC DOF, property tax rates",
    "checked": "2026-11-14",
    "confidence": "verified"
+  },
+  {
+   "url": "https://www.diningoutnyc.info/apply/publichearing",
+   "title": "Dining Out NYC, public hearing",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
   },
   {
    "url": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
@@ -9375,6 +11722,12 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://ny.eater.com/2019/3/7/18254534/fire-nolita-black-seed-bagels",
+   "title": "Eater NY, fire closes a Nolita bagel shop (2019)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide",
    "title": "Cushman & Wakefield, retail fit-out cost guide",
    "checked": "2026-11-14",
@@ -9387,6 +11740,12 @@
    "confidence": "verified"
   },
   {
+   "url": "https://www.nysenate.gov/legislation/laws/GBS/492",
+   "title": "NY General Business Law §492, access to restroom facilities",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
    "url": "https://www.nysenate.gov/legislation/laws/GBS/683",
    "title": "NY General Business Law §683, franchise registration and disclosure",
    "checked": "2026-11-14",
@@ -9395,6 +11754,12 @@
   {
    "url": "https://www.amny.com/transit/mta-master-vendor-grand-central-madison-retail",
    "title": "amNY, MTA retail at Grand Central Madison",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.insightglass.com/how-much-do-storefront-windows-cost/",
+   "title": "Insight Glass, storefront window cost",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -9501,6 +11866,12 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+   "title": "LPC, storefronts",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.metro-manhattan.com/security-deposit/",
    "title": "Metro Manhattan Office Space, security deposits",
    "checked": "2026-11-14",
@@ -9543,8 +11914,20 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://www.thecityreporter.nyc/2026/08/13/nyc-outdoor-dining-roadside-sheds-new-laws-restaraunts/",
+   "title": "The City Reporter, outdoor dining laws (August 2026)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://d1tvxue8o4w0fl.cloudfront.net/regulation/new-york-codes-rules-and-regulations/title-16-department-of-public-service/chapter-i-rules-of-procedure/subchapter-b-procedures-and-requirements-concerning-consumer-protections/part-13-rules-governing-the-provision-of-service-by-gas-electric-and-steam-corporations-to-nonresidential-customers/section-137-security-deposits",
    "title": "16 NYCRR §13.7, security deposits of nonresidential utility customers",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.kptv.com/2023/11/08/historic-diner-reopens-downtown-portland-months-after-kitchen-fire/",
+   "title": "KPTV, diner reopens months after a kitchen fire (2023)",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -9557,6 +11940,12 @@
   {
    "url": "https://robinpzander.com/lessons-learned-building-and-selling-robins-cafe/",
    "title": "Robin Zander, lessons from selling a cafe",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://tollbit.gothamist.com/2017/05/24/kushner_evict_pudge_knuckles.php",
+   "title": "Gothamist, building incident closes a cafe (2017)",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -9581,6 +11970,12 @@
   {
    "url": "https://brooklyn.news12.com/riverdale-businesses-struggle-without-gas-for-months",
    "title": "News 12, Riverdale businesses without gas for months (December 2024)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.indailysa.com.au/citymag/food-drink/2024/05/21/bitter-brew-cbd-coffee-spot-to-close-doors",
+   "title": "InDaily, roaster odor dispute closes a cafe (Adelaide, 2024)",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
