@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { OwnerView, Payout } from '@shared/types';
+import type { OwnerView, Payout } from '@ohh/shared/types';
 import { cafeEndedView, cafeView, MY_PLAYER_ID, OFFICIALS_RANKING, SEASON_PAYOUTS } from '../insights/fixtures';
 import { allBoards, myResult, nicheBoard, nichePools, officialsBoard, placePrizes, splitCents } from './prizes';
 

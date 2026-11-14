@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Debrief, OwnerView, PackRuleCard, Query } from '@shared/types';
+import type { Debrief, OwnerView, PackRuleCard, Query } from '@ohh/shared/types';
 import { Badge, Button, Card, Icon, MoneyText, RuleCard, Skeleton } from '../../ui';
 import { useGame, useOwnerView } from '../../app/store';
 import { money, nicheName } from '../insights/format';

@@ -4,7 +4,7 @@ import { WithStore } from '../../app/dev';
 import { devStore } from './dev-store';
 import { cafeRiskyView, cafeSetupView, cafeStrugglingView, cafeView } from './fixtures';
 import { InsightsTabConnected } from './InsightsTab';
-import type { OwnerView } from '@shared/types';
+import type { OwnerView } from '@ohh/shared/types';
 
 const DEV_LINKS = { plan: '/dev/plan', leaderboards: '/dev/leaderboards' };
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { PackSet } from '@shared/types';
+import type { PackSet } from '@ohh/shared/types';
 import { fixturePacks } from '../../app/fixtures';
 import { RULE_CARDS } from '../insights/fixtures';
 import { cardsFromPacks, packInfo } from './rulecards';

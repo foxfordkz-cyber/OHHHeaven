@@ -4,7 +4,7 @@ import { WithStore } from '../../app/dev';
 import { useOwnerView } from '../../app/store';
 import { devStore } from '../insights/dev-store';
 import { cafeEndedView, cafeView, RULE_CARDS } from '../insights/fixtures';
-import type { OwnerView } from '@shared/types';
+import type { OwnerView } from '@ohh/shared/types';
 import { EndConnected, EndScreen } from './EndScreen';
 import { Leaderboards } from './Leaderboards';
 import { PlanConnected, PlanScreen } from './PlanScreen';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { NicheId, OwnerView } from '@shared/types';
+import type { NicheId, OwnerView } from '@ohh/shared/types';
 import { AiBadge, Badge, Card, Icon, NICHE_ICON, SegmentedControl } from '../../ui';
 import { compactMoney, money, nicheName, nicheShort } from '../insights/format';
 import { allBoards, officialsBoard, type BoardRow, type NicheBoard } from './prizes';

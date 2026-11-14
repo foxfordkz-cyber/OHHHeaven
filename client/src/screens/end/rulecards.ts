@@ -2,7 +2,7 @@
 // so the screens take them from the app's catalog (agent 08, app/catalog.ts: the server's GET /api/packs, the
 // in-browser city or the examples). Cards passed in win: the /dev screens show sample cards.
 import { useMemo } from 'react';
-import type { PackRuleCard, PackSet } from '@shared/types';
+import type { PackRuleCard, PackSet } from '@ohh/shared/types';
 import { useCatalog } from '../../app/catalog';
 
 export interface PackInfo {

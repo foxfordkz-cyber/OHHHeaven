@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
-import type { Query } from '@shared/types';
+import type { Query } from '@ohh/shared/types';
 import { advisorAnswer, cafeRiskyView, cafeView } from './fixtures';
 import { AdvisorCard, askAdvisor, TIMEOUT_TEXT } from './Advisor';
 

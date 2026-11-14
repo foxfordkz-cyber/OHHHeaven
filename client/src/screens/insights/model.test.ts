@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { OwnerView } from '@shared/types';
+import type { OwnerView } from '@ohh/shared/types';
 import { cafeEndedView, cafeRiskyView, cafeSetupView, cafeStrugglingView, cafeView, MAYA_PLANS, monthLines, monthReport } from './fixtures';
 import { advisorPresets, benchmarkRow, breakEvenModel, capacityModel, costGroups, costModel, headline, kpiValue, mergeMarks, metricKey, riskModel, taxLabel, taxModel, trendModel } from './model';
 

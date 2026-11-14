@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import type { PackRuleCard, Query, RealWorldPlan } from '@shared/types';
+import type { PackRuleCard, Query, RealWorldPlan } from '@ohh/shared/types';
 import { Button, Card, Icon, RuleCard, Skeleton } from '../../ui';
 import { useGame } from '../../app/store';
 import { int, money, nicheName, unitWord } from '../insights/format';

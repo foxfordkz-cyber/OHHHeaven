@@ -1,5 +1,5 @@
 // A store for /dev screens whose queries answer like the server would: after a delay, by question.
-import type { ClientView, Query } from '@shared/types';
+import type { ClientView, Query } from '@ohh/shared/types';
 import { createStaticStore, type GameStore } from '../../app/store';
 import { fakeQuery } from './fixtures';
 

@@ -10,8 +10,8 @@ import type {
   Ack, AdvisorAnswer, Analytics, Benchmark, BusinessState, DayReport, Debrief, GameEvent, FeedItem, MonthReport,
   OwnerView, PackRuleCard, PackSupplier, PackRoadmapStep, Payout, PnlLine, PublicBusiness, Query,
   RealWorldPlan, Standing, WeatherCondition, WorldConfig, WorldPublic,
-} from '@shared/types';
-import { dateOf } from '@shared/rules';
+} from '@ohh/shared/types';
+import { dateOf } from '@ohh/shared/rules';
 import { int, money } from './format';
 
 // ───────────── deterministic noise ─────────────

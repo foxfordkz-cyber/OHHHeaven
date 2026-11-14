@@ -3,7 +3,7 @@
 // AI businesses get no prize. While the season runs the table shows the prize each place would get today, by the
 // same rule as finalizeSeason (engine/src/deals/season.ts); Standing.prize from the server wins when it is sent,
 // and after the end OwnerView.payouts gives the money actually paid.
-import type { NicheId, OwnerView, Payout, PublicBusiness, Standing } from '@shared/types';
+import type { NicheId, OwnerView, Payout, PublicBusiness, Standing } from '@ohh/shared/types';
 
 export interface BoardRow {
   businessId: string; rank: number; name: string; owner: string; isAi: boolean; bankrupt: boolean; mine: boolean;

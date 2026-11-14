@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import type { OwnerView } from '@shared/types';
+import type { OwnerView } from '@ohh/shared/types';
 import { Badge, Button, Card, Icon, ProgressBar } from '../../ui';
 import { useGame, useOwnerView } from '../../app/store';
 import { LeaderboardCard } from '../end/Leaderboards';

@@ -1,6 +1,6 @@
 // "Copy link" for the real-world plan: the whole plan travels in the URL fragment, compressed, so the link opens
 // on any device without a login or a server (the fragment never leaves the browser).
-import type { RealWorldPlan } from '@shared/types';
+import type { RealWorldPlan } from '@ohh/shared/types';
 
 const PREFIX_DEFLATE = 'z.';
 const PREFIX_PLAIN = 'j.';
