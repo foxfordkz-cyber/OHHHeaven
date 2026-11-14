@@ -56,7 +56,7 @@ const { call } = api(base);
 
     await decide('"Choose a place"', async () => { await btn(/Choose a place/).click(); });
     await page.getByText(/Where will it be\?/).waitFor({ timeout: 10000 });
-    const row = page.locator('.list-row', { hasText: /opens from/ }).first();
+    const row = page.locator('.list-row').filter({ hasNotText: /Over budget/ }).first(); // any affordable row
     await decide('picked the first storefront in the list', async () => { await row.click(); });
     await page.getByText(/Opening here costs/).first().waitFor({ timeout: 5000 }).catch(() => {});
     await mark('the game answers: what opening here costs', 'consequence', ((await textOf()).match(/Opening here costs[^.]*\./) ?? [''])[0]);
