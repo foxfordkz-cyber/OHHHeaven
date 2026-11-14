@@ -3,7 +3,14 @@ import type { Action, Case, CaseCard, Money, OfficialRole, OfficialView, PackOff
 import { RULES, dateOf } from '../../../../shared/src/rules';
 import { money } from '../network/logic';
 
-export const ROLE_LABEL: Record<OfficialRole, string> = { inspector: 'Health inspector', tax_auditor: 'Tax auditor' };
+/** Same names as the engine (engine/src/law/util.ts). */
+export const ROLE_LABEL: Record<OfficialRole, string> = { inspector: 'City inspector', tax_auditor: 'Tax auditor' };
+
+/** What each role checks in the packs (cafe, barbershop, _common). */
+export const ROLE_SCOPE: Record<OfficialRole, string> = {
+  inspector: 'Health, licenses, sidewalks and trash',
+  tax_auditor: 'Payroll, sales tax and labor law',
+};
 
 export const ORIGIN_LABEL: Record<Case['origin'], string> = {
   report: 'Neighbor complaint',
@@ -108,8 +115,27 @@ export function findViolation(packs: PackSet | null, niche: CaseCard['business']
   return [...packs.common.violations, ...(packs.niches[niche]?.violations ?? [])].find((v) => v.id === id);
 }
 
-export function officialFor(packs: PackSet | null, role: OfficialRole): PackOfficial | undefined {
-  return packs?.common.officials.find((o) => o.role === role);
+/** Officials live in the common pack and in niche packs; a violation names the one who finds it (`PackViolation.official`). */
+export function findOfficial(packs: PackSet | null, niche: CaseCard['business']['niche'], id: string): PackOfficial | undefined {
+  if (!packs) return undefined;
+  return [...(packs.niches[niche]?.officials ?? []), ...packs.common.officials].find((o) => o.id === id);
+}
+
+/** The real officials behind what this inspection found, without repeats: for «How it works in real life». */
+export function officialsForCase(card: CaseCard, packs: PackSet | null): PackOfficial[] {
+  const out: PackOfficial[] = [];
+  for (const f of card.found ?? []) {
+    const v = findViolation(packs, card.business.niche, f.violationId);
+    const o = v ? findOfficial(packs, card.business.niche, v.official) : undefined;
+    if (o && !out.some((x) => x.id === o.id)) out.push(o);
+  }
+  return out;
+}
+
+/** Bribery in the common pack (`bribery`), with the official who investigates it. */
+export function briberyRule(packs: PackSet | null): { law?: string; official?: PackOfficial } {
+  const v = packs?.common.violations.find((x) => x.id === 'bribery') ?? packs?.common.violations.find((x) => x.id.includes('brib'));
+  return { law: v?.law, official: v ? packs?.common.officials.find((o) => o.id === v.official) : undefined };
 }
 
 export interface FoundLine { id: string; name: string; law: string; fine: Money; closureDays: number; months: number; source?: string }
@@ -145,13 +171,13 @@ export function bribeFacts(card: CaseCardMaybe): BribeFacts {
 export function bribeWarning(card: CaseCardMaybe, view: OfficialView, packs: PackSet | null): string[] {
   const f = bribeFacts(card);
   const taken = view.official.bribesThisMonth;
-  const law = packs?.common.violations.find((v) => v.id === 'bribery' || v.id.includes('brib'));
+  const { law } = briberyRule(packs);
   return [
     `Take it: the ${money(f.fine)} fine disappears, you keep ${money(f.amount)} and get +${f.pointsIfTaken} points.`,
     'Once a month Internal Affairs exposes the official who took the most bribes that month: all points are gone, no new cases and no share of the bank.',
     taken > 0 ? `You have taken ${plural(taken, 'bribe')} this month already.` : 'You have taken no bribes this month.',
     `Refuse: the owner pays ${RULES.REFUSED_BRIBE_FINE_MULT}× the fine, ${money(f.fineIfRefused)}, and you get +${f.pointsIfRefused} points.`,
-    law?.law ? `In real life this is a crime: ${law.law}.` : 'In real life, taking money from a business you inspect is a crime.',
+    law ? `In real life the owner commits a crime: ${law}. Taking the money is bribe receiving, a crime too.` : 'In real life, taking money from a business you inspect is a crime.',
   ];
 }
 

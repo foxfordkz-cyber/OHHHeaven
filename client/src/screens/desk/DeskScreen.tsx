@@ -4,9 +4,9 @@ import { AiBadge, Badge, Banner, Button, Card, Clock, Feed, MoneyText, RuleCard,
 import { useCatalog, useGame, useView } from '../network/deps';
 import { NICHE_LABEL } from '../network/logic';
 import {
-  aiTakeoverText, bribeFacts, bribeWarning, closedText, closureOf, deskAct, EMPTY_QUEUE_NEXT, EMPTY_QUEUE_TEXT, earningsEstimate,
-  foundLines, noticeText, officialFor, ORIGIN_LABEL, ORIGIN_TEXT, POINTS_RULES, rankOf, ROLE_LABEL, stageOf, STAGE_LABEL,
-  suspension, takeAvailability, totalFine, waitingText, type CaseCardMaybe,
+  aiTakeoverText, bribeFacts, briberyRule, bribeWarning, closedText, closureOf, deskAct, EMPTY_QUEUE_NEXT, EMPTY_QUEUE_TEXT,
+  earningsEstimate, foundLines, noticeText, officialsForCase, ORIGIN_LABEL, ORIGIN_TEXT, POINTS_RULES, rankOf, ROLE_LABEL,
+  ROLE_SCOPE, stageOf, STAGE_LABEL, suspension, takeAvailability, totalFine, waitingText, type CaseCardMaybe,
 } from './logic';
 import './desk.css';
 
@@ -48,13 +48,12 @@ export function Desk({ view, packs, onAct }: DeskProps) {
   const o = view.official;
   const rank = rankOf(view);
   const pay = earningsEstimate(view);
-  const agency = officialFor(packs, o.role)?.agency;
   const blocked = suspension(view);
   const feed = [...view.feed].sort((a, b) => b.day - a.day);
 
   return (
     <main className="screen stack" data-screen="desk">
-      <Card title={`${ROLE_LABEL[o.role]} · ${o.name}`} subtitle={agency ?? 'City of New York'} aria-label="My desk">
+      <Card title={`${ROLE_LABEL[o.role]} · ${o.name}`} subtitle={ROLE_SCOPE[o.role]} aria-label="My desk">
         <div className="stack">
           <div className="dk-head">
             <Stat label="Points" value={<span className="num">{o.points}</span>} hint={`${o.casesClosed} cases closed`} />
@@ -160,7 +159,7 @@ function QueueCase({ card, view, onAct }: { card: CaseCardMaybe; view: OfficialV
 function MyCase({ card, view, packs, onAct }: { card: CaseCardMaybe; view: OfficialView; packs: PackSet | null; onAct: (a: Action) => unknown }) {
   const stage = stageOf(card);
   const lines = foundLines(card, packs);
-  const official = officialFor(packs, card.role);
+  const officials = officialsForCase(card, packs).filter((x) => x.realProcess).slice(0, 2);
   const closure = closureOf(card);
   return (
     <div className="dk-case" data-case={card.caseId}>
@@ -195,9 +194,9 @@ function MyCase({ card, view, packs, onAct }: { card: CaseCardMaybe; view: Offic
       )}
       {stage === 'notice' && <p className="xsmall muted">{noticeText(card)}</p>}
       {stage === 'bribe' && <BribeOffer card={card} view={view} packs={packs} onAct={onAct} />}
-      {(stage === 'notice' || stage === 'bribe') && official?.realProcess && (
-        <RuleCard title={`How it works in real life: ${official.name}`} text={official.realProcess} source={official.source} />
-      )}
+      {(stage === 'notice' || stage === 'bribe') && officials.map((x) => (
+        <RuleCard key={x.id} title={`How it works in real life: ${x.name}`} text={x.realProcess} source={x.source} />
+      ))}
     </div>
   );
 }
@@ -205,6 +204,7 @@ function MyCase({ card, view, packs, onAct }: { card: CaseCardMaybe; view: Offic
 function BribeOffer({ card, view, packs, onAct }: { card: CaseCardMaybe; view: OfficialView; packs: PackSet | null; onAct: (a: Action) => unknown }) {
   const f = bribeFacts(card);
   const amount = <MoneyText value={f.amount} />;
+  const watchdog = briberyRule(packs).official;
   return (
     <div className="dk-bribe" role="group" aria-label="Offer from the owner">
       <p className="small"><strong>{card.business.name}</strong> offers you {amount} to make the <MoneyText value={f.fine} /> fine go away.</p>
@@ -214,6 +214,9 @@ function BribeOffer({ card, view, packs, onAct }: { card: CaseCardMaybe; view: O
         <Button variant="danger" onClick={() => onAct(deskAct.answerBribe(card.caseId, true))}>Take {formatAmount(f.amount)}</Button>
         <Button onClick={() => onAct(deskAct.answerBribe(card.caseId, false))}>Refuse</Button>
       </div>
+      {watchdog?.realProcess && (
+        <RuleCard title={`Who catches it in real life: ${watchdog.name}`} text={watchdog.realProcess} source={watchdog.source} law={briberyRule(packs).law} />
+      )}
     </div>
   );
 }

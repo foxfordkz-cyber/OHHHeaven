@@ -367,10 +367,10 @@ export function pendingBlockFund(view: OwnerView, places: Place[]): BlockFundSta
 
 // ───────────── report to the city ─────────────
 
-/** Reports that apply to a business of this niche: common ones plus the niche pack's. */
+/** Reports that apply to a business of this niche: the niche pack's first (the most specific), then the common ones. */
 export function reportOptions(packs: PackSet | null, niche: NicheId): PackReport[] {
   if (!packs) return [];
-  const all = [...packs.common.reports, ...(packs.niches[niche]?.reports ?? [])];
+  const all = [...(packs.niches[niche]?.reports ?? []), ...packs.common.reports];
   return all.filter((r, i) => all.findIndex((x) => x.id === r.id) === i);
 }
 
@@ -442,7 +442,21 @@ export function reportName(packs: PackSet | null, reportId: string): string {
   return all.find((r) => r.id === reportId)?.name ?? reportId;
 }
 
-export const reportCatalogEmpty = (c: Pick<CommonPack, 'reports'>): boolean => c.reports.length === 0;
+/** Who checks a report in real life: the officials named by the violations it checks (niche pack first, then common). */
+export function reportCheckers(packs: PackSet | null, niche: NicheId, report: PackReport): string[] {
+  if (!packs) return [];
+  const violations = [...(packs.niches[niche]?.violations ?? []), ...packs.common.violations];
+  const officials = [...(packs.niches[niche]?.officials ?? []), ...packs.common.officials];
+  const names: string[] = [];
+  for (const id of report.checks) {
+    const v = violations.find((x) => x.id === id);
+    const o = v ? officials.find((x) => x.id === v.official) : undefined;
+    if (o && !names.includes(o.name)) names.push(o.name);
+  }
+  return names;
+}
+
+export const reportCatalogEmpty =(c: Pick<CommonPack, 'reports'>): boolean => c.reports.length === 0;
 
 // ───────────── actions: the only thing the screens send ─────────────
 

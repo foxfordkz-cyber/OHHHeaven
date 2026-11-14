@@ -1,17 +1,27 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import type { Action, OfficialView } from '../../../../shared/src/types';
+import type { Action, OfficialView, PackSet } from '../../../../shared/src/types';
 import { DevStore } from '../network/deps';
 import { ownerView } from '../network/fixtures';
 import { Desk, DeskScreen } from './DeskScreen';
 import { simulateDesk } from './dev';
 import { officialView, officialViewEmpty, officialViewExposed, packs, queue, TODAY } from './fixtures';
 import {
-  aiTakeoverText, bribeFacts, bribeWarning, closedText, deskAct, earningsEstimate, foundLines, rankOf, suspension,
-  takeAvailability, waitingText,
+  aiTakeoverText, bribeFacts, briberyRule, bribeWarning, closedText, deskAct, earningsEstimate, foundLines, officialsForCase,
+  rankOf, suspension, takeAvailability, waitingText,
 } from './logic';
 
 afterEach(cleanup);
+
+/** The bribery rule as packs/_common.json has it (agent 14). */
+const packsWithBribery: PackSet = {
+  ...packs,
+  common: {
+    ...packs.common,
+    violations: [...packs.common.violations, { id: 'bribery', name: 'Bribing a public servant', law: 'NY Penal Law §200.00 (bribery in the third degree)', official: 'doi_investigator', foundBy: ['complaint'], fine: { base: 0 }, confidence: 'estimate' }],
+    officials: [...packs.common.officials, { id: 'doi_investigator', name: 'Integrity investigator', agency: 'NYC Department of Investigation (DOI)', role: 'inspector', checks: ['bribery'], realProcess: 'City inspectors must report every offer of money or gifts.', confidence: 'estimate' }],
+  },
+};
 
 /** A paused clock keeps the Clock component from ticking during tests. */
 const paused = (v: OfficialView): OfficialView => ({ ...v, world: { ...v.world, config: { ...v.world.config, paused: true } } });
@@ -74,6 +84,17 @@ describe('desk logic', () => {
     expect(closedText({ ...notice, status: 'closed', outcome: 'bribed', bribeAmount: 400 })).toBe('You took $400; no fine');
   });
 
+  it('finds the real official behind each violation and the bribery rule', () => {
+    const notice = officialView.mine.find((c) => c.caseId === 'c12')!;
+    expect(officialsForCase(notice, packs).map((o) => o.id)).toEqual(['health_inspector']);
+    expect(officialsForCase({ ...notice, found: [] }, packs)).toEqual([]);
+    expect(briberyRule(packs)).toEqual({ law: undefined, official: undefined });
+    expect(briberyRule(packsWithBribery).law).toBe('NY Penal Law §200.00 (bribery in the third degree)');
+    expect(briberyRule(packsWithBribery).official?.id).toBe('doi_investigator');
+    const offer = officialView.mine.find((c) => c.caseId === 'c13')!;
+    expect(bribeWarning(offer, officialView, packsWithBribery).at(-1)).toBe('In real life the owner commits a crime: NY Penal Law §200.00 (bribery in the third degree). Taking the money is bribe receiving, a crime too.');
+  });
+
   it('builds the two desk actions', () => {
     expect(deskAct.takeCase('c21')).toEqual({ type: 'take_case', caseId: 'c21' });
     expect(deskAct.answerBribe('c13', false)).toEqual({ type: 'answer_bribe', caseId: 'c13', accept: false });
@@ -84,8 +105,8 @@ describe('desk screen', () => {
   it('shows role, points, rank, earnings estimate and the game date', () => {
     setup();
     const head = screen.getByRole('region', { name: 'My desk' });
-    expect(head.textContent).toContain('Health inspector · Dana Ortiz');
-    expect(head.textContent).toContain('NYC Department of Health and Mental Hygiene');
+    expect(head.textContent).toContain('City inspector · Dana Ortiz');
+    expect(head.textContent).toContain('Health, licenses, sidewalks and trash');
     expect(head.textContent).toContain('40');
     expect(head.textContent).toContain('#2');
     expect(head.textContent).toContain('$13.67');
@@ -122,6 +143,14 @@ describe('desk screen', () => {
     expect(onAct).toHaveBeenLastCalledWith({ type: 'answer_bribe', caseId: 'c13', accept: true });
     fireEvent.click(within(offer).getByRole('button', { name: 'Refuse' }));
     expect(onAct).toHaveBeenLastCalledWith({ type: 'answer_bribe', caseId: 'c13', accept: false });
+  });
+
+  it('shows who catches bribes in real life when the packs have the rule', () => {
+    render(<Desk view={paused(officialView)} packs={packsWithBribery} onAct={vi.fn()} />);
+    const offer = within(caseRow('My cases', 'c13')).getByRole('group', { name: 'Offer from the owner' });
+    const rule = within(offer).getByRole('complementary', { name: 'Real rule' });
+    expect(rule.textContent).toContain('Who catches it in real life: Integrity investigator');
+    expect(rule.textContent).toContain('NY Penal Law §200.00');
   });
 
   it('shows what was found, by which law, the fine and how it works in real life', () => {

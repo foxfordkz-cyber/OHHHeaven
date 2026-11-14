@@ -6,7 +6,7 @@ import {
   endEarlyWarning, formatDistance, groupDeals, lastMonthDealMoney, loanSchedule, monthBase, monthsLeftInSeason,
   myReports, neighborRows, reportConsequences, reportEligibility, reportInboxItems, reportLimit, reportName,
   reportOptions, reportOutcomeText, termsSummary, trustLabel, validateTerms, money, pct, falseReports,
-  DEAL_COPY, sideOf, otherId, daysLeftText, rankText, reportFiledDays, pendingBlockFund,
+  DEAL_COPY, sideOf, otherId, daysLeftText, rankText, reportFiledDays, pendingBlockFund, reportCheckers,
 } from './logic';
 import {
   analytics, blockFund, blockFundActive, deals, MY_ID, myBusiness, neighbors, ownerView, ownerViewBusyWeek, packs, places,
@@ -260,6 +260,14 @@ describe('report to the city', () => {
     expect(pending).toMatchObject({ block: 'E 7th St, 1st–2nd Ave', contributors: 0, eligible: 3, active: false, feeMonth: RULES.BLOCK_FUND_FEE_MONTH });
     expect(pendingBlockFund({ ...ownerView, business: { ...myBusiness, status: 'setup' } }, places)).toBeNull();
     expect(pendingBlockFund(ownerView, [])).toBeNull();
+  });
+
+  it('names who checks a report from the violations it checks', () => {
+    const [unsanitary, wages] = packs.common.reports;
+    expect(reportCheckers(packs, 'cafe', unsanitary)).toEqual(['Health inspector']);
+    expect(reportCheckers(packs, 'cafe', wages)).toEqual(['Tax auditor']);
+    expect(reportCheckers(packs, 'cafe', { ...wages, checks: ['not_in_the_pack'] })).toEqual([]);
+    expect(reportCheckers(null, 'cafe', wages)).toEqual([]);
   });
 
   it('says "new" instead of place 0 for a business that has no rank yet', () => {
