@@ -1,0 +1,283 @@
+{
+  "setup": [
+    {
+      "id": "grinder",
+      "name": "Espresso grinder (Mahlkonig E65W)",
+      "kind": "equipment",
+      "cost": 3099,
+      "required": true,
+      "lifespanMonths": 72,
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "confidence": "verified",
+      "note": "Mahlkonig E65W Grind-by-Sync: $3,099.00 at Visions Espresso (sale price; list $3,199), seen November 14, 2026. The E65S at $2,099 that the first pass used is marked discontinued (2025 update) and out of stock, so a new shop cannot buy it. Lifespan is my estimate."
+    },
+    {
+      "id": "decaf_grinder",
+      "name": "Second grinder for decaf (Mahlkonig E65W)",
+      "kind": "equipment",
+      "cost": 3099,
+      "required": false,
+      "lifespanMonths": 72,
+      "qualityBonus": 0.01,
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "confidence": "verified",
+      "note": "A second Mahlkonig E65W at $3,099.00 seen at Visions Espresso on November 14, 2026 (the E65S at $2,099 is discontinued and out of stock). A cheaper used or entry-level grinder is the usual way to save here; no listing was checked for it."
+    },
+    {
+      "id": "sinks",
+      "name": "Three-compartment sink, hand sink, mop sink and faucets",
+      "kind": "equipment",
+      "cost": 1519,
+      "required": true,
+      "lifespanMonths": 180,
+      "source": "https://www.webstaurantstore.com/regency-60-16-gauge-stainless-steel-three-compartment-commercial-sink-without-drainboards-17-x-17-x-12-bowls/600S31717X.html",
+      "confidence": "estimate",
+      "note": "Seen at WebstaurantStore on November 14, 2026: Regency 60-inch three-compartment sink $649.00; Regency wall-mount hand sink with gooseneck faucet $82.99-$89.99; Regency floor mop sink $234.49-$349.99 (I take $279.99). Faucets, pre-rinse and fittings stay the research notes' $500 allowance, not seen: $649 + $90 + $280 + $500 = $1,519. Plumbing labor is in the build-out. The Health Code requires a hand-washing sink near every place food is prepared and in each restroom."
+    },
+    {
+      "id": "fse_permit",
+      "name": "Food Service Establishment Permit",
+      "kind": "permit",
+      "cost": 280,
+      "required": true,
+      "waitDays": 22,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "withoutItViolation": "no_fse_permit",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "confidence": "verified",
+      "note": "NYC Business, seen November 14, 2026: the permit fee for most food service establishments is $280.00 a year, plus $25.00 if you make frozen desserts (soft serve, gelato); you can open 22 days after you submit the application even if no pre-permit inspection has taken place, or call 212-676-1600 for a pre-operating inspection to open sooner. The application asks for proof of workers' compensation and disability insurance, a Food Protection Certificate or course registration, and the sales tax Certificate of Authority. The clock starts when the build-out is finished: the Health Department checks the finished room. The permit does not pass to a buyer of an operating business: the new owner applies again.",
+      "afterBuildout": true
+    },
+    {
+      "id": "batch_brewer",
+      "name": "Batch brewer, bulk grinder and airpots",
+      "kind": "equipment",
+      "cost": 1780,
+      "required": false,
+      "lifespanMonths": 84,
+      "qualityBonus": 0.01,
+      "source": "https://www.webstaurantstore.com/search/bunn-cwtf15-aps.html",
+      "confidence": "estimate",
+      "note": "Bunn CWTF15-APS automatic brewer (item 234230010006): $980.00 at WebstaurantStore, seen November 14, 2026, matching the research notes' KaTom price. Plus the notes' $800 allowance for a bulk grinder and airpots (not seen). Drip coffee is the fastest thing on the menu at the morning peak."
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "get_fse_permit",
+      "title": "Get your Food Service Establishment Permit",
+      "kind": "permit",
+      "text": "Apply online with proof of workers' compensation and disability insurance, the sales tax Certificate of Authority and the Food Protection Certificate. The fee is $280 a year. You may open on the 22nd day after applying; call for a pre-operational inspection if you want to open sooner.",
+      "setupItemId": "fse_permit",
+      "fee": 280,
+      "waitDays": 22,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    }
+  ],
+  "staff": [
+    {
+      "id": "barista",
+      "name": "Barista",
+      "hourlyWage": 18,
+      "tipped": true,
+      "cashWage": 18,
+      "hoursPerMonth": 160,
+      "licenseRequired": null,
+      "source": "https://dol.ny.gov/statistics-oewswagezip",
+      "confidence": "estimate",
+      "note": "NY Department of Labor OEWS file (wages updated to the first quarter of 2026), New York City region, SOC 35-3023 Fast Food and Counter Workers, the occupation that holds baristas: median $36,545.83 a year ($17.57 an hour at 2,080 hours), mean $39,310.12 ($18.90), entry $35,510.25 ($17.07). OEWS wages include tips. A shop that pays the full $17.00 minimum with no tip credit and lets baristas keep their tips pays $17-$19; $18 is my middle. The research notes planned $21, which is above the market median even before tips. The tipped rate of $11.35 + $5.65 credit is legal only with written notice and tips that cover the gap (12 NYCRR 146-1.3)."
+    },
+    {
+      "id": "shift_lead",
+      "name": "Shift lead",
+      "hourlyWage": 24,
+      "tipped": true,
+      "cashWage": 24,
+      "hoursPerMonth": 160,
+      "licenseRequired": "NYC Food Protection Certificate (free online course, $24 exam)",
+      "source": "https://dol.ny.gov/statistics-oewswagezip",
+      "confidence": "verified",
+      "note": "NY Department of Labor OEWS file (wages updated to the first quarter of 2026), New York City region, SOC 35-1012 First-Line Supervisors of Food Preparation and Serving Workers: median $50,060.70 a year ($24.07 an hour), mean $54,158.95 ($26.04). $24 is the median rounded. A shift lead with a Food Protection Certificate covers the rule that a certified supervisor is on site every open hour."
+    }
+  ],
+  "monthlyCosts": [
+    {
+      "id": "sick_leave_cover",
+      "name": "Paid sick leave cover",
+      "kind": "other",
+      "basis": "per_staff",
+      "amount": 60,
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "confidence": "estimate",
+      "note": "Up to 40 paid hours a year per worker for employers with 5-99 workers (DCWP): 40 h x $18 / 12 = $60 a month per worker when it is all used. Since February 22, 2026 every employer also owes 32 more hours of unpaid leave a year, available at once (law-firm alerts on the ESSTA amendments; the DCWP page could not be opened from this session), and 20 hours of paid prenatal leave a year under New York State law."
+    }
+  ],
+  "violations": [
+    {
+      "id": "unlicensed_sidewalk_cafe",
+      "name": "Sidewalk tables without a Dining Out NYC license",
+      "law": "NYC Administrative Code §§19-160.1, 19-160.4, 19-160.5(c), 19-160.6; 34 RCNY §§5-10, 5-11 (Dining Out NYC)",
+      "official": "dot_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 1000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.diningoutnyc.info/enforcement",
+      "confidence": "verified",
+      "note": "Dining Out NYC enforcement page, seen November 14, 2026: unlicensed setups get a penalty with no warning, $500 for the first offense and $1,000 for the second and later ones, and the Transportation Department may order the setup removed. Licensed cafes that break the design or operation rules first get a corrective action request with 30 days to fix it, then $200 and $500. Since 2026 roadway dining may run all year; seasonal roadway cafes run April 1 to November 29. The game charges $500 per citation."
+    },
+    {
+      "id": "spoiled_food",
+      "name": "Spoiled food or cold food kept above 41°F",
+      "law": "NYC Health Code §81.07(a), §81.09(a); 24 RCNY Chapter 23, Appendix 23-C, codes 04H and 02G",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 250,
+        "perMonth": 50,
+        "pctOfSaved": 0,
+        "max": 600
+      },
+      "closureDays": 0,
+      "reputationHit": 0.12,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "note": "Penalty schedule (24 RCNY Chapter 23, Appendix 23-C; rule text of 2021 on rules.cityofnewyork.us and the NYC Business restaurant page agree): \"Cold TCS food not held at 41°F or below\" (02G) $250, $300, $350, $400 or $600 by condition level I-V; \"Food not protected from adulteration or contamination\" (04H) the same $250-$600. Both are public health hazards that must be corrected immediately; 7 to 10 points, 28 at the worst level. Game formula: $300 in the first month, up to $600."
+    },
+    {
+      "id": "no_food_protection_cert",
+      "name": "No Food Protection Certificate holder on site",
+      "law": "NYC Health Code §81.15(a); 24 RCNY Chapter 23, Appendix 23-C, code 04A",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 400,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 400
+      },
+      "closureDays": 0,
+      "reputationHit": 0.04,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "note": "Penalty schedule (24 RCNY Chapter 23, Appendix 23-C, code 04A): \"Food Protection Certificate not held by supervisor or manager of food operations\" $400, a critical violation worth 10 points; a certificate that exists but cannot be shown costs $200 ($400 on default, code 18-11). Three sources disagree: the 2021 rule text on rules.cityofnewyork.us prints $600 for 04A, the NYC Business restaurant page (seen November 14, 2026) says $500-$1,000 and that the fine doubles after the second violation, and the consolidated schedule the first pass opened says $400. I keep $400 until the current consolidated Appendix 23-C is reread."
+    }
+  ],
+  "events": [
+    {
+      "id": "coffee_price_spike",
+      "name": "Wholesale coffee up 20%",
+      "text": "Roasters pass on higher green coffee prices. Beans are about a quarter of what an order costs you to make.",
+      "effect": {
+        "field": "cogs",
+        "mult": 1.05
+      },
+      "months": 3,
+      "source": "https://fred.stlouisfed.org/series/APU0000717311",
+      "confidence": "estimate",
+      "note": "Seen at FRED on November 14, 2026. Retail ground coffee (BLS APU0000717311, US city average): $9.457 per lb in June 2026, $9.249 in October 2026, a peak of $9.723 in April 2026. Green arabica (IMF PCOFFOTMUSDM, \"Other Mild Arabica\", cents per lb): 307.8 in June 2026, 359.2 in July 2026 (+16.7% in one month), 330.1 in September 2026; 276.8 in October 2024 and 409.5 in February 2025 (+48% in four months). Real signal for the event: the monthly arabica price up 15% or more. A 20% rise in the roaster's bean price x beans about 25% of cost of goods = +5% on cost of goods; both shares are my estimates."
+    },
+    {
+      "id": "milk_price_up",
+      "name": "Milk up 10%",
+      "text": "Your dairy distributor raises prices. Milk goes into most of the drinks you sell.",
+      "effect": {
+        "field": "cogs",
+        "mult": 1.03
+      },
+      "months": 2,
+      "source": "https://fred.stlouisfed.org/series/APU0000709112",
+      "confidence": "estimate",
+      "note": "Seen at FRED on November 14, 2026 (BLS APU0000709112, whole milk, US city average): $3.997 per gallon in November 2025, $4.317 in June 2026 (+8% in seven months), $4.101 in October 2026. The 10% rise and the dairy share of cost of goods (about 30%) are my estimates: 10% x 30% = +3%."
+    }
+  ],
+  "extra": {
+    "tipCredit": {
+      "minimumWage": 17,
+      "cashWage": 11.35,
+      "tipCredit": 5.65,
+      "used": false,
+      "note": "NY DOL, seen November 14, 2026: New York City food service workers $17.00 = cash wage of at least $11.35 + tip credit of no more than $5.65, the same from January 1, 2027 (the minimum wage does not rise on January 1, 2027 because an off-ramp condition was met). No tip credit on days when a tipped worker spends more than two hours or 20% of the shift on non-tipped work.",
+      "source": "https://dol.ny.gov/minimum-wage-tipped-workers",
+      "confidence": "verified"
+    },
+    "d12CheckedUnchanged": []
+  },
+  "sources": [
+    {
+      "url": "https://dol.ny.gov/statistics-oewswagezip",
+      "title": "NY DOL: Occupational Employment and Wage Statistics data file, wages updated to Q1 2026 (oewsdata.csv)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/minimum-wage-0",
+      "title": "NY DOL: minimum wage as of 01/01/2027 and the off-ramp",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+      "title": "28 CFR 85.5: DOJ civil monetary penalties, adjusted July 3, 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://rules.cityofnewyork.us/wp-content/uploads/2021/09/Full-Text-Chapter-23-NOA_Penalty-Schedule_9-2-21-1.pdf",
+      "title": "DOHMH: Chapter 23 penalty schedule, adopted rule text (effective October 4, 2021)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://rules.cityofnewyork.us/wp-content/uploads/2025/10/Ch.-23-NOA_FSE-Inspections_10-16-25.pdf",
+      "title": "DOHMH: Chapter 23 amendment, effective November 15, 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/series/PCOFFOTMUSDM",
+      "title": "FRED: IMF Global price of Coffee, Other Mild Arabica, monthly",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf",
+      "title": "NYS Tax Publication 718: sales and use tax rates by jurisdiction, effective March 1, 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://paidfamilyleave.ny.gov/2026",
+      "title": "NY Paid Family Leave: 2026 contribution 0.432%, cap $411.91",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://ww3.nysif.com/-/media/Files/DISABILITY_BENEFITS/PDF/UDB-SOC_2026.pdf",
+      "title": "NYSIF: disability benefits rates effective January 1, 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/search/bunn-cwtf15-aps.html",
+      "title": "WebstaurantStore: Bunn CWTF15-APS brewer",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/search/regency-hand-sink.html",
+      "title": "WebstaurantStore: Regency hand sinks",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/search/regency-mop-sink.html",
+      "title": "WebstaurantStore: Regency mop sinks",
+      "checked": "2026-11-14"
+    }
+  ]
+}

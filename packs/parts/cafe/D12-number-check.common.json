@@ -1,0 +1,110 @@
+{
+  "violations": [
+    {
+      "id": "no_i9",
+      "name": "Missing Form I-9",
+      "law": "8 U.S.C. §1324a; 8 CFR §274a.2, §274a.10",
+      "official": "federal_auditor",
+      "foundBy": [
+        "audit"
+      ],
+      "fine": {
+        "base": 1152,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 11444
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "criminal": "A pattern or practice of knowingly hiring unauthorized workers is a federal crime (8 U.S.C. §1324a(f)).",
+      "source": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+      "confidence": "verified",
+      "note": "28 CFR §85.5, table 1, seen on eCFR November 14, 2026: an I-9 paperwork violation (8 U.S.C. 1324a(e)(5)) costs $288 to $2,861 per form for penalties assessed after July 3, 2025 (90 FR 29447). Knowingly employing a worker without authorization is $716 to $5,724 per worker on a first order. Every employer must complete Form I-9 for every person hired and keep it three years after hire or one year after employment ends, whichever is later. Game formula: four forms at the low end ($1,152), capped at four forms at the high end ($11,444)."
+    },
+    {
+      "id": "returns_not_filed",
+      "name": "Tax returns not filed",
+      "law": "26 U.S.C. §6651; NY Tax Law §1145(a)(1)(i)",
+      "official": "tax_auditor",
+      "foundBy": [
+        "audit"
+      ],
+      "fine": {
+        "base": 525,
+        "perMonth": 450,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.irs.gov/payments/failure-to-file-penalty",
+      "confidence": "estimate",
+      "note": "IRS failure-to-file page, seen November 14, 2026: 5% of the unpaid tax for each month or part of a month late, up to 25%; for a return more than 60 days late the minimum is $525 (returns due after December 31, 2025) or 100% of the tax, whichever is less. New York adds 10% of the sales tax due for the first month and 1% for each month after, up to 30%, minimum $50 (Tax Law §1145(a)(1)(i), seen). Game formula is my estimate for a shop that collects about $4,500 of sales tax a month: the $525 minimum plus $450 for every month without returns."
+    },
+    {
+      "id": "no_wc_insurance",
+      "name": "No workers' compensation coverage",
+      "law": "NY Workers' Compensation Law §52(1)(a), §52(5), §141-a",
+      "official": "wcb_investigator",
+      "foundBy": [
+        "audit",
+        "complaint"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 6000,
+        "pctOfSaved": 1,
+        "max": null
+      },
+      "closureDays": 3,
+      "reputationHit": 0.05,
+      "criminal": "A misdemeanor with a $1,000-$5,000 fine for an employer of five or fewer people; a class E felony with a $5,000-$50,000 fine for more than five (WCL §52(1)(a)).",
+      "source": "https://www.wcb.ny.gov/content/main/Employers/violations-wclaw.jsp",
+      "confidence": "verified",
+      "note": "Workers' Compensation Board, seen November 14, 2026: up to $2,000 for each 10-day period without coverage (up to $6,000 a month), or no more than two times the cost of compensation for the payroll of that period; by the time the first penalty notice arrives it may exceed $12,000. On top: the unpaid premium (1.0 x saved). Failing to cover five or fewer employees within 12 months is a misdemeanor with a $1,000-$5,000 fine; more than five is a class E felony with $5,000-$50,000. A stop-work order under §141-a halts all business until coverage is in place. The 3 closure days are my estimate of how fast a policy can be bought."
+    }
+  ],
+  "taxes": [
+    {
+      "id": "disability_pfl",
+      "name": "Disability benefits insurance (employer part)",
+      "base": "payroll",
+      "rate": 0.0004,
+      "due": "annual",
+      "appliesIf": "every employer with one or more employees",
+      "source": "https://ww3.nysif.com/-/media/Files/DISABILITY_BENEFITS/PDF/UDB-SOC_2026.pdf",
+      "confidence": "estimate",
+      "note": "NYSIF disability benefits standard rates effective January 1, 2026 (seen): statutory premium $0.10 per $100 of payroll capped at $340 a week = $17.68 per person a year, minimum annual premium $60 (so a shop with three or fewer workers pays $60); the employer may withhold up to 0.5% of wages, at most $0.60 a week, from each worker. $17.68 / $40,320 = 0.04% of a full-time wage. Paid Family Leave is paid by the worker through payroll deduction: 0.432% of wages, at most $411.91 in 2026 (seen at paidfamilyleave.ny.gov)."
+    }
+  ],
+  "extra": {
+    "statutory": {
+      "year": 2026,
+      "socialSecurityRate": 0.062,
+      "socialSecurityWageBase": 184500,
+      "medicareRate": 0.0145,
+      "futaRate": 0.06,
+      "futaMaxCredit": 0.054,
+      "futaWageBase": 7000,
+      "nySuiNewEmployerRate": 0.041,
+      "nySuiWageBase": 17600,
+      "nySuiMaxPerWorker": 721.6,
+      "nycMinimumWage": 17,
+      "nycMinimumWage2027": 17,
+      "tippedFoodServiceCashWage": 11.35,
+      "tippedFoodServiceTipCredit": 5.65,
+      "selfEmploymentRate": 0.153,
+      "mctmtQuarterlyPayrollThreshold": 312500,
+      "crtAnnualRentThreshold": 250000,
+      "crtEffectiveRate": 0.039,
+      "ubtRate": 0.04,
+      "ubtFullCreditBelow": 3400,
+      "llcFilingFee": 200,
+      "llcCertificateOfPublicationFee": 50,
+      "llcAnnualFeeSingleMember": 25,
+      "note": "Seen November 14, 2026: Social Security 6.2% on wages up to $184,500 and Medicare 1.45% (IRS Publication 15, 2026); FUTA 6.0% on $7,000 less up to 5.4% credit (IRS Topic 759); NY UI new employer rate 4.1% and wage base $17,600 for 2026 (NY DOL); NYC minimum wage $17.00 in 2026 and still $17.00 on January 1, 2027 because one of the law's off-ramp conditions was met; tipped food service cash wage $11.35 + $5.65 credit for 2026 and 2027 (NY DOL); MCTMT threshold $312,500 a quarter (Form MTA-305 instructions); LLC $200 and Certificate of Publication $50 (NYS DOS); single-member LLC fee $25 (NYS Tax). CRT and UBT values were not reopened: nyc.gov refuses automated requests from this session.",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "confidence": "verified"
+    }
+  }
+}
