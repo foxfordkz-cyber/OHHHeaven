@@ -5,7 +5,10 @@ import { pendingNotices, readInbox } from './actions';
 import { AwayCard } from './AwayCard';
 import { BooksTab } from './BooksTab';
 import type { BizDeps, BizTabId, ExtraTab } from './deps';
-import { dayLabel, plural } from './format';
+import { dayLabel, plural, shortDate } from './format';
+import { changeList } from './forecast';
+import { outlookFrom, unitOf, useOutlook } from './Outlook';
+import { reportDayFor, savePromise } from './promise';
 import { Header } from './Header';
 import { ruleCardById } from './lookup';
 import { ManageTab } from './ManageTab';
@@ -100,6 +103,7 @@ export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { de
   const diff = useMemo(() => (b && draft ? diffOrders(b.orders, draft) : {}), [b, draft]);
   const draftKey = draft ? JSON.stringify(draft) : '';
   const showSave = Object.keys(diff).length > 0 && savedKey !== draftKey;
+  const pair = useOutlook(deps, diff, !!b && b.status !== 'bankrupt' && (tab === 'manage' || showSave));
 
   if (!b) return <div className="bz-root"><NoBusiness onOpen={() => deps.navigate?.('/start')} /></div>;
 
@@ -125,18 +129,37 @@ export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { de
     if (!draft) return;
     const a = buildSetOrders(b.orders, draft);
     if (!a) return;
+    const changes = changeList(b.orders, draft, deps.pack, deps.common);
+    const unit = unitOf(deps);
+    const before = outlookFrom(pair.base, unit);
+    const after = pair.next.forKey === JSON.stringify(diff) ? outlookFrom(pair.next, unit) : null;
     setSaving(true); setSaveMsg(null);
     try {
       const ack = await deps.act(a);
       if (ack.ok) {
         setSavedKey(draftKey);
         clearDraft(b.id);
-        setSaveMsg({ ok: true, text: `Saved. From ${dayLabel(v.world.day + 1)} your business runs on the new settings.` });
+        const day = v.world.day;
+        const reportDay = reportDayFor(day);
+        savePromise({
+          businessId: b.id, appliedDay: day, changes,
+          before: before && { ordersPerDay: before.ordersPerDay, profit: before.profit },
+          after: after && { ordersPerDay: after.ordersPerDay, profit: after.profit },
+          reportDay,
+        });
+        const forecast = after ? pick(` Forecast: about ${after.ordersPerDay} a day.`, ` Прогноз: около ${after.ordersPerDay} в день.`) : '';
+        setSaveMsg({
+          ok: true,
+          text: pick(
+            `Applied: ${changes.join('; ')}. The shop runs on it from ${dayLabel(day + 1)}.${forecast} Tomorrow Today shows how the first day went; the whole month is in the report on ${shortDate(reportDay)}.`,
+            `Применено: ${changes.join('; ')}. Заведение работает так с ${dayLabel(day + 1)}.${forecast} Завтра во вкладке «Сегодня» — как прошёл первый день; весь месяц — в отчёте ${shortDate(reportDay)}.`,
+          ),
+        });
       } else {
-        setSaveMsg({ ok: false, text: ack.error ?? 'The city did not accept the change.' });
+        setSaveMsg({ ok: false, text: ack.error ?? pick('The city did not accept the change.', 'Город не принял изменение.') });
       }
     } catch {
-      setSaveMsg({ ok: false, text: 'Connection lost. Your changes are kept; save again when you are back online.' });
+      setSaveMsg({ ok: false, text: pick('Connection lost. Your changes are kept; press Apply again when you are back online.', 'Связь пропала. Изменения сохранены; нажми «Apply» ещё раз, когда связь вернётся.') });
     } finally {
       setSaving(false);
     }
@@ -184,7 +207,7 @@ export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { de
           </div>
         )}
         {tab === 'today' && <TodayTab deps={deps} onRule={openRule} onGo={goto} />}
-        {tab === 'manage' && draft && <ManageTab deps={deps} draft={draft} diff={diff} setDraft={setDraft} onRule={openRule} />}
+        {tab === 'manage' && draft && <ManageTab deps={deps} draft={draft} diff={diff} setDraft={setDraft} onRule={openRule} pair={pair} />}
         {tab === 'books' && <BooksTab deps={deps} />}
         {tab !== 'today' && tab !== 'manage' && tab !== 'books' && (current?.element ?? <Slot title={current?.label ?? 'Coming soon'} text={SLOT_TEXT[tab] ?? 'This part of your business is on its way.'} />)}
         {saveMsg && !showSave && (
@@ -202,7 +225,7 @@ export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { de
             {saveMsg && !saveMsg.ok && <span className="bz-small bz-bad-text" role="alert">{saveMsg.text}</span>}
             <div className="bz-btn-row">
               <Button onClick={() => { reset(); setSaveMsg(null); }} disabled={saving}>Discard</Button>
-              <Button variant="primary" onClick={save} disabled={saving || !deps.online}>{deps.online ? 'Save settings' : 'Waiting for connection…'}</Button>
+              <Button variant="primary" onClick={save} disabled={saving || !deps.online}>{!deps.online ? 'Waiting for connection…' : saving ? 'Applying…' : 'Apply'}</Button>
             </div>
           </div>
         </div>
