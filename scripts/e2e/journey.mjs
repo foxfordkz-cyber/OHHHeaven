@@ -32,6 +32,9 @@ const OUT = opt('out', join(HERE, 'docs/qa/runs', STAMP));
 const SHOTS = opt('shots', null);
 const WIDTHS = opt('widths', '375,1440').split(',').map(Number).filter(Boolean);
 const WITH_END = !flag('no-end');
+// Names a player would type: they show up in screenshots for the deck. Each run has its own city, so they never clash.
+const PLAYER = opt('name', 'Jordan');
+const RIVAL = 'Sam\'s Cuts';
 let BASE = (opt('url', process.env.E2E_URL ?? '') || '').replace(/\/$/, '');
 
 const sleep = (ms) => new Promise((ok) => setTimeout(ok, ms));
@@ -82,7 +85,7 @@ async function walk(browser, width) {
   const dir = join(OUT, String(width));
   mkdirSync(dir, { recursive: true });
   const phone = width < 700;
-  const W = ack(await call('POST', '/api/worlds', { name: `QA ${width}` }), 'create demo city').id;
+  const W = ack(await call('POST', '/api/worlds', { name: 'Demo City' }), 'create demo city').id;
   ack(await call('POST', `/api/worlds/${W}/clock`, { paused: true }), 'pause clock');
   const ctx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS ? 2 : 1, isMobile: phone, hasTouch: phone });
   const page = await ctx.newPage();
@@ -151,9 +154,9 @@ async function walk(browser, width) {
     localStorage.setItem('ohh.mode.v1', 'remote');
   }, s);
   const joinApi = async () => {
-    const j = ack(await call('POST', `/api/worlds/${W}/join`, { name: `QA Tester ${width}`, kind: 'owner' }), 'join');
+    const j = ack(await call('POST', `/api/worlds/${W}/join`, { name: PLAYER, kind: 'owner' }), 'join');
     Object.assign(state, { token: j.token, playerId: j.playerId });
-    await writeSession({ worldId: W, playerId: j.playerId, token: j.token, name: `QA Tester ${width}`, kind: 'owner' });
+    await writeSession({ worldId: W, playerId: j.playerId, token: j.token, name: PLAYER, kind: 'owner' });
   };
   let placeId = null;
   const openApi = async () => {
@@ -165,7 +168,7 @@ async function walk(browser, width) {
       const rec = unwrap(await call('POST', `/api/worlds/${W}/query`, { type: 'recommend_opening', niche: 'cafe', placeId: p.id }, state.token)) ?? [];
       const kit = rec.find((k) => k.cashLeft >= 0);
       if (!kit) continue;
-      ack(await act({ type: 'open_business', niche: 'cafe', placeId: p.id, name: `QA Cup ${width}`, kitId: kit.kitId, size: kit.size, items: kit.items }), 'open_business');
+      ack(await act({ type: 'open_business', niche: 'cafe', placeId: p.id, name: 'Morning Cup', kitId: kit.kitId, size: kit.size, items: kit.items }), 'open_business');
       placeId = p.id;
       return;
     }
@@ -196,7 +199,7 @@ async function walk(browser, width) {
       if (await row.count()) await row.click();
     }
     const name = page.getByPlaceholder('Morning Cup');
-    if (await name.count() && !(await name.inputValue())) await name.fill(`QA Cup ${width}`);
+    if (await name.count() && !(await name.inputValue())) await name.fill('Morning Cup');
     if (await go.isDisabled()) throw new Error('"Choose a place" stays disabled after the idea, the niche and the name');
     const t = await text();
     const recognised = /Looks like a (cafe|coffee)/i.test(t);
@@ -237,7 +240,7 @@ async function walk(browser, width) {
   // 5. Join
   await step('join', 'Join: name and test payment after the plan', async () => {
     const name = await visible(page.getByPlaceholder('Jordan'), 10000);
-    await name.fill(`QA Tester ${width}`);
+    await name.fill(PLAYER);
     await shot('join');
     await click(/and join|Join/);
     for (let i = 0; i < 40 && !(await readSession()); i++) await sleep(250);
@@ -360,14 +363,73 @@ async function walk(browser, width) {
     await page.getByRole('tab', { name: /^Today/ }).first().click({ timeout: 8000 }).catch(() => {});
     await sleep(800);
     const today = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-    const shown = today.includes(priceAfter.toFixed(2));
-    return `price ${priceBefore.toFixed(2)} → ${priceAfter.toFixed(2)}; forecast "${before.slice(0, 70)}" → "${after.slice(0, 70)}"; after save: "${banner.slice(0, 80)}"; next day Today ${shown ? 'shows' : 'does NOT show'} the new price`;
+    // Where Today mentions the new price (an advice that quotes it does not count as "the change is visible").
+    const money = `$${priceAfter.toFixed(2)}`;
+    const hits = today.split(/(?<=[.!?])\s+/).filter((x) => x.includes(money));
+    const shown = hits.length > 0;
+    return `price ${priceBefore.toFixed(2)} → ${priceAfter.toFixed(2)}; forecast "${before.slice(0, 70)}" → "${after.slice(0, 70)}"; after save: "${banner.slice(0, 80)}"; next day Today ${shown ? `mentions ${money}: "${hits[0].trim().slice(0, 100)}"` : 'does NOT mention the new price'}`;
   }, async () => { await act({ type: 'set_orders', orders: { price: (await view()).business.orders.price + 0.5 } }); });
 
+  // 9b. Today: apply the first piece of advice — a decision with a promised effect in dollars
+  await step('advice', 'Today: "Apply" on the first advice → it reaches the engine and the card says so', async () => {
+    await page.goto(`${BASE}/biz?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await visible(page.getByRole('tablist', { name: 'My business' }), 15000);
+    await dismissAway();
+    await page.getByRole('tab', { name: /^Today/ }).first().click({ timeout: 8000 });
+    const card = page.locator('section.bz-card, div.card').filter({ has: page.locator('h3, .card__title', { hasText: /^What to change/ }) }).last();
+    await visible(card, 8000);
+    // Pin the card by its position: once applied it has no "Apply" button and a filter would jump to the next card.
+    const all = card.locator('.bz-card');
+    let idx = -1;
+    for (let i = 0; i < (await all.count()); i++) if (await all.nth(i).getByRole('button', { name: /^Apply$/ }).count()) { idx = i; break; }
+    if (idx < 0) return 'no advice with Apply today';
+    const advice = all.nth(idx);
+    const title = ((await advice.locator('b').first().innerText().catch(() => '')) || '').trim();
+    const impact = ((await advice.locator('.bz-amt').first().innerText().catch(() => '')) || '').trim();
+    const before = JSON.stringify({ o: (await view()).business.orders, s: (await view()).business.size });
+    await shot('advice');
+    await advice.getByRole('button', { name: /^Apply$/ }).click();
+    await sleep(1000);
+    const v = await view();
+    const after = JSON.stringify({ o: v.business.orders, s: v.business.size });
+    const said = ((await advice.innerText().catch(() => '')) || '').replace(/\s+/g, ' ');
+    if (before === after) throw new Error(`"${title}" applied but orders and size did not change`);
+    return `"${title}" ${impact}: engine changed; card now: "${(said.match(/Applied[^.]*|[^.]*error[^.]*/i) ?? [said.slice(-60)])[0].trim()}"${impact.startsWith('−') || impact.startsWith('-') ? ' — NOTE: advice with a negative effect' : ''}`;
+  });
+
+  // 9c. The city runs (demo speed) while the player edits the price: the draft must survive incoming days
+  await step('live-edit', 'Manage with the clock running: an unsaved price edit survives new days', async () => {
+    ack(await call('POST', `/api/worlds/${W}/clock`, { paused: false, dayMs: 1500 }), 'unpause');
+    try {
+      const day0 = (await view()).world.day;
+      await dismissAway();
+      await page.getByRole('tab', { name: /^Manage/ }).first().click({ timeout: 8000 });
+      const stepper = page.getByRole('group', { name: 'price' }).first();
+      await visible(stepper, 8000);
+      const val = async () => (await stepper.locator('output, .stepper__value, span').first().innerText().catch(() => '')).trim();
+      const v0 = await val();
+      const inc = page.getByRole('button', { name: /^(More|Increase) price$/ }).first();
+      await inc.click(); await inc.click();
+      const v1 = await val();
+      await sleep(6000);
+      await dismissAway();
+      const v2 = await val();
+      const day1 = (await view()).world.day;
+      await shot('live-edit');
+      const bar = await btn(/Save settings/).count();
+      if (v2 !== v1) throw new Error(`draft reset while the city ran: ${v0} → ${v1} → ${v2} after ${day1 - day0} days`);
+      if (!bar) throw new Error('the save bar disappeared while the city ran');
+      await click(/Discard/, 3000).catch(() => {});
+      return `${v0} → ${v1}, still ${v2} after ${day1 - day0} game days; save bar kept`;
+    } finally {
+      ack(await call('POST', `/api/worlds/${W}/clock`, { paused: true }), 'pause');
+    }
+  });
+
   // 10. A neighbour (through the API), a deal and a report from the Network tab
-  const rival = { name: `Rival Cuts ${width}` };
+  const rival = { name: RIVAL };
   {
-    const j = ack(await call('POST', `/api/worlds/${W}/join`, { name: `Rival ${width}`, kind: 'owner' }), 'join rival');
+    const j = ack(await call('POST', `/api/worlds/${W}/join`, { name: 'Sam', kind: 'owner' }), 'join rival');
     rival.token = j.token;
     const places = unwrap(await call('GET', '/api/places'));
     const me = places.find((p) => p.id === state.biz.placeId);
@@ -419,11 +481,42 @@ async function walk(browser, width) {
     await shot('report-sheet');
     await rs.getByRole('button', { name: /Send report|Send|Report/ }).last().click();
     await sleep(800);
-    const o = ack(await call('POST', `/api/worlds/${W}/join`, { name: `Inspector ${width}`, kind: 'official', role: 'inspector' }), 'join official');
+    const o = ack(await call('POST', `/api/worlds/${W}/join`, { name: 'Dana', kind: 'official', role: 'inspector' }), 'join official');
+    state.official = { worldId: W, playerId: o.playerId, token: o.token, name: 'Dana', kind: 'official', role: 'inspector' };
     const q = unwrap(await call('GET', `/api/worlds/${W}/view`, undefined, o.token))?.queue ?? [];
     const c = q.find((x) => x.business?.id === rival.biz.id);
     if (!c) throw new Error('report sent, but no case for the neighbour in the inspector queue');
     return `case in the inspector queue: ${String(c.id ?? '')} ${String(c.origin ?? '')} ${String(c.violationId ?? c.reportId ?? '')}`.trim();
+  });
+
+  // 10b. The official's desk in its own browser: the case from the report is in the queue, the inspector takes it
+  await step('desk', 'City official desk: the report is in the case queue; "Take" starts an inspection', async () => {
+    if (!state.official) throw new Error('no official (the report step failed)');
+    const octx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS ? 2 : 1, isMobile: phone, hasTouch: phone });
+    try {
+      await octx.addInitScript((s) => {
+        localStorage.setItem('ohh.sessions.v1', JSON.stringify({ [`remote:${s.worldId}`]: s }));
+        localStorage.setItem('ohh.mode.v1', 'remote');
+      }, state.official);
+      const op = await octx.newPage();
+      op.on('pageerror', (e) => errors.push(`desk pageerror: ${String(e).slice(0, 200)}`));
+      await op.goto(`${BASE}/desk?world=${W}`, { waitUntil: 'domcontentloaded' });
+      const queue = op.getByRole('region', { name: 'Case queue' }).or(op.locator('[aria-label="Case queue"]'));
+      await queue.first().waitFor({ timeout: 15000 });
+      await sleep(800);
+      const qText = (await queue.first().innerText()).replace(/\s+/g, ' ');
+      if (!qText.includes(rival.name)) throw new Error(`the queue does not show ${rival.name}: "${qText.slice(0, 120)}"`);
+      const file = join(dir, `${String(++n).padStart(2, '0')}-desk.png`);
+      await op.screenshot({ path: file, fullPage: true });
+      if (SHOTS) await op.screenshot({ path: join(SHOTS, `${phone ? 'phone' : 'desktop'}-desk.png`) });
+      took = true;
+      const take = queue.first().getByRole('button', { name: /Take|Inspect|Open/ }).first();
+      if (!(await take.count())) return `queue shows the case; no "Take" button: "${qText.slice(0, 100)}"`;
+      await take.click();
+      await sleep(1000);
+      const mine = unwrap(await call('GET', `/api/worlds/${W}/view`, undefined, state.official.token))?.mine ?? [];
+      return `queue: "${qText.slice(0, 80)}"; after Take the official has ${mine.length} case(s)`;
+    } finally { await octx.close(); }
   });
 
   // 11. A month passes: the month report shows in Books
