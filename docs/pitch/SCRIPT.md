@@ -4,9 +4,11 @@ B17, третий заход. Основа — `docs/pitch/LIVE-SHOW.md` (кон
 
 **Как читать.** Обычный текст под заголовком страницы — речь, по-английски, вслух. Строки, начинающиеся с `▸`, — режиссура на русском, их не произносят. **А** — рассказчик (Maya), **Б** — управляет ноутбуком (Viktor).
 
-**Слова.** Речи — 558 английских слов (лимит 650). Темп — около 140 слов в минуту; время страницы = слова + живые действия (страницы 3 и 4 — по 15–20 секунд действий без слов). Пересчёт: `node docs/pitch/deck/words.mjs`. Числа рынка — из `USER.md` (B15), денег — из `MONEY.md` и `model.mjs` (B16).
+**Слова.** Речи — 550 английских слов (лимит 650). Темп — около 140 слов в минуту; время страницы = слова + живые действия (страницы 3 и 4 — по 15–20 секунд действий без слов). Пересчёт: `node docs/pitch/deck/words.mjs`. Числа рынка — из `USER.md` (B15), денег — из `MONEY.md` и `model.mjs` (B16).
 
 **Правило чисел.** Деньги кафе на сцене — те, что показывает игра в эту минуту, не из этого текста. Если экран показывает другое — говорим то, что на экране.
+
+**До выхода.** Город показа и коды телефонов — по `docs/pitch/RUNBOOK.md` (A5): `node scripts/pitch.mjs` должен закончиться `PASS: 16/16 steps in their windows`, затем «Back to start».
 
 ---
 
@@ -28,32 +30,30 @@ Owners don't fail on coffee. "It was pure economics: rents, expenses," said one 
 
 ## 0:47–1:32 · Страница 3 → живой продукт
 
-▸ Б переключает проектор на телефон Maya (подготовленная сессия, город на паузе). А держит телефон. Если игра открыта с публичного адреса (B05), А добавляет: “On a public address — scan the code later.”
+▸ Страница 3 на проекторе: как Maya дошла до открытия (настоящие экраны). Говорит А.
 
-This is the product, live.
-Maya picked a real East Village storefront: rent, size, foot traffic, and rivals within two hundred fifty meters.
-Before she buys anything, the game computes her first year: build-out, permits, and rent while she waits.
+Maya typed one line: coffee near the subway. The game found her a real East Village storefront — rent, size, foot traffic, rivals — and computed her first year before she bought anything.
 
-▸ Б открывает Manage. А поворачивается к жюри.
+▸ Б переключает проектор на телефон Maya: город показа A5, вход по коду `/p/<код Maya>`, открыт `/biz`, город на паузе (`docs/pitch/RUNBOOK.md`). А открывает вкладку Manage и поворачивается к жюри. Если игра на публичном адресе (B05), А добавляет: “It runs on a public address — scan the code later.”
 
-Her shop is open. Customers come, and some walk away. Your call: raise the price, or add seats?
+This is her shop, live. Customers come, and some walk away. Your call: raise the price, or add seats?
 
-▸ Судья выбирает; через пять секунд тишины — цена. А меняет один параметр, прогноз меняется до «Apply».
+▸ Судья выбирает; через пять секунд тишины — цена. А меняет один параметр на телефоне, прогноз месяца меняется до «Apply». Запасной путь — Б на пульте `/pitch`: «Raise the price» или «Add seats» (для мест пульт сам докупит туалет для гостей, если места переходят порог).
 
 The forecast updates before she commits. It is a model, not a promise. Apply.
 
 ## 1:32–2:10 · Страница 4 → живой город
 
-▸ Б открывает экран города. Говорит Б.
+▸ Проектор — гостевой вид города (`/p/<гостевой код>`). Говорит Б.
 
 I run the cafe next door. I save money by paying wages off the books.
 
-▸ А отправляет жалобу. Б снимает паузу; после результата — пауза.
+▸ А на телефоне: Network → Viktor → Report. Б на пульте `/pitch`: Resume · 1 s/day; город сам встанет на паузу, когда придёт уведомление. Запасной путь — кнопка «Maya reports Viktor · run to notice».
 
 Maya reports it. The city opens a case, an inspector checks my payroll.
 The verdict is computed by the engine, not scripted by us.
 
-▸ Результат проверки на экране. Если найдено другое нарушение: “The inspector found a different violation. Here is the record.”
+▸ Результат проверки на экране, Б оплачивает на своём телефоне. Если найдено другое нарушение: “The inspector found a different violation. Here is the record.” После показа — «Back to start» на пульте.
 
 ## 2:10–2:40 · Страница 5 — что настоящее
 
