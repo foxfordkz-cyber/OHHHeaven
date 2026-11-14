@@ -185,6 +185,7 @@ Books: «Wages, rent and monthly bills are paid on Feb 30», «closed Jan 30», 
 - Главная, 1440: легенда карты закрывает подпись «© OpenStreetMap contributors» («reetMap contributors»). **Кому:** B10.
 - Network, 375 (сборка B04): строка «Every neighbor sees your deal record.» начинается от самого края экрана, без отступа 16 px, как у остальных строк. **Кому:** B18 (`client/src/screens/network/`).
 - Today (сборка B04): «Month report on Feb 30 (in 21 days)» — та же дата, что в №3.
+- Insights, 1440 (сборка B04): ключевые числа и график безубыточности — на первом экране, советник — ниже сгиба (условие B09 «всё главное без прокрутки на 1440» выполнено не целиком). В первый месяц после открытия «Where your money goes» показывает месяц стройки: «Jan, last full month · Rent $9,600 · 100%» — будто аренда — единственный расход. **Кому:** B09 (`client/src/screens/insights/`).
 
 ## Исправлено
 

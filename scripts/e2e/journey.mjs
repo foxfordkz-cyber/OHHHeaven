@@ -348,7 +348,9 @@ async function walk(browser, width) {
       if (body.length < 40) throw new Error(`tab "${tab}" is almost empty: "${body}"`);
       if (/on its way|Coming soon/i.test(body)) throw new Error(`tab "${tab}" is a placeholder: "${body.slice(0, 120)}"`);
       const buttons = await panel.locator('button:not([disabled]), input:not([disabled]), select:not([disabled])').count();
-      return `${body.length} chars, ${buttons} enabled controls; starts: "${body.slice(0, 110)}"`;
+      // Advice that promises a loss (BUGS.md, №2): an amount like "−$902/mo" on a card with "Apply".
+      const negative = tab === 'Today' ? (body.match(/[−-]\$[\d,]+\/mo/g) ?? []) : [];
+      return `${body.length} chars, ${buttons} enabled controls${negative.length ? `; ADVICE WITH A LOSS: ${negative.join(', ')}` : ''}; starts: "${body.slice(0, 110)}"`;
     });
   }
 
