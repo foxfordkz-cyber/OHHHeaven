@@ -124,3 +124,21 @@ describe('month boundary with other modules', () => {
     expect(m3.fines).toBe(300);
   });
 });
+
+describe('sales tax base', () => {
+  it('taxableShare and taxableShareByTax set which part of revenue each sales tax applies to', async () => {
+    const { taxableShare } = await import('../../src/economy/taxes');
+    const { cafePack } = await import('../fixtures/cafe');
+    expect(taxableShare(cafePack, 'sales_tax')).toBe(0.9);
+    const shop = { ...cafePack, extra: { taxableShare: 1, taxableShareByTax: { retail_sales_tax: 0.1, service_tax: 1 } } };
+    expect(taxableShare(shop, 'retail_sales_tax')).toBe(0.1);
+    expect(taxableShare(shop, 'service_tax')).toBe(1);
+    expect(taxableShare(shop, 'other')).toBe(1);
+    let { w, ctx } = cafeCity(1);
+    w = run(w, ctx, 10);
+    const day = w.businesses[0].days.at(-1)!;
+    const collected = w.businesses[0].mtd.lines.find((l) => l.id === 'sales_tax_collected')!.amount;
+    expect(collected).toBeGreaterThan(0);
+    expect(day.revenue * 0.9 * 0.08875).toBeLessThan(collected);
+  });
+});

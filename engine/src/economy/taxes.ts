@@ -22,9 +22,16 @@ export function applicableTaxes(ctx: EngineCtx, pack: Pack): PackTax[] {
 /** Sales taxes are collected from customers on top of the price (base taxable_revenue). */
 export const isSalesTax = (t: PackTax): boolean => t.base === 'taxable_revenue';
 
-export function taxableShare(pack: Pack): number {
-  const v = (pack.extra as Record<string, unknown> | undefined)?.taxableShare;
-  return typeof v === 'number' && v >= 0 && v <= 1 ? v : 1;
+/**
+ * Share of revenue a sales tax applies to: pack.extra.taxableShareByTax[taxId] if set (a barbershop charges the 4.5%
+ * city tax on services and the 8.875% tax only on retail products), else pack.extra.taxableShare, else 1.
+ */
+export function taxableShare(pack: Pack, taxId?: string): number {
+  const extra = (pack.extra ?? {}) as Record<string, unknown>;
+  const byTax = extra.taxableShareByTax as Record<string, unknown> | undefined;
+  const ok = (v: unknown): v is number => typeof v === 'number' && v >= 0 && v <= 1;
+  if (taxId && byTax && ok(byTax[taxId])) return byTax[taxId] as number;
+  return ok(extra.taxableShare) ? extra.taxableShare : 1;
 }
 
 function dueDayOfMonth(ctx: EngineCtx): number {

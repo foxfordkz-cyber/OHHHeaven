@@ -138,10 +138,9 @@ function tradeDay(c: Calc, w: WorldState, ctx: EngineCtx, day: number, month: nu
   if (cogs !== 0) { lines = addLine(lines, { id: 'cogs', label: `Cost of goods (${pack.unit.name}s)`, kind: 'cogs', amount: -cogs }); cash = round2(cash - cogs); }
   let salesTax = 0;
   if (revenue > 0) {
-    const share = taxableShare(pack);
     for (const t of applicableTaxes(ctx, pack)) {
       if (!isSalesTax(t)) continue;
-      const amt = round2(revenue * share * t.rate);
+      const amt = round2(revenue * taxableShare(pack, t.id) * t.rate);
       if (amt <= 0) continue;
       salesTax = round2(salesTax + amt);
       liabilities = accrue(liabilities, t.id, amt, dueDayFor(t, month, ctx));
