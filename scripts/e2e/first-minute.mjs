@@ -62,18 +62,29 @@ const { call } = api(base);
     await mark('the game answers: what opening here costs', 'consequence', ((await textOf()).match(/Opening here costs[^.]*\./) ?? [''])[0]);
 
     await decide('"Open here"', async () => { await btn(/Open here/).click(); });
-    await btn(/See what to buy/).waitFor({ timeout: 10000 });
+    await btn(/See what to buy|Go on with this address/).waitFor({ timeout: 10000 });
     await mark('the opening plan (steps, fees, waits)', 'screen');
-    await decide('"See what to buy"', async () => { await btn(/See what to buy/).click(); });
+    await decide('plan read, go on', async () => { await btn(/See what to buy|Go on with this address/).click(); });
     await page.getByPlaceholder('Jordan').waitFor({ timeout: 10000 });
     await decide('typed a name, joined (test payment)', async () => {
       await page.getByPlaceholder('Jordan').fill('Jordan');
       await btn(/and join|Join/).click();
     });
-    const go = btn(/Use recommended for all|Open with recommended setup|Sign|Start construction/);
+    // The first setup is one button; after B07 it is a card per decision with "Use recommended for all" and a review.
+    const go = btn(/^(Use recommended for all|Open with recommended setup|Sign the lease|Start construction)/);
     await go.waitFor({ timeout: 15000 });
-    await mark('the setup: what to buy and what is left', 'screen', ((await textOf()).match(/Cash left after opening \$[\d,]+/) ?? [''])[0]);
-    await decide('bought the setup, signed the lease', async () => { await go.click(); });
+    await mark('the setup: what to buy and what is left', 'screen', ((await textOf()).match(/Cash left after opening \$[\d,]+|\$[\d,]+ cash left after signing/) ?? [''])[0]);
+    if (/Use recommended for all/.test(await go.innerText())) {
+      await decide('"Use recommended for all"', async () => { await go.click(); });
+      for (let i = 0; i < 30; i++) {
+        const next = btn(/^Next|See what it adds up to/);
+        if (!(await next.count()) || await btn(/^Sign the lease/).count()) break;
+        await next.click(); await sleep(200);
+      }
+    }
+    const sign = btn(/^(Open with recommended setup|Sign the lease|Start construction)/);
+    await sign.waitFor({ timeout: 15000 });
+    await decide('signed the lease', async () => { await sign.click(); });
     const session = await page.evaluate((w) => JSON.parse(localStorage.getItem('ohh.sessions.v1') ?? '{}')[`remote:${w}`] ?? null, W);
     const me = async () => unwrap(await call('GET', `/api/worlds/${W}/view`, undefined, session?.token));
     await page.getByText(/Waiting for permits|Everything is ready|Open doors/).first().waitFor({ timeout: 15000 });

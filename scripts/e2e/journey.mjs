@@ -118,7 +118,8 @@ async function walk(browser, width) {
     const free = places.filter((p) => p.suitableFor.includes('cafe') && !taken.has(p.id));
     for (const p of [placeId && free.find((x) => x.id === placeId), ...free].filter(Boolean)) {
       const rec = unwrap(await call('POST', `/api/worlds/${W}/query`, { type: 'recommend_opening', niche: 'cafe', placeId: p.id }, state.token)) ?? [];
-      const kit = rec.find((k) => k.cashLeft >= 0);
+      // The standard kit first: recommend_opening also offers kits that open_business refuses (BUGS.md, №12).
+      const kit = [...rec].sort((a, b) => (a.kitId === 'standard' ? -1 : 0) - (b.kitId === 'standard' ? -1 : 0)).find((k) => k.cashLeft >= 0);
       if (!kit) continue;
       ack(await act({ type: 'open_business', niche: 'cafe', placeId: p.id, name: 'Morning Cup', kitId: kit.kitId, size: kit.size, items: kit.items }), 'open_business');
       placeId = p.id;
@@ -163,23 +164,24 @@ async function walk(browser, width) {
   // 3. Place
   await step('place', 'Place step: an affordable storefront, "Open here"', async () => {
     await visible(page.getByText(/Where will it be\?/), 10000);
-    const rows = page.locator('.list-row', { hasText: /opens from/ });
-    if (!(await rows.count())) throw new Error('no affordable place in the list (no "opens from" row)');
+    const rows = page.locator('.list-row').filter({ hasNotText: /Over budget/ });
+    if (!(await rows.count())) throw new Error('no affordable place in the list (every row is "Over budget")');
     const t = await text();
     const m = t.match(/(\d+) of (\d+) free storefronts/);
     await rows.first().click();
     const openHere = await visible(btn(/Open here/), 5000);
     if (await openHere.isDisabled()) throw new Error('"Open here" is disabled on an affordable place');
-    const sub = (await page.locator('.card', { hasText: /Opening here costs/ }).first().innerText().catch(() => '')).replace(/\s+/g, ' ');
+    const rowText = (await rows.first().innerText().catch(() => '')).replace(/\s+/g, ' ');
+    const sub = (await page.locator('.card', { hasText: /Opening here costs/ }).first().innerText().catch(() => '')).replace(/\s+/g, ' ') || rowText;
     await sleep(500);
     await shot('place');
     await openHere.click();
-    return `${m ? `${m[1]} of ${m[2]} affordable; ` : ''}${(sub.match(/Opening here costs[^.]*\./) ?? [''])[0]}`;
+    return `${m ? `${m[1]} of ${m[2]} affordable; ` : ''}${(sub.match(/Opening here costs[^.]*\./) ?? [sub.slice(0, 140)])[0]}`;
   });
 
   // 4. Plan
   await step('plan', 'Opening plan: steps with agency, fee, days and official links', async () => {
-    const next = await visible(btn(/See what to buy/), 10000);
+    const next = await visible(btn(/See what to buy|Go on with this address/), 10000);
     const links = await page.getByRole('link', { name: /Official page/ }).count();
     const steps = await page.locator('main ol > li').count();
     const head = (await text()).match(/Longest wait \S+ \S+/)?.[0] ?? '';
@@ -205,9 +207,61 @@ async function walk(browser, width) {
   // 6. Setup (kit / decisions)
   await step('setup', 'Setup: buy the kit and sign the lease', async () => {
     await sleep(800);
-    const all = btn(/Use recommended for all/);
-    if (await all.count()) await all.first().click();
-    const go = await visible(btn(/Open with recommended setup|Sign|Buy|Open my|Start construction/), 15000);
+    let walked = '';
+    const cash = page.locator('[data-testid="dx-cash"]');
+    if (await cash.count()) {
+      // One card per decision: take a non-recommended, lawful option on the first card that has options and check that
+      // the numbers on top move (decision → consequence); take the recommended option on the others.
+      const monthly = page.locator('[data-testid="dx-monthly"]');
+      let cards = 0; let moved = null; let firstShot = false;
+      for (let i = 0; i < 30; i++) {
+        const card = page.locator('section.dx-card');
+        if (!(await card.count())) break;
+        cards++;
+        const title = ((await card.first().locator('h1').first().innerText().catch(() => '')) || '').trim();
+        const radios = card.first().getByRole('radio');
+        const nr = await radios.count();
+        if (nr) {
+          let rec = -1; const lawful = [];
+          for (let k = 0; k < nr; k++) {
+            const t = await radios.nth(k).innerText();
+            if (/Recommended/.test(t)) rec = k;
+            if (!/Breaks the law/.test(t)) lawful.push(k);
+          }
+          const other = lawful.find((k) => k !== rec);
+          const pick = moved === null && other !== undefined ? other : (rec >= 0 ? rec : lawful[0] ?? 0);
+          const c0 = await cash.innerText(); const m0 = await monthly.innerText().catch(() => '');
+          await radios.nth(pick).click();
+          await sleep(350);
+          const c1 = await cash.innerText(); const m1 = await monthly.innerText().catch(() => '');
+          if (moved === null && pick !== rec) {
+            moved = c1 !== c0 || m1 !== m0 ? `"${title}": cash left ${c0} → ${c1}, bills ${m0} → ${m1}` : `"${title}": NOTHING moved on top`;
+            await shot('setup-choice'); firstShot = true;
+            if (pick !== rec && rec >= 0) { await radios.nth(rec).click(); await sleep(200); } // back to the recommended one
+          }
+        } else {
+          const chip = card.first().locator('.dx-recchip');
+          if (await chip.count()) await chip.first().click();
+        }
+        const next = page.getByRole('button', { name: /^Next|See what it adds up to/ });
+        if (!(await next.count())) break;
+        if (await next.first().isDisabled()) {
+          const rest = btn(/Use recommended for/);
+          if (await rest.count()) await rest.first().click(); else throw new Error(`stuck on decision "${title}": Next is disabled`);
+          await sleep(250);
+          continue;
+        }
+        await next.first().click();
+        await sleep(250);
+      }
+      if (!firstShot) await shot('setup-choice');
+      walked = `${cards} decision cards; first own choice: ${moved ?? 'none had options'}`;
+    } else {
+      const all = btn(/Use recommended for all/);
+      if (await all.count()) await all.first().click();
+    }
+    // Exact names: the review lists every decision as a button too ("Sign and decor"), so a loose /Sign/ clicks the wrong one.
+    const go = await visible(btn(/^(Open with recommended setup|Sign the lease|Start construction)/), 15000);
     if (await go.isDisabled()) throw new Error(`setup button disabled: "${await go.innerText()}"`);
     const verdict = (await text()).match(/Even with[^—]*—[^.]*|this loses \$[\d,]+\/month[^.]*/)?.[0] ?? '';
     await sleep(500);
@@ -215,7 +269,7 @@ async function walk(browser, width) {
     await go.click();
     for (let i = 0; i < 40; i++) { const v = await view(); if (v?.business) { state.biz = v.business; break; } await sleep(250); }
     if (!state.biz) throw new Error('no business in the view after setup');
-    return `${state.biz.name}: cash ${Math.round(state.biz.cash)}${verdict ? `; setup card says: "${verdict.slice(0, 120)}"` : ''}`;
+    return `${state.biz.name}: cash ${Math.round(state.biz.cash)}${walked ? `; ${walked}` : ''}${verdict ? `; setup card says: "${verdict.slice(0, 120)}"` : ''}`;
   }, openApi);
 
   // 7. Permits → open. Days go by 5 at a time, like a player who comes back every few days.
@@ -241,7 +295,7 @@ async function walk(browser, width) {
     const v = await view();
     if (!opened) throw new Error(`not open after 200 days of waiting (day ${v.world.day})`);
     state.biz = v.business;
-    const rentNote = (waitText.match(/Rent keeps running[^.]*\./) ?? [''])[0];
+    const rentNote = (waitText.match(/Rent (keeps running|takes \$[\d,]+ a day)[^.]*\./) ?? [''])[0];
     return `signed day ${signedDay}, opened day ${v.world.day} (${v.world.day - signedDay} days of rent before the first sale); cash ${Math.round(v.business.cash)}${rentNote ? '' : '; no rent warning on screen'}`;
   }, async () => {
     for (let i = 0; i < 40; i++) { const r = await act({ type: 'launch' }); if (r.ok) return; ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 5 }), 'advance'); }
@@ -286,26 +340,27 @@ async function walk(browser, width) {
   }
 
   // 9. Manage: change the price, see the forecast before saving, save, see it on the next day
-  await step('whatif', 'Manage: price +$0.50 → forecast changes before saving → Save settings → next day uses it', async () => {
+  // The save button is "Save settings" in the first version and "Apply" after B08; it lives in the bottom bar.
+  const saveBtn = () => page.locator('.bz-savebar').getByRole('button', { name: /Save settings|^Apply/ }).first();
+  await step('whatif', 'Manage: price +$0.50 → forecast changes before saving → save → next day Today reports on it', async () => {
     await dismissAway();
     await page.getByRole('tab', { name: /^Manage/ }).first().click({ timeout: 8000 });
     // The business screen draws cards with its own copy of the kit (section.bz-card > h3), the rest of the app with client/src/ui (.card__title).
-    const fc = page.locator('section.bz-card, div.card').filter({ has: page.locator('h3, .card__title', { hasText: /^Projected month/ }) }).last();
+    const fc = page.locator('section.bz-card, div.card').filter({ has: page.locator('h3, .card__title', { hasText: /Projected month|Next 30 days|forecast/i }) }).first();
     await visible(fc, 10000);
     for (let i = 0; i < 20 && /Counting/.test(await fc.innerText()); i++) await sleep(300);
     const before = (await fc.innerText()).replace(/\s+/g, ' ');
     const priceBefore = (await view()).business.orders.price;
     const inc = page.getByRole('button', { name: /^(More|Increase) price$/ }).first(); // business stub kit says "More", client/src/ui says "Increase"
     for (let i = 0; i < 5; i++) await inc.click();
-    await visible(page.getByText(/Projected month with your changes/), 5000);
     let after = before;
     for (let i = 0; i < 20; i++) { await sleep(300); after = (await fc.innerText()).replace(/\s+/g, ' '); if (after !== before && !/updating/.test(after)) break; }
     if (after === before) throw new Error('forecast did not change after +$0.50');
     await shot('whatif-before-save');
-    await click(/Save settings/);
-    await sleep(800);
+    await saveBtn().click({ timeout: 5000 });
+    await sleep(1000);
     const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
-    const banner = body.match(/Saved\.[^.]*\./)?.[0] ?? '';
+    const banner = body.match(/(Saved\.|Applied|Changes? (start|from)|From (Mon|Tue|Wed|Thu|Fri|Sat|Sun))[^.]*\./)?.[0] ?? '';
     const v1 = await view();
     const priceAfter = v1.business.orders.price;
     if (Math.abs(priceAfter - priceBefore - 0.5) > 0.01) throw new Error(`price in the engine ${priceBefore} → ${priceAfter}, expected +0.50`);
@@ -319,7 +374,8 @@ async function walk(browser, width) {
     const money = `$${priceAfter.toFixed(2)}`;
     const hits = today.split(/(?<=[.!?])\s+/).filter((x) => x.includes(money));
     const shown = hits.length > 0;
-    return `price ${priceBefore.toFixed(2)} → ${priceAfter.toFixed(2)}; forecast "${before.slice(0, 70)}" → "${after.slice(0, 70)}"; after save: "${banner.slice(0, 80)}"; next day Today ${shown ? `mentions ${money}: "${hits[0].trim().slice(0, 100)}"` : 'does NOT mention the new price'}`;
+    const yours = today.match(/Your change.{0,160}/)?.[0] ?? '';
+    return `${yours ? `Today has "${yours.slice(0, 160)}"; ` : 'Today has NO "Your change" card; '}price ${priceBefore.toFixed(2)} → ${priceAfter.toFixed(2)}; forecast "${before.slice(0, 70)}" → "${after.slice(0, 70)}"; after save: "${banner.slice(0, 80)}"; next day Today ${shown ? `mentions ${money}: "${hits[0].trim().slice(0, 100)}"` : 'does NOT mention the new price'}`;
   }, async () => { await act({ type: 'set_orders', orders: { price: (await view()).business.orders.price + 0.5 } }); });
 
   // 9b. Today: apply the first piece of advice — a decision with a promised effect in dollars
@@ -368,7 +424,7 @@ async function walk(browser, width) {
       const v2 = await val();
       const day1 = (await view()).world.day;
       await shot('live-edit');
-      const bar = await btn(/Save settings/).count();
+      const bar = await saveBtn().count();
       if (v2 !== v1) throw new Error(`draft reset while the city ran: ${v0} → ${v1} → ${v2} after ${day1 - day0} days`);
       if (!bar) throw new Error('the save bar disappeared while the city ran');
       await click(/Discard/, 3000).catch(() => {});
