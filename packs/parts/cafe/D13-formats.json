@@ -38,7 +38,7 @@
     },
     {
       "id": "restricted_area_permit",
-      "name": "Restricted Area Mobile Food Vending Permit (private property or park, no cap)",
+      "name": "Restricted Area Mobile Food Vending Permit (private property, no cap)",
       "kind": "permit",
       "cost": 200,
       "required": false,
@@ -50,9 +50,26 @@
         "food_truck",
         "concession_kiosk"
       ],
-      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
-      "confidence": "estimate",
-      "note": "NYC311: the Restricted Area permit has no waiting list and no limit on the number of permits, but it only covers private property or park property under an agreement with the owner or the Parks Department, never a public street. The $200 fee is my assumption that it follows the full-term unit permit fee; the 311 excerpt did not show the amount. waitDays is my estimate."
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit",
+      "confidence": "verified",
+      "note": "NYC Business: new application $200 (food prepared on the unit) or $75 (pre-packaged), renewed every two years; no waiting list and no cap, but only on private property in a commercially zoned area, and it never covers street fairs. NYC311 adds park property under an agreement. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy. waitDays is my estimate."
+    },
+    {
+      "id": "mfv_food_protection_course",
+      "name": "Food Protection Course for Mobile Vendors (DOHMH, with exam)",
+      "kind": "license",
+      "cost": 53,
+      "required": false,
+      "waitDays": 7,
+      "agency": "NYC Health Academy (DOHMH)",
+      "link": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-for-mobile-vendors.page",
+      "formats": [
+        "coffee_cart",
+        "food_truck"
+      ],
+      "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-for-mobile-vendors.page",
+      "confidence": "verified",
+      "note": "$53 (Health Code fee and NYC Business), paid separately from the license; offered in English and Bangla; fail the exam and you pay again. The license arrives by mail about a week after passing. A free 15-minute online refresher is due every four years. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
     },
     {
       "id": "food_cart_new",
@@ -412,6 +429,32 @@
       "note": "Toast: automatic tapioca pearl cookers around $4,500 (simple 12 L pearl cookers sell for under $200 at Walmart). Fructose dispenser and tea brewer are inside this allowance, my estimate."
     },
     {
+      "id": "boba_franchise_fee",
+      "name": "Bubble tea franchise fee (optional brand)",
+      "kind": "other",
+      "cost": 40000,
+      "required": false,
+      "formats": [
+        "bubble_tea"
+      ],
+      "source": "https://www.franchisedirect.com/gong-cha-franchise-costs-fees-fdd",
+      "confidence": "estimate",
+      "note": "Gong Cha 2025 FDD as reported by aggregators: initial fee $40,000-$45,000, 6% royalty + 1% brand fund, total investment $184,500-$627,060; Kung Fu Tea 2025 FDD: total $169,000-$378,000 with a $25,000-$37,000 fee and 4% + 2%. I could not open the FDDs themselves."
+    },
+    {
+      "id": "holiday_market_booth",
+      "name": "Six-week booth at a flagship holiday market",
+      "kind": "other",
+      "cost": 22500,
+      "required": false,
+      "formats": [
+        "market_stall"
+      ],
+      "source": "https://www.retailbrew.com/stories/2023/11/08/inside-the-making-of-nyc-holiday-markets",
+      "confidence": "estimate",
+      "note": "Retail Brew (November 2023), with figures from the operator Urbanspace: Bryant Park Winter Village booths $22,500-$40,000 for the season, plus electricity. 2023 figures; Union Square premium spots cost extra."
+    },
+    {
       "id": "sla_restaurant_wine_license",
       "name": "State Liquor Authority Restaurant Wine license (wine and beer, NYC, 2 years)",
       "kind": "license",
@@ -587,6 +630,16 @@
       "source": "https://static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cadman-Plaza-Cafe-05122025__680bcae9c9b47.pdf",
       "confidence": "estimate",
       "note": "NYC Parks cafe and snack-bar licenses: the greater of a guaranteed minimum or 6%-11% of gross receipts (Cadman Plaza 10%, Harlem Meer 9%). The guaranteed minimum is a separate fixed floor."
+    },
+    {
+      "id": "franchise_royalty",
+      "name": "Franchise royalty and brand fund",
+      "kind": "fees",
+      "basis": "pct_revenue",
+      "amount": 0.07,
+      "source": "https://www.franchisedirect.com/gong-cha-franchise-costs-fees-fdd",
+      "confidence": "estimate",
+      "note": "Gong Cha: 6% royalty + 1% brand fund of gross sales (2025 FDD as reported). Only for a franchised bubble tea shop."
     },
     {
       "id": "propane_refills",
@@ -921,10 +974,10 @@
         },
         {
           "id": "holiday_market",
-          "label": "Six-week holiday market booth",
-          "monthlyCost": 6000,
+          "label": "Six-week flagship holiday market booth ($22,500-$40,000 a season)",
+          "monthlyCost": 15000,
           "effects": {
-            "demand": 0.8
+            "demand": 1.2
           }
         }
       ]
@@ -1624,6 +1677,42 @@
       "title": "Park kiosks pay a share",
       "text": "NYC Parks concessions pay the greater of a fixed annual minimum or 6%-11% of gross sales, under multi-year licenses won by proposal.",
       "source": "https://static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cadman-Plaza-Cafe-05122025__680bcae9c9b47.pdf"
+    },
+    {
+      "id": "wine_to_go",
+      "title": "Wine to go, by the glass only",
+      "text": "Licensed places may sell drinks to go through 2030, but only by the glass with a substantial food order; sealed bottles to go are not allowed under SLA guidance.",
+      "source": "https://sla.ny.gov/news/new-york-state-liquor-authority-announces-expansion-options-businesses-liquor-licenses-enacted"
+    },
+    {
+      "id": "outdoor_alcohol_alteration",
+      "title": "Outdoor drinks need a second approval",
+      "text": "A DOT sidewalk cafe license does not cover alcohol. After DOT issues it, you file an alteration with the SLA within 60 days and serve outside only once the SLA approves.",
+      "source": "https://sla.ny.gov/outdoor-dining-nyc-how-add-outdoor-space-your-liquor-license"
+    },
+    {
+      "id": "shared_kitchen_permit",
+      "title": "Shared kitchen, your own permit",
+      "text": "Renting time in a shared kitchen does not cover you: each business needs its own Food Service Establishment permit, and the kitchen may not rent to anyone without one.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens"
+    },
+    {
+      "id": "restricted_streets",
+      "title": "Some streets are closed to carts",
+      "text": "The Health Department publishes restricted streets by borough, day and hour where food vending is barred. Fines start at $50; general vending is barred in most of Midtown.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/mfv_restricted_streets.pdf"
+    },
+    {
+      "id": "vendor_course",
+      "title": "Vendors take their own course",
+      "text": "Every cart or truck worker needs a $50 two-year license and the $53 Food Protection Course for Mobile Vendors with an exam. Fail and you pay again.",
+      "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-for-mobile-vendors.page"
+    },
+    {
+      "id": "incubator_fee_waiver",
+      "title": "Incubator bakers pay no state fee",
+      "text": "New York waives the $400 Article 20-C food processing license fee for two years for a first-time applicant working in a kitchen incubator.",
+      "source": "https://nysenate.gov/legislation/laws/AGM/251-Z-3"
     }
   ],
   "roadmap": [
@@ -4304,6 +4393,81 @@
         "formats": [
           "coffee_cart"
         ]
+      },
+      {
+        "id": "outdoor_alcohol_wait",
+        "name": "Outdoor tables, but no wine outside yet",
+        "text": "Your sidewalk cafe license came through, but outdoor drinks wait for the Liquor Authority to approve your alteration filing.",
+        "scale": "city",
+        "months": [
+          4,
+          5
+        ],
+        "realSignal": "SLA alteration application after DOT Dining Out NYC approval (45-60 day SLA review in 2025 reporting)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.95,
+            "formats": [
+              "cafe_wine_bar"
+            ]
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "alcohol_program"
+          }
+        ],
+        "realFrequency": "Every spring for new sidewalk cafes",
+        "tier": "deep",
+        "source": "https://sla.ny.gov/outdoor-dining-nyc-how-add-outdoor-space-your-liquor-license",
+        "confidence": "estimate",
+        "note": "In 2025 only 7 of about 3,000 applicants had full approval at one point; the SLA then allowed drinks at setups with DOT conditional approval while its review ran (Streetsblog, DOT press release).",
+        "formats": [
+          "cafe_wine_bar"
+        ]
+      },
+      {
+        "id": "supervisory_license_rule",
+        "name": "Permit holder must stand at the cart",
+        "text": "The city starts checking that the supervisory license holder is at each cart. Rented-permit carts get caught.",
+        "scale": "city",
+        "months": [
+          3
+        ],
+        "realSignal": "DOHMH supervisory license rules (Local Law 18 of 2021); 'Supervisory licenses: what vendors need to know'",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5,
+            "formats": [
+              "coffee_cart",
+              "food_truck"
+            ]
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "rent_vending_permit"
+          },
+          {
+            "kind": "lever",
+            "id": "cart_spot"
+          }
+        ],
+        "realFrequency": "Ongoing as supervisory licenses roll out",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/supervisory-licenses-what-vendors-need-to-know.pdf",
+        "confidence": "estimate",
+        "note": "The size of the inspection rise is my estimate.",
+        "formats": [
+          "coffee_cart",
+          "food_truck"
+        ]
       }
     ]
   },
@@ -4324,8 +4488,8 @@
       "checked": "2026-11-14"
     },
     {
-      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
-      "title": "portal.311.nyc.gov/article/",
+      "url": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-for-mobile-vendors.page",
+      "title": "www.nyc.gov/site/doh/business/health-academy/food-protection-for-mobile",
       "checked": "2026-11-14"
     },
     {
@@ -4436,6 +4600,16 @@
     {
       "url": "https://pos.toasttab.com/blog/on-the-line/how-much-does-it-cost-to-open-a-boba-shop",
       "title": "pos.toasttab.com/blog/on-the-line/how-much-does-it-cost-to-open-a-boba-shop",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.franchisedirect.com/gong-cha-franchise-costs-fees-fdd",
+      "title": "www.franchisedirect.com/gong-cha-franchise-costs-fees-fdd",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.retailbrew.com/stories/2023/11/08/inside-the-making-of-nyc-holiday-markets",
+      "title": "www.retailbrew.com/stories/2023/11/08/inside-the-making-of-nyc-holiday-markets",
       "checked": "2026-11-14"
     },
     {
@@ -4629,6 +4803,31 @@
       "checked": "2026-11-14"
     },
     {
+      "url": "https://sla.ny.gov/news/new-york-state-liquor-authority-announces-expansion-options-businesses-liquor-licenses-enacted",
+      "title": "sla.ny.gov/news/new-york-state-liquor-authority-announces-expansion-op",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sla.ny.gov/outdoor-dining-nyc-how-add-outdoor-space-your-liquor-license",
+      "title": "sla.ny.gov/outdoor-dining-nyc-how-add-outdoor-space-your-liquor-licens",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/shared-kitchens",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/mfv_restricted_streets.pdf",
+      "title": "www.nyc.gov/assets/doh/downloads/pdf/permit/mfv_restricted_streets.pdf",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nysenate.gov/legislation/laws/AGM/251-Z-3",
+      "title": "nysenate.gov/legislation/laws/AGM/251-Z-3",
+      "checked": "2026-11-14"
+    },
+    {
       "url": "https://totalfood.com/getting-restaurant-open-easier-nyc-hospitality-alliance-con-edison/",
       "title": "totalfood.com/getting-restaurant-open-easier-nyc-hospitality-alliance-con",
       "checked": "2026-11-14"
@@ -4656,11 +4855,6 @@
     {
       "url": "https://altitude.geotab.com/news-and-releases/nyc-congestion-pricing-2026-update/",
       "title": "altitude.geotab.com/news-and-releases/nyc-congestion-pricing-2026-update/",
-      "checked": "2026-11-14"
-    },
-    {
-      "url": "https://nysenate.gov/legislation/laws/AGM/251-Z-3",
-      "title": "nysenate.gov/legislation/laws/AGM/251-Z-3",
       "checked": "2026-11-14"
     },
     {
@@ -4759,6 +4953,11 @@
       "checked": "2026-11-14"
     },
     {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
+      "title": "portal.311.nyc.gov/article/",
+      "checked": "2026-11-14"
+    },
+    {
       "url": "https://abc7ny.com/post/new-york-city-street-food-vendors-speak-permit-scammer-targeting/17467153/",
       "title": "abc7ny.com/post/new-york-city-street-food-vendors-speak-permit-scammer",
       "checked": "2026-11-14"
@@ -4821,6 +5020,11 @@
     {
       "url": "https://www.businessinsider.com/dad-ran-food-cart-worst-business-i-still-did-it-2025-12",
       "title": "www.businessinsider.com/dad-ran-food-cart-worst-business-i-still-did-it-2025-12",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/supervisory-licenses-what-vendors-need-to-know.pdf",
+      "title": "www.nyc.gov/assets/doh/downloads/pdf/rii/supervisory-licenses-what-vend",
       "checked": "2026-11-14"
     }
   ]
