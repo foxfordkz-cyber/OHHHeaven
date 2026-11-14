@@ -216,7 +216,8 @@ function summaryPart(b: BusinessState, pack: Pack, place: Place | undefined, ite
   };
 }
 
-function risksPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, place: PlanPlace | null, summary: PlanSummary, fixedMonth: Money): PlanRisk[] {
+/** `covered` — risks the season's lessons already tell (the plan shows those as lessons, not twice). */
+function risksPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, place: PlanPlace | null, summary: PlanSummary, fixedMonth: Money, covered: ReadonlySet<PlanRisk['id']>): PlanRisk[] {
   const out: PlanRisk[] = [];
   const a = analyze(b, w, ctx);
   const months = b.history.filter((m) => m.revenue > 0);
@@ -268,7 +269,7 @@ function risksPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, 
       why: 'There was no seat or the line was too long at the busy hour.',
       fix: 'Staff and seat for the busiest hour, not the average one.' });
   }
-  return out.sort((x, y) => (y.amount ?? -1) - (x.amount ?? -1)).slice(0, 3);
+  return out.filter((r) => !covered.has(r.id)).sort((x, y) => (y.amount ?? -1) - (x.amount ?? -1)).slice(0, 3);
 }
 
 /** Supplier id → which of the player's choices it serves. Ids of packs/cafe.json; other niches get the generic list. */
@@ -284,8 +285,16 @@ function suppliersPart(b: BusinessState, pack: Pack, items: PricedItem[], equipm
     if (/bean|coffee/.test(k)) why[s.id] = `${sourcing ? `You chose “${sourcing.label}” beans and milk. ` : ''}${inv ? `Your opening order is ${usd(inv.amount)}.` : ''}`.trim();
     else if (/dairy|milk/.test(k) && sourcing) why[s.id] = `With “${sourcing.label}” sourcing; deliveries several times a week.`;
     else if (/pastry/.test(k)) why[s.id] = items.some((i) => /pastry/.test(i.def.id)) ? 'You bought a pastry case: line up a licensed bakery before day one.' : '';
-    else if (/equipment_new|equipment, new/.test(k)) why[s.id] = equipmentTotal > 0 ? `You priced ${plural(items.filter((i) => EQUIPMENT_KINDS.has(i.def.kind)).length, 'item')} new: ${usd(equipmentTotal)}.` : '';
-    else if (/equipment_used|used/.test(k)) why[s.id] = equipmentTotal > 0 ? `Your list costs ${usd(equipmentTotal)} new. Used machines and furniture are where a first owner saves most.` : '';
+    else if (/equipment_new|equipment, new/.test(k)) {
+      const fresh = items.filter((i) => EQUIPMENT_KINDS.has(i.def.kind) && !/_used$/.test(i.def.id));
+      why[s.id] = fresh.length ? `You priced ${plural(fresh.length, 'item')} new: ${usd(fresh.reduce((x, i) => x + i.amount, 0))}.` : '';
+    }
+    else if (/equipment_used|used/.test(k)) {
+      // items whose id ends in _used are second-hand alternatives (none in packs/cafe.json yet; see agents/r3-B07.md)
+      const used = items.filter((i) => /_used$/.test(i.def.id));
+      why[s.id] = used.length ? `You chose ${plural(used.length, 'used piece')}: ${usd(used.reduce((x, i) => x + i.amount, 0))}.`
+        : equipmentTotal > 0 ? `Your list costs ${usd(equipmentTotal)} new. Used machines and furniture are where a first owner saves most.` : '';
+    }
     else if (/pos|payment|register/.test(k)) why[s.id] = has('pos') ? `Your register is in the budget: ${usd(items.find((i) => i.def.id === 'pos')!.amount)}.` : '';
     else if (/insurance/.test(k)) { const ins = monthly.filter(isInsurance).reduce((x, m) => x + m.amount, 0); why[s.id] = ins > 0 ? `Your books show ${usd(ins)} a month for insurance.` : 'Workers’ comp is required before your first hire.'; }
     else if (/pest/.test(k)) { const o = lever('pest_control'); why[s.id] = o ? (o.causes ? `You chose “${o.label}”: that is a violation an inspector fines.` : `You chose “${o.label}”.`) : ''; }
@@ -340,7 +349,18 @@ function stepsPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, 
   return out;
 }
 
-export function personalPlan(b: BusinessState, w: WorldState, ctx: EngineCtx, monthly: { label: string; amount: Money }[], reserve: Money, fixedMonth: Money): PersonalPlan {
+/** Risks whose story a lesson of the season already tells (lessons() titles). */
+function coveredByLessons(titles: string[]): Set<PlanRisk['id']> {
+  const out = new Set<PlanRisk['id']>();
+  for (const t of titles) {
+    if (/^Rent above/i.test(t)) out.add('rent');
+    if (/^Customers turned away/i.test(t)) out.add('lost');
+    if (/^Fine/i.test(t)) out.add('fines');
+  }
+  return out;
+}
+
+export function personalPlan(b: BusinessState, w: WorldState, ctx: EngineCtx, monthly: { label: string; amount: Money }[], reserve: Money, fixedMonth: Money, lessonTitles: string[] = []): PersonalPlan {
   const pack = packOf(ctx, b.niche);
   const place = placeOf(ctx, b.placeId);
   const items = pricedItems(b, pack, place);
@@ -364,7 +384,7 @@ export function personalPlan(b: BusinessState, w: WorldState, ctx: EngineCtx, mo
     equipment, equipmentTotal,
     firstOrder: inv ? { name: inv.def.name, amount: inv.amount, sourcing: src ? chosenOption(src, b.orders).label : null } : null,
     summary,
-    risks: risksPart(b, w, ctx, pack, pp, summary, fixedMonth),
+    risks: risksPart(b, w, ctx, pack, pp, summary, fixedMonth, coveredByLessons(lessonTitles)),
     supplierWhy: sup.why, supplierOrder: sup.order,
     steps: stepsPart(b, w, ctx, pack, pp, items, staff, r2(cmOpen.payroll), equipmentTotal, summary, monthly),
   };
@@ -379,6 +399,7 @@ export function realWorldPlan(b: BusinessState, w: WorldState, ctx: EngineCtx): 
   const reserve = r2(6 * fixedMonth);
   const startup = startupBudget(b, ctx);
   const monthly = monthlyFromBooks(b, w, ctx);
+  const learned = lessons(b, w, ctx);
   return {
     niche: b.niche, businessName: b.name,
     startupBudget: startup, startupTotal: sumLines(startup),
@@ -386,8 +407,8 @@ export function realWorldPlan(b: BusinessState, w: WorldState, ctx: EngineCtx): 
     reserveAdvised: reserve,
     breakEvenUnitsMonth: a.breakEvenUnitsMonth, paybackMonths: a.paybackMonths,
     checklist: checklist(b, ctx), suppliers: pack.suppliers,
-    lessons: lessons(b, w, ctx),
+    lessons: learned,
     disclaimer: DISCLAIMER,
-    extra: { personal: personalPlan(b, w, ctx, monthly, reserve, fixedMonth) },
+    extra: { personal: personalPlan(b, w, ctx, monthly, reserve, fixedMonth, learned.map((l) => l.title)) },
   };
 }

@@ -94,6 +94,12 @@ describe.skipIf(!has)('realWorldPlan: the plan of this player (real packs, real 
     for (const r of me.risks) { expect(r.why.length).toBeGreaterThan(10); expect(r.fix.length).toBeGreaterThan(10); }
   });
 
+  it('does not tell the same story twice: a risk that a lesson of the season already tells is left out', () => {
+    const ids = new Set(me.risks.map((r) => r.id));
+    if (plan.lessons.some((l) => l.title.startsWith('Rent above'))) expect(ids.has('rent')).toBe(false);
+    if (plan.lessons.some((l) => l.title.startsWith('Customers turned away'))) expect(ids.has('lost')).toBe(false);
+  });
+
   it('puts the suppliers that serve a choice of this player first, with the reason', () => {
     expect([...me.supplierOrder].sort()).toEqual(cafe.suppliers.map((s) => s.id).sort());
     const firstWithout = me.supplierOrder.findIndex((id) => !me.supplierWhy[id]);

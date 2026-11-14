@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { PackRuleCard, Query, RealWorldPlan } from '@ohh/shared/types';
-import { Button, Card, Icon, RuleCard, Skeleton } from '../../ui';
+import { Button, Card, Icon, RuleCard, Skeleton, useT } from '../../ui';
 import { useGame, useOwnerView } from '../../app/store';
 import { int, money, nicheName, unitWord } from '../insights/format';
 import { decodePlan, planLink, planTokenFromHash } from './plan-link';
@@ -93,6 +93,7 @@ export function usePlanProgress(plan: RealWorldPlan) {
 export function PlanView({ plan, cards, actions, day }: { plan: RealWorldPlan; cards: Map<string, PackRuleCard>; actions?: ReactNode; day?: number }) {
   const one = unitWord(plan.niche, 1);
   const many = unitWord(plan.niche, 2);
+  const tr = useT();
   const progress = usePlanProgress(plan);
   const { me, done } = progress;
   const suppliers = me && me.supplierOrder.length
@@ -103,7 +104,7 @@ export function PlanView({ plan, cards, actions, day }: { plan: RealWorldPlan; c
       <style data-plan-print="">{PLAN_PRINT_CSS}</style>
       <header className="plan-block plan-header">
         <div className="eyebrow">First Year · {nicheName(plan.niche)}</div>
-        <h1 className="h1">Your real-world plan</h1>
+        <h1 className="h1">{tr('Your real-world plan', 'Ваш план для жизни')}</h1>
         <p className="muted">{plan.businessName}{me?.place ? ` at ${me.place.address}` : ''} — built from your season in a learning simulation of real New York rents, permits, wages and taxes.</p>
         {actions}
         <NextRealStep steps={plan.checklist} done={done} />
@@ -116,13 +117,13 @@ export function PlanView({ plan, cards, actions, day }: { plan: RealWorldPlan; c
 
       <div className="plan-pair">
       <section className="plan-block plan-half" aria-labelledby="plan-budget">
-        <h2 id="plan-budget" className="h3">Money to start</h2>
-        <MoneyTable rows={plan.startupBudget} total={plan.startupTotal} totalLabel="Total to open" />
+        <h2 id="plan-budget" className="h3">{tr('Money to start', 'Деньги на открытие')}</h2>
+        <MoneyTable rows={plan.startupBudget} total={plan.startupTotal} totalLabel={tr('Total to open', 'Всего на открытие')} />
       </section>
 
       <section className="plan-block plan-half" aria-labelledby="plan-monthly">
-        <h2 id="plan-monthly" className="h3">Every month</h2>
-        <MoneyTable rows={plan.monthlyCosts} total={plan.monthlyTotal} totalLabel="Monthly costs" />
+        <h2 id="plan-monthly" className="h3">{tr('Every month', 'Каждый месяц')}</h2>
+        <MoneyTable rows={plan.monthlyCosts} total={plan.monthlyTotal} totalLabel={tr('Monthly costs', 'Расходы в месяц')} />
         <p className="plan-note">
           <strong>Keep {money(plan.reserveAdvised)} in reserve</strong>{reserveMonths(plan) ? ` — about ${reserveMonths(plan)} of these costs —` : ''} so one slow season does not close you.
           All in, have <strong className="num">{money(plan.startupTotal + plan.reserveAdvised)}</strong> before you sign a lease.
@@ -136,14 +137,14 @@ export function PlanView({ plan, cards, actions, day }: { plan: RealWorldPlan; c
       </section>
 
       <section className="plan-block plan-long" aria-labelledby="plan-docs">
-        <h2 id="plan-docs" className="h3">Documents, in this order</h2>
+        <h2 id="plan-docs" className="h3">{tr('Documents, in this order', 'Документы — по порядку')}</h2>
         <ol className="plan-steps">
           {plan.checklist.map((s, i) => (
             <li key={s.id} className="plan-row plan-step" data-done={done.has(s.id) || undefined}>
               <div className="plan-step__title">
                 <span className="plan-num" aria-hidden="true">{done.has(s.id) ? <Icon name="check" size={11} /> : i + 1}</span>
                 <span className="grow">{s.title}</span>
-                <label className="plan-tick no-print"><input type="checkbox" checked={done.has(s.id)} onChange={() => progress.toggle(s.id)} /> <span className="xsmall">Done in real life</span></label>
+                <label className="plan-tick no-print"><input type="checkbox" checked={done.has(s.id)} onChange={() => progress.toggle(s.id)} /> <span className="xsmall">{tr('Done in real life', 'Сделано в жизни')}</span></label>
               </div>
               <div className="plan-step__meta small">
                 {s.agency && <span>{s.agency}</span>}
@@ -152,23 +153,23 @@ export function PlanView({ plan, cards, actions, day }: { plan: RealWorldPlan; c
               </div>
               <StepMine mine={me?.steps[s.id]} day={day} />
               {me?.steps[s.id]?.mine
-                ? <div className="small muted plan-general"><span className="plan-general__tag">In general:</span> <Lead text={s.text} /></div>
+                ? <div className="small muted plan-general"><span className="plan-general__tag">{tr('In general', 'В общем случае')}:</span> <Lead text={s.text} /></div>
                 : <div className="small"><Lead text={s.text} /></div>}
-              {s.link ? <PlanLink href={s.link}>Official page <Icon name="arrowRight" size={12} /></PlanLink> : <span className="xsmall faint">No official page in our data yet: ask the agency.</span>}
+              {s.link ? <PlanLink href={s.link}>{tr('Official page', 'Официальная страница')} <Icon name="arrowRight" size={12} /></PlanLink> : <span className="xsmall faint">{tr('No official page in our data yet: ask the agency.', 'Официальной страницы в наших данных пока нет: спросите ведомство.')}</span>}
             </li>
           ))}
         </ol>
       </section>
 
       <section className="plan-block plan-long" aria-labelledby="plan-suppliers">
-        <h2 id="plan-suppliers" className="h3">Where to find suppliers</h2>
-        {me && Object.keys(me.supplierWhy).length > 0 && <p className="small muted plan-sub">The ones your choices need come first.</p>}
+        <h2 id="plan-suppliers" className="h3">{tr('Where to find suppliers', 'Где найти поставщиков')}</h2>
+        {me && Object.keys(me.supplierWhy).length > 0 && <p className="small muted plan-sub">{tr('The ones your choices need come first.', 'Сначала — те, что нужны под ваши выборы.')}</p>}
         <ul className="plan-suppliers">
           {suppliers.map((s) => (
             <li key={s.id} className="plan-row plan-supplier" data-mine={me?.supplierWhy[s.id] ? '' : undefined}>
               <strong>{s.category}</strong> — {sentence(s.what)} <span className="muted"><Lead text={sentence(s.whereToFind)} />{s.examples && <span className="plan-examples"> Examples: {sentence(s.examples)}</span>}</span>
               {s.link && <> <PlanLink href={s.link}>Link</PlanLink></>}
-              {me?.supplierWhy[s.id] && <div className="plan-for-you small"><strong>For you:</strong> {me.supplierWhy[s.id]}</div>}
+              {me?.supplierWhy[s.id] && <div className="plan-for-you small"><strong>{tr('For you', 'Вам')}:</strong> {me.supplierWhy[s.id]}</div>}
             </li>
           ))}
         </ul>
