@@ -3,7 +3,7 @@
   "part": "D02",
   "theme": "Premises and the physics of the room",
   "checked": "2026-11-14",
-  "howNumbersWereChecked": "November 14, 2026. This session could run web searches but could not open pages: every direct request was refused by the session's network policy. So 'verified' here has a narrower meaning than in the main pack: the number was shown by the search tool in an excerpt of the primary source itself (text of the law or rule, a nyc.gov or 311 page, a City Council report, a retailer's own price page). Every such record carries \"checkedVia\": \"search_excerpt\" so the merger can downgrade them in one pass. 'estimate' = a number from secondary sources (contractor and vendor guides, press), from the research notes, from memory (always said so in the note) or my own arithmetic, with the calculation in the note. Effects of levers and events (demand, quality, seat turns) are game-balance values unless the note cites a study.",
+  "howNumbersWereChecked": "November 14, 2026, two passes. First pass: the session could search the web but could not open pages. Second pass, after the session was given network access to city and federal sites: I downloaded and read the primary documents myself (Health Code Article 81 and Chapter 23, the 2022 Building and Plumbing Codes, the Buildings penalty schedule 1 RCNY 102-01, the Dining Out NYC fee and enforcement pages, NYC311 articles, DEP, FDNY, DCWP, Landmarks, the Water Board rate schedule, IRS Form 8826, the Access Board guide, NYC Open Data). Every record marked 'verified' says how: \"checkedVia\": \"page_opened\" = I opened the primary source and saw the number; \"checkedVia\": \"search_excerpt\" = the number was shown by the search tool in an excerpt of the primary source, but the page itself was not reachable (press sites, retailers, the online code library, which answered 403). 'estimate' = secondary sources (contractor and vendor guides, press), the research notes, memory (always said so in the note) or my own arithmetic, with the calculation in the note. Effects of levers and events (demand, quality, seat turns) are game-balance values unless the note cites a study.",
   "sizing": {
     "unitName": "seat",
     "min": 6,
@@ -17,7 +17,7 @@
     "emptyPenaltyBelow": 0.3,
     "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
     "confidence": "estimate",
-    "note": "Revised by D02. sqftPerUnit 18 -> 21: the engine divides 60% of the floor by this number, and 18 put 26 seats into 800 sq ft, above the research notes' own 15-25. Floor budget for 800 sq ft (extra.floorPlan): service bar 120, queue and pickup 70, accessible restroom 60, back of house 120, entry 25 = 395 sq ft that never holds a chair; 405 sq ft is left for seating; at 18 net sq ft per seat that is 22 seats, and 480 / 22 = 21. Anchors: the building code counts 15 net sq ft per person at tables and chairs and 5 net sq ft per standing person (Table 1004.5; NY State and model code values, the NYC 2022 table was not opened); vendor seating charts give 11-14 sq ft per seat for fast food, 12-15 full service, 18-20 fine dining; a Russian planning guide gives 1.6 sq m (17 sq ft) per guest. unitsServedPerSizeMonth stays 170, now with a derivation: 12 open hours, mean seat occupancy 47%, mean stay 60 minutes (70% short stays of 35 minutes, 30% laptop stays of 120 minutes) = 5.6 seated orders per seat a day. Stay lengths: Bloom Intelligence Wi-Fi data, 25 US coffee shops, June-September 2026: 32 minutes for a one-time visitor, almost two hours for the most frequent ones. takeawayShare stays 0.6: no public to-go split exists for independent cafes; the National Restaurant Association puts off-premises at nearly 75% of all restaurant traffic, drive-thru included. crowdPenaltyAbove 0.9 -> 0.85: solo guests hold two-tops, so a room is full when well under all chairs are taken (see extra.mechanics effective_seats_and_table_mix). emptyPenaltyBelow 0.4 -> 0.3: evidence that an empty room repels coffee buyers is weak (one 2025 survey study on crowding as social proof), so the penalty should start later. Both thresholds stay game-balance values."
+    "note": "Revised by D02. sqftPerUnit 18 -> 21: the engine divides 60% of the floor by this number, and 18 put 26 seats into 800 sq ft, above the research notes' own 15-25. Floor budget for 800 sq ft (extra.floorPlan): service bar 120, queue and pickup 70, accessible restroom 60, back of house 120, entry 25 = 395 sq ft that never holds a chair; 405 sq ft is left for seating; at 18 net sq ft per seat that is 22 seats, and 480 / 22 = 21. Anchors: the 2022 NYC Building Code counts 15 net sq ft per person at tables and chairs, 5 net sq ft per standing person and 200 gross sq ft per person in a commercial kitchen (Table 1004.1.3, read in the city's own PDF); vendor seating charts give 11-14 sq ft per seat for fast food, 12-15 full service, 18-20 fine dining; a Russian planning guide gives 1.6 sq m (17 sq ft) per guest. unitsServedPerSizeMonth stays 170, now with a derivation: 12 open hours, mean seat occupancy 47%, mean stay 60 minutes (70% short stays of 35 minutes, 30% laptop stays of 120 minutes) = 5.6 seated orders per seat a day. Stay lengths: Bloom Intelligence Wi-Fi data, 25 US coffee shops, June-September 2026: 32 minutes for a one-time visitor, almost two hours for the most frequent ones. takeawayShare stays 0.6: no public to-go split exists for independent cafes; the National Restaurant Association puts off-premises at nearly 75% of all restaurant traffic, drive-thru included. crowdPenaltyAbove 0.9 -> 0.85: solo guests hold two-tops, so a room is full when well under all chairs are taken (see extra.mechanics effective_seats_and_table_mix). emptyPenaltyBelow 0.4 -> 0.3: evidence that an empty room repels coffee buyers is weak (one 2025 survey study on crowding as social proof), so the penalty should start later. Both thresholds stay game-balance values."
   },
   "setup": [
     {
@@ -30,9 +30,10 @@
       "withoutItViolation": "no_patron_toilet",
       "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
       "link": "https://portal.311.nyc.gov/article/?kanumber=KA-01351",
-      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
       "confidence": "estimate",
-      "note": "Same id as in the pack; the price stays the earlier allowance (no public NYC price was found), the rule is now exact. Health Code 81.22(b), seen in a search excerpt of the code: food service establishments with a seating capacity of 20 or more shall provide toilet facilities for patrons, except premises where a permitted food service establishment operated on or before December 5, 1977; such an old premises loses the exemption when it does a renovation that needs a Department of Buildings permit. Patrons and staff may share one toilet, but patrons may not be sent through the kitchen, food prep, storage or dishwashing area (81.22(d)). The U.S. Access Board sets no minimum room size; its smallest sample single-user plan is 7 ft x 5 ft (35 sq ft) and a typical room is about 48 sq ft, plus the door clearance. A single-occupant toilet room must carry an all-gender sign next to the door (Local Law 79 of 2016)."
+      "note": "Same id as in the pack; the price stays the earlier allowance (no public NYC price was found), the rule is now exact and was read in the Health Code itself. Section 81.22(b): food service establishments with a seating capacity of 20 or more shall provide toilet facilities for patrons, except premises where a permitted food service establishment operated on or before December 5, 1977; such premises must add patron toilets when a renovation needs a Department of Buildings construction permit. 81.22(d): patrons and staff may share a toilet unless patrons would have to walk through a kitchen, food preparation or storage area or utensil washing area. NYC Health counts indoor and outdoor seats together. The Plumbing Code (403.2, 403.3) adds a second step that bites when a space is built or altered: where customers must be given a toilet and the space holds more than 30 people, staff included, separate facilities are required, which two single all-gender toilet rooms satisfy; the toilets may be one story up or down. The U.S. Access Board sets no minimum room size. A one-person toilet room must carry an all-gender sign (Local Law 79 of 2016).",
+      "checkedVia": "page_opened"
     },
     {
       "id": "portable_entrance_ramp",
@@ -44,7 +45,7 @@
       "source": "https://reliableramps.com/products/alumiramp-threshold-ramp-tr06n",
       "confidence": "verified",
       "checkedVia": "search_excerpt",
-      "note": "Retailer listing seen in a search excerpt: AlumiRamp aluminum threshold ramp $112.99 for a 6-inch rise, $156.99 for a 12-inch rise. A stopgap, not a compliant ramp: the ADA Standards allow 1:12 at most (1:10 for a rise up to 6 inches and 1:8 up to 3 inches only in existing buildings with no room), so a 7-inch step needs 7 feet of ramp. A permanent ramp that reaches onto the sidewalk needs a Transportation Department revocable consent; for a building put up before December 6, 1969 it may project no more than 44 inches. No public price for a permanent storefront ramp in NYC was found."
+      "note": "Retailer listing seen in a search excerpt (the shop's site could not be opened): AlumiRamp aluminum threshold ramp $112.99 for a 6-inch rise, $156.99 for a 12-inch rise. A stopgap, not a compliant ramp: the Buildings Department's storefront guide gives a maximum slope of 1:12, a clear width of at least 36 inches and a 60-inch landing, so a 7-inch step needs 7 feet of ramp. Building Code 3202.2.2.1: for a building put up before December 6, 1969 a wheelchair ramp may, with the Buildings Commissioner's approval, project up to 44 inches past the street line; anything further needs the Transportation Department. No public price for a permanent storefront ramp in NYC was found."
     },
     {
       "id": "automatic_door_operator",
@@ -85,15 +86,16 @@
       "id": "backflow_preventer",
       "name": "Backflow prevention device on the water line",
       "kind": "buildout",
-      "cost": 3500,
+      "cost": 4000,
       "required": false,
       "lifespanMonths": 240,
       "agency": "NYC Department of Environmental Protection (DEP)",
       "link": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
       "withoutItViolation": "backflow_not_tested",
       "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
-      "confidence": "estimate",
-      "note": "DEP FAQ, seen in a search excerpt: backflow devices are mandated for businesses that pose a risk to the public water supply, and once installed must be tested every 12 months by a certified tester; failure can bring fines or disconnection of water service. Restaurants are on the list (contractor sources). Price: contractor blogs give $2,000-$5,000 for the project plus a $350 plan review fee (unverified); $3,500 is the midpoint. A former cafe usually has one already: then only the yearly test is due."
+      "confidence": "verified",
+      "note": "DEP backflow FAQ, read on the page: food preparation facilities are on the list of businesses that must install a backflow prevention device; DEP's own cost guide says installation should cost $3,000-$5,000 for a very small one-story building and $3,750-$5,500 for a small two-story one ($4,000 is the middle of the first band). A licensed master plumber installs it after a plan filed by an architect or engineer, the test report goes to DEP within 30 days, and the device must then be tested every 12 months by a certified tester; DEP mails a notice when the test is due, and failure can bring fines or disconnection of the water service. The device sits on the building's water service line: in a former cafe it is already there, and the lease decides who pays for the yearly test.",
+      "checkedVia": "page_opened"
     },
     {
       "id": "grease_interceptor_unit",
@@ -107,7 +109,8 @@
       "withoutItViolation": "grease_interceptor_neglect",
       "source": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page",
       "confidence": "estimate",
-      "note": "DEP, seen in a search excerpt: every business that disposes of grease should have a properly sized grease interceptor (15 RCNY 19-11); food waste grinders are not allowed in NYC commercial establishments. Price: national cost guides put an indoor under-sink unit at $500-$3,000 installed and add 30%-50% for labor in New York; $2,500 is my figure inside that band. Must be installed by a licensed master plumber. A former cafe has one; a former shop or salon does not, and the build-out price for such a space should already include it."
+      "note": "DEP, read on the page: every business that disposes of grease should have a properly sized grease interceptor (15 RCNY 19-11); food waste grinders are not allowed in NYC commercial establishments. Price: national cost guides put an indoor under-sink unit at $500-$3,000 installed and add 30%-50% for labor in New York; $2,500 is my figure inside that band. DEP requires that only licensed plumbers install grease interceptors, and its inspectors order an undersized unit replaced. A former cafe has one; a former shop or salon does not, and the build-out price for such a space should already include it.",
+      "checkedVia": "page_opened"
     },
     {
       "id": "hvac_replacement",
@@ -131,7 +134,7 @@
       "link": "https://www.nyc.gov/assets/buildings/pdf/security_grille-sn.pdf",
       "source": "https://gothamist.com/news/nyc-council-scrambles-to-reverse-impending-ban-on-metal-storefront-security-gates",
       "confidence": "estimate",
-      "note": "Gothamist, 2026: a bakery owner was quoted $6,000-$7,000 to replace one gate; other reports give $5,000-$20,000. Local Law 75 of 2009 required every grille on a Group B or M storefront to be at least 70% see-through by July 1, 2026; on June 30, 2026 the City Council voted 51-0 (Int 0910-A) to drop the deadline, so the 70% rule now applies only when a grille is newly installed or replaced. A new grille still needs a Buildings Department permit."
+      "note": "Gothamist, 2026: a bakery owner was quoted $6,000-$7,000 to replace one gate; other reports give $5,000-$20,000. Buildings Department service notice of February 17, 2026, read in full: under Local Law 75 of 2009 grilles on Group B and M storefronts had to give at least 70% visibility by July 1, 2026 (Administrative Code 28-315.7.1), landmark buildings and historic districts exempt; non-compliance is a major violation that can be cured within 90 days, and replacing a grille needs a registered design professional and a permit. Seen in search excerpts of the press and the Council record: on June 30, 2026 the City Council voted 51-0 (Int 0910-A) to drop the deadline, so the 70% rule now applies only when a grille is newly installed or replaced."
     },
     {
       "id": "storefront_awning",
@@ -157,7 +160,7 @@
       "link": "https://portal.311.nyc.gov/article/?kanumber=KA-02227",
       "source": "https://www.signsny.com/outdoor/winter-vestibules",
       "confidence": "estimate",
-      "note": "One NYC fabricator lists temporary vestibules at $4,500-$10,000 with seasonal installation and removal included; $4,500 is the low end for a single door. NYC311, seen in a search excerpt: storm enclosures are allowed only from November 15 to April 15 and may not stand more than 18 inches beyond the street line; a fabricator cites a larger allowance of 25 sq ft for eating and drinking places with a 5-foot clear sidewalk (not checked against the Building Code). The cost returns every winter."
+      "note": "One NYC fabricator lists temporary vestibules at $4,500-$10,000 with seasonal installation and removal included (seen in a search excerpt); $4,500 is the low end for a single door. NYC311, read on the page: storm enclosures are allowed from November 15 through April 15, and the city takes complaints about ones that have no permit, stand more than 18 inches beyond the street line or are not removed after April 15. A fabricator cites a larger allowance of 25 sq ft for eating and drinking places (not checked against the Building Code). The cost returns every winter."
     },
     {
       "id": "air_curtain",
@@ -174,16 +177,16 @@
       "id": "roadway_cafe_license",
       "name": "Dining Out NYC roadway cafe license",
       "kind": "license",
-      "cost": 4550,
+      "cost": 4450,
       "required": false,
       "waitDays": 120,
       "agency": "NYC Department of Transportation (Dining Out NYC)",
       "link": "https://www.diningoutnyc.info/apply",
       "withoutItViolation": "unlicensed_sidewalk_cafe",
-      "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+      "source": "https://www.diningoutnyc.info/apply/fees",
       "confidence": "verified",
-      "checkedVia": "search_excerpt",
-      "note": "City Council report (April 2025), seen in a search excerpt: $1,050 for a four-year roadway cafe license, a $2,500 security deposit and a public hearing notice fee of up to $1,000 that every roadway application pays = $4,550; on top comes a yearly fee of $5 to $25 per sq ft by sector. The 120 days are the three to five months the 2026 Charter Revision Commission report gives for roadway applications (sidewalk ones take six to eight). Since Local Law 135 of 2026 (signed August 31, 2026) roadway cafes may stay up all year. The structure itself is a separate item."
+      "checkedVia": "page_opened",
+      "note": "Dining Out NYC fee table, read on the program's site: license $1,050 for the four-year term, refundable security deposit $2,500, public hearing notice $500-$900 (required for every roadway application) = $4,450 with the top hearing figure; on top comes the yearly revocable consent fee per sq ft. Wait: the program site says review can take six months; the law caps a roadway review at 85 days (City Council report, April 2025); the 2026 Charter Revision Commission report says roadway applications take three to five months: 120 days here. A seasonal roadway cafe runs April 1 to November 29 and must be removed by November 30; since 2026 a year-round roadway license exists at higher rates."
     },
     {
       "id": "roadway_cafe_structure",
@@ -194,7 +197,7 @@
       "lifespanMonths": 48,
       "source": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants",
       "confidence": "estimate",
-      "note": "Streetsblog, April 2025: a roadway setup can easily cost more than $35,000 with city fees, construction and insurance; rental companies quote about $20,000 a season; one owner spent just over $5,000 on a simple one. $20,000 is the rental-season figure used as a purchase price for a plain compliant setup. Until 2026 the structure had to be taken down and stored every winter."
+      "note": "Streetsblog, April 2025: a roadway setup can easily cost more than $35,000 with city fees, construction and insurance; rental companies quote about $20,000 a season; one owner spent just over $5,000 on a simple one. $20,000 is the rental-season figure used as a purchase price for a plain compliant setup. Until 2026 the structure had to be taken down and stored every winter. The program's own fee example uses a 160 sq ft roadway cafe."
     },
     {
       "id": "place_of_assembly_certificate",
@@ -208,7 +211,7 @@
       "withoutItViolation": "overcrowding_over_occupancy",
       "source": "https://www.nyc.gov/assets/buildings/pdf/pa_guide.pdf",
       "confidence": "estimate",
-      "note": "Buildings Department, seen in search excerpts: a Place of Assembly Certificate of Operation is required when the Certificate of Occupancy allows 75 or more people indoors (200 outdoors); within a year the Fire Department's annual Place of Assembly permit must follow, and its fee rises with the occupancy. The $235 ($200 filing + $35 processing) is from an older Buildings guide and may be out of date; the Fire Department fee was not found. The 60 days are my allowance. The real cost of crossing 74 people is not this fee: an assembly space needs a second exit, filed seating plans and trained fire safety staff."
+      "note": "Read at the Buildings Department and in the Fire Department's restaurant guide: a Place of Assembly Certificate of Operation is required where 75 or more people gather indoors (200 outdoors), and the Fire Department counts restaurant staff in the 75. After the certificate an annual Fire Department Place of Assembly permit follows; its fee is on a sliding scale by occupancy and re-inspections are billed at $210 an hour. The $235 ($200 filing + $35 processing) is from the Buildings guide dated 2013 and may be out of date. The 60 days are my allowance. The real cost of crossing 74 people is not this fee: a second exit, doors that swing outward, filed seating plans and certified fire safety staff."
     },
     {
       "id": "temporary_place_of_assembly",
@@ -222,8 +225,8 @@
       "withoutItViolation": "overcrowding_over_occupancy",
       "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
       "confidence": "verified",
-      "checkedVia": "search_excerpt",
-      "note": "NYC Business, seen in a search excerpt: the fee is $250, plus $100 for every day the request is late; it must be filed at least 10 business days before the event (14 calendar days). The legal way to hold one open-mic night or launch party for 75 or more people in a room that is normally under the line."
+      "checkedVia": "page_opened",
+      "note": "NYC Business, read on the page: the fee is $250, plus $100 for every day the request is late; it must be filed at least 10 business days before the event (14 calendar days). The legal way to hold one open-mic night or launch party for 75 or more people in a room that is normally under the line."
     },
     {
       "id": "landmarks_storefront_permit",
@@ -236,7 +239,7 @@
       "link": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
       "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
       "confidence": "estimate",
-      "note": "Applies only in a historic district or a landmark building. Commission pages, seen in search excerpts: any change to the outside of a storefront needs a permit, signs, awnings and lighting included; planters and A-frames that are not attached to the building do not. A 2018 fact sheet says staff aim to issue rule-conforming permits in 10 business days (FasTrack) or 15: 21 calendar days here. Staff will not approve a storefront with more than three kinds of signs. No fee was found, so the cost is 0; the price is the wait and the designer's drawings."
+      "note": "Applies only in a historic district or a landmark building. Landmarks Commission storefront page, read: any change to the exterior of a storefront needs a permit, including a new storefront, awnings, signs and lighting, a new paint color, and an unenclosed sidewalk cafe (which also needs the Transportation Department). The 21 days stand for the 10 to 15 business days a 2018 fact sheet gives for staff-level permits (seen in a search excerpt only). No fee was found, so the cost is 0; the price is the wait and the designer's drawings."
     },
     {
       "id": "storefront_glass_panel",
@@ -252,23 +255,25 @@
   "monthlyCosts": [
     {
       "id": "sidewalk_cafe_consent_fee",
-      "name": "Sidewalk cafe yearly fee to the city (8 seats)",
+      "name": "Sidewalk cafe yearly fee to the city (120 sq ft)",
       "kind": "fees",
       "basis": "fixed",
       "amount": 60,
-      "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
-      "confidence": "estimate",
-      "note": "Fee rates seen in a search excerpt of the City Council report: $6, $10, $18 or $31 per sq ft a year for a sidewalk cafe by sector; the $6 rate covers about 80% of the city and $31 applies in parts of Manhattan. Area is my estimate: 8 seats x 15 sq ft = 120 sq ft. 120 x $6 / 12 = $60 a month; in the top sector 120 x $31 / 12 = $310. Charge only while a sidewalk cafe is licensed. Local Law 145 of 2026 lets cafes pay in quarterly installments from about May 2027."
+      "source": "https://www.diningoutnyc.info/apply/fees",
+      "confidence": "verified",
+      "note": "Dining Out NYC fee table, read on the program's site: $6, $10, $18 or $31 per sq ft a year for a sidewalk cafe by sector, and the program's own example is a 120 sq ft cafe: $720 a year in sector 1 ($60 a month), $1,200 in sector 2, $2,160 in sector 3, $3,720 in sector 4 ($310 a month). The City Council report adds that the cheapest sector covers at least 80% of the city and the two dearest lie in Manhattan at or below 125th Street. 120 sq ft holds about 10 chairs at the density of the city's old sidewalk cafe licenses. Charge only while a sidewalk cafe is licensed.",
+      "checkedVia": "page_opened"
     },
     {
       "id": "roadway_cafe_consent_fee",
-      "name": "Roadway cafe yearly fee to the city",
+      "name": "Roadway cafe yearly fee to the city (160 sq ft, year-round)",
       "kind": "fees",
       "basis": "fixed",
-      "amount": 830,
-      "source": "https://nyc.streetsblog.org/2026/08/13/year-round-outdoor-dining-poised-to-return-under-council-bill",
-      "confidence": "estimate",
-      "note": "Streetsblog, August 2026: a roadway cafe of the maximum size costs a restaurant nearly $10,000 a year in city fees, about $27 a day: $10,000 / 12 = $830. Rates run $5 to $25 per sq ft a year by sector (City Council report), so a small setup in the cheapest sector pays far less. Charge only while a roadway cafe is licensed."
+      "amount": 80,
+      "source": "https://www.diningoutnyc.info/apply/fees",
+      "confidence": "verified",
+      "note": "Dining Out NYC fee table, read on the program's site: a year-round roadway cafe pays the sidewalk rates ($6, $10, $18, $31 per sq ft a year by sector), a seasonal one $5, $8, $14, $25. The program's example is a 160 sq ft roadway cafe: $800 a year seasonal in sector 1; year-round that is 160 x $6 = $960 = $80 a month, and 160 x $31 = $4,960 = $413 a month in sector 4. Streetsblog's 'nearly $10,000 a year' is for a setup of the maximum size. Charge only while a roadway cafe is licensed.",
+      "checkedVia": "page_opened"
     },
     {
       "id": "backflow_annual_test",
@@ -278,7 +283,7 @@
       "amount": 21,
       "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
       "confidence": "estimate",
-      "note": "DEP requires a test by a certified tester every 12 months (seen in a search excerpt of the DEP FAQ). Testing companies charge $150-$350 per device; $250 / 12 = $21 a month. The pack's maintenance line already names the backflow test: do not add both."
+      "note": "DEP requires a test by a certified tester every 12 months (read in the DEP FAQ). Testing companies charge $150-$350 per device; $250 / 12 = $21 a month. The pack's maintenance line already names the backflow test: do not add both."
     },
     {
       "id": "hvac_service_contract",
@@ -299,6 +304,28 @@
       "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650",
       "confidence": "estimate",
       "note": "From the research notes (Administrative Code Table 28-112.2, not opened by me): the yearly fee for an illuminated sign is $45 up to 30 sq ft and $70 for 30-50 sq ft; $45 / 12 = $3.75. Only if the shop has a lit sign."
+    },
+    {
+      "id": "fdny_rooftop_unit_permit",
+      "name": "Fire Department permit for a rooftop or ceiling-hung cooling unit",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 8.75,
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+      "confidence": "verified",
+      "checkedVia": "page_opened",
+      "note": "Fire Department Restaurant Fire Safety Guide, read: a permit is required to install and operate a refrigerating system that is mounted on or suspended from a roof or ceiling (or uses certain refrigerants); a system under five horsepower with a group A1 refrigerant that is not on the roof or ceiling is exempt. Cost of permit: $105 per compressor, renewed annually: $105 / 12 = $8.75 a month for one compressor. Only for shops whose air conditioning is a rooftop or ceiling-hung unit."
+    },
+    {
+      "id": "open_flame_permit",
+      "name": "Fire Department open flame permit (candles on tables)",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 17.5,
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+      "confidence": "verified",
+      "checkedVia": "page_opened",
+      "note": "Fire Department Restaurant Fire Safety Guide, read: a permit is required to use open flames, tabletop candles included, in any place of public gathering, and every restaurant with an occupancy under 75 is one; the annual inspection fee for the open flame permit is $210: $210 / 12 = $17.50 a month. Only for shops that light candles."
     }
   ],
   "levers": [
@@ -430,7 +457,7 @@
           }
         }
       ],
-      "note": "The law: under 20 seats a cafe owes customers no restroom; at 20 or more it must provide one (Health Code 81.22). The engine should refuse staff_only at 20 or more seats or attach the violation no_patron_toilet. Starbucks ended its open-door restroom policy on January 27, 2025 and now requires a purchase. The $150 for extra paper, soap and cleaning and the $40 saved are my estimates."
+      "note": "The law, read in both codes: under 20 seats a food business owes customers no restroom (Health Code 81.22(b); Plumbing Code 403.3, exception 1), and NYC311 adds that food businesses need not open their employee toilets to the public; at 20 or more it must provide one, free of charge. The engine should refuse staff_only at 20 or more seats or attach the violation no_patron_toilet. Starbucks ended its open-door restroom policy on January 27, 2025 and now requires a purchase (press, search excerpt). The $150 for extra paper, soap and cleaning is my estimate."
     },
     {
       "id": "hvac_care",
@@ -486,12 +513,12 @@
         },
         {
           "id": "sidewalk_cafe",
-          "label": "Licensed sidewalk cafe, 8 seats",
+          "label": "Licensed sidewalk cafe, 120 sq ft (about 10 seats)",
           "monthlyCost": 60,
           "effects": {
             "demand": 0.03
           },
-          "outdoorSeats": 8,
+          "outdoorSeats": 10,
           "monthsActive": [
             4,
             5,
@@ -504,13 +531,14 @@
         },
         {
           "id": "roadway_cafe",
-          "label": "Licensed roadway cafe, 16 seats",
-          "monthlyCost": 830,
+          "label": "Licensed roadway cafe, 160 sq ft (about 14 seats), all year",
+          "monthlyCost": 80,
           "effects": {
             "demand": 0.05
           },
-          "outdoorSeats": 16,
+          "outdoorSeats": 14,
           "monthsActive": [
+            3,
             4,
             5,
             6,
@@ -522,7 +550,8 @@
           ]
         }
       ],
-      "note": "Needs the license first (setup sidewalk_cafe_license or roadway_cafe_license; without it the option is the existing shortcut sidewalk_tables). Outdoor seats count toward the 20-seat restroom line. Fees: sidewalk $6 per sq ft a year in the cheapest sector (x 120 sq ft / 12 = $60; $310 in the top Manhattan sector); roadway about $10,000 a year for the largest setup. The demand lift and the months people really sit outside are my estimates; roadway cafes may legally stay all year since 2026."
+      "note": "Needs the license first (setup sidewalk_cafe_license or roadway_cafe_license; without it the option is the existing shortcut sidewalk_tables). Sizes and fees are the program's own examples: a 120 sq ft sidewalk cafe pays $720 a year in sector 1 ($60 a month; $310 in sector 4), a 160 sq ft year-round roadway cafe $960 ($80 a month; $413 in sector 4). Seats: the city's old sidewalk cafe license records (324 licenses in NYC Open Data with both figures) average 11.4 sq ft per chair: 120 / 11.4 = 10 chairs, 160 / 11.4 = 14. Outdoor seats count toward the 20-seat restroom line. Nothing may be stored or prepared outside, no smoking or vaping there, and the pest control contract must cover the outdoor area (NYC Health). The demand lift and the months people really sit outside are my estimates.",
+      "source": "https://www.diningoutnyc.info/apply/fees"
     },
     {
       "id": "music_tempo",
@@ -560,14 +589,14 @@
           "causes": "accessibility_barrier"
         }
       ],
-      "note": "Only for an address with a step at the door. The ramp is the setup item portable_entrance_ramp ($157). Federal law asks an existing business to remove barriers where that is readily achievable; a small business may claim the Disabled Access Credit for the cost (IRS Form 8826, up to $5,000 a year)."
+      "note": "Only for an address with a step at the door. The ramp is the setup item portable_entrance_ramp ($157). Federal law asks an existing business to remove barriers where that is readily achievable. IRS Form 8826, read: a business with gross receipts of $1 million or less or no more than 30 full-time employees gets a credit of 50% of its access spending between $250 and $10,250 a year, at most $5,000."
     }
   ],
   "shortcuts": [
     {
       "id": "squeeze_extra_seats",
       "name": "Add chairs past the 19-seat line without a customer restroom",
-      "what": "A few more chairs lift seated sales by about 3%, and you skip a $12,000 restroom. With 20 or more seats and no toilet for customers the Health Department writes a critical violation: $300 each inspection, and the fix is still owed.",
+      "what": "A few more chairs lift seated sales by about 3%, and you skip a $12,000 restroom. With 20 or more seats, outdoor ones included, and no toilet for customers the Health Department writes a critical violation: $300 and 10 points at each inspection, and the fix is still owed.",
       "saves": {
         "basis": "pct_revenue",
         "amount": 0.03
@@ -577,7 +606,7 @@
     {
       "id": "skip_restroom_upkeep",
       "name": "Stop restocking and checking the restroom",
-      "what": "Nobody checks the paper, the bin or the door closer during the shift: about $60 a month of supplies and time saved. An inspector who finds the restroom not properly supplied writes $200.",
+      "what": "Nobody checks the paper, the bin or the door closer during the shift: about $60 a month of supplies and time saved. A toilet not maintained or supplied costs $200 and 2 to 5 points at inspection.",
       "saves": {
         "basis": "fixed",
         "amount": 60
@@ -585,19 +614,9 @@
       "violation": "toilet_not_supplied"
     },
     {
-      "id": "prop_door_open_with_ac",
-      "name": "Prop the front door open with the air conditioning on",
-      "what": "An open door pulls in passers-by: about 1% more sales in summer. It has been illegal for every NYC business since 2015: $250 for each open door or window, more for repeats, and the city inspects thousands of shops every summer.",
-      "saves": {
-        "basis": "pct_revenue",
-        "amount": 0.01
-      },
-      "violation": "ac_door_open"
-    },
-    {
       "id": "unpermitted_sign",
       "name": "Hang a big lit sign without a permit",
-      "what": "You skip the licensed sign hanger and the Buildings Department filing: about $150 a month spread over the first year. One anonymous 311 call brings an inspector; in 2018 hundreds of small shops faced $6,000 fines for exactly this.",
+      "what": "You skip the licensed sign hanger and the Buildings Department filing: about $150 a month spread over the first year. One anonymous 311 call brings an inspector: work without a permit is $1,250, or $6,250 if you miss the hearing. In 2018 such calls tripled and hundreds of small shops were fined.",
       "saves": {
         "basis": "fixed",
         "amount": 150
@@ -607,7 +626,7 @@
     {
       "id": "sidewalk_sign_and_bench",
       "name": "A-frame sign and a bench out on the sidewalk",
-      "what": "A sign in the walking path and a bench at the curb catch about 1% more buyers. Anything more than 3 feet from your wall or taller than 5 feet is a sidewalk obstruction: $50 the first time, $100 after, up to $300.",
+      "what": "A sign in the walking path and a bench at the curb catch about 1% more buyers. Anything more than 3 feet from your wall or taller than 5 feet is a sidewalk obstruction: $50 the first time, $100 each time after, $300 if you ignore the ticket.",
       "saves": {
         "basis": "pct_revenue",
         "amount": 0.01
@@ -627,7 +646,7 @@
     {
       "id": "skip_backflow_test",
       "name": "Skip the yearly backflow test",
-      "what": "The device on your water line must be tested by a certified tester every 12 months: about $250 a year. Skip it and the city can fine you or shut off your water.",
+      "what": "The device on your water line must be tested by a certified tester every 12 months: about $250 a year. Skip it and the city can fine you or disconnect your water; a health inspector can cite the missing protection too.",
       "saves": {
         "basis": "fixed",
         "amount": 21
@@ -637,7 +656,7 @@
     {
       "id": "standing_room_events",
       "name": "Pack the room for open-mic nights",
-      "what": "Eighty people in a room approved for fewer than 75 bring about 2% more sales a month. More people than the Certificate of Occupancy allows is an immediately hazardous violation: about $2,400, or $12,000 if you ignore the summons. The legal way is a $250 temporary permit filed 10 business days ahead.",
+      "what": "Eighty people in a room approved for fewer than 75 bring about 2% more sales a month. More people than the Certificate of Occupancy allows is an immediately hazardous violation: $2,500, or $12,500 if you miss the hearing, with no cure. The legal way is a $250 temporary permit filed 10 business days ahead.",
       "saves": {
         "basis": "pct_revenue",
         "amount": 0.02
@@ -647,7 +666,7 @@
     {
       "id": "cellar_seating",
       "name": "Put customer tables in the cellar",
-      "what": "The cellar is free space: tables down there add about 3% to sales. A cellar approved for storage is not approved for customers: occupancy contrary to the Certificate of Occupancy costs about $1,200 and the tables have to go.",
+      "what": "The cellar is free space: tables down there add about 3% to sales. A cellar approved for storage is not approved for customers: occupancy contrary to the Certificate of Occupancy costs $1,250, or $6,250 if you miss the hearing, and the tables have to go.",
       "saves": {
         "basis": "pct_revenue",
         "amount": 0.03
@@ -663,6 +682,16 @@
         "amount": 0.01
       },
       "violation": "commercial_noise"
+    },
+    {
+      "id": "sidewalk_cafe_creep",
+      "name": "Add tables beyond your licensed outdoor area",
+      "what": "Two more tables past the line on your site plan add about 1% to sales in season. The first time the city sends a corrective action request and gives you 30 days; after that it is $200, then $500 each time, and repeat offenders can lose the license.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "outdoor_cafe_noncompliant"
     }
   ],
   "violations": [
@@ -683,14 +712,14 @@
       },
       "closureDays": 0,
       "reputationHit": 0.05,
-      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
       "confidence": "verified",
-      "checkedVia": "search_excerpt",
-      "note": "Penalty schedule, seen in a search excerpt: code 05E, critical, \"Toilet facilities not provided for patrons\" (81.22(b)) $300, $350 on default; the same amounts for no employee toilet (81.22(a)) and for a shared toilet reached through the kitchen, prep, storage or dishwashing area (81.22(d)). The fine repeats at every inspection until the toilet exists or the seats go back under 20. The points for 05E were not seen."
+      "checkedVia": "page_opened",
+      "note": "Read in the city's Chapter 23: scoring code 5E, \"Toilet facility not provided for employees or for patrons when required. Shared patron-employee toilet accessed through kitchen, food prep or storage area or utensil washing area\": 10 points (28 at the worst condition level), no lower levels. Penalty schedule, code 05E, critical: 81.22(a), (b) and (d) each $300, $350 at the worst level. Ten points alone leave four before the A is lost. The fine repeats at every inspection until the toilet exists or the seats go back under 20."
     },
     {
       "id": "toilet_not_supplied",
-      "name": "Restroom not properly supplied",
+      "name": "Restroom not maintained or supplied",
       "law": "NYC Health Code §81.22(c); 24 RCNY Chapter 23, Appendix 23-C, code 10A",
       "official": "health_inspector",
       "foundBy": [
@@ -705,10 +734,10 @@
       },
       "closureDays": 0,
       "reputationHit": 0.03,
-      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
       "confidence": "verified",
-      "checkedVia": "search_excerpt",
-      "note": "Penalty schedule, seen in a search excerpt: code 10A, general violation, \"Toilet facility not properly supplied\" (81.22(c)) $200. In practice, in the words of published inspection records: toilet facility not maintained and provided with toilet paper, waste receptacle and self-closing door."
+      "checkedVia": "page_opened",
+      "note": "Read in the city's Chapter 23: scoring code 10A, \"Toilet facility not maintained or provided with toilet paper, waste receptacle or self-closing door\": 2 to 5 points. Penalty schedule, code 10A, general: toilet facility not properly maintained $200, not properly supplied $200, toilet room not enclosed with a self-closing door $200, the same at every condition level."
     },
     {
       "id": "ventilation_inadequate",
@@ -727,31 +756,10 @@
       },
       "closureDays": 0,
       "reputationHit": 0.03,
-      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
       "confidence": "verified",
-      "checkedVia": "search_excerpt",
-      "note": "Penalty schedule, seen in a search excerpt: code 10D, ventilation not provided, improperly installed or in disrepair, leading to odors, smoke and fumes: $200 at every listed level. 81.19(c) also requires a mechanical vent in the restroom. The fine is small; the real cost of neglected air conditioning is the failure in a heat wave."
-    },
-    {
-      "id": "ac_door_open",
-      "name": "Door or window open while the air conditioning runs",
-      "law": "NYC Administrative Code §20-910 (Local Law 92 of 2015)",
-      "official": "dcwp_inspector",
-      "foundBy": [
-        "inspection",
-        "complaint"
-      ],
-      "fine": {
-        "base": 250,
-        "perMonth": 0,
-        "pctOfSaved": 0,
-        "max": 500
-      },
-      "closureDays": 0,
-      "reputationHit": 0.01,
-      "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and",
-      "confidence": "estimate",
-      "note": "The law covers every NYC business since 2015 (DCWP, seen in a search excerpt); allowed exceptions include deliveries and serving outdoor customers. Amounts are from 2015 press reports of the law, not from a current schedule: $250 for each open door or window, $500 for later violations. In 2024 the city made nearly 6,300 such inspections and wrote 89 violations."
+      "checkedVia": "page_opened",
+      "note": "Read in the city's Chapter 23: scoring code 10D, mechanical or natural ventilation not provided, improperly installed, in disrepair or failing to prevent build-up of heat, steam, vapors, odors, smoke and fumes: 2 to 5 points; penalty schedule 81.19(c): $200 at every level. Health Code 81.19(c) requires mechanical ventilation in rooms where odors, vapors or fumes originate. The fine is small; the real cost of neglected air conditioning is the failure in a heat wave."
     },
     {
       "id": "sign_without_permit",
@@ -763,16 +771,17 @@
         "inspection"
       ],
       "fine": {
-        "base": 6000,
+        "base": 1250,
         "perMonth": 0,
         "pctOfSaved": 0,
-        "max": null
+        "max": 6250
       },
       "closureDays": 0,
       "reputationHit": 0.01,
-      "source": "https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings",
-      "confidence": "estimate",
-      "note": "CBS New York, 2018-2019: a spike in complaints, many of them anonymous 311 calls, left many store owners facing $6,000 fines; the Buildings Department counted 1,046 illegal-sign complaints in 2018 against 310 in all of 2017. Local Law 28 of 2019 then froze violations for signs that existed on February 9, 2019 (extended to January 1, 2023 by Local Law 29 of 2021); a sign hung today is not covered. The current schedule amount was not seen: $6,000 is the 2018 figure. A wall sign of 6 sq ft or less with no lighting needs no permit."
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf",
+      "confidence": "verified",
+      "note": "Read in the Buildings penalty schedule (1 RCNY 102-01, city PDF dated July 2026): work without a permit under 28-105.1, Class 2: standard penalty $1,250, $6,250 on default, curable within 60 days; an outdoor sign on a display structure without a permit is also $1,250. Read on the Buildings sign page: no permit is needed for a sign painted directly on the wall or for a wall sign of 6 sq ft or less; anything else needs a permit, and only a licensed sign hanger may hang a sign over 75 sq ft or 25 pounds. History: in 2018 anonymous 311 complaints tripled (1,046 against 310 in 2017) and owners faced fines reported at $6,000; Local Law 28 of 2019 froze violations for signs that existed on February 9, 2019 and ended the Buildings Department's own extra civil penalty for business signs under 150 sq ft.",
+      "checkedVia": "page_opened"
     },
     {
       "id": "sidewalk_obstruction",
@@ -787,14 +796,14 @@
         "base": 50,
         "perMonth": 50,
         "pctOfSaved": 0,
-        "max": 300
+        "max": 100
       },
       "closureDays": 0,
       "reputationHit": 0,
-      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-99532",
+      "source": "https://www.nyc.gov/assets/dsny/downloads/about/adopted-rules/dsny-final-rule-relating-to-its-penalty-schedule.pdf",
       "confidence": "verified",
-      "checkedVia": "search_excerpt",
-      "note": "Sanitation penalty schedule, seen in a search excerpt: sidewalk obstruction under 16-118(2)(a) $50 for a first offense, $100 for a second or third, $300 at most. NYC311: sandwich and A-frame signs must not reach more than 3 feet into the sidewalk from the building or stand higher than 5 feet. Game formula: $100 from the second month, capped at $300."
+      "checkedVia": "page_opened",
+      "note": "Read in the Sanitation Department's adopted penalty rule (2021): Local Law 80 of 2021 set the penalties under 16-118(2)(a), sidewalk obstruction included, at $50 for a first violation and $100 for a second and for each later one; the default penalty is $300. NYC311, read: sandwich and A-frame signs must not extend more than 3 feet into the sidewalk from the building or be higher than 5 feet. Game formula: $50, then $100."
     },
     {
       "id": "blocked_egress",
@@ -820,23 +829,23 @@
     {
       "id": "backflow_not_tested",
       "name": "Backflow device missing or not tested",
-      "law": "10 NYCRR §5-1.31 (State Sanitary Code); 15 RCNY §20-04 (NYC water supply rules)",
+      "law": "NYC Health Code §81.20(a); 24 RCNY Chapter 23, code 10B; 10 NYCRR §5-1.31; 15 RCNY §20-04",
       "official": "dep_inspector",
       "foundBy": [
         "audit",
         "inspection"
       ],
       "fine": {
-        "base": 500,
+        "base": 100,
         "perMonth": 0,
         "pctOfSaved": 0,
         "max": null
       },
       "closureDays": 0,
       "reputationHit": 0,
-      "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
       "confidence": "estimate",
-      "note": "DEP FAQ, seen in a search excerpt: the device must be tested every 12 months by a certified tester, and failure can bring fines or disconnection of the water service. The $500 per untested device comes from a testing company's site, not from DEP. A City Council bill (Int 0768-2026) would raise the penalty for not installing a device to $1,000-$10,000; its status was not confirmed. Found by audit: DEP knows which annual reports are missing. Section numbers are cited from memory."
+      "note": "Two agencies. DEP FAQ, read: the device must be tested every 12 months by a certified tester, and failure can bring fines or disconnection of the water service; DEP's own fine amount was not found (a testing company's site says $500 per device). Health Department, read in Chapter 23: code 10B, back-flow prevention device not provided where required: 2 to 5 points (28 at worst); potable water not protected from back-flow $100, and $0 the first time if you prove the fix. The $100 is the Health Department figure. A City Council bill (Int 0768-2026) would raise the DEP penalty for not installing a device to $1,000-$10,000; its status was not confirmed. The state and city rule numbers are cited from memory."
     },
     {
       "id": "overcrowding_over_occupancy",
@@ -848,16 +857,17 @@
         "complaint"
       ],
       "fine": {
-        "base": 2400,
+        "base": 2500,
         "perMonth": 0,
         "pctOfSaved": 0,
         "max": 12500
       },
       "closureDays": 0,
       "reputationHit": 0.03,
-      "source": "https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf",
-      "confidence": "estimate",
-      "note": "Buildings penalty schedule copies seen in search excerpts: occupancy contrary to the Certificate of Occupancy (28-118.3.2), Class 1 (immediately hazardous): $2,400 standard, $12,000 on default, no cure and no stipulation; law-firm summaries of the current schedule give $2,500 and $12,500. Copies of different years disagree, hence estimate. A room used by 75 or more people also needs a Place of Assembly Certificate of Operation (28-117.1); the penalty for lacking one was not found. Under 75 people a cafe is classed as business use (Group B) and one exit can serve up to 74."
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf",
+      "confidence": "verified",
+      "note": "Read in the Buildings penalty schedule (1 RCNY 102-01, city PDF dated July 2026): occupancy contrary to that allowed by the Certificate of Occupancy (28-118.3.2), Class 1: standard $2,500, default $12,500, no cure and no stipulation. Operating a place of assembly without a current Certificate of Operation (28-117.1), Class 1: the same $2,500 and $12,500; operating one where the Certificate of Occupancy does not allow it: $5,000 and $25,000. Read in the 2022 Building Code: one exit may serve at most 74 people in business or assembly use, and doors must swing outward from a room of 75 or more.",
+      "checkedVia": "page_opened"
     },
     {
       "id": "cellar_used_for_customers",
@@ -869,16 +879,17 @@
         "complaint"
       ],
       "fine": {
-        "base": 1200,
+        "base": 1250,
         "perMonth": 0,
         "pctOfSaved": 0,
         "max": 6250
       },
       "closureDays": 0,
       "reputationHit": 0.02,
-      "source": "https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf",
-      "confidence": "estimate",
-      "note": "Same section as overcrowding, Class 2 (major): $1,200 standard and $6,000 on default in the schedule copies seen, $1,250 and $6,250 in law-firm summaries; it can be cured by filing a certificate of correction after the tables are gone. Legalizing cellar seating means amending the Certificate of Occupancy: exits, ceiling height, ventilation, an accessible route."
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf",
+      "confidence": "verified",
+      "note": "Read in the Buildings penalty schedule (1 RCNY 102-01, city PDF dated July 2026): occupancy contrary to the Certificate of Occupancy (28-118.3.2), Class 2: standard $1,250, default $6,250; it can be cured by a certificate of correction filed within 60 days, after the tables are gone. Legalizing cellar seating means amending the Certificate of Occupancy: exits, ceiling height, ventilation, an accessible route.",
+      "checkedVia": "page_opened"
     },
     {
       "id": "accessibility_barrier",
@@ -918,8 +929,30 @@
       "reputationHit": 0.02,
       "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
       "confidence": "verified",
-      "checkedVia": "search_excerpt",
-      "note": "DEP documents, seen in search excerpts: music from a commercial establishment may not exceed 42 dB(A) measured inside a receiving dwelling; one air-handling device may not exceed 42 dB(A) there and several together 45 dB(A). A first commercial music violation based on a reading in a residence can be reduced from $2,000 to $0 if the owner admits it and certifies the fix. Penalties for repeats were not seen."
+      "checkedVia": "page_opened",
+      "note": "DEP's instruction sheet on commercial music violations (2023), read: the penalty under 24-231(a) can be mitigated from $2,000 to $0, for the first violation only and only if it rests on a reading taken in a person's residence; the owner must admit liability and have a noise consultant certify compliance within six weeks. An older DEP schedule (2009), read: one air-circulation device over 42 dB(A) or several over 45 dB(A) cost $560 for a first offense, $1,120 for a second, $1,680 for a third; those amounts may have changed."
+    },
+    {
+      "id": "outdoor_cafe_noncompliant",
+      "name": "Licensed outdoor cafe set up against the rules",
+      "law": "NYC Administrative Code §19-160.1, §19-160.4, §19-160.5(c), §19-160.6; 34 RCNY §5-10, §5-11",
+      "official": "dot_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 200,
+        "perMonth": 300,
+        "pctOfSaved": 0,
+        "max": 500
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://www.diningoutnyc.info/enforcement",
+      "confidence": "verified",
+      "checkedVia": "page_opened",
+      "note": "Dining Out NYC enforcement page, read: for a first-time violation a licensed cafe receives a corrective action request with 30 days to fix it before any summons; after that, breaking the operation or design rules costs $200 for the first offense and $500 for the second and later ones, and repeat offenders can have the license suspended or revoked and the cafe removed. The engine should give one free month before charging. Game formula: $200, then $500."
     }
   ],
   "officials": [
@@ -1002,6 +1035,19 @@
       ],
       "realProcess": "Acts on a complaint from a person who could not get in or be served. In real life most cases never reach the Commission: a private lawyer files in federal court and the owner settles and fixes the entrance.",
       "source": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf"
+    },
+    {
+      "id": "dot_inspector",
+      "name": "Outdoor dining inspector",
+      "agency": "NYC Department of Transportation (Dining Out NYC)",
+      "role": "inspector",
+      "checks": [
+        "unlicensed_sidewalk_cafe",
+        "outdoor_cafe_noncompliant"
+      ],
+      "realProcess": "Inspectors patrol and answer 311 complaints. A licensed cafe with a setup problem first gets a corrective action request and 30 days to correct it; an unlicensed one is fined at once ($500, then $1,000) and can be ordered to clear the sidewalk.",
+      "source": "https://www.diningoutnyc.info/enforcement",
+      "note": "Same id as in the pack: one D02 violation added to the checks."
     }
   ],
   "reports": [
@@ -1037,20 +1083,12 @@
     },
     {
       "id": "report_blocked_sidewalk",
-      "name": "Report a blocked sidewalk (311)",
-      "text": "In real life: a 311 complaint about signs, benches or goods in the walking path. Sanitation enforcement tickets what it finds. If you are wrong, you get a warning.",
+      "name": "Report a blocked sidewalk or outdoor tables over the line (311)",
+      "text": "In real life: a 311 complaint about signs, benches, goods or cafe tables in the walking path. Sanitation enforcement tickets obstructions; the Transportation Department measures outdoor cafes against their plans. If you are wrong, you get a warning.",
       "role": "inspector",
       "checks": [
-        "sidewalk_obstruction"
-      ]
-    },
-    {
-      "id": "report_open_door_ac",
-      "name": "Report an open door with the air conditioning on (311)",
-      "text": "In real life: a 311 complaint to the Department of Consumer and Worker Protection in summer. An inspector checks whether cold air is pouring out of an open door. If you are wrong, you get a warning.",
-      "role": "inspector",
-      "checks": [
-        "ac_door_open"
+        "sidewalk_obstruction",
+        "outdoor_cafe_noncompliant"
       ]
     },
     {
@@ -1074,19 +1112,6 @@
   ],
   "events": [
     {
-      "id": "summer_open_door_sweep",
-      "name": "City sweep: doors open with the air conditioning on",
-      "text": "Inspectors walk the shopping streets in the hottest weeks looking for cold air pouring out of open doors.",
-      "effect": {
-        "field": "inspections",
-        "mult": 1.2
-      },
-      "months": 3,
-      "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and",
-      "confidence": "estimate",
-      "note": "DCWP, seen in a search excerpt: nearly 6,300 inspections and 89 violations for open doors in 2024. The 20% rise in inspection pressure is a game value."
-    },
-    {
       "id": "sign_complaint_wave",
       "name": "Wave of sign complaints on the avenue",
       "text": "Someone is calling 311 about every storefront sign on the strip. Buildings inspectors have to answer each call.",
@@ -1108,29 +1133,29 @@
         "mult": 1.01
       },
       "months": 12,
-      "source": "https://www.nyc.gov/site/dep/pay-my-bills/how-we-bill-you.page",
+      "source": "https://www.nyc.gov/assets/nycwaterboard/downloads/pdf/rates/fy2027_rates.pdf",
       "confidence": "estimate",
-      "note": "DEP, seen in a search excerpt: the combined water and sewer charge was $13.07 per 100 cubic feet in the year from July 1, 2025; a 6% rise was proposed for July 1, 2026 (adoption not confirmed). Water is roughly a seventh of the pack's utilities line by my estimate (about 12 hundred-cubic-feet a month = $157 of $1,100): 6% x 14% = about 1%."
+      "note": "Water Board rate schedule effective July 1, 2026, read: metered water $5.35 per 100 cubic feet (it was $5.05 the year before: +5.9%), wastewater 159% of the water charge, so $13.86 combined; minimum charge $0.49 a day. Water is roughly a seventh of the pack's utilities line by my estimate (about 12 hundred-cubic-feet a month = $166 of $1,100): 5.9% x 15% = about 1%. The rates are verified; the cafe's water use is the estimate."
     }
   ],
   "ruleCards": [
     {
       "id": "no_patron_toilet",
       "title": "Seat 20 needs a toilet",
-      "text": "A cafe with 20 or more seats must give customers a toilet, and they may not walk through the kitchen or storage to reach it. No toilet: $300 at every inspection. Premises that held a food permit by December 5, 1977 are exempt until they renovate.",
-      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264"
+      "text": "A cafe with 20 or more seats, outdoor ones included, must give customers a toilet they can reach without crossing the kitchen or storage. No toilet: $300 and 10 points at every inspection. Premises with a food permit by December 5, 1977 are exempt until they renovate.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf"
     },
     {
       "id": "toilet_not_supplied",
       "title": "A stocked restroom",
-      "text": "A restroom without toilet paper, a waste bin or a self-closing door is \"not properly supplied\": $200. A one-person restroom must also carry an all-gender sign on the wall next to the door (Local Law 79 of 2016).",
-      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/single-occupant-toilet-signage.page"
+      "text": "A restroom without toilet paper, a waste bin or a self-closing door costs $200 and 2 to 5 points at inspection. A one-person restroom must also carry an all-gender sign on the wall next to the door (Local Law 79 of 2016).",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
     },
     {
       "id": "occupancy_75",
       "title": "The 75-person line",
-      "text": "A room for fewer than 75 people is classed as business space and one exit can serve up to 74. At 75 it becomes a place of assembly: second exit, a Buildings certificate and a yearly Fire Department permit. People are counted, not chairs.",
-      "source": "https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-3-use-and-occupancy-classification"
+      "text": "A room for fewer than 75 people, staff included, is business space and one exit can serve up to 74. At 75 it is a place of assembly: second exit, outward-swinging doors, a Buildings certificate and a yearly Fire Department permit. People are counted, not chairs.",
+      "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf"
     },
     {
       "id": "occupant_load",
@@ -1141,14 +1166,14 @@
     {
       "id": "overcrowding_over_occupancy",
       "title": "Over capacity",
-      "text": "More people inside than the Certificate of Occupancy allows is an immediately hazardous violation: about $2,400, or $12,000 if you skip the hearing, and it cannot be cured with paperwork. For one big night, a temporary permit costs $250, filed 10 business days ahead.",
-      "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation"
+      "text": "More people inside than the Certificate of Occupancy allows is an immediately hazardous violation: $2,500, or $12,500 if you miss the hearing, and it cannot be cured with paperwork. For one big night, a temporary permit costs $250, filed 10 business days ahead.",
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
     },
     {
       "id": "cellar_used_for_customers",
       "title": "The cellar is storage",
-      "text": "A cellar listed as storage on the Certificate of Occupancy may hold stock, not customers. Seating down there is \"occupancy contrary to the Certificate\": about $1,200, $6,000 on default. Making it legal means exits, ceiling height and an amended certificate.",
-      "source": "https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf"
+      "text": "A cellar listed as storage on the Certificate of Occupancy may hold stock, not customers. Seating down there is \"occupancy contrary to the Certificate\": $1,250, or $6,250 on default. Making it legal means exits, ceiling height and an amended certificate.",
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
     },
     {
       "id": "accessibility_barrier",
@@ -1165,20 +1190,14 @@
     {
       "id": "ada_tax_credit",
       "title": "The government shares the cost of access",
-      "text": "A business with sales of $1 million or less, or no more than 30 full-time workers, can claim the Disabled Access Credit for ramps, doors and restroom changes on IRS Form 8826: up to $5,000 a year.",
+      "text": "A business with sales of $1 million or less, or no more than 30 full-time workers, gets a federal credit for ramps, doors and restroom changes: 50% of what it spends between $250 and $10,250 a year, up to $5,000 (IRS Form 8826).",
       "source": "https://www.irs.gov/pub/irs-pdf/f8826.pdf"
-    },
-    {
-      "id": "ac_door_open",
-      "title": "Shut the front door",
-      "text": "Since 2015 every NYC business must keep doors and windows closed while the air conditioning runs: $250 per open door or window, more for repeats. In 2024 the city made nearly 6,300 such inspections and wrote 89 violations.",
-      "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and"
     },
     {
       "id": "sign_without_permit",
       "title": "Signs get reported",
-      "text": "A sign over 6 sq ft, or any lit sign, needs a Buildings permit and a licensed sign hanger. In 2018 anonymous 311 complaints about signs tripled to more than 1,000 and many small shops faced $6,000 fines before the Council froze them.",
-      "source": "https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings"
+      "text": "A wall sign over 6 sq ft needs a Buildings permit; a sign painted on the wall needs none. Work without a permit: $1,250, or $6,250 if you miss the hearing. In 2018 anonymous 311 complaints about signs tripled to over 1,000 before the Council froze the fines.",
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
     },
     {
       "id": "awning_lettering",
@@ -1189,61 +1208,61 @@
     {
       "id": "landmark_storefront",
       "title": "Landmark blocks",
-      "text": "In a historic district any change to the outside of a storefront needs a Landmarks permit first: sign, awning, lighting. Staff permits take about 10 to 15 business days. Planters and A-frames that are not fixed to the building need none.",
+      "text": "In a historic district any change to the outside of a storefront needs a Landmarks permit first: storefront, sign, awning, lighting, a new paint color, even a sidewalk cafe. Check the address on the Landmarks map before you sign the lease.",
       "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
     },
     {
       "id": "security_grille",
       "title": "Roll-down gates",
-      "text": "A 2009 law told every shop to have a gate at least 70% see-through by July 1, 2026; owners were quoted $6,000 to $7,000 a gate. The Council dropped the deadline 51-0 on June 30, 2026. The 70% rule now applies only to a new or replaced gate.",
-      "source": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates"
+      "text": "A 2009 law told shops to have gates at least 70% see-through by July 1, 2026; owners were quoted $6,000 to $7,000 a gate. The Council dropped the deadline 51-0 on June 30, 2026. The 70% rule now applies only to a new or replaced gate.",
+      "source": "https://www.nyc.gov/assets/buildings/pdf/security_grille-sn.pdf"
     },
     {
       "id": "sidewalk_obstruction",
       "title": "Your sign on their sidewalk",
-      "text": "An A-frame sign may stand no more than 3 feet out from your wall and no taller than 5 feet. Beyond that, signs, benches and crates are sidewalk obstructions: $50 the first time, $100 the next two, up to $300.",
+      "text": "An A-frame sign may stand no more than 3 feet out from your wall and no taller than 5 feet. Beyond that, signs, benches and crates are sidewalk obstructions: $50 the first time, $100 each time after, $300 if you ignore the ticket.",
       "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
     },
     {
       "id": "sidewalk_cafe_geometry",
       "title": "How much sidewalk you can use",
-      "text": "A sidewalk cafe must leave walkers a clear path: 8 feet on most streets, 10 on regional corridors, 12 on the busiest ones, and stay 15 feet from a subway stair. On a 12-foot side-street sidewalk that leaves one row of small tables at most.",
+      "text": "A sidewalk cafe must leave walkers half the sidewalk or 8 feet, whichever is more (10 feet on regional corridors, 12 on global ones), and stay 15 feet from a subway stair. On a 12-foot side-street sidewalk that leaves one row of small tables at most.",
       "source": "https://www.nycstreetdesign.info/furniture/clear-path"
     },
     {
       "id": "outdoor_dining_fees",
       "title": "What outdoor seats cost",
-      "text": "License $1,050 for four years; deposit $1,500 (sidewalk) or $2,500 (roadway); hearing notice up to $1,000; then $6 to $31 per sq ft a year on the sidewalk and $5 to $25 in the roadway. The cheapest rate covers about 80% of the city.",
-      "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf"
+      "text": "License $1,050 for four years; refundable deposit $1,500 (sidewalk) or $2,500 (roadway); roadway hearing notice $500-$900; then $6 to $31 per sq ft a year by sector. The city's own example: 120 sq ft of sidewalk costs $720 a year in most of the city, $3,720 in central Manhattan.",
+      "source": "https://www.diningoutnyc.info/apply/fees"
     },
     {
       "id": "roadway_all_year",
       "title": "Roadway cafes all year",
-      "text": "Until 2026 a roadway cafe had to come down every November 29 and return April 1. A law signed August 31, 2026 lets roadway cafes stay all year; year-round applications were set to open in September 2026.",
-      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604"
+      "text": "A seasonal roadway cafe runs April 1 to November 29 and must be gone by November 30. Since a 2026 law a year-round roadway license exists, at the higher sidewalk rates ($6-$31 per sq ft a year instead of $5-$25). Sidewalk cafes were always year-round.",
+      "source": "https://www.diningoutnyc.info/enforcement"
     },
     {
       "id": "storm_enclosure",
       "title": "Winter vestibules",
-      "text": "A storm enclosure at the door is allowed only from November 15 to April 15 and may stand no more than 18 inches beyond the building line. Left up in May, it is an illegal structure that anyone can report to 311.",
+      "text": "A storm enclosure at the door is allowed only from November 15 through April 15, needs a permit and may stand no more than 18 inches beyond the building line. Left up after April 15, it is an illegal structure that anyone can report to 311.",
       "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02227"
     },
     {
       "id": "lighting_levels",
       "title": "Light is in the Health Code",
-      "text": "The Health Code sets light levels: 50 foot-candles where food is prepared, 20 at hand sinks, dishwashing and inside fridges, 10 in dry storage. Bulbs over food must be shatterproof or shielded. A moody dark bar is a violation.",
-      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238"
+      "text": "The Health Code sets light levels: 50 foot-candles where food is prepared, 20 at hand sinks, dishwashing, inside fridges and in the restroom, 10 in dry storage. Bulbs over food must be shatterproof or shielded. Too dark: $100, waived the first time if you fix it.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf"
     },
     {
       "id": "backflow_not_tested",
       "title": "The backflow test",
-      "text": "The backflow device on your water line keeps cafe water out of the city main. It must be tested every 12 months by a certified tester, about $150 to $350. Skip it and the city can fine you or disconnect your water.",
+      "text": "The backflow device on the water line keeps cafe water out of the city main. Installing one costs $3,000-$5,000 in a small building (DEP's figures) and it must be tested every 12 months by a certified tester. Skip it and the city can fine you or disconnect your water.",
       "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page"
     },
     {
       "id": "commercial_noise",
       "title": "42 decibels upstairs",
-      "text": "Music from a business may not exceed 42 decibels measured inside a neighbor's home; one rooftop fan or compressor has the same limit, several together 45. A first music violation is $2,000, reduced to $0 only if you prove the fix.",
+      "text": "Music from a business may not exceed 42 decibels measured inside a neighbor's home; one rooftop fan or compressor has the same limit, several together 45. A first music violation is $2,000, reduced to $0 only if a noise consultant certifies the fix.",
       "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf"
     },
     {
@@ -1267,8 +1286,50 @@
     {
       "id": "ventilation_inadequate",
       "title": "Air you have to maintain",
-      "text": "The Health Code requires working ventilation, and a mechanical vent in the restroom. Ventilation that is missing, badly installed or broken costs $200 at inspection. Most leases make the tenant, not the landlord, pay for the air conditioning unit.",
-      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593"
+      "text": "The Health Code requires working ventilation. Ventilation that is missing, badly installed or broken costs $200 and 2 to 5 points at inspection. Most leases make the tenant, not the landlord, pay for the air conditioning unit.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+      "id": "two_toilet_rooms",
+      "title": "More than 30 people: two toilet rooms",
+      "text": "Plumbing Code: where customers must be given a toilet and the space holds more than 30 people, staff included, it needs separate facilities. Two single all-gender rooms satisfy that. The rule bites when a space is built or altered, so seat 20 can mean two restrooms.",
+      "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022PC_Chapter4_FixturesWBwm.pdf"
+    },
+    {
+      "id": "one_exit_reach",
+      "title": "One door is not always enough",
+      "text": "One exit serves a business room only if the farthest corner is within 75 feet of walking distance once more than 30 people use it (100 feet with sprinklers). A long, narrow storefront can need a second exit with 40 seats.",
+      "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf"
+    },
+    {
+      "id": "open_door_and_ac",
+      "title": "Open door, air conditioning on",
+      "text": "Since 2015 NYC shops must shut doors and windows while the air conditioning runs. A food business with indoor seating whose door opens straight to the street is exempt; with a vestibule between door and seats it is not. The city made nearly 6,300 inspections in 2024.",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/DCAInspectionChecklist_AirConditionersAndOpenDoors.pdf"
+    },
+    {
+      "id": "outdoor_cafe_noncompliant",
+      "title": "Outdoor tables over the line",
+      "text": "A licensed outdoor cafe that breaks the design or operating rules first gets a corrective action request and 30 days to fix it. After that: $200 for the first offense, $500 for each later one, and repeat offenders can lose the license.",
+      "source": "https://www.diningoutnyc.info/enforcement"
+    },
+    {
+      "id": "outdoor_seat_rules",
+      "title": "Rules for the outdoor area",
+      "text": "Outdoor seats count toward the 20-seat restroom line. You may not prepare or store food, utensils or equipment outside, nobody may smoke or vape there, and your pest control contract must be extended to cover the outdoor setup.",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page"
+    },
+    {
+      "id": "open_flame_permit",
+      "title": "Candles need a permit",
+      "text": "Candles on the tables need a Fire Department open flame permit in any restaurant, even one for fewer than 75 people: $210 a year. No lit candles where people stand, in an aisle or at an exit.",
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf"
+    },
+    {
+      "id": "rooftop_unit_permit",
+      "title": "The unit on the roof has its own permit",
+      "text": "An air conditioning or refrigeration unit mounted on the roof or hung from the ceiling needs a Fire Department permit: $105 per compressor, renewed every year. A small floor unit under five horsepower with ordinary refrigerant is exempt.",
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf"
     }
   ],
   "roadmap": [
@@ -1282,7 +1343,7 @@
       "id": "decide_seat_count",
       "title": "Pick your seat count: 19 or 20 is a real decision",
       "kind": "idea",
-      "text": "With 20 or more seats, indoor and outdoor together, you must provide a customer restroom; with 75 or more people the room becomes a place of assembly. Decide the count before the architect draws: seat 20 can cost $12,000.",
+      "text": "With 20 or more seats, indoor and outdoor together, you must provide a customer restroom, and in a newly built or altered space for more than 30 people that means two toilet rooms. With 75 or more people the room becomes a place of assembly. Decide the count before the architect draws.",
       "agency": "NYC Department of Health and Mental Hygiene",
       "link": "https://portal.311.nyc.gov/article/?kanumber=KA-01351"
     },
@@ -1298,7 +1359,7 @@
       "id": "check_the_front_door",
       "title": "Look at the entrance the way a wheelchair user would",
       "kind": "space",
-      "text": "A step at the door is the most common reason small NYC shops get sued. A compliant ramp needs one foot of length per inch of height, and on the sidewalk it needs a city consent. Budget the fix now; a small business can claim up to $5,000 a year back through IRS Form 8826.",
+      "text": "A step at the door is the most common reason small NYC shops get sued. A compliant ramp needs one foot of length per inch of height; on an older building it may reach 44 inches onto the sidewalk with the Buildings Department's approval. A small business can claim back half the cost, up to $5,000 a year (IRS Form 8826).",
       "agency": "NYC Department of Buildings; NYC Department of Transportation",
       "link": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf"
     },
@@ -1306,7 +1367,7 @@
       "id": "check_landmark_and_sign_rules",
       "title": "Find out if the block is landmarked before you design the front",
       "kind": "permit",
-      "text": "In a historic district every outside change needs a Landmarks permit before the Buildings Department will act: sign, awning, lighting. Outside one, a sign over 6 sq ft or with lights still needs a permit and a licensed sign hanger.",
+      "text": "In a historic district every outside change needs a Landmarks permit before the Buildings Department will act: sign, awning, lighting, a new paint color. Outside one, a wall sign over 6 sq ft still needs a permit; a sign painted directly on the wall does not.",
       "setupItemId": "landmarks_storefront_permit",
       "fee": 0,
       "waitDays": 21,
@@ -1317,9 +1378,9 @@
       "id": "apply_roadway_cafe",
       "title": "Optional: apply for a roadway cafe",
       "kind": "permit",
-      "text": "A roadway cafe license is $1,050 for four years plus a $2,500 deposit, a hearing notice fee of up to $1,000 and a yearly fee per square foot. Review takes three to five months. Since 2026 the setup may stay all year, but the structure itself runs $5,000 to $35,000.",
+      "text": "A roadway cafe license is $1,050 for four years plus a refundable $2,500 deposit, a hearing notice of $500-$900 and a yearly fee per square foot. The program says review can take six months. A year-round license costs more per square foot than a seasonal one, and the structure itself runs $5,000 to $35,000.",
       "setupItemId": "roadway_cafe_license",
-      "fee": 4550,
+      "fee": 4450,
       "waitDays": 120,
       "agency": "NYC Department of Transportation (Dining Out NYC)",
       "link": "https://www.diningoutnyc.info/apply"
@@ -1379,23 +1440,34 @@
     "seatThresholds": [
       {
         "seats": 20,
-        "rule": "A customer toilet is required at a seating capacity of 20 or more, indoor and outdoor seats and shared seating counted together; premises that held a food permit on or before December 5, 1977 are exempt until a renovation that needs a Buildings permit",
+        "rule": "A customer toilet is required at a seating capacity of 20 or more, indoor and outdoor seats and shared seating counted together; premises that held a food permit on or before December 5, 1977 are exempt until a renovation that needs a Buildings construction permit",
         "law": "NYC Health Code §81.22(b)",
         "setupItemId": "customer_restroom",
-        "penalty": "Code 05E, critical: $300 at each inspection ($350 on default)",
-        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+        "penalty": "Code 5E, critical: $300 and 10 points at each inspection ($350 and 28 points at the worst level)",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
         "confidence": "verified",
-        "checkedVia": "search_excerpt"
+        "checkedVia": "page_opened"
+      },
+      {
+        "seats": 20,
+        "persons": 31,
+        "rule": "Where customers must be given a toilet and the space holds more than 30 people, staff included, separate facilities are required; two single all-gender toilet rooms satisfy it. Applies when a space is built or altered",
+        "law": "NYC Plumbing Code §403.2 (exceptions 2-4), §403.2.1, §403.2.2, §403.3",
+        "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022PC_Chapter4_FixturesWBwm.pdf",
+        "confidence": "verified",
+        "checkedVia": "page_opened",
+        "note": "Read in the 2022 Plumbing Code. No setupItemId on purpose: the engine should not block on it until the lead decides whether a second room is a separate item. A 20-seat room is over 30 people by the code's count (20 x 18 / 15 = 24, + 3 staff, + a queue)."
       },
       {
         "seats": 48,
         "persons": 75,
-        "rule": "75 or more people (the occupant load on the Certificate of Occupancy, not chairs) make the room a place of assembly: Place of Assembly Certificate of Operation, yearly Fire Department permit, a second exit. Below 75 a cafe is business use (Group B) and one exit may serve up to 74",
-        "law": "NYC Building Code §303.1.2 and Table 1006.2.1; NYC Administrative Code §28-117.1",
+        "rule": "75 or more people, staff included (the occupant load, not chairs) make the room a place of assembly: Place of Assembly Certificate of Operation, yearly Fire Department permit, a second exit, outward-swinging doors. Below 75 one exit may serve up to 74",
+        "law": "NYC Building Code Table 1004.1.3, Table 1006.2.1, §1010.1.2.2; NYC Administrative Code §28-117.1",
         "setupItemId": "place_of_assembly_certificate",
-        "source": "https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-3-use-and-occupancy-classification",
-        "confidence": "estimate",
-        "note": "Corrects the pack's entry, which read the line as 75 seats. The law counts people: seating area / 15 sq ft + standing area / 5 sq ft + staff. 48 seats is my conversion for a room laid out at 18 sq ft a seat with a 70 sq ft queue and 3 staff: 48 x 18 / 15 = 58, + 14 + 3 = 75. The pack's maximum of 40 seats stays under it (48 + 14 + 3 = 65); a standing event does not."
+        "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
+        "confidence": "verified",
+        "note": "Corrects the pack's entry, which read the line as 75 seats. The law counts people: seating area / 15 sq ft + standing area / 5 sq ft + staff (all read in the 2022 Building Code). 48 seats is my conversion for a room laid out at 18 sq ft a seat with a 70 sq ft queue and 3 staff: 48 x 18 / 15 = 58, + 14 + 3 = 75. The pack's maximum of 40 seats stays under it; a standing event does not. The threshold number is verified, the seat conversion is an estimate.",
+        "checkedVia": "page_opened"
       }
     ],
     "floorPlan": {
@@ -1410,13 +1482,13 @@
         {
           "id": "queue_and_pickup",
           "sqft": 70,
-          "basis": "Ten people at about 7 sq ft each; the code counts 5 net sq ft per standing person when it computes occupancy.",
+          "basis": "Ten people at about 7 sq ft each; the Building Code counts 5 net sq ft per standing person when it computes occupancy (Table 1004.1.3, read).",
           "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf"
         },
         {
           "id": "restroom",
           "sqft": 60,
-          "basis": "Accessible single-user room: 35 sq ft in the Access Board's smallest sample plan (7 ft x 5 ft), about 48 typical, plus the door approach. An employee toilet is required at any size (Health Code 81.22(a)).",
+          "basis": "Accessible single-user room: 35 sq ft in the Access Board's smallest sample plan (7 ft x 5 ft, search excerpt), about 48 typical, plus the door approach; the Access Board itself says the standards set no minimum room size (read). An employee toilet is required at any size (Health Code 81.22(a), read). A second room is needed in a new or altered space for more than 30 people with 20 or more seats.",
           "source": "https://www.access-board.gov/ada/guides/chapter-6-toilet-rooms/"
         },
         {
@@ -1473,7 +1545,14 @@
         }
       ],
       "formula": "seats = floor((sqft - fixedCoreSqft) / netSqftPerSeat); seatsEngineToday = min(40, floor(sqft x 0.6 / 18))",
-      "confidence": "estimate"
+      "confidence": "estimate",
+      "outdoorSqftPerChair": {
+        "value": 11.4,
+        "source": "https://data.cityofnewyork.us/resource/qcdj-rwhu.json",
+        "confidence": "verified",
+        "checkedVia": "page_opened",
+        "note": "NYC Open Data, old sidewalk cafe license records (dataset qcdj-rwhu), queried: 324 licenses with both figures, 92,391 sq ft and 8,072 chairs in total = 11.4 sq ft per chair; the average licensed cafe had 285 sq ft and 25 chairs. Pre-2024 program, both enclosed and unenclosed cafes."
+      }
     },
     "eventCatalog": [
       {
@@ -1867,12 +1946,12 @@
             "id": "squeeze_extra_seats"
           }
         ],
-        "realFrequency": "Health Code 81.22(b); NYC311 adds that seating shared by several food businesses in a common space is counted in",
+        "realFrequency": "Health Code 81.22(b); NYC Health: 20 or more seats, including both indoor and outdoor seats; NYC311 adds seating shared by several food businesses in a common space",
         "tier": "core",
-        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01351",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
         "confidence": "verified",
-        "checkedVia": "search_excerpt",
-        "note": "Not a random event: the inspection finds what is there."
+        "checkedVia": "page_opened",
+        "note": "Not a random event: the inspection finds what is there. 10 points and $300 each time (Chapter 23, code 5E)."
       },
       {
         "id": "accessibility_suit_wave",
@@ -1972,7 +2051,7 @@
         "tier": "deep",
         "source": "https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/",
         "confidence": "estimate",
-        "note": "Mirrors the standard event of the same name in 'events'."
+        "note": "Mirrors the standard event of the same name in 'events'. Today's penalty for work without a permit is $1,250 standard and $6,250 on default (Buildings schedule, read)."
       },
       {
         "id": "roll_down_gate_deadline",
@@ -2011,47 +2090,7 @@
         "source": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates",
         "confidence": "verified",
         "checkedVia": "search_excerpt",
-        "note": "No dice: both halves are announced. The lesson is real: read deadlines, but watch the Council calendar. The new rule (70% see-through only when a gate is installed or replaced) stays."
-      },
-      {
-        "id": "open_door_sweep",
-        "name": "\"Shut the Front Door\" sweep",
-        "text": "City inspectors walk the avenues in the hottest weeks and ticket shops that cool the sidewalk.",
-        "scale": "city",
-        "months": [
-          6,
-          7,
-          8
-        ],
-        "trigger": "announced every spring; hits businesses using the open-door shortcut",
-        "realSignal": "DCWP seasonal enforcement announcement; 2024: nearly 6,300 inspections, 89 violations",
-        "effects": [
-          {
-            "field": "inspections",
-            "mult": 1.2
-          },
-          {
-            "field": "violation",
-            "id": "ac_door_open"
-          }
-        ],
-        "durationMonths": 3,
-        "playerMoves": [
-          {
-            "kind": "shortcut",
-            "id": "prop_door_open_with_ac"
-          },
-          {
-            "kind": "lever",
-            "id": "entrance_winter"
-          }
-        ],
-        "realFrequency": "Every summer since 2016",
-        "tier": "core",
-        "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and",
-        "confidence": "verified",
-        "checkedVia": "search_excerpt",
-        "note": "Mirrors the standard event summer_open_door_sweep. An air curtain does not make an open door legal; it only helps when the door opens for customers."
+        "note": "No dice: both halves are announced. The Buildings notice of February 17, 2026 was read in full; the repeal vote is known from search excerpts of the press and the Council record. The lesson is real: read deadlines, but watch the Council calendar. The new rule (70% see-through only when a gate is installed or replaced) stays."
       },
       {
         "id": "winter_draft_at_the_door",
@@ -2124,8 +2163,8 @@
         "tier": "exotic",
         "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02227",
         "confidence": "verified",
-        "checkedVia": "search_excerpt",
-        "note": "The fine for a late or oversized enclosure was not found; the engine can treat it as a Buildings complaint."
+        "checkedVia": "page_opened",
+        "note": "Read at NYC311: enclosures with no permit, more than 18 inches beyond the street line or not removed after April 15 can be reported. The fine was not found; the engine can treat it as a Buildings complaint."
       },
       {
         "id": "storefront_glass_broken",
@@ -2235,7 +2274,7 @@
         "effects": [
           {
             "field": "seats",
-            "add": 8
+            "add": 10
           },
           {
             "field": "demand",
@@ -2255,9 +2294,9 @@
         ],
         "realFrequency": "Every year; sidewalk cafes are legal all year, roadway cafes all year since 2026",
         "tier": "core",
-        "source": "https://www.diningoutnyc.info/rules/sidewalk/siting-clearances",
+        "source": "https://www.diningoutnyc.info/apply/fees",
         "confidence": "estimate",
-        "note": "The months and the 3% are my estimates. Outdoor seats count toward the 20-seat restroom line, and seasonal outdoor seating counts toward the plumbing fixture count (NYC Plumbing Code 403.1)."
+        "note": "Ten seats = the program's 120 sq ft example at 11.4 sq ft a chair (average of 324 old sidewalk cafe licenses in NYC Open Data). The months and the 3% are my estimates. Outdoor seats count toward the 20-seat restroom line (NYC Health)."
       },
       {
         "id": "community_board_review",
@@ -2283,7 +2322,7 @@
         "effects": [
           {
             "field": "cash",
-            "add": -1000,
+            "add": -900,
             "onlyIf": "the player goes to the hearing"
           },
           {
@@ -2303,9 +2342,9 @@
             "id": "go_to_the_hearing"
           }
         ],
-        "realFrequency": "Charter Revision Commission report, 2026: sidewalk cafe applications take six to eight months; the hearing notice fee of up to $1,000 is charged when the board recommends disapproval",
+        "realFrequency": "Dining Out NYC, read: a hearing is held on every roadway application and on sidewalk applications that the community board denied or whose requested changes the applicant refused; the applicant pays for the notice, generally $500 to $900. By law a sidewalk review may last at most 130 days once the application is complete (City Council report); in practice six to eight months (Charter Revision Commission, 2026).",
         "tier": "deep",
-        "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+        "source": "https://www.diningoutnyc.info/apply/publichearing",
         "confidence": "estimate",
         "note": "Trimming the plan (fewer tables, earlier closing) passes without the fee; the extra 60 days for a hearing are my estimate."
       },
@@ -2318,11 +2357,15 @@
           9
         ],
         "trigger": "announced: law signed August 31, 2026",
-        "realSignal": "Local Law 135 of 2026; year-round applications from September 2026",
+        "realSignal": "Year-round roadway licenses offered from September 2026 (NYC311 and the program's fee table)",
         "effects": [
           {
             "field": "roadwayMonthsActive",
             "set": 12
+          },
+          {
+            "field": "roadwayFeePerSqft",
+            "set": "sidewalk rate: $6-$31 instead of $5-$25"
           }
         ],
         "durationMonths": 12,
@@ -2340,8 +2383,8 @@
         "tier": "deep",
         "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
         "confidence": "verified",
-        "checkedVia": "search_excerpt",
-        "note": "Before the law owners had to store or rebuild the structure each spring; operators called storing it impossible (Streetsblog)."
+        "checkedVia": "page_opened",
+        "note": "Read at NYC311 and on the program's site: a seasonal roadway cafe runs April 1 to November 29, may be set up from March 25 and must be removed by November 30; new applicants can choose a year-round license with higher fees and existing ones can upgrade for an additional fee. Before the law owners had to store or rebuild the structure each spring."
       },
       {
         "id": "outdoor_setup_out_of_bounds",
@@ -2361,12 +2404,20 @@
         "realSignal": "Transportation Department inspection or a 311 complaint",
         "effects": [
           {
+            "field": "violation",
+            "id": "outdoor_cafe_noncompliant"
+          },
+          {
             "field": "seats",
             "add": -4
           }
         ],
         "durationMonths": 1,
         "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "sidewalk_cafe_creep"
+          },
           {
             "kind": "lever",
             "id": "outdoor_seating"
@@ -2375,8 +2426,9 @@
         "realFrequency": "Not found for the current program; an older city audit found 24 of 183 sidewalk cafes (13%) operating with no license at all",
         "tier": "deep",
         "source": "https://www.diningoutnyc.info/enforcement",
-        "confidence": "estimate",
-        "note": "The 30-day cure for a licensed cafe is from the pack's existing enforcement source; the walkers' clear path is 8 feet on most streets, 10 on regional corridors and 12 on global corridors."
+        "confidence": "verified",
+        "note": "Read on the program's enforcement page: first a corrective action request with 30 days to fix, then $200 for the first offense and $500 for later ones. The walkers' clear path is the greater of half the sidewalk or 8 feet (10 on regional corridors, 12 on global ones).",
+        "checkedVia": "page_opened"
       },
       {
         "id": "ac_fails_in_heat_wave",
@@ -2597,8 +2649,8 @@
         "tier": "deep",
         "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
         "confidence": "verified",
-        "checkedVia": "search_excerpt",
-        "note": "DEP: failure to test can bring fines or disconnection of water service."
+        "checkedVia": "page_opened",
+        "note": "DEP, read: a notification letter arrives when the yearly test is due; failure to test can bring fines or disconnection of water service."
       },
       {
         "id": "cloudburst_floods_cellar",
@@ -2633,7 +2685,7 @@
             "id": "cellar_storage_or_ground_floor"
           }
         ],
-        "realFrequency": "DEP: about 60% of the city's sewers carry storm water and sewage in one pipe and back up into buildings when rain overwhelms them. NYC311: food that touched sewage water must be thrown out.",
+        "realFrequency": "DEP (search excerpt): about 60% of the city's sewers carry storm water and sewage in one pipe and back up into buildings when rain overwhelms them. NYC311, read: discard any food items, including packaged food, that were in contact with sewage water, and anything that cannot be cleaned and dried within 24-48 hours.",
         "tier": "core",
         "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02997",
         "confidence": "estimate",
@@ -2862,7 +2914,7 @@
         "tier": "deep",
         "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
         "confidence": "verified",
-        "checkedVia": "search_excerpt",
+        "checkedVia": "page_opened",
         "note": "42 dB(A) inside the dwelling; the first violation drops from $2,000 to $0 if the owner proves the fix. The same limit applies to a rooftop compressor."
       },
       {
@@ -2950,8 +3002,9 @@
         "realFrequency": "Not found",
         "tier": "deep",
         "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
-        "confidence": "estimate",
-        "note": "Standing people count at 5 sq ft each, so 400 sq ft of cleared floor is 80 people on paper."
+        "confidence": "verified",
+        "note": "Standing people count at 5 sq ft each (Building Code Table 1004.1.3, read), so 400 sq ft of cleared floor is 80 people on paper. The penalty is $2,500, or $12,500 on default; the temporary certificate is $250.",
+        "checkedVia": "page_opened"
       },
       {
         "id": "cellar_stairs_tax",
@@ -3075,11 +3128,12 @@
             "id": "decor_lighting"
           }
         ],
-        "realFrequency": "Penalty schedule: lighting (code 10C) $100, and $0 the first time",
+        "realFrequency": "Chapter 23, read: lighting (code 10C) 2 to 5 points; penalty $100, and $0 for a first-time violation once proof of correction is accepted",
         "tier": "exotic",
-        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238",
-        "confidence": "estimate",
-        "note": "The $0-then-$100 reading of the schedule row comes from a garbled search excerpt; the light levels (540, 215 and 108 lux) were seen clearly in the code text."
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+        "confidence": "verified",
+        "note": "Light levels read in Health Code 81.19(a): 540 lux (50 foot-candles) at prep surfaces, 215 lux (20) at hand washing, ware washing and in toilet rooms, 108 lux (10) in dry storage.",
+        "checkedVia": "page_opened"
       },
       {
         "id": "aisle_too_narrow",
@@ -3194,6 +3248,103 @@
         "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
         "confidence": "estimate",
         "note": "Bill text seen only in a garbled search excerpt of the Council record; do not switch it on until the status is checked."
+      },
+      {
+        "id": "renovation_triggers_restroom_rules",
+        "name": "Your renovation wakes up the restroom rules",
+        "text": "The old luncheonette never had a customer toilet and never needed one. Your building permit ends that: the plans must now show toilets for customers.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: a renovation that needs a Buildings permit in a room of 20 or more seats",
+        "realSignal": "Seats on the plan (20 or more) and people in the space (more than 30)",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -12000
+          },
+          {
+            "field": "seats",
+            "add": -3
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "setup",
+            "id": "customer_restroom"
+          },
+          {
+            "kind": "choice",
+            "id": "stay_at_19_seats"
+          },
+          {
+            "kind": "choice",
+            "id": "renovate_without_a_permit_scope"
+          }
+        ],
+        "realFrequency": "Health Code 81.22(b): premises with a food permit on or before December 5, 1977 must add patron toilets when a renovation needs a construction permit. Plumbing Code 403.2: above 30 people separate facilities are required, which two single rooms satisfy.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+        "confidence": "estimate",
+        "note": "The rules were read in both codes; $12,000 is the pack's allowance for one room and three seats are the 60 sq ft it takes. A second room doubles both."
+      },
+      {
+        "id": "candles_without_a_permit",
+        "name": "Candles on every table",
+        "text": "Evening hours with candlelight sell wine-bar atmosphere. The fire inspector asks for the open flame permit.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: candles on tables without the Fire Department permit",
+        "realSignal": "Fire Department inspection",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -210
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "choice",
+            "id": "buy_the_open_flame_permit"
+          },
+          {
+            "kind": "choice",
+            "id": "use_led_candles"
+          }
+        ],
+        "realFrequency": "Fire Department guide: every restaurant under 75 people is a place of public gathering and needs the permit for tabletop candles; the annual inspection fee is $210",
+        "tier": "exotic",
+        "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+        "confidence": "verified",
+        "checkedVia": "page_opened",
+        "note": "The penalty for burning candles without the permit was not found; the effect shown is the permit fee."
       }
     ],
     "mechanics": [
@@ -3210,16 +3361,18 @@
         ],
         "numbers": [
           {
-            "what": "Occupant load factor, tables and chairs, net sq ft per person (model code and NY State table; NYC 2022 table not opened)",
+            "what": "Occupant load factor, tables and chairs, net sq ft per person (2022 NYC Building Code, Table 1004.1.3)",
             "value": 15,
-            "source": "https://up.codes/viewer/new_york/ibc-2018/chapter/10/means-of-egress",
-            "confidence": "estimate"
+            "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           },
           {
             "what": "Occupant load factor, standing space, net sq ft per person",
             "value": 5,
-            "source": "https://up.codes/viewer/new_york/ibc-2018/chapter/10/means-of-egress",
-            "confidence": "estimate"
+            "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           },
           {
             "what": "Vendor seating chart: fast food, sq ft per seat (low end of 11-14)",
@@ -3251,6 +3404,13 @@
             "value": 395,
             "source": "https://pos.toasttab.com/blog/on-the-line/coffee-shop-floor-plans",
             "confidence": "estimate"
+          },
+          {
+            "what": "Occupant load factor, commercial kitchen, gross sq ft per person",
+            "value": 200,
+            "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           }
         ],
         "tier": "core"
@@ -3358,7 +3518,7 @@
           {
             "what": "Queue space per person, sq ft (my planning value; the code's occupancy count uses 5)",
             "value": 7,
-            "source": "https://up.codes/viewer/new_york/ibc-2018/chapter/10/means-of-egress",
+            "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
             "confidence": "estimate"
           }
         ],
@@ -3409,49 +3569,78 @@
       },
       {
         "id": "occupancy_thresholds",
-        "title": "Two lines in the law: seat 20 and person 75",
+        "title": "Three lines in the law: seat 20, person 31 and person 75",
         "playerDecision": "Stop at 19 seats, or pay for a customer restroom; keep events under 75 people, or buy a temporary permit, or become a place of assembly.",
-        "engineMath": "Seats for the 20 line = indoor + outdoor seats (extra.seatThresholds[0]; the engine already blocks a resize without the item). People for the 75 line = seatingSqft / 15 + standingSqft / 5 + staff on shift; it matters only for events or rooms above about 48 seats. A resize that crosses 20 should also take 60 sq ft out of the seating area for the restroom, which is why the step from 19 to 20 seats can leave fewer seats than before.",
+        "engineMath": "Seats for the 20 line = indoor + outdoor seats (extra.seatThresholds[0]; the engine already blocks a resize without the item). People = seatingSqft / 15 + standingSqft / 5 + staff on shift. Over 30 people in a room that must give customers a toilet: two toilet rooms when the space is built or altered (120 sq ft instead of 60). 75 or more: place of assembly; it matters only for events or rooms above about 48 seats. One exit also requires that the farthest corner be within 75 feet of travel once more than 30 people use the room (100 feet with sprinklers): a place attribute for long, narrow storefronts. A resize that crosses 20 takes 60 to 120 sq ft out of the seating area, which is why the step from 19 to 20 seats can leave fewer seats than before.",
         "fieldsNeeded": [
           "business.outdoorSeats",
           "place.premisesHadFoodPermitBefore1977 (exotic)",
-          "sizing.restroomSqft"
+          "sizing.restroomSqft",
+          "place.depthFt and place.sprinklered (exotic)"
         ],
         "numbers": [
           {
             "what": "Seating capacity from which a customer toilet is required",
             "value": 20,
-            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
           },
           {
             "what": "Penalty for no customer toilet, per inspection, USD",
             "value": 300,
-            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
           },
           {
             "what": "People from which a room is a place of assembly",
             "value": 75,
             "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
           },
           {
             "what": "Largest occupant load one exit may serve in business use (Group B)",
             "value": 74,
-            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-173045",
+            "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
           },
           {
             "what": "Temporary Place of Assembly fee for one event, USD",
             "value": 250,
             "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Inspection points for no customer toilet (28 at the worst level)",
+            "value": 10,
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "People above which separate toilet facilities are required (30 or fewer are exempt)",
+            "value": 30,
+            "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022PC_Chapter4_FixturesWBwm.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Longest walk to the single exit with more than 30 people and no sprinklers, feet",
+            "value": 75,
+            "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Penalty for more people than the Certificate of Occupancy allows, Class 1, USD (default $12,500)",
+            "value": 2500,
+            "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           }
         ],
         "tier": "core"
@@ -3460,7 +3649,7 @@
         "id": "outdoor_seating_season",
         "title": "Outdoor seats: geometry, license, season",
         "playerDecision": "Apply for a sidewalk or roadway cafe (and wait), run tables without a license (existing shortcut), or do without.",
-        "engineMath": "Whether the address can have a sidewalk cafe at all is geometry: cafeDepth = sidewalkWidth - clearPath - curbZone, with clearPath = 8 ft on most streets, 10 ft on regional corridors and 12 ft on global corridors (the codified rule also speaks of half the sidewalk; that part was not read clearly); 15 ft from a subway stair, smaller set distances from hydrants, trees and other street elements. outdoorSeats = floor(cafeDepth x frontage / 15). Seats are usable in monthsActive; yearly fee = outdoorSqft x sector rate (place tier prime $31, mid $10-$18, cheap $6); they count toward the 20-seat line. The license arrives after waitDays (sidewalk 180-240, roadway 90-150).",
+        "engineMath": "Whether the address can have a sidewalk cafe at all is geometry: cafeDepth = sidewalkWidth - clearPath - curbZone, with clearPath = the greater of half the sidewalk width or 8 ft (10 ft on regional corridors, 12 ft on global corridors); 15 ft from a subway stair, 10 ft and 5 ft from listed street objects, 8 ft of clear path past tree beds, street lights and hydrants. outdoorSeats = floor(cafeSqft / 11.4). Yearly fee = cafeSqft x sector rate (sidewalk and year-round roadway $6 / $10 / $18 / $31; seasonal roadway $5 / $8 / $14 / $25; the two dearest sectors are Manhattan at or below 125th Street). Seats are usable in monthsActive and count toward the 20-seat line. The license arrives after waitDays (program: up to six months). A licensed cafe that breaks the rules gets 30 days, then $200 and $500.",
         "fieldsNeeded": [
           "place.sidewalkWidthFt",
           "place.frontageFt",
@@ -3469,62 +3658,6 @@
           "lever option fields outdoorSeats and monthsActive"
         ],
         "numbers": [
-          {
-            "what": "Clear path for walkers on most streets, feet",
-            "value": 8,
-            "source": "https://www.nycstreetdesign.info/furniture/clear-path",
-            "confidence": "verified",
-            "checkedVia": "search_excerpt"
-          },
-          {
-            "what": "Clear path on regional corridors, feet",
-            "value": 10,
-            "source": "https://www.nycstreetdesign.info/furniture/clear-path",
-            "confidence": "verified",
-            "checkedVia": "search_excerpt"
-          },
-          {
-            "what": "Clear path on global corridors, feet",
-            "value": 12,
-            "source": "https://www.nycstreetdesign.info/furniture/clear-path",
-            "confidence": "verified",
-            "checkedVia": "search_excerpt"
-          },
-          {
-            "what": "Sidewalk cafe fee, cheapest sector, USD per sq ft a year",
-            "value": 6,
-            "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
-            "confidence": "verified",
-            "checkedVia": "search_excerpt"
-          },
-          {
-            "what": "Sidewalk cafe fee, top sector, USD per sq ft a year",
-            "value": 31,
-            "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
-            "confidence": "verified",
-            "checkedVia": "search_excerpt"
-          },
-          {
-            "what": "Roadway cafe fee, top sector, USD per sq ft a year",
-            "value": 25,
-            "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
-            "confidence": "verified",
-            "checkedVia": "search_excerpt"
-          },
-          {
-            "what": "Months a sidewalk cafe application takes (six to eight; Charter Revision Commission, 2026)",
-            "value": 7,
-            "source": "https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html",
-            "confidence": "verified",
-            "checkedVia": "search_excerpt"
-          },
-          {
-            "what": "Months a roadway cafe application takes (three to five)",
-            "value": 4,
-            "source": "https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html",
-            "confidence": "verified",
-            "checkedVia": "search_excerpt"
-          },
           {
             "what": "Cost of a roadway setup with fees, construction and insurance, USD (\"easily more than\")",
             "value": 35000,
@@ -3536,6 +3669,118 @@
             "value": 3,
             "source": "https://www.diningoutnyc.info/rules/sidewalk/siting-setup-area",
             "confidence": "estimate"
+          },
+          {
+            "what": "Clear path for walkers on most streets, feet (or half the sidewalk if that is more)",
+            "value": 8,
+            "source": "https://www.nycstreetdesign.info/furniture/clear-path",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Clear path on regional corridors, feet",
+            "value": 10,
+            "source": "https://www.nycstreetdesign.info/furniture/clear-path",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Clear path on global corridors, feet",
+            "value": 12,
+            "source": "https://www.nycstreetdesign.info/furniture/clear-path",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Sidewalk and year-round roadway fee, sector 1, USD per sq ft a year",
+            "value": 6,
+            "source": "https://www.diningoutnyc.info/apply/fees",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Sidewalk and year-round roadway fee, sector 4, USD per sq ft a year",
+            "value": 31,
+            "source": "https://www.diningoutnyc.info/apply/fees",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Seasonal roadway fee, sector 1, USD per sq ft a year",
+            "value": 5,
+            "source": "https://www.diningoutnyc.info/apply/fees",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Seasonal roadway fee, sector 4, USD per sq ft a year",
+            "value": 25,
+            "source": "https://www.diningoutnyc.info/apply/fees",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Sidewalk cafe in the program example, sq ft",
+            "value": 120,
+            "source": "https://www.diningoutnyc.info/apply/fees",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Roadway cafe in the program example, sq ft",
+            "value": 160,
+            "source": "https://www.diningoutnyc.info/apply/fees",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Refundable security deposit, sidewalk cafe, USD (roadway $2,500)",
+            "value": 1500,
+            "source": "https://www.diningoutnyc.info/apply/fees",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Public hearing notice, top of the usual range, USD ($500-$900)",
+            "value": 900,
+            "source": "https://www.diningoutnyc.info/apply/publichearing",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Outdoor sq ft per chair in 324 old sidewalk cafe licenses",
+            "value": 11.4,
+            "source": "https://data.cityofnewyork.us/resource/qcdj-rwhu.json",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Days a sidewalk cafe review may last by law once the application is complete",
+            "value": 130,
+            "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Months a sidewalk cafe application takes in practice (six to eight; Charter Revision Commission, 2026)",
+            "value": 7,
+            "source": "https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Months a roadway cafe application takes in practice (three to five)",
+            "value": 4,
+            "source": "https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Fine for a licensed cafe breaking the rules, first offense after the 30-day notice, USD ($500 later)",
+            "value": 200,
+            "source": "https://www.diningoutnyc.info/enforcement",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           }
         ],
         "tier": "deep"
@@ -3570,11 +3815,11 @@
             "confidence": "estimate"
           },
           {
-            "what": "Combined water and sewer charge, USD per 100 cubic feet, year from July 1, 2025",
-            "value": 13.07,
-            "source": "https://www.nyc.gov/site/dep/pay-my-bills/how-we-bill-you.page",
+            "what": "Combined water and sewer charge, USD per 100 cubic feet, from July 1, 2026 ($5.35 water + 159% for sewer)",
+            "value": 13.86,
+            "source": "https://www.nyc.gov/assets/nycwaterboard/downloads/pdf/rates/fy2027_rates.pdf",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
           },
           {
             "what": "Weeks for a Con Edison service upgrade (range 4 to 24 across two contractor guides)",
@@ -3587,6 +3832,13 @@
             "value": 6,
             "source": "https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/",
             "confidence": "estimate"
+          },
+          {
+            "what": "Fire Department permit for a rooftop or ceiling-hung cooling unit, USD per compressor a year",
+            "value": 105,
+            "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           }
         ],
         "tier": "deep"
@@ -3595,7 +3847,7 @@
         "id": "accessibility_exposure",
         "title": "A step at the door is a standing liability",
         "playerDecision": "Fix the entrance now (portable ramp and bell, or a permanent ramp, or a door opener) or leave it.",
-        "engineMath": "The address carries entranceStepInches (0 for most new storefronts). With a step and the lever on 'ignore', the business holds the open trail accessibility_barrier. Nothing happens until the announced event accessibility_suit_wave or a rival's report; then the claim ($1,000) and legal fees are charged and the fix is forced. A compliant ramp needs stepInches feet of length; on the sidewalk it needs a city consent. Access spending between $250 and $10,250 a year earns a 50% federal credit (cap $5,000).",
+        "engineMath": "The address carries entranceStepInches (0 for most new storefronts). With a step and the lever on 'ignore', the business holds the open trail accessibility_barrier. Nothing happens until the announced event accessibility_suit_wave or a rival's report; then the claim ($1,000) and legal fees are charged and the fix is forced. A compliant ramp needs stepInches feet of length, 36 inches of clear width and a 60-inch landing; on a pre-1969 building it may reach 44 inches onto the sidewalk with the Buildings Department's approval. Access spending between $250 and $10,250 a year earns a 50% federal credit (cap $5,000).",
         "fieldsNeeded": [
           "place.entranceStepInches",
           "taxes: one-off credit line"
@@ -3611,14 +3863,16 @@
           {
             "what": "Maximum ramp slope: inches of run per inch of rise",
             "value": 12,
-            "source": "https://www.accessibilitychecker.org/blog/ada-requirements-for-ramps/",
-            "confidence": "estimate"
+            "source": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           },
           {
-            "what": "Furthest a ramp may project past the street line for a building older than December 6, 1969, inches",
+            "what": "Furthest a ramp may project past the street line with the Buildings Commissioner's approval, building older than December 6, 1969, inches",
             "value": 44,
             "source": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf",
-            "confidence": "estimate"
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           },
           {
             "what": "Damages asked per suit in the 2019 NYC wave, USD (plus attorney's fees)",
@@ -3633,10 +3887,11 @@
             "confidence": "estimate"
           },
           {
-            "what": "Disabled Access Credit, yearly cap, USD (the 50% of $250-$10,250 formula is from memory of the tax code)",
+            "what": "Disabled Access Credit, yearly cap, USD (50% of spending between $250 and $10,250)",
             "value": 5000,
             "source": "https://www.irs.gov/pub/irs-pdf/f8826.pdf",
-            "confidence": "estimate"
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           }
         ],
         "tier": "deep"
@@ -3670,20 +3925,27 @@
             "value": 6,
             "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
           },
           {
             "what": "Furthest an A-frame sign may stand from the building, feet",
             "value": 3,
             "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
           },
           {
             "what": "Illegal-sign complaints to the Buildings Department in 2018 (310 in 2017)",
             "value": 1046,
             "source": "https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/",
             "confidence": "estimate"
+          },
+          {
+            "what": "Penalty for sign work without a permit, Class 2, USD (default $6,250)",
+            "value": 1250,
+            "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           }
         ],
         "tier": "deep"
@@ -3710,7 +3972,7 @@
             "value": 48,
             "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02997",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
           },
           {
             "what": "Staff capacity kept with cellar storage (my estimate)",
@@ -3749,7 +4011,14 @@
             "value": 12,
             "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
             "confidence": "verified",
-            "checkedVia": "search_excerpt"
+            "checkedVia": "page_opened"
+          },
+          {
+            "what": "Installing a backflow device in a very small one-story building, USD (DEP: $3,000-$5,000)",
+            "value": 4000,
+            "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+            "confidence": "verified",
+            "checkedVia": "page_opened"
           }
         ],
         "tier": "deep"
@@ -3757,14 +4026,14 @@
     ],
     "nonObvious": [
       {
-        "text": "The 75 line that turns a cafe into a place of assembly counts people, not chairs, and the code counts a standing person at 5 sq ft: a 70 sq ft queue area is 14 people on paper.",
-        "why": "An owner who thinks '75 seats, never my problem' can cross the line with 48 seats, or with one standing-room event.",
-        "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page"
+        "text": "The 75 line that turns a cafe into a place of assembly counts people, not chairs, staff included, and the code counts a standing person at 5 sq ft: a 70 sq ft queue area is 14 people on paper.",
+        "why": "An owner who thinks '75 seats, never my problem' can cross the line with 48 seats, or with one standing-room event: $2,500, no cure.",
+        "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf"
       },
       {
-        "text": "Seat number 20 is the most expensive chair in the shop: it brings the duty to give customers a toilet. Outdoor seats and seating shared with a neighbor count toward it.",
+        "text": "Seat number 20 is the most expensive chair in the shop: it brings the duty to give customers a toilet, 10 inspection points without one, and in a newly built or altered space for more than 30 people it means two toilet rooms. Outdoor seats count toward it.",
         "why": "Two sidewalk tables can turn a legal 18-seat room into a violation.",
-        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01351"
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page"
       },
       {
         "text": "A premises that held a food permit on or before December 5, 1977 is exempt from the customer-toilet rule, and loses the exemption the day it does a renovation that needs a Buildings permit.",
@@ -3812,14 +4081,14 @@
         "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/"
       },
       {
-        "text": "Keeping the door open with the air conditioning on is illegal for every NYC business, not just chains: $250 per open door or window. The city made nearly 6,300 such inspections in 2024.",
-        "why": "The open door is a classic way to pull in passers-by in July.",
-        "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and"
+        "text": "The law against open doors with the air conditioning on covers every shop, but a food business with indoor seating whose door opens straight to the street is exempt. Add a vestibule between door and seats and the exemption is gone.",
+        "why": "Owners copy each other: the cafe may prop its door, the boutique next door gets inspected (nearly 6,300 inspections in 2024). A permanent vestibule changes the cafe's own status.",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/DCAInspectionChecklist_AirConditionersAndOpenDoors.pdf"
       },
       {
-        "text": "Sign complaints can be anonymous 311 calls. In 2018 they tripled to more than a thousand and left small shops with $6,000 fines for signs that had hung for years.",
-        "why": "A sign is the easiest thing for a rival or an angry neighbor to report.",
-        "source": "https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings"
+        "text": "Sign complaints can be anonymous 311 calls. In 2018 they tripled to more than a thousand and left small shops with fines for signs that had hung for years. A sign painted directly on the wall needs no permit at all.",
+        "why": "A sign is the easiest thing for a rival or an angry neighbor to report: $1,250 today, $6,250 on default.",
+        "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
       },
       {
         "text": "An awning may carry only the shop's name and address, in letters no taller than 12 inches and 12 sq ft in all. Menus, photos and phone numbers on the fabric are violations.",
@@ -3842,11 +4111,6 @@
         "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02227"
       },
       {
-        "text": "In a historic district even a new sign or awning needs a Landmarks permit before the Buildings permit, and staff will not approve more than three kinds of signs on one storefront.",
-        "why": "Two agencies in sequence; the rent does not wait.",
-        "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
-      },
-      {
         "text": "Most small leases make the tenant repair and replace the air conditioning unit that serves the space. A dead unit is an $8,000-$40,000 bill in NYC.",
         "why": "New tenants assume the building's equipment is the landlord's.",
         "source": "https://www.vincomechanical.com/hvac-replacement-cost-nyc"
@@ -3862,7 +4126,7 @@
         "source": "https://w42st.com/post/gas-shutoff-drags-on-at-sesamo-leaving-restaurant-in-limbo-for-over-a-month/"
       },
       {
-        "text": "The backflow device on the water line must be tested by a certified tester every year, and the city can disconnect the water of a business that does not.",
+        "text": "The backflow device on the water line must be tested by a certified tester every year; the city can disconnect the water of a business that does not, and installing one in a small building costs $3,000-$5,000 by the city's own figures.",
         "why": "It is a part most owners have never seen, behind a panel in the cellar.",
         "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page"
       },
@@ -3892,18 +4156,18 @@
         "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02292"
       },
       {
-        "text": "A sidewalk cafe must leave walkers a clear path of 8 feet on most streets, 10 on regional corridors and 12 on the busiest. On an ordinary 12-15 foot side-street sidewalk that leaves room for one row of small tables or none.",
+        "text": "A sidewalk cafe must leave walkers the greater of half the sidewalk or 8 feet (10 on regional corridors, 12 on global ones). On an ordinary 12-15 foot side-street sidewalk that leaves room for one row of small tables or none.",
         "why": "Owners budget for outdoor seats before measuring the sidewalk.",
         "source": "https://www.nycstreetdesign.info/furniture/clear-path"
       },
       {
-        "text": "A roadway cafe can easily cost more than $35,000 to set up and about $10,000 a year in city fees at full size; until the 2026 law it also had to be dismantled every November.",
-        "why": "The pandemic-era free shed is gone; outdoor dining shrank by more than 80% under the permanent rules.",
-        "source": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants"
+        "text": "A roadway cafe can easily cost more than $35,000 to set up. The yearly city fee is modest in most of the city ($800-$960 for 160 sq ft) and about five times that in central Manhattan; the new year-round license costs more per square foot than the seasonal one.",
+        "why": "The pandemic-era free shed is gone; the structure, not the fee, is the real bill.",
+        "source": "https://www.diningoutnyc.info/apply/fees"
       },
       {
-        "text": "A $113 portable ramp does not make a 7-inch step compliant: the standard asks for a foot of ramp per inch of height, and a ramp on the sidewalk needs a city consent.",
-        "why": "The cheap fix shows good faith but is not the end of the exposure.",
+        "text": "A $113 portable ramp does not make a 7-inch step compliant: the standard asks for a foot of ramp per inch of height, 36 inches of width and a 60-inch landing. On a building older than 1969 a permanent ramp may reach 44 inches onto the sidewalk with city approval.",
+        "why": "The cheap fix shows good faith but is not the end of the exposure; half the cost of the real fix comes back as a tax credit, up to $5,000 a year.",
         "source": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf"
       },
       {
@@ -3930,474 +4194,705 @@
         "text": "The electric bill has a part that depends on your single highest half hour of the month. An oven that runs twenty minutes a day can raise the bill more than its energy use explains.",
         "why": "Owners compare kWh; larger commercial accounts are also billed on peak kW.",
         "source": "https://nectarclimate.com/rates/consolidated-edison-coned"
+      },
+      {
+        "text": "In a room that needs a second look by the plumbing code, the number is 30, not 20 or 75: above 30 people, staff included, a space that must give customers a toilet needs separate facilities, in practice two toilet rooms.",
+        "why": "The Health Department asks for 'a toilet'; the architect drawing a permit set must show two, and they take 120 sq ft.",
+        "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022PC_Chapter4_FixturesWBwm.pdf"
+      },
+      {
+        "text": "One exit is legal for up to 74 people only if the farthest corner is within 75 feet of walking distance (100 with sprinklers, or with 30 people or fewer). A deep, narrow storefront can need a rear exit long before it is crowded.",
+        "why": "Typical NYC storefronts are 20 feet wide and 80 to 100 feet deep.",
+        "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf"
+      },
+      {
+        "text": "Candles on the tables need a Fire Department open flame permit in any restaurant, even a tiny one: $210 a year.",
+        "why": "Nobody thinks of a tea light as something with a permit.",
+        "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf"
+      },
+      {
+        "text": "An air conditioning unit on the roof or hung from the ceiling needs its own Fire Department permit: $105 per compressor every year.",
+        "why": "The unit came with the space; the permit did not.",
+        "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf"
+      },
+      {
+        "text": "Nothing may be stored or prepared in the outdoor dining area, nobody may smoke or vape there, and the pest control contract has to be extended to cover it.",
+        "why": "Outdoor seats add rules as well as sales.",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page"
+      },
+      {
+        "text": "In a historic district even a new paint color on the storefront, and a sidewalk cafe, need a Landmarks permit.",
+        "why": "The Landmarks permit comes before the Buildings permit, and the rent does not wait.",
+        "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
+      },
+      {
+        "text": "A licensed outdoor cafe gets one free warning: a corrective action request and 30 days. An unlicensed one is fined on the first visit, $500 and then $1,000.",
+        "why": "The license is what buys the grace period.",
+        "source": "https://www.diningoutnyc.info/enforcement"
+      },
+      {
+        "text": "The customer toilet may be one floor down, in the cellar, as far as the plumbing code goes, but the route may not pass through a kitchen or storage room and new work has to be accessible.",
+        "why": "Many old NYC cafes send guests down a steep stair; a new build-out cannot copy that.",
+        "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022PC_Chapter4_FixturesWBwm.pdf"
       }
-    ]
+    ],
+    "forOtherNiches": {
+      "note": "Found while checking the cafe and not usable in it: the open-door rule binds shops without indoor food seating. For the barbershop, the bodega and any retail niche this is a real violation; it belongs in _common or in those packs.",
+      "violations": [
+        {
+          "id": "ac_door_open",
+          "name": "Door or window open while the air conditioning runs",
+          "law": "NYC Administrative Code §20-910 (Local Law 92 of 2015)",
+          "official": "dcwp_inspector",
+          "foundBy": [
+            "inspection",
+            "complaint"
+          ],
+          "fine": {
+            "base": 250,
+            "perMonth": 0,
+            "pctOfSaved": 0,
+            "max": 500
+          },
+          "closureDays": 0,
+          "reputationHit": 0.01,
+          "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/DCAInspectionChecklist_AirConditionersAndOpenDoors.pdf",
+          "confidence": "estimate",
+          "note": "DCWP inspection checklist (updated August 2022), read: stores must keep doors and windows shut when the air conditioning runs, whatever their size; allowed only for deliveries, an emergency, actively serving food or drinks to outdoor customers, or if the business sells food, has indoor seating and the door or window leads directly outside (not if a vestibule or foyer stands between). Chains with five or more NYC stores must post a sign. DCWP press release (April 2025), read: nearly 6,300 inspections in 2024, 89 violations for open doors and 267 for a missing sign. The $250 and $500 amounts are from 2015 press reports of the law and were not found in a current schedule."
+        }
+      ]
+    }
   },
   "sources": [
     {
       "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
       "title": "NYC Health Code §81.22 Employee and Patron Toilets (American Legal Publishing)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
       "title": "24 RCNY Chapter 23, Appendix 23-C: Food Service Establishment Penalty Schedule",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238",
       "title": "NYC Health Code §81.19 Lighting and Ventilation",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
       "title": "NYC Health Department, Chapter 23: Food Service Establishment Sanitary Inspection Procedures and Letter Grading",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01351",
       "title": "NYC311: Restaurant Bathroom Rules",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-3-use-and-occupancy-classification",
       "title": "2022 NYC Building Code, Chapter 3: Use and Occupancy Classification (ICC)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf",
       "title": "2022 NYC Building Code, Chapter 10: Means of Egress (NYC Buildings)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-173045",
       "title": "NYC Building Code §1006.2.1 and Table 1006.2.1: spaces with one exit",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://up.codes/viewer/new_york/ibc-2018/chapter/10/means-of-egress",
       "title": "New York State Building Code 2020, Chapter 10, Table 1004.5 (UpCodes)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page",
       "title": "NYC Buildings: Place of Assembly Certificate of Operation",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/assets/buildings/pdf/pa_guide.pdf",
       "title": "NYC Buildings: Place of Assembly guide (older edition)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
       "title": "NYC Business: Temporary Place of Assembly Certificate of Operation",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
       "title": "FDNY Restaurant Fire Safety Guide",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf",
       "title": "OATH/ECB Buildings Penalty Schedule",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf",
       "title": "1 RCNY §102-01: Buildings violation classification and penalties",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.corada.com/documents/2010ADAStandards/226",
       "title": "2010 ADA Standards §226: Dining Surfaces and Work Surfaces",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.access-board.gov/ada/guides/chapter-6-toilet-rooms/",
       "title": "U.S. Access Board: Guide to the ADA Standards, Chapter 6: Toilet Rooms",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.accessibilitychecker.org/blog/ada-requirements-for-ramps/",
       "title": "ADA requirements for ramps (secondary summary)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf",
       "title": "NYC Buildings: Storefront Accessibility (presentation)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.irs.gov/pub/irs-pdf/f8826.pdf",
       "title": "IRS Form 8826: Disabled Access Credit",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://reliableramps.com/products/alumiramp-threshold-ramp-tr06n",
       "title": "Reliable Ramps: AlumiRamp threshold ramp price list",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://ufiredoors.com/blog/ada-door-operator-cost/",
       "title": "ADA door operator cost guide (vendor)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny",
       "title": "NY1: Surge in lawsuits by a small group of plaintiffs with disabilities draws scrutiny (2019)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/",
       "title": "Seyfarth Shaw ADA Title III blog: 2025 federal filing counts",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and",
       "title": "NYC DCWP press release, April 2025: Shut the Front Door",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings",
       "title": "CBS New York: City Council approves moratorium on fines for awnings and signs",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/",
       "title": "The Brooklyn Home Reporter: Hard stop on signage fees as Council secures new Awning Act (2018)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
       "title": "NYC Buildings: project requirements for signs",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650",
       "title": "NYC Administrative Code Table 28-112.2: Buildings fees (from the research notes)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.lisc.org/media/filer_public/1b/91/1b916163-0300-4298-9439-4981884e9abd/corridor_challenge_storefront_improvement_design_guidelines_-___final.pdf",
       "title": "LISC NYC Commercial Corridor Challenge: storefront improvement design guidelines",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://sinra.ai/projects/permits/general-construction-153-second-avenue-manhattan-850583358",
       "title": "Permit aggregator: storefront awning filing, East Village (declared job cost)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
       "title": "NYC Landmarks Preservation Commission: storefront applications",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/assets/buildings/pdf/security_grille-sn.pdf",
       "title": "NYC Buildings service notice, February 17, 2026: security grille visibility",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates",
       "title": "NY1: City Council votes to repeal deadline for new roll-down security gates (July 2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://gothamist.com/news/nyc-council-scrambles-to-reverse-impending-ban-on-metal-storefront-security-gates",
       "title": "Gothamist: Council scrambles to reverse impending ban on metal storefront security gates (2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.insightglass.com/how-much-do-storefront-windows-cost/",
       "title": "Glazier guide: storefront window cost",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
       "title": "NYC311: Blocked Sidewalk or Street",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-99532",
       "title": "16 RCNY §19-103: Sanitation Penalty Schedule",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02227",
       "title": "NYC311: Awning, Canopy, Marquee or Storm Enclosure Complaint",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.signsny.com/outdoor/winter-vestibules",
       "title": "NYC fabricator: winter vestibules, prices",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.pickcomfort.com/cost-air-curtain-typical-prices-what-affects-quote/",
       "title": "Cost guide: air curtains",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://achrnews.com/articles/159663-michigan-eatery-eliminates-cold-complaints-with-air-curtains",
       "title": "ACHR News: eatery eliminates cold complaints with air curtains",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.diningoutnyc.info/rules/sidewalk/siting-clearances",
       "title": "Dining Out NYC: sidewalk cafe siting clearances",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.diningoutnyc.info/rules/sidewalk/siting-setup-area",
       "title": "Dining Out NYC: sidewalk cafe setup area",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.diningoutnyc.info/apply",
       "title": "Dining Out NYC: eligibility and application",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.diningoutnyc.info/enforcement",
       "title": "Dining Out NYC: enforcement (already in the pack)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nycstreetdesign.info/furniture/clear-path",
       "title": "NYC DOT Street Design Manual: Clear Path",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.diningoutnyc.info/sites/default/files/2024-03/sidewalk-cafe-site-plan-form.pdf",
       "title": "Dining Out NYC: sidewalk cafe site plan form (corridor types and clearances)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
       "title": "NYC Council report: Understanding Delays in New York City's Permanent Outdoor Dining Program (April 2025)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html",
       "title": "NYC Charter Revision Commission: adopted final report, 2026",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
       "title": "NYC311: Outdoor Dining Information and Application",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants",
       "title": "Streetsblog NYC: Here's how much outdoor dining costs restaurants (April 2025)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://nyc.streetsblog.org/2026/08/13/year-round-outdoor-dining-poised-to-return-under-council-bill",
       "title": "Streetsblog NYC: Year-round outdoor dining poised to return under Council bill (August 2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.thecityreporter.nyc/2026/08/13/nyc-outdoor-dining-roadside-sheds-new-laws-restaraunts/",
       "title": "The City Reporter: year-round roadside dining set to return under newly passed bills (August 2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
       "title": "NYC DEP: Backflow Prevention Frequently Asked Questions",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page",
       "title": "NYC DEP: Disposing of Grease as a Business",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/site/dep/pay-my-bills/how-we-bill-you.page",
       "title": "NYC DEP: How We Bill You (water and sewer rates)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.nyc.gov/assets/dep/downloads/pdf/water/wastewater/sbu-report.pdf",
       "title": "NYC DEP: sewer backup report",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02997",
       "title": "NYC311: Sewage or Flood Clean-Up",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02292",
       "title": "NYC311: Sidewalk Cellar Door Complaint",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
       "title": "NYC DEP: commercial music noise violation, zero penalty for a first offense",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/single-occupant-toilet-signage.page",
       "title": "NYC Buildings: Single-Occupant Toilet Signage (Local Law 79 of 2016)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
       "title": "1st-line Equipment: commercial espresso machine basic requirements",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://foodservicenerd.com/guides/how-to-choose-a-commercial-espresso-machine/",
       "title": "Commercial espresso machine buyer's guide (circuit sizes)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/",
       "title": "NYC electrical contractor: Con Edison service upgrade guide, 2026",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://nectarclimate.com/rates/consolidated-edison-coned",
       "title": "Third-party summary of Con Edison commercial rates",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://commercialenergyadvisors.com/resources/how-much-commercial-electricity-cost-2026/",
       "title": "Secondary summary of CBECS electricity intensity by building type",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.vincomechanical.com/hvac-replacement-cost-nyc",
       "title": "NYC contractor: commercial HVAC replacement cost, 2026",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://oxmaint.com/industries/hvac/hvac-maintenance-budget-planning-optimizing-spend",
       "title": "HVAC maintenance budget guide (vendor)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://w42st.com/post/gas-shutoff-drags-on-at-sesamo-leaving-restaurant-in-limbo-for-over-a-month/",
       "title": "W42ST: gas shutoff leaves a Hell's Kitchen restaurant in limbo for over a month",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/",
       "title": "ABC7 New York: restaurant cooking without gas for over a month after an inspection found a leak",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.hospitalitynet.org/news/4039649.html",
       "title": "Cornell restaurant research: diners are dissatisfied with close-set tables (2009)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://journals.sagepub.com/doi/10.1177/1938965511410310",
       "title": "Robson, Kimes, Becker, Evans: Consumers' Responses to Table Spacing in Restaurants, Cornell Hospitality Quarterly 52(3), 2011",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://pubsonline.informs.org/doi/abs/10.1287/mnsc.1120.1686",
       "title": "Lu, Musalem, Olivares, Schilkrut: Measuring the Effect of Queues on Customer Purchases, Management Science 59(8), 2013",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
       "title": "Working paper version of the queue study (Columbia Business School, 2011)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://waitwhile.com/blog/consumer-survey-waiting-in-line-2024/",
       "title": "Waitwhile consumer survey: the state of waiting in line, 2024",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.customerexperiencedive.com/news/4-takeaways-starbucks-customer-experience/756355/",
       "title": "Customer Experience Dive: takeaways from Starbucks' customer experience plans",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.geekwire.com/2024/on-his-first-earnings-call-starbucks-ceo-lays-out-plan-to-bring-order-to-mobile-ordering/",
       "title": "GeekWire: Starbucks CEO on bringing order to mobile ordering (2024)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.cnn.com/2025/01/14/food/starbucks-restroom-policy",
       "title": "CNN: Starbucks ends its open-door policies (January 2025)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales",
       "title": "NPR: No laptops, no Wi-Fi: how one cafe fired up sales (2014)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.npr.org/sections/health-shots/2017/05/08/526523520/public-restrooms-become-ground-zero-in-the-opioid-epidemic",
       "title": "NPR: public restrooms and business owners (2017)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://bloomintelligence.com/coffee-shop-marketing/",
       "title": "Bloom Intelligence: coffee shop data, Wi-Fi presence at 25 US coffee shops (2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.yahoo.com/lifestyle/heres-exactly-long-sit-coffee-070007503.html",
       "title": "Syndicated article: how long you can sit in a coffee shop (cafe chief executive quoted)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/",
       "title": "How does background music affect dining duration, tips and bill amounts? A field experiment (2024)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.mdpi.com/2071-1050/17/18/8400",
       "title": "Revisiting crowded restaurants in the post-pandemic era, Sustainability 17(18), 2025",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://federalheath.com/company/news-insights/how-important-are-signs-anyway",
       "title": "Secondary summary of the University of Cincinnati signage study (2012)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.gofoodservice.com/guides/designing-your-restaurant-seating-layout",
       "title": "Vendor guide: restaurant seating layout, square feet per seat",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://pos.toasttab.com/blog/on-the-line/coffee-shop-floor-plans",
       "title": "Toast: how to design a coffee shop floor plan",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://therestaurantwarehouse.com/blogs/restaurant-equipment/coffee-shop-layout",
       "title": "Coffee shop layout guide (vendor)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.sberbank.ru/start/articles/coffee/prepare_to_open",
       "title": "Sber: preparing to open a coffee shop (in Russian; 1.6 sq m per guest)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://alataucitybank.kz/business/osim/articles/sem-fundamentalnykh-printsipov-proektirovki-kofeynogo-bara",
       "title": "Seven principles of designing a coffee bar (in Russian)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://greenpointers.com/2024/04/01/radio-bakery-stoop-sale/",
       "title": "Greenpointers: a bakery line blocked neighbors' homes (2024)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
     },
     {
       "url": "https://www.tfp1.com/blog/fdny-violation-codes/",
       "title": "Fire protection company summary of Fire Department violation categories and penalties (2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": false
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+      "title": "NYC Health Code Article 81: Food Preparation and Food Establishments (city PDF)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022PC_Chapter4_FixturesWBwm.pdf",
+      "title": "2022 NYC Plumbing Code, Chapter 4: Fixtures, Faucets and Fixture Fittings (NYC Buildings)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.diningoutnyc.info/apply/fees",
+      "title": "Dining Out NYC: Fees",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.diningoutnyc.info/apply/publichearing",
+      "title": "Dining Out NYC: Public Hearing Process",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/DCAInspectionChecklist_AirConditionersAndOpenDoors.pdf",
+      "title": "NYC DCWP Inspection Checklist: Air Conditioning and Open Doors and Windows (updated 08/2022)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dsny/downloads/about/adopted-rules/dsny-final-rule-relating-to-its-penalty-schedule.pdf",
+      "title": "NYC Sanitation: adopted rule on the penalty schedule (2021, Local Law 80 of 2021)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://data.cityofnewyork.us/resource/qcdj-rwhu.json",
+      "title": "NYC Open Data: Sidewalk Cafe Licenses and Applications (legacy program), aggregate query",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
+      "title": "NYC Health: Operating a Restaurant (outdoor dining setup requirements)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.nyc.gov/assets/nycwaterboard/downloads/pdf/rates/fy2027_rates.pdf",
+      "title": "NYC Water Board: Water and Wastewater Rate Schedule effective July 1, 2026",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
+      "title": "NYC DEP: Noise Code Penalty Schedule (2009 edition)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/pdf/ll28_temp_biz_accessory_sign_program.pdf",
+      "title": "NYC Buildings: Local Law 28 of 2019, Temporary Business Accessory Sign Program",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/pdf/code_notes_eatinge_drinking_establishment.pdf",
+      "title": "NYC Buildings Code Notes: Eating and Drinking Establishment (2015)",
+      "checked": "2026-11-14",
+      "opened": true
     }
   ]
 }
