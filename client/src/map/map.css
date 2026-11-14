@@ -195,6 +195,17 @@
     backdrop-filter: none; -webkit-backdrop-filter: none;
     background: var(--surface, rgba(24, 24, 22, 0.96));
   }
+  /* name pins move with the map every frame: no shadow, filter or transition to repaint; hidden ones skip paint */
+  .cm-pin { box-shadow: none; transition: none; }
+  .cm-pin:hover { transform: none; }
+  .cm-pin--dim { filter: none; }
+  .cm-root--far .cm-pin:not(.cm-pin--mine), .cm-pin--hidden { visibility: hidden; }
 }
+.cm-legend__toggle {
+  min-height: 32px; padding: 4px 12px; border-radius: 999px; cursor: pointer; pointer-events: auto;
+  border: 1px solid var(--cm-line); background: var(--accent-fill, var(--cm-accent)); color: var(--accent-ink, #14140f);
+  font: 700 12px/1 var(--cm-font);
+}
+.cm-legend__toggle[aria-pressed='true'] { background: transparent; color: var(--cm-text); }
 .cm-card--biz .cm-place__stake { margin: 0 0 10px; }
 .cm-place__stake--rival { background: var(--loss-soft, rgba(248, 113, 113, 0.14)); }

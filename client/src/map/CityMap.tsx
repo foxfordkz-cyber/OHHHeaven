@@ -18,6 +18,7 @@ import {
 } from './geo';
 import { cityStyle, isTileFailure, mapPalette, offlineStyle, OFFLINE_STYLE_NAME, type MapTheme, type StyleSpecification } from './mapStyle';
 import { getTheme, useTheme } from '../ui/theme';
+import { useT } from '../ui/i18n';
 import { PlaceCard } from './PlaceCard';
 import { WeatherLayer } from './WeatherLayer';
 
@@ -41,6 +42,11 @@ export interface CityMapProps {
   initialBusinessId?: string;
   /** Pick mode: open this place's card right away (a link to one storefront). */
   initialPlaceId?: string;
+  /**
+   * Live mode, full screen: the "Free storefronts" switch shows the places nobody runs yet; a tap opens the place card.
+   * Its button calls this; without it the button goes to /start for that niche.
+   */
+  onStartHere?: (placeId: string, niche: NicheId) => void;
   /** The map sits inside a scrolling page: scroll and one finger move the page, ctrl+scroll or two fingers move the map. */
   embedded?: boolean;
   /** Today's game day: filters events and weather. Without it every event passed in is shown. */
@@ -190,7 +196,7 @@ function declutter(map: MapLibreMap, pins: Map<string, Marker>, markers: BizMark
 
 export function CityMap(props: CityMapProps) {
   const {
-    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness, businessCta, onExpand, embedded = false, initialBusinessId, initialPlaceId,
+    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness, businessCta, onExpand, embedded = false, initialBusinessId, initialPlaceId, onStartHere,
     blockFunds, packs, realBusinesses, offline: forceOffline = false, intro = true, orbit = false, className, style,
   } = props;
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -198,13 +204,17 @@ export function CityMap(props: CityMapProps) {
   const pinsRef = useRef(new Map<string, Marker>());
   const closedPinsRef = useRef<Marker[]>([]);
   const markersRef = useRef<BizMarker[]>([]);
-  const handlersRef = useRef({ onPick, onOpenBusiness, mode });
-  handlersRef.current = { onPick, onOpenBusiness, mode };
-  const openBusiness = (id: string) => { setOpenBiz(id); handlersRef.current.onOpenBusiness?.(id); };
+  const [showFree, setShowFree] = useState(!!initialPlaceId);
+  // places are tappable in pick mode, and in live mode while the free-storefronts switch is on
+  const placesOn = mode === 'pick' || showFree;
+  const handlersRef = useRef({ onPick, onOpenBusiness, mode, placesOn });
+  handlersRef.current = { onPick, onOpenBusiness, mode, placesOn };
+  const openBusiness = (id: string) => { setSelected(null); setOpenBiz(id); handlersRef.current.onOpenBusiness?.(id); };
   const openBusinessRef = useRef(openBusiness);
   openBusinessRef.current = openBusiness;
   const [styleEpoch, setStyleEpoch] = useState(0);
   const theme = useTheme();
+  const tr = useT();
   const themeRef = useRef<MapTheme>(theme);
   const shownThemeRef = useRef<MapTheme>(theme);
   themeRef.current = theme;
@@ -218,7 +228,10 @@ export function CityMap(props: CityMapProps) {
 
   const segments = useMemo(() => blockSegments(places), [places]);
   const realFC = useMemo(() => realFeatures(realBusinesses), [realBusinesses]);
-  const placeFC = useMemo(() => placeFeatures(places, businesses, niche), [places, businesses, niche]);
+  // live mode looks at storefronts as a café owner would (the product line); pick mode uses the niche being opened
+  const placeNiche: NicheId | undefined = mode === 'pick' ? niche : niche ?? 'cafe';
+  const placeFC = useMemo(() => placeFeatures(places, businesses, placeNiche), [places, businesses, placeNiche]);
+  const freeCount = useMemo(() => placeFC.features.filter((f) => f.properties.state === 'free').length, [placeFC]);
   const markers = useMemo(() => businessMarkers(businesses, places, myBusinessId), [businesses, places, myBusinessId]);
   const bizFC = useMemo(() => businessFeatures(markers), [markers]);
   const dealsFC = useMemo(() => partnerLines(businesses, places), [businesses, places]);
@@ -274,9 +287,9 @@ export function CityMap(props: CityMapProps) {
 
     // interaction: pick a place, open a business
     map.on('click', 'ohh-places-hit', (e: MapLayerMouseEvent) => {
-      if (handlersRef.current.mode !== 'pick') return;
+      if (!handlersRef.current.placesOn) return;
       const id = e.features?.[0]?.properties?.id;
-      if (typeof id === 'string') setSelected(id);
+      if (typeof id === 'string') { setOpenBiz(null); setSelected(id); }
     });
     map.on('click', 'ohh-biz-dot', (e: MapLayerMouseEvent) => {
       if (handlersRef.current.mode !== 'live') return;
@@ -351,9 +364,11 @@ export function CityMap(props: CityMapProps) {
     setData(map, 'ohh-deals', mode === 'live' ? dealsFC : EMPTY);
     setData(map, 'ohh-fund', fundFC);
     setData(map, 'ohh-closed', closedFC);
-    for (const id of LAYERS_PICK) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', mode === 'pick' ? 'visible' : 'none');
+    for (const id of LAYERS_PICK) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', placesOn ? 'visible' : 'none');
+    // live mode: taken places already carry a business pin; show only the free ones
+    for (const id of ['ohh-places-dot', 'ohh-places-hit']) if (map.getLayer(id)) map.setFilter(id, mode === 'live' ? ['!=', ['get', 'state'], 'taken'] : null);
     if (map.getLayer('ohh-biz-halo')) map.setLayoutProperty('ohh-biz-halo', 'visibility', mode === 'live' ? 'visible' : 'none');
-  }, [styleEpoch, realFC, placeFC, bizFC, dealsFC, fundFC, closedFC, mode]);
+  }, [styleEpoch, realFC, placeFC, bizFC, dealsFC, fundFC, closedFC, mode, placesOn]);
 
   // selection highlight
   useEffect(() => {
@@ -364,7 +379,7 @@ export function CityMap(props: CityMapProps) {
     if (idx >= 0) map.setFeatureState({ source: 'ohh-places', id: idx }, { selected: true });
   }, [selected, places, styleEpoch]);
 
-  useEffect(() => { if (mode !== 'pick') setSelected(null); }, [mode]);
+  useEffect(() => { if (!placesOn) setSelected(null); }, [placesOn]);
 
   // HTML name pins for live mode
   useEffect(() => {
@@ -410,9 +425,16 @@ export function CityMap(props: CityMapProps) {
     });
   }, [closed, segments]);
 
+  const freeLegend = [{ color: mapPalette(theme).free, label: placeNiche ? `Free for a ${NICHE_META[placeNiche].label.toLowerCase()}` : 'Free' }, { color: mapPalette(theme).other, label: 'Other niche' }];
   const legend = mode === 'pick'
-    ? [{ color: mapPalette(theme).free, label: niche ? `Free for a ${NICHE_META[niche].label.toLowerCase()}` : 'Free' }, { color: mapPalette(theme).other, label: 'Other niche' }, { color: mapPalette(theme).taken, label: 'Taken' }]
-    : [...new Set(markers.map((m) => m.niche))].map((n) => ({ color: NICHE_META[n].color, label: NICHE_META[n].label }));
+    ? [...freeLegend, { color: mapPalette(theme).taken, label: 'Taken' }]
+    : [...[...new Set(markers.map((m) => m.niche))].map((n) => ({ color: NICHE_META[n].color, label: NICHE_META[n].label })), ...(showFree ? freeLegend : [])];
+  const canBrowseFree = mode === 'live' && !embedded && !orbit;
+  const startHere = (id: string) => {
+    const n = placeNiche ?? 'cafe';
+    if (onStartHere) onStartHere(id, n);
+    else window.location.assign(`/start?niche=${encodeURIComponent(n)}&place=${encodeURIComponent(id)}`);
+  };
 
   return (
     <div className={`cm-root${zoomedOut ? ' cm-root--far' : ''}${near ? ' cm-root--near' : ''}${offline ? ' cm-root--offline' : ''}${className ? ` ${className}` : ''}`} style={style}>
@@ -441,6 +463,13 @@ export function CityMap(props: CityMapProps) {
         <ul className="cm-legend" aria-label="Legend">
           {legend.map((l) => <li key={l.label}><i style={{ background: l.color }} />{l.label}</li>)}
           {mode === 'live' && <li className="cm-legend__hint">#1–3 lead their niche · zoom in to see everyone</li>}
+          {canBrowseFree && (
+            <li>
+              <button type="button" className="cm-legend__toggle" aria-pressed={showFree} onClick={() => setShowFree((v) => !v)}>
+                {showFree ? tr('Hide free storefronts', 'Скрыть свободные помещения') : tr(`Free storefronts · ${freeCount}`, `Свободные помещения · ${freeCount}`)}
+              </button>
+            </li>
+          )}
         </ul>
       )}
       <div className="cm-ctl" role="group" aria-label="Map controls">
@@ -463,10 +492,12 @@ export function CityMap(props: CityMapProps) {
           me={myBusinessId ? businesses.find((x) => x.id === myBusinessId) : undefined} places={places}
         />
       )}
-      {mode === 'pick' && selectedPlace && (
+      {placesOn && selectedPlace && (
         <PlaceCard
-          place={selectedPlace} places={places} businesses={businesses} niche={niche} packs={packs}
-          onOpen={onPick} onClose={() => setSelected(null)} compact={short} myBusinessId={myBusinessId}
+          place={selectedPlace} places={places} businesses={businesses} niche={placeNiche} packs={packs}
+          onOpen={mode === 'pick' ? onPick : myBusinessId ? undefined : startHere} onClose={() => setSelected(null)}
+          compact={short} myBusinessId={myBusinessId}
+          actionLabel={mode === 'live' ? (myBusinessId ? tr('You already run a business', 'У тебя уже есть бизнес') : tr('Open my business here', 'Открыть здесь свой бизнес')) : undefined}
         />
       )}
     </div>
