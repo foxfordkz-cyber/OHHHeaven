@@ -36,9 +36,9 @@ export const INPUTS = {
     note: 'Product decision: 7.8x monthly, 35% off 12 x $19. LivePlan annual is 9x its monthly price ($15 x 12 vs $20).',
   },
   annualShare: {
-    value: 0.336, kind: 'fact', label: 'New subscriptions that pick the annual plan',
+    value: 0.336, kind: 'assumption', label: 'New subscriptions that pick the annual plan',
     source: 'https://www.revenuecat.com/state-of-subscription-apps',
-    note: 'RevenueCat State of Subscription Apps 2026: annual plans are 33.6% of subscription durations (secondary summary of the report). Mobile apps; we are web.',
+    note: 'One secondary summary of RevenueCat State of Subscription Apps 2026 gives annual plans as 33.6% of subscription durations (41.4% a year earlier); not confirmed by a second source, so kept as an assumption.',
   },
 
   // ---- 2. Retention ----------------------------------------------------------
