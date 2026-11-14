@@ -1,4 +1,2 @@
-// EngineCtx по build/CONTRACT.md, раздел 3. Когда агент 02 выложит engine/src/index.ts, импорт переедет туда.
-import type { PackSet, Place } from '../../../shared/src/types';
-
-export interface EngineCtx { packs: PackSet; places: Place[] }
+// EngineCtx объявлен в engine/src/index.ts (build/CONTRACT.md, раздел 3). Импорт только типа: цикла при запуске нет.
+export type { EngineCtx } from '../index';
