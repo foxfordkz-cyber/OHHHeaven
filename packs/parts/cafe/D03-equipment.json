@@ -198,6 +198,20 @@
       "note": "Dealer and auction guides: buyers pay 30-70% less than new for used restaurant equipment, while sellers get only 10-30% of the original price. Half of this pack's $2,628 pair is taken. No warranty. 48 months of remaining life is my assumption (a 10-year unit bought at year 6). Older units may run on R-404A, a refrigerant that is being phased down, so a leak can cost more than the fridge."
     },
     {
+      "id": "grinder_refurbished",
+      "name": "Refurbished espresso grinder",
+      "kind": "equipment",
+      "cost": 1912,
+      "required": false,
+      "lifespanMonths": 48,
+      "warrantyMonths": 12,
+      "alternativeTo": "grinder",
+      "backupFor": "grinder",
+      "source": "https://www.espressoparts.com/products/refurbished-mahlkonig-e65s-espresso-grinder-white",
+      "confidence": "verified",
+      "note": "Refurbished Mahlkonig E65S at Espresso Parts: $1,911.65 (regular price $2,249), sold as is, with a 1-year warranty against faulty workmanship and materials; the black one is $1,955. Only about 9% below the $2,099 new price in this pack: on a grinder, used saves little. 48 months of remaining life is my assumption (two thirds of the pack estimate). Fit new burrs ($149.99) on day one."
+    },
+    {
       "id": "espresso_install",
       "name": "Certified installation of the espresso machine",
       "kind": "other",
@@ -766,7 +780,7 @@
     {
       "id": "backflow_test_overdue",
       "name": "Backflow preventer not tested this year",
-      "law": "15 RCNY §20-04 (NYC Department of Environmental Protection, backflow prevention)",
+      "law": "NYC Administrative Code §24-343.1; 15 RCNY §20-04 (NYC Department of Environmental Protection, backflow prevention)",
       "official": "dep_inspector",
       "foundBy": [
         "audit",
@@ -782,7 +796,7 @@
       "reputationHit": 0,
       "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-129579",
       "confidence": "estimate",
-      "note": "Rule seen: each assembly is tested at least once a year by a state-certified tester employed by a licensed master plumber; failure to provide the annual test report is a violation that leads to a summons; defects are repaired within 30 days. Amounts: \"not less than $700 nor more than $10,000\" civil, $1,400-$10,000 criminal, quoted by the search tool from a City Council file (Int 0768-2026) on these penalties; I could not tell from the excerpt whether that is the current or the proposed range, hence an estimate. The monthly climb is a game formula."
+      "note": "Rule seen: each assembly is tested at least once a year by a state-certified tester employed by a licensed master plumber; failure to provide the annual test report is a violation that leads to a summons; defects are repaired within 30 days. Amounts as City Council bill files quote Administrative Code §24-343.1: $700 to $10,000 civil for not filing the annual test report ($1,000 to $10,000 for not installing a device), each day a separate offense; criminal fines $1,400-$10,000. A 2021 hearings-office schedule lists $1,000 for a missing annual report, with lower mitigated amounts. A 2026 bill (Int 0768-2026) would raise the range. I did not see the codified section itself, hence an estimate. The monthly climb is a game formula."
     },
     {
       "id": "extinguisher_not_serviced",
@@ -1199,6 +1213,12 @@
       "title": "One machine, one circuit",
       "text": "A two-group espresso machine needs its own 20-amp, 208-240 volt circuit; a three-group needs 30 amps. Grinders go on separate circuits. Plugging an oven or a second machine into a shared line trips the breaker at the rush.",
       "source": "https://1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/"
+    },
+    {
+      "id": "demand_charge",
+      "title": "The demand charge",
+      "text": "On Con Edison's general large rate, which starts at roughly 10 kW of demand, a business pays for its peak as well as its use: up to $36.50 per kW of the highest weekday demand in summer. Heating everything at once sets the bill for the month.",
+      "source": "https://www.coned.com/en/accounts-billing/your-bill/ev-phase-in-rates"
     },
     {
       "id": "water_damage_claims",
@@ -1881,6 +1901,26 @@
       "url": "https://www.manualsdir.com/manuals/48075/bunn-b10.html?page=9",
       "title": "Bunn brewer manual: delime at least every 3 months",
       "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.espressoparts.com/products/refurbished-mahlkonig-e65s-espresso-grinder-white",
+      "title": "Espresso Parts: refurbished Mahlkonig E65S, $1,911.65, 1-year warranty",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://thinktank.pmq.com/t/dishwashing-chemical-cost/7976",
+      "title": "PMQ forum: a dish machine lease quote, $150 a month with service, repairs and chemicals",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/blog/4540/dishwashers-leasing-vs-buying.html",
+      "title": "WebstaurantStore: lease or buy a commercial dishwasher",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.coned.com/en/accounts-billing/your-bill/ev-phase-in-rates",
+      "title": "Con Edison: SC 9 Rate 1 demand delivery charges per kW (up to $36.50 in summer, $29.45 in winter)",
+      "checked": "2026-11-14"
     }
   ],
   "extra": {
@@ -1995,6 +2035,8 @@
         "id": "grinder",
         "what": "Espresso grinder",
         "newCost": 2099,
+        "usedCost": 1912,
+        "usedWarrantyMonths": 12,
         "lifespanMonths": 72,
         "care": "Burr set every 800 kg ($149.99); grinder cleaner weekly.",
         "criticalShare": 0.65,
@@ -2017,7 +2059,7 @@
         ],
         "source": "https://www.mahlkoenig.us/collections/burrs/grinder-model_e65s",
         "confidence": "estimate",
-        "note": "Grinder price and lifespan are the pack figures; no service-life statistic found. Used and lease prices not found."
+        "note": "Grinder price and lifespan are the pack figures; no service-life statistic found. Refurbished: $1,911.65 with a 1-year warranty (Espresso Parts). Lease price not found."
       },
       {
         "id": "water_filtration",
@@ -2154,9 +2196,14 @@
             "source": "https://www.86repairs.com/state-of-repairs"
           }
         ],
+        "leaseMonthly": 150,
+        "leaseListedRange": [
+          78,
+          300
+        ],
         "source": "https://fesmag.com/serviceinsights/19740-maintaining-warewashers",
         "confidence": "estimate",
-        "note": "Rental from a chemical company comes at a fixed monthly cost with parts and labor included; no price is published."
+        "note": "Lease from a chemical company: a fixed monthly cost with parts and labor included; one forum quote was $150 a month with chemicals, a buying guide gives $78-$300."
       },
       {
         "id": "pos",
@@ -2476,6 +2523,17 @@
         "source": "https://www.katom.com/learning-center/ice-maker-cost-2026-pricing-guide.html",
         "confidence": "estimate",
         "note": "Retail bags: $2.59 (warehouse club) to $5.99 per 20 lb. At 40 lb a day on average over the year (my assumption: iced drinks at 8 oz of ice each) = 60 bags a month x $2.59 = $155; delivery prices in New York were not found."
+      },
+      {
+        "id": "dishwasher_lease",
+        "name": "Leased dish machine with chemicals and service",
+        "kind": "maintenance",
+        "basis": "fixed",
+        "amount": 150,
+        "appliesIf": "A dish machine is leased from a chemical company instead of bought",
+        "source": "https://thinktank.pmq.com/t/dishwashing-chemical-cost/7976",
+        "confidence": "estimate",
+        "note": "One restaurant owner on a trade forum was quoted a flat $150 a month covering the machine, service, repairs and chemicals; a buying guide puts chemical leases at $78-$300 a month and warns that some contracts make you buy a minimum of chemicals every month whether you need them or not. Chemical companies publish no prices: get the term, the minimum and the exit fee in writing."
       },
       {
         "id": "scale_inspection_fee",
@@ -4604,6 +4662,7 @@
           }
         ],
         "durationMonths": 1,
+        "oneTimeCost": 600,
         "playerMoves": [
           {
             "kind": "roadmap",
@@ -4618,7 +4677,7 @@
         "tier": "deep",
         "source": "https://1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
         "confidence": "estimate",
-        "note": "The effect lasts until a licensed electrician adds a circuit; a New York price for that was not found. A fridge on the tripped circuit warms up unnoticed: see fridge_warm_overnight. The 3% loss of capacity is my estimate."
+        "note": "The effect lasts until a licensed electrician adds a circuit: $350-$850 on New York price pages written for homes ($600 taken; indicative only, a commercial job with a permit costs more). A full panel is worse: an upgrade to 200 amps is quoted at $2,800-$5,500 and needs a permit and two to six weeks of coordination with Con Edison. A fridge on the tripped circuit warms up unnoticed: see fridge_warm_overnight. The 3% loss of capacity is my estimate."
       },
       {
         "id": "brewer_limed_up",
@@ -5286,6 +5345,21 @@
         "source": "https://1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/"
       },
       {
+        "text": "Part of the electric bill is set by your single busiest half hour.",
+        "why": "Above 10 kW a business pays a demand charge on its peak: up to $36.50 per kW in summer on the general large rate.",
+        "source": "https://www.coned.com/en/accounts-billing/your-bill/ev-phase-in-rates"
+      },
+      {
+        "text": "A leased dish machine can oblige you to buy chemicals you do not need.",
+        "why": "Chemical leases run $78-$300 a month, and some contracts set a monthly minimum purchase.",
+        "source": "https://www.webstaurantstore.com/blog/4540/dishwashers-leasing-vs-buying.html"
+      },
+      {
+        "text": "On a grinder, buying used saves almost nothing.",
+        "why": "A refurbished unit lists at $1,912 against $2,099 new; the real saving in used equipment is in refrigeration and the espresso machine.",
+        "source": "https://www.espressoparts.com/products/refurbished-mahlkonig-e65s-espresso-grinder-white"
+      },
+      {
         "text": "The drip brewer scales up too.",
         "why": "Its maker asks for deliming at least every 3 months; nobody remembers until it trickles.",
         "source": "https://www.manualsdir.com/manuals/48075/bunn-b10.html?page=9"
@@ -5322,7 +5396,7 @@
       "Time-to-failure statistics for espresso machines, grinders, brewers or registers: none published. The clocks in eventCatalog are game rules built from manufacturer service intervals.",
       "Number of repair calls per year for a small cafe: only cost per call (86 Repairs) was found.",
       "New York City prices for: a backflow test, an espresso service plan, a refrigeration maintenance plan, storefront glass, roll-down gate repair, ice delivery, a commercial dishwasher rental.",
-      "Con Edison 2026 commercial rates and demand charges (SC 2 and SC 9): the tariff was not reachable through search.",
+      "Con Edison 2026 energy rates per kWh for small business, and the exact rule that moves a shop from the small rate to the demand-billed rate: only the demand delivery charge ($36.50 per kW in summer) was seen.",
       "Dollar penalties for Health Code general violations 10B and 10E.",
       "Whether the $700-$10,000 backflow penalty is the current or the proposed range.",
       "The small-business reimbursement cap under Public Service Law §73.",
@@ -5330,7 +5404,7 @@
       "FDNY rules for nitrogen and small carbon dioxide cylinders in a cafe; FDNY approval status of specific ventless ovens.",
       "Service life of grinders, batch brewers, registers and blenders: IRS depreciation periods are used as a fallback.",
       "The size of 2025-2026 tariffs on imported espresso machines and parts.",
-      "The New York price of adding a dedicated electrical circuit or upgrading a panel.",
+      "A reliable New York price for a commercial dedicated circuit or a panel upgrade: only home-oriented price pages were found.",
       "The deductible and the exact water-damage terms of a typical cafe policy.",
       "First-person New York City owner accounts of equipment failures (Reddit is closed to the search tool)."
     ]
