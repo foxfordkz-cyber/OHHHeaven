@@ -3,7 +3,8 @@ import type { ScreenModule } from '../../app/screens';
 import { WithStore } from '../../app/dev';
 import { useOwnerView } from '../../app/store';
 import { devStore } from '../insights/dev-store';
-import { cafeEndedView, cafeView, RULE_CARDS, type ViewWithExtra } from '../insights/fixtures';
+import { cafeEndedView, cafeView, RULE_CARDS } from '../insights/fixtures';
+import type { OwnerView } from '@ohh/shared/types';
 import { EndConnected, EndScreen } from './EndScreen';
 import { Leaderboards } from './Leaderboards';
 import { PlanConnected, PlanScreen } from './PlanScreen';
@@ -19,11 +20,11 @@ function LeaderboardsPage() {
   );
 }
 
-function DevEnd({ view }: { view: ViewWithExtra }) {
+function DevEnd({ view }: { view: OwnerView }) {
   const store = useMemo(() => devStore(view, { delayMs: 700 }), [view]);
   return <WithStore store={store}><DevEndInner view={view} /></WithStore>;
 }
-function DevEndInner({ view }: { view: ViewWithExtra }) {
+function DevEndInner({ view }: { view: OwnerView }) {
   const { query } = useGame();
   return <EndScreen view={view} ask={query} cards={RULE_CARDS} planHref="/dev/plan" />;
 }
@@ -49,8 +50,8 @@ export const screen: ScreenModule = {
     { path: '/leaderboards', element: <LeaderboardsPage /> },
   ],
   dev: [
-    { id: 'end', title: 'End of season — 2nd of 18 coffee shops', render: () => <DevEnd view={cafeEndedView} /> },
-    { id: 'end-running', title: 'End screen during the season', render: () => <DevEnd view={cafeView as ViewWithExtra} /> },
+    { id: 'end', title: 'End of season — 2nd of 20 coffee shops', render: () => <DevEnd view={cafeEndedView} /> },
+    { id: 'end-running', title: 'End screen during the season', render: () => <DevEnd view={cafeView} /> },
     { id: 'plan', title: 'Your real-world plan', render: () => <DevPlan /> },
     { id: 'leaderboards', title: 'Leaderboards', render: () => <DevLeaderboards /> },
   ],

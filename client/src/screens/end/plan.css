@@ -1,5 +1,7 @@
 /* Real-world plan (agent 11): the screen page. The print-out rules live in print.ts (PlanView injects them). */
 .plan { display: flex; flex-direction: column; gap: var(--s-3); }
+.plan-pair { display: flex; flex-direction: column; gap: var(--s-3); }
+@media (min-width: 720px) { .plan-pair { flex-direction: row; align-items: flex-start; } .plan-pair > * { flex: 1 1 0; min-width: 0; } }
 .plan-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-3); padding: var(--s-4); box-shadow: var(--shadow-1); }
 .plan-block > h2 { margin: 0 0 var(--s-2); }
 .plan-header h1 { margin: 2px 0 var(--s-2); }

@@ -136,7 +136,9 @@ export function trendGeometry(points: TrendPoint[], marks: TrendMark[] = [], box
     const ps = pts.map((p) => ({ x: x(p.month), y: y(p[key]), value: p[key], month: p.month, partial: !!p.partial }));
     return { key, path: ps.map((p, i) => `${i ? 'L' : 'M'}${p.x},${p.y}`).join(' '), points: ps };
   });
-  const yTicks = [...new Set([yMin, ...ticks(yMax, 3), ...(yMin < 0 ? [round1(yMin / 2)] : [])])].sort((a, b) => a - b);
+  // a middle tick below zero only when the losses take a real part of the chart; otherwise the labels collide
+  const roomBelow = yMin < 0 && -yMin / (yMax - yMin) > 0.3;
+  const yTicks = [...new Set([yMin, ...ticks(yMax, 3), ...(roomBelow ? [round1(yMin / 2)] : [])])].sort((a, b) => a - b);
   return {
     box, x, y, yTicks, series, zeroY: y(0),
     marks: marks.filter((m) => m.month >= first && m.month <= last).map((m) => ({ x: x(m.month), kind: m.kind, label: m.label, month: m.month })),

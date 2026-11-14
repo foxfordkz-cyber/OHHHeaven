@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import type { PackRuleCard, Query, RealWorldPlan } from '@shared/types';
+import type { PackRuleCard, Query, RealWorldPlan } from '@ohh/shared/types';
 import { Button, Card, Icon, RuleCard, Skeleton } from '../../ui';
 import { useGame } from '../../app/store';
 import { int, money, nicheName, unitWord } from '../insights/format';
@@ -25,6 +25,48 @@ function MoneyTable({ rows, total, totalLabel }: { rows: { label: string; amount
   );
 }
 
+/** The reserve in months of the monthly costs shown above it ("2.8 months", "6 months"); null if there is nothing to divide by. */
+export function reserveMonths(plan: Pick<RealWorldPlan, 'reserveAdvised' | 'monthlyTotal'>): string | null {
+  if (plan.monthlyTotal <= 0 || plan.reserveAdvised <= 0) return null;
+  const m = Math.round((plan.reserveAdvised / plan.monthlyTotal) * 10) / 10;
+  return `${Number.isInteger(m) ? m : m.toFixed(1)} ${m === 1 ? 'month' : 'months'}`;
+}
+
+/** "Three lessons from your season", or as many as the books gave (the plan shows at most three). */
+export function lessonsTitle(n: number): string {
+  const k = Math.min(3, n);
+  return k === 0 ? 'Lessons from your season' : `${['One lesson', 'Two lessons', 'Three lessons'][k - 1]} from your season`;
+}
+
+/** A text as a sentence: trimmed, with one full stop at the end. */
+const sentence = (t: string) => (/[.!?]$/.test(t.trim()) ? t.trim() : `${t.trim()}.`);
+
+/** First sentence and the rest ("Apply 20 days before. No fee." → ["Apply 20 days before.", "No fee."]). */
+export function splitLead(text: string): [string, string] {
+  const m = /^(.+?[.!?])\s+(\S[\s\S]*)$/.exec(text.trim());
+  return m ? [m[1], m[2]] : [text.trim(), ''];
+}
+
+/** A link as it is printed: no scheme, no "www.", no trailing slash. */
+export function shortUrl(url: string): string {
+  return url.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
+}
+
+/** "Official page" on screen; on paper the address itself, short, so the reader can type it. */
+function PlanLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a className="plan-link small" href={href} target="_blank" rel="noopener noreferrer" data-url={shortUrl(href)}>
+      <span className="plan-link__label">{children}</span>
+    </a>
+  );
+}
+
+/** On screen the whole text; on paper only its first sentence (.plan-more is hidden in print). */
+function Lead({ text }: { text: string }) {
+  const [lead, rest] = splitLead(text);
+  return <>{lead}{rest && <span className="plan-more"> {rest}</span>}</>;
+}
+
 /** The page a person takes home. Pure: everything comes from the RealWorldPlan. */
 export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards: Map<string, PackRuleCard>; actions?: ReactNode }) {
   const one = unitWord(plan.niche, 1);
@@ -39,6 +81,7 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
         {actions}
       </header>
 
+      <div className="plan-pair">
       <section className="plan-block plan-half" aria-labelledby="plan-budget">
         <h2 id="plan-budget" className="h3">Money to start</h2>
         <MoneyTable rows={plan.startupBudget} total={plan.startupTotal} totalLabel="Total to open" />
@@ -47,15 +90,19 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
       <section className="plan-block plan-half" aria-labelledby="plan-monthly">
         <h2 id="plan-monthly" className="h3">Every month</h2>
         <MoneyTable rows={plan.monthlyCosts} total={plan.monthlyTotal} totalLabel="Monthly costs" />
-        <p className="plan-note"><strong>Keep {money(plan.reserveAdvised)} in reserve</strong> — six months of fixed costs, so one bad season does not close you.</p>
+        <p className="plan-note">
+          <strong>Keep {money(plan.reserveAdvised)} in reserve</strong>{reserveMonths(plan) ? ` — about ${reserveMonths(plan)} of these costs —` : ''} so one slow season does not close you.
+          All in, have <strong className="num">{money(plan.startupTotal + plan.reserveAdvised)}</strong> before you sign a lease.
+        </p>
       </section>
+      </div>
 
       <section className="plan-block plan-grid" aria-label="Break-even and payback">
         <div><div className="plan-kicker">Break-even</div><div className="plan-big num">{plan.breakEvenUnitsMonth === null ? '—' : int(plan.breakEvenUnitsMonth)}</div><div className="small muted">{plan.breakEvenUnitsMonth === null ? `each ${one} lost money` : `${many} a month · about ${int(plan.breakEvenUnitsMonth / 30)} a day`}</div></div>
         <div><div className="plan-kicker">Payback</div><div className="plan-big num">{plan.paybackMonths === null ? 'not reached' : `${plan.paybackMonths} months`}</div><div className="small muted">at your season’s pace</div></div>
       </section>
 
-      <section className="plan-block" aria-labelledby="plan-docs">
+      <section className="plan-block plan-long" aria-labelledby="plan-docs">
         <h2 id="plan-docs" className="h3">Documents, in this order</h2>
         <ol className="plan-steps">
           {plan.checklist.map((s, i) => (
@@ -64,29 +111,29 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
               <div className="plan-step__meta small">
                 {s.agency && <span>{s.agency}</span>}
                 {s.fee !== undefined && <span>{s.fee === 0 ? 'free' : money(s.fee, { cents: s.fee % 1 !== 0 })}</span>}
-                {s.waitDays !== undefined && <span>{s.waitDays} days</span>}
+                {s.waitDays !== undefined && <span>{s.waitDays} {s.waitDays === 1 ? 'day' : 'days'}</span>}
               </div>
-              <div className="small">{s.text}</div>
-              {s.link && <a className="plan-link small" href={s.link} target="_blank" rel="noopener noreferrer" data-url={s.link}>Official page <Icon name="arrowRight" size={12} /></a>}
+              <div className="small"><Lead text={s.text} /></div>
+              {s.link && <PlanLink href={s.link}>Official page <Icon name="arrowRight" size={12} /></PlanLink>}
             </li>
           ))}
         </ol>
       </section>
 
-      <section className="plan-block" aria-labelledby="plan-suppliers">
+      <section className="plan-block plan-long" aria-labelledby="plan-suppliers">
         <h2 id="plan-suppliers" className="h3">Where to find suppliers</h2>
         <ul className="plan-suppliers">
           {plan.suppliers.map((s) => (
-            <li key={s.id} className="plan-row">
-              <strong>{s.category}</strong> — {s.what}. <span className="muted">{s.whereToFind}{s.examples ? ` (${s.examples})` : ''}.</span>
-              {s.link && <> <a className="plan-link small" href={s.link} target="_blank" rel="noopener noreferrer" data-url={s.link}>Link</a></>}
+            <li key={s.id} className="plan-row plan-supplier">
+              <strong>{s.category}</strong> — {sentence(s.what)} <span className="muted"><Lead text={sentence(s.whereToFind)} />{s.examples && <span className="plan-examples"> Examples: {sentence(s.examples)}</span>}</span>
+              {s.link && <> <PlanLink href={s.link}>Link</PlanLink></>}
             </li>
           ))}
         </ul>
       </section>
 
       <section className="plan-block" aria-labelledby="plan-lessons">
-        <h2 id="plan-lessons" className="h3">Three lessons from your season</h2>
+        <h2 id="plan-lessons" className="h3">{lessonsTitle(plan.lessons.length)}</h2>
         <ol className="plan-lessons">
           {plan.lessons.slice(0, 3).map((l, i) => {
             const card = l.ruleCardId ? cards.get(l.ruleCardId) : undefined;

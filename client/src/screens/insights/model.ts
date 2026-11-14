@@ -1,7 +1,7 @@
 // Insights view-model: turns an OwnerView into what each card shows. Pure functions, no React.
 // The engine (agent 04) computes the numbers; here they are only grouped, labelled and compared.
-import type { Benchmark, DayReport, OwnerView, PnlKind, PnlLine } from '@shared/types';
-import { dateOf, RULES } from '@shared/rules';
+import type { Benchmark, DayReport, OwnerView, PnlKind, PnlLine } from '@ohh/shared/types';
+import { dateOf, RULES } from '@ohh/shared/rules';
 import { compactMoney, int, money, pct, toFraction, unitWord } from './format';
 import { monthAbbr, stackBar, type BreakEvenInput, type Segment, type TrendMark, type TrendPoint } from './chartMath';
 
@@ -21,7 +21,10 @@ export function headline(v: OwnerView): Stat[] {
       key: 'profit', label: 'Profit this month', value: money(a.profit, { sign: true }), tone: a.profit >= 0 ? 'good' : 'bad',
       sub: `forecast · day ${a.daysIntoMonth} of ${RULES.DAYS_PER_MONTH}`,
     },
-    { key: 'cash', label: 'Cash', value: money(b.cash), tone: b.cash > owed ? 'neutral' : 'bad', sub: owed > 0 ? `${money(owed)} of it is tax you owe` : undefined },
+    {
+      key: 'cash', label: 'Cash', value: money(b.cash), tone: b.cash > owed ? 'neutral' : 'bad',
+      sub: owed <= 0 ? undefined : owed > b.cash ? `you owe ${money(owed)} of tax: more than you have` : `${money(owed)} of it is tax you owe`,
+    },
     b.cash <= 0
       ? { key: 'runway', label: 'Cash runway', value: 'Out of cash', tone: 'bad', sub: 'bills are paid from the credit line now' }
       : a.cashRunwayMonths === null
@@ -79,15 +82,30 @@ const METRIC_LABELS: Record<string, string> = {
 };
 const HIGHER_IS_BETTER = new Set(['netMarginPct']);
 
+/** Benchmark.metric is a key (cogsPct) in samples and a label ('Labor, % of sales') in agent 04's analytics. */
+export function metricKey(metric: string): string {
+  if (METRIC_LABELS[metric]) return metric;
+  const m = metric.toLowerCase();
+  if (m.startsWith('prime')) return 'primeCostPct';
+  if (m.startsWith('cost of') || m.startsWith('cogs') || m.startsWith('food')) return 'cogsPct';
+  if (m.startsWith('labor') || m.startsWith('labour') || m.startsWith('payroll')) return 'laborPct';
+  if (m.startsWith('rent')) return 'rentPct';
+  if (m.includes('margin')) return 'netMarginPct';
+  return metric;
+}
+
 export interface BenchmarkRow { metric: string; text: string; short: string; you: string; industry: string; word: string; tone: Tone }
 
 export function benchmarkRow(bm: Benchmark): BenchmarkRow {
-  const better = HIGHER_IS_BETTER.has(bm.metric);
-  const word = bm.verdict === 'ok' ? 'normal' : (bm.verdict === 'good') === better ? 'high' : 'low';
+  const key = metricKey(bm.metric);
+  const better = HIGHER_IS_BETTER.has(key);
+  // The verdict is the engine's; the word only says which side of the norm you are on ("normal" when equal)
+  const same = pct(bm.you) === pct(bm.industry);
+  const word = bm.verdict === 'ok' || same ? 'normal' : (bm.verdict === 'good') === better ? 'high' : 'low';
   const tone: Tone = bm.verdict === 'good' ? 'good' : bm.verdict === 'bad' ? 'bad' : 'neutral';
-  const label = METRIC_LABELS[bm.metric] ?? bm.metric;
+  const label = METRIC_LABELS[key] ?? bm.metric.replace(/,\s*% of (sales|revenue)$/i, '');
   const short = `${label} ${pct(bm.you)} · industry ${pct(bm.industry)}`;
-  return { metric: bm.metric, you: pct(bm.you), industry: pct(bm.industry), word, tone, short, text: `${short} · ${word}` };
+  return { metric: key, you: pct(bm.you), industry: pct(bm.industry), word, tone, short, text: `${short} · ${word}` };
 }
 
 export interface CostModel { period: string; segments: Segment[]; total: number; rows: BenchmarkRow[] }
@@ -115,12 +133,27 @@ export function trendModel(v: OwnerView): { points: TrendPoint[]; marks: TrendMa
     points.push({ month: a.month, revenue: a.revenue, profit: a.profit, cash: b.cash, partial: true });
   }
   const monthOf = (day: number) => dateOf(day).month;
+  // The view keeps only current and coming events; past ones stay in the inbox as notices (host: kind 'event')
+  const current = new Set(v.events.map((e) => e.title));
   const marks: TrendMark[] = [
     ...v.events.map((e) => ({ month: monthOf(e.startDay), kind: 'event' as const, label: e.title })),
+    ...v.me.inbox.filter((i) => i.kind === 'event' && !current.has(i.title)).map((i) => ({ month: monthOf(i.day), kind: 'event' as const, label: i.title })),
     ...v.feed.filter((f) => f.kind === 'inspection' && f.businessId === b.id).map((f) => ({ month: monthOf(f.day), kind: 'inspection' as const, label: f.text })),
     ...b.history.filter((m) => m.fines > 0).map((m) => ({ month: m.month, kind: 'fine' as const, label: `Fine ${money(m.fines)}` })),
   ];
-  return { points, marks };
+  return { points, marks: mergeMarks(marks) };
+}
+
+/** One mark per month and kind: weekly notices of the same event would otherwise stack into a column of dots. */
+export function mergeMarks(marks: TrendMark[]): TrendMark[] {
+  const groups = new Map<string, TrendMark & { labels: string[] }>();
+  for (const m of marks) {
+    const key = `${m.month}:${m.kind}`;
+    const g = groups.get(key) ?? { ...m, labels: [] };
+    if (!g.labels.includes(m.label)) g.labels.push(m.label);
+    groups.set(key, g);
+  }
+  return [...groups.values()].map(({ labels, ...m }) => ({ ...m, label: labels.join(' · ') }));
 }
 
 // ───────────── capacity and lost sales ─────────────
@@ -157,10 +190,21 @@ export function capacityModel(v: OwnerView): CapacityModel | null {
 }
 
 // ───────────── taxes ─────────────
+/** Names of the taxes in the packs (server/fixtures, packs/*.json), for when the pack itself is not at hand. */
 const TAX_LABELS: Record<string, string> = {
-  sales_tax: 'Sales tax', income_tax_estimate: 'Estimated income tax', payroll_tax: 'Payroll taxes', ubt: 'NYC unincorporated business tax',
+  sales_tax: 'Sales tax', employer_fica: 'Employer Social Security and Medicare', ny_unemployment: 'NY unemployment insurance',
+  income_tax: 'Income taxes on profit', income_tax_estimate: 'Estimated income tax', payroll_tax: 'Payroll taxes',
+  nyc_service_sales_tax: 'NYC sales tax on barbering services', retail_sales_tax: 'Sales tax on retail products', ubt: 'NYC unincorporated business tax',
 };
-export const taxLabel = (id: string): string => TAX_LABELS[id] ?? id.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+const ACRONYMS = new Set(['ny', 'nyc', 'nys', 'fica', 'futa', 'suta', 'sui', 'ubt', 'mctmt', 'irs', 'us']);
+/** A tax id as words: the pack's name when known, else "nys_withholding" → "NYS withholding". */
+export function taxLabel(id: string, nameOf?: (id: string) => string | undefined): string {
+  const known = nameOf?.(id) ?? TAX_LABELS[id];
+  if (known) return known;
+  const words = id.split(/[_\s]+/).filter(Boolean).map((w) => (ACRONYMS.has(w.toLowerCase()) ? w.toUpperCase() : w.toLowerCase()));
+  const text = words.join(' ');
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
 
 export interface TaxModel {
   owed: number; enough: boolean | null; shortBy: number;
@@ -168,7 +212,7 @@ export interface TaxModel {
   items: { id: string; label: string; amount: number; due: string }[];
 }
 
-export function taxModel(v: OwnerView): TaxModel | null {
+export function taxModel(v: OwnerView, nameOf?: (taxId: string) => string | undefined): TaxModel | null {
   const b = v.business;
   if (!b) return null;
   const unpaid = b.liabilities.filter((l) => !l.paid).sort((x, y) => x.dueDay - y.dueDay);
@@ -178,24 +222,34 @@ export function taxModel(v: OwnerView): TaxModel | null {
   const enough = next ? b.cash >= next.amount : null;
   return {
     owed, next, enough, shortBy: next && !enough ? Math.round(next.amount - b.cash) : 0,
-    items: unpaid.map((l) => ({ id: l.taxId, label: taxLabel(l.taxId), amount: l.amount, due: dateOf(l.dueDay).label })),
+    items: unpaid.map((l) => ({ id: l.taxId, label: taxLabel(l.taxId, nameOf), amount: l.amount, due: dateOf(l.dueDay).label })),
   };
 }
 
 // ───────────── risk ─────────────
-export interface RiskModel { exposure: number; saved: number; open: { violationId: string; months: number; saved: number }[]; verdict: string; tone: Tone }
+export interface RiskModel {
+  exposure: number; saved: number; verdict: string; tone: Tone;
+  open: { violationId: string; name: string; months: number; saved: number }[];
+}
 
-export function riskModel(v: OwnerView): RiskModel | null {
+/** "no_fse_permit" → "No fse permit" when the pack's name is not at hand. */
+const violationLabel = (id: string) => (id.charAt(0).toUpperCase() + id.slice(1)).replace(/_/g, ' ');
+
+export function riskModel(v: OwnerView, nameOf?: (violationId: string) => string | undefined): RiskModel | null {
   const a = v.analytics;
   const b = v.business;
   if (!a || !b) return null;
-  const open = b.trails.filter((t) => !t.discovered).map((t) => ({ violationId: t.violationId, months: t.months, saved: t.saved }));
+  const open = b.trails.filter((t) => !t.discovered).map((t) => ({
+    violationId: t.violationId, name: nameOf?.(t.violationId) ?? violationLabel(t.violationId), months: t.months, saved: t.saved,
+  }));
   const saved = open.reduce((s, t) => s + t.saved, 0);
   const exposure = a.exposure;
   if (exposure <= 0 && open.length === 0) return { exposure: 0, saved: 0, open, verdict: 'No open violations: an inspection would find nothing.', tone: 'good' };
-  const verdict = exposure > saved
-    ? `If they find it today you pay ${money(exposure)}: ${money(exposure - saved)} more than you saved.`
-    : `You saved ${money(saved)}; fines today would be ${money(exposure)}. The fine grows every month you keep going.`;
+  const verdict = saved <= 0
+    ? `If they find it today you pay ${money(exposure)} in fines.`
+    : exposure > saved
+      ? `If they find it today you pay ${money(exposure)}: ${money(exposure - saved)} more than you saved.`
+      : `You saved ${money(saved)}; fines today would be ${money(exposure)}. The fine grows every month you keep going.`;
   return { exposure, saved, open, verdict, tone: exposure > saved ? 'bad' : 'neutral' };
 }
 
@@ -203,7 +257,10 @@ export function riskModel(v: OwnerView): RiskModel | null {
 export function kpiValue(value: number, unit: string): string {
   if (unit === '$') return money(value, { cents: value < 100 });
   if (unit === '%') return pct(value);
-  return `${Number.isInteger(value) ? int(value) : value.toFixed(1)} ${unit}`;
+  const n = Number.isInteger(value) ? int(value) : value.toFixed(1);
+  // packs name the unit in the singular ("order"); say "1 order", "204 orders"
+  const word = !unit || value === 1 || /s$/i.test(unit) || /\s/.test(unit) ? unit : `${unit}s`;
+  return word ? `${n} ${word}` : n;
 }
 
 // ───────────── questions for the advisor ─────────────
@@ -234,7 +291,7 @@ export function advisorPresets(v: OwnerView): string[] {
   const tax = taxModel(v);
   if (tax?.next && tax.enough === false) add(`How do I pay ${money(tax.next.amount)} of tax due ${tax.next.label}?`, 3);
   add(SUPPLIER_QUESTION[b.niche] ?? 'Where do I find suppliers in real life?', 2);
-  if (a?.benchmarks.some((bm) => bm.metric === 'rentPct' && bm.verdict === 'bad')) add('Is my rent too high for this space?', 1);
+  if (a?.benchmarks.some((bm) => metricKey(bm.metric) === 'rentPct' && bm.verdict === 'bad')) add('Is my rent too high for this space?', 1);
   add('How can I reach break-even faster?', 0);
   add('What permits do I need in real life?', 0);
   const seen = new Set<string>();
