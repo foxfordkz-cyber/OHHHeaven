@@ -316,6 +316,7 @@ export const leverOptions = {
   snow_ice_plan: { cost: { staff_shovel: 30, contractor: 133 }, why: 'D07 prices are per winter month (December-March). The engine charges levers every month, so the cost is spread over 12 months: 90 x 4 / 12 = 30, 400 x 4 / 12 = 133. Back to 90 and 400 once levers can have active months (D07 activeMonths).' },
   sidewalk_care: { cost: { sweep_open_close: 0, sweep_and_power_wash: 150 }, why: 'D07 valued 10 minutes a day of a barista ($85). Staff hours are already paid in staff.hoursPerMonth, so charging it again counts the same hour twice. Power washing stays a real extra ($150 a visit, D07).' },
   delivery_hatch_rule: { cost: { spotter_and_cones: 0 }, why: 'The spotter is a barista already on shift (D07 valued 10 minutes x 16 days = $45); charging it again counts the same paid hours twice.' },
+  refund_policy: { cost: { remake: 65 }, why: 'D10 put remade drinks at about 0.5% of sales ($250) valued at the menu price. A remake costs the shop its ingredients and cup, not the price: 0.5% x $50,000 x 0.26 (unit.cogsPerUnit / unit.refPrice = 2.21 / 8.50) = $65.' },
   entrance_floor_safety: { cost: { mats_and_signs: 43 }, why: 'D07 had $80 without a price list; D14 found about $5 a mat a week (2 mats x 5 x 52 / 12 = $43, chainstoreage.com vendor estimate).' },
 };
 
