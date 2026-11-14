@@ -83,6 +83,33 @@ def main():
         for k, v in data.get('corrections', {}).items():
             patch[k] = v
 
+    decisions = json.loads((HERE / 'D00-dedup.json').read_text()) if (HERE / 'D00-dedup.json').exists() else {'merges': []}
+    events_by_id = {x['id']: x for x in extra['eventCatalog']}
+    extra['deduplication'] = []
+    for removed, kept in decisions['merges']:
+        old, target = events_by_id[removed], events_by_id[kept]
+        target.setdefault('supportingSources', [])
+        if old['source'] != target['source']:
+            target['supportingSources'].append(old['source'])
+        target.setdefault('mergedVariantIds', []).append(removed)
+        extra['deduplication'].append({'id': 'd00_merge_' + removed.removeprefix('d00_'), 'removedId': removed, 'retainedId': kept, 'tier': 'deep', 'source': old['source'], 'reason': 'Same observable trigger and decision; alternative evidence retained, not counted as another event.'})
+        del events_by_id[removed]
+    extra['eventCatalog'] = list(events_by_id.values())
+    insights_by_id = {x['id']: x for x in extra['nonObvious']}
+    for removed, kept in decisions.get('nonObviousMerges', []):
+        old, target = insights_by_id[removed], insights_by_id[kept]
+        target.setdefault('supportingSources', [])
+        if old['source'] != target['source']:
+            target['supportingSources'].append(old['source'])
+        target.setdefault('mergedVariantIds', []).append(removed)
+        extra['deduplication'].append({'id': 'd00_merge_' + removed.removeprefix('d00_'), 'removedId': removed, 'retainedId': kept, 'tier': 'deep', 'source': old['source'], 'reason': 'Same underlying lesson; retain the evidence without counting another insight.'})
+        del insights_by_id[removed]
+    for removed in decisions.get('nonObviousExclusions', []):
+        old = insights_by_id.pop(removed)
+        extra['deduplication'].append({'id': 'd00_exclude_' + removed.removeprefix('d00_'), 'removedId': removed, 'tier': 'deep', 'source': old['source'], 'reason': 'Lesson is too general or obvious for the nonObvious minimum; original evidence remains in the shard.'})
+    extra['nonObvious'] = list(insights_by_id.values())
+    used_levers = {m['id'] for x in extra['eventCatalog'] for m in x['playerMoves']}
+    extra['researchLevers'] = [x for x in extra['researchLevers'] if x['id'] in used_levers]
     for row in extra['eventCatalog']:
         row['implementationStatus'] = 'research_only_pending_calibration'
         row['playerMoveRegistry'] = 'extra.researchLevers'
@@ -154,6 +181,27 @@ def main():
             source = row.get('source', '')
             accessed = source_lookup.get(canonical(source), {}) if source else {}
             numeric_audit.append({'id': f'd00_audit_{section.lower()}_{row["id"]}', 'record': f'{section}.{row["id"]}', 'fields': numeric_fields(row), 'baselineConfidence': row.get('confidence', 'unspecified'), 'source': source, 'tier': 'core', 'confidence': 'estimate', 'sourceAccessInD00': accessed.get('access', 'not_reopened_in_this_session'), 'verdict': 'No blanket re-verification. Product price, planning allowance, lifespan, quality/reputation effect and legal amount are distinct claims.', 'requiredEvidence': ('Case-specific legal amount and condition; game reputation and elapsed-month fine terms require separate calibration.' if section == 'violations' else 'Exact current quotation or rate with scope; actual usage/hours/quantity and calculation for any planning allowance.'), 'note': 'Audits all baseline numeric records for evidence status; an opened source alone does not verify every field. Values not established remain unresolved, not promoted to verified.'})
+    detailed_audits = {}
+    for audit_file in sorted(HERE.glob('D00-baseline-audit-*.json')):
+        for audited in json.loads(audit_file.read_text()).get('records', []):
+            if audited['record'] in detailed_audits:
+                raise ValueError('Duplicate detailed audit: ' + audited['record'])
+            detailed_audits[audited['record']] = (audit_file.name, audited)
+    for row in numeric_audit:
+        if row['record'] not in detailed_audits:
+            continue
+        artifact, audited = detailed_audits[row['record']]
+        row['auditArtifact'] = artifact
+        row['sourceAccessInD00'] = audited['access']
+        row['verdict'] = audited['verdict']
+        row['note'] = audited['note']
+        row['checkedFields'] = copy.deepcopy(audited['checkedFields'])
+        for field in row['checkedFields']:
+            field.setdefault('source', audited['source'])
+            field.setdefault('confidence', 'estimate')
+            field.setdefault('note', field.get('evidence', field.get('observedEvidence', 'See detailed audit artifact.')))
+        if audited.get('supportingSources'):
+            row['supportingSources'] = audited['supportingSources']
     extra['baselineNumericAudit'] = numeric_audit
     extra['d00ResearchStatus'] = {
         'tier': 'core', 'status': 'complete_catalog' if args.final else 'in_progress', 'date': '2026-11-14',
@@ -169,6 +217,8 @@ def main():
     patch['sources'] = source_list
     patch['extra'] = extra
     errors = []
+    if args.final and set(detailed_audits) != {x['record'] for x in numeric_audit}:
+        errors.append('Detailed primary-source audit must cover exactly all baseline numeric records.')
     for key, rows in extra.items():
         if not isinstance(rows, list):
             continue
@@ -218,6 +268,12 @@ def main():
             if counts[k] < n:
                 errors.append(f'{k}: {counts[k]} < {n}')
     checks = {'tier': 'core', 'counts': counts, 'minima': minima, 'minimumsMet': all(counts[k] >= n for k, n in minima.items()), 'errors': errors, 'byShard': shard_counts, 'scales': dict(collections.Counter(x['scale'] for x in extra['eventCatalog'])), 'sourceAccess': dict(collections.Counter(x['access'] for x in source_list)), 'languages': dict(collections.Counter(x['language'] for x in source_list)), 'closureStatus': dict(collections.Counter(x['status'] for x in extra['failureStories'])), 'unusedSourcesExcluded': [x['url'] for x in unused], 'limits': 'Structural checks do not certify truth or independently reproduce every quotation. Quotes, causal attribution and source applicability also require researcher review.'}
+    checks['baselineAudit'] = {
+        'records': len(detailed_audits),
+        'fieldChecks': sum(len(audit['checkedFields']) for _, audit in detailed_audits.values()),
+        'files': sorted({artifact for artifact, _ in detailed_audits.values()}),
+        'policy': 'Check actual primary-source fields separately from assumptions; no whole record is verified merely because one price or rate is confirmed.'
+    }
     dump(HERE / 'D00-total-search.json', patch)
     dump(HERE / 'D00-validation.json', checks)
     dump(pathlib.Path('/tmp/d00-cafe-overlay.json'), overlay(base, patch))

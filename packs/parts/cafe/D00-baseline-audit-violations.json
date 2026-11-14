@@ -1,0 +1,1060 @@
+{
+  "records": [
+    {
+      "record": "violations.no_fse_permit",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Operating without a Food Service Establishment Permit",
+          "evidence": "81.05(a) applies subject to 81.05(d): no inspection during the application waiting period permits opening on day22; it does not waive other duties. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "law",
+          "value": "NYC Health Code §81.05(a); 24 RCNY Chapter 23, Appendix 23-C, code 18-01",
+          "evidence": "81.05(a) applies subject to 81.05(d): no inspection during the application waiting period permits opening on day22; it does not waive other duties. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 1000,
+          "evidence": "Appendix23-C 18-01: appearance $1000.",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 0,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 0,
+          "evidence": "No savings-based component identified for this charge; zero disables a game formula term. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.max",
+          "value": 2000,
+          "evidence": "18-01: default $2000; not an ordinary escalation ceiling.",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "18-01 distinguishes appearance and default; the current schema stores the latter only in max. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 5,
+          "evidence": "The inherited note admits an estimate. Health Code 81.39(b) ties reopening to a valid displayed permit, not five days. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.1,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "health_inspector",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "inspection",
+            "complaint"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "Penalty schedule: \"No current valid permit, registration, other authorization to operate establishment\" $1,000, or $2,000 if you do not answer the summons. The Department can order an unpermitted establishment closed; the 5 closure days are my estimate. Opening on the 22nd day after applying is legal even without a pre-permit inspection (NYC Business).",
+          "evidence": "Permit exception verified in 81.05(d); closure authority verified in 81.39(b). https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf The five-day estimate and reputation effect remain unverified.",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Legal charge and appearance/default amounts supported; missing default-state trigger and unsupported closure/reputation calibration.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.no_food_protection_cert",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "No Food Protection Certificate holder on site",
+          "evidence": "81.15(a) requires qualified on-site supervision of food operations. Distinguish lacking a holder from unavailable proof. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "law",
+          "value": "NYC Health Code §81.15(a); 24 RCNY Chapter 23, Appendix 23-C, code 04A",
+          "evidence": "81.15(a) requires qualified on-site supervision of food operations. Distinguish lacking a holder from unavailable proof. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 400,
+          "evidence": "Appendix23-C 04A: $400.",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 0,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 0,
+          "evidence": "No savings-based component identified for this charge; zero disables a game formula term. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.max",
+          "value": 400,
+          "evidence": "04A lists $400; not an aggregate enforcement cap.",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "Absent from the inherited record. The reviewed source does not establish a separate default value for this mapped charge; no new value is inferred. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 0,
+          "evidence": "No fixed closure duration is substantiated. A numeric zero does not establish immunity from closure or other enforcement. Health Code 81.39 and Chapter23 section23-06 do not provide this fixed outcome. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.04,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "health_inspector",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "inspection",
+            "complaint"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "Penalty schedule: \"Food Protection Certificate not held by supervisor or manager of food operations\" $400; scoring worksheet: 10 points, a critical violation. A certificate that exists but cannot be shown costs $200 (code 18-11). The NYC Business restaurant page quotes $500-$1,000 for the same violation; I use the penalty schedule.",
+          "evidence": "04A is10 points. 18-11 unavailable certificate: appearance200/default400. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf NYC Business lists a conflicting range; use the specific current schedule, not an average. https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Listed fine supported for 04A; do not conflate unavailable proof, and do not call reputation or closure zero verified.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.dirty_surfaces",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Food contact surfaces not washed, rinsed and sanitized",
+          "evidence": "Food-contact cleaning and general non-food-contact cleanliness are separate charges; a single bundled formula obscures the distinction. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "law",
+          "value": "NYC Health Code §81.27(b), §81.17(e); 24 RCNY Chapter 23, Appendix 23-C, codes 06D and 10F",
+          "evidence": "Food-contact cleaning and general non-food-contact cleanliness are separate charges; a single bundled formula obscures the distinction. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 200,
+          "evidence": "06D condition I/II: $200.",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 25,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 0,
+          "evidence": "No savings-based component identified for this charge; zero disables a game formula term. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.max",
+          "value": 300,
+          "evidence": "06D condition IV: $300; 10F is a separate charge.",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "Absent from the inherited record. The reviewed source does not establish a separate default value for this mapped charge; no new value is inferred. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 0,
+          "evidence": "No fixed closure duration is substantiated. A numeric zero does not establish immunity from closure or other enforcement. Health Code 81.39 and Chapter23 section23-06 do not provide this fixed outcome. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.06,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "health_inspector",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "inspection",
+            "complaint"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "Penalty schedule: code 06D $200 to $300 by condition level (a critical violation, 5 to 8 points); dirty floors, walls and ceilings (code 10F) $100, or $0 the first time if you prove you fixed it. Game formula climbs from $225 to the $300 top as months pass. Fines are small; the points that cost you the A grade are the real price.",
+          "evidence": "06D I–IV:200/200/250/300. 10F:100, eligible first-time accepted cure0. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf The elapsed-month interpolation and claim that reputation matters more than fines have no measured support. 06D points I–IV:5/6/7/8.",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Condition-level fine endpoints supported for06D; monthly interpolation and bundling10F unsupported.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.pest_activity",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Mice, rats or roaches; no pest control contract",
+          "evidence": "81.23 requires pest prevention, a licensed contractor and on-site records; requested contract specifies at least monthly preventive service. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46269",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "law",
+          "value": "NYC Health Code §81.23(a), §81.23(b)(2); 24 RCNY Chapter 23, Appendix 23-C, codes 04K, 04L, 04M and 28-06",
+          "evidence": "81.23 requires pest prevention, a licensed contractor and on-site records; requested contract specifies at least monthly preventive service. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46269",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 300,
+          "evidence": "300 is not the universal pest base: one200 pest charge plus separate100 records charge is only a conditional sum.",
+          "status": "conditional_derived_sum_not_universal_base"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 50,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 0,
+          "evidence": "No savings-based component identified for this charge; zero disables a game formula term. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.max",
+          "value": 450,
+          "evidence": "450 only combines one350 pest charge with100 records charge; not a ceiling for multiple findings.",
+          "status": "conditional_derived_sum_not_total_cap"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "Absent from the inherited record. The reviewed source does not establish a separate default value for this mapped charge; no new value is inferred. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 2,
+          "evidence": "The inherited note admits an estimate. Correction and reopening review cannot be translated into two days from the cited rule. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.12,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "health_inspector",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "inspection",
+            "complaint"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "Penalty schedule: rats, mice or live roaches $200 to $350 by condition level, plus $100 when the contract with a pest management professional and the service records are not on the premises. Scoring worksheet: 5 to 8 points, 28 at the worst level, which alone means a C. Game formula: $350 in the first month up to $450. The Health Code requires a contract with monthly visits by a state-licensed exterminator (from research notes, §81.23(b)). The 2 closure days are my estimate for an infestation that cannot be fixed during the inspection.",
+          "evidence": "04K/04L/04M I–V:200/200/250/300/350 each;28-06:100. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf Monthly professional service is a real duty, not a monthly fine escalator. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46269 The C-grade assertion needs inspection-stage/closure context; two closure days are uncalibrated. Appendix23-B pest scoring uses the highest applicable category/condition, not an automatic sum across pest types. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Split pest presence and missing records; compounded amounts require actual separate sustained charges.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.spoiled_food",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Spoiled food or cold food kept above 41°F",
+          "evidence": "Title combines contamination and temperature charges; 41F applies to relevant cold TCS food with legal exceptions, not every cold food. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "law",
+          "value": "NYC Health Code §81.07(a), §81.09(a); 24 RCNY Chapter 23, Appendix 23-C, codes 04H and 02G",
+          "evidence": "Title combines contamination and temperature charges; 41F applies to relevant cold TCS food with legal exceptions, not every cold food. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 250,
+          "evidence": "02G and04H minimum250.",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 50,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 0,
+          "evidence": "No savings-based component identified for this charge; zero disables a game formula term. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.max",
+          "value": 600,
+          "evidence": "Generic02G cold TCS ceiling500;04H ceiling600.600 is not universal.",
+          "status": "partially_supported_charge_dependent"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "Absent from the inherited record. The reviewed source does not establish a separate default value for this mapped charge; no new value is inferred. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 0,
+          "evidence": "No fixed closure duration is substantiated. A numeric zero does not establish immunity from closure or other enforcement. Health Code 81.39 and Chapter23 section23-06 do not provide this fixed outcome. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.12,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "health_inspector",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "inspection",
+            "complaint"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "Penalty schedule: \"Cold TCS food not held at 41°F or below\" $250 to $500; \"Food not protected from adulteration or contamination\" $250 to $600. Both are public health hazards that must be corrected immediately. Scoring worksheet: 7 to 10 points, 28 at the worst level. Game formula: $300 in the first month, up to $600.",
+          "evidence": "02G cold TCS I–V:250/300/350/400/500;04H:250/300/350/400/600. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf A monthly formula conflates different condition findings. Zero closure days does not guarantee continued operation when an immediate hazard remains. 02G/04H points I–V:7/8/9/10/28.",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Separate contaminated-food and temperature branches; both monthly progression and universal600 cap are unsupported.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.unapproved_food_source",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Food from an unapproved source or a home kitchen",
+          "evidence": "81.04 requires an approved source; a blanket ban on every home-kitchen source is overbroad. NYC81.17(a)(2) recognizes the statutory home-processing exception. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf A separate registered NY home processor may wholesale approved, packaged and labeled products to cafes; the cafe permit holder cannot use this exemption for its own home production. https://agriculture.ny.gov/food-safety/home-processing",
+          "status": "partially_supported_overbroad_title"
+        },
+        {
+          "field": "law",
+          "value": "NYC Health Code §81.04; 24 RCNY Chapter 23, Appendix 23-C, code 03A",
+          "evidence": "81.04 and03A are applicable to an actually unapproved source; determine approval before triggering. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 400,
+          "evidence": "03A condition IV:400.",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 50,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 0,
+          "evidence": "No savings-based component identified for this charge; zero disables a game formula term. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.max",
+          "value": 600,
+          "evidence": "03A condition V:600.",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "Absent from the inherited record. The reviewed source does not establish a separate default value for this mapped charge; no new value is inferred. Source: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 0,
+          "evidence": "No fixed closure duration is substantiated. A numeric zero does not establish immunity from closure or other enforcement. Health Code 81.39 and Chapter23 section23-06 do not provide this fixed outcome. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.06,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "health_inspector",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "inspection",
+            "complaint"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "Penalty schedule: \"Food from unapproved or unknown source, or home cooked\" $400 to $600, a public health hazard worth 10 points, 28 at the worst level. Game formula: $450 in the first month, up to $600.",
+          "evidence": "03A:10 or28 points; IV400/V600. https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf The450 first-month value is an invented interpolation, not a schedule amount. Closure zero and reputation coefficient are unverified. Do not interpret the home-cooked wording as disqualifying an otherwise lawfully registered outside home processor. https://agriculture.ny.gov/food-safety/home-processing",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Condition-specific penalties supported for an actually unapproved source. Title needs the registered-home-processor distinction; monthly interpolation unsupported.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.tip_theft",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/196-D",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Owner keeping workers' tips",
+          "evidence": "196-d prohibits employer appropriation of employee gratuities. Qualified tip sharing is different. https://www.nysenate.gov/legislation/laws/LAB/196-D",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "law",
+          "value": "NY Labor Law §196-d, §198(1-a), §218",
+          "evidence": "196-d prohibits employer appropriation of employee gratuities. Qualified tip sharing is different. https://www.nysenate.gov/legislation/laws/LAB/196-D",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 0,
+          "evidence": "Zero is a game placeholder; it does not mean the violation has no monetary remedy. https://www.nysenate.gov/legislation/laws/LAB/198",
+          "status": "model_placeholder_not_statutory_amount"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 0,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://www.nysenate.gov/legislation/laws/LAB/196-D",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 2,
+          "evidence": "198(1-a): underpayment plus100% court liquidated damages unless good faith is proved; administrative damages no more than100%. Interest and attorney fees are separate.2x applies to established underpayment, not generic savings. https://www.nysenate.gov/legislation/laws/LAB/198",
+          "status": "conditional_legal_analogy_not_complete_liability"
+        },
+        {
+          "field": "fine.max",
+          "value": null,
+          "evidence": "Null supplies no liability ceiling. A single savings multiplier omits other components. https://www.nysenate.gov/legislation/laws/LAB/198 https://www.nysenate.gov/legislation/laws/LAB/218",
+          "status": "model_uncapped_not_complete_liability"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "Absent from the inherited record. The reviewed source does not establish a separate default value for this mapped charge; no new value is inferred. Source: https://www.nysenate.gov/legislation/laws/LAB/196-D",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 0,
+          "evidence": "No fixed closure duration is substantiated. A numeric zero does not establish immunity from closure or other enforcement. https://www.nysenate.gov/legislation/laws/LAB/196-D",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.08,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://www.nysenate.gov/legislation/laws/LAB/196-D",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "labor_investigator",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nysenate.gov/legislation/laws/LAB/196-D",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "complaint",
+            "audit"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nysenate.gov/legislation/laws/LAB/196-D",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://www.nysenate.gov/legislation/laws/LAB/196-D",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "Labor Law §196-d: no employer or agent may demand, accept or keep any part of the gratuities received by an employee. §198(1-a): the amount owed plus liquidated damages of 100%, interest and attorney's fees, with a six-year reach. §218: a civil penalty of up to double for willful or repeat cases. Game formula: 2.0 x what was kept.",
+          "evidence": "198(3) gives a six-year action period; current DOL intake guidance separately excludes wages older than three years. https://www.nysenate.gov/legislation/laws/LAB/198 https://dol.ny.gov/unpaidwithheld-wages-and-wage-supplements 218 allows additional civil penalties for repeat, willful or egregious cases. https://www.nysenate.gov/legislation/laws/LAB/218",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Prohibition supported. Model2x may approximate principal plus one conditional damages component; it is not total statutory liability.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.unpaid_training_time",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Unpaid trial shifts and training time",
+          "evidence": "Paid on-the-job training is supported by DOL. Minimum-wage remedies also require Article19/663, beyond the inherited198 citation. https://dol.ny.gov/unpaidwithheld-wages-and-wage-supplements https://www.nysenate.gov/legislation/laws/LAB/663",
+          "status": "partially_supported_missing_conditions"
+        },
+        {
+          "field": "law",
+          "value": "NY Labor Law §652, §198(1-a); 12 NYCRR §146-1.2, §146-1.5",
+          "evidence": "Paid on-the-job training is supported by DOL. Minimum-wage remedies also require Article19/663, beyond the inherited198 citation. https://dol.ny.gov/unpaidwithheld-wages-and-wage-supplements https://www.nysenate.gov/legislation/laws/LAB/663",
+          "status": "partially_supported_missing_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 0,
+          "evidence": "Zero is a game placeholder, not a statutory penalty amount. https://www.nysenate.gov/legislation/laws/LAB/663",
+          "status": "model_placeholder_not_statutory_amount"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 0,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://www.nysenate.gov/legislation/laws/LAB/198",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 2,
+          "evidence": "663 provides underpayment plus conditional100% liquidated damages, subject to good faith; costs, fees and interest remain separate. An administrative award can differ. https://www.nysenate.gov/legislation/laws/LAB/663",
+          "status": "conditional_legal_analogy_not_complete_liability"
+        },
+        {
+          "field": "fine.max",
+          "value": null,
+          "evidence": "Null is a model representation; liability is not fully described by this field. https://www.nysenate.gov/legislation/laws/LAB/663",
+          "status": "model_uncapped_not_complete_liability"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "Absent from the inherited record. The reviewed source does not establish a separate default value for this mapped charge; no new value is inferred. Source: https://www.nysenate.gov/legislation/laws/LAB/198",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 0,
+          "evidence": "No fixed closure duration is substantiated. A numeric zero does not establish immunity from closure or other enforcement. https://www.nysenate.gov/legislation/laws/LAB/198",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.04,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://www.nysenate.gov/legislation/laws/LAB/198",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "labor_investigator",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nysenate.gov/legislation/laws/LAB/198",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "complaint",
+            "audit"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.nysenate.gov/legislation/laws/LAB/198",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://www.nysenate.gov/legislation/laws/LAB/198",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "Every hour worked is owed at the minimum wage or more ($17.00 in New York City, 12 NYCRR 146); a worker who reports for a shift is owed at least three hours of pay (12 NYCRR §146-1.5). Labor Law §198(1-a): the unpaid wages plus 100% liquidated damages and interest. Game formula: 2.0 x what was withheld.",
+          "evidence": "2026 NYC basic minimum17/hour is supported.146-1.5: one-shift call-in3h or the shorter regularly scheduled shift; separate6h/8h rules cover two/three shifts. https://forms.labor.ny.gov/WP/CR146.pdf Thus the inherited unqualified three-hour statement is overbroad. Productive trial work is not made unpaid by its label. https://dol.ny.gov/unpaidwithheld-wages-and-wage-supplements",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Correct the call-in exception and distinguish work/training wages, call-in pay and conditional damages. No universal2x all-in penalty.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.spread_of_hours_unpaid",
+      "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Spread-of-hours pay not paid",
+          "evidence": "146-1.6: spread exceeding10h includes breaks/off-duty intervals; one extra basic-minimum hour. Coverage uses employee definition146-3.2, including exclusions. https://forms.labor.ny.gov/WP/CR146.pdf",
+          "status": "supported_with_coverage_conditions"
+        },
+        {
+          "field": "law",
+          "value": "12 NYCRR §146-1.6; NY Labor Law §198(1-a)",
+          "evidence": "146-1.6: spread exceeding10h includes breaks/off-duty intervals; one extra basic-minimum hour. Coverage uses employee definition146-3.2, including exclusions. https://forms.labor.ny.gov/WP/CR146.pdf",
+          "status": "supported_with_coverage_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 0,
+          "evidence": "Zero is a placeholder, not the unpaid spread amount or statutory penalty. https://forms.labor.ny.gov/WP/CR146.pdf",
+          "status": "model_placeholder_not_statutory_amount"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 0,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://forms.labor.ny.gov/WP/CR146.pdf",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 2,
+          "evidence": "The conditional Article19 damages analysis in unpaid_training_time applies;2x is not a flat fine or full recovery cap. https://www.nysenate.gov/legislation/laws/LAB/663 https://www.nysenate.gov/legislation/laws/LAB/218",
+          "status": "conditional_legal_analogy_not_complete_liability"
+        },
+        {
+          "field": "fine.max",
+          "value": null,
+          "evidence": "Null is a model representation, not a complete statement of recoverable liability. https://www.nysenate.gov/legislation/laws/LAB/663",
+          "status": "model_uncapped_not_complete_liability"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "Absent from the inherited record. The reviewed source does not establish a separate default value for this mapped charge; no new value is inferred. Source: https://forms.labor.ny.gov/WP/CR146.pdf",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 0,
+          "evidence": "No fixed closure duration is substantiated. A numeric zero does not establish immunity from closure or other enforcement. https://forms.labor.ny.gov/WP/CR146.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.03,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://forms.labor.ny.gov/WP/CR146.pdf",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "labor_investigator",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://forms.labor.ny.gov/WP/CR146.pdf",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "complaint",
+            "audit"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://forms.labor.ny.gov/WP/CR146.pdf",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://forms.labor.ny.gov/WP/CR146.pdf",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "12 NYCRR §146-1.6: on each day on which the spread of hours exceeds 10, an employee shall receive one additional hour of pay at the basic minimum hourly rate; it applies to all restaurant employees whatever their pay rate. Owed back with 100% liquidated damages (Labor Law §198). Game formula: 2.0 x what was withheld.",
+          "evidence": "All pay rates means covered restaurant employees irrespective of rate, not every legally exempt person.146-1.6/146-3.2. https://forms.labor.ny.gov/WP/CR146.pdf Article19 wage-order remedies should also cite663. https://www.nysenate.gov/legislation/laws/LAB/663",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Underlying spread rule supported for covered employees. Coverage exclusions and damages conditions must remain explicit.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.unlicensed_sidewalk_cafe",
+      "source": "https://www.diningoutnyc.info/enforcement",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Sidewalk tables without a Dining Out NYC license",
+          "evidence": "Unlicensed outdoor operation is separately enforced from design noncompliance. Current19-160.5(a) verifies the statute; its future amendment is not applied here. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-225799",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "law",
+          "value": "NYC Administrative Code §19-160 and following (Dining Out NYC, Local Law 121 of 2023)",
+          "evidence": "Unlicensed outdoor operation is separately enforced from design noncompliance. Current19-160.5(a) verifies the statute; its future amendment is not applied here. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-225799",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 500,
+          "evidence": "First offense500; no corrective-action warning for an unlicensed setup. https://www.diningoutnyc.info/enforcement",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 0,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://www.diningoutnyc.info/enforcement",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 0,
+          "evidence": "No savings-based component identified for this charge; zero disables a game formula term. Source: https://www.diningoutnyc.info/enforcement",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.max",
+          "value": 1000,
+          "evidence": "Second/subsequent offense1000; an offense-count rate, not a cap on all citations/removal expense. https://www.diningoutnyc.info/enforcement",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "Absent from the inherited record. The reviewed source does not establish a separate default value for this mapped charge; no new value is inferred. Source: https://www.diningoutnyc.info/enforcement",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 0,
+          "evidence": "No fixed closure duration is substantiated. A numeric zero does not establish immunity from closure or other enforcement. Removal of outdoor setup is distinct from closing the indoor cafe. https://www.diningoutnyc.info/enforcement",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.02,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://www.diningoutnyc.info/enforcement",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "dot_inspector",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.diningoutnyc.info/enforcement",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "inspection",
+            "complaint"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://www.diningoutnyc.info/enforcement",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://www.diningoutnyc.info/enforcement",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "Dining Out NYC enforcement page: unlicensed setups get a penalty with no warning: $500 for the first offense, $1,000 for the second and later offenses, and the Transportation Department may order the setup removed. The game charges $500 per citation. Section and local law numbers are cited from memory.",
+          "evidence": "The500-per-citation model omits the second/subsequent rate. DOT may require removal. Setup removal is not a fixed indoor-business shutdown. https://www.diningoutnyc.info/enforcement The source now distinguishes year-round and seasonal roadway licenses; this sidewalk record needs no winter shutdown rule.",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Current first/repeat fine amounts supported, but the inherited fixed500-per-citation execution misses recurrence. Reputation is uncalibrated.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    },
+    {
+      "record": "violations.grease_interceptor_neglect",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "name",
+          "value": "Grease interceptor not maintained",
+          "evidence": "19-11(a),(q) covers grease-bearing drains, including dairy and coffee shops; maintenance threshold is25% total liquid depth, while rated capacity must also not be exceeded. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-27198",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "law",
+          "value": "15 RCNY §19-11 (NYC Department of Environmental Protection sewer use rules)",
+          "evidence": "19-11(a),(q) covers grease-bearing drains, including dairy and coffee shops; maintenance threshold is25% total liquid depth, while rated capacity must also not be exceeded. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-27198",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.base",
+          "value": 100,
+          "evidence": "56-02 grease row: first100, second400, third800, subsequent1500; offense history determines amount. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+          "status": "supported_with_conditions"
+        },
+        {
+          "field": "fine.perMonth",
+          "value": 200,
+          "evidence": "No monthly increment in the reviewed charge. This field is a game formula coefficient, not a verified legal tariff. Source: https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "fine.pctOfSaved",
+          "value": 0,
+          "evidence": "No savings-based component identified for this charge; zero disables a game formula term. Source: https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+          "status": "model_zero_not_legal_rule"
+        },
+        {
+          "field": "fine.max",
+          "value": 1500,
+          "evidence": "1500 is the subsequent ordinary tariff, not an all-in legal cap; default and separate-order liability are omitted. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+          "status": "partially_supported_not_overall_cap"
+        },
+        {
+          "field": "fine.default",
+          "value": null,
+          "evidence": "56-02 row lists defaults1000/2000/3000/10000 by offense. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762 However56-01(e) says10000 for all charges. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118721 Both primary pages were opened; do not silently choose a replacement.",
+          "status": "missing_field_not_imputed"
+        },
+        {
+          "field": "closureDays",
+          "value": 0,
+          "evidence": "No fixed closure duration is substantiated. A numeric zero does not establish immunity from closure or other enforcement. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "reputationHit",
+          "value": 0.02,
+          "evidence": "No measured cafe reputation coefficient supplied by the cited primary source. Retain only as an explicitly uncalibrated game assumption. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+          "status": "unsupported_game_assumption"
+        },
+        {
+          "field": "official",
+          "value": "dep_inspector",
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+          "status": "qualitative_role_only"
+        },
+        {
+          "field": "foundBy",
+          "value": [
+            "inspection",
+            "complaint"
+          ],
+          "evidence": "Agency role is qualitatively plausible; the named game actor and this channel list do not define an exhaustive enforcement procedure or discovery probability. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+          "status": "qualitative_channels_not_calibration"
+        },
+        {
+          "field": "source",
+          "value": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+          "evidence": "Inherited URL was opened and inspected during this audit; additional primary URLs are recorded in field evidence.",
+          "status": "opened_primary"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A record-wide verified tag overstates the evidence because several numeric fields are model assumptions and legal amounts require the conditions documented here.",
+          "status": "unsupported_record_wide_verified_tag"
+        },
+        {
+          "field": "note",
+          "value": "NYC Business restaurant page: grease interceptors must be properly sized, installed and maintained; fats, oils and grease must not exceed 25% of the liquid depth or rated capacity; fine $100 to $1,500. The rule covers coffee shops and drains that receive dairy (from research notes, 15 RCNY §19-11). Game formula spreads the range over time: $300 after one month, $1,500 from the seventh.",
+          "evidence": "The restaurant summary supports a100–1500 range, but not time interpolation. https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant The25% figure attaches to liquid depth, not25% of rated grease capacity. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-27198 Repeat criteria: same respondent and rule subsection/paragraph, prior sustained/admitted/defaulted offense within one year; premises may differ. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118721",
+          "status": "mixed_supported_law_and_unsupported_model"
+        }
+      ],
+      "verdict": "Ordinary tariff supported by offense count. Monthly200 increment and global1500 cap unsupported. Official default conflict remains unresolved.",
+      "note": "Аудит исходного packs/cafe.json на 2026-11-14; исходный файл не изменён. Числа в value сохранены как унаследованные значения, а не как подтверждённые рекомендации. Отсутствующее поле fine.default показано как null только для выявления пробела схемы. Не подставлять новые коэффициенты без отдельной калибровки."
+    }
+  ]
+}

@@ -1,0 +1,717 @@
+{
+  "records": [
+    {
+      "record": "setup.security_deposit",
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 18000,
+          "evidence": "Guide p.20 ties security to rent, finances and guaranty; it does not quote this cafe or its rent. The amount is 3 × assumed $6,000.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.depositMonths",
+          "value": 3,
+          "evidence": "Guide p.20 says two months is common, with variation; three is a chosen reserve, not the guide benchmark.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "note.monthlyRent",
+          "value": 6000,
+          "evidence": "No property-specific $6,000 rent appears in the source.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.refundable",
+          "value": true,
+          "evidence": "Guide p.20 makes return conditional on required premises condition and no money owed under the lease.",
+          "status": "confirmed_with_conditions"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Deposit is a negotiated lease condition, not a universal three-month statutory requirement.",
+          "status": "model_assumption"
+        }
+      ],
+      "verdict": "Retain as a lease-specific estimate; unconditional refund wording needs qualification.",
+      "note": "Checked 2026-11-14. No replacement deposit or market rent inferred."
+    },
+    {
+      "record": "setup.buildout",
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 70000,
+          "evidence": "Contractor publishes $200–$300/sf for a counter-service cafe in second-generation food space; it does not quote the proposed lighter $70,000 scope.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.planningRatePerSqFt",
+          "value": 87.5,
+          "evidence": "$87.50 is the baseline budget rate, absent from this cafe benchmark.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.areaSqFt",
+          "value": 800,
+          "evidence": "800 sq ft is a scenario size, not a surveyed property in this source.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "note.secondGenerationCafeRate",
+          "value": [
+            200,
+            300
+          ],
+          "evidence": "Restaurant-specific section displays this per-square-foot range for counter-service cafes in existing food-service space.",
+          "status": "confirmed_vendor_benchmark"
+        },
+        {
+          "field": "note.nonFoodConversionRate",
+          "value": [
+            400,
+            600
+          ],
+          "evidence": "The displayed $400–$600/sf+ range is explicitly for full-service restaurant conversion, not every cafe conversion.",
+          "status": "confirmed_with_scope_limit"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Renovation need and extent depend on the actual premises and menu.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 120,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this build-out: light renovation of a former cafe. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Cost and lifespan remain assumptions; source confirms only a broader and more expensive scoped benchmark.",
+      "note": "Checked 2026-11-14. Do not substitute a full-build benchmark for a light-renovation quote."
+    },
+    {
+      "record": "setup.architect_expediter",
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 7000,
+          "evidence": "No $7,000 professional-services package or quoted design fee appears in the contractor guide.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.planningPercentOfBuildout",
+          "value": 10,
+          "evidence": "The source does not publish a ten-percent architect/engineer/expediter fee rule.",
+          "status": "unsupported_rate"
+        },
+        {
+          "field": "note.permitWeeks",
+          "value": [
+            6,
+            14
+          ],
+          "evidence": "Guide schedule section lists a 6–14-week permitting/filed-plan range.",
+          "status": "confirmed_vendor_benchmark"
+        },
+        {
+          "field": "note.constructionWeeks",
+          "value": [
+            8,
+            24
+          ],
+          "evidence": "Guide schedule section lists 8–24 weeks of active construction depending on size and complexity.",
+          "status": "confirmed_vendor_benchmark"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Which professionals are required depends on filed scope; the cited guide does not make this package mandatory for every cafe.",
+          "status": "model_assumption"
+        }
+      ],
+      "verdict": "Budget ratio unsupported; schedule ranges are a contractor benchmark, not a promised opening date.",
+      "note": "Checked 2026-11-14. NYC restaurant guide recommends licensed project professionals but does not establish this combined fee. https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+      "record": "setup.lease_lawyer",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 3500,
+          "evidence": "NYC page supplies no commercial lawyer fee or $3,500 price.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.freeLeaseAssistance",
+          "value": true,
+          "evidence": "Find/Plan/Build section links free commercial lease assistance through SBS.",
+          "status": "confirmed"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "NYC recommends speaking to a lawyer; it does not require buying this priced package.",
+          "status": "model_assumption"
+        }
+      ],
+      "verdict": "Private legal fee remains an allowance; the free-assistance route is supported.",
+      "note": "Checked 2026-11-14. Eligibility and scope of free assistance still need checking for the actual owner."
+    },
+    {
+      "record": "setup.llc_and_publication",
+      "source": "https://dos.ny.gov/node/35506",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 1675,
+          "evidence": "$200 state formation fee plus the separately opened $1,475 Kings County vendor package sum to $1,675; this is one procurement choice. https://www.llcpublishers.com/es/county/kings-llc-publication",
+          "status": "confirmed_arithmetic_with_vendor_scope"
+        },
+        {
+          "field": "note.articlesFee",
+          "value": 200,
+          "evidence": "Department of State Fees section explicitly lists $200.",
+          "status": "confirmed_statutory_fee"
+        },
+        {
+          "field": "note.publicationPackage",
+          "value": 1475,
+          "evidence": "Opened provider page lists a one-time $1,475 package for Kings County. https://www.llcpublishers.com/es/county/kings-llc-publication",
+          "status": "confirmed_vendor_price"
+        },
+        {
+          "field": "note.certificateFeeIncluded",
+          "value": 50,
+          "evidence": "Provider says $50 state filing included; opened DOS certificate form independently lists $50. https://dos.ny.gov/certificate-publication-domestic-limited-liability-company",
+          "status": "confirmed_included_statutory_fee"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "Formation fee and selected vendor package confirmed, but the amount is not a universal statutory startup fee.",
+          "status": "confirmed_with_scope_limit"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "An LLC is a chosen legal structure; a cafe can use another lawful structure, and this publication vendor is optional.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "note.otherCountyPackagePrices",
+          "value": {
+            "Manhattan": 1795,
+            "Queens": 1195
+          },
+          "evidence": "Opened provider comparison table confirms these prices for its own packages. https://www.llcpublishers.com/learn/llc-publishers-vs-new-york-llc-publishing-compared",
+          "status": "confirmed_vendor_price"
+        }
+      ],
+      "verdict": "Selected fee basket confirmed, subject to choosing this LLC/county/provider.",
+      "note": "Checked 2026-11-14. Supplemental state and vendor URLs were opened. County comparison amounts describe this provider, not statutory newspaper prices."
+    },
+    {
+      "record": "setup.espresso_machine",
+      "source": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 7600,
+          "evidence": "Named Appia Life Compact 110V SKU shows $7,600 each; a required service-plan selector is separate.",
+          "status": "confirmed_product_price"
+        },
+        {
+          "field": "note.voltage",
+          "value": 110,
+          "evidence": "Product title and specification identify 110V.",
+          "status": "confirmed"
+        },
+        {
+          "field": "note.shippingWeeks",
+          "value": [
+            2,
+            4
+          ],
+          "evidence": "Page says usual shipping is 2–4 weeks, variable with manufacturer stock; the Smart Wand option has a different lead time.",
+          "status": "confirmed_current_estimate"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "Displayed base product price verified; this does not verify installed cost, availability at a future date or lifespan.",
+          "status": "partially_confirmed"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "A two-group machine is an equipment choice for the espresso concept, not a universal cafe legal duty.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 96,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this two-group espresso machine. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Base price confirmed; service plan, tax, installation scope and lifespan are separate.",
+      "note": "Checked 2026-11-14. Page advertises free shipping, so a blanket delivery exclusion is not itself proof that this SKU incurs freight."
+    },
+    {
+      "record": "setup.grinder",
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 2099,
+          "evidence": "E65S listing displays $2,099 and marks it discontinued/out of stock.",
+          "status": "confirmed_unavailable_product_price"
+        },
+        {
+          "field": "note.successorPrice",
+          "value": 3099,
+          "evidence": "Same category table lists E65W at $3,099.",
+          "status": "confirmed_product_price"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "Price is visible, but a discontinued sold-out listing cannot verify a currently purchasable startup basket.",
+          "status": "partially_confirmed"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Specific grinder model and ownership are operational choices.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 72,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this espresso grinder. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Price confirmed for an unavailable model; budget procurement and lifespan remain unresolved.",
+      "note": "Checked 2026-11-14. Page narrative also says older models are on its shelf, conflicting with the product card; availability requires supplier confirmation."
+    },
+    {
+      "record": "setup.water_filtration",
+      "source": "https://www.seattlecoffeegear.com/collections/everpure",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 500,
+          "evidence": "Collection shows separate cartridge/head prices, not a $500 installed filtration package.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.ESO7CartridgePrice",
+          "value": 192.94,
+          "evidence": "Collection lists Everpure ESO7 cartridge at $192.94.",
+          "status": "confirmed_product_price"
+        },
+        {
+          "field": "note.QL2HeadPrice",
+          "value": 41.94,
+          "evidence": "Collection lists QL2 filter head at $41.94.",
+          "status": "confirmed_product_price"
+        },
+        {
+          "field": "note.replacementFrequency",
+          "value": "several times a year",
+          "evidence": "The cited collection contains no water-load-specific cartridge replacement frequency.",
+          "status": "unsupported_frequency"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Specific filtration design depends on the water and selected equipment.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 60,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this water filtration for the espresso machine. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Component prices confirmed; installed allowance, replacement frequency and lifespan unsupported.",
+      "note": "Checked 2026-11-14. Suitability needs water testing and machine-specific design; no replacement frequency invented."
+    },
+    {
+      "record": "setup.refrigeration",
+      "source": "https://www.webstaurantstore.com/avantco-a-19r-hc-29-solid-door-reach-in-refrigerator/178A19RHC.html",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 2628,
+          "evidence": "Opened main source lists $1,199 regular price; opened Atlantic listing shows $1,429 for MGF8401GR. Sum is $2,628. https://www.atlanticse.com/collections/atosa-undercounter-refrigeration/products/atosa-mgf8401gr",
+          "status": "confirmed_arithmetic_product_basket"
+        },
+        {
+          "field": "note.reachInPrice",
+          "value": 1199,
+          "evidence": "Main listing shows $1,199 regular; a lower member-only price is separately labeled.",
+          "status": "confirmed_product_price"
+        },
+        {
+          "field": "note.undercounterPrice",
+          "value": 1429,
+          "evidence": "Atlantic product page displays $1,429 for the right-hinge MGF8401GR. https://www.atlanticse.com/collections/atosa-undercounter-refrigeration/products/atosa-mgf8401gr",
+          "status": "confirmed_product_price"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "These two specific refrigeration units and quantities are a chosen layout, not the only compliant arrangement.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 96,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this under-counter milk fridge and reach-in refrigerator. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Two base prices now confirmed; service life and final landed total are not.",
+      "note": "Checked 2026-11-14. Both pages advertise free shipping, subject to actual delivery terms; tax/installation remain outside the sum."
+    },
+    {
+      "record": "setup.pastry_case",
+      "source": "https://www.webstaurantstore.com/13469/refrigerated-bakery-cases-and-dry-bakery-display-cases.html",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 1149,
+          "evidence": "Category listing identifies white Avantco BCS-48-HC, item 360bcs48hcw, at $1,149 each.",
+          "status": "confirmed_product_price"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "Price is confirmed for the named variant; durability and future availability are not.",
+          "status": "partially_confirmed"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Refrigerated display need follows the menu; this particular case is optional.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 96,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this refrigerated pastry display case. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        },
+        {
+          "field": "note.largerCaseComparison",
+          "value": 9800,
+          "evidence": "No $9,800 match found on the opened category page or targeted follow-up search. No specific model supports this comparator in the baseline.",
+          "status": "not_confirmed"
+        }
+      ],
+      "verdict": "Displayed base price confirmed; lifespan unsupported.",
+      "note": "Checked 2026-11-14. No universal market ceiling should be inferred from the unconfirmed larger-case comparator."
+    },
+    {
+      "record": "setup.sinks",
+      "source": "https://www.webstaurantstore.com/regency-60-16-gauge-stainless-steel-three-compartment-commercial-sink-without-drainboards-17-x-17-x-12-bowls/600S31717X.html",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 1720,
+          "evidence": "This source prices only the three-compartment sink at $649; it does not price the four-part $1,720 basket.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.threeCompartmentAllowance",
+          "value": 850,
+          "evidence": "The budget calls $850 an allowance; the opened specified SKU currently shows $649, before other required fittings.",
+          "status": "allowance_differs_from_observed_price"
+        },
+        {
+          "field": "note.handSinkAllowance",
+          "value": 90,
+          "evidence": "No matching hand sink SKU or $90 quote is supplied on the cited page.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.mopSinkAllowance",
+          "value": 280,
+          "evidence": "No matching mop sink SKU or $280 quote is supplied on the cited page.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.faucetsFittingsAllowance",
+          "value": 500,
+          "evidence": "No itemized $500 fittings basket is supplied.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Sanitation facilities must match approved operations; the retailer does not establish the exact required basket.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 180,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this three-compartment sink, hand sink, mop sink and faucets. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Basket is an unverified allowance; cited SKU price differs from its component reserve.",
+      "note": "Checked 2026-11-14. Installation labor is excluded by the baseline but not estimated by this product page. Legal layout/hand-sink placement needs its own code source."
+    },
+    {
+      "record": "setup.prep_table_shelving",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 600,
+          "evidence": "NYC checklist offers no dimensions, unit prices or $600 furniture/equipment basket.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Exact table and shelving package is a layout assumption.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 180,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this stainless prep table and shelving. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Allowance and lifespan unsupported.",
+      "note": "Checked 2026-11-14. Need a sized bill of materials and vendor quote."
+    },
+    {
+      "record": "setup.pos",
+      "source": "https://squareup.com/us/en/hardware/register",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 1299,
+          "evidence": "Square lists $899 for Register; the extra $400 accessories reserve is not priced as this bundle.",
+          "status": "partially_confirmed_allowance"
+        },
+        {
+          "field": "note.registerPrice",
+          "value": 899,
+          "evidence": "Official Register page shows $899 before taxes and fees.",
+          "status": "confirmed_product_price"
+        },
+        {
+          "field": "note.accessoryAllowance",
+          "value": 400,
+          "evidence": "Printer, drawer and mount appear as separate accessories; no $400 combined price was observed.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "This branded hardware bundle is a technology choice.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 48,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this pos register, receipt printer and cash drawer. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Device price now readable and confirmed; accessory basket and lifespan unsupported.",
+      "note": "Checked 2026-11-14. Baseline note that price was unreadable is historical and no longer describes this audit."
+    },
+    {
+      "record": "setup.smallwares",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 2000,
+          "evidence": "NYC checklist mentions general smallwares procurement but offers no quantities or $2,000 quote.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Exact inventory is a menu/capacity design choice.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 24,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this smallwares: pitchers, tampers, scales, cups, plates, bins. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Smallwares budget and lifespan unsupported.",
+      "note": "Checked 2026-11-14. Heterogeneous cups, thermometers and scales should not inherit a single verified life from general guidance."
+    },
+    {
+      "record": "setup.safety_kit",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 800,
+          "evidence": "NYC checklist gives no price for the combined bins/extinguisher/masks/signs/alarm basket.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.resuscitationMaskCounts",
+          "value": {
+            "adult": 1,
+            "pediatric": 1,
+            "glovePairs": 2
+          },
+          "evidence": "Checklist requires this resuscitation kit for restaurants/taverns selling food for on-premises consumption, with FDA-certified masks.",
+          "status": "confirmed_with_scope_limit"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Some safety items are required, but a single mandatory $800 bundle is not established.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 60,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this lidded bins, fire extinguisher, cpr kit, safety signs, alarm. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        }
+      ],
+      "verdict": "Kit obligation partially supported for on-premises service; package price and shared lifespan unsupported.",
+      "note": "Checked 2026-11-14. The resuscitation statement alone does not establish every item in the larger safety bundle."
+    },
+    {
+      "record": "setup.equipment_delivery_tax",
+      "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 3500,
+          "evidence": "City tax rate does not establish the equipment subtotal, freight, unloading or commissioning reserve.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.salesTaxPercent",
+          "value": 8.875,
+          "evidence": "NYC Finance explicitly totals city, state and MCTD rates at 8.875 percent for listed taxable purchases.",
+          "status": "confirmed_tax_rate"
+        },
+        {
+          "field": "note.equipmentTaxBase",
+          "value": 25000,
+          "evidence": "No invoice or equipment schedule totaling $25,000 is supplied by the tax source.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.roundedTaxAmount",
+          "value": 2200,
+          "evidence": "8.875% × $25,000 = $2,218.75; $2,200 is rounded, and the base is assumed.",
+          "status": "confirmed_arithmetic_only"
+        },
+        {
+          "field": "note.resaleCertificateExcludesOwnUseEquipment",
+          "value": true,
+          "evidence": "Opened NY tax bulletin lists kitchen/serving equipment as taxable and distinguishes resale inventory. https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/purchases_by_restaurants.htm",
+          "status": "confirmed_with_scope_limit"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Tax obligation follows taxable transactions; the pooled freight/install reserve is a model choice.",
+          "status": "model_assumption"
+        }
+      ],
+      "verdict": "Tax rate confirmed; total project reserve is not.",
+      "note": "Checked 2026-11-14. Classify actual purchases individually; the cited bulletin also covers exemptions and does not validate blanket treatment of every project line."
+    },
+    {
+      "record": "setup.chair",
+      "source": "https://www.webstaurantstore.com/42529/restaurant-chairs.html?vendor=Lancaster-Table-Seating",
+      "access": "accessed",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 49,
+          "evidence": "Named category includes Alloy Onyx Black cafe chair with vinyl cushion at $48.99, item 164ccafblkbv; $49 is a rounded unit assumption.",
+          "status": "confirmed_rounded_product_price"
+        },
+        {
+          "field": "note.priceComparisons",
+          "value": [
+            48.99,
+            56.49,
+            82.49
+          ],
+          "evidence": "Opened category shows $48.99 cafe chair, $56.49 alloy arm chair and $82.49 wood ladder-back variants; these are different SKUs.",
+          "status": "confirmed_variant_prices"
+        },
+        {
+          "field": "scalesWithSize",
+          "value": true,
+          "evidence": "One chair per modeled seat is a quantity rule, not a retailer-verified scaling relation for every possible layout.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "confidence",
+          "value": "verified",
+          "evidence": "A rounded selected SKU price is supported; quantity and five-year lifespan are not verified by the listing.",
+          "status": "partially_confirmed"
+        },
+        {
+          "field": "required",
+          "value": true,
+          "evidence": "Seated service requires an appropriate layout; a chair purchase per seat is a chosen furnishing design.",
+          "status": "model_assumption"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 60,
+          "evidence": "The opened source supplies no measured service-life or failure-timing evidence for this cafe chair. A warranty or durable-material description would not establish this replacement interval.",
+          "status": "unsupported_lifespan"
+        },
+        {
+          "field": "note.historicalResearchPrice",
+          "value": 39.99,
+          "evidence": "No specific historical SKU/date is attached to the research-notes price; current selected chair listing does not validate it.",
+          "status": "not_confirmed"
+        }
+      ],
+      "verdict": "Rounded unit price supported; variant selection, seat quantity and lifespan need separate assumptions.",
+      "note": "Checked 2026-11-14. The historical $39.99 research-notes figure is not substantiated in this audit."
+    }
+  ]
+}

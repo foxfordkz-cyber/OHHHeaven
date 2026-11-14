@@ -215,6 +215,54 @@
       "access": "opened_primary",
       "evidence": "POS is the main menu update source; portal changes may be overwritten and availability depends on integration.",
       "tier": "core"
+    },
+    {
+      "id": "d00_root_source_homeprocessor",
+      "url": "https://agriculture.ny.gov/food-safety/home-processing",
+      "title": "NY Agriculture: Home Processing",
+      "publisher": "NY Agriculture and Markets",
+      "language": "en",
+      "jurisdiction": "New York State",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Registered independent home processors may wholesale permitted prepackaged labeled goods to cafes; the cafe operator cannot use the exemption to prepare its own cafe food at home.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_root_source_outdoor_2026",
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-236623",
+      "title": "NYC Administrative Code §19-160: seasonal and year-round outdoor cafes",
+      "publisher": "NYC / American Legal Publishing",
+      "language": "en",
+      "jurisdiction": "New York City",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Current code separates seasonal and year-round licenses and interim year-round authorization; future amendments have separate effective dates.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_root_source_grease_schedule",
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+      "title": "NYC rules §56-02: sewer control penalty schedule",
+      "publisher": "NYC / American Legal Publishing",
+      "language": "en",
+      "jurisdiction": "New York City",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Schedule distinguishes offense sequence from elapsed time; default columns are not ordinary appearance penalties.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_root_source_nyc_sales_rate",
+      "url": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+      "title": "NYC Finance: combined sales and use tax rate",
+      "publisher": "NYC Department of Finance",
+      "language": "en",
+      "jurisdiction": "New York City",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Combined NYC rate is 8.875 percent; this page does not establish universal quarterly filing or every-item taxability.",
+      "tier": "core"
     }
   ],
   "ownerDay": [
@@ -776,6 +824,12 @@
         "title": "Check a former cafe before buying",
         "text": "An existing fit-out can save work, but confirm permitted use, equipment condition, lease consent and new permits. Follow bulk-sale procedures before paying for or taking possession of business assets.",
         "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+      },
+      {
+        "id": "unapproved_food_source",
+        "title": "Check the actual approved source",
+        "text": "Use approved suppliers. A qualifying registered NY home processor may supply permitted packaged goods; that does not authorize a cafe operator to make its own menu at home. Check the supplier, product and labeling.",
+        "source": "https://agriculture.ny.gov/food-safety/home-processing"
       }
     ],
     "shortcuts": [
@@ -787,6 +841,14 @@
         "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46103",
         "confidence": "estimate",
         "note": "The inherited one-percent saving is a legacy game allowance, not a measured waste reduction or a recommendation. Recalibrate from actual discarded inventory cost; this patch corrects the trigger and player text only."
+      },
+      {
+        "id": "home_baked_pastries",
+        "name": "Use unauthorized home preparation for the cafe",
+        "what": "Make cafe menu items in an unauthorized home kitchen. Buying permitted packaged goods from a qualifying independent registered processor is a different situation.",
+        "source": "https://agriculture.ny.gov/food-safety/home-processing",
+        "confidence": "estimate",
+        "note": "D00 corrects the scope; the inherited savings allowance is not independently reverified."
       }
     ],
     "violations": [
@@ -815,7 +877,8 @@
         },
         "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
         "confidence": "estimate",
-        "note": "D00 removes the unsupported automatic elapsed-month increase: condition levels in Chapter 23 describe severity/pervasiveness, not months. Other inherited fine parameters and reputation effects still require case-specific calibration; they are not blanket verified numbers. Repeated citations, separate violations and closure are separate state transitions."
+        "note": "D00 removes the unsupported automatic elapsed-month increase: condition levels in Chapter 23 describe severity/pervasiveness, not months. Other inherited fine parameters and reputation effects still require case-specific calibration; they are not blanket verified numbers. Repeated citations, separate violations and closure are separate state transitions.",
+        "name": "Unsafe TCS holding or contaminated food requiring the applicable violation code"
       },
       {
         "id": "unapproved_food_source",
@@ -824,7 +887,184 @@
         },
         "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
         "confidence": "estimate",
-        "note": "D00 removes the unsupported automatic elapsed-month increase: condition levels in Chapter 23 describe severity/pervasiveness, not months. Other inherited fine parameters and reputation effects still require case-specific calibration; they are not blanket verified numbers. Repeated citations, separate violations and closure are separate state transitions."
+        "note": "D00 removes the unsupported automatic elapsed-month increase: condition levels in Chapter 23 describe severity/pervasiveness, not months. Other inherited fine parameters and reputation effects still require case-specific calibration; they are not blanket verified numbers. Repeated citations, separate violations and closure are separate state transitions. Do not classify every registered independent home processor product as prohibited; verify the actual supplier and product scope.",
+        "name": "Food from an unapproved source, including unauthorized home preparation",
+        "supportingSources": [
+          "https://agriculture.ny.gov/food-safety/home-processing"
+        ]
+      },
+      {
+        "id": "no_fse_permit",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+        "confidence": "estimate",
+        "note": "Test lawful authority to operate, including the applicable post-application opening rule and remaining approvals, rather than physical possession of a permit alone. Inherited closureDays, reputationHit and default-judgment treatment are not verified law."
+      },
+      {
+        "id": "grease_interceptor_neglect",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762",
+        "confidence": "estimate",
+        "note": "Remove unsupported elapsed-month escalation. The penalty schedule distinguishes offense sequence, appearance and default. The inherited ordinary-offense ceiling is not an all-in liability cap. Conflicting primary-source default presentations require legal resolution before implementation; no default replacement invented.",
+        "fine": {
+          "perMonth": 0
+        }
+      },
+      {
+        "id": "tip_theft",
+        "source": "https://www.nysenate.gov/legislation/laws/LAB/196-D",
+        "confidence": "estimate",
+        "note": "Unpaid amounts, liquidated damages, interest and civil penalties have distinct legal conditions. The inherited multiplier and reputation effect are not universally verified outcomes."
+      },
+      {
+        "id": "unpaid_training_time",
+        "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+        "confidence": "estimate",
+        "note": "Pay for actual work is required. Call-in pay has shift-specific exceptions; do not apply a universal minimum attendance payment. The inherited damages multiplier and reputation effect require applicable facts."
+      },
+      {
+        "id": "spread_of_hours_unpaid",
+        "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
+        "confidence": "estimate",
+        "note": "The pay entitlement and possible damages are distinct. The inherited damages multiplier and reputation effect are not universally verified outcomes."
+      },
+      {
+        "id": "no_food_protection_cert",
+        "confidence": "estimate",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+        "note": "The specific 04A amount is separately verified in extra.verifiedFacts. Reputation effect and closureDays are game assumptions; zero does not establish a legal guarantee against closure. Distinguish no qualified certificate holder from failure to display an existing certificate."
+      },
+      {
+        "id": "unlicensed_sidewalk_cafe",
+        "confidence": "estimate",
+        "source": "https://www.diningoutnyc.info/enforcement",
+        "note": "Published offense-specific amounts do not verify a reputation multiplier or guarantee no closure/removal. Evaluate the current license type and applicable offense sequence; do not treat the amount field as all-in liability."
+      }
+    ],
+    "setup": [
+      {
+        "id": "espresso_machine",
+        "source": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "grinder",
+        "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "pastry_case",
+        "source": "https://www.webstaurantstore.com/13469/refrigerated-bakery-cases-and-dry-bakery-display-cases.html",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "chair",
+        "source": "https://www.webstaurantstore.com/42529/restaurant-chairs.html?vendor=Lancaster-Table-Seating",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "table_share",
+        "source": "https://www.webstaurantstore.com/lancaster-table-seating-24-x-24-reversible-walnut-oak-laminated-standard-height-table-top-and-base-kit-with-17-base/349C24SW17RS.html",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "decaf_grinder",
+        "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "dishwasher",
+        "source": "https://catalog.webstaurantstore.com/noble-warewashing-ht-uc24-select-high-temperature-undercounter-dishwasher-with-booster-heater-208-240v-1-phase/495HTUC24.html",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "premium_espresso_machine",
+        "source": "https://www.webstaurantstore.com/search/nuova-simonelli-appia-life-3-group.html",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "premium_grinder",
+        "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "sidewalk_cafe_license",
+        "source": "https://www.diningoutnyc.info/apply/fees",
+        "confidence": "estimate",
+        "note": "D00 preserves the baseline purchase-price allowance without independently renewing the quote. A product listing does not verify lifespanMonths, qualityBonus, current availability or an approval wait. These fields remain unresolved design assumptions; obtain a current model-specific quote and separate evidence before activation."
+      },
+      {
+        "id": "llc_and_publication",
+        "confidence": "estimate",
+        "source": "https://dos.ny.gov/node/35506",
+        "note": "The formation fee and a particular provider package are distinct. The inherited sum is a sourced selected-provider calculation, not a universal statutory package or current quote for every county. See detailed setup audit."
+      },
+      {
+        "id": "fse_permit",
+        "confidence": "estimate",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+        "note": "Published permit fee and conditional post-application opening window do not guarantee an actual opening date. waitDays is not an observed permitting time for this cafe; other applicable approvals remain required."
+      },
+      {
+        "id": "food_protection_cert",
+        "confidence": "estimate",
+        "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+        "note": "Base exam fee is published; a card processing fee may apply. The inherited waitDays is an unverified completion/booking assumption. Schedule certified coverage for receiving and preparation as well as public service."
+      }
+    ],
+    "staff": [
+      {
+        "id": "shift_lead",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+        "confidence": "estimate",
+        "note": "Existing wage and hours remain planning assumptions. Certified coverage must include receiving and preparation before public opening. Actual duties determine whether a shift lead is an eligible tipped worker or a manager; the title alone does not determine tip-pool rights."
+      }
+    ],
+    "taxes": [
+      {
+        "id": "sales_tax",
+        "confidence": "estimate",
+        "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+        "note": "The published NYC combined rate is verified; quarterly filing depends on classification, and taxability depends on the actual product and sale. Applying tax to every order is an unresolved game simplification, not a legal fact. Do not change the tax rate to compensate for the incorrect taxable base."
+      }
+    ],
+    "monthlyCosts": [
+      {
+        "id": "insurance",
+        "confidence": "estimate",
+        "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+        "note": "The inherited amount is an unquoted NYC reserve. Insureon describes a median among its policy-purchasing customers, not an average representative of all US cafes. Coverage, deductibles, exclusions and workers compensation require separate quotes."
+      },
+      {
+        "id": "sick_leave_cover",
+        "confidence": "estimate",
+        "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+        "note": "The inherited allowance models one paid-hours scenario at one wage; it is not the full cost of current protected time off. Apply headcount/income eligibility, actual role wage, leave usage, prenatal provisions and replacement scheduling separately."
+      },
+      {
+        "id": "payroll_service",
+        "confidence": "estimate",
+        "source": "https://gusto.com/product/pricing",
+        "note": "The inherited amount includes a planning buffer above the selected-person-count tariff calculation. The published fixed and per-person components are separately verified; the buffer is not a provider charge."
+      },
+      {
+        "id": "permit_renewals",
+        "confidence": "estimate",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+        "note": "The inherited monthly reserve is not an actual monthly fee. Food-service renewal, entity tax classification and any scale/sign obligations need separate applicable schedules; the state LLC filing amount is not universal."
+      },
+      {
+        "id": "accounting",
+        "confidence": "estimate",
+        "source": "https://quickbooks.intuit.com/learn-support/en-us/help-article/new-subscriptions/learn-quickbooks-live-bookkeeping-service/L5lZiwlRS_US_en_US?uid=lv2s0p5t",
+        "note": "The inherited budget for bookkeeping plus year-end accounting is not verified by a matching QuickBooks Live tier. Provider scope excludes tax return filing and other tasks; subscription, onboarding and separate professional services require distinct quotes."
       }
     ]
   },
@@ -858,6 +1098,17 @@
       ],
       "language": "en/ru/es",
       "purpose": "Independent multilingual cross-check during integration; pricing and penalty pages subsequently opened directly.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_root_final_queries",
+      "queries": [
+        "site.nyc.gov restaurant snow sidewalk ice commercial property cafe",
+        "site.tax.ny.gov bulk sales buying restaurant successor sales tax",
+        "NYC year-round roadway cafes Local Law 135 2026 adopted proposed rules October November"
+      ],
+      "language": "en",
+      "purpose": "Final current-law and day/year audit; open full code URL rather than treating a proposed rules notice as enacted law.",
       "tier": "core"
     }
   ],
@@ -932,6 +1183,16 @@
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
       "confidence": "verified",
       "note": "Scheduled amount for specified code; does not establish a universal closure duration or reputation effect.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_fact_nyc_sales_tax_rate",
+      "name": "NYC combined sales and use tax rate",
+      "value": 0.08875,
+      "unit": "fraction_of_taxable_sale",
+      "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+      "confidence": "verified",
+      "note": "4.5% city + 4% state + 0.375% MCTD = 8.875%. Taxability and return frequency require separate determinations.",
       "tier": "core"
     }
   ],
