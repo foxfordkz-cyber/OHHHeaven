@@ -2,7 +2,7 @@ import type {
   Ack, Action, ClientView, GameClient, OfficialRole, Query, WorldConfig, WorldState,
 } from '@ohh/shared/types';
 import { RULES } from '@ohh/shared/rules';
-import { getSession, saveSession, type Mode } from './session';
+import { clearSession, getSession, saveSession, type Mode } from './session';
 import { localRuntime, type LocalRuntime } from './local-host';
 import { interpretIdeaByRules } from './idea-rules';
 
@@ -70,7 +70,13 @@ export function createRemoteClient(opts: RemoteOptions = {}): GameClient {
     },
     async view(worldId, knownVersion) {
       const v = knownVersion === undefined ? '' : `?v=${knownVersion}`;
-      const res = await doFetch(`${base}/api/worlds/${encodeURIComponent(worldId)}/view${v}`, { headers: headers(worldId) });
+      let res = await doFetch(`${base}/api/worlds/${encodeURIComponent(worldId)}/view${v}`, { headers: headers(worldId) });
+      // The server no longer knows this token (it restarted without a snapshot, or the world was recreated):
+      // forget it and look at the city as a guest instead of showing "no connection".
+      if (res.status === 401 && getSession('remote', worldId)) {
+        clearSession('remote', worldId);
+        res = await doFetch(`${base}/api/worlds/${encodeURIComponent(worldId)}/view`, { headers: headers(worldId) });
+      }
       const ack = await toAck<ClientView | { unchanged: true }>(res);
       if (!ack.ok || !ack.data) throw new Error(ack.error ?? 'Empty view');
       return ack.data;
