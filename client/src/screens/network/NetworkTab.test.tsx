@@ -33,6 +33,9 @@ describe('Network tab: neighbors', () => {
     expect(row.textContent).toContain('kept 4 · broke 1');
     expect(within(row).getByText('AI')).toBeTruthy();
     expect(screen.queryByRole('button', { name: /^Luna Cafe/ })).toBeNull();
+    const neighbors = screen.getByRole('region', { name: 'Neighbors' });
+    expect(within(neighbors).getByRole('button', { name: /^Cuppa Joe East/ }).textContent).toContain('Shares your street');
+    expect(row.textContent).not.toContain('Shares your street');      // Tompkins is a cafe, but far away
   });
 
   it('shows the closest 12 neighbors first and the rest on request', () => {
