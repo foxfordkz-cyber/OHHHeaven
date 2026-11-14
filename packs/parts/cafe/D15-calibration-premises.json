@@ -1760,7 +1760,9 @@
       "id": "guaranty_type",
       "optionId": "good_guy",
       "label": "Have signed a good guy guaranty",
-      "cost": {},
+      "cost": {
+       "depositMonthsAdd": 1
+      },
       "result": "personal exposure ends at surrender"
      }
     ],
@@ -1861,7 +1863,10 @@
       "id": "lease_terms",
       "optionId": "ten_with_option",
       "label": "Renewal option already in the lease",
-      "cost": {},
+      "cost": {
+       "commitmentMonths": 120,
+       "lawyerHours": 2
+      },
       "result": "binds the new owner"
      }
     ],
@@ -1924,7 +1929,9 @@
       "id": "guaranty_type",
       "optionId": "full_personal",
       "label": "Full guaranty",
-      "cost": {},
+      "cost": {
+       "personalExposure": "rent to the end of the term"
+      },
       "result": "exposure to the end of the term"
      },
      {
@@ -2414,7 +2421,9 @@
       "kind": "choice",
       "id": "close",
       "label": "Close at lease end",
-      "cost": {},
+      "cost": {
+       "goodwillLost": true
+      },
       "result": "exit"
      }
     ],
@@ -2553,7 +2562,9 @@
       "kind": "choice",
       "id": "longer_lease",
       "label": "Sign 10 years with a renewal option",
-      "cost": {},
+      "cost": {
+       "commitmentMonths": 120
+      },
       "result": "avoids the next move"
      }
     ],
@@ -2602,7 +2613,10 @@
       "kind": "choice",
       "id": "sell_furnishings",
       "label": "Sell fixtures to the next tenant",
-      "cost": {},
+      "cost": {
+       "days": 14,
+       "fixturesSoldBelowCost": true
+      },
       "result": "+$2,000 and no removal, estimate"
      }
     ],
@@ -2776,7 +2790,10 @@
       "kind": "choice",
       "id": "surrender_227",
       "label": "Surrender the untenantable space",
-      "cost": {},
+      "cost": {
+       "buildoutValueLost": true,
+       "awareness": 0.0
+      },
       "result": "no further rent (RPL §227)"
      }
     ],
@@ -2824,7 +2841,9 @@
       "kind": "choice",
       "id": "single_lease",
       "label": "Keep production under one lease",
-      "cost": {},
+      "cost": {
+       "rentMult": 1.1
+      },
       "result": "no split risk"
      }
     ],
@@ -3265,7 +3284,10 @@
       "kind": "choice",
       "id": "small_business_waiver",
       "label": "One-time small business waiver",
-      "cost": {},
+      "cost": {
+       "onceOnly": true,
+       "openingDelayDaysStay": 32
+      },
       "result": "fine waived once"
      }
     ],
@@ -3676,7 +3698,9 @@
       "id": "contractor_choice",
       "optionId": "fixed_price",
       "label": "Freeze the design before bids",
-      "cost": {},
+      "cost": {
+       "buildoutCostMult": 1.03
+      },
       "result": "no added scope"
      }
     ],
@@ -3852,7 +3876,10 @@
       "id": "contractor_choice",
       "optionId": "food_service_specialist",
       "label": "Pay against lien waivers",
-      "cost": {},
+      "cost": {
+       "buildoutCostMult": 1.0,
+       "vsLowestBid": 1.12
+      },
       "result": "no lien"
      }
     ],
@@ -3907,7 +3934,9 @@
       "kind": "choice",
       "id": "match_existing_storefront",
       "label": "Keep the existing storefront and sign size",
-      "cost": {},
+      "cost": {
+       "quality": -0.01
+      },
       "result": "staff-level permit only"
      },
      {
@@ -4007,7 +4036,9 @@
       "kind": "choice",
       "id": "standard_furniture",
       "label": "Use the standard approved furniture",
-      "cost": {},
+      "cost": {
+       "quality": -0.01
+      },
       "result": "staff-level review"
      }
     ],
@@ -4053,7 +4084,9 @@
       "kind": "setup",
       "id": "architect_expediter",
       "label": "Drawings by the architect",
-      "cost": {},
+      "cost": {
+       "pctOfBuildout": 0.1
+      },
       "result": "complete application"
      }
     ],
@@ -4172,7 +4205,10 @@
       "id": "site_due_diligence",
       "optionId": "survey_first",
       "label": "Check the CO",
-      "cost": {},
+      "cost": {
+       "cash": 2500,
+       "leaseSigningDelayDays": 10
+      },
       "result": "avoid"
      }
     ],
@@ -4226,7 +4262,10 @@
       "id": "site_due_diligence",
       "optionId": "survey_first",
       "label": "Ask the landlord for proof of legal use",
-      "cost": {},
+      "cost": {
+       "cash": 2500,
+       "leaseSigningDelayDays": 10
+      },
       "result": "landlord's job before signing"
      }
     ],
@@ -4278,7 +4317,10 @@
       "id": "site_due_diligence",
       "optionId": "survey_first",
       "label": "Proof of legal use first",
-      "cost": {},
+      "cost": {
+       "cash": 2500,
+       "leaseSigningDelayDays": 10
+      },
       "result": "avoid"
      }
     ],
@@ -4377,7 +4419,9 @@
       "kind": "setup",
       "id": "architect_expediter",
       "label": "Expediter closes the job",
-      "cost": {},
+      "cost": {
+       "pctOfBuildout": 0.1
+      },
       "result": "sign-offs filed with the work"
      }
     ],
@@ -4488,7 +4532,10 @@
       "id": "contractor_choice",
       "optionId": "food_service_specialist",
       "label": "Licensed plumber and electrician",
-      "cost": {},
+      "cost": {
+       "buildoutCostMult": 1.0,
+       "vsLowestBid": 1.12
+      },
       "result": "passes"
      }
     ],
@@ -4725,7 +4772,9 @@
       "kind": "choice",
       "id": "sign_before",
       "label": "Sign the contract before the announcement",
-      "cost": {},
+      "cost": {
+       "fewerBidsCompared": true
+      },
       "result": "old price"
      }
     ],
@@ -4774,7 +4823,9 @@
       "kind": "choice",
       "id": "give_st124",
       "label": "Give the contractor Form ST-124",
-      "cost": {},
+      "cost": {
+       "paperworkWithinDays": 90
+      },
       "result": "labor exempt as a capital improvement"
      }
     ],
@@ -4821,7 +4872,10 @@
       "kind": "choice",
       "id": "apply_22_days_ahead",
       "label": "Apply 22 days before the planned opening",
-      "cost": {},
+      "cost": {
+       "cash": 280,
+       "requires": "insurance and sales tax certificate ready 22 days before opening"
+      },
       "result": "no delay"
      }
     ],
@@ -4922,7 +4976,9 @@
       "kind": "choice",
       "id": "deliver_after_visit",
       "label": "Schedule the first delivery after the visit",
-      "cost": {},
+      "cost": {
+       "openingDelayDays": 1
+      },
       "result": "no loss"
      }
     ],
@@ -4969,7 +5025,9 @@
       "kind": "setup",
       "id": "architect_expediter",
       "label": "Ask the architect",
-      "cost": {},
+      "cost": {
+       "pctOfBuildout": 0.1
+      },
       "result": "scope checked"
      }
     ],
@@ -5023,7 +5081,9 @@
       "kind": "choice",
       "id": "small_wall_sign",
       "label": "Wall sign of 6 sq ft or less",
-      "cost": {},
+      "cost": {
+       "footTrafficMult": 0.98
+      },
       "result": "no permit needed"
      },
      {
@@ -5085,7 +5145,9 @@
       "kind": "choice",
       "id": "no_cooking",
       "label": "Stay a no-cook cafe",
-      "cost": {},
+      "cost": {
+       "demandMult": 0.95
+      },
       "result": "no hood, no event"
      }
     ],
@@ -5189,7 +5251,9 @@
       "kind": "choice",
       "id": "stay_at_19_seats",
       "label": "Stay at 19 seats",
-      "cost": {},
+      "cost": {
+       "seatsMax": 19
+      },
       "result": "no toilet required"
      }
     ],
@@ -5301,7 +5365,9 @@
       "kind": "choice",
       "id": "stay_at_19_seats",
       "label": "19 seats",
-      "cost": {},
+      "cost": {
+       "seatsMax": 19
+      },
       "result": "no toilet"
      }
     ],
@@ -5356,7 +5422,9 @@
       "id": "lease_negotiation",
       "optionId": "allowance_as_rent_credit",
       "label": "Take it as free rent instead",
-      "cost": {},
+      "cost": {
+       "allowanceDollarsMult": 0.8
+      },
       "result": "no cash gap; fewer dollars"
      }
     ],
@@ -5423,7 +5491,10 @@
       "id": "construction_pace",
       "optionId": "standard_hours",
       "label": "Weekday hours only",
-      "cost": {},
+      "cost": {
+       "buildoutDaysMult": 1.33,
+       "vs": "after_hours"
+      },
       "result": "no complaint"
      }
     ],
@@ -6013,7 +6084,9 @@
       "kind": "choice",
       "id": "pay_in_installments",
       "label": "Pay in three installments",
-      "cost": {},
+      "cost": {
+       "availableTo": "existing customers"
+      },
       "result": "half now, the rest over two months (offered to existing customers)"
      }
     ],
@@ -6061,7 +6134,9 @@
       "kind": "choice",
       "id": "pay_in_installments",
       "label": "Installments",
-      "cost": {},
+      "cost": {
+       "availableTo": "existing customers"
+      },
       "result": "spread over 3 months"
      }
     ],
@@ -6108,7 +6183,9 @@
       "kind": "choice",
       "id": "standard_service",
       "label": "Stay within the existing service",
-      "cost": {},
+      "cost": {
+       "equipmentLimitedToExistingAmps": true
+      },
       "result": "no charge"
      }
     ],
@@ -6154,7 +6231,9 @@
       "kind": "choice",
       "id": "file_signoff_early",
       "label": "Electrician files the sign-off the day work ends",
-      "cost": {},
+      "cost": {
+       "cash": 200
+      },
       "result": "7 days instead of 14"
      }
     ],
@@ -6212,7 +6291,10 @@
       "id": "site_due_diligence",
       "optionId": "survey_first",
       "label": "Ask if the building already has an approved device",
-      "cost": {},
+      "cost": {
+       "cash": 2500,
+       "leaseSigningDelayDays": 10
+      },
       "result": "often already installed in former food spaces"
      }
     ],
@@ -6965,14 +7047,18 @@
       "kind": "choice",
       "id": "prove_arms_length",
       "label": "Show the arm's-length purchase contract",
-      "cost": {},
+      "cost": {
+       "cash": 500
+      },
       "result": "permit issued"
      },
      {
       "kind": "choice",
       "id": "pay_from_price",
       "label": "Seller pays from the price",
-      "cost": {},
+      "cost": {
+       "sellerMustAgree": true
+      },
       "result": "no hold"
      }
     ],
@@ -7069,7 +7155,9 @@
       "id": "takeover_terms",
       "optionId": "credit_for_accruals",
       "label": "Deduct accrued sick time from the price",
-      "cost": {},
+      "cost": {
+       "sellerMustAgree": true
+      },
       "result": "seller pays for it"
      }
     ],
@@ -7187,7 +7275,9 @@
       "kind": "choice",
       "id": "keep_name",
       "label": "Keep the name for a year",
-      "cost": {},
+      "cost": {
+       "inheritsSellerReputation": true
+      },
       "result": "awareness 0.7"
      }
     ],
@@ -7346,7 +7436,10 @@
       "id": "takeover_terms",
       "optionId": "seller_note_standby",
       "label": "Seller note on full standby",
-      "cost": {},
+      "cost": {
+       "sellerMustAgree": true,
+       "priceMult": 1.03
+      },
       "result": "covers at most half of the 10%"
      }
     ],
@@ -7516,7 +7609,9 @@
       "kind": "choice",
       "id": "decline",
       "label": "Keep running",
-      "cost": {},
+      "cost": {
+       "salePriceForgone": true
+      },
       "result": "no change"
      }
     ],
@@ -7563,7 +7658,9 @@
       "kind": "choice",
       "id": "read_fdd",
       "label": "Use the days to call existing franchisees",
-      "cost": {},
+      "cost": {
+       "days": 14
+      },
       "result": "fewer surprises (see young_franchise_system)"
      }
     ],
@@ -7660,7 +7757,9 @@
       "kind": "choice",
       "id": "independent",
       "label": "Stay independent",
-      "cost": {},
+      "cost": {
+       "awarenessStart": 0.35
+      },
       "result": "lean kit allowed"
      }
     ],
@@ -7706,7 +7805,9 @@
       "kind": "choice",
       "id": "established_brand",
       "label": "Choose an older system",
-      "cost": {},
+      "cost": {
+       "setupCostMult": 1.1
+      },
       "result": "references to call"
      }
     ],
@@ -7954,7 +8055,9 @@
       "id": "lease_negotiation",
       "optionId": "renewal_right",
       "label": "Renewal right in the agreement",
-      "cost": {},
+      "cost": {
+       "cash": 500
+      },
       "result": "stays"
      }
     ],
@@ -8136,7 +8239,12 @@
       "kind": "choice",
       "id": "own_license",
       "label": "Wait for your own supervisory license",
-      "cost": {},
+      "cost": {
+       "waitYears": [
+        4.5,
+        9
+       ]
+      },
       "result": "legal"
      }
     ],
@@ -8303,7 +8411,9 @@
       "id": "laptop_policy",
       "optionId": "minimum_spend",
       "label": "One order per 90 minutes",
-      "cost": {},
+      "cost": {
+       "reputation": -0.01
+      },
       "result": "turns x 0.95 and ticket +$1"
      }
     ],
@@ -8449,7 +8559,9 @@
       "id": "laptop_policy",
       "optionId": "open",
       "label": "Invite remote workers in the afternoon",
-      "cost": {},
+      "cost": {
+       "seatTurns": 0.85
+      },
       "result": "room looks alive"
      }
     ],
@@ -8721,7 +8833,9 @@
       "kind": "choice",
       "id": "apply_at_substantial_completion",
       "label": "Apply when the room is substantially done",
-      "cost": {},
+      "cost": {
+       "requires": "insurance and sales tax certificate ready"
+      },
       "result": "permit wait overlaps the last week of work"
      }
     ],
@@ -9053,7 +9167,9 @@
       "kind": "choice",
       "id": "cap_guests",
       "label": "Cap at 74 people",
-      "cost": {},
+      "cost": {
+       "eventRevenueMult": 0.8
+      },
       "result": "no permit"
      }
     ],
@@ -9272,7 +9388,9 @@
       "kind": "choice",
       "id": "keep_music_low",
       "label": "Keep music low",
-      "cost": {},
+      "cost": {
+       "quality": -0.01
+      },
       "result": "no violation"
      }
     ],
@@ -9400,7 +9518,9 @@
       "kind": "choice",
       "id": "wait_and_watch",
       "label": "Do not replace the gate yet",
-      "cost": {},
+      "cost": {
+       "riskIfRepealFails": "violation"
+      },
       "result": "saves $6,500"
      }
     ],
@@ -9450,7 +9570,9 @@
       "kind": "choice",
       "id": "daily_restock_list",
       "label": "One restock run before opening",
-      "cost": {},
+      "cost": {
+       "staffMinutesPerDay": 20
+      },
       "result": "staff 0.99"
      }
     ],
@@ -9490,7 +9612,10 @@
       "id": "site_due_diligence",
       "optionId": "survey_first",
       "label": "Check the CO for the yard",
-      "cost": {},
+      "cost": {
+       "cash": 2500,
+       "leaseSigningDelayDays": 10
+      },
       "result": "price the yard at zero"
      }
     ],
@@ -9756,7 +9881,9 @@
       "kind": "choice",
       "id": "small_wall_sign",
       "label": "Wall sign of 6 sq ft or less",
-      "cost": {},
+      "cost": {
+       "footTrafficMult": 0.98
+      },
       "result": "no permit, no exposure"
      },
      {
@@ -9930,7 +10057,9 @@
       "kind": "choice",
       "id": "stay_under_20",
       "label": "Count outdoor seats toward 20",
-      "cost": {},
+      "cost": {
+       "indoorSeatsMax": 10
+      },
       "result": "10 inside + 10 outside = 20: customer toilet required"
      }
     ],
@@ -10116,7 +10245,9 @@
       "kind": "choice",
       "id": "pay_quarterly",
       "label": "Pay by the quarter",
-      "cost": {},
+      "cost": {
+       "noSaving": true
+      },
       "result": "less cash up front"
      }
     ],
@@ -10564,7 +10695,9 @@
       "kind": "choice",
       "id": "allow_access",
       "label": "Let the guest use it",
-      "cost": {},
+      "cost": {
+       "staffMinutes": 5
+      },
       "result": "complies"
      }
     ],
@@ -10732,7 +10865,9 @@
       "kind": "choice",
       "id": "sign_now",
       "label": "Sign before the next report",
-      "cost": {},
+      "cost": {
+       "lessTimeForDueDiligence": true
+      },
       "result": "today's rent"
      },
      {
@@ -10893,7 +11028,9 @@
       "kind": "choice",
       "id": "file_complete_scope",
       "label": "File the whole scope at once",
-      "cost": {},
+      "cost": {
+       "designDays": 7
+      },
       "result": "no subsequent filing"
      }
     ],
