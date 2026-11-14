@@ -8,7 +8,7 @@
 2. Главный вывод по ремонту: бесплатных месяцев аренды (обычно 3–6) не хватает. От подписания до открытия выходит 123 дня для бывшего кафе, 160 для переоборудования и 280 для помещения без общепита; при трёх бесплатных месяцах это $6 600, $14 000 и $38 000 аренды без выручки.
 3. Главный вывод по покупке: работающее кафе стоит около двух годовых заработков владельца (медиана 2,0×; 0,41× годовой выручки). Для эталонной точки пакета это примерно $233 000 — втрое дороже лёгкого ремонта, зато продажи идут с первой недели. Текущая оценка в ветке keen-cray (0,2× выручки, потолок $200 000) занижена.
 4. Покупателю переходят долги продавца по налогу с продаж (если не подано уведомление AU-196.10), его ставка страхования по безработице и накопленные больничные работников; разрешение на общепит не переходит никогда.
-5. **Сверка по первоисточникам сделана частично.** После одобрения окружения с 20 хостами я открыл 30 страниц и дословно сверил числа: 30 чисел помечены `verified`, ещё у 24 записей правило прочитано на странице, а само число — мой расчёт. Сайты www.nyc.gov, свод законов города, BizBuySell и FTC отказали автоматическим запросам, поэтому сборы и штрафы Департамента зданий, тексты Health Code и кратные цены продажи остались с пометкой `primary_search_extract` (35 записей).
+5. **Сверка по первоисточникам сделана частично.** После одобрения окружения с 20 хостами я открыл 37 страниц и дословно сверил числа: 32 числа помечены `verified`, ещё у 28 записей правило прочитано на странице, а само число — мой расчёт. Сайты www.nyc.gov, свод законов города, BizBuySell и FTC отказали автоматическим запросам, поэтому сборы и штрафы Департамента зданий, тексты Health Code и кратные цены продажи остались с пометкой `primary_search_extract` (32 записи).
 
 ## 2. Что добавлено
 
@@ -127,7 +127,7 @@
 
 ## 7. Источники
 
-Проверка: 14 ноября 2026. Страницы, которые я открыл и прочитал сам, перечислены с подтверждёнными числами в `extra.verification.openedPages` (29 страниц: налоговая штата, NYC Business, NYC311, Контролёры штата и города, Con Edison, Департамент труда, Inspire Brands, Cushman & Wakefield, Сенат штата, City Record, Генеральный прокурор штата, Корнелл, ABCEats). Остальные источники увидены только в выдержках поиска.
+Проверка: 14 ноября 2026. Страницы, которые я открыл и прочитал сам, перечислены с подтверждёнными числами в `extra.verification.openedPages` (37 страниц: налоговая штата, NYC Business, NYC311, Контролёры штата и города, Con Edison, Департамент труда, Inspire Brands, Cushman & Wakefield, Сенат штата, City Record, Генеральный прокурор штата, Корнелл, ABCEats). Остальные источники увидены только в выдержках поиска.
 
 Что изменила сверка:
 
@@ -137,23 +137,30 @@
 - Работы для арендатора освобождаются от налога с продаж, только если договор передаёт улучшения собственнику и не обязывает их демонтировать.
 - Опрос о газе — сентябрь 2017 года; средний ущерб от задержки — $140 000 на заведение.
 - Закон штата требует вручить документ франшизы за 10 рабочих дней; федеральное правило о 14 днях открыть не удалось.
+- Сбор Landmarks расходится в двух городских источниках: на открытой странице NYC Business — $50 и $3 за каждую тысячу сверх $25 000, на странице самой комиссии (только выдержка) — $95 и $5. В пакете оставлено $95 с пометкой о расхождении.
+- За удаление асбеста город берёт от $200 до $1 200 по площади; для пола кафе в 800 кв. футов — $800. Запись `asbestos_abatement` пересчитана до $5 600.
 - На странице NYC Business «Restaurant» нашлись два требования, которых не было ни в пакете, ни в моём первом проходе: штраф $400–$25 000 за работу вопреки Certificate of Occupancy и обязательный шумовой план на стройке. Оба добавлены.
 - Эта же страница содержит шкалу штрафов для ресторанов по всем ведомствам (от $5 до $25 000) и открывается без отказов: она пригодится исследователям D07 и D08 для подтверждения их нарушений.
 
 
-### Открыты и прочитаны (30)
+### Открыты и прочитаны (37)
 
 - https://a816-health.nyc.gov/ABCEatsRestaurants/App/partials/controllers/faq.html — The first graded inspection, unannounced
 - https://a856-cityrecord.nyc.gov/RequestDetail/20240628149 — A kiosk in a park; A stall at a seasonal food market, or a city concession for a kiosk or
 - https://ag.ny.gov/sites/default/files/publications/franchise_booklet.pdf — Franchise fee (example: Gregorys Coffee)
 - https://comptroller.nyc.gov/reports/whos-minding-the-storefronts/ — Empty storefronts are leverage; One storefront in nine is empty
 - https://dol.ny.gov/transfers-business-and-your-contribution-rate — You inherit the seller's unemployment record; You inherit the seller's unemployment-insurance record
+- https://nyc-business.nyc.gov/nycbusiness/business-services/initiatives/street-vending-in-nyc
 - https://nyc-business.nyc.gov/nycbusiness/business-services/legal-assistance/commercial-lease-assistance-program — Get the lease reviewed, free if you qualify; Free lease lawyer
+- https://nyc-business.nyc.gov/nycbusiness/description/asbestos-rules-and-regulations — Asbestos abatement (only if the report is positive); The asbestos report comes back positive
+- https://nyc-business.nyc.gov/nycbusiness/description/certificate-of-occupancy
 - https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan — A noise plan on the wall of the site; A neighbor complains about construction noise
 - https://nyc-business.nyc.gov/nycbusiness/description/food-protection-course-for-mobile-vendors — Food Protection Course for Mobile Vendors
 - https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit — Buying a shop: apply for every permit in your own name; The 22-day clock starts when you apply
 - https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license — Mobile Food Vending License (the vendor's personal license); Cart: take the vendor course and get your license
 - https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term — Mobile Food Vending Unit permit (the cart's decal); coffee cart start: cart $16,500 + license $50 + course $53 + permit $7
+- https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vendor-permit-temporary-seasonal
+- https://nyc-business.nyc.gov/nycbusiness/description/performing-work-on-a-landmarked-property
 - https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit — Restricted Area vending permit (cart on private property, no waiting l; Where the cart stands
 - https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about — Corner in someone else's shop: work under the host's permit; The host wants the corner back
 - https://nyc-business.nyc.gov/nycbusiness/description/small-business-energy-efficiency-program — A project manager who maps your permits and coordinates pre-opening in
@@ -161,6 +168,8 @@
 - https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant — Running a cafe where the Certificate of Occupancy does not allow one; Open in a space that is not legal for a cafe
 - https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf — Waiting for gas; Gas or all-electric
 - https://portal.311.nyc.gov/article/?kanumber=KA-01825 — temporary food permit for a market stand, USD a year; Market stand or a corner in someone else's shop
+- https://portal.311.nyc.gov/article/?kanumber=KA-01911
+- https://portal.311.nyc.gov/article/?kanumber=KA-02023 — Letter of No Objection for an old building without a Certificate of Oc; The building has no Certificate of Occupancy
 - https://portal.311.nyc.gov/article/?kanumber=KA-02955 — Health Department consultative inspection (optional, ungraded); Pass the trade inspections and close out the permit
 - https://portal.311.nyc.gov/article/?kanumber=KA-03354 — Cart: get on the waiting list for a supervisory license; Cart permits are capped
 - https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf — Con Edison security deposit for a new business account; Utility deposit
@@ -174,7 +183,7 @@
 - https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm — Sales tax on the furniture and equipment bought with a business; Bought a business without notifying the Tax Department (bulk sale)
 - https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm — Add the clause that saves sales tax on the build-out; Sales tax on your build-out
 
-### Первоисточники, увиденные только в выдержках поиска (39)
+### Первоисточники, увиденные только в выдержках поиска (38)
 
 - https://a810-bisweb.nyc.gov/bisweb/bispi00.jsp — Look up the address before you fall in love with it
 - https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650 — Department of Buildings alteration filing fee; The note says the 10% excludes government fees; those fees are now sep
@@ -206,7 +215,6 @@
 - https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page — Letter of No Objection for an old building without a Certificate of Oc; Old building with no Certificate of Occupancy: get a Letter of No Obje
 - https://www.nyc.gov/site/buildings/safety/swo.page — Buildings inspector; Working against a Stop Work Order
 - https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page — Sick leave balances survive a sale; The staff you kept arrive with sick days owed
-- https://www.nyc.gov/site/dep/environment/asbestos-abatement-forms.page — Asbestos abatement (only if the report is positive); The asbestos report comes back positive
 - https://www.nyc.gov/site/dep/news/26-010/department-environmental-protection-proposes-fiscal-year-2027-water-rate
 - https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page — Cart: sign with a commissary and pass the cart inspection; A cart needs a commissary
 - https://www.nyc.gov/site/doh/business/food-operators/temporary-food-service-establishments.page — Selling food at a market or pop-up without a temporary permit; Run a pop-up stand with no temporary permit
