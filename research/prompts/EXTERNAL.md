@@ -71,3 +71,47 @@ Deliver:
 6) Which track fits best — MONEY ("Where does money hurt?"), ENTERTAINMENT, or SKILLS ("What do people fail to master?") — and why.
 Be blunt about what is weak.
 ```
+
+## E6 — GPT Pro (пользователь): питч как живой показ, а не слайды → `docs/pitch/gpt-show.md`
+
+Заменяет «слайдовую» часть E5 (деньги, доказательства боли и вопросы жюри из E5 остаются нужны). Вставлять целиком, включить поиск. Перед отправкой впиши трек и критерии жюри, если они известны.
+
+```text
+You are a pitch director for a two-person team at a 24-hour hackathon (Business Cup 2.0 "From Zero to Product", Astana, organizer Zimran). The final is 5 minutes on stage plus 2 minutes of questions, in front of a jury of entrepreneurs and investors. Every other team will click through slides. I do not want a slide deck. I want a short live show built around the working product, where slides are at most 2-3 silent title cards.
+
+THE PRODUCT (it works, it is on a laptop and on phones)
+"First Year" is a slow multiplayer business game set in real New York. An adult who is afraid to start a business (25-45, has a family, cannot risk savings) types an idea, for example "a coffee shop near the subway". The system picks a real address in the East Village on a live map, shows the real opening roadmap (LLC, EIN, sales tax certificate, health permit: agency, fee, days of waiting), recommends a setup kit with real prices, and the person runs the shop next to about 100 other players and AI-run neighbors. One game day is 48 real minutes, so a month takes one real day and nobody has to sit in the game: you leave standing orders, a hired manager covers you, and you come back to "while you were away". Owners make deals (joint purchase, cross-promo, block fund, loan, partnership) or report a rival to the city. Other players are city officials: an inspector and a tax auditor who take cases and earn points. There are temptations with real consequences, such as paying wages in cash to dodge payroll tax, shown with the real law and the real fine. Weather and street events change demand. Analytics look like a real owner's: break-even, cash runway, payback. At the end the player gets a "real-world plan": documents, money, suppliers. Top 3 in every niche win prizes (test money in the demo). A demo city runs at 2 seconds per game day, so a full year fits into a few minutes on stage.
+Worked example we can show: a cafe with $224,000 start capital, $139,500 setup, 200 tickets a day at $8.50, break-even at 177 tickets a day, about +$4,152 a month with a manager.
+Stage tools: one laptop on the projector (city screen with the live map, leaderboards and feed), our two phones as two players, and any jury phone via a QR code.
+
+WHAT I NEED FROM YOU
+
+1. THREE DIFFERENT SHOW CONCEPTS, each in 5-6 lines, honestly compared (wow effect, risk of failure on stage, how hard to rehearse in 3 hours). Examples of the kind of thing I mean, invent better ones:
+   - "The jury's idea": we ask a jury member for any small business idea, type it in, and run one year of it live while we talk; the last 20 seconds reveal whether it survived and why.
+   - "Two founders, one street": the two of us open rival cafes on the same block from our phones; one plays honest, one cuts corners; an inspector arrives on the projector.
+   - "The receipt": we open with one real number of what a failed cafe costs a family in New York, then replay that failure in 60 seconds for free.
+   Then pick ONE and say why.
+
+2. A DIRECTOR'S SCRIPT for the chosen concept, second by second, as a table with columns: time (0:00-5:00, steps of 10-20 seconds) | what the projector shows | what each phone shows | who speaks | exact words (short spoken English sentences, 12 words at most each) | what a hand does (click, tap, scan). Include:
+   - a cold open in the first 15 seconds with no greeting and no "we are team X";
+   - three "reveal" moments where something on screen changes because of what was just said;
+   - one moment where the jury does something themselves (scan a QR, vote, choose);
+   - where the money slide of the business itself fits (who pays, how it reaches $100,000 a year) in no more than 40 seconds;
+   - the last line: one sentence the jury will repeat to each other afterwards.
+
+3. THE 2-3 TITLE CARDS: exact text on each (7 words at most), when it appears, for how many seconds.
+
+4. A FALLBACK TREE: what we do if (a) the wifi dies, (b) the map does not load, (c) the jury member's idea is not a cafe or a barbershop (those two are the only playable niches), (d) a phone fails, (e) we are cut to 3 minutes. For each: the sentence we say and the action we take, so that the show looks planned.
+
+5. A REHEARSAL PLAN for 3 hours and 2 people: what to pre-seed in the demo city (names, a rival, an inspection that fires at a known second), what to practice in what order, and the 5 most likely ways this goes wrong.
+
+6. A LEAVE-BEHIND instead of a deck: one thing the jury keeps after we leave the stage (for example a printed "real-world plan" for a cafe with real fees, or a QR to a city that keeps running). Describe exactly what is on it.
+
+7. TEN HOSTILE JURY QUESTIONS for this specific show, each with an answer of two sentences at most.
+
+RULES
+- Use web search to check any real-world number you add (fees, failure rates, costs) and give the source link next to it. If you cannot verify a number, write "unverified" next to it. Do not invent statistics.
+- Do not promise features that are not in the product description above.
+- Spoken lines in simple English. Everything else (explanations, comparisons, the plans) in Russian.
+- No filler, no motivational phrases. Write it so that two tired people can perform it at 11 in the morning.
+```

@@ -104,3 +104,37 @@
 .home-nav > .theme-toggle { margin-left: auto; }
 .home-nav > .btn { margin-left: 0; }
 @media (min-width: 768px) { .home-nav > .theme-toggle { margin-left: 0; } }
+
+/* ───────── home hero as a stage (computers): the live map fills the block, two glass panels float over it.
+   The same idea as the /map screen and the reference: the city is the picture, the interface is glass. ───────── */
+@media (min-width: 1000px) {
+  .home-hero {
+    position: relative; display: block; isolation: isolate; overflow: hidden;
+    min-height: min(calc(100dvh - 116px), 860px);
+    border-radius: var(--r-4); border: 1px solid var(--border); background: var(--map-bg);
+    padding: 20px;
+  }
+  .home-hero__map { position: absolute; inset: 0; z-index: 0; }
+  .home-hero__map > .glass-frame { height: 100% !important; min-height: 0; border: 0; border-radius: 0; }
+  .home-hero__strip,
+  .home-hero__lead {
+    position: relative; z-index: 6; width: min(480px, 40%); max-width: none;
+    padding: 20px 22px; border-radius: var(--r-3);
+    background: var(--glass-thick); -webkit-backdrop-filter: var(--blur-thick); backdrop-filter: var(--blur-thick);
+    border: 1px solid var(--glass-stroke); box-shadow: var(--glass-edge), var(--glass-shadow-float);
+  }
+  .home-hero__lead { margin-top: 12px; gap: 18px; justify-content: flex-start; }
+  .home-pitch .h1 { font-size: clamp(34px, 3vw, 44px); line-height: 1.05; letter-spacing: -0.03em; }
+  .home-pitch__sub { font-size: 17px; max-width: none; }
+  /* the map's own chips and legend move out from under the panels */
+  .home-hero .cm-top { left: calc(min(480px, 40%) + 36px); top: 20px; right: 70px; }
+  .home-hero .cm-legend { left: calc(min(480px, 40%) + 36px); bottom: 20px; }
+  .home-hero .cm-ctl { right: 20px; }
+  /* buttons and fields on glass are solid: glass is never laid on glass */
+  .home-hero__lead .btn--secondary { background: var(--card); border-color: var(--border); }
+  .home-hero__lead .input { background: var(--card); border-color: var(--border); }
+  .home-hero__lead .chip { background: var(--card); border: 1px solid var(--border); }
+}
+@media (min-width: 1000px) and (max-height: 760px) {
+  .home-hero { min-height: 640px; }
+}

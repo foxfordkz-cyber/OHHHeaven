@@ -563,6 +563,10 @@ button.list-row:active { background: var(--press); }
 .cm-legend { border-radius: var(--r-2); font-size: var(--fs-xs); box-shadow: var(--glass-shadow); }
 .cm-pin { border-radius: 10px; padding: 3px 9px 3px 3px; font-weight: 500; font-size: 12.5px; border-color: var(--glass-stroke); box-shadow: 0 4px 12px rgba(16, 24, 20, 0.18); }
 .cm-pin__rank { border-radius: 7px; font-weight: 700; }
+/* a closed or bankrupt business keeps its dot and a small mark; its name does not crowd the map */
+.cm-pin--dim { padding: 3px; opacity: 0.7; }
+.cm-pin--dim .cm-pin__name, .cm-pin--dim .cm-pin__ai { display: none; }
+.cm-pin--ai:not(.cm-pin--dim) .cm-pin__name { color: var(--text-2); }
 
 /* ───────────── home ───────────── */
 
@@ -591,8 +595,16 @@ button.list-row:active { background: var(--press); }
   from { opacity: 0; transform: translate3d(0, 8px, 0); }
 }
 
+/* computers: screens that are still one column get a 720px reading column instead of a phone-wide strip */
 @media (min-width: 900px) {
+  :root { --app-max: 720px; }
   .app:not(.app--wide) { padding-top: 12px; }
+  .bz-root { max-width: 720px; }
+  .bz-sheet, .bz-overlay > .bz-card { max-width: 640px; }
+  .bz-savebar { width: min(calc(100% - 20px), 640px); }
+  .bz-savebar-inner { max-width: 616px; }
+  .bottom-nav { max-width: 520px; }
+  .sheet { max-width: 640px; border-radius: var(--r-4); bottom: 24px; border-bottom: 1px solid var(--glass-stroke); }
 }
 
 /* ───────────── respect the device ───────────── */
