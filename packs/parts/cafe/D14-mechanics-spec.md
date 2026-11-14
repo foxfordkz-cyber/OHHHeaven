@@ -120,7 +120,7 @@ startupDeductionLeft?: Money;  // остаток к амортизации
 
 Бесплатные месяцы оказываются тем, что они есть на деле: займом арендодателя, который возвращается через высокую ставку. Выбор становится вопросом денег в кассе в первые месяцы, а не бесплатной выгодой.
 
-Срезанный угол: двери открываются на 62-й день вместо 82-го — это 20 дней аренды, $4,000. Если его найдут, штраф $5,000, стройка стоит до выдачи разрешения, и выигранные 20 дней пропадают: открытие снова на 82-й день.
+Срезанный угол: двери открываются на 62-й день вместо 82-го — это 20 дней продаж раньше, а без бесплатных месяцев ещё и $4,000 аренды без выручки. Если его найдут, штраф $5,000, стройка стоит до выдачи разрешения, и выигранные 20 дней пропадают: открытие снова на 82-й день.
 
 Налог §195: при расходах до открытия $9,000 в месяц открытия вычитается $5,000, потом по $22 в месяц. При $60,000 сразу не вычитается ничего, потом по $333 в месяц.
 
@@ -141,7 +141,7 @@ startupDeductionLeft?: Money;  // остаток к амортизации
 - Шаг «Lease» в `/start`: три карточки. «3 months free · $6,000/mo», «No free rent · $5,850/mo», «6 months free · $6,158/mo». Под каждой: «Paid before your first sale: $…» и «Over 10 years: $702,000».
 - Полоса времени до открытия: «Lease signed Jan 1 → Build-out 60 days → Health permit 21 days → Doors open Mar 22 · Rent-free until Mar 31».
 - Вкладка Today в статусе `setup`: «Day 34 of 82 before opening», «Spent so far: rent $0, insurance $280, power $370…», «Cash left $…», «Free rent ends in 56 days».
-- Срезанный угол — кнопка с ценой риска: «Start before the permit: open 20 days sooner (saves about $4,000 of rent). If a neighbor calls 311: at least $5,000 and work stops until the permit is issued».
+- Срезанный угол — кнопка с ценой риска: «Start before the permit: open 20 days sooner (20 more days of sales). If a neighbor calls 311: at least $5,000 and work stops until the permit is issued».
 
 ---
 
