@@ -13,11 +13,13 @@ import {
 export function ProposeDealSheet(props: {
   onClose: () => void; view: OwnerView; target: PublicBusiness; distanceM: number | null;
   onAct: (a: Action) => unknown;
+  /** Kind to open on (the «Team up» move picks one); falls back to the first allowed kind. */
+  initialKind?: DealKind | null;
 }) {
   const { view, target } = props;
   const me = view.business;
   const availability = useMemo(() => dealAvailability({ me, target, deals: view.deals, distanceM: props.distanceM }), [me, target, view.deals, props.distanceM]);
-  const [kind, setKind] = useState<DealKind | null>(() => DEAL_KINDS.find((k) => availability[k].allowed) ?? null);
+  const [kind, setKind] = useState<DealKind | null>(() => (props.initialKind && availability[props.initialKind].allowed ? props.initialKind : DEAL_KINDS.find((k) => availability[k].allowed) ?? null));
   const [terms, setTerms] = useState<Record<DealKind, DealTerms>>(() => ({
     joint_purchase: defaultTerms('joint_purchase', me), cross_promo: defaultTerms('cross_promo', me),
     loan: defaultTerms('loan', me), partnership: defaultTerms('partnership', me),
