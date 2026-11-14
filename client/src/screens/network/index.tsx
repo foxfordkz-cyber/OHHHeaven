@@ -14,3 +14,5 @@ export const screen: ScreenModule = {
 };
 
 export { NetworkTab, NetworkTabScreen } from './NetworkTab';
+
+export { RivalStrip, RivalStripView } from './RivalStrip';

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import type { Action, Deal, OwnerView } from '../../../../shared/src/types';
 import { NetworkTab } from './NetworkTab';
+import { RivalStripView } from './RivalStrip';
 import { MY_ID, ownerView, ownerViewBusyWeek, ownerViewSetup, packs, places, TODAY } from './fixtures';
 
 afterEach(cleanup);
@@ -32,6 +33,9 @@ describe('Network tab: neighbors', () => {
     expect(row.textContent).toContain('kept 4 · broke 1');
     expect(within(row).getByText('AI')).toBeTruthy();
     expect(screen.queryByRole('button', { name: /^Luna Cafe/ })).toBeNull();
+    const neighbors = screen.getByRole('region', { name: 'Neighbors' });
+    expect(within(neighbors).getByRole('button', { name: /^Cuppa Joe East/ }).textContent).toContain('Shares your street');
+    expect(row.textContent).not.toContain('Shares your street');      // Tompkins is a cafe, but far away
   });
 
   it('shows the closest 12 neighbors first and the rest on request', () => {
@@ -167,6 +171,10 @@ describe('Network tab: offers, my deals, block fund', () => {
   it('accepts and declines incoming offers', () => {
     const onAct = setup();
     const offers = screen.getByRole('region', { name: 'Waiting for your answer' });
+    // the most urgent answer shows first; the rest are one tap away
+    expect(offers.querySelectorAll('[data-deal]').length).toBe(1);
+    expect(offers.querySelector('[data-deal="d2"]')).not.toBeNull();   // Bowery's offer expires first
+    fireEvent.click(within(offers).getByRole('button', { name: 'Show all 2' }));
     const fromFade = offers.querySelector<HTMLElement>('[data-deal="d1"]')!;
     expect(fromFade.textContent).toContain('Fade Factory');
     expect(fromFade.textContent).toContain('kept 1 · broke 0');
@@ -274,7 +282,12 @@ describe('Network tab: rivals and prizes in plain sight', () => {
     const card = screen.getByRole('region', { name: 'Your rival' });
     expect(card.textContent).toContain('Cuppa Joe East');
     expect(card.textContent).toContain('Run by Maya R.');
-    expect(card.textContent).toContain('Ahead of you by $3,800');
+    const h2h = within(card).getByRole('table', { name: 'You against your rival' });
+    const row = (label: string) => [...h2h.querySelectorAll('tr')].find((r) => r.cells[0].textContent === label)!;
+    expect([...row('Price').cells].map((c) => c.textContent)).toEqual(['Price', '$5.25', '$4.95']);
+    expect(row('Price').cells[2].className).toBe('nw-lead');        // cheaper wins walk-ins
+    expect([...row('Net worth').cells].map((c) => c.textContent)).toEqual(['Net worth', '$24,100', '$27,900']);
+    expect([...row('Place').cells].map((c) => c.textContent)).toEqual(['Place', '#3', '#2']);
     expect(card.textContent).toMatch(/split one stream of people/);
     expect(card.textContent).toContain('If you are right: they pay $300–$1,000');
     expect(card.textContent).toContain('If you are wrong: you pay $500 and Cuppa Joe East learns your name.');
@@ -322,5 +335,46 @@ describe('Network tab: rivals and prizes in plain sight', () => {
     expect(card.textContent).toContain('$1,780 in total, $1,380 more than paying');
     fireEvent.click(within(card).getByRole('button', { name: 'Pay' }));
     expect(onAct).toHaveBeenLastCalledWith({ type: 'answer_notice', caseId: 'c_fine', response: 'pay' });
+  });
+});
+
+describe('Network tab: a neighbor who reported me falsely', () => {
+  it('shows who it was and lets me strike back or team up', () => {
+    const reveal = { id: 'law:c7:reveal', day: TODAY - 2, kind: 'case' as const, title: 'The report came from Fade Factory', text: 'Fade Factory reported you to the city, and the inspection found nothing. They were fined $500.', ref: { type: 'business' as const, id: 'b_fade' }, read: false };
+    const view = { ...ownerView, me: { ...ownerView.me, inbox: [...ownerView.me.inbox, reveal] } };
+    const onAct = setup(view);
+    const box = screen.getByRole('region', { name: 'Waiting for your answer' });
+    expect(box.querySelector('[data-deal]')).toBeNull();            // who reported me goes before offers
+    const card = box.querySelector<HTMLElement>('[data-reveal="b_fade"]')!;
+    expect(card.textContent).toContain('The report came from Fade Factory');
+    expect(card.textContent).toContain('If you are right: they pay');
+    fireEvent.click(within(card).getByRole('button', { name: 'Report' }));
+    const sheet = screen.getByRole('dialog', { name: 'Report to the city' });
+    expect(sheet.textContent).toContain('About Fade Factory');
+    expect(onAct).not.toHaveBeenCalled();
+  });
+
+  it('an old reveal (over a game month) is gone', () => {
+    const reveal = { id: 'law:c1:reveal', day: TODAY - 31, kind: 'case' as const, title: 'The report came from Fade Factory', text: '', ref: { type: 'business' as const, id: 'b_fade' }, read: true };
+    setup({ ...ownerView, me: { ...ownerView.me, inbox: [reveal] } });
+    expect(document.querySelector('[data-reveal]')).toBeNull();
+  });
+});
+
+describe('Rival strip for other screens', () => {
+  it('names the rival and my place, and opens the Network tab', () => {
+    const onOpen = vi.fn();
+    render(<RivalStripView view={ownerView} places={places} packs={packs} onOpen={onOpen} />);
+    const card = screen.getByRole('region', { name: 'Rival summary' });
+    expect(card.textContent).toContain('Cuppa Joe East');
+    expect(card.textContent).toContain('$3,800 ahead of you');
+    expect(card.textContent).toMatch(/You are #3 of 4 · prize today \$/);
+    fireEvent.click(within(card).getByRole('button', { name: /Team up or report/ }));
+    expect(onOpen).toHaveBeenCalled();
+  });
+
+  it('renders nothing before I own a business', () => {
+    const { container } = render(<RivalStripView view={{ ...ownerView, business: null }} places={places} packs={packs} onOpen={() => {}} />);
+    expect(container.textContent).toBe('');
   });
 });

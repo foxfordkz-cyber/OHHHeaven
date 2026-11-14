@@ -1,12 +1,13 @@
 // Rivals and prizes in plain sight (task B18): what needs my answer, who my main rival is, where I stand and how far
 // the prize is, and what changed next door with one line on what it means for me. Behavior and data only: the look
 // comes from the shared components of client/src/ui.
+import { Fragment, useState, type ReactNode } from 'react';
 import type { Action, CaseNotice, Deal, OwnerView, PackSet, Place, PublicBusiness } from '../../../../shared/src/types';
 import { dateOf } from '../../../../shared/src/rules';
 import { AiBadge, Badge, Button, Card, formatDuration, List, ListRow, MoneyText, useT } from './ui';
-import { act, formatDistance, money, NICHE_LABEL, rankText, termsSummary, trustLabel, type MyReport, type NetworkExtra } from './logic';
+import { act, formatDistance, money, NICHE_LABEL, termsSummary, trustLabel, type MyReport, type NetworkExtra } from './logic';
 import {
-  ladderLine, msToMonthClose, nextMonthCloseDay, noticeChoices, offerChoices, reportMove, teamUpMove,
+  ladderLine, msToMonthClose, nextMonthCloseDay, noticeChoices, offerChoices, reportMove, revealedReporters, teamUpMove,
   type Ladder, type ReportMove, type Rival, type RivalNews, type TeamUpMove,
 } from './rivals';
 import type { DealKind } from './logic';
@@ -25,19 +26,50 @@ function useMonthClose(view: OwnerView): string {
 
 // ───────────── incoming: offers and fine notices, with what each answer does ─────────────
 
-export function IncomingCard(props: { view: OwnerView; packs: PackSet | null; offers: Deal[]; nameOf: (id: string) => PublicBusiness | undefined; onAct: (a: Action) => unknown }) {
+/** Answers shown before «Show all»: the rival card stays on the first phone screen. */
+export const INCOMING_FIRST = 1;
+
+export function IncomingCard(props: {
+  view: View; packs: PackSet | null; offers: Deal[]; nameOf: (id: string) => PublicBusiness | undefined; onAct: (a: Action) => unknown;
+  distanceOf: (id: string) => number | null; onTeamUp: (id: string, kind: DealKind | null) => void; onReport: (id: string) => void;
+}) {
   const tr = useT();
+  const [all, setAll] = useState(false);
   const { view, offers } = props;
-  const notices = view.notices.filter((n) => n.status === 'notice');
-  if (offers.length + notices.length === 0) return null;
+  // the most urgent first: fine notices (silence means you pay), then who reported me, then offers by deadline
+  const items: { key: string; node: ReactNode }[] = [
+    ...view.notices.filter((n) => n.status === 'notice').map((n) => ({ key: n.caseId, node: <NoticeCard notice={n} view={view} packs={props.packs} onAct={props.onAct} /> })),
+    ...revealedReporters(view).flatMap((r) => {
+      const biz = props.nameOf(r.businessId);
+      if (!biz) return [];
+      const team = teamUpMove(view, biz, props.distanceOf(biz.id));
+      return [{
+        key: r.id,
+        node: (
+          <div className="nw-offer nw-offer--loss" data-reveal={r.businessId}>
+            <div className="nw-offer__head"><strong>{r.title}</strong><span className="xsmall faint nw-push">{dateOf(r.day).label}</span></div>
+            <p className="small muted nw-why">{r.text} {tr('Strike back with a report, or turn them into a partner.', 'Ответьте жалобой или сделайте их партнёром.')}</p>
+            <TwoMoves team={team} report={reportMove(view, props.packs, biz)} onTeamUp={() => props.onTeamUp(biz.id, team.kind)} onReport={() => props.onReport(biz.id)} />
+          </div>
+        ),
+      }];
+    }),
+    ...[...offers].sort((x, y) => x.expiresDay - y.expiresDay).map((d) => ({ key: d.id, node: <OfferCard deal={d} view={view} author={props.nameOf(d.fromBusinessId)} onAct={props.onAct} /> })),
+  ];
+  if (items.length === 0) return null;
+  const shown = all ? items : items.slice(0, INCOMING_FIRST);
   return (
     <Card
       title={tr('Waiting for your answer', 'Ждёт вашего ответа')} tone="accent" aria-label="Waiting for your answer"
-      subtitle={tr(`${offers.length + notices.length} to decide`, `Решений: ${offers.length + notices.length}`)}
+      subtitle={tr(`${items.length} to decide`, `Решений: ${items.length}`)}
     >
       <div className="stack">
-        {notices.map((n) => <NoticeCard key={n.caseId} notice={n} view={view} packs={props.packs} onAct={props.onAct} />)}
-        {offers.map((d) => <OfferCard key={d.id} deal={d} view={view} author={props.nameOf(d.fromBusinessId)} onAct={props.onAct} />)}
+        {shown.map((x) => <Fragment key={x.key}>{x.node}</Fragment>)}
+        {items.length > INCOMING_FIRST && (
+          <Button block variant="ghost" onClick={() => setAll((v) => !v)}>
+            {all ? tr('Show only the most urgent', 'Только самое срочное') : tr(`Show all ${items.length}`, `Показать все: ${items.length}`)}
+          </Button>
+        )}
       </div>
     </Card>
   );
@@ -111,7 +143,7 @@ function Choices({ choices }: { choices: { label: string; outcome: string }[] })
 // ───────────── the main rival and the two moves ─────────────
 
 export function RivalCard(props: {
-  view: View; packs: PackSet | null; rival: Rival | null; places: Place[];
+  view: View; packs: PackSet | null; rival: Rival | null; places: Place[]; myNetWorth: number | null;
   onTeamUp: (id: string, kind: DealKind | null) => void; onReport: (id: string) => void; onOpen: (id: string) => void;
 }) {
   const tr = useT();
@@ -137,20 +169,42 @@ export function RivalCard(props: {
         <button type="button" className="nw-rival" onClick={() => props.onOpen(b.id)}>
           <span className="nw-rival__name">{b.name}{b.isAi && <AiBadge />}</span>
           <span className="small muted">
-            {b.isAi ? tr('Run by AI', 'Ведёт ИИ') : tr(`Run by ${b.ownerName}`, `Владелец: ${b.ownerName}`)} · {formatDistance(rival.distanceM)} · {rival.rank ? `#${rival.rank}` : rankText(b)} · ${b.price.toFixed(2)}
-            {typeof me.orders?.price === 'number' && <> ({tr('you', 'вы')} ${me.orders.price.toFixed(2)})</>}
+            {b.isAi ? tr('Run by AI', 'Ведёт ИИ') : tr(`Run by ${b.ownerName}`, `Владелец: ${b.ownerName}`)} · {formatDistance(rival.distanceM)} {tr('from you', 'от вас')}
           </span>
-          {rival.gap !== null && (
-            <span className="small">
-              {rival.gap >= 0 ? tr('Ahead of you by ', 'Впереди вас на ') : tr('Behind you by ', 'Позади вас на ')}
-              <strong className="num">{money(Math.abs(rival.gap))}</strong> {tr('of net worth', 'стоимости')}
-            </span>
-          )}
         </button>
+        <HeadToHead view={view} rival={rival} myNetWorth={props.myNetWorth} />
         <p className="small nw-why">{rival.why}</p>
         <TwoMoves team={team} report={report} onTeamUp={() => props.onTeamUp(b.id, team.kind)} onReport={() => props.onReport(b.id)} />
       </div>
     </Card>
+  );
+}
+
+/** You against them on the four things the city compares: price, reputation, net worth and place. */
+function HeadToHead(props: { view: OwnerView; rival: Rival; myNetWorth: number | null }) {
+  const tr = useT();
+  const me = props.view.business!;
+  const b = props.rival.biz;
+  const myRank = (props.view.leaderboards[me.niche] ?? []).find((s) => s.businessId === me.id)?.rank ?? null;
+  const theirs = props.rival.gap !== null && props.myNetWorth !== null ? props.myNetWorth + props.rival.gap : null;
+  const stars = (r: number) => `★ ${(Math.round(Math.max(0, Math.min(1, r)) * 50) / 10).toFixed(1)}`;
+  // last value: above 0 — they lead on this line, below 0 — I lead (on price the cheaper one wins walk-ins)
+  const rows: [string, string, string, number | null][] = [
+    [tr('Price', 'Цена'), `$${me.orders.price.toFixed(2)}`, `$${b.price.toFixed(2)}`, me.orders.price - b.price],
+    [tr('Reputation', 'Репутация'), stars(me.reputation), stars(b.reputation), b.reputation - me.reputation],
+    [tr('Net worth', 'Стоимость'), props.myNetWorth !== null ? money(props.myNetWorth) : '—', theirs !== null ? money(theirs) : '—', props.rival.gap],
+    [tr('Place', 'Место'), myRank ? `#${myRank}` : '—', props.rival.rank ? `#${props.rival.rank}` : '—', myRank && props.rival.rank ? myRank - props.rival.rank : null],
+  ];
+  const lead = (d: number | null, mine: boolean) => (d === null || Math.abs(d) < 1e-6 ? undefined : (d > 0) !== mine ? 'nw-lead' : undefined);
+  return (
+    <table className="nw-table nw-h2h" aria-label="You against your rival">
+      <thead><tr><th><span className="sr-only">{tr('Line', 'Строка')}</span></th><th>{tr('You', 'Вы')}</th><th>{tr('Them', 'Они')}</th></tr></thead>
+      <tbody>
+        {rows.map(([label, mine, them, d]) => (
+          <tr key={label}><td>{label}</td><td className={lead(d, true)}>{mine}</td><td className={lead(d, false)}>{them}</td></tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 

@@ -7,7 +7,7 @@ import { Lines, Stars } from './fields';
 import { ProposeDealSheet } from './ProposeDealSheet';
 import { ReportSheet } from './ReportSheet';
 import { IncomingCard, LadderCard, NewsCard, RivalCard, TwoMoves } from './RivalsPanel';
-import { changesSince, ladderOf, mainRival, reportMove, rivalNews, teamUpMove } from './rivals';
+import { changesSince, footfallRadius, ladderOf, mainRival, reportMove, rivalNews, teamUpMove } from './rivals';
 import { useLastLook } from './memory';
 import {
   act, blockFundInfo, daysLeftText, dealEffect, dealEndDay, endEarlyWarning, formatDistance, groupDeals, lastMonthDealMoney,
@@ -73,6 +73,8 @@ export function NetworkTab(props: NetworkTabProps) {
   const lastLook = useLastLook(view);
   const changes = useMemo(() => changesSince(view, places, packs, lastLook), [view, places, packs, lastLook]);
   const openProfile = (id: string) => { if (rowOf(id)) setPanel({ kind: 'profile', id }); };
+  const radius = footfallRadius(packs, me?.niche);
+  const sharesStreet = (r: NeighborRow) => Boolean(me) && r.biz.niche === me!.niche && r.biz.status !== 'bankrupt' && r.distanceM !== null && r.distanceM <= radius;
 
   return (
     <div className="stack nw" data-screen="network">
@@ -84,11 +86,16 @@ export function NetworkTab(props: NetworkTabProps) {
       )}
       {!me && <p className="muted">Open your business to make deals with neighbors. You can already look around.</p>}
 
-      {me && <IncomingCard view={view} packs={packs} offers={groups.incoming} nameOf={bizOf} onAct={onAct} />}
+      {me && (
+        <IncomingCard
+          view={view} packs={packs} offers={groups.incoming} nameOf={bizOf} onAct={onAct} distanceOf={(id) => rowOf(id)?.distanceM ?? null}
+          onTeamUp={(id, dealKind) => setPanel({ kind: 'deal', id, dealKind })} onReport={(id) => setPanel({ kind: 'report', id })}
+        />
+      )}
 
       {me && (
         <RivalCard
-          view={view} packs={packs} places={places} rival={rival} onOpen={openProfile}
+          view={view} packs={packs} places={places} rival={rival} myNetWorth={ladder?.me?.netWorth ?? null} onOpen={openProfile}
           onTeamUp={(id, dealKind) => setPanel({ kind: 'deal', id, dealKind })} onReport={(id) => setPanel({ kind: 'report', id })}
         />
       )}
@@ -107,7 +114,7 @@ export function NetworkTab(props: NetworkTabProps) {
           ) : (
             <>
               <List>
-                {(showAll ? rows : rows.slice(0, LIST_FIRST)).map((r) => <NeighborListRow key={r.biz.id} row={r} onOpen={() => setPanel({ kind: 'profile', id: r.biz.id })} />)}
+                {(showAll ? rows : rows.slice(0, LIST_FIRST)).map((r) => <NeighborListRow key={r.biz.id} row={r} street={sharesStreet(r)} onOpen={() => setPanel({ kind: 'profile', id: r.biz.id })} />)}
               </List>
               {rows.length > LIST_FIRST && (
                 <Button block variant="ghost" onClick={() => setShowAll((v) => !v)}>
@@ -172,12 +179,12 @@ const price = (n: number) => `$${n.toFixed(2)}`;
 const LIST_FIRST = 12;
 const money0 = (n: number) => `$${Math.round(n).toLocaleString('en-US')}`;
 
-function NeighborListRow({ row, onOpen }: { row: NeighborRow; onOpen: () => void }) {
+function NeighborListRow({ row, onOpen, street }: { row: NeighborRow; onOpen: () => void; street: boolean }) {
   const b = row.biz;
   return (
     <ListRow
       onClick={onOpen}
-      title={<span className="nw-name">{b.name}{b.isAi && <AiBadge />}<StatusBadge biz={b} /></span>}
+      title={<span className="nw-name">{b.name}{b.isAi && <AiBadge />}<StatusBadge biz={b} />{street && <Badge tone="warn" title="Same trade within the foot-traffic radius: you split the people walking by">Shares your street</Badge>}</span>}
       subtitle={`${NICHE_LABEL[b.niche]} · ${formatDistance(row.distanceM)} · ${price(b.price)} · ${rankText(b)}`}
       value={<span className="nw-rowvalue"><Stars value={b.reputation} /><span className="xsmall faint">{trustLabel(b.trust)}</span></span>}
     />
