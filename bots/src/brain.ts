@@ -61,13 +61,32 @@ function placeOf(ctx: EngineCtx, id: string): Place | undefined {
   return m.get(id);
 }
 
-/** Pick a free place for a new business: tier by character, ties broken by a name-seeded jitter. */
+/** Share of the expected revenue the rent takes (lower is better). Uses only public map and pack data. */
+export function rentShare(ctx: EngineCtx, niche: NicheId, p: Place, profile: OwnerProfile): number {
+  const pack = ctx.packs.niches[niche];
+  if (!pack) return Infinity;
+  const e = Math.exp(5 * pack.market.weights.location * (p.footTraffic - 0.55));
+  const demand = pack.market.unitsPerSlotMonth * (0.6 + 0.8 * p.footTraffic) * (e / (e + 0.4286));
+  const seats = Math.min(pack.sizing.max, Math.floor((p.sqft * RULES.USABLE_FLOOR_SHARE) / pack.sizing.sqftPerUnit), pack.kits.find((k) => k.id === 'standard')?.size ?? pack.sizing.default);
+  const capacity = (seats * pack.sizing.unitsServedPerSizeMonth) / (1 - (pack.sizing.takeawayShare ?? 0));
+  const revenue = Math.min(demand, capacity) * pack.unit.refPrice * (profile.quality === 'high' ? 1.3 : 1);
+  return ((p.sqft * p.rentPerSqftYear) / 12) / Math.max(1, revenue);
+}
+
+/** Rent a sensible owner accepts: at most 25% of the revenue the place can bring (30% for a premium shop). */
+export const affordable =(ctx: EngineCtx, niche: NicheId, p: Place, profile: OwnerProfile): boolean =>
+  rentShare(ctx, niche, p, profile) <= (profile.quality === 'high' ? 0.3 : 0.25);
+
+/** Pick a free place: affordable ones first (by character tier, name-seeded jitter); if none, the lowest rent share. */
 export function choosePlace(ctx: EngineCtx, name: string, niche: NicheId, profile: OwnerProfile, occupied: Set<string>): Place | undefined {
   const rng = rngFor('place', name);
   const want = profile.tier;
+  const free = ctx.places.filter((p) => !occupied.has(p.id) && p.suitableFor.includes(niche));
+  const careless = profile.price === 'fixed_random';
+  const pool = careless ? free : free.filter((p) => affordable(ctx, niche, p, profile));
+  if (!pool.length) return careless ? undefined : free.reduce<Place | undefined>((a, p) => (!a || rentShare(ctx, niche, p, profile) < rentShare(ctx, niche, a, profile) ? p : a), undefined);
   let best: Place | undefined, bestScore = -Infinity;
-  for (const p of ctx.places) {
-    if (occupied.has(p.id) || !p.suitableFor.includes(niche)) continue;
+  for (const p of pool) {
     const tierScore = want === 'any' ? 0 : p.tier === want ? 2 : (want === 'mid' || p.tier === 'mid') ? 1 : 0;
     const score = tierScore + rng() * 1.5;
     if (score > bestScore) { bestScore = score; best = p; }
@@ -162,7 +181,7 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     const phase = hashStr(playerId) % 7;
     if (profile.loginEvery > 1 && (w.day - sight.me.joinedDay) % profile.loginEvery !== 0 && sight.business) return [];
     const b = sight.business;
-    if (!b) return openingActions(w, ctx, sight, strategy);
+    if (!b) return sight.hadBusiness ? [] : openingActions(w, ctx, sight, strategy);
     const pack = ctx.packs.niches[b.niche]!;
     const place = placeOf(ctx, b.placeId)!;
     const acts: Action[] = [];
@@ -326,6 +345,7 @@ function acceptDeal(sight: OwnerSight, ctx: EngineCtx, b: BusinessState, pack: P
 }
 
 function complaint(sight: OwnerSight, ctx: EngineCtx, b: BusinessState, harass: boolean): Action | null {
+  if (sight.myReportDays.filter((d) => d > sight.day - 7).length >= RULES.REPORTS_PER_WEEK) return null;
   const peers = sight.neighbors().filter((n) => n.niche === b.niche && n.status === 'open' && n.rankInNiche > 0);
   if (!peers.length) return null;
   const leader = peers.reduce((a, c) => (c.rankInNiche < a.rankInNiche ? c : a));

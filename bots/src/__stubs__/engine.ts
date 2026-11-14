@@ -376,7 +376,7 @@ export function applyAction(w: WorldState, ctx: EngineCtx, playerId: string, a: 
 }
 
 function openBusiness(w: WorldState, ctx: EngineCtx, player: Player, a: Extract<Action, { type: 'open_business' }>): ActionResult {
-  if (w.businesses.some((b) => b.managerPlayerId === player.id && b.status !== 'bankrupt')) return err(w, 'already has a business');
+  if (w.businesses.some((b) => b.managerPlayerId === player.id)) return err(w, 'one business per owner per season');
   const pack = ctx.packs.niches[a.niche];
   const place = placeOf(ctx, a.placeId);
   if (!pack || !place || !place.suitableFor.includes(a.niche)) return err(w, 'bad niche or place');

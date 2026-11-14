@@ -24,6 +24,8 @@ export interface SeasonSetup {
   days?: number;
   /** collect invalid actions instead of ignoring them (tests) */
   recordErrors?: boolean;
+  /** called before residents act each day; may return a replacement world (tests: snapshots, chaos) */
+  onDay?: (w: WorldState, day: number) => WorldState | void;
 }
 
 export interface OwnerResult { playerId: string; name: string; strategy: OwnerStrategy; niche: NicheId; businessId?: string; netWorth: number; bankrupt: boolean; bankruptDay?: number; rank: number; prizePlace: boolean; profit: number; fines: number; savings: number; cashAtMonth3: number | null; bankruptByMonth3: boolean }
@@ -37,6 +39,18 @@ export const DEFAULT_OFFICIALS: SeasonSetup['officials'] = [
 
 export function seasonConfig(seed: number, months = 12): WorldConfig {
   return { id: `sim-${seed}`, name: 'Simulated season', city: 'nyc', seasonMonths: months, dayMs: RULES.DAY_MS_DEMO, paused: false, maxOwners: 100, aiBusinessesTarget: 0, entryFee: 5, prizeShare: 0.9, officialsShare: 0.05, platformShare: 0.05, nichePrizeTable: [0.5, 0.3, 0.2], demo: true, seed };
+}
+
+/** The residents runSeason uses for a setup: players join in order owners → officials, ids p1, p2, … */
+export function brainFor(api: EngineApi, setup: SeasonSetup): BotBrain {
+  const n = setup.owners.length;
+  const idx = (id: string) => Number(id.slice(1)) - 1;
+  return createBotBrain({
+    ...setup.brain,
+    strategyOf: (p) => { const i = idx(p.id); return i < n ? setup.owners[i]?.strategy : setup.officials[i - n]?.strategy; },
+    nicheOf: (p) => setup.owners[idx(p.id)]?.niche,
+    recommendOpening: (ni, pl, ww, c) => api.recommendOpening(ni, pl, ww, c as Ctx),
+  });
 }
 
 export function runSeason(api: EngineApi, setup: SeasonSetup): SeasonResult {
@@ -76,6 +90,7 @@ export function runSeason(api: EngineApi, setup: SeasonSetup): SeasonResult {
       const ev = api.deckEvent(w);
       if (ev) w = { ...w, events: [...w.events.filter((e) => e.endDay >= w.day - 30), ev] };
     }
+    if (setup.onDay) w = setup.onDay(w, day) ?? w;
     for (const pid of ownerIds) for (const a of brain.ownerActions(w, ctx, pid)) apply(pid, a);
     // nanny for manager-run shops: open when permits are ready, safe orders every MANAGER_REVIEW_DAYS
     for (const b of w.businesses) {

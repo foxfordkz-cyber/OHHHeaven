@@ -1,5 +1,5 @@
 // @ohh/bots — AI residents of the city (agent 07). Contract: build/CONTRACT.md §7.
-export { createBotBrain, choosePlace, playableNiches, nicheFromName } from './brain';
+export { createBotBrain, choosePlace, affordable, rentShare, playableNiches, nicheFromName } from './brain';
 export type { BotBrain, BrainOptions, PopulateEntry } from './brain';
 export { ownerSight, officialSight, publicBusinesses } from './observe';
 export type { OwnerSight, OfficialSight } from './observe';

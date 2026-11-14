@@ -33,6 +33,8 @@ export interface OwnerSight {
   offers: Deal[];                    // deals proposed to me and still open
   myDeals: Deal[];                   // active or proposed deals I am part of
   notices: CaseNotice[];             // fines waiting for my answer
+  myReportDays: number[];            // days I reported someone (my own actions)
+  hadBusiness: boolean;              // I already opened a business this season (bankrupt or not)
   feed: WorldState['feed'];
   events: WorldState['events'];
 }
@@ -67,8 +69,9 @@ export function ownerSight(w: WorldState, playerId: string): OwnerSight | null {
   if (!me || me.kind !== 'owner') return null;
   const business = w.businesses.find((b) => b.managerPlayerId === playerId && b.status !== 'bankrupt') ?? null;
   const live = business ? liveDealsOf(w, business.id) : [];
+  const recent = business ? recentCases(w, 60) : [];
   const notices: CaseNotice[] = business
-    ? recentCases(w, 60).filter((c) => c.businessId === business.id && c.status === 'notice').map((c) => ({ caseId: c.id, role: c.role, found: c.found ?? [], fine: c.fine ?? 0, closureDays: c.closureDays ?? 0, answerByDay: c.answerByDay ?? w.day, status: c.status, outcome: c.outcome }))
+    ? recent.filter((c) => c.businessId === business.id && c.status === 'notice').map((c) => ({ caseId: c.id, role: c.role, found: c.found ?? [], fine: c.fine ?? 0, closureDays: c.closureDays ?? 0, answerByDay: c.answerByDay ?? w.day, status: c.status, outcome: c.outcome }))
     : [];
   return {
     day: w.day, me, business,
@@ -76,6 +79,8 @@ export function ownerSight(w: WorldState, playerId: string): OwnerSight | null {
     offers: live.filter((d) => d.status === 'proposed' && d.toBusinessId === business?.id && d.expiresDay >= w.day),
     myDeals: live,
     notices,
+    myReportDays: business ? recent.filter((c) => c.reporterBusinessId === business.id).map((c) => c.openedDay) : [],
+    hadBusiness: w.businesses.some((b) => b.managerPlayerId === playerId),
     feed: w.feed, events: w.events,
   };
 }
