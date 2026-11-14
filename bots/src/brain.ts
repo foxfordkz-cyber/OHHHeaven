@@ -212,9 +212,9 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     const phase = hashStr(playerId) % 7;
     if (profile.loginEvery > 1 && (w.day - sight.me.joinedDay) % profile.loginEvery !== 0 && sight.business) return [];
     const b = sight.business;
-    // no business yet: look through the listings on the day of joining and then every two weeks, not every day
+    // no business yet: look through the listings on the day of joining and then once a month, not every day
     // (each look prices up to 40 doors; a careful newcomer may find none it would sign for)
-    if (!b) return sight.hadBusiness || (w.day - sight.me.joinedDay) % 14 !== 0 ? [] : openingActions(w, ctx, sight, strategy);
+    if (!b) return sight.hadBusiness || (w.day - sight.me.joinedDay) % RULES.DAYS_PER_MONTH !== 0 ? [] : openingActions(w, ctx, sight, strategy);
     const pack = ctx.packs.niches[b.niche]!;
     const place = placeOf(ctx, b.placeId)!;
     const acts: Action[] = [];
@@ -241,6 +241,9 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
       if (r) acts.push(r);
     }
     if (profile.proposesDeals && w.day % 7 === (phase + 5) % 7) acts.push(...proposals(w, sight, ctx, b, place, strategy));
+    // 4. a shop of the same trade has just opened its doors nearby: a dealmaker greets it with an offer within two days
+    //    (the newcomer — often a human — meets a named neighbour and a decision on the first days, not a silent map)
+    else if (profile.proposesDeals) acts.push(...welcome(w, sight, ctx, b, place));
     if (profile.breaksDeals && w.day % 7 === (phase + 1) % 7) {
       for (const d of sight.myDeals) if (d.status === 'active' && d.terms.type !== 'loan' && w.day - (d.startDay ?? w.day) >= 20 && rng() < 0.5) acts.push({ type: 'cancel_deal', dealId: d.id });
     }
@@ -396,6 +399,28 @@ function complaint(sight: OwnerSight, ctx: EngineCtx, b: BusinessState, harass: 
   if (!harass && !(cheap || dirty || finedRecently)) return null;
   const pick = dirty ? healthReport : harass && sight.day % 14 < 7 ? healthReport : taxReport;
   return pick ? { type: 'report', targetBusinessId: leader.id, reportId: pick.id } : null;
+}
+
+/** How far a dealmaker looks for a new shop of its trade to greet, in metres (the reach of a cross promotion). */
+export const WELCOME_M = 400;
+
+/** A joint purchase offered to the nearest shop of the same trade that opened its doors in the last two days. */
+function welcome(w: WorldState, sight: OwnerSight, ctx: EngineCtx, b: BusinessState, place: Place): Action[] {
+  if (sight.myDeals.length >= RULES.MAX_ACTIVE_DEALS - 1) return [];
+  const fresh = new Set<string>();
+  for (let i = sight.feed.length - 1; i >= 0 && w.day - sight.feed[i].day <= 2; i--) {
+    const f = sight.feed[i];
+    // day 1 is the founding of the city: everyone opens at once, nobody is new
+    if (f.kind === 'opening' && f.businessId && f.businessId !== b.id && f.day > 1) fresh.add(f.businessId);
+  }
+  if (!fresh.size) return [];
+  const partners = new Set(sight.myDeals.flatMap((d) => [d.fromBusinessId, d.toBusinessId]));
+  const near = sight.neighbors()
+    .filter((n) => fresh.has(n.id) && n.niche === b.niche && n.status === 'open' && !partners.has(n.id) && n.partners.length < RULES.MAX_ACTIVE_DEALS)
+    .map((n) => ({ n, d: distanceM(place, placeOf(ctx, n.placeId) ?? place) }))
+    .filter((x) => x.n.placeId !== place.id && x.d <= WELCOME_M)
+    .sort((x, y) => x.d - y.d)[0];
+  return near ? [{ type: 'propose_deal', toBusinessId: near.n.id, terms: { type: 'joint_purchase', months: 3 } }] : [];
 }
 
 function proposals(w: WorldState, sight: OwnerSight, ctx: EngineCtx, b: BusinessState, place: Place, strategy: OwnerStrategy): Action[] {
