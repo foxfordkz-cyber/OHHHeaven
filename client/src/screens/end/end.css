@@ -1,0 +1,31 @@
+/* Leaderboards, end of season (agent 11). */
+.lb { display: flex; flex-direction: column; gap: 4px; }
+.lb-head, .lb-row { display: grid; grid-template-columns: 30px minmax(0, 1fr) 62px 74px; align-items: center; gap: var(--s-2); }
+.lb-head { padding: 0 var(--s-2); }
+.lb-head span:nth-child(3), .lb-head span:nth-child(4) { text-align: right; }
+.lb-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.lb-list--pinned { border-top: 1px dashed var(--border-strong); padding-top: 6px; margin-top: 2px; position: sticky; bottom: 0; background: var(--surface); }
+.lb-row { padding: 8px var(--s-2); border-radius: var(--r-1); background: var(--bg-elev); border: 1px solid transparent; font-size: var(--fs-sm); }
+.lb-row--p1 { border-color: rgba(255, 201, 60, 0.55); background: linear-gradient(90deg, rgba(255, 201, 60, 0.12), var(--bg-elev) 60%); }
+.lb-row--p2 { border-color: rgba(203, 213, 225, 0.4); background: linear-gradient(90deg, rgba(203, 213, 225, 0.1), var(--bg-elev) 60%); }
+.lb-row--p3 { border-color: rgba(217, 140, 87, 0.45); background: linear-gradient(90deg, rgba(217, 140, 87, 0.12), var(--bg-elev) 60%); }
+.lb-row--mine { outline: 2px solid var(--accent); outline-offset: -2px; }
+.lb-rank { text-align: center; color: var(--text-2); font-weight: 650; }
+.lb-medal { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font-size: var(--fs-xs); font-weight: 800; color: #1b1400; }
+.lb-medal--1 { background: var(--accent); }
+.lb-medal--2 { background: #cbd5e1; }
+.lb-medal--3 { background: #d98c57; }
+.lb-name { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.lb-title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-you { color: var(--accent); font-weight: 700; }
+.lb-sub { display: flex; gap: 6px; align-items: center; color: var(--text-3); font-size: var(--fs-xs); flex-wrap: wrap; }
+.lb-worth { text-align: right; color: var(--text-2); }
+.lb-prize { text-align: right; font-weight: 700; display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; }
+.lb-test { font-size: 10px; font-weight: 500; color: var(--text-3); }
+.lb-note { margin: 6px 0 0; }
+
+.end-hero { text-align: center; padding: var(--s-6) var(--s-4); }
+.end-place { font-size: 64px; font-weight: 800; line-height: 1; color: var(--accent); letter-spacing: -0.03em; }
+.end-loss { display: flex; flex-direction: column; gap: var(--s-2); padding: var(--s-3); border-radius: var(--r-2); background: var(--bg-elev); border: 1px solid var(--border); }
+.end-loss__head { display: flex; align-items: baseline; gap: var(--s-2); }
+.end-list { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
