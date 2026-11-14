@@ -26,7 +26,7 @@ export function CityMapSlot(props: CityMapProps) {
   if (import.meta.env.MODE === 'test') return <StubCityMap {...props} />;
   const { height = 240, selectedPlaceId: _selected, ...rest } = props;
   return (
-    <div style={{ height, borderRadius: 16, overflow: 'hidden' }}>
+    <div className="glass-frame" style={{ height }}>
       <CityMap {...rest} intro={false} />
     </div>
   );
