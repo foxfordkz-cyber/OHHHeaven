@@ -882,7 +882,7 @@
       "kind": "permit",
       "path": "cart",
       "order": 29,
-      "text": "New year-round cart permits go only to holders of a supervisory license, handed out from a waiting list. The city adds 2,200 a year from July 2026 through 2031; advocates count more than 20,000 people waiting. A restricted-area permit for private property or a park is outside that waiting list.",
+      "text": "New year-round cart permits go only to holders of a supervisory license, handed out from a waiting list. The city adds 2,200 a year from July 2026 through 2031; advocates count more than 20,000 people waiting. A Restricted Area permit for private property has no waiting list.",
       "setupItemId": "mobile_food_unit_permit",
       "fee": 75,
       "waitDays": 180,
@@ -1151,6 +1151,629 @@
       "title": "A kiosk in a park",
       "text": "A park kiosk or cart is a city concession won through a public request for proposals. The operator pays the higher of a guaranteed minimum yearly fee or a share of gross receipts: one 2024 agreement set $40,000 against 4% in year one.",
       "source": "https://a856-cityrecord.nyc.gov/RequestDetail/20240628149"
+    }
+  ],
+  "monthlyCosts": [
+    {
+      "id": "rent_step_up",
+      "name": "Yearly rent increase written into the lease",
+      "kind": "rent",
+      "basis": "fixed",
+      "amount": 180,
+      "fromMonth": 13,
+      "costBasis": "pct_of_rent",
+      "rate": 0.03,
+      "compounding": true,
+      "source": "https://www.metro-manhattan.com/blog/rentescalations",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "A fixed yearly percentage increase is the most common escalation in NYC leases, typically about 3% (two broker sources); it compounds, so $100 per sq ft becomes about $130 in year ten. 3% x $6,000 = $180 a month from month 13, $365 from month 25. Zero in the first lease year."
+    },
+    {
+      "id": "real_estate_tax_escalation",
+      "name": "Share of the building's property-tax increase (additional rent)",
+      "kind": "rent",
+      "basis": "fixed",
+      "amount": 60,
+      "fromMonth": "first July after signing",
+      "billedIn": [
+        7,
+        1
+      ],
+      "source": "https://www.carltonfields.com/leasing-retail-stores-in-new-york-city/",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "Law-firm guides: NYC store tenants usually pay their proportionate share of the building's real estate tax above a base year; a broker site says that on an older building with high taxes the pass-through can add $10-$20 per sq ft a year over time. Calculation for year one: tax attributable to an 800 sq ft store taken as $18 per sq ft a year ($14,400), growing 5% in the new city fiscal year = $720 a year = $60 a month. Both the $18 and the 5% are my assumptions; the real figure is in the lease and in the building's tax bill. City property-tax bills run on a July 1 fiscal year."
+    },
+    {
+      "id": "letter_of_credit_fee",
+      "name": "Bank fee for a letter of credit posted as the lease deposit",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 23,
+      "costBasis": "pct_of_deposit_per_year",
+      "rate": 0.015,
+      "appliesIf": "the deposit is posted as a standby letter of credit instead of cash",
+      "source": "https://corporate.findlaw.com/business-operations/security-deposit-concerns-for-the-thoughtful-tenant.html",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "Lease guides put the yearly bank fee for a standby letter of credit at about 0.75-1.5% of its amount (others say 1-2%), plus an issuance fee; a new business must usually back it with cash, it is renewed every year and takes 2-3 weeks to issue (NYC broker sources). 1.5% x $18,000 = $270 a year = $23 a month. No bank rate sheet was seen."
+    },
+    {
+      "id": "franchise_royalty",
+      "name": "Franchise royalty",
+      "kind": "fees",
+      "basis": "pct_revenue",
+      "amount": 0.06,
+      "appliesTo": [
+        "franchise"
+      ],
+      "source": "https://franchise.gregoryscoffee.com/",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Gregorys Coffee franchise site, seen in extract: royalty 6% of gross sales. Dunkin': 5.9% (several summaries of its disclosure document); Scooter's Coffee: 6% (2026 disclosure document summary). At the reference $51,000 a month this is $3,060."
+    },
+    {
+      "id": "franchise_marketing_fund",
+      "name": "Franchise marketing fund",
+      "kind": "marketing",
+      "basis": "pct_revenue",
+      "amount": 0.025,
+      "appliesTo": [
+        "franchise"
+      ],
+      "source": "https://americasbestfranchises.com/franchises/gregorys-coffee/",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "Franchise directory summary of the Gregorys Coffee disclosure document: 2.5% of gross sales to the marketing fund on top of the royalty. Dunkin' charges 5% for advertising. At $51,000 a month: $1,275."
+    },
+    {
+      "id": "commissary_fee",
+      "name": "Commissary: overnight storage, cleaning, water and supplies for a cart",
+      "kind": "other",
+      "basis": "fixed",
+      "amount": 600,
+      "appliesTo": [
+        "cart"
+      ],
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "The rule is from the Health Department page (seen in extract): a cart must be stored at a permitted commissary and return at least once a day; the agreement is checked at the pre-permit inspection. The price is not official: a 2013/2018 Untapped Cities report gave $250-$300 a month for a garage space; 2026 vendor guides quote $300-$600 for basic access and $500-$1,500 for full service. $600 is my planning value between them."
+    },
+    {
+      "id": "supervisory_license_renewal",
+      "name": "Supervisory license renewal (cart)",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 18.25,
+      "appliesTo": [
+        "cart"
+      ],
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/supervisory-licenses-what-vendors-need-to-know.pdf",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Health Department guidance, seen in extract: the first supervisory license is issued without a fee; renewing it for two years costs $438 (veterans exempt). $438 / 24 = $18.25 a month. An older 2022 notice listed $230."
+    }
+  ],
+  "levers": [
+    {
+      "id": "guaranty_type",
+      "name": "Personal guaranty",
+      "phase": "lease",
+      "oneTime": true,
+      "note": "Legal mechanics are real (good guy guaranty: liability ends at surrender after written notice, typically 3-6 months; full guaranty: liability for the remaining term; deposits of 3-6 months with credit, 6-12 months for startups and restaurants). The mapping of deposit months to each option is a design value built from those ranges.",
+      "source": "https://www.bisnow.com/new-york/news/other/key-considerations-for-determining-the-appropriate-security-deposit-and-good-guy-guarantee-77148",
+      "options": [
+        {
+          "id": "good_guy",
+          "label": "Good guy guaranty, 6-month notice, deposit of 4 months",
+          "monthlyCost": 0,
+          "effects": {
+            "depositMonths": 4,
+            "exitNoticeMonths": 6,
+            "exitLiability": "rent_until_surrender"
+          }
+        },
+        {
+          "id": "full_personal",
+          "label": "Full personal guaranty, deposit of 3 months",
+          "monthlyCost": 0,
+          "effects": {
+            "depositMonths": 3,
+            "exitLiability": "remaining_lease_rent"
+          }
+        },
+        {
+          "id": "no_guaranty_big_deposit",
+          "label": "No guaranty, deposit of 9 months",
+          "monthlyCost": 0,
+          "effects": {
+            "depositMonths": 9,
+            "exitLiability": "deposit_only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "free_rent_deal",
+      "name": "Free rent for the build-out",
+      "phase": "lease",
+      "oneTime": true,
+      "note": "Real range: NYC restaurant leases typically give 3-6 months of free rent, up to 12 for heavy build-outs on a 10-year lease. The 4% rent premium for the longer concession and the permit-tied start are design values: landlords price free rent into the face rent, but no public rate exists.",
+      "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+      "options": [
+        {
+          "id": "three_months",
+          "label": "Three months free, standard rent",
+          "monthlyCost": 0,
+          "effects": {
+            "freeRentMonths": 3
+          }
+        },
+        {
+          "id": "six_months_higher_rent",
+          "label": "Six months free, rent 4% higher for the whole term",
+          "monthlyCost": 240,
+          "effects": {
+            "freeRentMonths": 6,
+            "rent": 1.04
+          }
+        },
+        {
+          "id": "starts_with_permits",
+          "label": "Rent starts when the Buildings permit is issued, then three months free, rent 2% higher",
+          "monthlyCost": 120,
+          "effects": {
+            "freeRentMonths": 3,
+            "freeRentStartsAt": "dob_permit_issued",
+            "rent": 1.02
+          }
+        }
+      ]
+    },
+    {
+      "id": "site_due_diligence",
+      "name": "Checks before signing the lease",
+      "phase": "before_lease",
+      "oneTime": true,
+      "note": "The survey price is my estimate (an architect or engineer and an electrician for half a day each); no public fee was found. The game effect is real-world logic: every hidden attribute of the address (year built, landmark, Certificate of Occupancy, panel size, prior use, building arrears) is public record or visible on a walk-through.",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/do-i-need-a-permit.page",
+      "options": [
+        {
+          "id": "sign_fast",
+          "label": "Sign this week before someone else takes it",
+          "monthlyCost": 0,
+          "effects": {
+            "hiddenAttributesRevealed": false
+          }
+        },
+        {
+          "id": "survey_first",
+          "label": "Records search and walk-through with an architect and an electrician ($2,500)",
+          "monthlyCost": 0,
+          "oneTimeCost": 2500,
+          "effects": {
+            "hiddenAttributesRevealed": true,
+            "leaseSigningDelayDays": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "utility_concept",
+      "name": "Gas or all-electric",
+      "phase": "design",
+      "oneTime": true,
+      "note": "Gas wait: NY State Senate survey of city restaurants (2017), average about 68 days, 69% at least 30 days, some up to a year. All-electric removes the gas track but can force a larger electrical service (see electrical_service_upgrade).",
+      "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+      "options": [
+        {
+          "id": "all_electric",
+          "label": "All-electric: espresso, ovens and water heater on electricity",
+          "monthlyCost": 0,
+          "effects": {
+            "gasWaitDays": 0,
+            "electricalLoad": 1.3
+          }
+        },
+        {
+          "id": "gas_equipment",
+          "label": "Gas for the water heater and an oven",
+          "monthlyCost": 0,
+          "effects": {
+            "gasWaitDays": 68,
+            "electricalLoad": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "contractor_choice",
+      "name": "Which contractor",
+      "phase": "construction",
+      "oneTime": true,
+      "note": "The price gap and the schedule effects are design values. The underlying facts are real: licensed trades are mandatory, a contractor's unpaid subcontractor can lien the property for 8 months, and the tenant who hires the crew can be liable under Labor Law 240 if a worker falls.",
+      "source": "https://www.levelset.com/mechanics-lien/new-york-lien-law-faqs",
+      "options": [
+        {
+          "id": "food_service_specialist",
+          "label": "Contractor who builds cafes: insured, milestone payments, lien waivers",
+          "monthlyCost": 0,
+          "effects": {
+            "buildoutCost": 1,
+            "changeOrderShare": 0.05
+          }
+        },
+        {
+          "id": "lowest_bid",
+          "label": "Lowest bid, 12% cheaper, half the money up front",
+          "monthlyCost": 0,
+          "effects": {
+            "buildoutCost": 0.88,
+            "changeOrderShare": 0.2,
+            "lienRisk": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "contingency_level",
+      "name": "Build-out contingency",
+      "phase": "construction",
+      "oneTime": true,
+      "note": "Contractor guidance: 10-15% of hard costs (another contractor: 5-10%); a Spanish-language NYC guide advises 20%. Changes forced through with no reserve cost a 15-30% premium.",
+      "source": "https://blueberrybuilders.com/resources/cost-overruns-in-construction/",
+      "options": [
+        {
+          "id": "thin",
+          "label": "Keep 5% in reserve",
+          "monthlyCost": 0,
+          "effects": {
+            "contingencyPct": 0.05,
+            "changeOrderPremium": 1.3
+          }
+        },
+        {
+          "id": "standard",
+          "label": "Keep 15% in reserve",
+          "monthlyCost": 0,
+          "effects": {
+            "contingencyPct": 0.15,
+            "changeOrderPremium": 1
+          }
+        },
+        {
+          "id": "fat",
+          "label": "Keep 20% in reserve",
+          "monthlyCost": 0,
+          "effects": {
+            "contingencyPct": 0.2,
+            "changeOrderPremium": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "construction_pace",
+      "name": "Construction pace",
+      "phase": "construction",
+      "note": "After-hours variance fees are from the Buildings Department (seen in extract): filing fee $650 for 13-14 days plus $80 for each day of work. Two 14-day variances a month = 2 x (650 + 14 x 80) = $3,540; overtime premium on labor is my estimate ($2,200 a month: half of the labor on a $70,000 job, a quarter more hours at time and a half). The 25% shorter schedule is a design value.",
+      "source": "https://www.nyc.gov/site/buildings/industry/ahvs-renewal-guidelines-fees.page",
+      "options": [
+        {
+          "id": "standard_hours",
+          "label": "Weekdays, regular hours",
+          "monthlyCost": 0,
+          "effects": {
+            "buildoutDays": 1
+          }
+        },
+        {
+          "id": "after_hours",
+          "label": "Evenings and weekends with an after-hours variance",
+          "monthlyCost": 5740,
+          "effects": {
+            "buildoutDays": 0.75
+          }
+        }
+      ]
+    },
+    {
+      "id": "opening_mode",
+      "name": "How you open",
+      "phase": "opening",
+      "oneTime": true,
+      "note": "The $100 consultative inspection is real (Health Code Chapter 21; only after food service has begun and before the first graded inspection). The size of the effect on inspection points is a design value.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02955",
+      "options": [
+        {
+          "id": "grand_opening",
+          "label": "Grand opening on day one",
+          "monthlyCost": 0,
+          "effects": {
+            "awareness": 0.05
+          }
+        },
+        {
+          "id": "soft_open_with_consult",
+          "label": "Two quiet weeks and a $100 consultative inspection",
+          "monthlyCost": 0,
+          "oneTimeCost": 100,
+          "effects": {
+            "firstInspectionPoints": 0.6
+          }
+        }
+      ]
+    },
+    {
+      "id": "takeover_due_diligence",
+      "name": "Checks before buying a business",
+      "phase": "closing",
+      "oneTime": true,
+      "appliesTo": [
+        "takeover",
+        "asset_sale"
+      ],
+      "note": "Fee: New York guides put legal fees for a small business purchase at $1,800-$10,000 (another: $3,500-$25,000 for small and mid-sized sales); $6,000 covers the lawyer and an accountant matching register reports to bank deposits. What the review reveals is real: seller's sales-tax debt (bulk sale answer), liens on equipment, lease term left, true sales.",
+      "source": "https://lawyerforbusiness.com/how-much-does-business-sale-lawyer-cost-ny/",
+      "options": [
+        {
+          "id": "trust_the_listing",
+          "label": "Trust the listing and the seller's word",
+          "monthlyCost": 0,
+          "effects": {
+            "listingHiddenFactsRevealed": false
+          }
+        },
+        {
+          "id": "full_review",
+          "label": "Lawyer, accountant, lien search and bulk-sale notice ($6,000)",
+          "monthlyCost": 0,
+          "oneTimeCost": 6000,
+          "effects": {
+            "listingHiddenFactsRevealed": true,
+            "closingDelayDays": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "takeover_permit_timing",
+      "name": "When to apply for your own permits",
+      "phase": "closing",
+      "oneTime": true,
+      "appliesTo": [
+        "takeover"
+      ],
+      "note": "NYC Business: a new applicant may open on the 22nd day after submitting the application; Health Code §5.11 voids the seller's permit on transfer. Applying before closing costs nothing and removes the gap.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "options": [
+        {
+          "id": "apply_before_closing",
+          "label": "Apply 22 days before closing; the seller trades until the handover",
+          "monthlyCost": 0,
+          "effects": {
+            "closureDaysAtTakeover": 0
+          }
+        },
+        {
+          "id": "apply_at_closing",
+          "label": "Apply on closing day and stay shut until day 22",
+          "monthlyCost": 0,
+          "effects": {
+            "closureDaysAtTakeover": 22
+          }
+        }
+      ]
+    },
+    {
+      "id": "takeover_transition",
+      "name": "First month after buying",
+      "phase": "closing",
+      "oneTime": true,
+      "appliesTo": [
+        "takeover"
+      ],
+      "note": "Design values. The research branch keeps 90% of regulars at a takeover; the split between a quiet handover and an immediate rebrand is mine. Seller training of 2-4 weeks is usual in business sales but no figure was sourced.",
+      "source": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
+      "options": [
+        {
+          "id": "keep_team_and_menu",
+          "label": "Keep the staff, the menu and the name for now",
+          "monthlyCost": 0,
+          "effects": {
+            "awareness": 0.9
+          }
+        },
+        {
+          "id": "rebrand_now",
+          "label": "New name, new menu, new team from day one",
+          "monthlyCost": 0,
+          "oneTimeCost": 5000,
+          "effects": {
+            "awareness": 0.6,
+            "quality": 0.02
+          }
+        }
+      ]
+    },
+    {
+      "id": "cart_site",
+      "name": "Where the cart stands",
+      "appliesTo": [
+        "cart"
+      ],
+      "note": "Rule from NYC Business and Health Code Article 89 (seen in extract): a Restricted Area permit lets a cart vend on private, commercially zoned property or Parks land under a written agreement with the owner; it has no waiting list and no cap, but the sidewalk in front of the building is public space and not covered. The $1,500 site rent is a design value: no public figure exists.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit",
+      "options": [
+        {
+          "id": "public_sidewalk",
+          "label": "Public sidewalk (needs a capped citywide permit)",
+          "monthlyCost": 0,
+          "effects": {
+            "needsSupervisoryLicense": true,
+            "footTraffic": 1
+          }
+        },
+        {
+          "id": "private_lot",
+          "label": "Private plaza or lot under a written agreement (no waiting list)",
+          "monthlyCost": 1500,
+          "effects": {
+            "needsSupervisoryLicense": false,
+            "footTraffic": 0.6
+          }
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "dob_review_slowdown",
+      "name": "Buildings permits slow down",
+      "text": "The Department of Buildings is taking longer to approve plans this season. Anyone still waiting for a permit waits a few days more.",
+      "effect": {
+        "field": "permitWaitDays",
+        "mult": 1.16
+      },
+      "months": 4,
+      "scale": "city",
+      "source": "https://www.osc.ny.gov/press/releases/2026/07/dinapoli-nyc-department-buildings-meets-critical-goals-lags-lower-priority-issues",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYS Comptroller audit release (July 2026), seen in extract: application-to-approval averaged 20.3 days in 2025 and rose to 23.6 days in the first four months of fiscal 2026: 23.6 / 20.3 = 1.16. New field permitWaitDays: needs engine support."
+    },
+    {
+      "id": "fit_out_cost_inflation",
+      "name": "Construction costs up 7%",
+      "text": "Contractors in New York are quoting more than last year. A build-out not yet under contract costs more.",
+      "effect": {
+        "field": "buildoutCost",
+        "mult": 1.07
+      },
+      "months": 12,
+      "scale": "city",
+      "source": "https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Cushman & Wakefield 2026 Retail Fit-Out Cost Guide, seen in extract: New York City in-line retail fit-outs rose 7.0% year over year to $181 per sq ft (national average $157, up 1.4%). That figure is plain retail, not food service. New field buildoutCost: applies to contracts signed while the event is active."
+    },
+    {
+      "id": "eu_equipment_tariff",
+      "name": "Tariff on European espresso machines",
+      "text": "Italian machines and grinders carry a 15% import tariff. Dealers pass it on to new orders.",
+      "effect": {
+        "field": "equipmentCost",
+        "mult": 1.15
+      },
+      "months": 12,
+      "scale": "country",
+      "source": "https://dailycoffeenews.com/2025/09/05/delonghis-computer-that-makes-coffee-trolls-u-s-tariffs",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "Trade press, seen in extract: since late July 2025 the United States applies a 15% tariff to goods from the European Union, appliances included. Full pass-through to the price of imported espresso machines and grinders is my assumption (upper bound); some dealers absorbed part of it. New field equipmentCost: applies to imported setup items bought while active."
+    },
+    {
+      "id": "storefront_vacancy_high",
+      "name": "One storefront in nine is empty",
+      "text": "Landlords with empty stores are giving more free rent to sign a tenant. Leases signed now start cheaper.",
+      "effect": {
+        "field": "freeRentMonths",
+        "mult": 1.33
+      },
+      "months": 6,
+      "scale": "city",
+      "source": "https://comptroller.nyc.gov/reports/whos-minding-the-storefronts/",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYC Comptroller, seen in extract: citywide storefront vacancy 11.0% on April 15, 2026 (Manhattan 12.9%, Brooklyn 12.3%, Queens 9.5%, Financial District 21.1%). The effect is a design value: one extra free month on a three-month concession (x1.33) in districts above the city average. New field freeRentMonths."
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "business_brokers_listings",
+      "category": "Shops for sale",
+      "what": "Listings of operating coffee shops and built-out spaces offered for key money, with asking price, stated sales and cash flow",
+      "whereToFind": "BizBuySell and BizQuest (filter New York, coffee shops and cafes); restaurant brokers; signs in windows; ask your roaster who is selling",
+      "examples": "BizBuySell, BizQuest, LoopNet",
+      "link": "https://www.bizbuysell.com/new-york/coffee-shops-and-cafes-for-sale/",
+      "source": "https://www.bizbuysell.com/new-york/coffee-shops-and-cafes-for-sale/",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Asking prices seen in November 2026 extracts: Sunnyside cafe $385,000 with $150,000 stated cash flow; 40-year-old Queens coffee shop $235,000 / $145,000; 558 sq ft Brooklyn cafe $125,000 / $71,157 with seller financing; a cafe at $120,000 / $40,126. Asking prices, not closed sales."
+    },
+    {
+      "id": "lease_and_deal_lawyer",
+      "category": "Lease and purchase lawyer",
+      "what": "Commercial lease review and negotiation; asset purchase agreement, bulk-sale notice and escrow when buying a shop",
+      "whereToFind": "Free: NYC Commercial Lease Assistance Program (888-SBS-4NYC). Paid: restaurant and hospitality law firms; ask for a flat fee and what it covers",
+      "examples": "NYC Small Business Services legal providers",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/business-services/legal-assistance/commercial-lease-assistance-program",
+      "source": "https://lawyerforbusiness.com/how-much-does-business-sale-lawyer-cost-ny/",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "New York guides: legal fees for a small business purchase about $1,800-$10,000; one firm publishes 0.85% of the deal with a $1,800 minimum. The pack budgets $3,500 for a lease lawyer."
+    },
+    {
+      "id": "expediter_and_asbestos",
+      "category": "Permit expediter and asbestos investigator",
+      "what": "Filing representative for Department of Buildings and Landmarks applications; certified asbestos investigator for the ACP-5 report",
+      "whereToFind": "Your architect brings both; the Department of Environmental Protection lists certified asbestos investigators; ask other shop owners on the block",
+      "examples": "Registered filing representatives; DEP-certified asbestos investigators",
+      "link": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+      "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Only a certified asbestos investigator may file an ACP-5; survey prices of $400-$1,500 are from secondary guides."
+    },
+    {
+      "id": "city_free_help",
+      "category": "Free city help to open",
+      "what": "A project manager who maps your permits and coordinates pre-opening inspections; free lease review; free energy survey with equipment incentives",
+      "whereToFind": "NYC Business Express Service Team (NYC BEST) through Small Business Services; Con Edison small business program",
+      "examples": "NYC BEST, Commercial Lease Assistance Program, Con Edison Small Business Direct Install",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/small-business-energy-efficiency-program",
+      "source": "https://www.nyc.gov/mayors-office/news/2026/07/executive-order-no--18.html",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Executive Order 18 (July 20, 2026) orders a dedicated project manager for each NYC BEST client. Con Edison's 2026 small-business factsheet says incentives may cover up to 100% of eligible cost for lighting, refrigeration and HVAC upgrades."
+    },
+    {
+      "id": "franchisors",
+      "category": "Coffee franchises",
+      "what": "A brand, a design and a supply chain in exchange for a fee, a royalty and control over your build-out",
+      "whereToFind": "The franchisor's own franchise site; the disclosure document; franchisees listed in Item 20",
+      "examples": "Gregorys Coffee, Dunkin', Caffe Aronne",
+      "link": "https://www.ftc.gov/business-guidance/resources/consumers-guide-buying-franchise",
+      "source": "https://franchise.gregoryscoffee.com/",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Total initial investment from disclosure-document summaries: Gregorys Coffee $459,150-$946,000; Dunkin' $443,000-$1,832,500; Caffe Aronne $98,000-$268,000 (aggregator figures). Starbucks does not franchise."
+    },
+    {
+      "id": "cart_builders_commissaries",
+      "category": "Carts and commissaries",
+      "what": "A cart built to Health Department rules and a permitted commissary to store, clean and supply it",
+      "whereToFind": "Cart makers in Queens and Brooklyn; the Health Department's list of permitted commissaries; other vendors at the commissary gate",
+      "examples": "800 Buy Cart (New York-built carts from $5,790)",
+      "link": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+      "source": "https://www.800buycart.com/?p=740",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "Cart price points seen: hot dog cart from $5,790; a full-service stainless coffee cart listed at $16,500. Commissary prices are not published."
+    },
+    {
+      "id": "markets_and_concessions",
+      "category": "Markets, pop-ups and park kiosks",
+      "what": "A stall at a seasonal food market, or a city concession for a kiosk or cart in a park",
+      "whereToFind": "Market operators' vendor applications; NYC Parks concession opportunities and the City Record for requests for proposals",
+      "examples": "Smorgasburg (Williamsburg, Prospect Park, World Trade Center); Battery kiosks",
+      "link": "https://prd2.nycgovparks.org/opportunities/concessions/rfps-rfbs-rfeis",
+      "source": "https://a856-cityrecord.nyc.gov/RequestDetail/20240628149",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Parks concessions pay the greater of a guaranteed minimum yearly fee or a percentage of gross receipts (one 2024 agreement: $40,000 against 4% in year one). Market stall fees were not found in this session."
     }
   ],
   "extra": {}
