@@ -6,7 +6,7 @@ import { baselineOrdersDay, overlap } from '../../shared/src/place';
 import { FIRST, LAST, businessName } from './names';
 import { officialSight, ownerSight, type OwnerSight } from './observe';
 import { hashStr, mulberry32, rngFor, shuffle } from './rng';
-import { lastsThroughRamp, runwayOf } from './runway';
+import { lastsThroughRamp, obviouslyShort, runwayOf } from './runway';
 import { OFFICIAL_PROFILES, OWNER_STRATEGIES, PROFILES, officialStrategyFromName, ownerStrategyFromName, type OfficialStrategy, type OwnerProfile, type OwnerStrategy } from './strategies';
 import type { EngineCtx } from './__stubs__/engine';
 import { recommendOpening as stubRecommendOpening, recommendedPrice as stubRecommendedPrice } from './__stubs__/engine';
@@ -185,6 +185,7 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     for (let tries = 0; tries < 40; tries++) {
       const p = choosePlace(ctx, sight.me.name, niche, profile, occupied);
       if (!p) break;
+      if (careful && obviouslyShort(ctx, niche, p)) { occupied.add(p.id); continue; }
       const r = recommend(niche, p.id, w, ctx).filter((x) => x.cashLeft >= 0 && (!careful || lastsThroughRamp(runwayOf(ctx, niche, p, x, rivals(p)))));
       if (r.length) { place = p; recs = r; break; }
       occupied.add(p.id);
