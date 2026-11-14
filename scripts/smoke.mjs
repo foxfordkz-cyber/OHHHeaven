@@ -224,7 +224,10 @@ const run = {
     }, ctx.clock ? 40_000 : 30 * 2_000, 250);
     if (ctx.clock) await clock({ paused: true });
     must(got, 'no inspection result within the wait');
-    if (got.notice && got.notice.status === 'notice') ack(await action(ctx.b.token, { type: 'answer_notice', caseId: got.notice.caseId, response: 'pay' }), 'answer_notice');
+    // the clock ran between the poll and the pause: silence already counts as "pay" once the answer window closed,
+    // so read the notice again and answer only if it is still waiting
+    const still = got.notice ? (await view(ctx.b.token)).notices?.find((n) => n.caseId === got.notice.caseId) : null;
+    if (still && still.status === 'notice') ack(await action(ctx.b.token, { type: 'answer_notice', caseId: still.caseId, response: 'pay' }), 'answer_notice');
     const inboxB = (await view(ctx.b.token)).me.inbox ?? [];
     must(got.warned || inboxB.some((m) => m.kind === 'case'), 'owner 2 got no case notification');
     return got.notice ? `notice: fine ${Math.round(got.notice.fine)} for ${got.notice.found.length} violation(s) (${got.notice.found.map((f) => f.violationId).join(', ')})` : `clean inspection, reporter warned: "${got.warned.title}"`;
