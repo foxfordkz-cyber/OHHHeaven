@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { Map as MapLibreMap, Marker, setWorkerUrl, type GeoJSONSource, type MapLayerMouseEvent } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { BusinessCard, type BusinessCta } from './BusinessCard';
 import './map.css';
 import offlineImageUrl from '../../../data/offline-map.png';
 import offlineMeta from '../../../data/offline-map.json';
@@ -31,6 +32,14 @@ export interface CityMapProps {
   niche?: NicheId;
   onPick?: (placeId: string) => void;
   onOpenBusiness?: (businessId: string) => void;
+  /** Live mode: the button on the card that opens when a business is tapped. */
+  businessCta?: BusinessCta;
+  /** Shows an "expand" button (the caller opens the full-screen map). */
+  onExpand?: () => void;
+  /** Open this business's card right away (full-screen map opened from a tap elsewhere). */
+  initialBusinessId?: string;
+  /** The map sits inside a scrolling page: scroll and one finger move the page, ctrl+scroll or two fingers move the map. */
+  embedded?: boolean;
   /** Today's game day: filters events and weather. Without it every event passed in is shown. */
   day?: number;
   /** Lit streets: blocks whose fund is active this month. */
@@ -171,7 +180,7 @@ function declutter(map: MapLibreMap, pins: Map<string, Marker>, markers: BizMark
 
 export function CityMap(props: CityMapProps) {
   const {
-    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness,
+    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness, businessCta, onExpand, embedded = false, initialBusinessId,
     blockFunds, packs, realBusinesses, offline: forceOffline = false, intro = true, orbit = false, className, style,
   } = props;
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -181,9 +190,13 @@ export function CityMap(props: CityMapProps) {
   const markersRef = useRef<BizMarker[]>([]);
   const handlersRef = useRef({ onPick, onOpenBusiness, mode });
   handlersRef.current = { onPick, onOpenBusiness, mode };
+  const openBusiness = (id: string) => { setOpenBiz(id); handlersRef.current.onOpenBusiness?.(id); };
+  const openBusinessRef = useRef(openBusiness);
+  openBusinessRef.current = openBusiness;
   const [styleEpoch, setStyleEpoch] = useState(0);
   const [offline, setOffline] = useState(forceOffline || (typeof navigator !== 'undefined' && navigator.onLine === false));
   const [selected, setSelected] = useState<string | null>(null);
+  const [openBiz, setOpenBiz] = useState<string | null>(initialBusinessId ?? null);
   const [zoomedOut, setZoomedOut] = useState(true);
 
   const segments = useMemo(() => blockSegments(places), [places]);
@@ -198,6 +211,7 @@ export function CityMap(props: CityMapProps) {
   const wx = todayWeather(weather, day);
   const live = useMemo(() => liveEvents(events, day), [events, day]);
   const selectedPlace = selected ? places.find((p) => p.id === selected) ?? null : null;
+  const openBizItem = openBiz ? businesses.find((x) => x.id === openBiz) ?? null : null;
 
   // create the map once
   useEffect(() => {
@@ -217,6 +231,7 @@ export function CityMap(props: CityMapProps) {
       maxPitch: 65, minZoom: 12.8, maxZoom: 19,
       maxBounds: MAX_BOUNDS,
       attributionControl: { compact: true },
+      cooperativeGestures: embedded,
       pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
       fadeDuration: 0,
       canvasContextAttributes: { antialias: !isSmallScreen() },
@@ -247,7 +262,7 @@ export function CityMap(props: CityMapProps) {
     map.on('click', 'ohh-biz-dot', (e: MapLayerMouseEvent) => {
       if (handlersRef.current.mode !== 'live') return;
       const id = e.features?.[0]?.properties?.id;
-      if (typeof id === 'string') handlersRef.current.onOpenBusiness?.(id);
+      if (typeof id === 'string') openBusinessRef.current(id);
     });
     for (const layer of ['ohh-places-hit', 'ohh-biz-dot']) {
       map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
@@ -336,7 +351,7 @@ export function CityMap(props: CityMapProps) {
     for (const m of wanted) {
       const existing = pins.get(m.id);
       if (existing) { existing.setLngLat([m.lng, m.lat]); updatePin(existing.getElement(), m); continue; }
-      const marker = new Marker({ element: pinElement(m, (id) => handlersRef.current.onOpenBusiness?.(id)), anchor: 'bottom', offset: [0, -10] })
+      const marker = new Marker({ element: pinElement(m, (id) => openBusinessRef.current(id)), anchor: 'bottom', offset: [0, -10] })
         .setLngLat([m.lng, m.lat]).addTo(map);
       pins.set(m.id, marker);
     }
@@ -391,6 +406,25 @@ export function CityMap(props: CityMapProps) {
         <ul className="cm-legend" aria-label="Legend">
           {legend.map((l) => <li key={l.label}><i style={{ background: l.color }} />{l.label}</li>)}
         </ul>
+      )}
+      <div className="cm-ctl" role="group" aria-label="Map controls">
+        {onExpand && (
+          <button type="button" className="cm-ctl__btn" onClick={onExpand} aria-label="Open the full map" title="Open the full map">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
+          </button>
+        )}
+        <button type="button" className="cm-ctl__btn" onClick={() => mapRef.current?.zoomIn({ duration: 320 })} aria-label="Zoom in" title="Zoom in">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+        </button>
+        <button type="button" className="cm-ctl__btn" onClick={() => mapRef.current?.zoomOut({ duration: 320 })} aria-label="Zoom out" title="Zoom out">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M5 12h14" /></svg>
+        </button>
+      </div>
+      {mode === 'live' && !embedded && openBizItem && (
+        <BusinessCard
+          business={openBizItem} place={places.find((p) => p.id === openBizItem.placeId)} mine={openBizItem.id === myBusinessId}
+          cta={businessCta} onClose={() => setOpenBiz(null)}
+        />
       )}
       {mode === 'pick' && selectedPlace && (
         <PlaceCard

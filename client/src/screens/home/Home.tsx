@@ -29,6 +29,7 @@ export function Home() {
   const view = useView();
   const { status, mode } = useStoreState();
   const catalog = useCatalog();
+  const navigate = useNavigate();
 
   if (!view) {
     return (
@@ -45,7 +46,7 @@ export function Home() {
   return (
     <main className="screen home">
       <CityStrip view={view} />
-      <CityMapSlot mode="live" places={catalog?.places ?? []} businesses={businesses} myBusinessId={ownerWithBusiness?.business?.id} weather={view.weather[0]} events={view.events} height={230} />
+      <CityMapSlot mode="live" places={catalog?.places ?? []} businesses={businesses} myBusinessId={ownerWithBusiness?.business?.id} weather={view.weather[0]} events={view.events} height={300} embedded onExpand={() => navigate('/map')} onOpenBusiness={(id) => navigate('/map?b=' + encodeURIComponent(id))} />
       {view.kind === 'city' || (view.kind === 'owner' && !view.business) ? (
         <>
           {view.kind === 'owner' && <ContinueCard />}

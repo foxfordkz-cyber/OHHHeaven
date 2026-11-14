@@ -1,0 +1,12 @@
+.map-screen { position: fixed; inset: 0; }
+.map-screen--loading { display: grid; place-items: center; color: var(--text-2); }
+.map-screen .cm-root { height: 100dvh; min-height: 0; }
+.map-screen__back {
+  position: absolute; z-index: 6; left: 12px; top: calc(12px + env(safe-area-inset-top, 0px));
+  width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; cursor: pointer; color: var(--text);
+  background: var(--glass-thick); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-stroke); box-shadow: var(--glass-edge), var(--glass-shadow-float);
+  transition: transform var(--t-med) var(--ease-bounce);
+}
+.map-screen__back:active { transform: scale(0.92); }
+.map-screen .cm-top { left: 68px; }

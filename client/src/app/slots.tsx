@@ -15,6 +15,14 @@ export interface CityMapProps {
   niche?: NicheId;
   onPick?: (placeId: string) => void;
   onOpenBusiness?: (businessId: string) => void;
+  /** live mode: the button on the card of a tapped business */
+  businessCta?: { label: string; onClick: (businessId: string) => void };
+  /** shows the expand button; the caller opens the full-screen map */
+  onExpand?: () => void;
+  /** the map sits inside a scrolling page */
+  embedded?: boolean;
+  /** open this business's card right away */
+  initialBusinessId?: string;
   /** stand-in only: height in px */
   height?: number;
   /** stand-in only: highlighted place in pick mode */
