@@ -1,7 +1,8 @@
 // The return brief as pure functions of OwnerView: what changed since the last look, the one decision
 // that waits today and when the next month report lands. No new fields: everything comes from the view.
-import type { Action, CaseNotice, Deal, DealTerms, FeedItem, InboxItem, MonthReport, Money, OwnerView, Standing } from '@ohh/shared/types';
+import type { Action, CaseNotice, Deal, DealTerms, FeedItem, InboxItem, MonthReport, Money, OwnerView, Place, Standing } from '@ohh/shared/types';
 import { RULES, dateOf } from '@ohh/shared/rules';
+import { distanceM } from '@ohh/shared/place';
 import { formatMoney, formatNumber, pick } from '../../ui';
 import type { AwaySnapshot, BriefMemory, LastLook } from './memory';
 
@@ -71,8 +72,28 @@ export interface Happening {
 
 const FEED_NEIGHBOR: FeedItem['kind'][] = ['opening', 'inspection', 'bankruptcy', 'deal', 'report'];
 
-/** Inbox since the last look, events that were announced or started, and what neighbors did. Newest first. */
-export function happenings(view: OwnerView, since: Since, max = 8): Happening[] {
+/** Used when the niche pack has no `extra.footfall.radiusM`: ROUND3 — neighbors within 250 m share one stream of passers-by. */
+export const NEAR_RADIUS_FALLBACK_M = 250;
+
+/** Businesses whose place is within the radius of mine: they share my passers-by. */
+export function nearbyIds(view: OwnerView, places: Place[], radiusM: number): Set<string> {
+  const byId = new Map(places.map((p) => [p.id, p]));
+  const mine = view.business ? byId.get(view.business.placeId) : undefined;
+  const out = new Set<string>();
+  if (!mine) return out;
+  for (const n of view.neighbors) {
+    const p = byId.get(n.placeId);
+    if (p && distanceM(mine, p) < radiusM) out.add(n.id);
+  }
+  return out;
+}
+
+/**
+ * Inbox since the last look, events that were announced or started, and what neighbors did. Newest first.
+ * `near` — businesses that share my passers-by; without it (no map data) only rivals in my niche are listed,
+ * and nothing claims they are on my street.
+ */
+export function happenings(view: OwnerView, since: Since, near: Set<string> | null = null, max = 6): Happening[] {
   const today = view.world.day;
   const out: Happening[] = [];
   const seen = new Set<string>();
@@ -96,12 +117,14 @@ export function happenings(view: OwnerView, since: Since, max = 8): Happening[] 
       : pick(`Running until ${dateOf(e.endDay).label}`, `Идёт до ${dateOf(e.endDay).label}`);
     add({ id: `ev:${e.id}`, day: started ? e.startDay : e.announcedDay, kind: 'event', title: e.title, text: `${when}. ${e.text}`, tone: 'info' });
   }
-  const mine = view.business?.id;
-  const near = new Set(view.neighbors.map((n) => n.id));
+  // My own business is in the inbox already; the feed adds what others did.
+  const niche = view.business?.niche;
+  const sameNiche = new Set(view.neighbors.filter((n) => n.niche === niche).map((n) => n.id));
   for (const f of view.feed) {
     if (f.day <= since.day || !f.businessId || !FEED_NEIGHBOR.includes(f.kind)) continue;
-    if (f.businessId !== mine && !near.has(f.businessId)) continue;
-    add({ id: `fd:${f.id}`, day: f.day, kind: f.businessId === mine ? 'system' : 'neighbor', title: f.text, text: neighborMeaning(f), tone: f.kind === 'bankruptcy' || f.kind === 'opening' ? 'warn' : 'info' });
+    const close = near?.has(f.businessId) ?? false;
+    if (!close && !(near === null && sameNiche.has(f.businessId))) continue;
+    add({ id: `fd:${f.id}`, day: f.day, kind: 'neighbor', title: f.text, text: neighborMeaning(f, close), tone: f.kind === 'bankruptcy' || f.kind === 'opening' ? 'warn' : 'info' });
   }
   return out.sort((a, z) => z.day - a.day).slice(0, max);
 }
@@ -113,12 +136,16 @@ function inboxTone(i: InboxItem): Happening['tone'] {
   return 'info';
 }
 
-/** One line on what a neighbor's move means for me. */
-function neighborMeaning(f: FeedItem): string {
+/** One line on what a neighbor's move means for me. `close` — they share my passers-by. */
+function neighborMeaning(f: FeedItem, close: boolean): string {
   switch (f.kind) {
-    case 'opening': return pick('One more shop shares your street’s foot traffic.', 'Ещё одно заведение делит поток прохожих на твоей улице.');
-    case 'bankruptcy': return pick('Their customers now walk past your door.', 'Их гости теперь идут мимо твоей двери.');
-    case 'inspection': return pick('Inspectors are working this street: check your own risks.', 'Проверяющие работают на этой улице: проверь свои риски.');
+    case 'opening': return close
+      ? pick('Within a block of you: your passers-by are now split one way more.', 'В квартале от тебя: прохожих теперь делят на одно заведение больше.')
+      : pick('One more rival in your niche: the prize places get harder.', 'Ещё один соперник в нише: призовые места даются труднее.');
+    case 'bankruptcy': return close
+      ? pick('Their share of passers-by on your block is free now.', 'Их доля прохожих в твоём квартале освободилась.')
+      : pick('One rival fewer in your niche.', 'В нише на одного соперника меньше.');
+    case 'inspection': return pick('Inspectors are busy nearby: check your own risks in Today.', 'Проверяющие работают рядом: проверь свои риски в «Сегодня».');
     case 'deal': return pick('Neighbors are teaming up: you can offer a deal too.', 'Соседи объединяются: ты тоже можешь предложить сделку.');
     case 'report': return pick('Someone filed a report: inspections follow reports.', 'Кто-то подал жалобу: за жалобой приходит проверка.');
     default: return '';
@@ -201,8 +228,8 @@ function noticeDecision(n: CaseNotice): Decision {
     id: `notice:${n.caseId}`, kind: 'notice', deadlineDay: n.answerByDay,
     title: pick(`Fine notice: ${formatMoney(n.fine)}`, `Предписание: штраф ${formatMoney(n.fine)}`),
     text: pick(
-      `${plural(n.found.length, 'violation')} found. Answer by ${dateOf(n.answerByDay).label}; silence means you pay.`,
-      `Нарушений: ${n.found.length}. Ответь до ${dateOf(n.answerByDay).label}; молчание — значит платишь.`,
+      `${plural(n.found.length, 'violation')} found. No answer by the deadline means you pay in full.`,
+      `Нарушений: ${n.found.length}. Нет ответа к сроку — платишь полностью.`,
     ),
     options: [
       { id: 'pay', label: pick(`Pay ${formatMoney(n.fine)}`, `Заплатить ${formatMoney(n.fine)}`), action: { type: 'answer_notice', caseId: n.caseId, response: 'pay' }, primary: !cheaper, tone: 'loss', result: pick(`−${formatMoney(n.fine)} today${closed}.`, `−${formatMoney(n.fine)} сегодня${closed}.`) },

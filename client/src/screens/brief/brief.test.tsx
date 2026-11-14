@@ -6,7 +6,8 @@ import { BriefScreen } from './BriefScreen';
 import { briefFixture, BRIEF_FIXTURES } from './fixtures';
 import { calendarText } from './ics';
 import { readMemory, writeMemory } from './memory';
-import { happenings, nextReport, pickDecision, resolveSince, rival, snapshotAway, upcoming } from './model';
+import { fixturePlaces } from '../../app/fixtures';
+import { happenings, nearbyIds, nextReport, pickDecision, resolveSince, rival, snapshotAway, upcoming } from './model';
 
 const NOW = Date.UTC(2026, 10, 15, 9, 0);
 
@@ -99,6 +100,30 @@ describe('what happened and what is ahead', () => {
     expect(h.some((x) => x.title.includes('Cross-promo'))).toBe(true);
     expect(h.some((x) => x.kind === 'event' && x.title === 'Street fair on Avenue A')).toBe(true);
     expect(h.every((x, i) => i === 0 || h[i - 1].day >= x.day)).toBe(true);
+  });
+
+  it('neighbors: without map data only rivals in my niche, never "your block"', () => {
+    const v = briefFixture('away');
+    const h = happenings(v, resolveSince(v, {}), null, 20).filter((x) => x.kind === 'neighbor');
+    expect(h.some((x) => x.title.startsWith('Blade & Brick'))).toBe(false);          // a barbershop
+    expect(h.some((x) => x.title.startsWith("Maya's Morning Cup"))).toBe(false);     // my own news is in the inbox
+    expect(h.some((x) => x.title.startsWith('Tin Lantern Coffee'))).toBe(true);
+    expect(h.every((x) => !/block/.test(x.text))).toBe(true);
+  });
+
+  it('neighbors: with map data, businesses within the radius and what it means for my block', () => {
+    const v = briefFixture('away');
+    const h = happenings(v, resolveSince(v, {}), new Set(['b09']), 20).filter((x) => x.kind === 'neighbor');
+    expect(h.map((x) => x.title.split(' ')[0])).toEqual(['Blade']);
+    expect(h[0].text).toMatch(/Within a block of you/);
+  });
+
+  it('nearby = places closer than the radius to mine', () => {
+    const v = briefFixture('away');
+    const all = nearbyIds(v, fixturePlaces, 100_000);
+    expect(all.size).toBe(v.neighbors.length);
+    expect(nearbyIds(v, fixturePlaces, 1).size).toBe(0);
+    expect(nearbyIds({ ...v, business: null }, fixturePlaces, 100_000).size).toBe(0);
   });
 
   it('the next report: in the live city the rest of the month in real time', () => {
