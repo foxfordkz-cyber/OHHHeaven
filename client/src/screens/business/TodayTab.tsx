@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import type { DayReport, Recommendation } from '../../../../shared/src/types';
+import type { DayReport, Recommendation } from '@ohh/shared/types';
 import { Button, Card, Stat } from './__stubs__/ui';
 import { applyAll, applyRecommendation, pendingNotices, type ApplyResult } from './actions';
-import type { BizDeps, BizTab } from './deps';
+import type { BizDeps, BizTabId } from './deps';
 import { dayLabel, effectIsGood, effectText, multChange, num, relDay, shortDate, signedUsd, usd, WEATHER_ICON } from './format';
 import { NoticeCard } from './NoticeCard';
 import { chartSeries, lostReasons, lostTotal, pickDays, topRecommendations, upcomingEvents } from './today';
 import { SetupPanel } from './StatusScreens';
 
-export function TodayTab({ deps, onRule, onGo }: { deps: BizDeps; onRule(id: string): void; onGo(tab: BizTab): void }) {
+export function TodayTab({ deps, onRule, onGo }: { deps: BizDeps; onRule(id: string): void; onGo(tab: BizTabId): void }) {
   const v = deps.view;
   const b = v.business!;
   const packs = { pack: deps.pack, common: deps.common };

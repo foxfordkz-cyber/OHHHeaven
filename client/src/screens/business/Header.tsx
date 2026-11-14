@@ -1,4 +1,4 @@
-import type { OwnerView, Pack } from '../../../../shared/src/types';
+import type { OwnerView, Pack } from '@ohh/shared/types';
 import { Pill } from './__stubs__/ui';
 import { dayLabel, nichePlural, realWait, usd, WEATHER_ICON } from './format';
 

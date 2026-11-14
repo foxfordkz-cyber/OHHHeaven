@@ -1,6 +1,6 @@
 // Stand-in for the server so /dev/biz works offline. It does rough, made-up math on purpose:
 // the real numbers come from the engine (agents 02–04) through what_if and the view.
-import type { Ack, Action, CommonPack, MonthReport, OwnerView, Pack, PnlLine, Query, StandingOrders } from '../../../../../shared/src/types';
+import type { Ack, Action, CommonPack, MonthReport, OwnerView, Pack, PnlLine, Query, StandingOrders } from '@ohh/shared/types';
 import type { BizDeps } from '../deps';
 import type { WhatIf } from '../useWhatIf';
 

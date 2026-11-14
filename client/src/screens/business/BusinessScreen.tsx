@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { StandingOrders } from '../../../../shared/src/types';
+import type { StandingOrders } from '@ohh/shared/types';
 import { Banner, Button, Card } from './__stubs__/ui';
 import { pendingNotices, readInbox } from './actions';
 import { AwayCard } from './AwayCard';
 import { BooksTab } from './BooksTab';
-import type { BizDeps, BizTab } from './deps';
+import type { BizDeps, BizTabId, ExtraTab } from './deps';
 import { dayLabel, plural } from './format';
 import { Header } from './Header';
 import { ruleCardById } from './lookup';
@@ -16,13 +16,23 @@ import { BankruptScreen, NoBusiness } from './StatusScreens';
 import { TodayTab } from './TodayTab';
 import './biz.css';
 
-const TABS: { id: BizTab; label: string }[] = [
-  { id: 'today', label: 'Today' },
-  { id: 'manage', label: 'Manage' },
-  { id: 'books', label: 'Books' },
-  { id: 'network', label: 'Network' },
-  { id: 'insights', label: 'Insights' },
+const OWN: { id: BizTabId; label: string; order: number }[] = [
+  { id: 'today', label: 'Today', order: 10 },
+  { id: 'manage', label: 'Manage', order: 20 },
+  { id: 'books', label: 'Books', order: 30 },
 ];
+const SLOTS: ExtraTab[] = [
+  { id: 'network', label: 'Network', order: 40, element: null },
+  { id: 'insights', label: 'Insights', order: 50, element: null },
+];
+
+/** My tabs, then the shell's (agents 11, 12 and later ones) by order; Network and Insights always have a slot. */
+export function tabList(extra: ExtraTab[] = []): { id: BizTabId; label: string; order: number; element?: ExtraTab['element']; badge?: number }[] {
+  const ownIds = new Set(OWN.map((t) => t.id));
+  const others = extra.filter((t) => !ownIds.has(t.id));
+  const slots = SLOTS.filter((s) => !others.some((t) => t.id === s.id));
+  return [...OWN, ...others, ...slots].sort((a, b) => a.order - b.order);
+}
 
 /** Keeps the Manage draft across tab switches, reloads and dropped connections. */
 function useDraft(businessId: string | null, orders: StandingOrders | null) {
@@ -55,10 +65,12 @@ function useDraft(businessId: string | null, orders: StandingOrders | null) {
   return { draft: state?.draft ?? null, setDraft, reset };
 }
 
-export function BusinessScreen({ deps, initialTab = 'today' }: { deps: BizDeps; initialTab?: BizTab }) {
+export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { deps: BizDeps; initialTab?: BizTabId; onTabChange?(tab: BizTabId): void }) {
   const v = deps.view;
   const b = v.business;
-  const [tab, setTab] = useState<BizTab>(initialTab);
+  const tabs = tabList(deps.tabs);
+  const [tab, setTabState] = useState<BizTabId>(tabs.some((t) => t.id === initialTab) ? initialTab : 'today');
+  const setTab = (t: BizTabId) => { setTabState(t); onTabChange?.(t); };
   const [awayClosed, setAwayClosed] = useState(false);
   const [ruleId, setRuleId] = useState<string | null>(null);
   const [, setSeenTick] = useState(0);
@@ -69,14 +81,19 @@ export function BusinessScreen({ deps, initialTab = 'today' }: { deps: BizDeps; 
   const { draft, setDraft, reset } = useDraft(b?.id ?? null, b?.orders ?? null);
   const packs = { pack: deps.pack, common: deps.common };
 
+  useEffect(() => {
+    if (initialTab && tabs.some((t) => t.id === initialTab)) setTabState(initialTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialTab]);
+
   const diff = useMemo(() => (b && draft ? diffOrders(b.orders, draft) : {}), [b, draft]);
   const draftKey = draft ? JSON.stringify(draft) : '';
   const showSave = Object.keys(diff).length > 0 && savedKey !== draftKey;
 
-  if (!b) return <div className="bz-root"><NoBusiness deps={deps} /></div>;
+  if (!b) return <div className="bz-root"><NoBusiness onOpen={() => deps.navigate?.('/start')} /></div>;
 
   const openRule = (id: string) => setRuleId(id);
-  const goto = (t: BizTab) => setTab(t);
+  const goto = (t: BizTabId) => setTab(t);
 
   const ruleCandidates = [
     ...v.notices.flatMap((n) => n.found.map((f) => f.violationId)),
@@ -115,7 +132,8 @@ export function BusinessScreen({ deps, initialTab = 'today' }: { deps: BizDeps; 
   };
 
   const offers = v.deals.filter((d) => d.status === 'proposed' && d.toBusinessId === b.id).length;
-  const badge: Partial<Record<BizTab, boolean>> = { today: pendingNotices(v.notices).length > 0, network: offers > 0 };
+  const badge: Record<string, boolean> = { today: pendingNotices(v.notices).length > 0, network: offers > 0 };
+  const current = tabs.find((t) => t.id === tab);
 
   if (b.status === 'bankrupt') {
     return (
@@ -140,15 +158,15 @@ export function BusinessScreen({ deps, initialTab = 'today' }: { deps: BizDeps; 
         </div>
       )}
       <nav className="bz-tabs" role="tablist" aria-label="My business">
-        {TABS.map((t) => (
+        {tabs.map((t) => (
           <button key={t.id} type="button" role="tab" className="bz-tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}>
-            {t.label}{badge[t.id] && <span className="bz-dot" aria-label="needs an answer" />}
+            {t.label}{(badge[t.id] || (t.badge ?? 0) > 0) && <span className="bz-dot" aria-label="needs an answer" />}
           </button>
         ))}
       </nav>
 
       <div className="bz-tabpanel" role="tabpanel">
-        {firstCard && tab !== 'network' && tab !== 'insights' && (
+        {firstCard && (tab === 'today' || tab === 'manage' || tab === 'books') && (
           <div className="bz-pad" style={{ marginBottom: 12 }}>
             <RealRuleCard card={firstCard} onDone={() => { markRuleSeen(firstCard.id); setSeenTick((n) => n + 1); }} />
           </div>
@@ -156,8 +174,7 @@ export function BusinessScreen({ deps, initialTab = 'today' }: { deps: BizDeps; 
         {tab === 'today' && <TodayTab deps={deps} onRule={openRule} onGo={goto} />}
         {tab === 'manage' && draft && <ManageTab deps={deps} draft={draft} diff={diff} setDraft={setDraft} onRule={openRule} />}
         {tab === 'books' && <BooksTab deps={deps} />}
-        {tab === 'network' && (deps.slots?.network ?? <Slot title="Network" text="Neighbors, offers and deals." />)}
-        {tab === 'insights' && (deps.slots?.insights ?? <Slot title="Insights" text="Break-even, payback, costs against the industry and the advisor." />)}
+        {tab !== 'today' && tab !== 'manage' && tab !== 'books' && (current?.element ?? <Slot title={current?.label ?? 'Coming soon'} text={SLOT_TEXT[tab] ?? 'This part of your business is on its way.'} />)}
         {saveMsg && !showSave && (
           <div className="bz-pad" style={{ marginTop: 12 }}><Banner tone={saveMsg.ok ? 'good' : 'bad'}>{saveMsg.text}</Banner></div>
         )}
@@ -184,6 +201,11 @@ export function BusinessScreen({ deps, initialTab = 'today' }: { deps: BizDeps; 
     </div>
   );
 }
+
+const SLOT_TEXT: Record<string, string> = {
+  network: 'Neighbors, offers and deals.',
+  insights: 'Break-even, payback, costs against the industry and the advisor.',
+};
 
 function Slot({ title, text }: { title: string; text: string }) {
   return (

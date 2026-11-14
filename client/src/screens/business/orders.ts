@@ -1,6 +1,6 @@
 // Manage tab form: a draft of StandingOrders and the set_orders action built from it.
 // The screen does no game math; it only keeps the draft inside the pack's limits.
-import type { Action, CommonPack, Pack, StandingOrders } from '../../../../shared/src/types';
+import type { Action, CommonPack, Pack, StandingOrders } from '@ohh/shared/types';
 
 export type Draft = StandingOrders;
 

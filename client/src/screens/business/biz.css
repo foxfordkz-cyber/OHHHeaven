@@ -1,45 +1,32 @@
 /* /biz screen. Scoped to .bz-root so it never fights the shell's styles. Phone first (390px). */
 .bz-root {
-  --bz-bg: #f6f5f2;
-  --bz-surface: #ffffff;
-  --bz-surface-2: #f0eee9;
-  --bz-text: #1d1c1a;
-  --bz-muted: #6b675f;
-  --bz-line: #e2dfd8;
-  --bz-accent: #1f5f4a;
-  --bz-accent-text: #ffffff;
-  --bz-good: #1f7a4d;
-  --bz-good-bg: #e6f3ec;
-  --bz-warn: #9a5b00;
-  --bz-warn-bg: #fdf1dc;
-  --bz-bad: #b3261e;
-  --bz-bad-bg: #fbe7e5;
-  --bz-info: #2a5aa8;
-  --bz-info-bg: #e8eefb;
-  --bz-radius: 14px;
+  /* Mapped onto the shell's design tokens (client/src/ui/tokens.css); fallbacks keep it readable without them. */
+  --bz-bg: var(--bg, #f6f5f2);
+  --bz-surface: var(--surface, #ffffff);
+  --bz-surface-2: var(--surface-2, #f0eee9);
+  --bz-text: var(--text, #1d1c1a);
+  --bz-muted: var(--text-2, #6b675f);
+  --bz-line: var(--border, #e2dfd8);
+  --bz-accent: var(--accent, #1f5f4a);
+  --bz-accent-text: var(--accent-ink, #ffffff);
+  --bz-good: var(--profit, #1f7a4d);
+  --bz-good-bg: var(--profit-soft, #e6f3ec);
+  --bz-warn: var(--warn, #9a5b00);
+  --bz-warn-bg: var(--warn-soft, #fdf1dc);
+  --bz-bad: var(--loss, #b3261e);
+  --bz-bad-bg: var(--loss-soft, #fbe7e5);
+  --bz-info: var(--info, #2a5aa8);
+  --bz-info-bg: var(--info-soft, #e8eefb);
+  --bz-radius: var(--r-2, 14px);
   --bz-gap: 12px;
   background: var(--bz-bg);
   color: var(--bz-text);
-  font: 15px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font: 15px/1.4 var(--font, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif);
   min-height: 100vh;
   max-width: 560px;
   margin: 0 auto;
   padding-bottom: 96px;
   -webkit-font-smoothing: antialiased;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .bz-root {
-    --bz-bg: #141413; --bz-surface: #1d1d1b; --bz-surface-2: #262623; --bz-text: #f1efe9; --bz-muted: #a19d94;
-    --bz-line: #33322e; --bz-accent: #5fb898; --bz-accent-text: #0d1f18;
-    --bz-good: #6fcf97; --bz-good-bg: #18291f; --bz-warn: #f2b45a; --bz-warn-bg: #2d2414;
-    --bz-bad: #f28b82; --bz-bad-bg: #2f1a18; --bz-info: #8ab4f8; --bz-info-bg: #18233a;
-  }
-}
-:root[data-theme='dark'] .bz-root {
-  --bz-bg: #141413; --bz-surface: #1d1d1b; --bz-surface-2: #262623; --bz-text: #f1efe9; --bz-muted: #a19d94;
-  --bz-line: #33322e; --bz-accent: #5fb898; --bz-accent-text: #0d1f18;
-  --bz-good: #6fcf97; --bz-good-bg: #18291f; --bz-warn: #f2b45a; --bz-warn-bg: #2d2414;
-  --bz-bad: #f28b82; --bz-bad-bg: #2f1a18; --bz-info: #8ab4f8; --bz-info-bg: #18233a;
 }
 .bz-root *, .bz-root *::before, .bz-root *::after { box-sizing: border-box; }
 .bz-root h1, .bz-root h2, .bz-root h3, .bz-root p { margin: 0; }

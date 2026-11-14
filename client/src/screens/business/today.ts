@@ -1,5 +1,5 @@
 // Today tab helpers: pick days, name the reasons for lost customers, order recommendations and events.
-import type { DayReport, GameEvent, NicheId, PackSizing, Recommendation } from '../../../../shared/src/types';
+import type { DayReport, GameEvent, NicheId, PackSizing, Recommendation } from '@ohh/shared/types';
 
 export function pickDays(days: DayReport[], worldDay: number): { today: DayReport | null; yesterday: DayReport | null } {
   const byDay = new Map(days.map((d) => [d.day, d]));

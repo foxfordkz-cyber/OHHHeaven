@@ -1,4 +1,4 @@
-import type { PackRuleCard } from '../../../../shared/src/types';
+import type { PackRuleCard } from '@ohh/shared/types';
 import { Button, Card, Sheet } from './__stubs__/ui';
 import { fineRule, ruleCardById, violationById, whoCatches, type Packs } from './lookup';
 

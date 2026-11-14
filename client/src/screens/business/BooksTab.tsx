@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { MonthReport, PnlLine } from '../../../../shared/src/types';
-import { RULES } from '../../../../shared/src/rules';
+import type { MonthReport, PnlLine } from '@ohh/shared/types';
+import { RULES } from '@ohh/shared/rules';
 import { Card, Segmented, Stat } from './__stubs__/ui';
 import { groupLines, monthAddsUp, sumLines, taxCoverage, taxRows } from './books';
 import type { BizDeps } from './deps';

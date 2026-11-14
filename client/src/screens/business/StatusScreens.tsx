@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { MonthReport } from '../../../../shared/src/types';
+import type { MonthReport } from '@ohh/shared/types';
 import { Button, Card, Stat } from './__stubs__/ui';
 import { launchAction } from './actions';
 import { groupLines } from './books';
@@ -111,12 +111,12 @@ export function BankruptScreen({ deps, onBooks }: { deps: BizDeps; onBooks(): vo
   );
 }
 
-export function NoBusiness({ deps }: { deps: BizDeps }) {
+export function NoBusiness({ onOpen }: { onOpen(): void }) {
   return (
     <div className="bz-pad" style={{ paddingTop: 16 }}>
       <Card title="You don't run a business yet">
         <p>Pick a place on the map and open your first business. The city keeps running while you decide.</p>
-        <Button variant="primary" onClick={() => deps.navigate?.('/start')}>Open a business</Button>
+        <Button variant="primary" onClick={onOpen}>Open a business</Button>
       </Card>
     </div>
   );

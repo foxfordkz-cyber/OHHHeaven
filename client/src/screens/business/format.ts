@@ -1,6 +1,6 @@
 // Display formatting only. No game math here: numbers come from the view or from what_if.
-import { dateOf } from '../../../../shared/src/rules';
-import type { EventEffect, WeatherCondition } from '../../../../shared/src/types';
+import { dateOf } from '@ohh/shared/rules';
+import type { EventEffect, WeatherCondition } from '@ohh/shared/types';
 
 const whole = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0, minimumFractionDigits: 0 });
 const cents = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });

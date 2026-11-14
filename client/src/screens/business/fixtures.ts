@@ -3,8 +3,8 @@
 import type {
   Analytics, BusinessState, CaseNotice, DayReport, DayWeather, Deal, GameEvent, InboxItem, MonthReport,
   OwnerView, PnlLine, PublicBusiness, Recommendation, RoadmapItem, Standing, WeatherCondition, WorldConfig,
-} from '../../../../shared/src/types';
-import { dateOf, RULES } from '../../../../shared/src/rules';
+} from '@ohh/shared/types';
+import { dateOf, RULES } from '@ohh/shared/rules';
 
 export type FixtureName = 'setup' | 'open' | 'away' | 'notice' | 'closed' | 'bankrupt' | 'none';
 

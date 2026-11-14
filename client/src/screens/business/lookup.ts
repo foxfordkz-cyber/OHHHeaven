@@ -1,5 +1,5 @@
 // Read-only lookups into the niche pack and _common: names, laws, who can catch what.
-import type { CommonPack, FoundBy, Pack, PackOfficial, PackRuleCard, PackShortcut, PackViolation, ViolationTrail } from '../../../../shared/src/types';
+import type { CommonPack, FoundBy, Pack, PackOfficial, PackRuleCard, PackShortcut, PackViolation, ViolationTrail } from '@ohh/shared/types';
 import { usd } from './format';
 
 export interface Packs { pack: Pack | null; common: CommonPack | null }

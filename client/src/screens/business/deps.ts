@@ -1,8 +1,12 @@
 // The one seam between the /biz screen and the app shell (agent 08).
 import type { ReactNode } from 'react';
-import type { Ack, Action, CommonPack, GameClient, OwnerView, Pack, Query } from '../../../../shared/src/types';
+import type { Ack, Action, CommonPack, GameClient, OwnerView, Pack, Query } from '@ohh/shared/types';
 
-export type BizTab = 'today' | 'manage' | 'books' | 'network' | 'insights';
+/** Tabs this screen owns; other agents add theirs through the shell (Network 40, Insights 50). */
+export type BizTabId = 'today' | 'manage' | 'books' | 'network' | 'insights' | (string & {});
+
+/** Same shape as the shell's BizTab (client/src/app/screens.tsx). */
+export interface ExtraTab { id: string; label: string; order: number; element: ReactNode; badge?: number }
 
 export interface BizDeps {
   view: OwnerView;
@@ -14,17 +18,17 @@ export interface BizDeps {
   act(a: Action): Promise<Ack>;
   query<T>(q: Query): Promise<Ack<T>>;
   navigate?(to: string): void;
-  /** Tabs owned by other agents: Network (12) and Insights (11). */
-  slots?: Partial<Record<'network' | 'insights', ReactNode>>;
+  /** Tabs registered by other agents (getBizTabs()); Network and Insights get a placeholder until they exist. */
+  tabs?: ExtraTab[];
 }
 
-/** What the shell passes in once it has useView() and a GameClient. */
+/** For a shell that holds a GameClient directly. */
 export function fromGameClient(p: {
   client: GameClient; worldId: string; view: OwnerView; pack: Pack | null; common: CommonPack | null; online: boolean;
-  navigate?(to: string): void; slots?: BizDeps['slots'];
+  navigate?(to: string): void; tabs?: ExtraTab[];
 }): BizDeps {
   return {
-    view: p.view, pack: p.pack, common: p.common, online: p.online, navigate: p.navigate, slots: p.slots,
+    view: p.view, pack: p.pack, common: p.common, online: p.online, navigate: p.navigate, tabs: p.tabs,
     act: (a) => p.client.act(p.worldId, a),
     query: <T,>(q: Query) => p.client.query<T>(p.worldId, q),
   };

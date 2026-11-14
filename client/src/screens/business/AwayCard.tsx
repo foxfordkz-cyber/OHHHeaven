@@ -1,11 +1,11 @@
-import type { InboxItem, OwnerView } from '../../../../shared/src/types';
+import type { InboxItem, OwnerView } from '@ohh/shared/types';
 import { Button, Card } from './__stubs__/ui';
-import type { BizTab } from './deps';
+import type { BizTabId } from './deps';
 import { pendingNotices } from './actions';
 import { plural, shortDate, signedUsd } from './format';
 
 /** Where an inbox item sends the player, if it waits for an answer or deserves a look. */
-function goFor(item: InboxItem, hasNotice: boolean): { label: string; tab: BizTab } | null {
+function goFor(item: InboxItem, hasNotice: boolean): { label: string; tab: BizTabId } | null {
   switch (item.kind) {
     case 'deal': return { label: 'Answer the offer', tab: 'network' };
     case 'case': return hasNotice ? { label: 'Answer the notice', tab: 'today' } : null;
@@ -15,7 +15,7 @@ function goFor(item: InboxItem, hasNotice: boolean): { label: string; tab: BizTa
   }
 }
 
-export function AwayCard({ view, onClose, onGo }: { view: OwnerView; onClose(): void; onGo(tab: BizTab): void }) {
+export function AwayCard({ view, onClose, onGo }: { view: OwnerView; onClose(): void; onGo(tab: BizTabId): void }) {
   const away = view.away!;
   const b = view.business;
   const offers = b ? view.deals.filter((d) => d.status === 'proposed' && d.toBusinessId === b.id).length : 0;

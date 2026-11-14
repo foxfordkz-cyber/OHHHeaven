@@ -1,8 +1,10 @@
 // /dev/biz — the screen on sample data, no server. Every state is one tap away.
 import { useMemo, useState } from 'react';
-import type { OwnerView } from '../../../../shared/src/types';
+import type { OwnerView } from '@ohh/shared/types';
+import { DevStore } from '../../app/dev';
+import { getBizTabs } from '../../app/screens';
 import { cafePack, commonPack } from './__stubs__/cafePack';
-import { fakeDeps } from './__stubs__/fakeDeps';
+import { fakeDeps, fakeReduce } from './__stubs__/fakeDeps';
 import { BusinessScreen } from './BusinessScreen';
 import { fixture, FIXTURE_NAMES, type FixtureName } from './fixtures';
 import './biz.css';
@@ -31,13 +33,17 @@ export function DevBiz({ initial }: { initial?: FixtureName }) {
     setName(n); setView(fixture(n)); setLog([]); setEpoch((e) => e + 1);
     try { localStorage.removeItem('ohh.rules.seen'); } catch { /* ignore */ }
   };
-  const deps = useMemo(() => fakeDeps({
-    view, pack: cafePack, common: commonPack, online, onView: setView,
-    log: (l) => setLog((old) => [l, ...old].slice(0, 8)),
+  const deps = useMemo(() => ({
+    ...fakeDeps({
+      view, pack: cafePack, common: commonPack, online, onView: setView,
+      log: (l) => setLog((old) => [l, ...old].slice(0, 8)),
+    }),
+    tabs: getBizTabs(),
   }), [view, online]);
 
   return (
-    <div>
+    // Other agents' tabs (Network, Insights) read the same sample view from the store.
+    <DevStore view={view} onAct={(a, current) => { const next = fakeReduce(current as OwnerView, a); setView(next); return next; }}>
       <div className="bz-root" style={{ minHeight: 0, paddingBottom: 0 }}>
         <div className="bz-dev" aria-label="Dev controls">
           <div className="bz-row bz-wrap">
@@ -51,6 +57,6 @@ export function DevBiz({ initial }: { initial?: FixtureName }) {
         </div>
       </div>
       <BusinessScreen key={`${name}-${epoch}`} deps={deps} />
-    </div>
+    </DevStore>
   );
 }

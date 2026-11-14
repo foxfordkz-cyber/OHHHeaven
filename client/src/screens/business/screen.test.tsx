@@ -1,6 +1,6 @@
-import { act as rtlAct, fireEvent, render, renderHook, screen, waitFor, within } from '@testing-library/react';
+import { act as rtlAct, cleanup, fireEvent, render, renderHook, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Ack, Action, OwnerView, Query } from '../../../../shared/src/types';
+import type { Ack, Action, OwnerView, Query } from '@ohh/shared/types';
 import { cafePack, commonPack } from './__stubs__/cafePack';
 import { fakeWhatIf } from './__stubs__/fakeDeps';
 import { BusinessScreen } from './BusinessScreen';
@@ -39,7 +39,7 @@ const EXPECT: Record<FixtureName, RegExp> = {
 };
 
 beforeEach(() => localStorage.clear());
-afterEach(() => vi.useRealTimers());
+afterEach(() => { cleanup(); vi.useRealTimers(); });
 
 describe('/biz renders every state from samples', () => {
   for (const name of FIXTURE_NAMES) {

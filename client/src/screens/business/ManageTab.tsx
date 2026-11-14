@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { Action, PnlLine, StandingOrders } from '../../../../shared/src/types';
-import { dateOf, RULES } from '../../../../shared/src/rules';
+import type { Action, PnlLine, StandingOrders } from '@ohh/shared/types';
+import { dateOf, RULES } from '@ohh/shared/rules';
 import { Button, Card, Segmented, Sheet, Stepper, Toggle } from './__stubs__/ui';
 import type { BizDeps } from './deps';
 import { dayLabel, num, plural, shortDate, signedUsd, usd, usd2 } from './format';

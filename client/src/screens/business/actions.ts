@@ -1,6 +1,6 @@
 // Everything the screen sends goes through BizDeps.act / BizDeps.query. Builders here are pure.
-import type { Ack, Action, CaseNotice, InboxItem, Money, Recommendation } from '../../../../shared/src/types';
-import { RULES } from '../../../../shared/src/rules';
+import type { Ack, Action, CaseNotice, InboxItem, Money, Recommendation } from '@ohh/shared/types';
+import { RULES } from '@ohh/shared/rules';
 
 /** What the /biz screen needs from the app shell. The shell builds it from useView() and GameClient. */
 export interface ActPort { act(a: Action): Promise<Ack> }

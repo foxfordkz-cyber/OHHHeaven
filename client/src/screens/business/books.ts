@@ -1,5 +1,5 @@
 // Books tab: groups P&L lines by kind for display. Totals are plain sums of the lines the engine sent.
-import type { BusinessState, CommonPack, MonthReport, Pack, PnlKind, PnlLine, TaxLiability } from '../../../../shared/src/types';
+import type { BusinessState, CommonPack, MonthReport, Pack, PnlKind, PnlLine, TaxLiability } from '@ohh/shared/types';
 
 export const KIND_ORDER: PnlKind[] = ['revenue', 'cogs', 'payroll', 'payroll_tax', 'rent', 'opex', 'tax', 'fine', 'saving', 'deal', 'setup', 'other'];
 

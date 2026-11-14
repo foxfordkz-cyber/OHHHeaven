@@ -1,7 +1,7 @@
 // Stand-in for packs/cafe.json and packs/_common.json (agents 14 and 01) so /dev/biz works today.
 // Numbers here only drive the screen. Real values, sources and confidence come from the packs.
 // Law citations and the letter-grade bands are real; money amounts are marked estimate.
-import type { CommonPack, Pack } from '../../../../../shared/src/types';
+import type { CommonPack, Pack } from '@ohh/shared/types';
 
 const FIXTURE = { confidence: 'estimate' as const, note: 'fixture for /dev/biz; real value in packs/cafe.json' };
 

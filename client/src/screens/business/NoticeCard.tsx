@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import type { Ack, Action, CaseNotice } from '../../../../shared/src/types';
+import type { Ack, Action, CaseNotice } from '@ohh/shared/types';
 import { Button, Card } from './__stubs__/ui';
 import { bribeAction, CONTEST, contestAction, payAction } from './actions';
 import { dayLabel, plural, relDay, usd } from './format';

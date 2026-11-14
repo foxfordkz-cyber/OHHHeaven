@@ -1,6 +1,6 @@
 // Live forecast: one what_if query after the player stops changing settings for 400 ms.
 import { useEffect, useRef, useState } from 'react';
-import type { Ack, Analytics, MonthReport, Query, StandingOrders } from '../../../../shared/src/types';
+import type { Ack, Analytics, MonthReport, Query, StandingOrders } from '@ohh/shared/types';
 
 export interface WhatIf { projected: MonthReport; analytics: Analytics }
 export interface WhatIfState { status: 'idle' | 'loading' | 'ok' | 'error'; data: WhatIf | null; error?: string; forKey: string | null }

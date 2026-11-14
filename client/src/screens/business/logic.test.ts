@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Ack, Action, Recommendation, StandingOrders } from '../../../../shared/src/types';
+import type { Ack, Action, Recommendation, StandingOrders } from '@ohh/shared/types';
 import { cafePack, commonPack } from './__stubs__/cafePack';
 import {
   buildSetOrders, diffOrders, draftFrom, hasChanges, knownShortcutIds, loadDraft, mergeOrders, saveDraft,
