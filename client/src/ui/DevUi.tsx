@@ -137,7 +137,7 @@ export function DevUi() {
       </Section>
 
       <Section title="RuleCard">
-        <RuleCard title="No permit, no coffee" text="You need a Food Service Establishment Permit before you serve anything. Opening early is a violation that can close you." law="NYC Health Code § 81.05" penalty="Fine up to $2,000 · closure" source="https://www.nyc.gov/site/doh/business/food-operators/food-service-establishments.page" />
+        <RuleCard title="No permit, no coffee" text="You need a Food Service Establishment Permit before you serve anything. Opening early is a violation that can close you." law="NYC Health Code § 81.05" penalty="Fine up to $2,000 · closure" source="https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit" />
       </Section>
 
       <Section title="Clock and Feed">
