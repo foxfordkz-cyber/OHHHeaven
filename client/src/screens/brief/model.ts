@@ -115,8 +115,8 @@ export function happenings(view: OwnerView, since: Since, near: Set<string> | nu
     const announced = e.announcedDay > since.day;
     if (!started && !announced) continue;
     const when = e.startDay > today
-      ? pick(`Starts ${dateOf(e.startDay).label}`, `Начнётся ${dateOf(e.startDay).label}`)
-      : pick(`Running until ${dateOf(e.endDay).label}`, `Идёт до ${dateOf(e.endDay).label}`);
+      ? pick(`Starts ${dayLabel(e.startDay)}`, `Начнётся ${dayLabel(e.startDay)}`)
+      : pick(`Running until ${dayLabel(e.endDay)}`, `Идёт до ${dayLabel(e.endDay)}`);
     add({ id: `ev:${e.id}`, day: started ? e.startDay : e.announcedDay, kind: 'event', title: e.title, text: `${when}. ${e.text}`, tone: 'info' });
   }
   for (const h of dealNews(view, since)) add(h);
@@ -213,7 +213,7 @@ export function pickDecision(view: OwnerView): Decision | null {
     const day = b.bankruptDay ?? view.world.day;
     return {
       id: 'bankrupt', kind: 'restart',
-      title: pick(`${b.name} went bankrupt on ${dateOf(day).label}`, `${b.name} обанкротился ${dateOf(day).label}`),
+      title: pick(`${b.name} went bankrupt on ${dayLabel(day)}`, `${b.name} обанкротился ${dayLabel(day)}`),
       text: pick(`Cash fell to ${formatMoney(b.cash)}. A business that cannot pay its bills closes.`, `Касса упала до ${formatMoney(b.cash)}. Бизнес, который не может платить по счетам, закрывается.`),
       options: [
         { id: 'why', label: pick('See what went wrong', 'Разобрать, что пошло не так'), to: '/end', primary: true, result: pick('Where the money went, month by month, and what to change in real life.', 'Куда ушли деньги по месяцам и что поменять в жизни.') },
@@ -229,7 +229,7 @@ export function pickDecision(view: OwnerView): Decision | null {
     const left = b.closedUntilDay - view.world.day;
     return {
       id: 'closed', kind: 'closed', deadlineDay: b.closedUntilDay,
-      title: pick(`Closed by inspection until ${dateOf(b.closedUntilDay).label}`, `Закрыт проверкой до ${dateOf(b.closedUntilDay).label}`),
+      title: pick(`Closed by inspection until ${dayLabel(b.closedUntilDay)}`, `Закрыт проверкой до ${dayLabel(b.closedUntilDay)}`),
       text: pick(`${plural(left, 'more day')} with rent and wages and no sales. Fix what was found so the next visit is clean.`, `Ещё дней без продаж, но с арендой и зарплатой: ${left}. Исправь найденное, чтобы следующая проверка прошла чисто.`),
       options: [{ id: 'today', label: pick('See what was found', 'Что нашли'), to: '/biz/today', primary: true, result: pick('Opens Today with the violations and the shortcuts you run.', 'Откроет «Сегодня» с нарушениями и срезанными углами.') }],
     };
@@ -295,7 +295,7 @@ function dealDecision(view: OwnerView, d: Deal): Decision {
   return {
     id: `deal:${d.id}`, kind: 'deal', deadlineDay: d.expiresDay,
     title: pick(`${who} offers: ${termsTitle(d.terms)}`, `${who} предлагает: ${termsTitle(d.terms)}`),
-    text: pick(`The offer expires ${dateOf(d.expiresDay).label}.`, `Предложение действует до ${dateOf(d.expiresDay).label}.`),
+    text: pick(`The offer expires ${dayLabel(d.expiresDay)}.`, `Предложение действует до ${dayLabel(d.expiresDay)}.`),
     options: [
       { id: 'accept', label: pick('Accept', 'Принять'), action: { type: 'answer_deal', dealId: d.id, accept: true }, primary: true, tone: 'profit', result: termsResult(d.terms) },
       { id: 'decline', label: pick('Decline', 'Отказать'), action: { type: 'answer_deal', dealId: d.id, accept: false }, tone: 'neutral', result: pick(`Nothing changes. ${who} sees your answer.`, `Ничего не меняется. ${who} увидит ответ.`) },
@@ -317,8 +317,12 @@ function termsResult(t: DealTerms): string {
     case 'joint_purchase': return pick(`Both shops buy supplies together for ${plural(t.months, 'month')}: lower ingredient costs.`, `Оба заведения закупаются вместе ${t.months} мес.: сырьё дешевле.`);
     case 'cross_promo': return pick(`Each shop sends customers to the other for ${plural(t.months, 'month')}.`, `Заведения ${t.months} мес. отправляют гостей друг к другу.`);
     case 'loan': {
-      const monthly = round2((t.amount / Math.max(1, t.months)) * (1 + t.monthlyRatePct / 100));
-      return pick(`+${formatMoney(t.amount)} now, then about ${formatMoney(monthly)} a month for ${plural(t.months, 'month')} (${t.monthlyRatePct}% a month).`, `+${formatMoney(t.amount)} сейчас, затем около ${formatMoney(monthly)} в месяц ${t.months} мес. (${t.monthlyRatePct}% в месяц).`);
+      const monthly = loanPayment(t.amount, t.monthlyRatePct, t.months);
+      const total = round2(monthly * Math.max(1, Math.floor(t.months)));
+      return pick(
+        `+${formatMoney(t.amount)} now, then ${formatMoney(monthly)} a month for ${plural(t.months, 'month')} (${t.monthlyRatePct}% a month, ${formatMoney(total)} in all).`,
+        `+${formatMoney(t.amount)} сейчас, затем ${formatMoney(monthly)} в месяц ${t.months} мес. (${t.monthlyRatePct}% в месяц, всего ${formatMoney(total)}).`,
+      );
     }
     case 'partnership': return pick(`+${formatMoney(t.amount)} cash now; they own ${t.sharePct}% of your net worth at the end.`, `+${formatMoney(t.amount)} сейчас; им достаётся ${t.sharePct}% стоимости бизнеса в конце.`);
   }
@@ -436,6 +440,22 @@ export function upcoming(view: OwnerView, max = 5): Upcoming[] {
 }
 
 // ───────────── helpers ─────────────
+
+/** Equal monthly payment of a loan: the same annuity the engine charges (engine/src/deals/loans.ts, `schedule`). */
+export function loanPayment(amount: Money, monthlyRatePct: number, months: number): Money {
+  const n = Math.max(1, Math.floor(months));
+  const r = monthlyRatePct / 100;
+  return round2(r === 0 ? amount / n : (amount * r) / (1 - (1 + r) ** -n));
+}
+
+const WEEKDAYS_RU = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+const MONTHS_RU_OF = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+
+/** A game day as the player reads it: "Fri, Mar 8" or "пт, 8 марта". */
+export function dayLabel(day: number): string {
+  const d = dateOf(day);
+  return pick(d.label, `${WEEKDAYS_RU[d.weekday]}, ${d.dayOfMonth} ${MONTHS_RU_OF[(d.month - 1) % 12]}`);
+}
 
 export function round2(n: number): number {
   return Math.round(n * 100) / 100;

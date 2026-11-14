@@ -9,7 +9,7 @@ import { Badge, Banner, Button, Card, List, ListRow, MoneyText, Stat, TopBar, fo
 import { readMemory, writeMemory, type BriefMemory } from './memory';
 import { calendarFile } from './ics';
 import {
-  clockAt, happenings, inTime, lookNow, monthLength, monthName, monthNews, myStanding, nextReport, pickDecision, resolveSince, rival, round2, snapshotAway, upcoming,
+  clockAt, dayLabel, happenings, inTime, lookNow, monthLength, monthName, monthNews, myStanding, nextReport, pickDecision, resolveSince, rival, round2, snapshotAway, upcoming,
   type Decision, type DecisionOption, type Happening,
 } from './model';
 
@@ -79,11 +79,11 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
 
   const sinceLine = since.source === 'away' || since.source === 'look'
     ? days > 0
-      ? tr(`${days === 1 ? '1 day' : `${formatNumber(days)} days`} since you were here · ${dateOf(since.day).label} → ${view.world.date.label}`, `Прошло дней: ${formatNumber(days)} · ${dateOf(since.day).label} → ${view.world.date.label}`)
-      : tr(`You are up to date · ${view.world.date.label}`, `Всё прочитано · ${view.world.date.label}`)
+      ? tr(`${days === 1 ? '1 day' : `${formatNumber(days)} days`} since you were here · ${dayLabel(since.day)} → ${dayLabel(today)}`, `Прошло дней: ${formatNumber(days)} · ${dayLabel(since.day)} → ${dayLabel(today)}`)
+      : tr(`You are up to date · ${dayLabel(today)}`, `Всё прочитано · ${dayLabel(today)}`)
     : since.source === 'month'
-      ? tr(`Since ${monthName(dateOf(since.day + 1).month)} began · ${view.world.date.label}`, `С начала месяца (${monthName(dateOf(since.day + 1).month)}) · ${view.world.date.label}`)
-      : view.world.date.label;
+      ? tr(`Since ${monthName(dateOf(since.day + 1).month)} began · ${dayLabel(today)}`, `С начала месяца (${monthName(dateOf(since.day + 1).month)}) · ${dayLabel(today)}`)
+      : dayLabel(today);
 
   return (
     <main className="screen stack" aria-label={tr('Your brief', 'Твоя сводка')}>
@@ -126,7 +126,7 @@ function HappenedCard({ items }: { items: Happening[] }) {
       {items.length > 0 && (
         <List>
           {shown.map((h) => (
-            <ListRow key={h.id} icon={KIND_ICON[h.kind]} iconTone={h.tone} title={h.title} subtitle={`${dateOf(h.day).label}${h.text ? ` · ${h.text}` : ''}`} />
+            <ListRow key={h.id} icon={KIND_ICON[h.kind]} iconTone={h.tone} title={h.title} subtitle={`${dayLabel(h.day)}${h.text ? ` · ${h.text}` : ''}`} />
           ))}
         </List>
       )}
@@ -191,7 +191,7 @@ function DecisionCard({ decision, deps, cash }: { decision: Decision; deps: Brie
   }
 
   const tone = decision.kind === 'restart' ? 'loss' : decision.kind === 'notice' || decision.kind === 'closed' ? 'warn' : 'default';
-  const deadline = decision.deadlineDay !== undefined ? <Badge tone="warn" icon="clock">{tr(`by ${dateOf(decision.deadlineDay).label}`, `до ${dateOf(decision.deadlineDay).label}`)}</Badge> : undefined;
+  const deadline = decision.deadlineDay !== undefined ? <Badge tone="warn" icon="clock">{tr(`by ${dayLabel(decision.deadlineDay)}`, `до ${dayLabel(decision.deadlineDay)}`)}</Badge> : undefined;
   return (
     <Card tone={tone} title={decision.title} subtitle={decision.text} action={deadline} aria-label={tr('Decision for today', 'Решение на сегодня')}>
       <p className="xsmall faint" style={{ margin: 0 }}>{tr('Your decision today', 'Твоё решение сегодня')}</p>
@@ -239,7 +239,7 @@ function NextCard({ next, ahead, length, now, onDone, done }: { next: ReturnType
       {ahead.length > 0 && (
         <List>
           {ahead.map((u) => (
-            <ListRow key={u.id} icon="clock" iconTone="info" title={u.title} subtitle={`${dateOf(u.day).label}${u.ms === null ? '' : ` · ${inTime(u.ms)}`}`} />
+            <ListRow key={u.id} icon="clock" iconTone="info" title={u.title} subtitle={`${dayLabel(u.day)}${u.ms === null ? '' : ` · ${inTime(u.ms)}`}`} />
           ))}
         </List>
       )}

@@ -7,7 +7,7 @@ import { briefFixture, BRIEF_FIXTURES } from './fixtures';
 import { calendarText } from './ics';
 import { readMemory, writeMemory } from './memory';
 import { fixturePlaces } from '../../app/fixtures';
-import { dealNews, happenings, monthLength, nearbyIds, nextReport, pickDecision, resolveSince, rival, snapshotAway, upcoming } from './model';
+import { dayLabel, dealNews, happenings, loanPayment, monthLength, nearbyIds, nextReport, pickDecision, resolveSince, rival, snapshotAway, upcoming } from './model';
 
 const NOW = Date.UTC(2026, 10, 15, 9, 0);
 
@@ -78,7 +78,18 @@ describe('the one decision', () => {
     expect(d.kind).toBe('deal');
     expect(d.title).toContain('Ortiz Espresso Bar');
     expect(d.options[0].action).toEqual({ type: 'answer_deal', dealId: 'd-loan-3', accept: true });
-    expect(d.options[0].result).toMatch(/\+\$8,000 now/);
+    expect(d.options[0].result).toMatch(/\+\$8,000 now, then \$1,428 a month for 6 months \(2% a month, \$8,569 in all\)/);
+  });
+
+  it('loan payments are the engine annuity, not a flat split', () => {
+    expect(loanPayment(8_000, 2, 6)).toBe(1_428.21);
+    expect(loanPayment(6_000, 0, 3)).toBe(2_000);
+  });
+
+  it('game days read in the viewer language', () => {
+    expect(dayLabel(74)).toBe('Thu, Mar 14');
+    localStorage.setItem('fy-lang', 'ru');
+    expect(dayLabel(74)).toBe('чт, 14 марта');
   });
 
   it('otherwise the advice with the biggest effect, applied in one tap', () => {
