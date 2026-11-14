@@ -97,7 +97,7 @@
       ],
       "source": "https://startbusinessbystate.com/new-york/food-truck/",
       "confidence": "estimate",
-      "note": "Start Business by State (2026) puts a new truck at $100,000-$175,000. A used, already-fitted truck is my estimate at $90,000. Trucks also need commercial auto insurance, a DOT visual inspection and an FDNY LPG permit when they cook on propane."
+      "note": "Vendor and consultant guides found by search disagree: a basic new truck $65,000-$85,000, fully loaded $100,000-$150,000, used from $45,000 (Homebase-style guides); Start Business by State (2026) gives $100,000-$175,000 new; NYC all-in launch estimates run $80,000-$150,000. $90,000 = a used, already-fitted truck, my estimate. Add commercial auto insurance ($2,000-$5,000+ a year in the same guides), a truck fire suppression system for grease-producing equipment ($3,500-$6,500 installed), a DOT visual inspection and the FDNY LPG permit."
     },
     {
       "id": "commissary_contract_deposit",
@@ -1813,6 +1813,12 @@
       "title": "Station cafes pay a share",
       "text": "Transit kiosks and cafes are licensed by MTA Real Estate: a one-year Grand Central Madison pastry and coffee stall pays 15% of gross sales; larger station cafes pay base rent plus a share above a sales threshold.",
       "source": "https://www.mta.info/document/186826"
+    },
+    {
+      "id": "no_app_customer_data",
+      "title": "The apps keep your customers",
+      "text": "NYC tried to make delivery apps share diners' names and emails with restaurants. Courts held the law unconstitutional in 2024, so delivery customers stay the app's, not yours.",
+      "source": "https://www.hunton.com/privacy-and-cybersecurity-law-blog/federal-court-invalidates-nyc-law-requiring-food-delivery-apps-to-share-customer-data-with-restaurants"
     }
   ],
   "roadmap": [
@@ -2072,7 +2078,7 @@
           "typical": 120000,
           "max": 200000,
           "confidence": "estimate",
-          "note": "Used fitted truck $90,000 (setup.food_truck_used) + permits and FDNY $400 + commissary deposit $1,500 + wrap and menu $5,000 + stock and working capital; a new truck $100,000-$175,000 (Start Business by State 2026)."
+          "note": "Used fitted truck $90,000 (setup.food_truck_used) + permits and FDNY $400 + commissary deposit $1,500 + wrap and menu $5,000 + stock and working capital. Guides found by search: used trucks from $45,000, new $65,000-$150,000, NYC all-in launch $80,000-$150,000; commissary $1,000-$1,500 a month in NYC; insurance $2,000-$5,000+ a year."
         },
         "space": {
           "sqftMin": 0,
@@ -4722,6 +4728,39 @@
           "takeaway_window",
           "bakery_cafe"
         ]
+      },
+      {
+        "id": "customer_data_ruling",
+        "name": "Court: apps need not share your customers",
+        "text": "A federal court strikes down the city law that made delivery apps hand restaurants their customers' contact details.",
+        "scale": "city",
+        "months": [
+          9
+        ],
+        "realSignal": "Ruling on NYC Admin Code 20-563.7 (Customer Data Law), September 2024; later Second Circuit decision",
+        "effects": [
+          {
+            "field": "deliveryShare",
+            "mult": 1.0
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "delivery_plan"
+          }
+        ],
+        "realFrequency": "One-off (2024)",
+        "tier": "exotic",
+        "source": "https://www.hunton.com/privacy-and-cybersecurity-law-blog/federal-court-invalidates-nyc-law-requiring-food-delivery-apps-to-share-customer-data-with-restaurants",
+        "confidence": "estimate",
+        "note": "Announcement event: building your own ordering channel (and loyalty list) becomes the only way to own delivery customers.",
+        "formats": [
+          "delivery_kitchen",
+          "cafe",
+          "bubble_tea"
+        ]
       }
     ]
   },
@@ -5114,6 +5153,11 @@
     {
       "url": "https://www.mta.info/document/186826",
       "title": "www.mta.info/document/186826",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.hunton.com/privacy-and-cybersecurity-law-blog/federal-court-invalidates-nyc-law-requiring-food-delivery-apps-to-share-customer-data-with-restaurants",
+      "title": "www.hunton.com/privacy-and-cybersecurity-law-blog/federal-court-invalidate",
       "checked": "2026-11-14"
     },
     {
