@@ -71,6 +71,12 @@ export const PLAN_PRINT_CSS = `
   .plan-step__mine { margin-left: 14pt; font-size: 7pt; }
   .plan-step > .faint, .plan-general { margin-left: 14pt; }
   .plan-general { display: none; }
-  .plan-kit .plan-kit__list { display: table !important; }
+  .plan-kit { display: none !important; }                       /* the same items are listed under "Money to start" */
+  .plan .xsmall { font-size: 6.5pt; }
+  .plan-check__inputs { flex-wrap: nowrap; gap: 6pt; align-items: center; }
+  .plan-check .field__label { font-size: 7pt; }
+  .plan-check .segmented button { min-height: 0; padding: 1pt 4pt; font-size: 7.5pt; }
+  .plan-check__verdict { font-size: 7.5pt; }
+  .plan-check__verdict svg { width: 9pt; height: 9pt; }
 }
 `;
