@@ -8,7 +8,7 @@
 2. Главный вывод по ремонту: бесплатных месяцев аренды (обычно 3–6) не хватает. От подписания до открытия выходит 123 дня для бывшего кафе, 160 для переоборудования и 280 для помещения без общепита; при трёх бесплатных месяцах это $6 600, $14 000 и $38 000 аренды без выручки.
 3. Главный вывод по покупке: работающее кафе стоит около двух годовых заработков владельца (медиана 2,0×; 0,41× годовой выручки). Для эталонной точки пакета это примерно $233 000 — втрое дороже лёгкого ремонта, зато продажи идут с первой недели. Текущая оценка в ветке keen-cray (0,2× выручки, потолок $200 000) занижена.
 4. Покупателю переходят долги продавца по налогу с продаж (если не подано уведомление AU-196.10), его ставка страхования по безработице и накопленные больничные работников; разрешение на общепит не переходит никогда.
-5. **Ни одно число не помечено `verified`.** Прямое открытие страниц в этой сессии заблокировано сетевой политикой окружения, поэтому числа увидены только в выдержках поиска. 65 записей помечены `seenIn: primary_search_extract` — это очередь на подтверждение по первоисточнику.
+5. **Сверка по первоисточникам сделана частично.** После одобрения окружения с 20 хостами я открыл 29 страниц и дословно сверил числа: 29 чисел помечены `verified`, ещё у 51 записи правило прочитано на странице, а само число — мой расчёт. Сайты www.nyc.gov, свод законов города, BizBuySell и FTC отказали автоматическим запросам, поэтому сборы и штрафы Департамента зданий, тексты Health Code и кратные цены продажи остались с пометкой `primary_search_extract` (35 записей).
 
 ## 2. Что добавлено
 
@@ -106,7 +106,9 @@
 
 ## 6. Не найдено
 
-- **Ни одно число не подтверждено открытием страницы.** Хосты первоисточников недоступны из этой сессии. Список записей для подтверждения можно получить отбором по `seenIn: primary_search_extract`.
+- **Не открылись четыре сайта первоисточников.** www.nyc.gov, codelibrary.amlegal.com, www.bizbuysell.com и www.ftc.gov возвращают 403 и на обычный запрос, и из встроенного браузера; franchise.gregoryscoffee.com не отвечает. Защиту я не обходил. Не подтверждены открытием страницы: таблица сборов и штрафы Департамента зданий, асбестовое правило, Letter of No Objection, сроки и сборы Landmarks, тексты Health Code (§5.11, статья 5, главы 6 и 21), шкала штрафов за торговлю с тележки, правило о больничных при продаже, Executive Order 18, кратные BizBuySell, правило FTC о 14 днях, условия Gregorys. Полный список — в `extra.verification.stillOnlyInSearchExtracts`.
+- Рост цен отделки в Нью-Йорке на 7,0% не подтверждён: на открытой странице Cushman & Wakefield есть $181 за кв. фут, но процента нет.
+- Доли вакантности по районам (Бруклин 12,3%, Квинс 9,5%) не нашлись в тексте отчёта Контролёра: они взяты из пресс-релиза.
 - Цена коммерческого усиления электроввода (трёхфазный ввод): есть только расценки для квартир, $3 500–$10 000.
 - Официальная цена асбестового обследования и удаления для небольшого коммерческого помещения.
 - Сбор Департамента зданий за Letter of No Objection.
@@ -125,23 +127,25 @@
 
 ## 7. Источники
 
-Проверка: 14 ноября 2026. «Выдержка» означает, что текст страницы увиден в результатах поиска, а сама страница не открывалась.
+Проверка: 14 ноября 2026. Страницы, которые я открыл и прочитал сам, перечислены с подтверждёнными числами в `extra.verification.openedPages` (29 страниц: налоговая штата, NYC Business, NYC311, Контролёры штата и города, Con Edison, Департамент труда, Inspire Brands, Cushman & Wakefield, Сенат штата, City Record, Генеральный прокурор штата, Корнелл, ABCEats). Остальные источники увидены только в выдержках поиска.
 
-### Первоисточники: ведомства, тексты законов, сайты компаний (68)
+Что изменила сверка:
 
-- https://a810-bisweb.nyc.gov/bisweb/bispi00.jsp — Look up the address before you fall in love with it
+- Плата за франшизу Dunkin' на странице франчайзера — $40 000, а не диапазон $40 000–$90 000 из пересказов.
+- Концессия в парке с платой «$40 000 или 4% выручки» оказалась именно кафе (Dag Hammarskjold Park), с ростом минимума на 5% в год.
+- Con Edison депозит с нового клиента требует, а не «может запросить».
+- Работы для арендатора освобождаются от налога с продаж, только если договор передаёт улучшения собственнику и не обязывает их демонтировать.
+- Опрос о газе — сентябрь 2017 года; средний ущерб от задержки — $140 000 на заведение.
+- Закон штата требует вручить документ франшизы за 10 рабочих дней; федеральное правило о 14 днях открыть не удалось.
+
+
+### Открыты и прочитаны (29)
+
 - https://a816-health.nyc.gov/ABCEatsRestaurants/App/partials/controllers/faq.html — The first graded inspection, unannounced
 - https://a856-cityrecord.nyc.gov/RequestDetail/20240628149 — A kiosk in a park; A stall at a seasonal food market, or a city concession for a kiosk or
 - https://ag.ny.gov/sites/default/files/publications/franchise_booklet.pdf — Franchise fee (example: Gregorys Coffee)
-- https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650 — Department of Buildings alteration filing fee; The note says the 10% excludes government fees; those fees are now sep
-- https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-157685 — civil penalty for work without a permit, multiple of the permit fee (o; minimum civil penalty for work without a permit, USD
-- https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-215585 — Vending on a cart permit rented from its holder; Rent a cart permit on the black market
-- https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-44016 — Keep trading on the seller's Health permit; Permits do not come with the shop
 - https://comptroller.nyc.gov/reports/whos-minding-the-storefronts/ — Empty storefronts are leverage; One storefront in nine is empty
-- https://dol.ny.gov/bizserve/ui/prg/rate/wbarchive — 2026 unemployment-insurance wage base per worker, USD
 - https://dol.ny.gov/transfers-business-and-your-contribution-rate — You inherit the seller's unemployment record; You inherit the seller's unemployment-insurance record
-- https://franchise.gregoryscoffee.com/ — Franchise fee (example: Gregorys Coffee); Franchise training fee and pre-opening travel
-- https://inspirebrands.com/wp-content/uploads/2025/03/2023-Dunkin-Brochure-FINAL-Digital.pdf — Franchise: site approval, mandated build-out, training; Dunkin' minimum liquid assets per shop, USD
 - https://nyc-business.nyc.gov/nycbusiness/business-services/legal-assistance/commercial-lease-assistance-program — Get the lease reviewed, free if you qualify; Free lease lawyer
 - https://nyc-business.nyc.gov/nycbusiness/description/food-protection-course-for-mobile-vendors — Food Protection Course for Mobile Vendors
 - https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit — Buying a shop: apply for every permit in your own name; The 22-day clock starts when you apply
@@ -151,26 +155,41 @@
 - https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about — Corner in someone else's shop: work under the host's permit; The host wants the corner back
 - https://nyc-business.nyc.gov/nycbusiness/description/small-business-energy-efficiency-program — A project manager who maps your permits and coordinates pre-opening in
 - https://nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishment-permit — Temporary Food Service Establishment permit (markets, street fairs, po; Pop-up or market stand: get the temporary permit
-- https://nyc.gov/site/lpc/about/pr2025/lpc-releases-new-analysis-20250414.page — share of Landmarks approvals issued at staff level
-- https://nyc.gov/VendorEnforcement — Street vending enforcement officer; Roll the cart out without a permit
+- https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant
 - https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf — Waiting for gas; Gas or all-electric
-- https://portal.311.nyc.gov/article/?kanumber=KA-01825 — Temporary Food Service Establishment permit (markets, street fairs, po; temporary food permit for a market stand, USD a year
+- https://portal.311.nyc.gov/article/?kanumber=KA-01825 — temporary food permit for a market stand, USD a year; Market stand or a corner in someone else's shop
 - https://portal.311.nyc.gov/article/?kanumber=KA-02955 — Health Department consultative inspection (optional, ungraded); Pass the trade inspections and close out the permit
 - https://portal.311.nyc.gov/article/?kanumber=KA-03354 — Cart: get on the waiting list for a supervisory license; Cart permits are capped
-- https://prd2.nycgovparks.org/opportunities/concessions/rfps-rfbs-rfeis — A stall at a seasonal food market, or a city concession for a kiosk or; The Parks Department asks for kiosk proposals
-- https://www.bizbuysell.com/learning-center/article/buyer-training-after-business-sale/ — Who pays the business broker
-- https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/ — Purchase price of an operating coffee shop; Choose how you enter: build, buy, franchise, cart or pop-up
 - https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf — Con Edison security deposit for a new business account; Utility deposit
 - https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide — Electrical service upgrade for espresso, ice and refrigeration loads; Walk the space with an architect and an electrician
 - https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide — Construction costs up 7%; Contractors raise their prices
-- https://www.franchising.inspirebrands.com/dunkin — The franchisor dictates the build-out; franchise, lowest total initial investment seen for a full coffee shop
-- https://www.ftc.gov/business-guidance/resources/consumers-guide-buying-franchise — Franchise: read the disclosure document and call franchisees; The 14-day rule for franchises
+- https://www.franchising.inspirebrands.com/dunkin — Franchise: site approval, mandated build-out, training; What a coffee franchise takes
 - https://www.law.cornell.edu/nyctap/I08_0054.htm — A worker falls on your job; A worker falls from a ladder on your job
+- https://www.osc.ny.gov/press/releases/2026/07/dinapoli-nyc-department-buildings-meets-critical-goals-lags-lower-priority-issues — How long a Buildings permit takes; Buildings permits slow down
+- https://www.tax.ny.gov/pdf/current_forms/st/au196_10.pdf
+- https://www.tax.ny.gov/pubs_and_bulls/advisory_opinions/sales/24-54s.htm — Sales tax on the contractor's bill (if the work is not a capital impro; The contractor's invoice comes with sales tax
+- https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm — Sales tax on the furniture and equipment bought with a business; Bought a business without notifying the Tax Department (bulk sale)
+- https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm — Add the clause that saves sales tax on the build-out; Sales tax on your build-out
+
+### Первоисточники, увиденные только в выдержках поиска (39)
+
+- https://a810-bisweb.nyc.gov/bisweb/bispi00.jsp — Look up the address before you fall in love with it
+- https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650 — Department of Buildings alteration filing fee; The note says the 10% excludes government fees; those fees are now sep
+- https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-157685 — civil penalty for work without a permit, multiple of the permit fee (o; minimum civil penalty for work without a permit, USD
+- https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-215585 — Vending on a cart permit rented from its holder; Rent a cart permit on the black market
+- https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-44016 — Keep trading on the seller's Health permit; Permits do not come with the shop
+- https://dol.ny.gov/bizserve/ui/prg/rate/wbarchive — 2026 unemployment-insurance wage base per worker, USD
+- https://franchise.gregoryscoffee.com/ — Franchise fee (example: Gregorys Coffee); Franchise training fee and pre-opening travel
+- https://nyc.gov/site/lpc/about/pr2025/lpc-releases-new-analysis-20250414.page — share of Landmarks approvals issued at staff level
+- https://nyc.gov/VendorEnforcement — Street vending enforcement officer; Roll the cart out without a permit
+- https://prd2.nycgovparks.org/opportunities/concessions/rfps-rfbs-rfeis — A stall at a seasonal food market, or a city concession for a kiosk or
+- https://www.bizbuysell.com/learning-center/article/buyer-training-after-business-sale/ — Who pays the business broker
+- https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/ — Purchase price of an operating coffee shop; Choose how you enter: build, buy, franchise, cart or pop-up
+- https://www.ftc.gov/business-guidance/resources/consumers-guide-buying-franchise — Franchise: read the disclosure document and call franchisees; The 14-day rule for franchises
 - https://www.naggl.org/wp-content/uploads/2025/08/SBA-Info-5000-872051.7aFees.8.28.25.pdf — SBA loan guaranty fee (if you borrow to buy or build)
 - https://www.nyc.gov/assets/buildings/pdf/ll156_sn.pdf — Construction work without a Department of Buildings permit; Renovate without filing plans
 - https://www.nyc.gov/assets/buildings/pdf/ll160of2017_sn.pdf — The landlord's unpaid fines block your permit; arrears on a property above which the Buildings Department denies perm
 - https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article5.pdf — The seller left unpaid Health Department fines
-- https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter21.pdf — Health Department consultative inspection (optional, ungraded)
 - https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter6.pdf — Lattes change the class of your cart
 - https://www.nyc.gov/assets/doh/downloads/pdf/rii/mobile-food-vending-unit-penalty-schedule-for-administrative-code.pdf — Vending food from a cart with no license or no unit permit
 - https://www.nyc.gov/assets/doh/downloads/pdf/rii/supervisory-licenses-what-vendors-need-to-know.pdf — Supervisory license renewal (cart)
@@ -192,13 +211,9 @@
 - https://www.nyc.gov/site/lpc/applications/fees.page — Storefronts in historic districts
 - https://www.nyc.gov/site/lpc/applications/storefronts.page — Landmarks permit for storefront work (historic districts only); In a historic district: get the Landmarks permit first
 - https://www.nycctp.com/wp-content/uploads/2021/03/EV-Make-Ready-Information-Sheet-DOT.pdf — utility-side electrical upgrade, months (low; Con Edison 2021 fleet sh; utility-side electrical upgrade, months (high)
-- https://www.osc.ny.gov/press/releases/2026/07/dinapoli-nyc-department-buildings-meets-critical-goals-lags-lower-priority-issues — How long a Buildings permit takes; Buildings permits slow down
 - https://www.tax.ny.gov/pdf/current_forms/st/dtf17i.pdf — days before the first taxable sale to apply for the sales-tax Certific
-- https://www.tax.ny.gov/pubs_and_bulls/advisory_opinions/sales/24-54s.htm — Sales tax on the contractor's bill (if the work is not a capital impro; The contractor's invoice comes with sales tax
-- https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm — Sales tax on the furniture and equipment bought with a business; Bought a business without notifying the Tax Department (bulk sale)
-- https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm — Add the clause that saves sales tax on the build-out; Sales tax on your build-out
 
-### Вторичные: юристы, брокеры, отраслевая пресса, новости (51)
+### Вторичные: юристы, брокеры, отраслевая пресса, новости (50)
 
 - https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/ — The gas to the building is shut off; A Hell's Kitchen restaurant cooked without gas for about six weeks in 
 - https://acquisitionstars.com/buying-a-business/coffee-shop — The espresso machine belongs to a lender
@@ -247,7 +262,6 @@
 - https://www.metro-manhattan.com/blog/rentescalations — Rent goes up every year; Yearly rent increase written into the lease
 - https://www.metro-manhattan.com/security-deposit/ — How big the deposit gets; The bank needs three weeks for the letter of credit
 - https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers — Staying past the lease; holdover rent as a multiple of the last rent (low)
-- https://www.vettedbiz.com/resources/dunkin-franchise — Dunkin' royalty, share of gross sales; Dunkin' advertising fee, share of gross sales
 - https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html — The machine you bought with the shop dies
 - https://www.westsiderag.com/2014/03/27/bocca-di-bye-bye-restaurant-backs-out-because-of-red-tape — Bocca di Bacco walked away from a signed Upper West Side lease and abo
 - https://www.whitefordlaw.com/news-events/client-alert-sba-issues-sop-50-10-8-key-changes-impacting-sba-7a-lending — Borrowing to buy a business; The bank wants 10% of your own money
