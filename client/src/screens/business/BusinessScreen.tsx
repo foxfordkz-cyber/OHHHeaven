@@ -1,0 +1,194 @@
+import { useEffect, useMemo, useState } from 'react';
+import type { StandingOrders } from '../../../../shared/src/types';
+import { Banner, Button, Card } from './__stubs__/ui';
+import { pendingNotices, readInbox } from './actions';
+import { AwayCard } from './AwayCard';
+import { BooksTab } from './BooksTab';
+import type { BizDeps, BizTab } from './deps';
+import { dayLabel, plural } from './format';
+import { Header } from './Header';
+import { ruleCardById } from './lookup';
+import { ManageTab } from './ManageTab';
+import { buildSetOrders, clearDraft, diffOrders, draftFrom, hasChanges, loadDraft, saveDraft, type Draft } from './orders';
+import { RealRuleCard, RuleSheet } from './RuleCards';
+import { firstUnseen, markRuleSeen } from './seen';
+import { BankruptScreen, NoBusiness } from './StatusScreens';
+import { TodayTab } from './TodayTab';
+import './biz.css';
+
+const TABS: { id: BizTab; label: string }[] = [
+  { id: 'today', label: 'Today' },
+  { id: 'manage', label: 'Manage' },
+  { id: 'books', label: 'Books' },
+  { id: 'network', label: 'Network' },
+  { id: 'insights', label: 'Insights' },
+];
+
+/** Keeps the Manage draft across tab switches, reloads and dropped connections. */
+function useDraft(businessId: string | null, orders: StandingOrders | null) {
+  const ordersKey = orders ? JSON.stringify(orders) : '';
+  const [state, setState] = useState<{ base: string; draft: Draft } | null>(() =>
+    businessId && orders ? { base: ordersKey, draft: loadDraft(businessId, orders) ?? draftFrom(orders) } : null);
+
+  useEffect(() => {
+    if (!businessId || !orders) { setState(null); return; }
+    setState((s) => {
+      if (!s) return { base: ordersKey, draft: loadDraft(businessId, orders) ?? draftFrom(orders) };
+      if (s.base === ordersKey) return s;
+      const oldBase = JSON.parse(s.base) as StandingOrders;
+      // No local edits: follow the server (Apply, manager, another device). Local edits: keep them.
+      return { base: ordersKey, draft: hasChanges(oldBase, s.draft) ? s.draft : draftFrom(orders) };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [businessId, ordersKey]);
+
+  const setDraft = (d: Draft) => {
+    if (!businessId || !orders) return;
+    setState({ base: ordersKey, draft: d });
+    saveDraft(businessId, orders, d);
+  };
+  const reset = () => {
+    if (!businessId || !orders) return;
+    clearDraft(businessId);
+    setState({ base: ordersKey, draft: draftFrom(orders) });
+  };
+  return { draft: state?.draft ?? null, setDraft, reset };
+}
+
+export function BusinessScreen({ deps, initialTab = 'today' }: { deps: BizDeps; initialTab?: BizTab }) {
+  const v = deps.view;
+  const b = v.business;
+  const [tab, setTab] = useState<BizTab>(initialTab);
+  const [awayClosed, setAwayClosed] = useState(false);
+  const [ruleId, setRuleId] = useState<string | null>(null);
+  const [, setSeenTick] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [savedKey, setSavedKey] = useState<string | null>(null);
+  const [bankruptBooks, setBankruptBooks] = useState(false);
+  const { draft, setDraft, reset } = useDraft(b?.id ?? null, b?.orders ?? null);
+  const packs = { pack: deps.pack, common: deps.common };
+
+  const diff = useMemo(() => (b && draft ? diffOrders(b.orders, draft) : {}), [b, draft]);
+  const draftKey = draft ? JSON.stringify(draft) : '';
+  const showSave = Object.keys(diff).length > 0 && savedKey !== draftKey;
+
+  if (!b) return <div className="bz-root"><NoBusiness deps={deps} /></div>;
+
+  const openRule = (id: string) => setRuleId(id);
+  const goto = (t: BizTab) => setTab(t);
+
+  const ruleCandidates = [
+    ...v.notices.flatMap((n) => n.found.map((f) => f.violationId)),
+    ...v.recommendations.map((r) => r.ruleCardId).filter((x): x is string => !!x),
+    ...b.trails.filter((t) => t.months > 0).map((t) => t.violationId),
+    ...(v.away?.items.some((i) => i.kind === 'case') ? ['letter_grade'] : []),
+  ].filter((id) => ruleCardById(packs, id));
+  const firstRule = firstUnseen(ruleCandidates);
+  const firstCard = firstRule ? ruleCardById(packs, firstRule) : null;
+
+  const closeAway = () => {
+    setAwayClosed(true);
+    const a = v.away ? readInbox(v.away.items) : null;
+    if (a) deps.act(a).catch(() => undefined);
+  };
+
+  const save = async () => {
+    if (!draft) return;
+    const a = buildSetOrders(b.orders, draft);
+    if (!a) return;
+    setSaving(true); setSaveMsg(null);
+    try {
+      const ack = await deps.act(a);
+      if (ack.ok) {
+        setSavedKey(draftKey);
+        clearDraft(b.id);
+        setSaveMsg({ ok: true, text: `Saved. From ${dayLabel(v.world.day + 1)} your business runs on the new settings.` });
+      } else {
+        setSaveMsg({ ok: false, text: ack.error ?? 'The city did not accept the change.' });
+      }
+    } catch {
+      setSaveMsg({ ok: false, text: 'Connection lost. Your changes are kept; save again when you are back online.' });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const offers = v.deals.filter((d) => d.status === 'proposed' && d.toBusinessId === b.id).length;
+  const badge: Partial<Record<BizTab, boolean>> = { today: pendingNotices(v.notices).length > 0, network: offers > 0 };
+
+  if (b.status === 'bankrupt') {
+    return (
+      <div className="bz-root">
+        <Header view={v} pack={deps.pack} />
+        {!bankruptBooks ? <BankruptScreen deps={deps} onBooks={() => setBankruptBooks(true)} /> : (
+          <>
+            <div className="bz-pad" style={{ paddingTop: 12 }}><Button onClick={() => setBankruptBooks(false)}>← Back</Button></div>
+            <div className="bz-tabpanel"><BooksTab deps={deps} /></div>
+          </>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="bz-root">
+      <Header view={v} pack={deps.pack} />
+      {!deps.online && (
+        <div className="bz-pad" style={{ paddingTop: 10 }}>
+          <Banner tone="bad">Connection lost. The city keeps running; your unsaved changes are kept on this device.</Banner>
+        </div>
+      )}
+      <nav className="bz-tabs" role="tablist" aria-label="My business">
+        {TABS.map((t) => (
+          <button key={t.id} type="button" role="tab" className="bz-tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}>
+            {t.label}{badge[t.id] && <span className="bz-dot" aria-label="needs an answer" />}
+          </button>
+        ))}
+      </nav>
+
+      <div className="bz-tabpanel" role="tabpanel">
+        {firstCard && tab !== 'network' && tab !== 'insights' && (
+          <div className="bz-pad" style={{ marginBottom: 12 }}>
+            <RealRuleCard card={firstCard} onDone={() => { markRuleSeen(firstCard.id); setSeenTick((n) => n + 1); }} />
+          </div>
+        )}
+        {tab === 'today' && <TodayTab deps={deps} onRule={openRule} onGo={goto} />}
+        {tab === 'manage' && draft && <ManageTab deps={deps} draft={draft} diff={diff} setDraft={setDraft} onRule={openRule} />}
+        {tab === 'books' && <BooksTab deps={deps} />}
+        {tab === 'network' && (deps.slots?.network ?? <Slot title="Network" text="Neighbors, offers and deals." />)}
+        {tab === 'insights' && (deps.slots?.insights ?? <Slot title="Insights" text="Break-even, payback, costs against the industry and the advisor." />)}
+        {saveMsg && !showSave && (
+          <div className="bz-pad" style={{ marginTop: 12 }}><Banner tone={saveMsg.ok ? 'good' : 'bad'}>{saveMsg.text}</Banner></div>
+        )}
+      </div>
+
+      {showSave && (
+        <div className="bz-savebar">
+          <div className="bz-savebar-inner">
+            <div className="bz-between bz-small">
+              <span>{plural(Object.keys(diff).length, 'change')} · start {dayLabel(v.world.day + 1)}</span>
+              {tab !== 'manage' && <button type="button" className="bz-linkbtn" onClick={() => setTab('manage')}>Review</button>}
+            </div>
+            {saveMsg && !saveMsg.ok && <span className="bz-small bz-bad-text" role="alert">{saveMsg.text}</span>}
+            <div className="bz-btn-row">
+              <Button onClick={() => { reset(); setSaveMsg(null); }} disabled={saving}>Discard</Button>
+              <Button variant="primary" onClick={save} disabled={saving || !deps.online}>{deps.online ? 'Save settings' : 'Waiting for connection…'}</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <RuleSheet id={ruleId} packs={packs} onClose={() => setRuleId(null)} />
+      {v.away && !awayClosed && <AwayCard view={v} onClose={closeAway} onGo={goto} />}
+    </div>
+  );
+}
+
+function Slot({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="bz-pad">
+      <Card title={title}><p className="bz-muted">{text}</p></Card>
+    </div>
+  );
+}
