@@ -189,10 +189,14 @@ export function settleFine(w: WorldState, ctx: EngineCtx, caseId: string, opts: 
       id: `law:${caseId}:closed`, title: `Case closed: ${b.name} fined ${usd(fine)}`, text: `+${points} points.`, ref: { type: 'case', id: caseId },
     });
   }
+  const parts = [
+    opts.reason ?? '',
+    opts.contestFee ? `Contested: lawyer ${usd(RULES.CONTEST_FEE)}, fine cut to ${usd(fine)}.` : '',
+    hit > 0 ? `Reputation -${Math.round(hit * 100)} points.` : '',
+    closureDays > 0 ? `Closed for ${plural(closureDays, 'day')}.` : '',
+  ].map((s) => s.trim()).filter(Boolean);
   world = addInbox(world, ownerPlayerIds(b), {
-    id: `law:${caseId}:paid`, title: `Fine paid: ${usd(fine)}`,
-    text: `${opts.reason ?? ''}${opts.contestFee ? `Contested: lawyer ${usd(RULES.CONTEST_FEE)}, fine cut to ${usd(fine)}. ` : ''}`
-      + `${hit > 0 ? `Reputation -${Math.round(hit * 100)} points. ` : ''}${closureDays > 0 ? `Closed for ${plural(closureDays, 'day')}.` : ''}`.trim() || `Paid ${usd(fine)}.`,
+    id: `law:${caseId}:paid`, title: `Fine paid: ${usd(fine)}`, text: parts.length > 0 ? parts.join(' ') : `Paid ${usd(fine)}.`,
     ref: { type: 'case', id: caseId },
   });
   world = addFeed(world, { id: `law:${caseId}:fined`, kind: 'inspection', businessId: b.id, text: `${ROLE_LABEL[c.role]} fined ${b.name} ${usd(fine)}` });
