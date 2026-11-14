@@ -227,10 +227,26 @@ describe('cafe service — through the hooks the engine calls', () => {
     const b = cafe({ size: 30, orders: orders({ staff: { barista: 2 } }), days: [report(DAY, 550)] });
     const k = serviceKpis(b, pack);
     expect(k.map((x) => x.id)).toEqual(['rush_served', 'bar_rush_per_hour', 'seat_turns', 'seats_peak_use']);
-    const notes = serviceDayNotes(b, report(DAY, 550), pack);
-    expect(part.notes!(b, report(DAY, 550), pack)).toEqual(notes);
-    expect(notes.length).toBeGreaterThan(0);
+    const r = { ...report(DAY, 550), servedUnits: 400, lost: { size: 0, staff: 150, closure: 0 } };
+    const notes = serviceDayNotes(b, r, pack);
+    expect(part.notes!(b, r, pack)).toEqual(notes);
     expect(notes.join(' ')).toMatch(/Out of hands|Morning rush/);
+  });
+
+  it('notes never name more or fewer lost guests than the day report', () => {
+    const b = cafe({ size: 30, orders: orders({ staff: { barista: 2 } }) });
+    const lostIn = (notes: string[]): number => notes.reduce((a, n) => {
+      const m = n.match(/^Morning rush: .*, (\d+) walked on$/) ?? n.match(/^Out of hands: (\d+) order/) ?? n.match(/^No free seat: (\d+) guest/)
+        ?? n.match(/^Nobody on the floor .*: (\d+) order/) ?? n.match(/^(?:Line out the door|Short-staffed): (\d+) /);
+      return a + (m ? Number(m[1]) : 0);
+    }, 0);
+    for (const lost of [0, 7, 150, 300]) {
+      const r = { ...report(DAY, 550), servedUnits: 550 - lost, lost: { size: 0, staff: lost, closure: 0 } };
+      expect(Math.abs(lostIn(serviceDayNotes(b, r, pack)) - lost)).toBeLessThanOrEqual(2);   // each line rounds once
+    }
+    // a quiet day by the model, but the report lost guests: the engine's words, not an invented cause
+    const quiet = { ...report(DAY, 40), servedUnits: 30, lost: { size: 4, staff: 6, closure: 0 } };
+    expect(serviceDayNotes(cafe(), quiet, pack)).toEqual(['Line out the door: 4 customers walked away', 'Short-staffed: 6 customers left unserved']);
   });
 
   it('seat use at the busiest hour: a takeaway counter is not "packed" just because it sells a lot', () => {

@@ -299,10 +299,45 @@ export function seatUseDay(d: CafeDay): number | null {
   return s && s.seats.count > 0 ? s.seats.present / s.seats.count : null;
 }
 
+/** The engine's own words for the day's losses, split as the engine split them. */
+function engineLines(r: DayReport): string[] {
+  const out: string[] = [];
+  const size = Math.round(r.lost.size), staff = Math.round(r.lost.staff);
+  if (size > 0) out.push(`Line out the door: ${size} customers walked away`);
+  if (staff > 0) out.push(`Short-staffed: ${staff} customers left unserved`);
+  return out;
+}
+
+const NO_LOSS = { hours: 0, queue: 0, seats: 0, labor: 0 };
+
+/**
+ * The model's day held to the report's total: the losses it names add up to the guests the report lost (closures
+ * aside); the model only splits them by cause. The engine passes no place to notes yet (FORMATS.md, request 1), so
+ * the model may count seats that have no floor or the guests of an average door; the total stays the true one.
+ * null when the report lost guests the model sees no cause for.
+ */
+function heldToReport(s: ServiceDay, r: DayReport): ServiceDay | null {
+  const reported = Math.max(0, r.lost.size + r.lost.staff);
+  const modelled = s.lost.hours + s.lost.queue + s.lost.seats + s.lost.labor;
+  if (reported > 0 && modelled <= 1e-9) return null;
+  const k = modelled > 0 ? reported / modelled : 0;
+  return {
+    ...s,
+    lost: { hours: s.lost.hours * k, queue: s.lost.queue * k, seats: s.lost.seats * k, labor: s.lost.labor * k },
+    rush: { ...s.rush, walked: s.rush.walked * k },
+    seats: { ...s.seats, left: s.seats.left * k },
+  };
+}
+
 /** The owner's sentences for one day report: why orders were lost today. */
 export function serviceDayNotes(b: BusinessState, r: DayReport, pack: Pack, env?: NicheEnv): string[] {
   const s = dayFromReport(b, r, pack, env?.place);
-  return s ? serviceNotes(s, b.size, env?.place?.sqft) : [];
+  if (!s) return [];
+  const held = heldToReport(s, r);
+  if (held) return serviceNotes(held, b.size, env?.place?.sqft);
+  // the model without the door cannot explain the report's losses: say them in the engine's words
+  const quiet: ServiceDay = { ...s, lost: NO_LOSS, rush: { ...s.rush, walked: 0 }, seats: { ...s.seats, left: 0 } };
+  return [...engineLines(r), ...serviceNotes(quiet, b.size, env?.place?.sqft)];
 }
 
 /**
@@ -312,12 +347,7 @@ export function serviceDayNotes(b: BusinessState, r: DayReport, pack: Pack, env?
  * hears it exactly once.
  */
 function engineLimitNotes(r: DayReport): string[] {
-  if (typeof staffing.part.notes === 'function') return [];
-  const out: string[] = [];
-  const size = Math.round(r.lost.size), staff = Math.round(r.lost.staff);
-  if (size > 0) out.push(`Line out the door: ${size} customers walked away`);
-  if (staff > 0) out.push(`Short-staffed: ${staff} customers left unserved`);
-  return out;
+  return typeof staffing.part.notes === 'function' ? [] : engineLines(r);
 }
 
 /**
