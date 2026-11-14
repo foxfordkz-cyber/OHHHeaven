@@ -75,6 +75,39 @@
       "source": "https://ww3.nysif.com/-/media/Files/DISABILITY_BENEFITS/PDF/UDB-SOC_2026.pdf",
       "confidence": "estimate",
       "note": "NYSIF disability benefits standard rates effective January 1, 2026 (seen): statutory premium $0.10 per $100 of payroll capped at $340 a week = $17.68 per person a year, minimum annual premium $60 (so a shop with three or fewer workers pays $60); the employer may withhold up to 0.5% of wages, at most $0.60 a week, from each worker. $17.68 / $40,320 = 0.04% of a full-time wage. Paid Family Leave is paid by the worker through payroll deduction: 0.432% of wages, at most $411.91 in 2026 (seen at paidfamilyleave.ny.gov)."
+    },
+    {
+      "id": "futa",
+      "name": "Federal unemployment tax (FUTA)",
+      "base": "payroll",
+      "rate": 0.001,
+      "due": "annual",
+      "appliesIf": "every employer; 0.6% on the first $7,000 of each worker's wages",
+      "source": "https://www.irs.gov/taxtopics/tc759",
+      "confidence": "estimate",
+      "note": "Seen at IRS Topic 759: 6.0% on the first $7,000 paid to each employee, less a credit of up to 5.4% for state unemployment tax = 0.6%, at most $42 per worker a year. Game rate is the effective share: $42 / $40,320 = 0.10% of payroll (with the D12 barista wage of $18: $42 / $34,560 = 0.12%). US DOL final 2026 credit reductions (updated November 12, 2026, seen): only California (1.5%) and the Virgin Islands; New York is not on the list, so 0.6% holds for 2026."
+    },
+    {
+      "id": "workers_comp",
+      "name": "Workers' compensation insurance",
+      "base": "payroll",
+      "rate": 0.02,
+      "due": "monthly",
+      "appliesIf": "most employers with one or more employees",
+      "source": "https://www.wcb.ny.gov/content/main/Employers/workers-compensation-insurance.jsp",
+      "confidence": "estimate",
+      "note": "Seen at the Workers' Compensation Board: coverage is mandatory for most employers of one or more employees, and deducting its cost from wages is a misdemeanor. The premium is quoted per $100 of payroll by job class and claims history, so there is no single rate: you need a quote. Game planning rate, my estimate: 2% of payroll. Anchors: Insureon reports coffee shops pay $88 a month ($1,059 a year) on average across the US (seen); New York's overall loss cost level fell 21.9% from October 1, 2026 (NYCIRB filing approved by DFS, seen through search). New York uses its own class codes (restaurants 9071-9074 per brokers); the restaurant loss cost per $100 was not found."
+    },
+    {
+      "id": "ny_unemployment",
+      "name": "NY unemployment insurance (new employer)",
+      "base": "payroll",
+      "rate": 0.0179,
+      "due": "quarterly",
+      "appliesIf": "every employer; 4.1% on the first $17,600 of each worker's wages",
+      "source": "https://dol.ny.gov/bizserve/ui/prg/rate",
+      "confidence": "estimate",
+      "note": "Seen at NY DOL: new employer rate 4.1% for 2026 (range 1.7%-9.5%) and a 2026 wage base of $17,600, so at most $721.60 per worker a year. The engine multiplies one rate by the whole payroll, so the game rate is the effective share for a full-time worker: $721.60 / $40,320 ($21 x 160 h x 12) = 1.79%; at the D12 cafe barista wage of $18 ($34,560 a year) it is 2.09%. The shared file serves every niche, so the rate is left at 1.79%; a per-worker cap in the engine would remove the guess. For a $17 x 140 h worker ($28,560 a year) the true share is 2.53%. Filed quarterly on Form NYS-45."
     }
   ],
   "extra": {

@@ -60,6 +60,21 @@
       "source": "https://www.webstaurantstore.com/search/bunn-cwtf15-aps.html",
       "confidence": "estimate",
       "note": "Bunn CWTF15-APS automatic brewer (item 234230010006): $980.00 at WebstaurantStore, seen November 14, 2026, matching the research notes' KaTom price. Plus the notes' $800 allowance for a bulk grinder and airpots (not seen). Drip coffee is the fastest thing on the menu at the morning peak."
+    },
+    {
+      "id": "sidewalk_cafe_license",
+      "name": "Dining Out NYC sidewalk cafe license",
+      "kind": "license",
+      "cost": 2550,
+      "required": false,
+      "waitDays": 240,
+      "qualityBonus": 0.02,
+      "agency": "NYC Department of Transportation (Dining Out NYC)",
+      "link": "https://www.diningoutnyc.info/apply/fees",
+      "withoutItViolation": "unlicensed_sidewalk_cafe",
+      "source": "https://www.diningoutnyc.info/apply/fees",
+      "confidence": "verified",
+      "note": "Dining Out NYC fees, seen November 14, 2026: $1,050 license for a four-year term + $1,500 refundable security deposit for a sidewalk cafe ($2,500 for a roadway cafe, plus a $500-$900 public hearing fee) = $2,550; on top comes a yearly revocable consent fee of $6, $10, $18 or $31 per sq ft by sector (a 120 sq ft sidewalk cafe pays $720-$3,720 a year). The 240-day wait is the Transportation Department's own eight-month timeline; the Comptroller found on October 27, 2026 that more than half of approved restaurants waited over 19 months, only 28.6% of nearly 5,000 applications from 2024 to mid-June 2026 were approved, and 1 of 388 filed in 2026. Never part of a starter kit."
     }
   ],
   "roadmap": [
@@ -225,6 +240,32 @@
       "source": "https://fred.stlouisfed.org/series/APU0000709112",
       "confidence": "estimate",
       "note": "Seen at FRED on November 14, 2026 (BLS APU0000709112, whole milk, US city average): $3.997 per gallon in November 2025, $4.317 in June 2026 (+8% in seven months), $4.101 in October 2026. The 10% rise and the dairy share of cost of goods (about 30%) are my estimates: 10% x 30% = +3%."
+    },
+    {
+      "id": "sidewalk_shed",
+      "name": "Sidewalk shed goes up on your block",
+      "text": "Scaffolding covers your storefront while the building next door repairs its facade. Fewer people notice the shop.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 0.93
+      },
+      "months": 6,
+      "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
+      "confidence": "estimate",
+      "note": "Seen through search on November 14, 2026 (nyc.gov refuses this session): the City's 2024 study with Mastercard found that dining and drinking places with a sidewalk shed in front saw weekly transactions fall 3.5% to 9.7% in the six months after the shed went up, and card spending at businesses in buildings with sheds fell $3,900-$9,500 a month. I take the middle, -7%, for six months. Owners quoted in the press report 20-30% drops; those are anecdotes. Since Local Laws 48 and 51 of 2025 (in force January 2026) shed permits last 90 days, each renewal costs $130, and after 180 days the building owner pays graduated monthly penalties (up to $6,000 a month): sheds came down faster in 2026. The average shed stood 482 days in August 2023 (Citizens Union report)."
+    },
+    {
+      "id": "restaurant_week",
+      "name": "NYC Restaurant Week",
+      "text": "Prix-fixe menus at $30, $45 and $60 pull diners into the neighborhood. More people walk past your door.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 1.05
+      },
+      "months": 1,
+      "source": "https://www.nyctourism.com/restaurant-week/",
+      "confidence": "estimate",
+      "note": "NYC Tourism, seen November 14, 2026: Restaurant Week Winter 2027 runs January 19 to February 11 with prix-fixe menus at $30, $45 and $60; Saturdays are excluded and restaurants may join for one to four weeks. A coffee shop does not sell prix-fixe meals: the 5% lift is my estimate for more people out on the streets of a dining block. No measurement exists."
     }
   ],
   "extra": {

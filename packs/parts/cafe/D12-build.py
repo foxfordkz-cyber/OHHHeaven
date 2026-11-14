@@ -99,4 +99,10 @@ with open(os.path.join(HERE, 'D12-table.md'), 'w') as f:
     for pack, rows in (('cafe', cafe_rows), ('_common', common_rows)):
         for where, b, a, src, why, conf in rows:
             f.write(f"| {pack}: `{where}` | {fmt(b)} | {fmt(a)} | {conf} | {src} | {why} |\n")
+with open(os.path.join(HERE, 'D12-review.md'), 'w') as f:
+    f.write('| Пакет | Число | Значение | Итог | Что найдено |\n|---|---|---|---|---|\n')
+    for pack, where, val, status, text in D12_patches.REVIEW:
+        f.write(f"| {pack} | `{where}` | {val} | {status} | {text} |\n")
+from collections import Counter
+print(Counter(r[3] for r in D12_patches.REVIEW))
 print(len(cafe_rows), 'cafe patches,', len(common_rows), 'common patches,', len(CHECKED_ONLY), 'checked-only')
