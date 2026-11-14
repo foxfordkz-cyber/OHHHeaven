@@ -1,5 +1,7 @@
 // Where the cash of a newcomer goes, month by month, before and after the doors open.
-//   npx tsx sim/trace.ts [seasons] [--niche=cafe] [--json=out.json]
+//   npx tsx sim/trace.ts [seasons] [--niche=cafe] [--json=out.json] [--seed=100] [--capture=…] [--start=…] [--ramp=…] [--no-runway] [--brief]
+// --capture/--start/--ramp override pack.extra.footfall for a what-if (nothing is written); --no-runway lets every
+// newcomer open without the cash check of bots/src/runway.ts; --brief prints only the summary.
 // Same city as `sim/calibrate.ts season`: 30 established shops (AI residents) plus ten newcomers who play the
 // recommended opening. For every newcomer of the niche it prints: the opening bill (setup spent, cash left on
 // opening day), then each month's lines (revenue, cogs, payroll, rent, opex, taxes) and cash at month end, and for
@@ -20,6 +22,15 @@ import { recommendOpening } from '../engine/src/analytics/opening';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const json = <T>(p: string): T => JSON.parse(readFileSync(join(ROOT, p), 'utf8')) as T;
 const packs: PackSet = { common: json('packs/_common.json'), niches: { cafe: json<Pack>('packs/cafe.json'), barbershop: json<Pack>('packs/barbershop.json') } };
+const argv0 = process.argv.slice(2);
+const flag = (k: string): number | undefined => { const a = argv0.find((x) => x.startsWith(`--${k}=`)); return a ? Number(a.slice(k.length + 3)) : undefined; };
+for (const n of Object.values(packs.niches)) {
+  const f = (n!.extra as { footfall?: Record<string, number> } | undefined)?.footfall;
+  if (!f || n!.id !== (argv0.find((a) => a.startsWith('--niche='))?.slice(8) ?? 'cafe')) continue;
+  if (flag('capture') != null) f.captureRate = flag('capture')!;
+  if (flag('start') != null) f.awarenessStart = flag('start')!;
+  if (flag('ramp') != null) f.rampDays = flag('ramp')!;
+}
 const places = json<Place[]>('data/places.json');
 const ctx = { packs, places };
 const usd = (x: number): string => (x < 0 ? '-$' : '$') + Math.round(Math.abs(x)).toLocaleString('en-US');
@@ -39,11 +50,12 @@ interface Row {
 }
 
 const rows: Row[] = [];
+let neverOpened = 0;
 const t0 = Date.now();
 for (let s = 0; s < seasons; s++) {
   const seed = seed0 + s * 7;
   const strategies = new Map<string, OwnerStrategy>();
-  const brain = createBotBrain({ strategyOf: (p) => strategies.get(p.id), recommendOpening: (n, placeId, world, c) => recommendOpening(n, placeId, world, c) });
+  const brain = createBotBrain({ runwayCheck: !argv.includes('--no-runway'), strategyOf: (p) => strategies.get(p.id), recommendOpening: (n, placeId, world, c) => recommendOpening(n, placeId, world, c) });
   const deps = defaultDeps({ bots: brain });
   let w = newWorld({ ...defaultConfig({ id: 'cal', name: 'Calibration', demo: true, seed }), aiBusinessesTarget: 30 }, ctx, deps);
   const newcomers: string[] = [];
@@ -84,13 +96,16 @@ for (let s = 0; s < seasons; s++) {
       })),
     });
   }
+  neverOpened += newcomers.filter((id) => !w.businesses.some((b) => b.managerPlayerId === id)).length;
   console.error(`season ${s} done, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 }
 
 const neu = rows.filter((r) => !r.est);
 const est = rows.filter((r) => r.est);
+const fp = (packs.niches[niche]!.extra as { footfall?: Record<string, number> }).footfall;
+console.log(`footfall: captureRate ${fp?.captureRate}, awarenessStart ${fp?.awarenessStart}, rampDays ${fp?.rampDays}; runway check ${argv.includes('--no-runway') ? 'off' : 'on'}; seasons ${seasons} from seed ${seed0}; newcomers of all niches who found no door they would sign for: ${neverOpened}`);
 console.log(`# ${packs.niches[niche]!.name}: newcomers ${neu.length} (closed ${neu.filter((r) => r.bankruptDay != null).length}), established ${est.length} (closed ${est.filter((r) => r.bankruptDay != null).length}), start capital ${usd(packs.niches[niche]!.startCapital)}`);
-for (const r of [...neu, ...est.filter((x) => x.bankruptDay != null)]) {
+for (const r of argv.includes('--brief') ? [] : [...neu, ...est.filter((x) => x.bankruptDay != null)]) {
   console.log(`\n## ${r.est ? 'established' : 'newcomer'} ${r.strat} @ ${r.place} (${r.kind}; ${r.ped} people/day, map says ${r.base} orders/day; rent ${usd(r.rent)}/mo)`);
   console.log(`   lease day ${r.createdDay}, doors open day ${r.openedDay}, ${r.bankruptDay != null ? `CLOSED day ${r.bankruptDay}` : 'alive'}; spent on setup ${usd(r.setupSpent)}, cash on opening day ${r.cashAtOpen == null ? '—' : usd(r.cashAtOpen)}`);
   console.log('   month  open  orders/day  price   revenue      cogs   payroll      rent      opex     other     taxes    profit  cash end');
@@ -112,5 +127,9 @@ for (const [label, xs] of [['newcomers closed', neu.filter((r) => r.bankruptDay 
   const a = agg(xs);
   console.log(`${label.padEnd(24)} ${pad(a.n, 3)} ${pad(usd(a.setup), 9)} ${pad(usd(a.preRent), 18)} ${pad(usd(a.preOther), 19)} ${pad(usd(a.rampMonth), 31)} ${pad(usd(a.laterMonth), 17)}`);
 }
+console.log('\n# Newcomers, one line each');
+for (const r of neu) console.log(`${r.strat.padEnd(10)} ${r.place} ${r.kind.padEnd(8)} open day ${pad(r.openedDay, 3)}  ${r.bankruptDay != null ? `closed day ${pad(r.bankruptDay, 3)}` : 'alive         '}  cash on opening ${pad(r.cashAtOpen == null ? '—' : usd(r.cashAtOpen), 8)}  end cash ${pad(usd(r.months[r.months.length - 1]?.cashEnd ?? 0), 9)}  last month ${pad(usd(r.months[r.months.length - 1]?.profit ?? 0), 8)}  price $${(r.months[r.months.length - 1]?.price ?? 0).toFixed(2)}`);
+const estLast = est.filter((r) => r.bankruptDay == null).map((r) => r.months[r.months.length - 1]?.profit ?? 0).sort((a, b) => a - b);
+console.log(`established: closed ${est.filter((r) => r.bankruptDay != null).length} of ${est.length} (target 5–10% a year); last month profit quartiles ${[0.25, 0.5, 0.75].map((q) => usd(estLast[Math.floor((estLast.length - 1) * q)] ?? 0)).join(' / ')}`);
 console.log(`\ndone in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 if (jsonOut) writeFileSync(jsonOut, JSON.stringify(rows, null, 1));
