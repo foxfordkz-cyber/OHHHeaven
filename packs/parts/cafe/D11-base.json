@@ -1,0 +1,2625 @@
+{
+  "id": "cafe",
+  "version": 2,
+  "name": "Coffee shop",
+  "tagline": "Espresso, pastries and 18 seats on a real New York block: real rent, real permits, real inspectors.",
+  "startCapital": 224000,
+  "unit": {
+    "name": "order",
+    "refPrice": 8.5,
+    "priceMin": 4,
+    "priceMax": 16,
+    "cogsPerUnit": 2.21,
+    "source": "https://order.online/en-US/store/ten-thousand-coffee-24834959",
+    "confidence": "estimate",
+    "note": "Planning assumption from research notes (economics.md, 2026 planning model): an average ticket of $8.50 before sales tax (a drink, sometimes with a pastry). Menu anchors seen by the note's author in 2026: latte $4.25-$6.99, croissant $4.00-$5.49. Ingredients, food and spoilage are 26% of sales = $2.21 per order; cups, lids and napkins (another 2%) are a separate monthly cost line, so the full cost of goods is 28%. No public statistic of the average NYC cafe ticket exists."
+  },
+  "market": {
+    "unitsPerSlotMonth": 6000,
+    "priceElasticity": -1.3,
+    "weights": {
+      "price": 0.35,
+      "quality": 0.25,
+      "reputation": 0.2,
+      "location": 0.2
+    },
+    "source": "https://restaurant.org/research-and-media/media/press-releases/new-resource-from-national-restaurant-association-provides-insights-into-operational-realities",
+    "confidence": "estimate",
+    "note": "Planning assumption from research notes (economics.md, 2026 planning model): 200 orders a day x 30 days = 6,000 a month for one average storefront at $8.50 and average quality. The notes stress that this is a scenario, not a measured \"typical\" figure: count foot traffic yourself. Elasticity and weights are game-balance values kept from the engine fixture."
+  },
+  "capacity": {
+    "unitsPerStaffMonth": 1700,
+    "minStaff": 2,
+    "maxStaff": 8,
+    "hardCapUnits": null,
+    "note": "Four baristas at 160 paid hours each serve the reference 6,000 orders with about 12% slack: 1,700 orders per person a month, roughly 10.6 orders per paid hour. Planning assumption from the research notes (four baristas for 200 orders a day over a 12-hour day, with the owner or a hired manager as a fifth pair of hands). Two people is the legal and practical floor: someone holding a Food Protection Certificate must be on site every open hour."
+  },
+  "sizing": {
+    "unitName": "seat",
+    "min": 6,
+    "max": 40,
+    "default": 18,
+    "sqftPerUnit": 18,
+    "unitsServedPerSizeMonth": 170,
+    "takeawayShare": 0.6,
+    "cleaningCostPerSizeMonth": 15,
+    "crowdPenaltyAbove": 0.9,
+    "emptyPenaltyBelow": 0.4,
+    "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
+    "confidence": "estimate",
+    "note": "My estimates, sized to the research notes' shop (about 800 sq ft, 15-25 seats, 20 chairs at 10 small tables). 18 sq ft per seat with aisles: 800 sq ft x 60% usable / 18 = 26 seats at most. 60% of orders leave with the cup. One seat turns about 5.7 sit-down orders a day (170 a month), so 18 seats carry 255 orders a day in all and 12 seats only 170: at 200 orders a day the small room turns people away, while 40 seats sit two-thirds empty: a room less than 40% used reads as dead and costs reputation. $15 per seat a month covers sanitizer, paper goods, table and floor care. Real rule seen at NYC Health: 20 or more seats, indoor plus outdoor, require a customer bathroom."
+  },
+  "setup": [
+    {
+      "id": "security_deposit",
+      "name": "Lease security deposit (three months of rent)",
+      "kind": "deposit",
+      "cost": 18000,
+      "required": true,
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "confidence": "estimate",
+      "note": "Three months of this address's rent: the reserve chosen in the research notes (the fallback $18,000 is 3 x $6,000). Seen in the NYC Commercial Lease Guide: the deposit is commonly two months of rent but depends on the tenant's finances, and a new business may be asked for much more or for a personal guaranty. Refundable at the end of the lease.",
+      "costBasis": "months_rent",
+      "rate": 3
+    },
+    {
+      "id": "buildout",
+      "name": "Build-out: what it takes to turn this space into a cafe",
+      "kind": "buildout",
+      "cost": 70000,
+      "required": true,
+      "lifespanMonths": 120,
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate",
+      "note": "Priced by what the space was before, per square foot of this address (extra.buildout). Research notes, 2026: a former cafe that keeps its plumbing, ventilation and bathroom $87.50 per sq ft; a former restaurant or food shop $225 per sq ft (the contractor's 2026 guide gives $200-$300 for a counter-service cafe in a former food space); a space that never had food service $400 per sq ft (the guide gives $400-$600 or more). The fallback $70,000 is the former cafe at 800 sq ft. Covers the counter, finishes, electrical and plumbing hookups; movable equipment is bought separately.",
+      "costBasis": "per_sqft"
+    },
+    {
+      "id": "architect_expediter",
+      "name": "Architect, engineer and permit expediter",
+      "kind": "other",
+      "cost": 7000,
+      "required": true,
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate",
+      "note": "10% of the build-out: the share chosen in the research notes for filed plans, engineering and a permit expediter (the percentage is the notes' own, not a published tariff). The fallback $7,000 is 10% of a $70,000 light renovation.",
+      "costBasis": "pct_of_buildout",
+      "rate": 0.1,
+      "includedInTakeover": true
+    },
+    {
+      "id": "lease_lawyer",
+      "name": "Lawyer for the lease and contracts",
+      "kind": "other",
+      "cost": 3500,
+      "required": true,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "estimate",
+      "note": "Research notes estimate, not a published fee. NYC Small Business Services offers free commercial lease review and legal advice (seen on the NYC Business restaurant page)."
+    },
+    {
+      "id": "llc_and_publication",
+      "name": "LLC filing and newspaper publication",
+      "kind": "other",
+      "cost": 1675,
+      "required": true,
+      "source": "https://dos.ny.gov/node/35506",
+      "confidence": "verified",
+      "note": "$200 Articles of Organization (NYS Department of State) + $1,475 all-in publication package for Kings County (Brooklyn), which includes the $50 Certificate of Publication (LLC Publishers price list: Manhattan $1,795, Queens $1,195). Both numbers seen; the package price is one provider's, not a state fee."
+    },
+    {
+      "id": "espresso_machine",
+      "name": "Two-group espresso machine",
+      "kind": "equipment",
+      "cost": 7600,
+      "required": true,
+      "lifespanMonths": 96,
+      "source": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+      "confidence": "verified",
+      "note": "Nuova Simonelli Appia Life Compact two-group volumetric, 110V: $7,600.00 at WebstaurantStore, usually ships in 2-4 weeks. Price before sales tax, delivery and installation. Lifespan is my estimate."
+    },
+    {
+      "id": "grinder",
+      "name": "Espresso grinder",
+      "kind": "equipment",
+      "cost": 2099,
+      "required": true,
+      "lifespanMonths": 72,
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "confidence": "verified",
+      "note": "Mahlkonig E65S grind-by-time: $2,099 at Visions Espresso (listed as discontinued and out of stock on the day I looked; its successor E65W is $3,099). Lifespan is my estimate."
+    },
+    {
+      "id": "water_filtration",
+      "name": "Water filtration for the espresso machine",
+      "kind": "equipment",
+      "cost": 500,
+      "required": true,
+      "lifespanMonths": 60,
+      "source": "https://www.seattlecoffeegear.com/collections/everpure",
+      "confidence": "estimate",
+      "note": "Research notes allowance for a filter head, cartridge and fittings; listed there: Everpure ESO7 cartridge $192.94, QL2 head $41.94. Cartridges are replaced several times a year (in the maintenance line)."
+    },
+    {
+      "id": "refrigeration",
+      "name": "Under-counter milk fridge and reach-in refrigerator",
+      "kind": "equipment",
+      "cost": 2628,
+      "required": true,
+      "lifespanMonths": 96,
+      "source": "https://www.webstaurantstore.com/avantco-a-19r-hc-29-solid-door-reach-in-refrigerator/178A19RHC.html",
+      "confidence": "estimate",
+      "note": "Avantco A-19R-HC 29-inch reach-in refrigerator $1,199.00 (seen at WebstaurantStore) + Atosa MGF8401GR under-counter refrigerator $1,429 (from research notes; the dealer page refused my request). Lifespan is my estimate."
+    },
+    {
+      "id": "pastry_case",
+      "name": "Refrigerated pastry display case",
+      "kind": "equipment",
+      "cost": 1149,
+      "required": true,
+      "lifespanMonths": 96,
+      "source": "https://www.webstaurantstore.com/13469/refrigerated-bakery-cases-and-dry-bakery-display-cases.html",
+      "confidence": "verified",
+      "note": "Avantco BCS-48-HC 48-inch refrigerated countertop bakery case: $1,149.00 at WebstaurantStore. Larger floor cases run to $9,800. Lifespan is my estimate."
+    },
+    {
+      "id": "sinks",
+      "name": "Three-compartment sink, hand sink, mop sink and faucets",
+      "kind": "equipment",
+      "cost": 1720,
+      "required": true,
+      "lifespanMonths": 180,
+      "source": "https://www.webstaurantstore.com/regency-60-16-gauge-stainless-steel-three-compartment-commercial-sink-without-drainboards-17-x-17-x-12-bowls/600S31717X.html",
+      "confidence": "estimate",
+      "note": "Research notes basket: three-compartment sink $850 (allowance), hand-wash sink $90, mop sink $280, faucets and fittings $500. Plumbing labor is in the build-out. The Health Code requires a hand-washing sink near every place food is prepared and in each restroom (seen at NYC Health)."
+    },
+    {
+      "id": "prep_table_shelving",
+      "name": "Stainless prep table and shelving",
+      "kind": "equipment",
+      "cost": 600,
+      "required": true,
+      "lifespanMonths": 180,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "estimate",
+      "note": "Research notes allowance; needs a real list of sizes."
+    },
+    {
+      "id": "pos",
+      "name": "POS register, receipt printer and cash drawer",
+      "kind": "equipment",
+      "cost": 1299,
+      "required": true,
+      "lifespanMonths": 48,
+      "source": "https://squareup.com/us/en/hardware/register",
+      "confidence": "estimate",
+      "note": "Research notes: Square Register $899 (Square's store, 2026) plus $400 allowance for a printer, cash drawer and mounts. The price was not readable on the page when I opened it."
+    },
+    {
+      "id": "smallwares",
+      "name": "Smallwares: pitchers, tampers, scales, cups, plates, bins",
+      "kind": "equipment",
+      "cost": 2000,
+      "required": true,
+      "lifespanMonths": 24,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "estimate",
+      "note": "Research notes allowance for scales, tampers, pitchers, knock box, thermometers, cups, plates, utensils and food bins."
+    },
+    {
+      "id": "safety_kit",
+      "name": "Lidded bins, fire extinguisher, CPR kit, safety signs, alarm",
+      "kind": "equipment",
+      "cost": 800,
+      "required": true,
+      "lifespanMonths": 60,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "estimate",
+      "note": "Research notes allowance. Seen on the NYC Business restaurant page: restaurants must keep one adult and one pediatric resuscitation mask and two pairs of gloves."
+    },
+    {
+      "id": "equipment_delivery_tax",
+      "name": "Sales tax on equipment, delivery and installation",
+      "kind": "other",
+      "cost": 3500,
+      "required": true,
+      "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+      "confidence": "estimate",
+      "note": "Research notes, \"almost ready\" column: 8.875% sales tax on about $25,000 of equipment ($2,200) plus freight, unloading and commissioning. Equipment is not bought tax-free: a resale certificate covers only goods you resell.",
+      "includedInTakeover": true
+    },
+    {
+      "id": "chair",
+      "name": "Cafe chair",
+      "kind": "furniture",
+      "cost": 49,
+      "required": true,
+      "scalesWithSize": true,
+      "lifespanMonths": 60,
+      "source": "https://www.webstaurantstore.com/42529/restaurant-chairs.html?vendor=Lancaster-Table-Seating",
+      "confidence": "verified",
+      "note": "Lancaster Table & Seating metal cafe chairs at WebstaurantStore: $48.99 to $56.49 each; a wood ladder-back chair is $82.49. The research notes used a $39.99 basic chair. One chair per seat."
+    },
+    {
+      "id": "table_share",
+      "name": "Two-top table (share per seat)",
+      "kind": "furniture",
+      "cost": 35,
+      "required": true,
+      "scalesWithSize": true,
+      "lifespanMonths": 72,
+      "source": "https://www.webstaurantstore.com/lancaster-table-seating-24-x-24-reversible-walnut-oak-laminated-standard-height-table-top-and-base-kit-with-17-base/349C24SW17RS.html",
+      "confidence": "verified",
+      "note": "Lancaster Table & Seating 24 x 24 inch laminated table top with cast iron base: $69.99 at WebstaurantStore; one table for every two seats = $35 per seat. The research notes budgeted $150 per table set."
+    },
+    {
+      "id": "opening_inventory",
+      "name": "Opening inventory: beans, milk, syrups, pastries, cups",
+      "kind": "inventory",
+      "cost": 3000,
+      "required": true,
+      "source": "https://catalog.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
+      "confidence": "estimate",
+      "note": "Research notes, \"almost ready\" column: $3,000 (their fuller basket is $5,000: beans $1,000, tea and syrups $600, milk and first food delivery $900, cups and lids $1,200, cleaning chemicals $500, test drinks and waste $800). Seen: 12 oz hot cups $45.99 per 1,000 at WebstaurantStore. Do not stock milk or pastry for more than a few days."
+    },
+    {
+      "id": "hiring_training",
+      "name": "Hiring and paid training before opening",
+      "kind": "other",
+      "cost": 4000,
+      "required": true,
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "confidence": "estimate",
+      "note": "Research notes: recruiting plus paid training hours and a soft opening for four baristas (about 190 paid hours at $21). Training time must be paid."
+    },
+    {
+      "id": "insurance_utility_deposits",
+      "name": "First insurance premiums and utility deposits",
+      "kind": "other",
+      "cost": 1500,
+      "required": true,
+      "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "confidence": "estimate",
+      "note": "Research notes: first premiums, utility and security deposits, hookups. Seen at Insureon: a business owner's policy for a coffee shop averages $126 a month and workers' comp $88 a month across the US."
+    },
+    {
+      "id": "fse_permit",
+      "name": "Food Service Establishment Permit",
+      "kind": "permit",
+      "cost": 280,
+      "required": true,
+      "waitDays": 21,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "withoutItViolation": "no_fse_permit",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "confidence": "verified",
+      "note": "NYC Business: the permit fee is $280.00 a year; you can open 22 days after you submit the application even if no pre-permit inspection has taken place. The application asks for proof of workers' compensation and disability insurance, a Food Protection Certificate or course registration, and the sales tax Certificate of Authority. The clock starts when the build-out is finished: the Health Department checks the finished room. The permit does not pass to a buyer of an operating business: the new owner applies again.",
+      "afterBuildout": true
+    },
+    {
+      "id": "food_protection_cert",
+      "name": "Food Protection Certificate (course and exam)",
+      "kind": "license",
+      "cost": 24,
+      "required": true,
+      "waitDays": 14,
+      "agency": "NYC Health Academy (DOHMH)",
+      "link": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+      "withoutItViolation": "no_food_protection_cert",
+      "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+      "confidence": "verified",
+      "note": "NYC Health: the online course is free and has 15 lessons; the in-person final exam costs $24. A certified supervisor must be on site whenever the shop is operating. The 14 days are my estimate for finishing the lessons and getting an exam date; the classroom version costs $114 (from research notes). The certificate does not expire."
+    },
+    {
+      "id": "batch_brewer",
+      "name": "Batch brewer, bulk grinder and airpots",
+      "kind": "equipment",
+      "cost": 1780,
+      "required": false,
+      "lifespanMonths": 84,
+      "qualityBonus": 0.01,
+      "source": "https://www.katom.com/021-230010006.html",
+      "confidence": "estimate",
+      "note": "Research notes: Bunn CWTF15-APS brewer $980 (KaTom, 2026; the page refused my request) + $800 allowance for a bulk grinder and airpots. Drip coffee is the fastest thing on the menu at the morning peak."
+    },
+    {
+      "id": "decaf_grinder",
+      "name": "Second grinder for decaf",
+      "kind": "equipment",
+      "cost": 2099,
+      "required": false,
+      "lifespanMonths": 72,
+      "qualityBonus": 0.01,
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "confidence": "verified",
+      "note": "A second Mahlkonig E65S at the same $2,099 seen at Visions Espresso."
+    },
+    {
+      "id": "ice_machine",
+      "name": "Ice machine",
+      "kind": "equipment",
+      "cost": 3500,
+      "required": false,
+      "lifespanMonths": 84,
+      "qualityBonus": 0.01,
+      "source": "https://oswaltsupply.com/uyf0140a-ice-maker-137-lb",
+      "confidence": "estimate",
+      "note": "Research notes allowance next to a clearance Manitowoc UYF0140A at $3,479.40; the 2026 list price of the current model is $6,392. Without it you buy bagged ice for iced drinks."
+    },
+    {
+      "id": "dishwasher",
+      "name": "Under-counter commercial dishwasher",
+      "kind": "equipment",
+      "cost": 4449,
+      "required": false,
+      "lifespanMonths": 96,
+      "qualityBonus": 0.01,
+      "source": "https://catalog.webstaurantstore.com/noble-warewashing-ht-uc24-select-high-temperature-undercounter-dishwasher-with-booster-heater-208-240v-1-phase/495HTUC24.html",
+      "confidence": "verified",
+      "note": "Noble Warewashing HT-UC24 high-temperature under-counter dishwasher with booster heater: $4,449.00 at WebstaurantStore. Not mandatory: washing by hand in the three-compartment sink (wash, rinse, sanitize) is legal."
+    },
+    {
+      "id": "decor_lighting",
+      "name": "Menu boards, lighting and decor",
+      "kind": "furniture",
+      "cost": 2000,
+      "required": false,
+      "lifespanMonths": 60,
+      "qualityBonus": 0.02,
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate",
+      "note": "Research notes allowance for movable furniture, menus, lighting and decor; fixed counters are in the build-out."
+    },
+    {
+      "id": "signage",
+      "name": "Storefront sign",
+      "kind": "other",
+      "cost": 1500,
+      "required": false,
+      "lifespanMonths": 120,
+      "qualityBonus": 0.01,
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+      "confidence": "estimate",
+      "note": "Research notes, \"almost ready\" column: design, fabrication and installation, quote-only. Seen at the Department of Buildings: a wall sign of six square feet or less needs no sign permit; bigger signs need a permit obtained by a licensed sign hanger.",
+      "includedInTakeover": true
+    },
+    {
+      "id": "premium_espresso_machine",
+      "name": "Upgrade to a three-group espresso machine",
+      "kind": "equipment",
+      "cost": 4100,
+      "required": false,
+      "lifespanMonths": 96,
+      "qualityBonus": 0.04,
+      "source": "https://www.webstaurantstore.com/search/nuova-simonelli-appia-life-3-group.html",
+      "confidence": "verified",
+      "note": "Nuova Simonelli Appia Life three-group volumetric, 220V: $11,700.00 at WebstaurantStore; the upgrade costs the difference from the $7,600 compact two-group = $4,100. Needs a 220V line. The quality bonus is a game value."
+    },
+    {
+      "id": "premium_grinder",
+      "name": "Shop grinder for filter coffee and retail bags",
+      "kind": "equipment",
+      "cost": 3899,
+      "required": false,
+      "lifespanMonths": 96,
+      "qualityBonus": 0.02,
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "confidence": "verified",
+      "note": "Mahlkonig EK43: $3,899 at Visions Espresso. The quality bonus is a game value."
+    },
+    {
+      "id": "customer_restroom",
+      "name": "Customer restroom upgrade (needed for 20 or more seats)",
+      "kind": "buildout",
+      "cost": 12000,
+      "required": false,
+      "lifespanMonths": 180,
+      "qualityBonus": 0.01,
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
+      "confidence": "estimate",
+      "note": "My allowance for bringing an existing staff toilet up to an accessible customer restroom; quote-only, not in the research notes. Seen at NYC Health: a restaurant with 20 or more seats, indoor and outdoor together, must have a customer bathroom."
+    },
+    {
+      "id": "sidewalk_cafe_license",
+      "name": "Dining Out NYC sidewalk cafe license",
+      "kind": "license",
+      "cost": 2550,
+      "required": false,
+      "waitDays": 240,
+      "qualityBonus": 0.02,
+      "agency": "NYC Department of Transportation (Dining Out NYC)",
+      "link": "https://www.diningoutnyc.info/apply/fees",
+      "withoutItViolation": "unlicensed_sidewalk_cafe",
+      "source": "https://www.diningoutnyc.info/apply/fees",
+      "confidence": "verified",
+      "note": "Dining Out NYC fees: $1,050 license for a four-year term + $1,500 refundable security deposit for a sidewalk cafe = $2,550; on top comes a yearly consent fee of $6, $10, $18 or $31 per sq ft by sector. The 240-day wait is the Transportation Department's own eight-month estimate; the Comptroller found in October 2026 that more than half of approved restaurants waited over 19 months. Never part of a starter kit."
+    }
+  ],
+  "kits": [
+    {
+      "id": "lean",
+      "name": "Lean start",
+      "size": 12,
+      "items": [
+        {
+          "id": "security_deposit",
+          "qty": 1
+        },
+        {
+          "id": "buildout",
+          "qty": 1
+        },
+        {
+          "id": "architect_expediter",
+          "qty": 1
+        },
+        {
+          "id": "lease_lawyer",
+          "qty": 1
+        },
+        {
+          "id": "llc_and_publication",
+          "qty": 1
+        },
+        {
+          "id": "espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "grinder",
+          "qty": 1
+        },
+        {
+          "id": "water_filtration",
+          "qty": 1
+        },
+        {
+          "id": "refrigeration",
+          "qty": 1
+        },
+        {
+          "id": "pastry_case",
+          "qty": 1
+        },
+        {
+          "id": "sinks",
+          "qty": 1
+        },
+        {
+          "id": "prep_table_shelving",
+          "qty": 1
+        },
+        {
+          "id": "pos",
+          "qty": 1
+        },
+        {
+          "id": "smallwares",
+          "qty": 1
+        },
+        {
+          "id": "safety_kit",
+          "qty": 1
+        },
+        {
+          "id": "equipment_delivery_tax",
+          "qty": 1
+        },
+        {
+          "id": "chair",
+          "qty": 12
+        },
+        {
+          "id": "table_share",
+          "qty": 12
+        },
+        {
+          "id": "opening_inventory",
+          "qty": 1
+        },
+        {
+          "id": "hiring_training",
+          "qty": 1
+        },
+        {
+          "id": "insurance_utility_deposits",
+          "qty": 1
+        },
+        {
+          "id": "fse_permit",
+          "qty": 1
+        },
+        {
+          "id": "food_protection_cert",
+          "qty": 1
+        }
+      ],
+      "pitch": "The legal minimum in a small room: 12 seats, one grinder, hand-washed cups, no sign. Cheapest way to open, but the room fills up at 170 orders a day."
+    },
+    {
+      "id": "standard",
+      "name": "Standard",
+      "size": 18,
+      "items": [
+        {
+          "id": "security_deposit",
+          "qty": 1
+        },
+        {
+          "id": "buildout",
+          "qty": 1
+        },
+        {
+          "id": "architect_expediter",
+          "qty": 1
+        },
+        {
+          "id": "lease_lawyer",
+          "qty": 1
+        },
+        {
+          "id": "llc_and_publication",
+          "qty": 1
+        },
+        {
+          "id": "espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "grinder",
+          "qty": 1
+        },
+        {
+          "id": "water_filtration",
+          "qty": 1
+        },
+        {
+          "id": "refrigeration",
+          "qty": 1
+        },
+        {
+          "id": "pastry_case",
+          "qty": 1
+        },
+        {
+          "id": "sinks",
+          "qty": 1
+        },
+        {
+          "id": "prep_table_shelving",
+          "qty": 1
+        },
+        {
+          "id": "pos",
+          "qty": 1
+        },
+        {
+          "id": "smallwares",
+          "qty": 1
+        },
+        {
+          "id": "safety_kit",
+          "qty": 1
+        },
+        {
+          "id": "equipment_delivery_tax",
+          "qty": 1
+        },
+        {
+          "id": "chair",
+          "qty": 18
+        },
+        {
+          "id": "table_share",
+          "qty": 18
+        },
+        {
+          "id": "opening_inventory",
+          "qty": 1
+        },
+        {
+          "id": "hiring_training",
+          "qty": 1
+        },
+        {
+          "id": "insurance_utility_deposits",
+          "qty": 1
+        },
+        {
+          "id": "fse_permit",
+          "qty": 1
+        },
+        {
+          "id": "food_protection_cert",
+          "qty": 1
+        },
+        {
+          "id": "batch_brewer",
+          "qty": 1
+        },
+        {
+          "id": "ice_machine",
+          "qty": 1
+        },
+        {
+          "id": "signage",
+          "qty": 1
+        }
+      ],
+      "pitch": "The usual neighborhood cafe: 18 seats, drip coffee and iced drinks, a proper sign. Sized for 200 orders a day with room to spare."
+    },
+    {
+      "id": "premium",
+      "name": "Premium",
+      "size": 24,
+      "items": [
+        {
+          "id": "security_deposit",
+          "qty": 1
+        },
+        {
+          "id": "buildout",
+          "qty": 1
+        },
+        {
+          "id": "architect_expediter",
+          "qty": 1
+        },
+        {
+          "id": "lease_lawyer",
+          "qty": 1
+        },
+        {
+          "id": "llc_and_publication",
+          "qty": 1
+        },
+        {
+          "id": "espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "grinder",
+          "qty": 1
+        },
+        {
+          "id": "water_filtration",
+          "qty": 1
+        },
+        {
+          "id": "refrigeration",
+          "qty": 1
+        },
+        {
+          "id": "pastry_case",
+          "qty": 1
+        },
+        {
+          "id": "sinks",
+          "qty": 1
+        },
+        {
+          "id": "prep_table_shelving",
+          "qty": 1
+        },
+        {
+          "id": "pos",
+          "qty": 1
+        },
+        {
+          "id": "smallwares",
+          "qty": 1
+        },
+        {
+          "id": "safety_kit",
+          "qty": 1
+        },
+        {
+          "id": "equipment_delivery_tax",
+          "qty": 1
+        },
+        {
+          "id": "chair",
+          "qty": 24
+        },
+        {
+          "id": "table_share",
+          "qty": 24
+        },
+        {
+          "id": "opening_inventory",
+          "qty": 1
+        },
+        {
+          "id": "hiring_training",
+          "qty": 1
+        },
+        {
+          "id": "insurance_utility_deposits",
+          "qty": 1
+        },
+        {
+          "id": "fse_permit",
+          "qty": 1
+        },
+        {
+          "id": "food_protection_cert",
+          "qty": 1
+        },
+        {
+          "id": "batch_brewer",
+          "qty": 1
+        },
+        {
+          "id": "decaf_grinder",
+          "qty": 1
+        },
+        {
+          "id": "ice_machine",
+          "qty": 1
+        },
+        {
+          "id": "dishwasher",
+          "qty": 1
+        },
+        {
+          "id": "decor_lighting",
+          "qty": 1
+        },
+        {
+          "id": "signage",
+          "qty": 1
+        },
+        {
+          "id": "premium_espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "premium_grinder",
+          "qty": 1
+        },
+        {
+          "id": "customer_restroom",
+          "qty": 1
+        }
+      ],
+      "pitch": "24 seats, a three-group machine, top grinders, a dishwasher and a customer restroom (required from 20 seats). Higher quality, about $29,000 more up front, and more seats to fill."
+    }
+  ],
+  "monthlyCosts": [
+    {
+      "id": "rent",
+      "name": "Rent",
+      "kind": "rent",
+      "basis": "fixed",
+      "amount": 6000,
+      "source": "https://www.rebny.com/reports/brooklyn-retail-report-2025/",
+      "confidence": "estimate",
+      "note": "Research notes: $90 per sq ft a year x 800 sq ft / 12 = $6,000, a moderate Brooklyn side street (REBNY 2025: small Park Slope spaces ask under $100). The game takes rent from the place on the map; this line is the fallback. See extra.rentByTier."
+    },
+    {
+      "id": "utilities",
+      "name": "Electricity, gas, water and sewer",
+      "kind": "utilities",
+      "basis": "fixed",
+      "amount": 1100,
+      "source": "https://www.nyserda.ny.gov/Energy-Prices/Electricity/Monthly-Avg-Electricity-Commercial",
+      "confidence": "estimate",
+      "note": "Research notes: planning band $800-$1,800. Electricity alone at 3,000-5,000 kWh x 23.1 cents (NYSERDA statewide commercial average, August 2026) is $693-$1,155. The kWh figure is the notes' assumption."
+    },
+    {
+      "id": "insurance",
+      "name": "Business owner's policy: liability, property, interruption",
+      "kind": "insurance",
+      "basis": "fixed",
+      "amount": 250,
+      "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "confidence": "estimate",
+      "note": "Research notes: NYC reserve of $150-$400, base $250. Seen at Insureon: coffee shops pay $126 a month on average across the US for a business owner's policy. Workers' compensation is separate (in _common taxes)."
+    },
+    {
+      "id": "supplies",
+      "name": "Cups, lids, sleeves, napkins, bags",
+      "kind": "supplies",
+      "basis": "per_unit",
+      "amount": 0.17,
+      "source": "https://catalog.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
+      "confidence": "estimate",
+      "note": "Research notes: 2% of sales = $0.17 per $8.50 order. Seen at WebstaurantStore: a 12 oz hot cup is 4.6 cents ($45.99 per 1,000); lid, sleeve, napkin and bag come on top."
+    },
+    {
+      "id": "card_fees",
+      "name": "Card processing: percentage fee",
+      "kind": "fees",
+      "basis": "pct_revenue",
+      "amount": 0.0255,
+      "source": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees",
+      "confidence": "estimate",
+      "note": "Seen in Square's fee table: 2.5% + 15 cents per tap on the Plus plan (2.6% on Free). Research notes model: 90% of sales on cards, and the percentage is charged on sales tax and tips too: 0.9 x 2.5% x 1.08875 + 2.5% x $2,000 of card tips / $51,000 of sales = 2.55% of sales."
+    },
+    {
+      "id": "card_fixed_fee",
+      "name": "Card processing: 15 cents per tap",
+      "kind": "fees",
+      "basis": "per_unit",
+      "amount": 0.135,
+      "source": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees",
+      "confidence": "estimate",
+      "note": "15 cents per card transaction (seen in Square's fee table) x 90% of orders paid by card = 13.5 cents per order. With the percentage fee the total is about 4.1% of sales on an $8.50 ticket."
+    },
+    {
+      "id": "tips_payroll_tax",
+      "name": "Employer payroll tax on reported tips",
+      "kind": "fees",
+      "basis": "pct_revenue",
+      "amount": 0.003,
+      "source": "https://www.irs.gov/publications/p15",
+      "confidence": "estimate",
+      "note": "Tips are wages for payroll tax (IRS Publication 15). Research notes assume $2,000 of card tips a month on $51,000 of sales: 7.65% x $2,000 = $153 = 0.3% of sales."
+    },
+    {
+      "id": "sick_leave_cover",
+      "name": "Paid sick leave cover",
+      "kind": "other",
+      "basis": "per_staff",
+      "amount": 70,
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "confidence": "estimate",
+      "note": "Up to 40 paid hours a year per worker for employers with 5-99 workers (seen at DCWP): 40 h x $21 / 12 = $70 a month per worker when it is all used."
+    },
+    {
+      "id": "maintenance",
+      "name": "Equipment service, filters, grease interceptor, fire extinguisher checks",
+      "kind": "maintenance",
+      "basis": "fixed",
+      "amount": 300,
+      "source": "https://www.seattlecoffeegear.com/collections/everpure",
+      "confidence": "estimate",
+      "note": "Research notes: band $200-$500: filter cartridges, descaling and calibration, the yearly backflow test and extinguisher service, grease interceptor cleaning, replacing smallwares."
+    },
+    {
+      "id": "waste",
+      "name": "Private carter: trash, recycling, organics",
+      "kind": "other",
+      "basis": "fixed",
+      "amount": 250,
+      "source": "https://www.nyc.gov/site/dsny/businesses/commercial-waste-zones.page",
+      "confidence": "estimate",
+      "note": "Research notes: band $150-$400; not a city rate. Seen at the Sanitation Department: businesses sign with one of three carters authorized for their commercial waste zone, and each carter has a maximum price that depends on volume."
+    },
+    {
+      "id": "internet",
+      "name": "Internet and phone",
+      "kind": "other",
+      "basis": "fixed",
+      "amount": 100,
+      "source": "https://www.verizon.com/business/products/internet/",
+      "confidence": "estimate",
+      "note": "Research notes: band $80-$150; Verizon business internet starts at $69 a month plus fees."
+    },
+    {
+      "id": "pos_software",
+      "name": "POS software subscription",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 49,
+      "source": "https://squareup.com/us/en/pricing",
+      "confidence": "estimate",
+      "note": "Research notes: Square Plus $49 per location a month (Free plan $0, Premium $149). The plan prices were not readable on the page when I opened it."
+    },
+    {
+      "id": "accounting",
+      "name": "Bookkeeping and year-end accountant",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 400,
+      "source": "https://www.nerdwallet.com/business/software/learn/quickbooks-live-bookkeeping",
+      "confidence": "estimate",
+      "note": "Research notes allowance, band $300-$800; no reliable public NYC price. Not a quote."
+    },
+    {
+      "id": "payroll_service",
+      "name": "Payroll service",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 85,
+      "source": "https://gusto.com/product/pricing",
+      "confidence": "estimate",
+      "note": "Research notes: Gusto Simple $49 a month + $6 per person, five people = $79, rounded up. Files the payroll tax returns for you."
+    },
+    {
+      "id": "marketing",
+      "name": "Website, listings, menus and printing",
+      "kind": "marketing",
+      "basis": "fixed",
+      "amount": 300,
+      "source": "https://restaurant.org/research-and-media/media/press-releases/new-resource-from-national-restaurant-association-provides-insights-into-operational-realities",
+      "confidence": "estimate",
+      "note": "Research notes: chosen budget inside a $100-$600 band, not an industry norm."
+    },
+    {
+      "id": "permit_renewals",
+      "name": "Permit renewals and filing fees",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 50,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "confidence": "estimate",
+      "note": "Research notes: $30-$100 a month set aside. Seen: the Food Service Establishment Permit renews at $280 a year ($23 a month); the rest covers the $25 state LLC fee, scale and sign fees."
+    }
+  ],
+  "staff": [
+    {
+      "id": "barista",
+      "name": "Barista",
+      "hourlyWage": 21,
+      "tipped": true,
+      "cashWage": 21,
+      "hoursPerMonth": 160,
+      "licenseRequired": null,
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "confidence": "estimate",
+      "note": "Research notes planning wage: $21 an hour, above the New York City minimum of $17.00 (seen at NY DOL; it stays $17.00 in 2027). Baristas keep their tips on top. This pack takes no tip credit, so the cash wage equals the full wage: the tipped rate of $11.35 + $5.65 credit is legal only with written notice and tips that cover the gap (12 NYCRR 146-1.3)."
+    },
+    {
+      "id": "shift_lead",
+      "name": "Shift lead",
+      "hourlyWage": 24,
+      "tipped": true,
+      "cashWage": 24,
+      "hoursPerMonth": 160,
+      "licenseRequired": "NYC Food Protection Certificate (free online course, $24 exam)",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "confidence": "estimate",
+      "note": "My estimate: a $3 premium over the barista wage for opening, closing and cash-out. A shift lead with a Food Protection Certificate covers the rule that a certified supervisor is on site every open hour."
+    }
+  ],
+  "taxes": [
+    {
+      "id": "sales_tax",
+      "name": "NYC sales tax on food and drinks",
+      "base": "taxable_revenue",
+      "rate": 0.08875,
+      "due": "quarterly",
+      "appliesIf": "coffee and tea served in a cup, food eaten in the shop, heated food and sandwiches",
+      "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+      "confidence": "verified",
+      "note": "NYC Department of Finance: 4.5% city + 4% state + 0.375% Metropolitan Commuter Transportation District = 8.875%; food and beverages sold by restaurants are taxable. Charged on top of the menu price and held for the state. Bags of beans to take home and some unheated bakery items sold to go are exempt (NYS tax bulletins, from research notes); the game taxes every order, as the notes' model does."
+    }
+  ],
+  "levers": [
+    {
+      "id": "cleaning",
+      "name": "Cleaning",
+      "options": [
+        {
+          "id": "standard",
+          "label": "Staff clean every day, deep clean once a month",
+          "monthlyCost": 130
+        },
+        {
+          "id": "deep",
+          "label": "Professional cleaning crew every night",
+          "monthlyCost": 530,
+          "effects": {
+            "quality": 0.04
+          }
+        },
+        {
+          "id": "minimal",
+          "label": "Wipe and go",
+          "monthlyCost": 30,
+          "effects": {
+            "quality": -0.05
+          },
+          "causes": "dirty_surfaces"
+        }
+      ]
+    },
+    {
+      "id": "sourcing",
+      "name": "Beans and milk",
+      "options": [
+        {
+          "id": "standard",
+          "label": "House blend from a wholesale roaster",
+          "monthlyCost": 0
+        },
+        {
+          "id": "specialty",
+          "label": "Specialty roaster and local dairy",
+          "monthlyCost": 750,
+          "effects": {
+            "quality": 0.05
+          }
+        }
+      ]
+    },
+    {
+      "id": "hours",
+      "name": "Opening hours",
+      "options": [
+        {
+          "id": "standard",
+          "label": "7am - 7pm",
+          "monthlyCost": 0
+        },
+        {
+          "id": "long",
+          "label": "6am - 9pm",
+          "monthlyCost": 2300,
+          "effects": {
+            "demand": 0.08
+          }
+        }
+      ]
+    },
+    {
+      "id": "pest_control",
+      "name": "Pest control",
+      "options": [
+        {
+          "id": "monthly",
+          "label": "Licensed exterminator, monthly visits",
+          "monthlyCost": 175
+        },
+        {
+          "id": "none",
+          "label": "Skip it",
+          "monthlyCost": 0,
+          "causes": "pest_activity"
+        }
+      ]
+    },
+    {
+      "id": "staff_pay",
+      "name": "Barista pay",
+      "options": [
+        {
+          "id": "standard",
+          "label": "Market wage",
+          "monthlyCost": 0
+        },
+        {
+          "id": "above",
+          "label": "$2 an hour above market",
+          "monthlyCost": 1430,
+          "effects": {
+            "quality": 0.04,
+            "capacity": 0.04
+          }
+        }
+      ]
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "skip_food_protection_cert",
+      "name": "Run shifts with no certified supervisor",
+      "what": "A Food Protection Certificate holder must be on site every hour you are open. Covering every shift means training more people and paying leads; skipping it saves about $120 a month. Each inspection that finds nobody certified costs $400 and 10 points.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 120
+      },
+      "violation": "no_food_protection_cert"
+    },
+    {
+      "id": "keep_old_food",
+      "name": "Sell yesterday's milk and pastries",
+      "what": "Nothing gets thrown out: old pastries go back in the case, milk sits on the counter. Saves about 1% of sales in waste. Spoiled or warm food is a public health hazard: $250-$600 per citation and a fast road to a C grade.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "spoiled_food"
+    },
+    {
+      "id": "home_baked_pastries",
+      "name": "Sell pastries baked at home",
+      "what": "Baking at home instead of buying from a licensed bakery cuts pastry cost by more than half, about 3% of sales. Food from a home kitchen is food from an unapproved source: $400-$600 and a public health hazard on your record.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.03
+      },
+      "violation": "unapproved_food_source"
+    },
+    {
+      "id": "keep_tips",
+      "name": "Keep part of the tips",
+      "what": "The owner takes a cut of the tip jar and the card tips: about $150 per barista a month. Tips belong to the staff by law. A wage claim returns every dollar double and reaches back six years.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 150
+      },
+      "violation": "tip_theft"
+    },
+    {
+      "id": "unpaid_trial_shifts",
+      "name": "Unpaid trial shifts and training",
+      "what": "New hires work a few shifts \"on trial\" and train for free: about $85 per worker a month. Every hour worked must be paid at $17.00 or more; unpaid hours are owed back double.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 85
+      },
+      "violation": "unpaid_training_time"
+    },
+    {
+      "id": "no_spread_of_hours",
+      "name": "Long days without the extra hour",
+      "what": "Open-to-close and split shifts stretch a workday past 10 hours. The law adds one extra hour of pay at $17.00 for each such day; skipping it saves about $135 per worker a month and is owed back double.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 135
+      },
+      "violation": "spread_of_hours_unpaid"
+    },
+    {
+      "id": "sidewalk_tables",
+      "name": "Put tables on the sidewalk without a license",
+      "what": "A few tables outside bring about 2% more sales, and you skip the $1,050 license, the $1,500 deposit and a wait that often runs past a year. The city fines $500, then $1,000 each time, and can order the tables removed.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.02
+      },
+      "violation": "unlicensed_sidewalk_cafe"
+    },
+    {
+      "id": "skip_grease_trap_cleaning",
+      "name": "Skip grease interceptor cleaning",
+      "what": "Milk fat and coffee grounds fill the grease interceptor under the sink. Skipping the pump-out saves about $75 a month. Inspectors measure it: more than 25% full means a fine of $100 to $1,500, and a backup floods your floor.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 75
+      },
+      "violation": "grease_interceptor_neglect"
+    }
+  ],
+  "violations": [
+    {
+      "id": "no_fse_permit",
+      "name": "Operating without a Food Service Establishment Permit",
+      "law": "NYC Health Code §81.05(a); 24 RCNY Chapter 23, Appendix 23-C, code 18-01",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 2000
+      },
+      "closureDays": 5,
+      "reputationHit": 0.1,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "note": "Penalty schedule: \"No current valid permit, registration, other authorization to operate establishment\" $1,000, or $2,000 if you do not answer the summons. The Department can order an unpermitted establishment closed; the 5 closure days are my estimate. Opening on the 22nd day after applying is legal even without a pre-permit inspection (NYC Business)."
+    },
+    {
+      "id": "no_food_protection_cert",
+      "name": "No Food Protection Certificate holder on site",
+      "law": "NYC Health Code §81.15(a); 24 RCNY Chapter 23, Appendix 23-C, code 04A",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 400,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 400
+      },
+      "closureDays": 0,
+      "reputationHit": 0.04,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "note": "Penalty schedule: \"Food Protection Certificate not held by supervisor or manager of food operations\" $400; scoring worksheet: 10 points, a critical violation. A certificate that exists but cannot be shown costs $200 (code 18-11). The NYC Business restaurant page quotes $500-$1,000 for the same violation; I use the penalty schedule."
+    },
+    {
+      "id": "dirty_surfaces",
+      "name": "Food contact surfaces not washed, rinsed and sanitized",
+      "law": "NYC Health Code §81.27(b), §81.17(e); 24 RCNY Chapter 23, Appendix 23-C, codes 06D and 10F",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 200,
+        "perMonth": 25,
+        "pctOfSaved": 0,
+        "max": 300
+      },
+      "closureDays": 0,
+      "reputationHit": 0.06,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "note": "Penalty schedule: code 06D $200 to $300 by condition level (a critical violation, 5 to 8 points); dirty floors, walls and ceilings (code 10F) $100, or $0 the first time if you prove you fixed it. Game formula climbs from $225 to the $300 top as months pass. Fines are small; the points that cost you the A grade are the real price."
+    },
+    {
+      "id": "pest_activity",
+      "name": "Mice, rats or roaches; no pest control contract",
+      "law": "NYC Health Code §81.23(a), §81.23(b)(2); 24 RCNY Chapter 23, Appendix 23-C, codes 04K, 04L, 04M and 28-06",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 300,
+        "perMonth": 50,
+        "pctOfSaved": 0,
+        "max": 450
+      },
+      "closureDays": 2,
+      "reputationHit": 0.12,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "note": "Penalty schedule: rats, mice or live roaches $200 to $350 by condition level, plus $100 when the contract with a pest management professional and the service records are not on the premises. Scoring worksheet: 5 to 8 points, 28 at the worst level, which alone means a C. Game formula: $350 in the first month up to $450. The Health Code requires a contract with monthly visits by a state-licensed exterminator (from research notes, §81.23(b)). The 2 closure days are my estimate for an infestation that cannot be fixed during the inspection."
+    },
+    {
+      "id": "spoiled_food",
+      "name": "Spoiled food or cold food kept above 41°F",
+      "law": "NYC Health Code §81.07(a), §81.09(a); 24 RCNY Chapter 23, Appendix 23-C, codes 04H and 02G",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 250,
+        "perMonth": 50,
+        "pctOfSaved": 0,
+        "max": 600
+      },
+      "closureDays": 0,
+      "reputationHit": 0.12,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "note": "Penalty schedule: \"Cold TCS food not held at 41°F or below\" $250 to $500; \"Food not protected from adulteration or contamination\" $250 to $600. Both are public health hazards that must be corrected immediately. Scoring worksheet: 7 to 10 points, 28 at the worst level. Game formula: $300 in the first month, up to $600."
+    },
+    {
+      "id": "unapproved_food_source",
+      "name": "Food from an unapproved source or a home kitchen",
+      "law": "NYC Health Code §81.04; 24 RCNY Chapter 23, Appendix 23-C, code 03A",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 400,
+        "perMonth": 50,
+        "pctOfSaved": 0,
+        "max": 600
+      },
+      "closureDays": 0,
+      "reputationHit": 0.06,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "note": "Penalty schedule: \"Food from unapproved or unknown source, or home cooked\" $400 to $600, a public health hazard worth 10 points, 28 at the worst level. Game formula: $450 in the first month, up to $600."
+    },
+    {
+      "id": "tip_theft",
+      "name": "Owner keeping workers' tips",
+      "law": "NY Labor Law §196-d, §198(1-a), §218",
+      "official": "labor_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.08,
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/196-D",
+      "confidence": "verified",
+      "note": "Labor Law §196-d: no employer or agent may demand, accept or keep any part of the gratuities received by an employee. §198(1-a): the amount owed plus liquidated damages of 100%, interest and attorney's fees, with a six-year reach. §218: a civil penalty of up to double for willful or repeat cases. Game formula: 2.0 x what was kept."
+    },
+    {
+      "id": "unpaid_training_time",
+      "name": "Unpaid trial shifts and training time",
+      "law": "NY Labor Law §652, §198(1-a); 12 NYCRR §146-1.2, §146-1.5",
+      "official": "labor_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.04,
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "confidence": "verified",
+      "note": "Every hour worked is owed at the minimum wage or more ($17.00 in New York City, 12 NYCRR 146); a worker who reports for a shift is owed at least three hours of pay (12 NYCRR §146-1.5). Labor Law §198(1-a): the unpaid wages plus 100% liquidated damages and interest. Game formula: 2.0 x what was withheld."
+    },
+    {
+      "id": "spread_of_hours_unpaid",
+      "name": "Spread-of-hours pay not paid",
+      "law": "12 NYCRR §146-1.6; NY Labor Law §198(1-a)",
+      "official": "labor_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
+      "confidence": "verified",
+      "note": "12 NYCRR §146-1.6: on each day on which the spread of hours exceeds 10, an employee shall receive one additional hour of pay at the basic minimum hourly rate; it applies to all restaurant employees whatever their pay rate. Owed back with 100% liquidated damages (Labor Law §198). Game formula: 2.0 x what was withheld."
+    },
+    {
+      "id": "unlicensed_sidewalk_cafe",
+      "name": "Sidewalk tables without a Dining Out NYC license",
+      "law": "NYC Administrative Code §19-160 and following (Dining Out NYC, Local Law 121 of 2023)",
+      "official": "dot_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 1000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.diningoutnyc.info/enforcement",
+      "confidence": "verified",
+      "note": "Dining Out NYC enforcement page: unlicensed setups get a penalty with no warning: $500 for the first offense, $1,000 for the second and later offenses, and the Transportation Department may order the setup removed. The game charges $500 per citation. Section and local law numbers are cited from memory."
+    },
+    {
+      "id": "grease_interceptor_neglect",
+      "name": "Grease interceptor not maintained",
+      "law": "15 RCNY §19-11 (NYC Department of Environmental Protection sewer use rules)",
+      "official": "dep_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 100,
+        "perMonth": 200,
+        "pctOfSaved": 0,
+        "max": 1500
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "verified",
+      "note": "NYC Business restaurant page: grease interceptors must be properly sized, installed and maintained; fats, oils and grease must not exceed 25% of the liquid depth or rated capacity; fine $100 to $1,500. The rule covers coffee shops and drains that receive dairy (from research notes, 15 RCNY §19-11). Game formula spreads the range over time: $300 after one month, $1,500 from the seventh."
+    }
+  ],
+  "officials": [
+    {
+      "id": "health_inspector",
+      "name": "Health inspector",
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "role": "inspector",
+      "checks": [
+        "no_fse_permit",
+        "no_food_protection_cert",
+        "dirty_surfaces",
+        "pest_activity",
+        "spoiled_food",
+        "unapproved_food_source"
+      ],
+      "realProcess": "Unannounced, at least once a year. The inspector walks the whole shop with a thermometer and a flashlight and scores each violation in points: under 14 is an A. With 14 or more, a second inspection comes at least 7 days later and sets the grade. Fines are decided afterwards at a city hearing (OATH).",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+      "id": "dot_inspector",
+      "name": "Outdoor dining inspector",
+      "agency": "NYC Department of Transportation (Dining Out NYC)",
+      "role": "inspector",
+      "checks": [
+        "unlicensed_sidewalk_cafe"
+      ],
+      "realProcess": "Inspectors patrol and answer 311 complaints. A licensed cafe with a setup problem gets 30 days to correct it; an unlicensed one is fined at once and can be ordered to clear the sidewalk.",
+      "source": "https://www.diningoutnyc.info/enforcement"
+    },
+    {
+      "id": "dep_inspector",
+      "name": "Sewer inspector",
+      "agency": "NYC Department of Environmental Protection (DEP)",
+      "role": "inspector",
+      "checks": [
+        "grease_interceptor_neglect"
+      ],
+      "realProcess": "Inspectors visit food businesses, open the grease interceptor, measure how full it is and ask for cleaning records.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_unsanitary",
+      "name": "Report unsanitary conditions (311)",
+      "text": "In real life: a 311 complaint about a food establishment. The Health Department sends an inspector unannounced; pests, dirty equipment, spoiled or home-made food all count. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "dirty_surfaces",
+        "pest_activity",
+        "spoiled_food",
+        "unapproved_food_source"
+      ]
+    },
+    {
+      "id": "report_no_permit",
+      "name": "Report operating without a permit (311)",
+      "text": "In real life: a 311 complaint to the Health Department. An inspector checks the permit on the wall and asks who on the shift holds a Food Protection Certificate. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "no_fse_permit",
+        "no_food_protection_cert"
+      ]
+    },
+    {
+      "id": "report_sidewalk_tables",
+      "name": "Report unlicensed sidewalk tables or grease dumping (311)",
+      "text": "In real life: a 311 complaint routed to the Transportation Department (outdoor dining) or Environmental Protection (grease in the sewer). An inspector checks the license and the grease interceptor. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "unlicensed_sidewalk_cafe",
+        "grease_interceptor_neglect"
+      ]
+    },
+    {
+      "id": "report_wage_theft",
+      "name": "Report wage or tip theft (NYS Department of Labor)",
+      "text": "In real life: a labor standards complaint, which a worker or anyone else can file. An investigator audits time records, pay stubs and the tip log. If you are wrong, you get a warning.",
+      "role": "tax_auditor",
+      "checks": [
+        "tip_theft",
+        "unpaid_training_time",
+        "spread_of_hours_unpaid"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "coffee_price_spike",
+      "name": "Wholesale coffee up 20%",
+      "text": "Roasters pass on higher green coffee prices. Beans are about a quarter of what an order costs you to make.",
+      "effect": {
+        "field": "cogs",
+        "mult": 1.05
+      },
+      "months": 3,
+      "source": "https://fred.stlouisfed.org/series/APU0000717311",
+      "confidence": "estimate",
+      "note": "Seen at FRED (BLS average price, ground roast coffee, US city average): $9.25 per lb in October 2026, $9.46 in June 2026. The 20% rise and the bean share of cost of goods (about 25%) are my estimates: 20% x 25% = +5% on cost of goods."
+    },
+    {
+      "id": "milk_price_up",
+      "name": "Milk up 10%",
+      "text": "Your dairy distributor raises prices. Milk goes into most of the drinks you sell.",
+      "effect": {
+        "field": "cogs",
+        "mult": 1.03
+      },
+      "months": 2,
+      "source": "https://fred.stlouisfed.org/series/APU0000709112",
+      "confidence": "estimate",
+      "note": "Seen at FRED (BLS average price, whole milk, US city average): $4.10 per gallon in October 2026, $4.32 in June 2026: a 5% swing in four months. The 10% rise and the dairy share of cost of goods (about 30%) are my estimates."
+    },
+    {
+      "id": "restaurant_week",
+      "name": "NYC Restaurant Week",
+      "text": "Prix-fixe menus at $30, $45 and $60 pull diners into the neighborhood. More people walk past your door.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 1.05
+      },
+      "months": 1,
+      "source": "https://www.nyctourism.com/restaurant-week/",
+      "confidence": "estimate",
+      "note": "Seen at NYC Tourism: Restaurant Week Winter 2027 runs January 19 to February 11 with menus at $30, $45 and $60 at hundreds of restaurants. The 5% lift for a coffee shop is my estimate."
+    },
+    {
+      "id": "sidewalk_shed",
+      "name": "Sidewalk shed goes up on your block",
+      "text": "Scaffolding covers your storefront while the building next door repairs its facade. Fewer people notice the shop.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 0.9
+      },
+      "months": 3,
+      "source": "https://www.nyc.gov/site/buildings/safety/sidewalk-sheds.page",
+      "confidence": "estimate",
+      "note": "Seen at the Department of Buildings: sidewalk sheds protect pedestrians during construction or facade work; a first permit is generally valid for a year. The 10% drop is my estimate."
+    },
+    {
+      "id": "summer_power_peak",
+      "name": "Summer electricity peak",
+      "text": "Air conditioning, ice machine and fridges run flat out while electricity is at its yearly high.",
+      "effect": {
+        "field": "utilities",
+        "mult": 1.08
+      },
+      "months": 2,
+      "source": "https://www.nyserda.ny.gov/Energy-Prices/Electricity/Monthly-Avg-Electricity-Commercial",
+      "confidence": "estimate",
+      "note": "Research notes, NYSERDA statewide commercial average price: 22.3 cents per kWh in January 2026, 24.2 cents in July 2026: 8.5% higher. The page refused my request, so the figures are from the notes."
+    },
+    {
+      "id": "flu_season",
+      "name": "Flu season",
+      "text": "Half the team is sick in the same fortnight. Sick workers are entitled to paid leave, and the bar runs short-handed.",
+      "effect": {
+        "field": "staffAvailability",
+        "mult": 0.92
+      },
+      "months": 2,
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "confidence": "estimate",
+      "note": "Seen at DCWP: employers with 99 or fewer workers owe up to 40 hours of paid protected time off a year. The 8% loss of working hours is my estimate."
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "letter_grade",
+      "title": "Letter grades",
+      "text": "Every NYC cafe is inspected unannounced at least once a year. 0-13 points is an A, 14-27 a B, 28 or more a C, and the card must hang where passersby can see it. Not posting it costs $500; tampering with it costs $1,000.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+      "id": "fse_permit",
+      "title": "Food Service Establishment Permit",
+      "text": "A cafe needs a Food Service Establishment Permit from the Health Department: $280 a year. You may open on the 22nd day after applying even if no inspector has come yet; the first inspection then arrives unannounced.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    },
+    {
+      "id": "no_fse_permit",
+      "title": "No permit",
+      "text": "Serving food or drinks without a current Health Department permit costs $1,000 ($2,000 if you ignore the summons), and the Department can order the shop closed until the permit is issued.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+      "id": "no_food_protection_cert",
+      "title": "Food Protection Certificate",
+      "text": "A supervisor with a Food Protection Certificate must be on site every hour you are open. The online course is free and the exam costs $24. Nobody certified at inspection: $400 and 10 points, most of the way to losing your A.",
+      "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page"
+    },
+    {
+      "id": "dirty_surfaces",
+      "title": "Clean, rinse, sanitize",
+      "text": "Surfaces that touch food must be washed, rinsed and sanitized. A dirty steam wand, grinder or cutting board is a critical violation: $200-$300 and 5 to 8 points each time. Dirty floors and walls add $100 and 2 to 5 points.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+      "id": "pest_activity",
+      "title": "Pests",
+      "text": "Mice, rats or roaches cost $200-$350 per citation and 5 to 28 points: at the worst level that alone is a C. The Health Code also requires a contract with a licensed exterminator kept on site ($100 if it is missing).",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+      "id": "spoiled_food",
+      "title": "Cold food and old food",
+      "text": "Cold food must stay at 41°F or below. Milk left on the counter or spoiled food kept for sale is a public health hazard: $250-$600 per citation, and the shop can be closed if it is not fixed on the spot.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+      "id": "unapproved_food_source",
+      "title": "Where your food comes from",
+      "text": "Everything you sell must come from a licensed source. Pastries baked in a home kitchen count as food from an unapproved source: a public health hazard, $400-$600, however good they taste.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+      "id": "tip_theft",
+      "title": "Tips belong to the staff",
+      "text": "Tips belong to the workers. An owner or manager may not keep any part of them (NY Labor Law §196-d). Taken tips are owed back with 100% damages and interest, and claims reach back six years.",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/196-D"
+    },
+    {
+      "id": "unpaid_training_time",
+      "title": "Trial shifts are paid",
+      "text": "Trial shifts, training and staff meetings are work. Each hour must be paid at $17.00 or more, and anyone who reports for a shift is owed at least 3 hours of pay. Unpaid hours are owed back double.",
+      "source": "https://forms.labor.ny.gov/WP/CR146.pdf"
+    },
+    {
+      "id": "spread_of_hours_unpaid",
+      "title": "Spread of hours",
+      "text": "If a workday stretches over more than 10 hours from start to finish, breaks and split shifts included, the worker is owed one extra hour at the minimum wage: $17.00 in New York City.",
+      "source": "https://forms.labor.ny.gov/WP/CR146.pdf"
+    },
+    {
+      "id": "unlicensed_sidewalk_cafe",
+      "title": "Sidewalk tables",
+      "text": "Tables on the sidewalk need a Dining Out NYC license: $1,050 for four years, a $1,500 deposit and a yearly fee of $6-$31 per square foot. Without it: $500 for the first offense, $1,000 for each one after, and the city can remove the setup.",
+      "source": "https://www.diningoutnyc.info/enforcement"
+    },
+    {
+      "id": "outdoor_dining_wait",
+      "title": "Outdoor dining takes a long time",
+      "text": "Plan the first year without outdoor seats. The city Comptroller found in 2026 that more than half of the restaurants approved for outdoor dining had waited over 19 months for the permit.",
+      "source": "https://comptroller.nyc.gov/newsroom/comptroller-investigation-finds-more-than-half-of-restaurants-in-outdoor-dining-program-waited-over-19-months-for-permits-delays-deprive-businesses-of-much-needed-revenue/"
+    },
+    {
+      "id": "grease_interceptor_neglect",
+      "title": "Grease interceptor",
+      "text": "Coffee shops need a grease interceptor too: milk fat counts. It must be properly sized and installed, and cleaned before grease fills 25% of it. Fines run from $100 to $1,500.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+      "id": "seats_20",
+      "title": "The 20-seat line",
+      "text": "With 20 or more seats, counting outdoor ones, a cafe must give customers a bathroom. Under 20 seats you do not need a customer bathroom, but you still need a hand-washing sink near the bar and in every restroom.",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page"
+    },
+    {
+      "id": "tip_credit",
+      "title": "Tipped wage",
+      "text": "A tipped food service worker in NYC may be paid $11.35 in cash plus a $5.65 tip credit only with written notice, records, and tips that really cover the gap. Otherwise the full $17.00 is due. The safe choice is to pay the full wage.",
+      "source": "https://dol.ny.gov/minimum-wage-tipped-workers"
+    },
+    {
+      "id": "sales_tax_food",
+      "title": "What is taxed in a cafe",
+      "text": "Coffee in a cup is taxed at 8.875% even to go. Food eaten in the shop, heated food and sandwiches are taxed too. Bags of beans to take home are not. Set the register up item by item: the tax you collect is never part of your sales.",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_by_restaurants.htm"
+    },
+    {
+      "id": "card_fees",
+      "title": "Card fees on small tickets",
+      "text": "Card fees are not just 2.5%. With 15 cents per tap, and the fee charged on tax and tips too, an $8.50 order costs about 35 cents to process: around 4% of sales. Small tickets pay the highest share.",
+      "source": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees"
+    },
+    {
+      "id": "inspection_cycle",
+      "title": "After a bad inspection",
+      "text": "Score 14 or more on the first inspection and the inspector returns no sooner than 7 days later to set your grade. A B brings the next cycle in 5-7 months, a C in 3-5 months, instead of once a year.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+      "id": "sign_permit",
+      "title": "Storefront signs",
+      "text": "A wall sign of 6 square feet or less needs no Buildings Department sign permit. Anything bigger needs a permit that only a licensed sign hanger can obtain. Read the lease as well: the landlord usually has to approve the sign.",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page"
+    },
+    {
+      "id": "commercial_waste",
+      "title": "Business trash",
+      "text": "The city does not collect business trash. You must sign with a private carter authorized for your commercial waste zone (three per zone) and post its decal. Each carter has a maximum price that depends on how much you put out.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/commercial-waste-zones.page"
+    },
+    {
+      "id": "fair_workweek",
+      "title": "Fair Workweek",
+      "text": "New York City's Fair Workweek Law covers fast food chains with 30 or more locations nationwide: schedules 14 days ahead and premiums for changes. One independent cafe is not covered, but call-in pay and spread-of-hours rules still apply.",
+      "source": "https://www.nyc.gov/site/dca/workers/workersrights/fastfood-retail-workers.page"
+    },
+    {
+      "id": "second_generation_space",
+      "title": "Take over a former cafe",
+      "text": "A space that was already a cafe saves the most money. Building a counter-service cafe in a former food space costs $200-$300 per square foot in NYC; a space that never had food service can run $400-$600 or more.",
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc"
+    }
+  ],
+  "benchmarks": {
+    "cogsPct": 0.28,
+    "laborPct": 0.35,
+    "rentPct": 0.1,
+    "netMarginPct": 0.04,
+    "source": "https://restaurant.org/research-and-media/media/press-releases/new-resource-from-national-restaurant-association-provides-insights-into-operational-realities",
+    "confidence": "estimate",
+    "note": "Seen at the National Restaurant Association (2025 release, 2024 data, more than 900 US restaurants): limited-service operators had a median pre-tax income of 4.0% of sales and prime costs (food, drinks and labor) of 65%. Cost of goods 28% is the research notes' model; labor 35% is the rest of the 65% prime cost, rounded; rent 10% is my New York planning ceiling: the national median for city-center limited service is 6.0% (NRA, from research notes), while the notes' Brooklyn model runs 11.8%."
+  },
+  "suppliers": [
+    {
+      "id": "coffee_beans",
+      "category": "Coffee",
+      "what": "Wholesale roasted beans, usually with barista training and equipment service included",
+      "whereToFind": "Ask the cafes you like who roasts for them, then visit two or three roasters for a cupping. Most have a wholesale page and deliver weekly across the city.",
+      "examples": "Partners Coffee, Joe Coffee Company, Brooklyn Roasting Company, Variety Coffee Roasters, Devocion, Counter Culture Coffee",
+      "link": "https://www.partnerscoffee.com/pages/wholesale",
+      "source": "https://www.partnerscoffee.com/pages/wholesale",
+      "confidence": "estimate",
+      "note": "Seen on the Partners Coffee wholesale page: barista education, in-house service technicians, equipment and delivery across New York City. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "dairy",
+      "category": "Milk and alternatives",
+      "what": "Whole milk, half-and-half, oat and almond milk delivered several times a week",
+      "whereToFind": "Foodservice distributors that already deliver on your street; your roaster and neighboring cafes know which trucks pass by. Small volumes: a cash-and-carry warehouse.",
+      "examples": "Baldor Specialty Foods, Dairyland (The Chefs' Warehouse), Battenkill Valley Creamery, Restaurant Depot for oat milk by the case",
+      "link": "https://www.baldorfood.com/",
+      "source": "https://www.baldorfood.com/",
+      "confidence": "estimate",
+      "note": "Seen on Baldor's site: a specialty food distributor carrying dairy, bakery, produce and kitchen supplies for business customers. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "pastry",
+      "category": "Pastry and food",
+      "what": "Croissants, muffins, cookies and sandwiches baked by a licensed wholesale bakery and delivered before opening",
+      "whereToFind": "Wholesale programs of local bakeries: ask for a sample box and the minimum order. Buying from a licensed source keeps you inside the Health Code; home baking does not.",
+      "examples": "Balthazar Bakery, Bien Cuit, Ceci-Cela, Colson Patisserie, Pain d'Avignon, Orwashers, Amy's Bread",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "estimate",
+      "note": "The rule behind it was seen in the penalty schedule: food from an unapproved source or home cooked is a public health hazard ($400-$600). Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "equipment_new",
+      "category": "Equipment, new",
+      "what": "Espresso machine, grinders, refrigeration, sinks, dishwasher, shelving",
+      "whereToFind": "Online restaurant supply stores for list prices; the restaurant supply shops on the Bowery in Manhattan to see things in person; your roaster for the espresso machine, often with a service contract.",
+      "examples": "WebstaurantStore, KaTom, Visions Espresso, Restaurant Depot, Bowery restaurant supply shops",
+      "link": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+      "source": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+      "confidence": "estimate",
+      "note": "Prices in this pack were seen at WebstaurantStore and Visions Espresso on November 14, 2026. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "equipment_used",
+      "category": "Equipment, used",
+      "what": "Second-hand machines, fridges and furniture at roughly half the new price",
+      "whereToFind": "Cafes that are closing (ask brokers and landlords), restaurant equipment auctions, used dealers on the Bowery, Facebook Marketplace and Craigslist. Have a technician test an espresso machine before you pay.",
+      "examples": "Restaurant auction houses, used equipment dealers on the Bowery, the previous tenant of your space",
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate",
+      "note": "The \"half price\" figure is my rough estimate. The research notes' cheapest opening budget assumes part of the previous cafe's equipment is kept. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "disposables",
+      "category": "Cups and packaging",
+      "what": "Cups, lids, sleeves, napkins, bags, cleaning chemicals, gloves",
+      "whereToFind": "Order online by the case, or load a van at a cash-and-carry warehouse in Brooklyn, Queens or the Bronx. Membership is free for businesses.",
+      "examples": "WebstaurantStore, Restaurant Depot, Imperial Dade",
+      "link": "https://www.restaurantdepot.com/",
+      "source": "https://www.restaurantdepot.com/",
+      "confidence": "estimate",
+      "note": "Seen: Restaurant Depot is a wholesale cash-and-carry supplier with free membership; 12 oz hot cups cost $45.99 per 1,000 at WebstaurantStore. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "pos_payments",
+      "category": "Register and payments",
+      "what": "Point-of-sale system, card reader, online ordering, tip and sales tax reports",
+      "whereToFind": "Compare the monthly plan and the per-tap fee on the providers' own pricing pages; on small tickets the fixed cents matter more than the percentage.",
+      "examples": "Square, Toast, Clover",
+      "link": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees",
+      "source": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees",
+      "confidence": "estimate",
+      "note": "Seen in Square's fee table: 2.6% + 15 cents (Free), 2.5% + 15 cents (Plus), 2.4% + 15 cents (Premium) per in-person payment. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "insurance_broker",
+      "category": "Insurance",
+      "what": "Business owner's policy, workers' compensation, disability and paid family leave coverage",
+      "whereToFind": "An independent broker who insures restaurants can quote several carriers at once. The New York State Insurance Fund writes workers' compensation and disability policies for any employer.",
+      "examples": "A local independent broker, Insureon, New York State Insurance Fund (NYSIF)",
+      "link": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "confidence": "estimate",
+      "note": "Seen at Insureon: coffee shops pay on average $126 a month for a business owner's policy and $88 for workers' compensation across the US. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "accountant_help",
+      "category": "Accountant and free advice",
+      "what": "Bookkeeper or accountant who knows restaurants; free city help with leases, permits and plans",
+      "whereToFind": "Ask other owners on your block for their accountant. NYC Small Business Services gives free lease review, legal advice, business courses and a team that walks restaurants through permits.",
+      "examples": "NYC Small Business Services and its NYC Business Express Service Team, a local accountant with restaurant clients",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "estimate",
+      "note": "Seen on the NYC Business restaurant page: free commercial lease assistance, free legal advice, free business courses and the NYC Business Express Service Team. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "pest_control",
+      "category": "Pest control",
+      "what": "Monthly service by a state-licensed exterminator, with a written contract kept in the shop",
+      "whereToFind": "Ask neighboring restaurants; check that the company is licensed by the state. Expect $100-$300 a month for a small cafe.",
+      "examples": "Local licensed pest management companies",
+      "link": "https://advancedexterminating.com/blog/nyc-commercial-pest-control-cost/",
+      "source": "https://advancedexterminating.com/blog/nyc-commercial-pest-control-cost/",
+      "confidence": "estimate",
+      "note": "Seen at a local exterminator's 2026 price guide: $100-$300 a month for a small NYC cafe, $250-$600 for a first treatment. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    },
+    {
+      "id": "waste_carter",
+      "category": "Trash and recycling",
+      "what": "Private carter for trash, recycling and food scraps",
+      "whereToFind": "The Sanitation Department lists the three carters authorized for your commercial waste zone and shows the maximum price each may charge.",
+      "examples": "The three carters authorized for your commercial waste zone",
+      "link": "https://www.nyc.gov/site/dsny/businesses/commercial-waste-zones.page",
+      "source": "https://www.nyc.gov/site/dsny/businesses/commercial-waste-zones.page",
+      "confidence": "estimate",
+      "note": "Seen at the Sanitation Department: three carters are authorized in each of the 20 zones, and a calculator shows each carter's maximum monthly rate."
+    },
+    {
+      "id": "contractor_architect",
+      "category": "Contractor and architect",
+      "what": "Architect or engineer to file plans, licensed plumber and electrician, general contractor with cafe experience",
+      "whereToFind": "Ask who built the cafes you admire, check licenses with the Department of Buildings, and get three written bids that say whether equipment hookups are included.",
+      "examples": "Licensed general contractors with food-service projects; the city offers free plan examinations for small businesses",
+      "link": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate",
+      "note": "Seen in a contractor's 2026 guide: counter-service cafe build-outs in former food spaces run $200-$300 per sq ft, permits 6-14 weeks, construction 8-24 weeks. Names are well-known examples from general knowledge of the New York market, not endorsements and not checked in this session unless a link is given; compare at least three quotes."
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "pick_concept",
+      "title": "Decide the format: counter service, menu, seats",
+      "kind": "idea",
+      "text": "Coffee and bought-in pastries with no cooking keeps you out of hoods, fire suppression and gas permits. Stay under 20 seats and you do not have to build a customer bathroom. Count people walking past your target corner at 8am before you count on 200 orders a day."
+    },
+    {
+      "id": "find_space",
+      "title": "Scout storefronts: look for a former cafe",
+      "kind": "idea",
+      "text": "About 800 sq ft holds 18-24 seats. A former cafe keeps its plumbing, ventilation and bathroom: a light renovation runs near $90 per sq ft instead of $200-$300. Typical asking rents for 800 sq ft: about $3,000 a month in outer Queens, $6,000 on a Brooklyn side street, $22,000 in prime Manhattan.",
+      "link": "https://www.rebny.com/reports/brooklyn-retail-report-2025/"
+    },
+    {
+      "id": "check_certificate_of_occupancy",
+      "title": "Check the Certificate of Occupancy before you sign",
+      "kind": "idea",
+      "text": "The building's Certificate of Occupancy must allow an eating and drinking place; buildings from before 1938 may need a Letter of No Objection instead. Also check electrical capacity, the grease interceptor, an accessible restroom and whether the block is landmarked. Make the lease depend on getting your permits.",
+      "agency": "NYC Department of Buildings",
+      "link": "https://portal.311.nyc.gov/article/?kanumber=KA-02023"
+    },
+    {
+      "id": "plan_buildout",
+      "title": "Design and build out",
+      "kind": "space",
+      "text": "An architect files plans, licensed plumbers and electricians pull the permits. Budget $70,000 for a light renovation of a former cafe plus about 10% for drawings and filings. Expect 6-14 weeks for permits and 8-24 weeks of construction, with rent due once any free-rent period ends.",
+      "setupItemId": "buildout",
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc"
+    },
+    {
+      "id": "take_food_protection_course",
+      "title": "Pass the Food Protection Course",
+      "kind": "permit",
+      "text": "Take the free 15-lesson online course and pay $24 for the in-person exam. A certified supervisor must be in the shop every hour it is open, so certify yourself and at least one more person. You need the certificate or a course registration to apply for the permit.",
+      "setupItemId": "food_protection_cert",
+      "fee": 24,
+      "waitDays": 14,
+      "agency": "NYC Health Academy (DOHMH)",
+      "link": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page"
+    },
+    {
+      "id": "get_fse_permit",
+      "title": "Get your Food Service Establishment Permit",
+      "kind": "permit",
+      "text": "Apply online with proof of workers' compensation and disability insurance, the sales tax Certificate of Authority and the Food Protection Certificate. The fee is $280 a year. You may open on the 22nd day after applying; call for a pre-operational inspection if you want to open sooner.",
+      "setupItemId": "fse_permit",
+      "fee": 280,
+      "waitDays": 21,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    },
+    {
+      "id": "arrange_grease_and_waste",
+      "title": "Grease interceptor and private carter",
+      "kind": "permit",
+      "text": "Have a licensed plumber confirm the grease interceptor is the right size. Sign a contract with one of the three private carters authorized for your commercial waste zone and post the decal: the city does not pick up business trash.",
+      "agency": "NYC Department of Environmental Protection; NYC Department of Sanitation",
+      "link": "https://www.nyc.gov/site/dsny/businesses/commercial-waste-zones.page"
+    },
+    {
+      "id": "check_sign_rules",
+      "title": "Check the sign rules before you order a sign",
+      "kind": "permit",
+      "text": "A wall sign of 6 sq ft or less needs no sign permit. A bigger or illuminated sign must be filed with the Department of Buildings and hung by a licensed sign hanger, and the landlord usually has to approve it.",
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page"
+    },
+    {
+      "id": "apply_outdoor_seating",
+      "title": "Optional: apply for sidewalk seating",
+      "kind": "permit",
+      "text": "Sidewalk tables need a Dining Out NYC license: $1,050 for four years plus a $1,500 refundable deposit and a yearly fee per square foot. Apply early, but plan year one without outdoor seats: more than half of approved restaurants waited over 19 months.",
+      "setupItemId": "sidewalk_cafe_license",
+      "fee": 2550,
+      "waitDays": 240,
+      "agency": "NYC Department of Transportation (Dining Out NYC)",
+      "link": "https://www.diningoutnyc.info/apply/fees"
+    },
+    {
+      "id": "buy_equipment",
+      "title": "Buy equipment and furniture",
+      "kind": "money",
+      "text": "A new basic set costs about $36,500 before tax and delivery: espresso machine $7,600, two grinders $4,200, fridges and pastry case $3,800, sinks, ice machine, dishwasher, register, 20 chairs and 10 tables. Order the machine first: delivery takes 2-4 weeks. Used gear from a closing cafe cuts the bill.",
+      "setupItemId": "espresso_machine",
+      "link": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html"
+    },
+    {
+      "id": "line_up_suppliers",
+      "title": "Line up suppliers and the opening order",
+      "kind": "supplier",
+      "text": "Pick a wholesale roaster (many train your staff and service the machine), a dairy distributor, a wholesale bakery that delivers before 7am, and a source for cups and lids. Open accounts two to three weeks ahead; the first order runs $3,000-$5,000.",
+      "setupItemId": "opening_inventory",
+      "link": "https://www.partnerscoffee.com/pages/wholesale"
+    },
+    {
+      "id": "set_up_pos",
+      "title": "Set up the register and card payments",
+      "kind": "supplier",
+      "text": "A Square register costs about $900; processing is 2.5%-2.6% plus 15 cents per tap. Program each menu item as taxable or not, switch on tip reporting, and connect payroll so tips and hours flow into pay stubs.",
+      "setupItemId": "pos",
+      "link": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees"
+    },
+    {
+      "id": "hire",
+      "title": "Hire and train baristas",
+      "kind": "people",
+      "text": "Four baristas cover a 12-hour day at 200 orders. Minimum wage is $17.00; the model pays $21 plus tips. Pay for training and trial shifts, give each hire a written pay notice, and schedule to avoid overtime and days longer than 10 hours.",
+      "link": "https://dol.ny.gov/minimum-wage-0"
+    },
+    {
+      "id": "open_doors",
+      "title": "Open your doors",
+      "kind": "launch",
+      "text": "Open once the permit is in hand or on the 22nd day after applying. Post the permit, keep the Food Protection Certificate and the pest control contract in the shop, and expect an unannounced first inspection. Keep three months of fixed costs in the bank: the first months are slower than the plan.",
+      "link": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page"
+    }
+  ],
+  "manager": {
+    "monthlySalary": 4800,
+    "source": "https://dol.ny.gov/minimum-wage-0",
+    "confidence": "estimate",
+    "note": "Research notes: the economic price of a manager who replaces the owner, 160 hours x $30 = $4,800 a month before employer payroll taxes. A planning figure, not a wage statistic."
+  },
+  "sources": [
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "title": "NYC Business: Food Service Establishment Permit, $280, open on the 22nd day",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01878",
+      "title": "NYC311: Food Service Establishment Permit, $280 fee and renewal",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+      "title": "NYC Health: free online Food Protection Course, $24 exam",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-protection-certificate",
+      "title": "NYC Business: Food Protection Certificate, classroom course (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "title": "NYC Health Code rules, 24 RCNY Chapter 23: inspection scoring, letter grades and penalty schedule (Appendix 23-C)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/business/food-operators/letter-grading-for-restaurants.page",
+      "title": "NYC Health: letter grading for restaurants, A 0-13, B 14-27, C 28+",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
+      "title": "NYC Health: operating a restaurant, 20-seat bathroom rule, yearly unannounced inspection",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "title": "NYC Business: restaurant resources, requirements and fines, free city help",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02023",
+      "title": "NYC311: Certificate of Occupancy (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-27198",
+      "title": "15 RCNY §19-11: grease interceptors (from research notes; site blocked in this session)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.diningoutnyc.info/apply/fees",
+      "title": "Dining Out NYC: license, deposit and consent fees",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.diningoutnyc.info/enforcement",
+      "title": "Dining Out NYC: enforcement and penalties",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://comptroller.nyc.gov/newsroom/comptroller-investigation-finds-more-than-half-of-restaurants-in-outdoor-dining-program-waited-over-19-months-for-permits-delays-deprive-businesses-of-much-needed-revenue/",
+      "title": "NYC Comptroller, October 27, 2026: more than half of approved outdoor dining applicants waited over 19 months",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+      "title": "NYC Department of Buildings: sign permits, six square foot exemption",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/businesses/commercial-waste-zones.page",
+      "title": "NYC Department of Sanitation: Commercial Waste Zones",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/safety/sidewalk-sheds.page",
+      "title": "NYC Department of Buildings: sidewalk sheds",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/minimum-wage-0",
+      "title": "NY DOL: minimum wage, $17.00 in New York City",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/minimum-wage-tipped-workers",
+      "title": "NY DOL: tipped workers, $11.35 cash wage and $5.65 tip credit for food service workers in NYC",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://forms.labor.ny.gov/WP/CR146.pdf",
+      "title": "12 NYCRR Part 146, Hospitality Industry Wage Order: tip credit, call-in pay, spread of hours",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/LAB/196-D",
+      "title": "NY Labor Law §196-d: gratuities",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "title": "NY Labor Law §198: liquidated damages",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "title": "NYC DCWP: paid safe and sick leave FAQ",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dca/workers/workersrights/fastfood-retail-workers.page",
+      "title": "NYC DCWP: Fair Workweek for fast food workers",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+      "title": "NYC Department of Finance: sales tax 8.875%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_by_restaurants.htm",
+      "title": "NYS Tax Bulletin: sales by restaurants, taverns and similar establishments (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/beverages_sold_by_food_stores.htm",
+      "title": "NYS Tax Bulletin: beverages sold by food stores (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.rebny.com/reports/brooklyn-retail-report-2025/",
+      "title": "REBNY Brooklyn Retail Report 2025 (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://content.cushmanwakefield.com/api/public/content/0c916c5affba4d6c93bb0f4bef086d16?v=15b6419f",
+      "title": "Cushman & Wakefield Manhattan retail market statistics, Q3 2026 (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cityfeet.com/cont/jackson-heights-queens-ny/retail-space-for-lease",
+      "title": "CityFeet: Jackson Heights retail listings, seen November 2026 (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "title": "NYC Small Business Services: Commercial Lease Guide, security deposit commonly two months",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "title": "Alpha Contracting: NYC commercial build-out cost guide 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://restaurant.org/research-and-media/media/press-releases/new-resource-from-national-restaurant-association-provides-insights-into-operational-realities",
+      "title": "National Restaurant Association: limited-service median pre-tax income 4.0%, prime cost 65%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://restaurant.org/research-and-media/research/restaurant-economic-insights/analysis-commentary/restaurant-occupancy-costs-were-more-than-5-of-sales-in-2024/",
+      "title": "National Restaurant Association: occupancy costs (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://order.online/en-US/store/ten-thousand-coffee-24834959",
+      "title": "Merchant menu page used as a price anchor (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+      "title": "WebstaurantStore: Nuova Simonelli Appia Life Compact two-group, $7,600",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/search/nuova-simonelli-appia-life-3-group.html",
+      "title": "WebstaurantStore: Appia Life three-group, $11,700",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "title": "Visions Espresso: Mahlkonig grinders, E65S $2,099, EK43 $3,899",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/avantco-a-19r-hc-29-solid-door-reach-in-refrigerator/178A19RHC.html",
+      "title": "WebstaurantStore: Avantco A-19R-HC reach-in refrigerator, $1,199",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.atlanticse.com/collections/atosa-undercounter-refrigeration/products/atosa-mgf8401gr",
+      "title": "Atlantic Restaurant Equipment: Atosa MGF8401GR (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/13469/refrigerated-bakery-cases-and-dry-bakery-display-cases.html",
+      "title": "WebstaurantStore: refrigerated bakery cases, Avantco BCS-48-HC $1,149",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://catalog.webstaurantstore.com/noble-warewashing-ht-uc24-select-high-temperature-undercounter-dishwasher-with-booster-heater-208-240v-1-phase/495HTUC24.html",
+      "title": "WebstaurantStore: Noble HT-UC24 dishwasher, $4,449",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/regency-60-16-gauge-stainless-steel-three-compartment-commercial-sink-without-drainboards-17-x-17-x-12-bowls/600S31717X.html",
+      "title": "WebstaurantStore: Regency three-compartment sink (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/42529/restaurant-chairs.html?vendor=Lancaster-Table-Seating",
+      "title": "WebstaurantStore: Lancaster Table & Seating chairs, $48.99-$82.49",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/lancaster-table-seating-24-x-24-reversible-walnut-oak-laminated-standard-height-table-top-and-base-kit-with-17-base/349C24SW17RS.html",
+      "title": "WebstaurantStore: Lancaster 24 x 24 table kit, $69.99",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://catalog.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
+      "title": "WebstaurantStore: 12 oz hot cups, $45.99 per 1,000",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.katom.com/021-230010006.html",
+      "title": "KaTom: Bunn CWTF15-APS brewer (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.seattlecoffeegear.com/collections/everpure",
+      "title": "Seattle Coffee Gear: Everpure filtration (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://oswaltsupply.com/uyf0140a-ice-maker-137-lb",
+      "title": "Oswalt Supply: Manitowoc ice maker (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://squareup.com/us/en/hardware/register",
+      "title": "Square: Register hardware (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://squareup.com/us/en/pricing",
+      "title": "Square: plan pricing (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees",
+      "title": "Square: processing fees by plan",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "title": "Insureon: insurance costs for coffee shops",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://gusto.com/product/pricing",
+      "title": "Gusto: payroll pricing (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.verizon.com/business/products/internet/",
+      "title": "Verizon: business internet (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyserda.ny.gov/Energy-Prices/Electricity/Monthly-Avg-Electricity-Commercial",
+      "title": "NYSERDA: monthly average commercial electricity price (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nerdwallet.com/business/software/learn/quickbooks-live-bookkeeping",
+      "title": "NerdWallet: bookkeeping price benchmark (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://advancedexterminating.com/blog/nyc-commercial-pest-control-cost/",
+      "title": "Advanced Pest Management: NYC commercial pest control cost, $100-$300 a month",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.partnerscoffee.com/pages/wholesale",
+      "title": "Partners Coffee: wholesale program",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.restaurantdepot.com/",
+      "title": "Restaurant Depot: wholesale cash and carry, free membership",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.baldorfood.com/",
+      "title": "Baldor Specialty Foods",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/series/APU0000717311",
+      "title": "FRED / BLS: average price of ground roast coffee, $9.25 per lb in October 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/series/APU0000709112",
+      "title": "FRED / BLS: average price of whole milk, $4.10 per gallon in October 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyctourism.com/restaurant-week/",
+      "title": "NYC Tourism: Restaurant Week Winter 2027, January 19 - February 11",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/publications/p15",
+      "title": "IRS Publication 15 (2026): tips are wages for payroll tax",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dos.ny.gov/node/35506",
+      "title": "NYS Department of State: forming a domestic LLC, $200",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.llcpublishers.com/pricing",
+      "title": "LLC Publishers: publication package prices by county (one provider's price list)",
+      "checked": "2026-11-14"
+    }
+  ],
+  "extra": {
+    "howNumbersWereChecked": "verified = I opened the primary source in this session (November 14, 2026) and saw the number. estimate = taken from the research notes (C:/OHHHeaven/research_notes, coffee shop cost 2026) without opening the source, or my own arithmetic or planning value; the note says which. Game-balance values (quality bonuses, effects of levers, closure days, reputation hits) are design choices, not facts.",
+    "weekdayMult": [
+      1,
+      1,
+      1,
+      1,
+      1.05,
+      1.05,
+      0.9
+    ],
+    "weekdayMultNote": "Mon..Sun; sums to 7. My estimate for a neighborhood cafe: commuters on weekdays, a longer brunch crowd Friday and Saturday, a quieter Sunday. No public data set was used.",
+    "taxableShare": 1,
+    "taxableShareNote": "Every order is treated as taxable, as in the research notes' model. In real life bags of beans and some unheated bakery items sold to go are exempt, so the true share is a little under 1.",
+    "rentByTier": {
+      "unit": "USD per sq ft per year, ground-floor retail asking rent; monthly = rate x 800 / 12",
+      "prime": {
+        "rentPerSqftYear": 326,
+        "monthlyFor800Sqft": 21733,
+        "example": "Flatiron / Union Square West, Fifth Avenue and Broadway: $326 gross asking rent (Cushman & Wakefield, Q3 2026); SoHo Broadway is $409",
+        "breakEvenOrdersPerDay": 267
+      },
+      "mid": {
+        "rentPerSqftYear": 90,
+        "monthlyFor800Sqft": 6000,
+        "example": "Moderate Brooklyn side street; small Park Slope spaces near Union Street ask under $100 (REBNY 2025)",
+        "breakEvenOrdersPerDay": 177
+      },
+      "cheap": {
+        "rentPerSqftYear": 45,
+        "monthlyFor800Sqft": 3000,
+        "example": "Secondary street in Queens; a listing at 95-41 Roosevelt Avenue, Jackson Heights asked $45 (CityFeet, November 2026), while 37th Avenue listings asked $98-$106",
+        "breakEvenOrdersPerDay": 159
+      },
+      "depositMonths": 3,
+      "source": "https://content.cushmanwakefield.com/api/public/content/0c916c5affba4d6c93bb0f4bef086d16?v=15b6419f",
+      "confidence": "estimate",
+      "note": "All three tiers from the research notes; Brooklyn and Queens figures are planning estimates, not market medians. Break-even orders per day are the notes' cash break-even at $8.50 with the owner's labor priced at $4,800 a month."
+    },
+    "seatThresholds": [
+      {
+        "seats": 20,
+        "rule": "A customer bathroom is required at 20 or more seats, indoor and outdoor seats counted together",
+        "law": "NYC Health Code §81.22",
+        "setupItemId": "customer_restroom",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
+        "confidence": "verified"
+      },
+      {
+        "seats": 75,
+        "rule": "A Place of Assembly permit is needed when 75 or more people can gather inside",
+        "law": "NYC Building Code; Fire Department rules",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+        "confidence": "verified"
+      }
+    ],
+    "tipCredit": {
+      "minimumWage": 17,
+      "cashWage": 11.35,
+      "tipCredit": 5.65,
+      "used": false,
+      "note": "Seen at NY DOL and in 12 NYCRR 146-1.3: food service workers in New York City, 2026. Legal only with written notice (146-2.2), records, and tips that cover the credit; a worker who spends 2 hours or 20% of a shift on untipped work loses the status for that day (from research notes). The pack does not use it.",
+      "source": "https://dol.ny.gov/minimum-wage-tipped-workers"
+    },
+    "openingBudget": {
+      "note": "Research notes, three scenarios for an 800 sq ft cafe, USD, 2026 planning estimates. The game charges rent before opening by the day, so \"rent before opening\" is not a setup item. The standard kit follows the first column with a $6,000 rent (deposit $18,000).",
+      "rows": [
+        {
+          "item": "Lease deposit, three months",
+          "almostReady": 9000,
+          "typicalRefit": 18000,
+          "heavyConversion": 18000
+        },
+        {
+          "item": "Rent before opening, after free rent",
+          "almostReady": 9000,
+          "typicalRefit": 18000,
+          "heavyConversion": 36000
+        },
+        {
+          "item": "Build-out",
+          "almostReady": 70000,
+          "typicalRefit": 180000,
+          "heavyConversion": 320000
+        },
+        {
+          "item": "Architect, engineer, expediter",
+          "almostReady": 7000,
+          "typicalRefit": 18000,
+          "heavyConversion": 32000
+        },
+        {
+          "item": "Equipment, furniture, smallwares",
+          "almostReady": 25000,
+          "typicalRefit": 36523,
+          "heavyConversion": 50000
+        },
+        {
+          "item": "Sales tax on equipment, delivery, installation",
+          "almostReady": 3500,
+          "typicalRefit": 5200,
+          "heavyConversion": 7500
+        },
+        {
+          "item": "Sign",
+          "almostReady": 1500,
+          "typicalRefit": 3000,
+          "heavyConversion": 5000
+        },
+        {
+          "item": "Lawyer",
+          "almostReady": 3500,
+          "typicalRefit": 5000,
+          "heavyConversion": 8000
+        },
+        {
+          "item": "LLC, publication, permits",
+          "almostReady": 2500,
+          "typicalRefit": 4000,
+          "heavyConversion": 6000
+        },
+        {
+          "item": "Opening inventory",
+          "almostReady": 3000,
+          "typicalRefit": 5000,
+          "heavyConversion": 7000
+        },
+        {
+          "item": "Hiring and paid training",
+          "almostReady": 4000,
+          "typicalRefit": 6000,
+          "heavyConversion": 9000
+        },
+        {
+          "item": "First insurance premiums, utility deposits",
+          "almostReady": 1500,
+          "typicalRefit": 2000,
+          "heavyConversion": 3000
+        },
+        {
+          "item": "Contingency",
+          "almostReady": 9500,
+          "typicalRefit": 21652,
+          "heavyConversion": 37000
+        },
+        {
+          "item": "Working capital after opening",
+          "almostReady": 75000,
+          "typicalRefit": 90000,
+          "heavyConversion": 100000
+        }
+      ],
+      "totals": {
+        "almostReady": 224000,
+        "typicalRefit": 412375,
+        "heavyConversion": 638500
+      },
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate"
+    },
+    "referenceMonth": {
+      "note": "One month at the reference point, computed from this pack and _common the way the engine closes a month (script and full table in research/reports/14-cafe.md). Standard kit, 18 seats, 200 orders a day at $8.50, four baristas, default levers, $6,000 rent, no shortcuts.",
+      "orders": 6000,
+      "sales": 51000,
+      "costOfGoods": 13260,
+      "rent": 6000,
+      "wages": 13440,
+      "employerPayrollTaxes": 1556,
+      "otherCosts": 7022,
+      "llcFee": 2,
+      "profitBeforeOwnerTaxes": 9719,
+      "ownerTaxes": 3026,
+      "profitAfterOwnerTaxes": 6694,
+      "salesTaxCollectedForTheState": 4526,
+      "withHiredManager": {
+        "managerSalary": 4800,
+        "managerPayrollTaxes": 556,
+        "profitBeforeOwnerTaxes": 4363,
+        "ownerTaxes": 1358,
+        "profitAfterOwnerTaxes": 3005
+      },
+      "researchNotesModel": {
+        "cashOperatingSurplus": 4152,
+        "note": "The notes price the owner's 160 hours at $4,800 and load 15.1% on wages; the pack gives $4,363 with a hired manager."
+      },
+      "leanKit": {
+        "seats": 12,
+        "ordersServed": 5100,
+        "ordersLost": 900,
+        "profitBeforeOwnerTaxes": 4641
+      },
+      "confidence": "estimate"
+    },
+    "inspectionPoints": {
+      "note": "Seen in the Health Department scoring worksheet (24 RCNY Chapter 23, Appendix 23-A): points by condition level for the violations this pack uses. Under 14 points is an A, 14-27 a B, 28 or more a C. Not used by the engine yet; enough to compute a letter grade from the open trails of a business.",
+      "grades": {
+        "A": [
+          0,
+          13
+        ],
+        "B": [
+          14,
+          27
+        ],
+        "C": [
+          28,
+          null
+        ]
+      },
+      "points": {
+        "no_food_protection_cert": {
+          "code": "04A",
+          "min": 10,
+          "max": 10
+        },
+        "dirty_surfaces": {
+          "code": "06D",
+          "min": 5,
+          "max": 8
+        },
+        "pest_activity": {
+          "code": "04K/04L/04M",
+          "min": 5,
+          "max": 8,
+          "worst": 28
+        },
+        "spoiled_food": {
+          "code": "02G",
+          "min": 7,
+          "max": 10,
+          "worst": 28
+        },
+        "unapproved_food_source": {
+          "code": "03A",
+          "min": 10,
+          "max": 10,
+          "worst": 28
+        }
+      },
+      "reinspectionAfterDays": 7,
+      "nextCycleDaysAfterB": [
+        150,
+        210
+      ],
+      "nextCycleDaysAfterC": [
+        90,
+        150
+      ],
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified"
+    },
+    "realTimeline": {
+      "note": "The game waits only for the two Health Department items (21 days). In real life the build-out sets the date: permit path 6-14 weeks, long-lead equipment 8-20 weeks, construction 8-24 weeks, inspections 1-3 weeks (contractor's 2026 estimates, steps overlap). The research notes budget three paid months of rent before opening for a former cafe and six for a heavy conversion.",
+      "preOpeningRentMonths": {
+        "almostReady": 3,
+        "typicalRefit": 3,
+        "heavyConversion": 6
+      },
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate"
+    },
+    "footfall": {
+      "captureRate": 0.088,
+      "outside": 1.5,
+      "priceSensitivity": 2.7,
+      "radiusM": 250,
+      "staticWeight": 0.5,
+      "rampDays": 75,
+      "awarenessStart": 0.35,
+      "source": "https://data.cityofnewyork.us/d/cqsj-cfgu",
+      "confidence": "estimate",
+      "note": "Demand = people walking the block a day (data/places.json, modelled from MTA station entries and DOHMH food places and scaled to DOT sidewalk counts: data/open/fit.json) x the share who buy here. captureRate is that share for a known, average shop with no rival in sight at the reference price; real coffee shops within 250 m (DOHMH) and playing shops split the same people, and 'outside' is everyone who buys coffee somewhere else or not at all. No public statistic of cafe conversion exists. The rate, the price sensitivity and the ramp were set on the bench (sim/calibrate.ts) against three targets: an established shop on a sound block clears a few thousand dollars a month at about $9 an order, the best price sits within 10% of the reference price, and a careful newcomer ends the first year alive but far below the starting capital. A new shop starts at 35% of its regular crowd and closes about two thirds of the gap every 75 days. Every one of these is an estimate waiting for evidence: research/prompts/80-codex-real-factors.md, part A."
+    },
+    "buildout": {
+      "itemId": "buildout",
+      "classes": {
+        "light": {
+          "label": "Former cafe: light renovation, keeps the plumbing and ventilation",
+          "perSqft": 87.5,
+          "days": 60
+        },
+        "standard": {
+          "label": "Former restaurant or food shop: standard conversion",
+          "perSqft": 225,
+          "days": 90
+        },
+        "heavy": {
+          "label": "Never had food service: heavy conversion (new plumbing, ventilation, grease trap)",
+          "perSqft": 400,
+          "days": 180
+        }
+      },
+      "byFormerUse": {
+        "cafe": "light",
+        "food": "standard",
+        "retail": "heavy",
+        "salon": "heavy"
+      },
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate",
+      "note": "Cost per sq ft: research notes (economics.md), three columns of the 2026 opening budget. Days: the notes count 3, 3 and 6 months of paid rent before the first sale; the contractor's 2026 guide gives 8-24 weeks of construction after 6-14 weeks of permits, overlapping (contractor estimates, not official deadlines). Here the light job takes 60 days, the standard one 90 and the heavy one 180, and the Health Department permit adds its wait after the room is finished. Rent is due from the day the lease is signed."
+    },
+    "takeover": {
+      "multipleOfAnnualSales": 0.2,
+      "min": 80000,
+      "max": 200000,
+      "awareness": 0.9,
+      "refreshDays": 10,
+      "confidence": "estimate",
+      "note": "Buying an operating coffee shop: the price covers the finished room, the equipment and the furniture, and nine in ten regulars stay. The research notes list key money as quote-only with no public figure; the asking price here is 20% of a year of sales the address supports at the reference price, between $80,000 and $200,000 - a planning rule of thumb, not a listing. The buyer still signs a lease (new deposit), applies for a new Health Department permit (it does not transfer), restocks and hires. Estimate waiting for evidence: research/prompts/80-codex-real-factors.md, part A."
+    }
+  }
+}

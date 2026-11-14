@@ -1,0 +1,4742 @@
+{
+ "inputs": [
+  "D00-total-search.json",
+  "D01-entry-preopening.json",
+  "D02-premises.json",
+  "D03-equipment.json",
+  "D04-menu-cogs-suppliers-waste.json",
+  "D05-people.json",
+  "D06-demand.json",
+  "D07-weather-street-city.json",
+  "D08-law.json",
+  "D09-money.json",
+  "D10-deaths-nonobvious-year.json",
+  "D13-formats.json",
+  "D14-mechanics.json"
+ ],
+ "base": "D11-base.json",
+ "sections": {
+  "setup": {
+   "base": 33,
+   "candidates": 191,
+   "unique": 147,
+   "fixesOfBase": 19,
+   "newRecords": 114,
+   "multiSource": 24
+  },
+  "monthlyCosts": {
+   "base": 16,
+   "candidates": 75,
+   "unique": 62,
+   "fixesOfBase": 7,
+   "newRecords": 46,
+   "multiSource": 6
+  },
+  "staff": {
+   "base": 2,
+   "candidates": 15,
+   "unique": 12,
+   "fixesOfBase": 2,
+   "newRecords": 10,
+   "multiSource": 1
+  },
+  "taxes": {
+   "base": 1,
+   "candidates": 15,
+   "unique": 13,
+   "fixesOfBase": 1,
+   "newRecords": 12,
+   "multiSource": 1
+  },
+  "levers": {
+   "base": 5,
+   "candidates": 154,
+   "unique": 124,
+   "fixesOfBase": 1,
+   "newRecords": 119,
+   "multiSource": 23
+  },
+  "shortcuts": {
+   "base": 8,
+   "candidates": 126,
+   "unique": 90,
+   "fixesOfBase": 2,
+   "newRecords": 82,
+   "multiSource": 28
+  },
+  "violations": {
+   "base": 11,
+   "candidates": 166,
+   "unique": 101,
+   "fixesOfBase": 11,
+   "newRecords": 90,
+   "multiSource": 38
+  },
+  "officials": {
+   "base": 3,
+   "candidates": 46,
+   "unique": 17,
+   "fixesOfBase": 3,
+   "newRecords": 14,
+   "multiSource": 9
+  },
+  "reports": {
+   "base": 4,
+   "candidates": 54,
+   "unique": 35,
+   "fixesOfBase": 0,
+   "newRecords": 31,
+   "multiSource": 13
+  },
+  "events": {
+   "base": 6,
+   "candidates": 67,
+   "unique": 58,
+   "fixesOfBase": 3,
+   "newRecords": 52,
+   "multiSource": 5
+  },
+  "ruleCards": {
+   "base": 23,
+   "candidates": 399,
+   "unique": 352,
+   "fixesOfBase": 4,
+   "newRecords": 329,
+   "multiSource": 35
+  },
+  "roadmap": {
+   "base": 14,
+   "candidates": 112,
+   "unique": 109,
+   "fixesOfBase": 0,
+   "newRecords": 95,
+   "multiSource": 3
+  },
+  "suppliers": {
+   "base": 12,
+   "candidates": 79,
+   "unique": 73,
+   "fixesOfBase": 5,
+   "newRecords": 61,
+   "multiSource": 1
+  }
+ },
+ "contradictions": [
+  {
+   "section": "setup",
+   "id": "espresso_machine",
+   "field": "lifespanMonths",
+   "chosen": 120,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "espresso_machine",
+     "v": 96,
+     "conf": "verified",
+     "src": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html"
+    },
+    {
+     "tag": "D03",
+     "id": "espresso_machine",
+     "v": 120,
+     "conf": "verified",
+     "src": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "refrigeration",
+   "field": "lifespanMonths",
+   "chosen": 120,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "refrigeration",
+     "v": 96,
+     "conf": "estimate",
+     "src": "https://www.webstaurantstore.com/avantco-a-19r-hc-29-solid-door-reach-in-refrigerator/178A19RHC.html"
+    },
+    {
+     "tag": "D03",
+     "id": "refrigeration",
+     "v": 120,
+     "conf": "estimate",
+     "src": "https://www.webstaurantstore.com/avantco-a-19r-hc-29-solid-door-reach-in-refrigerator/178A19RHC.html"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "pastry_case",
+   "field": "lifespanMonths",
+   "chosen": 120,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "pastry_case",
+     "v": 96,
+     "conf": "verified",
+     "src": "https://www.webstaurantstore.com/13469/refrigerated-bakery-cases-and-dry-bakery-display-cases.html"
+    },
+    {
+     "tag": "D03",
+     "id": "pastry_case",
+     "v": 120,
+     "conf": "verified",
+     "src": "https://www.webstaurantstore.com/13469/refrigerated-bakery-cases-and-dry-bakery-display-cases.html"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "fse_permit",
+   "field": "waitDays",
+   "chosen": 22,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "fse_permit",
+     "v": 21,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    },
+    {
+     "tag": "D14",
+     "id": "fse_permit",
+     "v": 22,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "ice_machine",
+   "field": "lifespanMonths",
+   "chosen": 102,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "ice_machine",
+     "v": 84,
+     "conf": "estimate",
+     "src": "https://oswaltsupply.com/uyf0140a-ice-maker-137-lb"
+    },
+    {
+     "tag": "D03",
+     "id": "ice_machine",
+     "v": 102,
+     "conf": "estimate",
+     "src": "https://oswaltsupply.com/uyf0140a-ice-maker-137-lb"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "dishwasher",
+   "field": "lifespanMonths",
+   "chosen": 90,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "dishwasher",
+     "v": 96,
+     "conf": "verified",
+     "src": "https://catalog.webstaurantstore.com/noble-warewashing-ht-uc24-select-high-temperature-undercounter-dishwasher-with-booster-heater-208-240v-1-phase/495HTUC24.html"
+    },
+    {
+     "tag": "D03",
+     "id": "dishwasher",
+     "v": 90,
+     "conf": "verified",
+     "src": "https://catalog.webstaurantstore.com/noble-warewashing-ht-uc24-select-high-temperature-undercounter-dishwasher-with-booster-heater-208-240v-1-phase/495HTUC24.html"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "dob_alteration_filing_fee",
+   "field": "cost",
+   "chosen": 915,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "dob_alteration_filing_fee",
+     "v": 915,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650"
+    },
+    {
+     "tag": "D14",
+     "id": "dob_alteration_permit",
+     "v": 970,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "dob_alteration_filing_fee",
+   "field": "waitDays",
+   "chosen": 21,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "dob_alteration_filing_fee",
+     "v": 21,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650"
+    },
+    {
+     "tag": "D14",
+     "id": "dob_alteration_permit",
+     "v": 20,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "landmarks_storefront_permit",
+   "field": "cost",
+   "chosen": 320,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "lpc_storefront_permit",
+     "v": 320,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/lpc/downloads/pdf/Storefronts_in_Historic_Districts_Fact_Sheet.pdf"
+    },
+    {
+     "tag": "D02",
+     "id": "landmarks_storefront_permit",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "con_ed_security_deposit",
+   "field": "cost",
+   "chosen": 1600,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "con_ed_security_deposit",
+     "v": 1600,
+     "conf": "estimate",
+     "src": "https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf"
+    },
+    {
+     "tag": "D09",
+     "id": "utility_deposit",
+     "v": 1800,
+     "conf": "estimate",
+     "src": "https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "electrical_service_upgrade",
+   "field": "cost",
+   "chosen": 9000,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "electrical_service_upgrade",
+     "v": 9000,
+     "conf": "estimate",
+     "src": "https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide"
+    },
+    {
+     "tag": "D02",
+     "id": "electrical_service_upgrade",
+     "v": 8000,
+     "conf": "estimate",
+     "src": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "mfv_unit_permit",
+   "field": "cost",
+   "chosen": 75,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "mobile_food_unit_permit",
+     "v": 75,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term"
+    },
+    {
+     "tag": "D13",
+     "id": "mfv_unit_permit",
+     "v": 200,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "mfv_unit_permit",
+   "field": "waitDays",
+   "chosen": 180,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "mobile_food_unit_permit",
+     "v": 180,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term"
+    },
+    {
+     "tag": "D13",
+     "id": "mfv_unit_permit",
+     "v": 365,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "food_cart_new",
+   "field": "cost",
+   "chosen": 16500,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "coffee_cart_unit",
+     "v": 16500,
+     "conf": "estimate",
+     "src": "https://reach.dog/shop/vertical-ledge/products/full-service-mobile-coffee-cart"
+    },
+    {
+     "tag": "D13",
+     "id": "food_cart_new",
+     "v": 15000,
+     "conf": "estimate",
+     "src": "https://pos.toasttab.com/blog/on-the-line/how-much-does-a-food-cart-cost"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "food_cart_new",
+   "field": "lifespanMonths",
+   "chosen": 84,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "coffee_cart_unit",
+     "v": 84,
+     "conf": "estimate",
+     "src": "https://reach.dog/shop/vertical-ledge/products/full-service-mobile-coffee-cart"
+    },
+    {
+     "tag": "D13",
+     "id": "food_cart_new",
+     "v": 120,
+     "conf": "estimate",
+     "src": "https://pos.toasttab.com/blog/on-the-line/how-much-does-a-food-cart-cost"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "tfse_permit",
+   "field": "waitDays",
+   "chosen": 30,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "tfse_permit",
+     "v": 30,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishment-permit"
+    },
+    {
+     "tag": "D13",
+     "id": "tfse_permit",
+     "v": 14,
+     "conf": "verified",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-01825"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "takeover_due_diligence",
+   "field": "cost",
+   "chosen": 7500,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "acquisition_legal_and_accounting",
+     "v": 6000,
+     "conf": "estimate",
+     "src": "https://lawyerforbusiness.com/how-much-does-business-sale-lawyer-cost-ny/"
+    },
+    {
+     "tag": "D14",
+     "id": "takeover_due_diligence",
+     "v": 7500,
+     "conf": "estimate",
+     "src": "https://www.peony.ink/blog/due-diligence-cost-breakdown"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "restricted_area_permit",
+   "field": "cost",
+   "chosen": 75,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "restricted_area_vending_permit",
+     "v": 75,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit"
+    },
+    {
+     "tag": "D13",
+     "id": "restricted_area_permit",
+     "v": 200,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "restricted_area_permit",
+   "field": "waitDays",
+   "chosen": 21,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "restricted_area_vending_permit",
+     "v": 21,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit"
+    },
+    {
+     "tag": "D13",
+     "id": "restricted_area_permit",
+     "v": 45,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "sba_guaranty_fee",
+   "field": "cost",
+   "chosen": 1700,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "sba_guaranty_fee",
+     "v": 2550,
+     "conf": "estimate",
+     "src": "https://www.naggl.org/wp-content/uploads/2025/08/SBA-Info-5000-872051.7aFees.8.28.25.pdf"
+    },
+    {
+     "tag": "D09",
+     "id": "loan_guaranty_fee",
+     "v": 1700,
+     "conf": "estimate",
+     "src": "https://www.naggl.org/sba-issues-notices-announcing-fy-2027-7a-and-504-loan-program-fees/"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "portable_entrance_ramp",
+   "field": "cost",
+   "chosen": 157,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "portable_entrance_ramp",
+     "v": 157,
+     "conf": "verified",
+     "src": "https://reliableramps.com/products/alumiramp-threshold-ramp-tr06n"
+    },
+    {
+     "tag": "D10",
+     "id": "portable_ramp",
+     "v": 300,
+     "conf": "estimate",
+     "src": "https://www.mondaq.com/unitedstates/discrimination-disability-sexual-harassment/1763220/ada-lawsuits-against-coffee-shops-and-breweries-on-the-rise-how-small-businesses-can-avoid-costly-accessibility-claims-about-architectural-barriers-and-websites"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "ac_replacement",
+   "field": "cost",
+   "chosen": 8500,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "hvac_replacement",
+     "v": 15000,
+     "conf": "estimate",
+     "src": "https://www.vincomechanical.com/hvac-replacement-cost-nyc"
+    },
+    {
+     "tag": "D03",
+     "id": "ac_replacement",
+     "v": 8500,
+     "conf": "estimate",
+     "src": "https://fixar-html.pages.dev/commercial/rtu"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "convection_oven",
+   "field": "cost",
+   "chosen": 390,
+   "values": [
+    {
+     "tag": "D03",
+     "id": "convection_oven",
+     "v": 390,
+     "conf": "verified",
+     "src": "https://www.webstaurantstore.com/avantco-co-16-half-size-countertop-convection-oven-1-5-cu-ft-120v-1600w/177CO16.html"
+    },
+    {
+     "tag": "D04",
+     "id": "bakeoff_oven",
+     "v": 460,
+     "conf": "verified",
+     "src": "https://www.webstaurantstore.com/avantco-co-28m-half-size-countertop-convection-oven-2-3-cu-ft-208-240v-2100-2800w/177CO28M.html"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "labor_law_posters",
+   "field": "cost",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "labor_law_posters",
+     "v": 40,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSafeSickLeave-MandatoryNotice-English.pdf"
+    },
+    {
+     "tag": "D08",
+     "id": "labor_posters_and_notices",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://dol.ny.gov/posting-requirements"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "snow_kit",
+   "field": "cost",
+   "chosen": 160,
+   "values": [
+    {
+     "tag": "D07",
+     "id": "snow_kit",
+     "v": 160,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page"
+    },
+    {
+     "tag": "D14",
+     "id": "ice_melt_and_shovels",
+     "v": 180,
+     "conf": "estimate",
+     "src": "https://www.webstaurantstore.com/snow-joe-melt50eb-premium-environmentally-friendly-blend-ice-melt-with-cma-and-resealable-bag-50-lb/200MELT50EB.html"
+    }
+   ]
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "maintenance",
+   "field": "amount",
+   "chosen": 45,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "maintenance",
+     "v": 300,
+     "conf": "estimate",
+     "src": "https://www.seattlecoffeegear.com/collections/everpure"
+    },
+    {
+     "tag": "D03",
+     "id": "maintenance",
+     "v": 45,
+     "conf": "estimate",
+     "src": "https://www.86repairs.com/state-of-repairs"
+    }
+   ]
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "franchise_royalty",
+   "field": "amount",
+   "chosen": 0.06,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "franchise_royalty",
+     "v": 0.06,
+     "conf": "estimate",
+     "src": "https://franchise.gregoryscoffee.com/"
+    },
+    {
+     "tag": "D13",
+     "id": "franchise_royalty",
+     "v": 0.07,
+     "conf": "estimate",
+     "src": "https://www.franchisedirect.com/gong-cha-franchise-costs-fees-fdd"
+    }
+   ]
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "commissary_fee",
+   "field": "amount",
+   "chosen": 600,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "commissary_fee",
+     "v": 600,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page"
+    },
+    {
+     "tag": "D13",
+     "id": "commissary_fee",
+     "v": 750,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page"
+    }
+   ]
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "backflow_test",
+   "field": "amount",
+   "chosen": 38,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "backflow_annual_test",
+     "v": 21,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page"
+    },
+    {
+     "tag": "D03",
+     "id": "backflow_test",
+     "v": 38,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page"
+    }
+   ]
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "turnover_replacement",
+   "field": "amount",
+   "chosen": 113,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "turnover_replacement",
+     "v": 113,
+     "conf": "estimate",
+     "src": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/"
+    },
+    {
+     "tag": "D10",
+     "id": "staff_replacement",
+     "v": 105,
+     "conf": "estimate",
+     "src": "https://www.dripos.com/counter-talk/how-to-keep-your-best-baristas----and-actually-reduce-turnover"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "dirty_surfaces",
+   "field": "fine.perMonth",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "dirty_surfaces",
+     "v": 25,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D00",
+     "id": "dirty_surfaces",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "pest_activity",
+   "field": "fine.perMonth",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "pest_activity",
+     "v": 50,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D00",
+     "id": "pest_activity",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "spoiled_food",
+   "field": "fine.perMonth",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "spoiled_food",
+     "v": 50,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D00",
+     "id": "spoiled_food",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "unapproved_food_source",
+   "field": "fine.perMonth",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "unapproved_food_source",
+     "v": 50,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D00",
+     "id": "unapproved_food_source",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "grease_interceptor_neglect",
+   "field": "fine.perMonth",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "grease_interceptor_neglect",
+     "v": 200,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+     "tag": "D00",
+     "id": "grease_interceptor_neglect",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-118762"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "work_without_permit",
+   "field": "fine.base",
+   "chosen": 6000,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "work_without_permit",
+     "v": 6000,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/buildings/pdf/ll156_sn.pdf"
+    },
+    {
+     "tag": "D03",
+     "id": "work_without_permit",
+     "v": 6000,
+     "conf": "verified",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-157685"
+    },
+    {
+     "tag": "D08",
+     "id": "work_without_permit",
+     "v": 6000,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    },
+    {
+     "tag": "D14",
+     "id": "work_without_permit",
+     "v": 5000,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "work_without_permit",
+   "field": "fine.max",
+   "chosen": 15000,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "work_without_permit",
+     "v": 15000,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/buildings/pdf/ll156_sn.pdf"
+    },
+    {
+     "tag": "D03",
+     "id": "work_without_permit",
+     "v": 15000,
+     "conf": "verified",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-157685"
+    },
+    {
+     "tag": "D08",
+     "id": "work_without_permit",
+     "v": 15000,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    },
+    {
+     "tag": "D14",
+     "id": "work_without_permit",
+     "v": 13580,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "work_without_permit",
+   "field": "closureDays",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "work_without_permit",
+     "v": 30,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/buildings/pdf/ll156_sn.pdf"
+    },
+    {
+     "tag": "D03",
+     "id": "work_without_permit",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-157685"
+    },
+    {
+     "tag": "D08",
+     "id": "work_without_permit",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    },
+    {
+     "tag": "D14",
+     "id": "work_without_permit",
+     "v": 20,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "stop_work_order_ignored",
+   "field": "fine.perMonth",
+   "chosen": 6000,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "stop_work_order_violation",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/buildings/safety/swo.page"
+    },
+    {
+     "tag": "D08",
+     "id": "stop_work_order_ignored",
+     "v": 6000,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "stop_work_order_ignored",
+   "field": "closureDays",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "stop_work_order_violation",
+     "v": 14,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/buildings/safety/swo.page"
+    },
+    {
+     "tag": "D08",
+     "id": "stop_work_order_ignored",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "vending_without_license",
+   "field": "closureDays",
+   "chosen": 7,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "unlicensed_mobile_vending",
+     "v": 7,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/mobile-food-vending-unit-penalty-schedule-for-administrative-code.pdf"
+    },
+    {
+     "tag": "D13",
+     "id": "vending_without_license",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.6sqft.com/new-legislation-ends-criminal-penalties-for-nyc-street-vendors/"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "no_tfse_permit",
+   "field": "fine.base",
+   "chosen": 200,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "no_temporary_food_permit",
+     "v": 200,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/doh/business/food-operators/temporary-food-service-establishments.page"
+    },
+    {
+     "tag": "D13",
+     "id": "no_tfse_permit",
+     "v": 1000,
+     "conf": "estimate",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-01825"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "permit_holder_absent",
+   "field": "closureDays",
+   "chosen": 14,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "illegal_permit_rental",
+     "v": 14,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-215585"
+    },
+    {
+     "tag": "D13",
+     "id": "permit_holder_absent",
+     "v": 30,
+     "conf": "estimate",
+     "src": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "occupancy_contrary_to_co",
+   "field": "fine.base",
+   "chosen": 400,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "occupancy_contrary_to_co",
+     "v": 400,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+     "tag": "D02",
+     "id": "cellar_used_for_customers",
+     "v": 1250,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
+    },
+    {
+     "tag": "D10",
+     "id": "illegal_occupancy",
+     "v": 1250,
+     "conf": "estimate",
+     "src": "https://nycadmincode.readthedocs.io/t28/c01/art118/"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "occupancy_contrary_to_co",
+   "field": "fine.max",
+   "chosen": 25000,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "occupancy_contrary_to_co",
+     "v": 25000,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+     "tag": "D02",
+     "id": "cellar_used_for_customers",
+     "v": 6250,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "occupancy_contrary_to_co",
+   "field": "closureDays",
+   "chosen": 30,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "occupancy_contrary_to_co",
+     "v": 30,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+     "tag": "D02",
+     "id": "cellar_used_for_customers",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
+    },
+    {
+     "tag": "D10",
+     "id": "illegal_occupancy",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://nycadmincode.readthedocs.io/t28/c01/art118/"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "propane_without_cof",
+   "field": "closureDays",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "D01",
+     "id": "no_certificate_of_fitness",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+     "tag": "D13",
+     "id": "propane_without_cof",
+     "v": 3,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/fdny/business/all-certifications/cof-g23.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "sign_without_permit",
+   "field": "fine.base",
+   "chosen": 1250,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "sign_without_permit",
+     "v": 1250,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
+    },
+    {
+     "tag": "D08",
+     "id": "sign_without_permit",
+     "v": 6000,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/buildings/safety/installing-a-business-sign.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "sign_without_permit",
+   "field": "fine.max",
+   "chosen": 6250,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "sign_without_permit",
+     "v": 6250,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
+    },
+    {
+     "tag": "D08",
+     "id": "sign_without_permit",
+     "v": 15000,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/buildings/safety/installing-a-business-sign.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "sidewalk_obstruction",
+   "field": "fine.base",
+   "chosen": 50,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "sidewalk_obstruction",
+     "v": 50,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dsny/downloads/about/adopted-rules/dsny-final-rule-relating-to-its-penalty-schedule.pdf"
+    },
+    {
+     "tag": "D07",
+     "id": "sidewalk_obstruction",
+     "v": 50,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    },
+    {
+     "tag": "D08",
+     "id": "sidewalk_sign_obstruction",
+     "v": 100,
+     "conf": "estimate",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+    },
+    {
+     "tag": "D10",
+     "id": "sidewalk_obstruction",
+     "v": 100,
+     "conf": "estimate",
+     "src": "https://themidtowngazette.com/?p=10092"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "sidewalk_obstruction",
+   "field": "fine.perMonth",
+   "chosen": 50,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "sidewalk_obstruction",
+     "v": 50,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dsny/downloads/about/adopted-rules/dsny-final-rule-relating-to-its-penalty-schedule.pdf"
+    },
+    {
+     "tag": "D07",
+     "id": "sidewalk_obstruction",
+     "v": 250,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    },
+    {
+     "tag": "D08",
+     "id": "sidewalk_sign_obstruction",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+    },
+    {
+     "tag": "D10",
+     "id": "sidewalk_obstruction",
+     "v": 100,
+     "conf": "estimate",
+     "src": "https://themidtowngazette.com/?p=10092"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "sidewalk_obstruction",
+   "field": "fine.max",
+   "chosen": 100,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "sidewalk_obstruction",
+     "v": 100,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dsny/downloads/about/adopted-rules/dsny-final-rule-relating-to-its-penalty-schedule.pdf"
+    },
+    {
+     "tag": "D07",
+     "id": "sidewalk_obstruction",
+     "v": 500,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    },
+    {
+     "tag": "D08",
+     "id": "sidewalk_sign_obstruction",
+     "v": 300,
+     "conf": "estimate",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+    },
+    {
+     "tag": "D10",
+     "id": "sidewalk_obstruction",
+     "v": 300,
+     "conf": "estimate",
+     "src": "https://themidtowngazette.com/?p=10092"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "blocked_exit",
+   "field": "fine.max",
+   "chosen": 1000,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "blocked_egress",
+     "v": 5000,
+     "conf": "estimate",
+     "src": "https://www.tfp1.com/blog/fdny-violation-codes/"
+    },
+    {
+     "tag": "D08",
+     "id": "blocked_exit",
+     "v": 1000,
+     "conf": "verified",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "backflow_not_tested",
+   "field": "fine.base",
+   "chosen": 500,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "backflow_not_tested",
+     "v": 100,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D03",
+     "id": "backflow_test_overdue",
+     "v": 700,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-129579"
+    },
+    {
+     "tag": "D08",
+     "id": "backflow_not_tested",
+     "v": 500,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "backflow_not_tested",
+   "field": "fine.perMonth",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "backflow_not_tested",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D03",
+     "id": "backflow_test_overdue",
+     "v": 150,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-129579"
+    },
+    {
+     "tag": "D08",
+     "id": "backflow_not_tested",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "backflow_not_tested",
+   "field": "fine.max",
+   "chosen": 1000,
+   "values": [
+    {
+     "tag": "D03",
+     "id": "backflow_test_overdue",
+     "v": 10000,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-129579"
+    },
+    {
+     "tag": "D08",
+     "id": "backflow_not_tested",
+     "v": 1000,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "overcrowding",
+   "field": "fine.base",
+   "chosen": 950,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "overcrowding_over_occupancy",
+     "v": 2500,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
+    },
+    {
+     "tag": "D08",
+     "id": "overcrowding",
+     "v": 950,
+     "conf": "verified",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
+    },
+    {
+     "tag": "D14",
+     "id": "overcrowding",
+     "v": 950,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "overcrowding",
+   "field": "fine.max",
+   "chosen": 2375,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "overcrowding_over_occupancy",
+     "v": 12500,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
+    },
+    {
+     "tag": "D08",
+     "id": "overcrowding",
+     "v": 2375,
+     "conf": "verified",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
+    },
+    {
+     "tag": "D14",
+     "id": "overcrowding",
+     "v": 5000,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "accessibility_barrier",
+   "field": "fine.base",
+   "chosen": 10000,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "accessibility_barrier",
+     "v": 1000,
+     "conf": "estimate",
+     "src": "https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny"
+    },
+    {
+     "tag": "D08",
+     "id": "accessibility_barrier",
+     "v": 10000,
+     "conf": "estimate",
+     "src": "https://www.adatitleiii.com/2026/02/ada-title-iii-federal-lawsuit-filings-fall-slightly-to-8667-in-2025/"
+    },
+    {
+     "tag": "D10",
+     "id": "access_barrier",
+     "v": 10000,
+     "conf": "estimate",
+     "src": "https://www.mondaq.com/unitedstates/discrimination-disability-sexual-harassment/1763220/ada-lawsuits-against-coffee-shops-and-breweries-on-the-rise-how-small-businesses-can-avoid-costly-accessibility-claims-about-architectural-barriers-and-websites"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "loud_music_noise",
+   "field": "fine.base",
+   "chosen": 2000,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "commercial_noise",
+     "v": 2000,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf"
+    },
+    {
+     "tag": "D07",
+     "id": "commercial_music_noise",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    },
+    {
+     "tag": "D08",
+     "id": "loud_music_noise",
+     "v": 2000,
+     "conf": "verified",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-30850"
+    },
+    {
+     "tag": "D13",
+     "id": "excessive_noise",
+     "v": 1000,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-code-fact-sheet.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "loud_music_noise",
+   "field": "fine.perMonth",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "commercial_noise",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf"
+    },
+    {
+     "tag": "D07",
+     "id": "commercial_music_noise",
+     "v": 2000,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    },
+    {
+     "tag": "D08",
+     "id": "loud_music_noise",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-30850"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "loud_music_noise",
+   "field": "fine.max",
+   "chosen": 8000,
+   "values": [
+    {
+     "tag": "D02",
+     "id": "commercial_noise",
+     "v": 2000,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf"
+    },
+    {
+     "tag": "D07",
+     "id": "commercial_music_noise",
+     "v": 8000,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    },
+    {
+     "tag": "D08",
+     "id": "loud_music_noise",
+     "v": 8000,
+     "conf": "verified",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-30850"
+    },
+    {
+     "tag": "D13",
+     "id": "excessive_noise",
+     "v": 8000,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-code-fact-sheet.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "foam_containers",
+   "field": "fine.base",
+   "chosen": 150,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "foam_packaging",
+     "v": 50,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/foam-containers.page"
+    },
+    {
+     "tag": "D08",
+     "id": "foam_containers",
+     "v": 150,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/foam-containers.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "single_use_handouts",
+   "field": "fine.base",
+   "chosen": 100,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "plastic_stirrers_straws",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page"
+    },
+    {
+     "tag": "D04",
+     "id": "unrequested_takeout_extras",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page"
+    },
+    {
+     "tag": "D08",
+     "id": "single_use_handouts",
+     "v": 100,
+     "conf": "verified",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-03462"
+    },
+    {
+     "tag": "D13",
+     "id": "plastic_straw_unrequested",
+     "v": 100,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "single_use_handouts",
+   "field": "fine.perMonth",
+   "chosen": 100,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "plastic_stirrers_straws",
+     "v": 100,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page"
+    },
+    {
+     "tag": "D04",
+     "id": "unrequested_takeout_extras",
+     "v": 50,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page"
+    },
+    {
+     "tag": "D08",
+     "id": "single_use_handouts",
+     "v": 100,
+     "conf": "verified",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-03462"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "single_use_handouts",
+   "field": "fine.max",
+   "chosen": 400,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "plastic_stirrers_straws",
+     "v": 400,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page"
+    },
+    {
+     "tag": "D04",
+     "id": "unrequested_takeout_extras",
+     "v": 250,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page"
+    },
+    {
+     "tag": "D08",
+     "id": "single_use_handouts",
+     "v": 400,
+     "conf": "verified",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-03462"
+    },
+    {
+     "tag": "D13",
+     "id": "plastic_straw_unrequested",
+     "v": 400,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "commercial_waste_in_litter_basket",
+   "field": "fine.base",
+   "chosen": 100,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "trash_in_litter_basket",
+     "v": 25,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/litter-baskets.page"
+    },
+    {
+     "tag": "D07",
+     "id": "commercial_waste_in_litter_basket",
+     "v": 100,
+     "conf": "estimate",
+     "src": "https://dsny.cityofnewyork.us/?p=1198"
+    },
+    {
+     "tag": "D08",
+     "id": "business_trash_dumped",
+     "v": 100,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "commercial_waste_in_litter_basket",
+   "field": "fine.perMonth",
+   "chosen": 125,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "trash_in_litter_basket",
+     "v": 75,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/litter-baskets.page"
+    },
+    {
+     "tag": "D07",
+     "id": "commercial_waste_in_litter_basket",
+     "v": 125,
+     "conf": "estimate",
+     "src": "https://dsny.cityofnewyork.us/?p=1198"
+    },
+    {
+     "tag": "D08",
+     "id": "business_trash_dumped",
+     "v": 100,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "commercial_waste_in_litter_basket",
+   "field": "fine.max",
+   "chosen": 350,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "trash_in_litter_basket",
+     "v": 350,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/litter-baskets.page"
+    },
+    {
+     "tag": "D07",
+     "id": "commercial_waste_in_litter_basket",
+     "v": 350,
+     "conf": "estimate",
+     "src": "https://dsny.cityofnewyork.us/?p=1198"
+    },
+    {
+     "tag": "D08",
+     "id": "business_trash_dumped",
+     "v": 300,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "recycling_not_separated",
+   "field": "fine.base",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "recycling_not_separated",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page"
+    },
+    {
+     "tag": "D07",
+     "id": "recycling_not_separated",
+     "v": 100,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "banned_additive_cbd",
+   "field": "fine.base",
+   "chosen": 200,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "adulterated_drink_additive",
+     "v": 400,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/adulterated-foods.pdf"
+    },
+    {
+     "tag": "D08",
+     "id": "banned_additive_cbd",
+     "v": 200,
+     "conf": "estimate",
+     "src": "https://hempindustrydaily.com/new-york-city-cbd-ban-targeting-food-and-drinks-takes-effect/"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "banned_additive_cbd",
+   "field": "fine.perMonth",
+   "chosen": 50,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "adulterated_drink_additive",
+     "v": 200,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/adulterated-foods.pdf"
+    },
+    {
+     "tag": "D08",
+     "id": "banned_additive_cbd",
+     "v": 50,
+     "conf": "estimate",
+     "src": "https://hempindustrydaily.com/new-york-city-cbd-ban-targeting-food-and-drinks-takes-effect/"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "banned_additive_cbd",
+   "field": "fine.max",
+   "chosen": 650,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "adulterated_drink_additive",
+     "v": 1200,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/adulterated-foods.pdf"
+    },
+    {
+     "tag": "D08",
+     "id": "banned_additive_cbd",
+     "v": 650,
+     "conf": "estimate",
+     "src": "https://hempindustrydaily.com/new-york-city-cbd-ban-targeting-food-and-drinks-takes-effect/"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "deceptive_menu_claims",
+   "field": "fine.perMonth",
+   "chosen": 525,
+   "values": [
+    {
+     "tag": "D04",
+     "id": "deceptive_menu_claims",
+     "v": 525,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dca/about/consumer-protection-and-licensing-laws.page"
+    },
+    {
+     "tag": "D06",
+     "id": "deceptive_menu_claims",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-98103"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "pay_frequency_violation",
+   "field": "fine.base",
+   "chosen": 1000,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "pay_frequency_violation",
+     "v": 1000,
+     "conf": "estimate",
+     "src": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers"
+    },
+    {
+     "tag": "D09",
+     "id": "pay_frequency_violation",
+     "v": 300,
+     "conf": "estimate",
+     "src": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers"
+    },
+    {
+     "tag": "D10",
+     "id": "pay_frequency_violation",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "pay_frequency_violation",
+   "field": "fine.perMonth",
+   "chosen": 21,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "pay_frequency_violation",
+     "v": 21,
+     "conf": "estimate",
+     "src": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers"
+    },
+    {
+     "tag": "D09",
+     "id": "pay_frequency_violation",
+     "v": 10,
+     "conf": "estimate",
+     "src": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers"
+    },
+    {
+     "tag": "D10",
+     "id": "pay_frequency_violation",
+     "v": 20,
+     "conf": "estimate",
+     "src": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "retaliation",
+   "field": "fine.base",
+   "chosen": 5000,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "retaliation",
+     "v": 5000,
+     "conf": "estimate",
+     "src": "https://dol.ny.gov/wages-and-hours-frequently-asked-questions"
+    },
+    {
+     "tag": "D08",
+     "id": "retaliation_firing",
+     "v": 10000,
+     "conf": "verified",
+     "src": "https://newyork.public.law/laws/n.y._labor_law_section_215"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "retaliation",
+   "field": "fine.perMonth",
+   "chosen": 3400,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "retaliation",
+     "v": 3400,
+     "conf": "estimate",
+     "src": "https://dol.ny.gov/wages-and-hours-frequently-asked-questions"
+    },
+    {
+     "tag": "D08",
+     "id": "retaliation_firing",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://newyork.public.law/laws/n.y._labor_law_section_215"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "no_disability_pfl_coverage",
+   "field": "fine.perMonth",
+   "chosen": 67,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "no_disability_pfl_coverage",
+     "v": 67,
+     "conf": "verified",
+     "src": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp"
+    },
+    {
+     "tag": "D09",
+     "id": "no_disability_pfl_coverage",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "no_harassment_policy_training",
+   "field": "fine.base",
+   "chosen": 1000,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "no_harassment_policy_training",
+     "v": 400,
+     "conf": "estimate",
+     "src": "https://newyork.public.law/laws/n.y._labor_law_section_201-g"
+    },
+    {
+     "tag": "D08",
+     "id": "no_harassment_policy_training",
+     "v": 1000,
+     "conf": "estimate",
+     "src": "https://www.nysenate.gov/legislation/laws/LAB/201-G"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "no_harassment_policy_training",
+   "field": "fine.max",
+   "chosen": 3000,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "no_harassment_policy_training",
+     "v": 400,
+     "conf": "estimate",
+     "src": "https://newyork.public.law/laws/n.y._labor_law_section_201-g"
+    },
+    {
+     "tag": "D08",
+     "id": "no_harassment_policy_training",
+     "v": 3000,
+     "conf": "estimate",
+     "src": "https://www.nysenate.gov/legislation/laws/LAB/201-G"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "job_ad_no_pay_range",
+   "field": "fine.max",
+   "chosen": 3000,
+   "values": [
+    {
+     "tag": "D05",
+     "id": "job_ad_no_pay_range",
+     "v": 1000,
+     "conf": "estimate",
+     "src": "https://pillsburylaw.com/en/news-and-insights/nyc-pay-transparency-law.html"
+    },
+    {
+     "tag": "D08",
+     "id": "job_ad_no_pay_range",
+     "v": 3000,
+     "conf": "estimate",
+     "src": "https://www.dol.ny.gov/pay-transparency"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "illegal_posting",
+   "field": "fine.base",
+   "chosen": 750,
+   "values": [
+    {
+     "tag": "D06",
+     "id": "illegal_posting",
+     "v": 1500,
+     "conf": "estimate",
+     "src": "https://intro.nyc/0302-2024"
+    },
+    {
+     "tag": "D07",
+     "id": "illegal_posting",
+     "v": 750,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "illegal_posting",
+   "field": "fine.max",
+   "chosen": 9000,
+   "values": [
+    {
+     "tag": "D06",
+     "id": "illegal_posting",
+     "v": 5000,
+     "conf": "estimate",
+     "src": "https://intro.nyc/0302-2024"
+    },
+    {
+     "tag": "D07",
+     "id": "illegal_posting",
+     "v": 9000,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "snow_ice_not_cleared",
+   "field": "fine.perMonth",
+   "chosen": 0,
+   "values": [
+    {
+     "tag": "D07",
+     "id": "snow_ice_not_cleared",
+     "v": 0,
+     "conf": "verified",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-01397"
+    },
+    {
+     "tag": "D14",
+     "id": "sidewalk_snow_not_cleared",
+     "v": 50,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "dirty_sidewalk",
+   "field": "fine.base",
+   "chosen": 100,
+   "values": [
+    {
+     "tag": "D07",
+     "id": "dirty_sidewalk",
+     "v": 50,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    },
+    {
+     "tag": "D08",
+     "id": "dirty_sidewalk",
+     "v": 100,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "dirty_sidewalk",
+   "field": "fine.perMonth",
+   "chosen": 50,
+   "values": [
+    {
+     "tag": "D07",
+     "id": "dirty_sidewalk",
+     "v": 250,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    },
+    {
+     "tag": "D08",
+     "id": "dirty_sidewalk",
+     "v": 50,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "dirty_sidewalk",
+   "field": "fine.max",
+   "chosen": 300,
+   "values": [
+    {
+     "tag": "D07",
+     "id": "dirty_sidewalk",
+     "v": 500,
+     "conf": "verified",
+     "src": "https://data.cityofnewyork.us/d/jz4z-kudi"
+    },
+    {
+     "tag": "D08",
+     "id": "dirty_sidewalk",
+     "v": 300,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "trash_setout_violation",
+   "field": "fine.max",
+   "chosen": 200,
+   "values": [
+    {
+     "tag": "D07",
+     "id": "improper_trash_setout",
+     "v": 300,
+     "conf": "verified",
+     "src": "https://portal.311.nyc.gov/article/?kanumber=KA-01787"
+    },
+    {
+     "tag": "D08",
+     "id": "trash_setout_violation",
+     "v": 200,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "unlicensed_music",
+   "field": "fine.base",
+   "chosen": 3000,
+   "values": [
+    {
+     "tag": "D08",
+     "id": "unlicensed_music",
+     "v": 3000,
+     "conf": "estimate",
+     "src": "https://hartfordbusiness.com/article/sued-for-a-song-music-licensing-lawsuits-hit-ct-restaurants/"
+    },
+    {
+     "tag": "D10",
+     "id": "unlicensed_music",
+     "v": 1500,
+     "conf": "estimate",
+     "src": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "unlicensed_music",
+   "field": "fine.perMonth",
+   "chosen": 500,
+   "values": [
+    {
+     "tag": "D08",
+     "id": "unlicensed_music",
+     "v": 500,
+     "conf": "estimate",
+     "src": "https://hartfordbusiness.com/article/sued-for-a-song-music-licensing-lawsuits-hit-ct-restaurants/"
+    },
+    {
+     "tag": "D10",
+     "id": "unlicensed_music",
+     "v": 0,
+     "conf": "estimate",
+     "src": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "unlicensed_music",
+   "field": "fine.max",
+   "chosen": 30000,
+   "values": [
+    {
+     "tag": "D08",
+     "id": "unlicensed_music",
+     "v": 30000,
+     "conf": "estimate",
+     "src": "https://hartfordbusiness.com/article/sued-for-a-song-music-licensing-lawsuits-hit-ct-restaurants/"
+    },
+    {
+     "tag": "D10",
+     "id": "unlicensed_music",
+     "v": 150000,
+     "conf": "estimate",
+     "src": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "alcohol_to_minor",
+   "field": "fine.base",
+   "chosen": 2500,
+   "values": [
+    {
+     "tag": "D08",
+     "id": "alcohol_to_minor",
+     "v": 2500,
+     "conf": "verified",
+     "src": "https://sla.ny.gov/news/underage-drinking-compliance-checks-albany-county-august-2026"
+    },
+    {
+     "tag": "D13",
+     "id": "sale_to_minor",
+     "v": 3000,
+     "conf": "verified",
+     "src": "https://sla.ny.gov/news/04112024-sla-conducts-underage-drinking-operation-bethlehem"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "coffee_price_spike",
+   "field": "effect.mult",
+   "chosen": 1.07,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "coffee_price_spike",
+     "v": 1.05,
+     "conf": "estimate",
+     "src": "https://fred.stlouisfed.org/series/APU0000717311"
+    },
+    {
+     "tag": "D04",
+     "id": "coffee_price_spike",
+     "v": 1.07,
+     "conf": "estimate",
+     "src": "https://fred.stlouisfed.org/series/APU0000717311"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "coffee_price_spike",
+   "field": "months",
+   "chosen": 6,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "coffee_price_spike",
+     "v": 3,
+     "conf": "estimate",
+     "src": "https://fred.stlouisfed.org/series/APU0000717311"
+    },
+    {
+     "tag": "D04",
+     "id": "coffee_price_spike",
+     "v": 6,
+     "conf": "estimate",
+     "src": "https://fred.stlouisfed.org/series/APU0000717311"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "milk_price_up",
+   "field": "effect.mult",
+   "chosen": 1.01,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "milk_price_up",
+     "v": 1.03,
+     "conf": "estimate",
+     "src": "https://fred.stlouisfed.org/series/APU0000709112"
+    },
+    {
+     "tag": "D04",
+     "id": "milk_price_up",
+     "v": 1.01,
+     "conf": "estimate",
+     "src": "https://www.ams.usda.gov/mnreports/dymadvancedprices.pdf"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "sidewalk_shed",
+   "field": "effect.mult",
+   "chosen": 0.93,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "sidewalk_shed",
+     "v": 0.9,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/buildings/safety/sidewalk-sheds.page"
+    },
+    {
+     "tag": "D07",
+     "id": "sidewalk_shed",
+     "v": 0.93,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses"
+    },
+    {
+     "tag": "D10",
+     "id": "sidewalk_shed",
+     "v": 0.9,
+     "conf": "estimate",
+     "src": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "sidewalk_shed",
+   "field": "months",
+   "chosen": 12,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "sidewalk_shed",
+     "v": 3,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/buildings/safety/sidewalk-sheds.page"
+    },
+    {
+     "tag": "D07",
+     "id": "sidewalk_shed",
+     "v": 12,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses"
+    },
+    {
+     "tag": "D10",
+     "id": "sidewalk_shed",
+     "v": 12,
+     "conf": "estimate",
+     "src": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "chain_opens_nearby",
+   "field": "effect.mult",
+   "chosen": 0.93,
+   "values": [
+    {
+     "tag": "D06",
+     "id": "chain_opens_nearby",
+     "v": 0.93,
+     "conf": "estimate",
+     "src": "https://www.cbsnews.com/news/rex-coffee-shop-owner-faced-down-starbucks"
+    },
+    {
+     "tag": "D10",
+     "id": "chain_opens_next_door",
+     "v": 0.88,
+     "conf": "estimate",
+     "src": "https://secretnyc.co/buddies-coffee-closing-williamsburg/"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "chain_opens_nearby",
+   "field": "months",
+   "chosen": 6,
+   "values": [
+    {
+     "tag": "D06",
+     "id": "chain_opens_nearby",
+     "v": 6,
+     "conf": "estimate",
+     "src": "https://www.cbsnews.com/news/rex-coffee-shop-owner-faced-down-starbucks"
+    },
+    {
+     "tag": "D10",
+     "id": "chain_opens_next_door",
+     "v": 12,
+     "conf": "estimate",
+     "src": "https://secretnyc.co/buddies-coffee-closing-williamsburg/"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "january_slump",
+   "field": "effect.mult",
+   "chosen": 0.92,
+   "values": [
+    {
+     "tag": "D06",
+     "id": "january_slump",
+     "v": 0.92,
+     "conf": "estimate",
+     "src": "https://freshcup.com/surviving-a-sales-slump/"
+    },
+    {
+     "tag": "D07",
+     "id": "january_slump",
+     "v": 0.92,
+     "conf": "estimate",
+     "src": "https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/"
+    },
+    {
+     "tag": "D10",
+     "id": "january_trough",
+     "v": 0.88,
+     "conf": "estimate",
+     "src": "https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "street_dig_long",
+   "field": "effect.mult",
+   "chosen": 0.87,
+   "values": [
+    {
+     "tag": "D07",
+     "id": "street_dig_long",
+     "v": 0.87,
+     "conf": "estimate",
+     "src": "https://www.amny.com/news/water-pipe-torture-killing-w-10th-st-business"
+    },
+    {
+     "tag": "D10",
+     "id": "street_dig",
+     "v": 0.75,
+     "conf": "estimate",
+     "src": "https://therealdeal.com/2010/08/24/second-avenue-merchants-subway-construction-cutting-business-by-up-to-40/"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "street_dig_long",
+   "field": "months",
+   "chosen": 12,
+   "values": [
+    {
+     "tag": "D07",
+     "id": "street_dig_long",
+     "v": 12,
+     "conf": "estimate",
+     "src": "https://www.amny.com/news/water-pipe-torture-killing-w-10th-st-business"
+    },
+    {
+     "tag": "D10",
+     "id": "street_dig",
+     "v": 9,
+     "conf": "estimate",
+     "src": "https://therealdeal.com/2010/08/24/second-avenue-merchants-subway-construction-cutting-business-by-up-to-40/"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "minimum_wage_march_2027",
+   "field": "effect.mult",
+   "chosen": 1.03,
+   "values": [
+    {
+     "tag": "D09",
+     "id": "minimum_wage_march_2027",
+     "v": 1.035,
+     "conf": "estimate",
+     "src": "https://www.governor.ny.gov/new-york-state-minimum-wage-2027"
+    },
+    {
+     "tag": "D10",
+     "id": "wage_step_january",
+     "v": 1.03,
+     "conf": "verified",
+     "src": "https://dol.ny.gov/minimum-wage-0"
+    }
+   ]
+  },
+  {
+   "section": "events",
+   "id": "minimum_wage_march_2027",
+   "field": "months",
+   "chosen": 12,
+   "values": [
+    {
+     "tag": "D09",
+     "id": "minimum_wage_march_2027",
+     "v": 10,
+     "conf": "estimate",
+     "src": "https://www.governor.ny.gov/new-york-state-minimum-wage-2027"
+    },
+    {
+     "tag": "D10",
+     "id": "wage_step_january",
+     "v": 12,
+     "conf": "verified",
+     "src": "https://dol.ny.gov/minimum-wage-0"
+    }
+   ]
+  }
+ ],
+ "aliasesApplied": [
+  {
+   "section": "setup",
+   "from": "lpc_storefront_permit",
+   "to": "landmarks_storefront_permit",
+   "fragment": "D01"
+  },
+  {
+   "section": "setup",
+   "from": "mobile_food_vending_license",
+   "to": "mfv_license",
+   "fragment": "D01"
+  },
+  {
+   "section": "setup",
+   "from": "mobile_food_unit_permit",
+   "to": "mfv_unit_permit",
+   "fragment": "D01"
+  },
+  {
+   "section": "setup",
+   "from": "coffee_cart_unit",
+   "to": "food_cart_new",
+   "fragment": "D01"
+  },
+  {
+   "section": "setup",
+   "from": "acquisition_legal_and_accounting",
+   "to": "takeover_due_diligence",
+   "fragment": "D01"
+  },
+  {
+   "section": "setup",
+   "from": "mobile_vendor_food_protection_course",
+   "to": "mfv_food_protection_course",
+   "fragment": "D01"
+  },
+  {
+   "section": "setup",
+   "from": "restricted_area_vending_permit",
+   "to": "restricted_area_permit",
+   "fragment": "D01"
+  },
+  {
+   "section": "setup",
+   "from": "hvac_replacement",
+   "to": "ac_replacement",
+   "fragment": "D02"
+  },
+  {
+   "section": "setup",
+   "from": "bakeoff_oven",
+   "to": "convection_oven",
+   "fragment": "D04"
+  },
+  {
+   "section": "setup",
+   "from": "labor_posters_and_notices",
+   "to": "labor_law_posters",
+   "fragment": "D08"
+  },
+  {
+   "section": "setup",
+   "from": "consultative_inspection_new",
+   "to": "consultative_inspection",
+   "fragment": "D08"
+  },
+  {
+   "section": "setup",
+   "from": "loan_guaranty_fee",
+   "to": "sba_guaranty_fee",
+   "fragment": "D09"
+  },
+  {
+   "section": "setup",
+   "from": "utility_deposit",
+   "to": "con_ed_security_deposit",
+   "fragment": "D09"
+  },
+  {
+   "section": "setup",
+   "from": "portable_ramp",
+   "to": "portable_entrance_ramp",
+   "fragment": "D10"
+  },
+  {
+   "section": "setup",
+   "from": "dob_alteration_permit",
+   "to": "dob_alteration_filing_fee",
+   "fragment": "D14"
+  },
+  {
+   "section": "setup",
+   "from": "ice_melt_and_shovels",
+   "to": "snow_kit",
+   "fragment": "D14"
+  },
+  {
+   "section": "monthlyCosts",
+   "from": "backflow_annual_test",
+   "to": "backflow_test",
+   "fragment": "D02"
+  },
+  {
+   "section": "monthlyCosts",
+   "from": "staff_replacement",
+   "to": "turnover_replacement",
+   "fragment": "D10"
+  },
+  {
+   "section": "levers",
+   "from": "cart_site",
+   "to": "cart_spot",
+   "fragment": "D01"
+  },
+  {
+   "section": "levers",
+   "from": "hvac_care",
+   "to": "hvac_service",
+   "fragment": "D02"
+  },
+  {
+   "section": "levers",
+   "from": "entrance_winter",
+   "to": "winter_proofing",
+   "fragment": "D02"
+  },
+  {
+   "section": "levers",
+   "from": "equipment_insurance",
+   "to": "insurance_package",
+   "fragment": "D03"
+  },
+  {
+   "section": "levers",
+   "from": "takeout_packing",
+   "to": "takeout_packaging",
+   "fragment": "D04"
+  },
+  {
+   "section": "levers",
+   "from": "owner_hours",
+   "to": "owner_schedule",
+   "fragment": "D05"
+  },
+  {
+   "section": "levers",
+   "from": "limited_time_drink",
+   "to": "seasonal_menu",
+   "fragment": "D06"
+  },
+  {
+   "section": "levers",
+   "from": "laptop_tables",
+   "to": "laptop_policy",
+   "fragment": "D06"
+  },
+  {
+   "section": "levers",
+   "from": "restroom_policy",
+   "to": "restroom_access",
+   "fragment": "D06"
+  },
+  {
+   "section": "levers",
+   "from": "trash_setup",
+   "to": "waste_service",
+   "fragment": "D07"
+  },
+  {
+   "section": "levers",
+   "from": "cooling_plan",
+   "to": "hvac_service",
+   "fragment": "D07"
+  },
+  {
+   "section": "levers",
+   "from": "hiring_ads",
+   "to": "job_ads",
+   "fragment": "D08"
+  },
+  {
+   "section": "levers",
+   "from": "floor_safety",
+   "to": "entrance_floor_safety",
+   "fragment": "D08"
+  },
+  {
+   "section": "levers",
+   "from": "card_fee_policy",
+   "to": "card_pricing",
+   "fragment": "D09"
+  },
+  {
+   "section": "levers",
+   "from": "kitchen_energy",
+   "to": "utility_concept",
+   "fragment": "D10"
+  },
+  {
+   "section": "levers",
+   "from": "wifi_policy",
+   "to": "laptop_policy",
+   "fragment": "D10"
+  },
+  {
+   "section": "levers",
+   "from": "insurance_endorsements",
+   "to": "insurance_package",
+   "fragment": "D10"
+  },
+  {
+   "section": "levers",
+   "from": "catering_wholesale",
+   "to": "catering",
+   "fragment": "D10"
+  },
+  {
+   "section": "levers",
+   "from": "surplus_app",
+   "to": "day_end_surplus",
+   "fragment": "D10"
+  },
+  {
+   "section": "levers",
+   "from": "harassment_training",
+   "to": "harassment_prevention",
+   "fragment": "D10"
+  },
+  {
+   "section": "levers",
+   "from": "delivery_plan",
+   "to": "delivery_apps",
+   "fragment": "D13"
+  },
+  {
+   "section": "levers",
+   "from": "snow_clearing",
+   "to": "snow_ice_plan",
+   "fragment": "D14"
+  },
+  {
+   "section": "levers",
+   "from": "entrance_mats",
+   "to": "entrance_floor_safety",
+   "fragment": "D14"
+  },
+  {
+   "section": "levers",
+   "from": "seat_density",
+   "to": "seating_layout",
+   "fragment": "D14"
+  },
+  {
+   "section": "shortcuts",
+   "from": "ignore_stop_work_order",
+   "to": "work_through_stop_order",
+   "fragment": "D01"
+  },
+  {
+   "section": "shortcuts",
+   "from": "vend_without_permit",
+   "to": "vend_without_license",
+   "fragment": "D01"
+  },
+  {
+   "section": "shortcuts",
+   "from": "popup_without_temp_permit",
+   "to": "popup_without_tfse",
+   "fragment": "D01"
+  },
+  {
+   "section": "shortcuts",
+   "from": "rent_a_permit",
+   "to": "rent_vending_permit",
+   "fragment": "D01"
+  },
+  {
+   "section": "shortcuts",
+   "from": "unpermitted_sign",
+   "to": "big_sign_no_permit",
+   "fragment": "D02"
+  },
+  {
+   "section": "shortcuts",
+   "from": "sidewalk_sign_and_bench",
+   "to": "a_frame_on_sidewalk",
+   "fragment": "D02"
+  },
+  {
+   "section": "shortcuts",
+   "from": "stock_in_the_exit_path",
+   "to": "stock_in_exit_path",
+   "fragment": "D02"
+  },
+  {
+   "section": "shortcuts",
+   "from": "standing_room_events",
+   "to": "overpack_event_nights",
+   "fragment": "D02"
+  },
+  {
+   "section": "shortcuts",
+   "from": "run_without_hot_water",
+   "to": "delay_hot_water_repair",
+   "fragment": "D03"
+  },
+  {
+   "section": "shortcuts",
+   "from": "trash_in_street_basket",
+   "to": "dump_trash_in_baskets",
+   "fragment": "D04"
+  },
+  {
+   "section": "shortcuts",
+   "from": "one_bag_for_everything",
+   "to": "skip_recycling",
+   "fragment": "D04"
+  },
+  {
+   "section": "shortcuts",
+   "from": "cbd_drinks",
+   "to": "cbd_lattes",
+   "fragment": "D04"
+  },
+  {
+   "section": "shortcuts",
+   "from": "hide_grade_card",
+   "to": "hide_bad_grade",
+   "fragment": "D06"
+  },
+  {
+   "section": "shortcuts",
+   "from": "hidden_card_surcharge",
+   "to": "hidden_card_fee",
+   "fragment": "D06"
+  },
+  {
+   "section": "shortcuts",
+   "from": "allow_dogs_inside",
+   "to": "dogs_welcome_inside",
+   "fragment": "D06"
+  },
+  {
+   "section": "shortcuts",
+   "from": "fake_specialty_claims",
+   "to": "cheap_swap_premium_label",
+   "fragment": "D06"
+  },
+  {
+   "section": "shortcuts",
+   "from": "storm_day_no_call_in_pay",
+   "to": "send_home_no_call_in_pay",
+   "fragment": "D07"
+  },
+  {
+   "section": "shortcuts",
+   "from": "bags_on_curb",
+   "to": "bags_on_the_curb",
+   "fragment": "D07"
+  },
+  {
+   "section": "shortcuts",
+   "from": "dump_in_litter_basket",
+   "to": "dump_trash_in_baskets",
+   "fragment": "D07"
+  },
+  {
+   "section": "shortcuts",
+   "from": "sign_in_the_walkway",
+   "to": "a_frame_on_sidewalk",
+   "fragment": "D07"
+  },
+  {
+   "section": "shortcuts",
+   "from": "speaker_on_sidewalk",
+   "to": "speaker_at_the_door",
+   "fragment": "D07"
+  },
+  {
+   "section": "shortcuts",
+   "from": "surprise_card_fee",
+   "to": "hidden_card_fee",
+   "fragment": "D09"
+  },
+  {
+   "section": "shortcuts",
+   "from": "pay_staff_every_two_weeks",
+   "to": "pay_every_two_weeks",
+   "fragment": "D09"
+  },
+  {
+   "section": "shortcuts",
+   "from": "skip_disability_pfl_policy",
+   "to": "skip_disability_pfl_insurance",
+   "fragment": "D09"
+  },
+  {
+   "section": "shortcuts",
+   "from": "biweekly_pay",
+   "to": "pay_every_two_weeks",
+   "fragment": "D10"
+  },
+  {
+   "section": "shortcuts",
+   "from": "ignore_the_step",
+   "to": "skip_accessibility_fixes",
+   "fragment": "D10"
+  },
+  {
+   "section": "shortcuts",
+   "from": "plastic_straws_default",
+   "to": "plastic_stirrers",
+   "fragment": "D13"
+  },
+  {
+   "section": "violations",
+   "from": "stop_work_order_violation",
+   "to": "stop_work_order_ignored",
+   "fragment": "D01"
+  },
+  {
+   "section": "violations",
+   "from": "unlicensed_mobile_vending",
+   "to": "vending_without_license",
+   "fragment": "D01"
+  },
+  {
+   "section": "violations",
+   "from": "no_temporary_food_permit",
+   "to": "no_tfse_permit",
+   "fragment": "D01"
+  },
+  {
+   "section": "violations",
+   "from": "illegal_permit_rental",
+   "to": "permit_holder_absent",
+   "fragment": "D01"
+  },
+  {
+   "section": "violations",
+   "from": "no_certificate_of_fitness",
+   "to": "propane_without_cof",
+   "fragment": "D01"
+  },
+  {
+   "section": "violations",
+   "from": "blocked_egress",
+   "to": "blocked_exit",
+   "fragment": "D02"
+  },
+  {
+   "section": "violations",
+   "from": "overcrowding_over_occupancy",
+   "to": "overcrowding",
+   "fragment": "D02"
+  },
+  {
+   "section": "violations",
+   "from": "cellar_used_for_customers",
+   "to": "occupancy_contrary_to_co",
+   "fragment": "D02"
+  },
+  {
+   "section": "violations",
+   "from": "commercial_noise",
+   "to": "loud_music_noise",
+   "fragment": "D02"
+  },
+  {
+   "section": "violations",
+   "from": "no_hot_water",
+   "to": "hand_wash_station_down",
+   "fragment": "D03"
+  },
+  {
+   "section": "violations",
+   "from": "backflow_test_overdue",
+   "to": "backflow_not_tested",
+   "fragment": "D03"
+  },
+  {
+   "section": "violations",
+   "from": "extinguisher_not_serviced",
+   "to": "fire_extinguisher_untagged",
+   "fragment": "D03"
+  },
+  {
+   "section": "violations",
+   "from": "foam_packaging",
+   "to": "foam_containers",
+   "fragment": "D04"
+  },
+  {
+   "section": "violations",
+   "from": "plastic_stirrers_straws",
+   "to": "single_use_handouts",
+   "fragment": "D04"
+  },
+  {
+   "section": "violations",
+   "from": "unrequested_takeout_extras",
+   "to": "single_use_handouts",
+   "fragment": "D04"
+  },
+  {
+   "section": "violations",
+   "from": "trash_in_litter_basket",
+   "to": "commercial_waste_in_litter_basket",
+   "fragment": "D04"
+  },
+  {
+   "section": "violations",
+   "from": "adulterated_drink_additive",
+   "to": "banned_additive_cbd",
+   "fragment": "D04"
+  },
+  {
+   "section": "violations",
+   "from": "grade_card_not_posted",
+   "to": "grade_card_hidden",
+   "fragment": "D06"
+  },
+  {
+   "section": "violations",
+   "from": "card_surcharge_not_disclosed",
+   "to": "card_surcharge_undisclosed",
+   "fragment": "D06"
+  },
+  {
+   "section": "violations",
+   "from": "live_animals_inside",
+   "to": "pet_inside_shop",
+   "fragment": "D06"
+  },
+  {
+   "section": "violations",
+   "from": "improper_trash_setout",
+   "to": "trash_setout_violation",
+   "fragment": "D07"
+  },
+  {
+   "section": "violations",
+   "from": "commercial_music_noise",
+   "to": "loud_music_noise",
+   "fragment": "D07"
+  },
+  {
+   "section": "violations",
+   "from": "business_trash_dumped",
+   "to": "commercial_waste_in_litter_basket",
+   "fragment": "D08"
+  },
+  {
+   "section": "violations",
+   "from": "sidewalk_sign_obstruction",
+   "to": "sidewalk_obstruction",
+   "fragment": "D08"
+  },
+  {
+   "section": "violations",
+   "from": "retaliation_firing",
+   "to": "retaliation",
+   "fragment": "D08"
+  },
+  {
+   "section": "violations",
+   "from": "card_surcharge_violation",
+   "to": "card_surcharge_undisclosed",
+   "fragment": "D09"
+  },
+  {
+   "section": "violations",
+   "from": "unlawful_wage_deduction",
+   "to": "illegal_deductions",
+   "fragment": "D09"
+  },
+  {
+   "section": "violations",
+   "from": "illegal_surcharge",
+   "to": "card_surcharge_undisclosed",
+   "fragment": "D10"
+  },
+  {
+   "section": "violations",
+   "from": "illegal_occupancy",
+   "to": "occupancy_contrary_to_co",
+   "fragment": "D10"
+  },
+  {
+   "section": "violations",
+   "from": "access_barrier",
+   "to": "accessibility_barrier",
+   "fragment": "D10"
+  },
+  {
+   "section": "violations",
+   "from": "sale_to_minor",
+   "to": "alcohol_to_minor",
+   "fragment": "D13"
+  },
+  {
+   "section": "violations",
+   "from": "plastic_straw_unrequested",
+   "to": "single_use_handouts",
+   "fragment": "D13"
+  },
+  {
+   "section": "violations",
+   "from": "excessive_noise",
+   "to": "loud_music_noise",
+   "fragment": "D13"
+  },
+  {
+   "section": "violations",
+   "from": "sidewalk_snow_not_cleared",
+   "to": "snow_ice_not_cleared",
+   "fragment": "D14"
+  },
+  {
+   "section": "officials",
+   "from": "vending_enforcement_officer",
+   "to": "dsny_vendor_officer",
+   "fragment": "D01"
+  },
+  {
+   "section": "officials",
+   "from": "fire_inspector",
+   "to": "fdny_inspector",
+   "fragment": "D01"
+  },
+  {
+   "section": "officials",
+   "from": "fire_inspector",
+   "to": "fdny_inspector",
+   "fragment": "D03"
+  },
+  {
+   "section": "officials",
+   "from": "noise_inspector",
+   "to": "dep_inspector",
+   "fragment": "D03"
+  },
+  {
+   "section": "officials",
+   "from": "buildings_inspector",
+   "to": "dob_inspector",
+   "fragment": "D03"
+  },
+  {
+   "section": "officials",
+   "from": "sanitation_agent",
+   "to": "dsny_agent",
+   "fragment": "D04"
+  },
+  {
+   "section": "officials",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator",
+   "fragment": "D05"
+  },
+  {
+   "section": "officials",
+   "from": "sanitation_enforcement_agent",
+   "to": "dsny_agent",
+   "fragment": "D06"
+  },
+  {
+   "section": "officials",
+   "from": "sanitation_agent",
+   "to": "dsny_agent",
+   "fragment": "D07"
+  },
+  {
+   "section": "officials",
+   "from": "cchr_investigator",
+   "to": "human_rights_investigator",
+   "fragment": "D08"
+  },
+  {
+   "section": "officials",
+   "from": "sanitation_agent",
+   "to": "dsny_agent",
+   "fragment": "D10"
+  },
+  {
+   "section": "officials",
+   "from": "buildings_inspector",
+   "to": "dob_inspector",
+   "fragment": "D10"
+  },
+  {
+   "section": "officials",
+   "from": "private_plaintiff",
+   "to": "civil_court",
+   "fragment": "D10"
+  },
+  {
+   "section": "officials",
+   "from": "dsny_enforcement",
+   "to": "dsny_agent",
+   "fragment": "D14"
+  },
+  {
+   "section": "reports",
+   "from": "report_unlicensed_vendor",
+   "to": "report_illegal_vendor",
+   "fragment": "D01"
+  },
+  {
+   "section": "reports",
+   "from": "report_access_barrier",
+   "to": "report_access_or_job_ad",
+   "fragment": "D02"
+  },
+  {
+   "section": "reports",
+   "from": "report_illegal_work",
+   "to": "report_illegal_construction",
+   "fragment": "D03"
+  },
+  {
+   "section": "reports",
+   "from": "report_fire_safety",
+   "to": "report_fire_hazard",
+   "fragment": "D03"
+  },
+  {
+   "section": "reports",
+   "from": "report_menu_fraud",
+   "to": "report_fake_reviews",
+   "fragment": "D04"
+  },
+  {
+   "section": "reports",
+   "from": "report_dirty_sidewalk_trash",
+   "to": "report_sidewalk_and_trash",
+   "fragment": "D08"
+  },
+  {
+   "section": "reports",
+   "from": "report_illegal_seating",
+   "to": "report_overcrowding",
+   "fragment": "D10"
+  },
+  {
+   "section": "reports",
+   "from": "report_sidewalk_sign",
+   "to": "report_blocked_sidewalk",
+   "fragment": "D10"
+  },
+  {
+   "section": "reports",
+   "from": "report_card_fee",
+   "to": "report_hidden_fees",
+   "fragment": "D10"
+  },
+  {
+   "section": "reports",
+   "from": "report_underage_service",
+   "to": "report_underage_sale",
+   "fragment": "D13"
+  },
+  {
+   "section": "reports",
+   "from": "report_unshoveled_sidewalk",
+   "to": "report_sidewalk_and_trash",
+   "fragment": "D14"
+  },
+  {
+   "section": "reports",
+   "from": "report_work_without_permit",
+   "to": "report_illegal_construction",
+   "fragment": "D14"
+  },
+  {
+   "section": "events",
+   "from": "january_trough",
+   "to": "january_slump",
+   "fragment": "D10"
+  },
+  {
+   "section": "events",
+   "from": "chain_opens_next_door",
+   "to": "chain_opens_nearby",
+   "fragment": "D10"
+  },
+  {
+   "section": "events",
+   "from": "street_dig",
+   "to": "street_dig_long",
+   "fragment": "D10"
+  },
+  {
+   "section": "events",
+   "from": "wage_step_january",
+   "to": "minimum_wage_march_2027",
+   "fragment": "D10"
+  },
+  {
+   "section": "ruleCards",
+   "from": "bulk_sale_not_notified",
+   "to": "bulk_sale_notice",
+   "fragment": "D01"
+  },
+  {
+   "section": "ruleCards",
+   "from": "open_door_and_ac",
+   "to": "open_door_ac",
+   "fragment": "D02"
+  },
+  {
+   "section": "ruleCards",
+   "from": "trash_in_litter_basket",
+   "to": "commercial_waste_in_litter_basket",
+   "fragment": "D04"
+  },
+  {
+   "section": "ruleCards",
+   "from": "trash_setout",
+   "to": "trash_setout_violation",
+   "fragment": "D04"
+  },
+  {
+   "section": "ruleCards",
+   "from": "trash_bins",
+   "to": "trash_setout_violation",
+   "fragment": "D07"
+  },
+  {
+   "section": "ruleCards",
+   "from": "litter_basket",
+   "to": "commercial_waste_in_litter_basket",
+   "fragment": "D07"
+  },
+  {
+   "section": "ruleCards",
+   "from": "sidewalk_sign_3_feet",
+   "to": "sidewalk_obstruction",
+   "fragment": "D07"
+  },
+  {
+   "section": "ruleCards",
+   "from": "office_week",
+   "to": "hybrid_week",
+   "fragment": "D07"
+  },
+  {
+   "section": "ruleCards",
+   "from": "good_guy_guarantee",
+   "to": "good_guy_guaranty",
+   "fragment": "D09"
+  },
+  {
+   "section": "ruleCards",
+   "from": "what_a_cafe_sells_for",
+   "to": "business_price_multiples",
+   "fragment": "D09"
+  },
+  {
+   "section": "ruleCards",
+   "from": "tip_tax_credit",
+   "to": "fica_tip_credit",
+   "fragment": "D09"
+  },
+  {
+   "section": "ruleCards",
+   "from": "utility_deposit",
+   "to": "con_ed_deposit",
+   "fragment": "D09"
+  },
+  {
+   "section": "ruleCards",
+   "from": "shed_duration",
+   "to": "sidewalk_shed_rules",
+   "fragment": "D10"
+  },
+  {
+   "section": "ruleCards",
+   "from": "cash_advance",
+   "to": "merchant_cash_advance",
+   "fragment": "D10"
+  },
+  {
+   "section": "ruleCards",
+   "from": "unpaid_time_off_2026",
+   "to": "protected_time_off",
+   "fragment": "D10"
+  },
+  {
+   "section": "ruleCards",
+   "from": "delivery_fee_cap",
+   "to": "delivery_fee_caps",
+   "fragment": "D13"
+  },
+  {
+   "section": "ruleCards",
+   "from": "straws_on_request",
+   "to": "single_use_handouts",
+   "fragment": "D13"
+  },
+  {
+   "section": "ruleCards",
+   "from": "park_concession_fee",
+   "to": "parks_concession_fee",
+   "fragment": "D13"
+  },
+  {
+   "section": "ruleCards",
+   "from": "landmarks_storefront",
+   "to": "landmark_storefront",
+   "fragment": "D13"
+  },
+  {
+   "section": "ruleCards",
+   "from": "takeover_price",
+   "to": "business_price_multiples",
+   "fragment": "D14"
+  },
+  {
+   "section": "ruleCards",
+   "from": "queue_room",
+   "to": "queue_length",
+   "fragment": "D14"
+  }
+ ],
+ "moved": [
+  {
+   "section": "setup",
+   "id": "franchise_initial_fee",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "setup",
+   "id": "franchise_training_fee",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "setup",
+   "id": "mfv_license",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "setup",
+   "id": "mfv_unit_permit",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "setup",
+   "id": "food_cart_new",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "setup",
+   "id": "tfse_permit",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "setup",
+   "id": "mfv_food_protection_course",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "setup",
+   "id": "restricted_area_permit",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "setup",
+   "id": "food_truck_used",
+   "to": "extra.formatRecords",
+   "why": "formats: food_truck"
+  },
+  {
+   "section": "setup",
+   "id": "commissary_contract_deposit",
+   "to": "extra.formatRecords",
+   "why": "formats: coffee_cart, food_truck"
+  },
+  {
+   "section": "setup",
+   "id": "fdny_g23_cof",
+   "to": "extra.formatRecords",
+   "why": "formats: coffee_cart, food_truck, market_stall"
+  },
+  {
+   "section": "setup",
+   "id": "fdny_lpg_truck_permit",
+   "to": "extra.formatRecords",
+   "why": "formats: food_truck"
+  },
+  {
+   "section": "setup",
+   "id": "vending_generator_battery",
+   "to": "extra.formatRecords",
+   "why": "formats: coffee_cart, market_stall"
+  },
+  {
+   "section": "setup",
+   "id": "home_processor_registration",
+   "to": "extra.formatRecords",
+   "why": "formats: market_stall"
+  },
+  {
+   "section": "setup",
+   "id": "market_stall_gear",
+   "to": "extra.formatRecords",
+   "why": "formats: market_stall"
+  },
+  {
+   "section": "setup",
+   "id": "kiosk_buildout",
+   "to": "extra.formatRecords",
+   "why": "formats: takeaway_window, concession_kiosk"
+  },
+  {
+   "section": "setup",
+   "id": "concession_fee_deposit",
+   "to": "extra.formatRecords",
+   "why": "formats: concession_kiosk"
+  },
+  {
+   "section": "setup",
+   "id": "convection_oven_full",
+   "to": "extra.formatRecords",
+   "why": "formats: bakery_cafe, sandwich_bar"
+  },
+  {
+   "section": "setup",
+   "id": "ventless_rapid_oven",
+   "to": "extra.formatRecords",
+   "why": "formats: takeaway_window, sandwich_bar, cafe_wine_bar"
+  },
+  {
+   "section": "setup",
+   "id": "type1_hood_suppression",
+   "to": "extra.formatRecords",
+   "why": "formats: bakery_cafe, sandwich_bar, cafe_wine_bar, delivery_kitchen"
+  },
+  {
+   "section": "setup",
+   "id": "fdny_cooking_permit",
+   "to": "extra.formatRecords",
+   "why": "formats: bakery_cafe, sandwich_bar, cafe_wine_bar, delivery_kitchen"
+  },
+  {
+   "section": "setup",
+   "id": "gas_authorization",
+   "to": "extra.formatRecords",
+   "why": "formats: bakery_cafe, delivery_kitchen"
+  },
+  {
+   "section": "setup",
+   "id": "spiral_mixer",
+   "to": "extra.formatRecords",
+   "why": "formats: bakery_cafe"
+  },
+  {
+   "section": "setup",
+   "id": "proofer_retarder",
+   "to": "extra.formatRecords",
+   "why": "formats: bakery_cafe"
+  },
+  {
+   "section": "setup",
+   "id": "sandwich_prep_table",
+   "to": "extra.formatRecords",
+   "why": "formats: sandwich_bar, takeaway_window, delivery_kitchen"
+  },
+  {
+   "section": "setup",
+   "id": "meat_slicer",
+   "to": "extra.formatRecords",
+   "why": "formats: sandwich_bar"
+  },
+  {
+   "section": "setup",
+   "id": "cold_press_juicer",
+   "to": "extra.formatRecords",
+   "why": "formats: juice_bar"
+  },
+  {
+   "section": "setup",
+   "id": "commercial_blenders",
+   "to": "extra.formatRecords",
+   "why": "formats: juice_bar, bubble_tea"
+  },
+  {
+   "section": "setup",
+   "id": "boba_sealer",
+   "to": "extra.formatRecords",
+   "why": "formats: bubble_tea, juice_bar"
+  },
+  {
+   "section": "setup",
+   "id": "boba_pearl_cooker",
+   "to": "extra.formatRecords",
+   "why": "formats: bubble_tea"
+  },
+  {
+   "section": "setup",
+   "id": "boba_franchise_fee",
+   "to": "extra.formatRecords",
+   "why": "formats: bubble_tea"
+  },
+  {
+   "section": "setup",
+   "id": "holiday_market_booth",
+   "to": "extra.formatRecords",
+   "why": "formats: market_stall"
+  },
+  {
+   "section": "setup",
+   "id": "sla_restaurant_wine_license",
+   "to": "extra.formatRecords",
+   "why": "formats: cafe_wine_bar"
+  },
+  {
+   "section": "setup",
+   "id": "sla_tavern_wine_license",
+   "to": "extra.formatRecords",
+   "why": "formats: cafe_wine_bar"
+  },
+  {
+   "section": "setup",
+   "id": "sla_temporary_retail_permit",
+   "to": "extra.formatRecords",
+   "why": "formats: cafe_wine_bar"
+  },
+  {
+   "section": "setup",
+   "id": "community_board_notice",
+   "to": "extra.formatRecords",
+   "why": "formats: cafe_wine_bar"
+  },
+  {
+   "section": "setup",
+   "id": "wine_service_fitout",
+   "to": "extra.formatRecords",
+   "why": "formats: cafe_wine_bar"
+  },
+  {
+   "section": "setup",
+   "id": "liquor_license_lawyer",
+   "to": "extra.formatRecords",
+   "why": "formats: cafe_wine_bar"
+  },
+  {
+   "section": "setup",
+   "id": "shared_kitchen_onboarding",
+   "to": "extra.formatRecords",
+   "why": "formats: delivery_kitchen"
+  },
+  {
+   "section": "setup",
+   "id": "delivery_packaging_tablets",
+   "to": "extra.formatRecords",
+   "why": "formats: delivery_kitchen, takeaway_window"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "rent_step_up",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "from month 13: the yearly rent step written into the lease"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "real_estate_tax_escalation",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "from the first tax-year bill after signing: additional rent"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "letter_of_credit_fee",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only if the deposit is posted as a letter of credit"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "franchise_royalty",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "franchise_marketing_fund",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "commissary_fee",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "supervisory_license_renewal",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "sidewalk_cafe_consent_fee",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only with a sidewalk cafe (lever outdoor_seating)"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "roadway_cafe_consent_fee",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only with a roadway cafe (lever outdoor_seating)"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "hvac_service_contract",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "covered by the lever hvac_service; charging both would count it twice"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "illuminated_sign_fee",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only with an illuminated sign over the sidewalk"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "fdny_rooftop_unit_permit",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only with a rooftop or ceiling-hung cooling unit that needs the permit"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "open_flame_permit",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only with candles on tables"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "music_license",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "covered by the lever music; charging both would count it twice"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "sba_loan_payment",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only with an SBA 7(a) loan"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "microloan_payment",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only with an SBA microloan"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "family_loan_payment",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only if the owner borrowed from family"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "mca_daily_holdback",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only while a merchant cash advance is open"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "credit_card_interest",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only while a card balance is carried"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "equipment_lease_payment",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only if equipment is leased"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "future_fund_interest",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only with an NYC Future Fund loan"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "owner_health_insurance",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "owner choice (lever owner_health_cover)"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "insurance_cyber",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "optional cover"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "insurance_epli",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "optional cover (lever epli_cover / insurance_package)"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "pastry_waste",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "unit.cogsPerUnit already includes waste in the D04 menu math; kept for reference"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "black_market_permit_rent",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "delivery_app_commission",
+   "to": "extra.conditionalMonthlyCosts",
+   "why": "only on delivery orders, when the delivery_apps lever is on"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "shared_kitchen_hours",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "liquor_liability_insurance",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "hood_cleaning_suppression_service",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "concession_share",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "monthlyCosts",
+   "id": "propane_refills",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "staff",
+   "id": "baker",
+   "to": "extra.formatRecords",
+   "why": "formats: bakery_cafe"
+  },
+  {
+   "section": "staff",
+   "id": "prep_cook",
+   "to": "extra.formatRecords",
+   "why": "formats: sandwich_bar, delivery_kitchen, bakery_cafe"
+  },
+  {
+   "section": "staff",
+   "id": "evening_server_bartender",
+   "to": "extra.formatRecords",
+   "why": "formats: cafe_wine_bar"
+  },
+  {
+   "section": "staff",
+   "id": "cart_helper",
+   "to": "extra.formatRecords",
+   "why": "formats: coffee_cart, food_truck, market_stall"
+  },
+  {
+   "section": "taxes",
+   "id": "nyc_liquor_license_tax",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "guaranty_type",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "free_rent_deal",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "site_due_diligence",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "utility_concept",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "contractor_choice",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "contingency_level",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "construction_pace",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "opening_mode",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "takeover_due_diligence",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "takeover_permit_timing",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "takeover_transition",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "cart_spot",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "entry_mode",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "lease_contingencies",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "franchise_brand",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "popup_venue",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "tax_structure",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "loan_rate_type",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "lease_terms",
+   "to": "extra.preOpeningChoices",
+   "why": "decided once before opening, not a monthly lever"
+  },
+  {
+   "section": "levers",
+   "id": "alcohol_program",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "hot_food",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "bake_schedule",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "pearl_batches",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "commissary_choice",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "truck_route",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "vehicle_maintenance",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "id_checks",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "kitchen_contract",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "market_days",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "levers",
+   "id": "wholesale_share",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "vend_without_license",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "popup_without_tfse",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "rent_vending_permit",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "skip_id_checks",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "vend_from_meter",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "cart_too_close",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "pour_before_license",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "bottle_juice_no_label",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "cook_without_hood",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "skip_suppression_service",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "swap_propane_yourself",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "vending_without_license",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "no_tfse_permit",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "permit_holder_absent",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "propane_without_cof",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "alcohol_to_minor",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "vending_without_unit_permit",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "vending_at_meter",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "vending_siting",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "unlicensed_alcohol_sale",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "unlabeled_raw_juice",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "cooking_without_hood",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "suppression_overdue",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "no_cooking_system_permit",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "violations",
+   "id": "time_temp_abuse",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "officials",
+   "id": "dsny_vendor_officer",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "officials",
+   "id": "sla_investigator",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "reports",
+   "id": "report_illegal_vendor",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "reports",
+   "id": "report_underage_sale",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "reports",
+   "id": "report_grease_smoke",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "events",
+   "id": "vending_permit_window",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "events",
+   "id": "liquor_backlog",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "events",
+   "id": "tapioca_tariff",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "shortcuts",
+   "id": "home_baked_pastries",
+   "to": "extra.formatRecords",
+   "why": "its violation undefined is not in the cafe pack"
+  }
+ ],
+ "dropped": [
+  {
+   "section": "officials",
+   "id": "labor_investigator",
+   "why": "already in _common"
+  }
+ ],
+ "refFixes": [
+  {
+   "at": "violations.equipment_noise.official",
+   "from": "noise_inspector",
+   "to": "dep_inspector"
+  },
+  {
+   "at": "violations.no_private_carter.official",
+   "from": "sanitation_agent",
+   "to": "dsny_agent"
+  },
+  {
+   "at": "violations.commercial_waste_in_litter_basket.official",
+   "from": "sanitation_agent",
+   "to": "dsny_agent"
+  },
+  {
+   "at": "violations.recycling_not_separated.official",
+   "from": "sanitation_agent",
+   "to": "dsny_agent"
+  },
+  {
+   "at": "violations.pay_frequency_violation.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.no_wage_notice_statements.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.call_in_pay_unpaid.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.meal_period_denied.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.illegal_deductions.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.uniform_costs_unpaid.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.invalid_tip_credit.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.exempt_misclassification.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.retaliation.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.child_labor.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.unpaid_volunteer_labor.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.no_day_of_rest.official",
+   "from": "hospitality_wage_investigator",
+   "to": "labor_investigator"
+  },
+  {
+   "at": "violations.job_ad_no_pay_range.official",
+   "from": "cchr_investigator",
+   "to": "human_rights_investigator"
+  },
+  {
+   "at": "violations.illegal_posting.official",
+   "from": "sanitation_agent",
+   "to": "dsny_agent"
+  },
+  {
+   "at": "violations.snow_ice_not_cleared.official",
+   "from": "sanitation_agent",
+   "to": "dsny_agent"
+  },
+  {
+   "at": "shortcuts.a_frame_on_sidewalk.violation",
+   "from": "sidewalk_sign_obstruction",
+   "to": "sidewalk_obstruction"
+  },
+  {
+   "at": "shortcuts.cellar_seating.violation",
+   "from": "cellar_used_for_customers",
+   "to": "occupancy_contrary_to_co"
+  },
+  {
+   "at": "shortcuts.loud_evening_music.violation",
+   "from": "commercial_noise",
+   "to": "loud_music_noise"
+  },
+  {
+   "at": "shortcuts.plastic_stirrers.violation",
+   "from": "plastic_stirrers_straws",
+   "to": "single_use_handouts"
+  },
+  {
+   "at": "shortcuts.dump_trash_in_baskets.violation",
+   "from": "business_trash_dumped",
+   "to": "commercial_waste_in_litter_basket"
+  },
+  {
+   "at": "shortcuts.dock_pay_for_shortages.violation",
+   "from": "unlawful_wage_deduction",
+   "to": "illegal_deductions"
+  },
+  {
+   "at": "shortcuts.backyard_seating.violation",
+   "from": "illegal_occupancy",
+   "to": "occupancy_contrary_to_co"
+  },
+  {
+   "at": "levers.worker_complaints.cut_their_shifts.causes",
+   "from": "retaliation_firing",
+   "to": "retaliation"
+  },
+  {
+   "at": "setup.fdny_g46_certificate.withoutItViolation",
+   "from": "propane_without_cof",
+   "to": null
+  },
+  {
+   "at": "roadmap.franchise_read_fdd.setupItemId",
+   "from": "franchise_initial_fee",
+   "to": null
+  },
+  {
+   "at": "roadmap.franchise_site_and_training.setupItemId",
+   "from": "franchise_training_fee",
+   "to": null
+  },
+  {
+   "at": "roadmap.cart_license_and_course.setupItemId",
+   "from": "mfv_license",
+   "to": null
+  },
+  {
+   "at": "roadmap.cart_supervisory_waitlist.setupItemId",
+   "from": "mfv_unit_permit",
+   "to": null
+  },
+  {
+   "at": "roadmap.cart_commissary_and_inspection.setupItemId",
+   "from": "food_cart_new",
+   "to": null
+  },
+  {
+   "at": "roadmap.popup_temporary_permit.setupItemId",
+   "from": "tfse_permit",
+   "to": null
+  },
+  {
+   "at": "roadmap.join_vending_waitlist.setupItemId",
+   "from": "mfv_unit_permit",
+   "to": null
+  },
+  {
+   "at": "roadmap.sign_commissary.setupItemId",
+   "from": "commissary_contract_deposit",
+   "to": null
+  },
+  {
+   "at": "roadmap.file_hood_and_suppression.setupItemId",
+   "from": "type1_hood_suppression",
+   "to": null
+  },
+  {
+   "at": "roadmap.notify_community_board.setupItemId",
+   "from": "community_board_notice",
+   "to": null
+  },
+  {
+   "at": "roadmap.file_sla_and_trp.setupItemId",
+   "from": "sla_temporary_retail_permit",
+   "to": null
+  },
+  {
+   "at": "kits.lean",
+   "added": "asbestos_survey_acp5"
+  },
+  {
+   "at": "kits.standard",
+   "added": "asbestos_survey_acp5"
+  },
+  {
+   "at": "kits.premium",
+   "added": "asbestos_survey_acp5"
+  }
+ ],
+ "eventCatalog": {
+  "total": 899,
+  "afterFuzzyDedupe": 886,
+  "inPack": 693,
+  "inReference": 193,
+  "fuzzyAliases": {
+   "gas_red_tag": "gas_shut_off_in_building",
+   "bulk_sale_claim": "sellers_tax_claim",
+   "outdoor_season_opens": "sidewalk_cafe_season",
+   "gas_connection_wait": "service_upgrade_wait",
+   "water_main_break": "water_main_break_day",
+   "burglary_wave_block": "burglary_wave",
+   "comp_audit_bill": "workers_comp_audit_bill",
+   "harassment_training_due": "yearly_harassment_training_due",
+   "world_cup_summer": "world_cup_2026",
+   "back_to_school_boba": "school_year_starts",
+   "slip_and_fall_claim": "customer_slip_claim",
+   "dsny_snow_sweep": "sanitation_ticket_hours",
+   "big_chain_store_closes": "chain_leaves"
+  }
+ },
+ "counts": {
+  "setup": 107,
+  "monthlyCosts": 30,
+  "staff": 8,
+  "taxes": 12,
+  "levers": 94,
+  "shortcuts": 78,
+  "violations": 87,
+  "officials": 14,
+  "reports": 32,
+  "events": 55,
+  "ruleCards": 352,
+  "roadmap": 109,
+  "suppliers": 73,
+  "eventCatalog": 693,
+  "mechanics": 121,
+  "formatRecords": {
+   "setup": 40,
+   "monthlyCosts": 10,
+   "staff": 4,
+   "taxes": 1,
+   "levers": 14,
+   "shortcuts": 12,
+   "violations": 14,
+   "officials": 2,
+   "reports": 3,
+   "events": 3
+  },
+  "conditionalMonthlyCosts": 22,
+  "preOpeningChoices": 16,
+  "reference": {
+   "eventCatalog": 193,
+   "nonObvious": 640,
+   "failureStories": 177
+  }
+ }
+}
