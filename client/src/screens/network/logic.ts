@@ -89,6 +89,9 @@ const between = (d: Deal, x: string, y: string) =>
 export const KIND_NAME: Record<DealKind, string> = {
   joint_purchase: 'Joint purchasing', cross_promo: 'Cross-promo', loan: 'Loan', partnership: 'Partner up',
 };
+const KIND_NOUN: Record<DealKind, string> = {
+  joint_purchase: 'joint purchasing deal', cross_promo: 'cross-promo', loan: 'loan', partnership: 'partnership',
+};
 
 /** Which of the four deal kinds I can offer this neighbor, by build/CONTRACT.md §4 and task 13 §1. The engine re-checks. */
 export function dealAvailability(args: {
@@ -121,7 +124,7 @@ function commonBlock(me: BusinessState | null, target: PublicBusiness, deals: De
 
 function kindRule(kind: DealKind, me: BusinessState, target: PublicBusiness, deals: Deal[], distanceM: number | null): { allowed: boolean; reason?: string } {
   const same = deals.find((d) => isLive(d) && d.terms.type === kind && between(d, me.id, target.id));
-  if (same) return { allowed: false, reason: same.status === 'proposed' ? `A ${KIND_NAME[kind].toLowerCase()} offer is already waiting` : `You already have a ${KIND_NAME[kind].toLowerCase()} with them` };
+  if (same) return { allowed: false, reason: same.status === 'proposed' ? `A ${KIND_NOUN[kind]} offer is already waiting` : `You already have a ${KIND_NOUN[kind]} with them` };
   switch (kind) {
     case 'joint_purchase':
       return target.niche === me.niche ? { allowed: true } : { allowed: false, reason: `Joint purchasing needs the same niche (they are a ${NICHE_LABEL[target.niche].toLowerCase()})` };
