@@ -12,6 +12,7 @@ import { mountBilling } from './billing';
 import { WorldRuntime } from './runtime';
 import { PitchDirector, enterPage, joinBase, joinPage, type PitchCommand, type PitchHost } from './pitch';
 import { qrSvg } from './qr';
+import { compressedJson, compressedStatic } from './compress';
 import { deskPage } from './desk';
 
 export const CLIENT_DIST = resolve(REPO_ROOT, 'client/dist');
@@ -197,7 +198,7 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true, name: 'First Year', stubs: usingStubs, uptimeS: Math.round((Date.now() - game.startedAt) / 1000), worlds: [...game.runtimes.values()].map((x) => x.stats()), data: game.data.sources });
   });
-  app.get('/api/packs', (_req, res) => { res.json(game.data.packs); });
+  app.get('/api/packs', compressedJson(() => game.data.packs)); // сжато: ~220 КБ при каждом входе (server/src/compress.ts)
   app.get('/api/places', (_req, res) => { res.json(game.data.places); });
   app.get('/api/worlds', (_req, res) => {
     res.json([...game.runtimes.values()].map((x) => ({
@@ -327,6 +328,7 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
   });
 
   if (existsSync(CLIENT_DIST)) {
+    app.use(compressedStatic(CLIENT_DIST)); // br/gzip и долгий кэш для /assets/ (docs/qa/BUGS.md #11)
     app.use(express.static(CLIENT_DIST));
     app.get(/^(?!\/api\/).*/, (_req, res) => res.sendFile(resolve(CLIENT_DIST, 'index.html')));
   }
