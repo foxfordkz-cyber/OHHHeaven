@@ -7,7 +7,7 @@ import { NICHE_META as MAP_NICHE } from '../../map/geo';
 import { switchMode, useGame, useStoreState, useView } from '../../app/store';
 import {
   AiBadge, Badge, Banner, Button, Card, Clock, Feed, Icon, List, ListRow, MoneyText, NICHE_ICON, Skeleton, Stat, formatMoney, formatNumber,
-  type IconName, ThemeToggle, Logo } from '../../ui';
+  type IconName, ThemeToggle, Logo , Sheet } from '../../ui';
 import './home.css';
 
 const IDEA_EXAMPLES = ['A coffee shop near the subway', 'A barbershop with three chairs', 'A corner store with long hours'];
@@ -30,6 +30,9 @@ export function Home() {
   const { status, mode } = useStoreState();
   const catalog = useCatalog();
   const navigate = useNavigate();
+  // hooks stay above the early return below
+  const [guide, setGuide] = useState(firstVisit);
+  const closeGuide = () => { setGuide(false); try { window.localStorage.setItem(GUIDE_KEY, '1'); } catch { /* private mode */ } };
 
   if (!view) {
     return (
@@ -58,7 +61,8 @@ export function Home() {
 
   return (
     <main className="screen home">
-      <HomeNav demo={view.world.config.demo} />
+      <HomeNav demo={view.world.config.demo} onHelp={() => setGuide(true)} />
+      <Guide open={guide} onClose={closeGuide} />
       <section className="home-hero">
         <div className="home-hero__strip"><CityStrip view={view} /></div>
         <div className="home-hero__map">
@@ -130,9 +134,41 @@ function CityBoard({ view, businesses, onOpen, onAll }: { view: Exclude<ClientVi
   );
 }
 
+// ───────────────────────── first visit: the whole game in four plain sentences ─────────────────────────
+
+const GUIDE_KEY = 'fy-guide-1';
+/** True on the very first visit (never in tests: the guide would cover the page under test). */
+function firstVisit(): boolean {
+  if (import.meta.env.MODE === 'test') return false;
+  try { return window.localStorage.getItem(GUIDE_KEY) !== '1'; } catch { return false; }
+}
+
+const GUIDE_STEPS: { title: string; text: string }[] = [
+  { title: 'You open a small business', text: 'A coffee shop or a barbershop on a real street in New York. You start with test money, not your own.' },
+  { title: 'Everything costs what it really costs', text: 'Rent, equipment, wages, permits and taxes are real New York numbers. You see every step and every bill before you pay it.' },
+  { title: 'The city lives without you', text: 'One game day takes 48 real minutes. You set the rules for your shop once, and it works while you sleep. Come back when you like.' },
+  { title: 'Other people play around you', text: 'Neighbors can make deals with you or report you to the city. Inspectors are players too. The best three shops in each trade win the prize.' },
+];
+
+function Guide({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Sheet open={open} onClose={onClose} title="How First Year works" footer={<Button block onClick={onClose}>Got it — show me the city</Button>}>
+      <ol className="home-guide">
+        {GUIDE_STEPS.map((g, i) => (
+          <li key={g.title}>
+            <b className="home-guide__n">{i + 1}</b>
+            <div><strong>{g.title}</strong><p>{g.text}</p></div>
+          </li>
+        ))}
+      </ol>
+      <p className="xsmall muted">Nothing here can cost you real money. You can read this again: “How it works” at the top.</p>
+    </Sheet>
+  );
+}
+
 // ───────────────────────── 0. top bar ─────────────────────────
 
-function HomeNav({ demo }: { demo: boolean }) {
+function HomeNav({ demo, onHelp }: { demo: boolean; onHelp: () => void }) {
   const navigate = useNavigate();
   return (
     <nav className="home-nav" aria-label="Main">
@@ -143,7 +179,7 @@ function HomeNav({ demo }: { demo: boolean }) {
       <div className="home-nav__links">
         <button type="button" className="home-nav__link" onClick={() => navigate('/map')}>City map</button>
         <button type="button" className="home-nav__link" onClick={() => navigate('/leaderboards')}>Leaderboards</button>
-        <a className="home-nav__link" href="#how-it-works">How it works</a>
+        <button type="button" className="home-nav__link" onClick={onHelp}>How it works</button>
       </div>
       <ThemeToggle />
       <Button size="sm" icon="store" onClick={() => navigate('/start')}>Start</Button>
@@ -178,6 +214,11 @@ function Pitch() {
     <section className="home-pitch">
       <h1 className="h1">Test your business idea in real New York.</h1>
       <p className="home-pitch__sub">Real rent, real permits, real taxes. None of your savings at risk.</p>
+      <ol className="home-first" aria-label="What you do here">
+        <li><b>1</b><span>Type any small business idea below.</span></li>
+        <li><b>2</b><span>See a real address, what it costs to open and which permits you need.</span></li>
+        <li><b>3</b><span>Run it next to other players. A few minutes a day is enough.</span></li>
+      </ol>
     </section>
   );
 }
