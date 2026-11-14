@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import type { BusinessState, ClientView, IdeaMatch, NicheId, OwnerView, PublicBusiness, Standing } from '@ohh/shared/types';
 import { useCatalog, NICHE_META, NICHE_ORDER, type Catalog } from '../../app/catalog';
 import { CityMapSlot } from '../../app/slots';
+import { NICHE_META as MAP_NICHE } from '../../map/geo';
 import { switchMode, useGame, useStoreState, useView } from '../../app/store';
 import {
   AiBadge, Badge, Banner, Button, Card, Clock, Feed, Icon, List, ListRow, MoneyText, NICHE_ICON, Skeleton, Stat, formatMoney, formatNumber,
-  type IconName, ThemeToggle } from '../../ui';
+  type IconName, ThemeToggle, Logo , Sheet } from '../../ui';
 import './home.css';
 
 const IDEA_EXAMPLES = ['A coffee shop near the subway', 'A barbershop with three chairs', 'A corner store with long hours'];
@@ -29,6 +30,9 @@ export function Home() {
   const { status, mode } = useStoreState();
   const catalog = useCatalog();
   const navigate = useNavigate();
+  // hooks stay above the early return below
+  const [guide, setGuide] = useState(firstVisit);
+  const closeGuide = () => { setGuide(false); try { window.localStorage.setItem(GUIDE_KEY, '1'); } catch { /* private mode */ } };
 
   if (!view) {
     return (
@@ -57,13 +61,15 @@ export function Home() {
 
   return (
     <main className="screen home">
-      <HomeNav demo={view.world.config.demo} />
+      <HomeNav demo={view.world.config.demo} onHelp={() => setGuide(true)} />
+      <Guide open={guide} onClose={closeGuide} />
       <section className="home-hero">
         <div className="home-hero__strip"><CityStrip view={view} /></div>
         <div className="home-hero__map">
           <CityMapSlot mode="live" places={catalog?.places ?? []} businesses={businesses} myBusinessId={ownerWithBusiness?.business?.id} weather={view.weather[0]} events={view.events} height={300} embedded onExpand={() => navigate('/map')} onOpenBusiness={(id) => navigate('/map?b=' + encodeURIComponent(id))} />
         </div>
         <div className="home-hero__lead">{lead}</div>
+        {view.kind !== 'official' && <CityBoard view={view} businesses={businesses} onOpen={(id) => navigate('/map?b=' + encodeURIComponent(id))} onAll={() => navigate('/leaderboards')} />}
       </section>
       <NicheCards view={view} businesses={businesses} catalog={catalog} />
       <section className="home-band">
@@ -80,21 +86,100 @@ export function Home() {
   );
 }
 
+// ───────────────────────── city board: who leads right now, what just happened ─────────────────────────
+
+function CityBoard({ view, businesses, onOpen, onAll }: { view: Exclude<ClientView, { kind: 'official' }>; businesses: PublicBusiness[]; onOpen: (id: string) => void; onAll: () => void }) {
+  const nameOf = new Map(businesses.map((b) => [b.id, b] as const));
+  const leaders: Standing[] = Object.values(view.leaderboards)
+    .flatMap((list) => (list ?? []).filter((x) => !x.bankrupt).slice(0, 3))
+    .sort((a, b) => b.netWorth - a.netWorth)
+    .slice(0, 5);
+  const news = view.feed.slice(0, 3);
+  if (leaders.length === 0 && news.length === 0) return null;
+  return (
+    <aside className="home-hero__side" aria-label="The city right now">
+      {leaders.length > 0 && (
+        <div className="city-board">
+          <div className="row-between">
+            <h2 className="city-board__title">Leading the city</h2>
+            <button type="button" className="city-board__all" onClick={onAll}>All</button>
+          </div>
+          <ol className="city-board__list">
+            {leaders.map((x) => (
+              <li key={x.businessId}>
+                <button type="button" className="city-board__row" onClick={() => onOpen(x.businessId)}>
+                  <span className="city-board__rank" style={{ background: MAP_NICHE[x.niche]?.color }}>{x.rank}</span>
+                  <span className="city-board__name">
+                    <b className="truncate">{x.name ?? nameOf.get(x.businessId)?.name ?? 'Business'}</b>
+                    <small>{`${NICHE_META[x.niche]?.name ?? x.niche} · ${x.isAi ? 'AI' : 'player'}`}</small>
+                  </span>
+                  <span className="city-board__worth num">{formatMoney(x.netWorth, { compact: true })}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+      {news.length > 0 && (
+        <div className="city-board city-board--news">
+          <h2 className="city-board__title">Just happened</h2>
+          <ul className="city-board__news">
+            {news.map((n) => (
+              <li key={n.id}><span className="num">Day {n.day}</span>{n.text}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </aside>
+  );
+}
+
+// ───────────────────────── first visit: the whole game in four plain sentences ─────────────────────────
+
+const GUIDE_KEY = 'fy-guide-1';
+/** True on the very first visit (never in tests: the guide would cover the page under test). */
+function firstVisit(): boolean {
+  if (import.meta.env.MODE === 'test') return false;
+  try { return window.localStorage.getItem(GUIDE_KEY) !== '1'; } catch { return false; }
+}
+
+const GUIDE_STEPS: { title: string; text: string }[] = [
+  { title: 'You open a small business', text: 'A coffee shop or a barbershop on a real street in New York. You start with test money, not your own.' },
+  { title: 'Everything costs what it really costs', text: 'Rent, equipment, wages, permits and taxes are real New York numbers. You see every step and every bill before you pay it.' },
+  { title: 'The city lives without you', text: 'One game day takes 48 real minutes. You set the rules for your shop once, and it works while you sleep. Come back when you like.' },
+  { title: 'Other people play around you', text: 'Neighbors can make deals with you or report you to the city. Inspectors are players too. The best three shops in each trade win the prize.' },
+];
+
+function Guide({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Sheet open={open} onClose={onClose} title="How First Year works" footer={<Button block onClick={onClose}>Got it — show me the city</Button>}>
+      <ol className="home-guide">
+        {GUIDE_STEPS.map((g, i) => (
+          <li key={g.title}>
+            <b className="home-guide__n">{i + 1}</b>
+            <div><strong>{g.title}</strong><p>{g.text}</p></div>
+          </li>
+        ))}
+      </ol>
+      <p className="xsmall muted">Nothing here can cost you real money. You can read this again: “How it works” at the top.</p>
+    </Sheet>
+  );
+}
+
 // ───────────────────────── 0. top bar ─────────────────────────
 
-function HomeNav({ demo }: { demo: boolean }) {
+function HomeNav({ demo, onHelp }: { demo: boolean; onHelp: () => void }) {
   const navigate = useNavigate();
   return (
     <nav className="home-nav" aria-label="Main">
       <button type="button" className="home-nav__brand" onClick={() => navigate('/')}>
-        <span className="home-nav__mark" aria-hidden="true">1</span>
-        <span>First Year</span>
+        <Logo size={32} />
         {demo && <Badge tone="accent" icon="play">Demo city</Badge>}
       </button>
       <div className="home-nav__links">
         <button type="button" className="home-nav__link" onClick={() => navigate('/map')}>City map</button>
         <button type="button" className="home-nav__link" onClick={() => navigate('/leaderboards')}>Leaderboards</button>
-        <a className="home-nav__link" href="#how-it-works">How it works</a>
+        <button type="button" className="home-nav__link" onClick={onHelp}>How it works</button>
       </div>
       <ThemeToggle />
       <Button size="sm" icon="store" onClick={() => navigate('/start')}>Start</Button>
@@ -129,6 +214,11 @@ function Pitch() {
     <section className="home-pitch">
       <h1 className="h1">Test your business idea in real New York.</h1>
       <p className="home-pitch__sub">Real rent, real permits, real taxes. None of your savings at risk.</p>
+      <ol className="home-first" aria-label="What you do here">
+        <li><b>1</b><span>Type any small business idea below.</span></li>
+        <li><b>2</b><span>See a real address, what it costs to open and which permits you need.</span></li>
+        <li><b>3</b><span>Run it next to other players. A few minutes a day is enough.</span></li>
+      </ol>
     </section>
   );
 }

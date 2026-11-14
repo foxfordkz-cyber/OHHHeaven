@@ -16,6 +16,15 @@ import { BankruptScreen, NoBusiness } from './StatusScreens';
 import { TodayTab } from './TodayTab';
 import './biz.css';
 
+/** One plain sentence per tab, shown under the tab bar: a first-time owner should not have to guess. */
+const TAB_HINT: Record<string, string> = {
+  today: 'What happened in your shop since you last looked, and what is waiting for your answer.',
+  manage: 'Your standing orders: price, staff, cleaning. The shop follows them while you are away.',
+  books: 'Where the money came from and where it went: sales, rent, wages, taxes.',
+  network: 'Your neighbors: make a deal, join the block fund, or report a rival to the city.',
+  insights: 'Is the business worth it: break-even, months of cash left, and an advisor you can ask.',
+};
+
 const OWN: { id: BizTabId; label: string; order: number }[] = [
   { id: 'today', label: 'Today', order: 10 },
   { id: 'manage', label: 'Manage', order: 20 },
@@ -166,6 +175,7 @@ export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { de
       </nav>
 
       <div className="bz-tabpanel" role="tabpanel">
+        {TAB_HINT[tab] && <p className="bz-hint">{TAB_HINT[tab]}</p>}
         {firstCard && (tab === 'today' || tab === 'manage' || tab === 'books') && (
           <div className="bz-pad" style={{ marginBottom: 12 }}>
             <RealRuleCard card={firstCard} onDone={() => { markRuleSeen(firstCard.id); setSeenTick((n) => n + 1); }} />

@@ -20,7 +20,7 @@ export interface MapPalette {
   bg: string; landcover: string; park: string; water: string; waterway: string;
   path: string; minor: string; major: string; rail: string;
   buildings: [string, string, string, string];
-  label: string; halo: string;
+  label: string; halo: string; casing: string; place: string;
   /** overlays drawn by CityMap */
   poi: string; outline: string; ring: string; free: string; taken: string; other: string; dim: string; aiRing: string;
   deal: string; fund: string; fundLine: string; closed: string; closedLine: string;
@@ -30,10 +30,10 @@ export interface MapPalette {
 }
 
 const NIGHT: MapPalette = {
-  bg: '#151513', landcover: '#181915', park: '#1a2318', water: '#101a20', waterway: '#16242c',
+  bg: '#161614', landcover: '#191a16', park: '#1c2a1d', water: '#11222d', waterway: '#16303d',
   path: '#24231f', minor: '#2a2925', major: '#3a3832', rail: '#2e2d28',
   buildings: ['#1f1f1c', '#2a2925', '#36342e', '#45423a'],
-  label: '#8f8b7c', halo: '#151513',
+  label: '#9a9687', halo: '#161614', casing: '#0f0f0e', place: '#c9c5b6',
   poi: '#77736a', outline: '#151513', ring: '#ffffff', free: '#74b592', taken: '#d67d70', other: '#45433c', dim: '#55524a', aiRing: '#8f8b7c',
   deal: '#d9b75a', fund: '#74b592', fundLine: '#a9d2bd', closed: '#d67d70', closedLine: '#e09a8f',
   light: { anchor: 'viewport', color: '#fff3d6', intensity: 0.36, position: [1.25, 205, 32] },
@@ -42,10 +42,10 @@ const NIGHT: MapPalette = {
 };
 
 const DAY: MapPalette = {
-  bg: '#ece8dd', landcover: '#e6e3d5', park: '#cfdcc0', water: '#b7cfdb', waterway: '#a8c3d1',
-  path: '#dcd7c8', minor: '#fbfaf5', major: '#ffffff', rail: '#cdc7b8',
-  buildings: ['#e0dacb', '#d6cfbe', '#c9c1ad', '#bab09a'],
-  label: '#787364', halo: '#f3f1ea',
+  bg: '#efece3', landcover: '#e7e5d6', park: '#c9dfb9', water: '#a9cee3', waterway: '#9cc3da',
+  path: '#ddd8c9', minor: '#fdfcf8', major: '#ffffff', rail: '#cbc5b6',
+  buildings: ['#e6e0d1', '#dad2c0', '#cbc2ad', '#b9ae97'],
+  label: '#6f6a5b', halo: '#f6f4ec', casing: '#d8d2c2', place: '#4e4a3e',
   poi: '#9a9484', outline: '#fcfbf7', ring: '#1a1913', free: '#2c7256', taken: '#a2463c', other: '#b9b3a2', dim: '#a8a292', aiRing: '#767265',
   deal: '#8d6b1c', fund: '#2c7256', fundLine: '#2c7256', closed: '#a2463c', closedLine: '#a2463c',
   light: { anchor: 'viewport', color: '#ffffff', intensity: 0.42, position: [1.25, 205, 32] },
@@ -72,6 +72,16 @@ export function cityStyle(theme: MapTheme = 'dark'): StyleSpecification {
       { id: 'bg', type: 'background', paint: { 'background-color': c.bg } },
       { id: 'landcover', type: 'fill', source: src, 'source-layer': 'landcover', paint: { 'fill-color': c.landcover, 'fill-opacity': 0.55 } },
       { id: 'park', type: 'fill', source: src, 'source-layer': 'park', paint: { 'fill-color': c.park, 'fill-opacity': 0.9 } },
+      {
+        id: 'green', type: 'fill', source: src, 'source-layer': 'landcover',
+        filter: ['in', ['get', 'class'], ['literal', ['grass', 'wood']]],
+        paint: { 'fill-color': c.park, 'fill-opacity': 0.95 },
+      },
+      {
+        id: 'green-use', type: 'fill', source: src, 'source-layer': 'landuse',
+        filter: ['in', ['get', 'class'], ['literal', ['park', 'pitch', 'playground', 'cemetery']]],
+        paint: { 'fill-color': c.park, 'fill-opacity': 0.8 },
+      },
       { id: 'water', type: 'fill', source: src, 'source-layer': 'water', paint: { 'fill-color': c.water } },
       { id: 'waterway', type: 'line', source: src, 'source-layer': 'waterway', paint: { 'line-color': c.waterway, 'line-width': 1.2 } },
       {
@@ -84,6 +94,12 @@ export function cityStyle(theme: MapTheme = 'dark'): StyleSpecification {
         filter: ['in', ['get', 'class'], ['literal', ['minor', 'service']]],
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: { 'line-color': c.minor, 'line-width': roadWidth(2.4) },
+      },
+      {
+        id: 'road-major-casing', type: 'line', source: src, 'source-layer': 'transportation',
+        filter: ['in', ['get', 'class'], ['literal', ['tertiary', 'secondary', 'primary', 'trunk', 'motorway']]],
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': c.casing, 'line-width': roadWidth(4.8) },
       },
       {
         id: 'road-major', type: 'line', source: src, 'source-layer': 'transportation',
@@ -107,9 +123,15 @@ export function cityStyle(theme: MapTheme = 'dark'): StyleSpecification {
         },
       },
       {
-        id: 'street-names', type: 'symbol', source: src, 'source-layer': 'transportation_name', minzoom: 15,
+        id: 'street-names', type: 'symbol', source: src, 'source-layer': 'transportation_name', minzoom: 14.4,
         layout: { 'symbol-placement': 'line', 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Regular'], 'text-size': 11, 'text-letter-spacing': 0.06 },
         paint: { 'text-color': c.label, 'text-halo-color': c.halo, 'text-halo-width': 1.4 },
+      },
+      {
+        id: 'place-names', type: 'symbol', source: src, 'source-layer': 'place', minzoom: 12, maxzoom: 16.5,
+        filter: ['in', ['get', 'class'], ['literal', ['neighbourhood', 'suburb', 'quarter']]],
+        layout: { 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Regular'], 'text-size': ['interpolate', ['linear'], ['zoom'], 12, 10, 16, 14], 'text-transform': 'uppercase', 'text-letter-spacing': 0.14, 'text-max-width': 8 },
+        paint: { 'text-color': c.place, 'text-opacity': 0.75, 'text-halo-color': c.halo, 'text-halo-width': 1.6 },
       },
     ],
   };
@@ -125,11 +147,13 @@ export interface OfflineAssets {
 }
 
 /** Offline style: no network at all (no glyphs, no tiles). Labels live in the PNG and in HTML markers. */
-export function offlineStyle(a: OfflineAssets, theme: MapTheme = 'dark'): StyleSpecification {
-  const c = mapPalette(theme);
+/** The saved picture is a night picture, so the offline map is always the night one, whatever the theme. */
+export const OFFLINE_STYLE_NAME = 'First Year — Offline';
+export function offlineStyle(a: OfflineAssets, _theme: MapTheme = 'dark'): StyleSpecification {
+  const c = mapPalette('dark');
   return {
     version: 8,
-    name: 'First Year — Offline',
+    name: OFFLINE_STYLE_NAME,
     light: c.light,
     sky: c.sky,
     sources: {

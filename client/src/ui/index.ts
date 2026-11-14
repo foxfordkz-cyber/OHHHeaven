@@ -7,3 +7,4 @@ export * from './icons';
 export * from './format';
 export * from './theme';
 export * from './ThemeToggle';
+export * from './Logo';
