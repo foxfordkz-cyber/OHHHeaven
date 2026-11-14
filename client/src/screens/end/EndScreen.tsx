@@ -70,7 +70,8 @@ export function EndScreen({ view, ask, cards, planHref = '/end/plan' }: { view: 
       </Card>
 
       <section className="stack" aria-label="Debrief">
-        <div className="row-between"><h2 className="h2" style={{ margin: 0 }}>Where you lost money</h2>{debrief && <OriginBadge origin={debrief.origin} />}</div>
+        <h2 className="h2" style={{ margin: 0 }}>Where you lost money</h2>
+        {debrief && <div className="row"><OriginBadge origin={debrief.origin} /><span className="xsmall faint">Debrief of your season</span></div>}
         {loading && <div className="stack-sm" aria-busy="true"><Skeleton height={72} /><Skeleton height={72} /><Skeleton height={72} /></div>}
         {failed && <p className="muted small"><Icon name="alert" size={14} /> The debrief is not ready yet. Your plan below has the same three lessons.</p>}
         {debrief && (

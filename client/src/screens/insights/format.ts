@@ -71,3 +71,7 @@ export const NICHE_NAMES: Record<string, string> = {
 };
 
 export const nicheName = (niche: string): string => NICHE_NAMES[niche] ?? niche;
+
+/** Short tab labels that fit a 390 px segmented control. */
+export const NICHE_SHORT: Record<string, string> = { cafe: 'Cafes', barbershop: 'Barbers', bodega: 'Stores', guesthouse: 'Hotels', rentals: 'Rentals' };
+export const nicheShort = (niche: string): string => NICHE_SHORT[niche] ?? nicheName(niche);

@@ -266,9 +266,9 @@ const FEED: FeedItem[] = [
 function ownerView(o: {
   day: number; phase: 'running' | 'ended'; plans: MonthPlan[]; current: MonthPlan | null; status: BusinessState['status'];
   myRank: number | null; exposure: number; trails: BusinessState['trails']; liabilities: BusinessState['liabilities'];
-  benchmarks: Analytics['benchmarks']; shortcuts: string[]; seed: number; price: number; staffBarista: number;
+  benchmarks: Analytics['benchmarks']; shortcuts: string[]; seed: number; price: number; staffBarista: number; startCash?: number;
 }): OwnerView {
-  const history = buildHistory(o.plans, START_CASH);
+  const history = buildHistory(o.plans, o.startCash ?? START_CASH);
   const last = history[history.length - 1];
   const date = dateOf(o.day);
   const into = o.phase === 'ended' ? 30 : date.dayOfMonth;
@@ -277,7 +277,7 @@ function ownerView(o: {
   const thisMonth = days.filter((d) => dateOf(d.day).month === date.month);
   const sumLost = (k: 'size' | 'staff' | 'closure') => thisMonth.reduce((s, d) => s + d.lost[k], 0);
   const mtdLines = o.current ? monthLines(o.current).map((l) => ({ ...l, amount: r2((l.amount * into) / 30) })) : [];
-  const cash = r2((last?.cashEnd ?? START_CASH) + mtdLines.reduce((s, l) => s + l.amount, 0));
+  const cash = r2((last?.cashEnd ?? o.startCash ?? START_CASH) + mtdLines.reduce((s, l) => s + l.amount, 0));
   const unpaid = o.liabilities.filter((l) => !l.paid).reduce((s, l) => s + l.amount, 0);
   const netWorth = r2(cash + ITEMS_VALUE_SHARE - unpaid);
   const cafe = nicheField('cafe', 18, 3, o.myRank, 52000, 11, [17]);
@@ -335,18 +335,20 @@ export const cafeView: OwnerView = ownerView({
 });
 
 // ───────────── the struggling cafe: cheap coffee, too many people ─────────────
-const STRUGGLE = { ...BASE, staff: 5, payroll: 12825, payrollTax: 1410 };
+// Cheap coffee, one person too many, a bit too much rent: loses about $4,600 a month, cash for about a month.
+const STRUGGLE = { ...BASE, staff: 5, payroll: 11550, payrollTax: 1270, rent: 7100, blockFund: 0 };
 export const STRUGGLING_PLANS: MonthPlan[] = [
-  { ...STRUGGLE, month: 1, units: 1100, price: 5.2, payroll: 4100, payrollTax: 450, blockFund: 0, setup: 52900, quality: 0.6, reputation: 0.5, rank: 14 },
-  { ...STRUGGLE, month: 2, units: 4300, price: 5.2, quality: 0.62, reputation: 0.52, rank: 13 },
-  { ...STRUGGLE, month: 3, units: 4700, price: 5.2, quality: 0.63, reputation: 0.55, rank: 13, salesTaxPaid: 2400 },
-  { ...STRUGGLE, month: 4, units: 4810, price: 5.2, quality: 0.63, reputation: 0.56, rank: 14 },
-  { ...STRUGGLE, month: 5, units: 4850, price: 5.2, quality: 0.64, reputation: 0.57, rank: 15 },
+  { ...STRUGGLE, month: 1, units: 1100, price: 5.6, payroll: 4100, payrollTax: 450, marketing: 900, setup: 41000, quality: 0.6, reputation: 0.5, rank: 14 },
+  { ...STRUGGLE, month: 2, units: 4700, price: 5.6, quality: 0.62, reputation: 0.52, rank: 13 },
+  { ...STRUGGLE, month: 3, units: 4800, price: 5.6, quality: 0.63, reputation: 0.55, rank: 13, salesTaxPaid: 4800 },
+  { ...STRUGGLE, month: 4, units: 4850, price: 5.6, quality: 0.63, reputation: 0.56, rank: 14 },
+  { ...STRUGGLE, month: 5, units: 4900, price: 5.6, quality: 0.64, reputation: 0.57, rank: 15 },
 ];
 export const cafeStrugglingView: OwnerView = ownerView({
-  day: 168, phase: 'running', plans: STRUGGLING_PLANS.slice(0, 4), current: STRUGGLING_PLANS[4], status: 'open', myRank: 15,
-  exposure: 0, shortcuts: [], seed: 9, price: 5.2, staffBarista: 4, trails: [],
-  liabilities: [{ taxId: 'sales_tax', amount: 6810, dueDay: 170, paid: false }],
+  day: 138, phase: 'running', plans: STRUGGLING_PLANS.slice(0, 4), current: STRUGGLING_PLANS[4], status: 'open', myRank: 15,
+  exposure: 0, shortcuts: [], seed: 9, price: 5.6, staffBarista: 4, trails: [],
+  startCash: 71500,
+  liabilities: [{ taxId: 'sales_tax', amount: 7310, dueDay: 140, paid: false }],
   benchmarks: [
     { metric: 'cogsPct', you: 0.38, industry: 0.3, verdict: 'bad' },
     { metric: 'laborPct', you: 0.38, industry: 0.3, verdict: 'bad' },

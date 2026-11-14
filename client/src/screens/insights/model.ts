@@ -22,9 +22,11 @@ export function headline(v: OwnerView): Stat[] {
       sub: `forecast · day ${a.daysIntoMonth} of ${RULES.DAYS_PER_MONTH}`,
     },
     { key: 'cash', label: 'Cash', value: money(b.cash), tone: b.cash > owed ? 'neutral' : 'bad', sub: owed > 0 ? `${money(owed)} of it is tax you owe` : undefined },
-    a.cashRunwayMonths === null
-      ? { key: 'runway', label: 'Cash runway', value: 'In profit', tone: 'good', sub: fixed > 0 ? `cash covers ${(b.cash / fixed).toFixed(1)} months of fixed costs` : undefined }
-      : { key: 'runway', label: 'Cash runway', value: `${a.cashRunwayMonths.toFixed(1)} months`, tone: a.cashRunwayMonths < 2 ? 'bad' : 'neutral', sub: 'until cash runs out at this loss' },
+    b.cash <= 0
+      ? { key: 'runway', label: 'Cash runway', value: 'Out of cash', tone: 'bad', sub: 'bills are paid from the credit line now' }
+      : a.cashRunwayMonths === null
+        ? { key: 'runway', label: 'Cash runway', value: 'In profit', tone: 'good', sub: fixed > 0 ? `cash covers ${(b.cash / fixed).toFixed(1)} months of fixed costs` : undefined }
+        : { key: 'runway', label: 'Cash runway', value: `${Math.max(0, a.cashRunwayMonths).toFixed(1)} months`, tone: a.cashRunwayMonths < 2 ? 'bad' : 'neutral', sub: 'until cash runs out at this loss' },
     a.paybackMonths === null
       ? { key: 'payback', label: 'Payback', value: 'Not yet', tone: 'bad', sub: `at this pace the ${compactMoney(a.setupInvested)} you put in does not come back` }
       : { key: 'payback', label: 'Payback', value: `${a.paybackMonths} months`, tone: a.paybackMonths <= 24 ? 'good' : 'neutral', sub: 'at this pace', sentence: `Payback: ${a.paybackMonths} months at this pace` },

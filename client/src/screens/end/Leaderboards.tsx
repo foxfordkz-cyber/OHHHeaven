@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { NicheId, OwnerView } from '@shared/types';
 import { AiBadge, Badge, Card, Icon, NICHE_ICON, SegmentedControl } from '../../ui';
-import { compactMoney, money, nicheName } from '../insights/format';
+import { compactMoney, money, nicheName, nicheShort } from '../insights/format';
 import { allBoards, officialsBoard, type BoardRow, type NicheBoard } from './prizes';
 import './end.css';
 
@@ -87,7 +87,7 @@ export function Leaderboards({ view }: { view: OwnerView }) {
   return (
     <div className="stack">
       <SegmentedControl label="Leaderboard" value={tab} onChange={setTab}
-        options={[...boards.map((b) => ({ value: b.niche as string, label: <span className="row"><Icon name={NICHE_ICON[b.niche as NicheId]} size={16} />{nicheName(b.niche)}</span> })), { value: 'officials', label: 'Officials' }]} />
+        options={[...boards.map((b) => ({ value: b.niche as string, label: <span className="row" title={nicheName(b.niche)}><Icon name={NICHE_ICON[b.niche as NicheId]} size={16} />{nicheShort(b.niche)}</span> })), { value: 'officials', label: 'Officials' }]} />
       {board ? <NicheTable board={board} testMoney={testMoney} /> : <OfficialsTable view={view} />}
       {testMoney && <p className="xsmall faint">Demo city: all money is test money.</p>}
     </div>

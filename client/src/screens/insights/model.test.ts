@@ -85,7 +85,7 @@ describe('trend, capacity, taxes, risk', () => {
     expect(ok.enough).toBe(true);
     const short = taxModel(cafeStrugglingView)!;
     expect(short.enough).toBe(false);
-    expect(short.shortBy).toBe(Math.round(6810 - cafeStrugglingView.business!.cash));
+    expect(short.shortBy).toBe(Math.round(7310 - cafeStrugglingView.business!.cash));
   });
   it('puts fines-if-found next to what cutting corners saved', () => {
     const r = riskModel(cafeView)!;
