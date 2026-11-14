@@ -322,6 +322,7 @@ function noticeAnswer(caseId: string, fine: number, b: BusinessState, profile: O
 }
 
 function acceptDeal(sight: OwnerSight, ctx: EngineCtx, b: BusinessState, pack: Pack, place: Place, terms: DealTerms, fromId: string, profile: OwnerProfile, strategy: OwnerStrategy): boolean {
+  if (strategy === 'loner') return false; // simulator stand-in: an owner who never deals
   const partner = sight.neighbors().find((n) => n.id === fromId);
   if (!partner || partner.status !== 'open') return false;
   const { kept, broken } = partner.trust;

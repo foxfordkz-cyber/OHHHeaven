@@ -10,7 +10,7 @@ import type {
 import { RULES, dateOf, isMonthEnd } from '../../../shared/src/rules';
 
 /** Simulator-only knobs of the stub engine: what-if values for numbers that live in shared/src/rules.ts. */
-export interface Tuning { routineEveryMonths?: number; taxFlags?: boolean; jointCogsMult?: number; crossDemandMult?: number; crossPriceMult?: number; blockThreshold?: number; blockFee?: number; blockTrafficMult?: number }
+export interface Tuning { routineEveryMonths?: number; routineAuditEveryMonths?: number; taxFlags?: boolean; jointCogsMult?: number; crossDemandMult?: number; crossPriceMult?: number; blockThreshold?: number; blockFee?: number; blockTrafficMult?: number }
 export interface EngineCtx { packs: PackSet; places: Place[]; tuning?: Tuning }
 
 // ───────────── lookups ─────────────
@@ -823,6 +823,8 @@ function lawMonthClose(d: Draft, ctx: EngineCtx, month: number) {
       w.cases.push({ id: `c${w.cases.length + 1}`, businessId: b.id, role: 'tax_auditor', origin: 'flag', openedDay: day, hints: [hint], status: 'open' });
     }
     const every = ctx.tuning?.routineEveryMonths ?? RULES.ROUTINE_INSPECTION_EVERY_MONTHS;
+    const audit = ctx.tuning?.routineAuditEveryMonths;
+    if (audit && month % audit === 0) w.cases.push({ id: `c${w.cases.length + 1}`, businessId: b.id, role: 'tax_auditor', origin: 'routine', openedDay: day, hints: [`No audit in ${audit} months`], status: 'open' });
     if (month % every === 0) w.cases.push({ id: `c${w.cases.length + 1}`, businessId: b.id, role: 'inspector', origin: 'routine', openedDay: day, hints: [`No inspection in ${every} months`], status: 'open' });
   });
   // internal affairs: the official with the most bribes this month is exposed

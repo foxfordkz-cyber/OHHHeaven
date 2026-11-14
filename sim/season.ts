@@ -74,19 +74,22 @@ print(`check: max share ${top} ${(100 * share(top)).toFixed(1)}% (target ≤ 35%
 print();
 
 // ───────────── Q2: complaint and inspection frequency vs value of cheating ─────────────
-print('## Q2. Net worth of cheaters minus honest, by tax flags, complaint share and routine inspection frequency');
+print('## Q2. Net worth of cheaters minus honest, by detection channel and frequency');
 {
   const rows: (string | number)[][] = [];
-  for (const flags of [true, false]) for (const routine of [12, 6]) for (const cshare of [0, 0.15, 0.3]) {
-    const nC = Math.round(OWNERS * cshare);
-    const nCheat = Math.round(OWNERS / 4);
+  const cell = (label: string, tuning: SeasonSetup['tuning'], cshare: number, salt: number) => {
+    const nC = Math.round(OWNERS * cshare), nCheat = Math.round(OWNERS / 4);
     const owners = mix([['cut_all', nCheat], ['cut_taxes', nCheat], ['complainer', nC], ['honest', OWNERS - 2 * nCheat - nC]]);
-    const res = byStrategy(runMany(side(6), SEED + 10_000 + routine * 100 + Math.round(cshare * 100) + (flags ? 0 : 7), (seed) => base(seed, owners, { tuning: { routineEveryMonths: routine, taxFlags: flags } })));
+    const res = byStrategy(runMany(side(6), SEED + 10_000 + salt, (seed) => base(seed, owners, { tuning })));
     const h = mean((res.get('honest') ?? []).map((o) => o.netWorth));
     const ca = res.get('cut_all') ?? [], ct = res.get('cut_taxes') ?? [];
-    rows.push([flags ? 'on' : 'off', `every ${routine} mo`, `${Math.round(cshare * 100)}% (${nC})`, usd(mean(ca.map((o) => o.netWorth)) - h), usd(mean(ct.map((o) => o.netWorth)) - h), pct(ca.filter((o) => o.bankrupt).length, ca.length), pct(ct.filter((o) => o.fines > 0).length, ct.length)]);
-  }
-  table(['tax flags', 'routine inspection', 'complainers', 'cut_all − honest', 'cut_taxes − honest', 'cut_all bankrupt', 'cut_taxes caught'], rows);
+    rows.push([label, `${Math.round(cshare * 100)}% (${nC})`, usd(mean(ca.map((o) => o.netWorth)) - h), usd(mean(ct.map((o) => o.netWorth)) - h), pct(ca.filter((o) => o.bankrupt).length, ca.length), pct(ct.filter((o) => o.fines > 0).length, ct.length)]);
+  };
+  let salt = 0;
+  for (const routine of [12, 6]) for (const cshare of [0, 0.15, 0.3]) cell(`tax flags on, health routine every ${routine} mo`, { routineEveryMonths: routine }, cshare, ++salt);
+  for (const cshare of [0, 0.3]) cell('no tax flags, health routine every 6 mo', { taxFlags: false }, cshare, ++salt);
+  for (const audit of [6, 4, 3, 2]) cell(`no tax flags, routine tax audit every ${audit} mo`, { taxFlags: false, routineAuditEveryMonths: audit }, 0.15, ++salt);
+  table(['detection', 'complainers', 'cut_all − honest', 'cut_taxes − honest', 'cut_all bankrupt', 'cut_taxes caught'], rows);
 }
 
 // ───────────── Q3: honest newbies going bankrupt vs startCapital ─────────────
@@ -163,24 +166,26 @@ print('## Q5. Complaints');
 }
 
 // ───────────── Q6: social vs loner ─────────────
-print('## Q6. Deals: social owner vs honest loner');
+print('## Q6. Deals: social owner vs a loner who refuses every deal (same mix of neighbours)');
 {
   const rows: (string | number)[][] = [];
   const line = (label: string, R: Map<OwnerStrategy, OwnerResult[]>) => {
-    const so = R.get('social') ?? [], ho = R.get('honest') ?? [];
-    const a = mean(so.map((o) => o.netWorth)), b = mean(ho.map((o) => o.netWorth));
-    rows.push([label, usd(a), usd(b), b ? `${(((a - b) / Math.abs(b)) * 100).toFixed(1)}%` : '—', pct(so.filter((o) => o.prizePlace).length, so.length), pct(ho.filter((o) => o.prizePlace).length, ho.length)]);
+    const so = R.get('social') ?? [], lo = R.get('loner') ?? [], ho = R.get('honest') ?? [];
+    const a = mean(so.map((o) => o.netWorth)), b = mean(lo.map((o) => o.netWorth)), c = mean(ho.map((o) => o.netWorth));
+    rows.push([label, usd(a), usd(c), usd(b), b ? `${(((a - b) / Math.abs(b)) * 100).toFixed(1)}%` : '—', b ? `${(((c - b) / Math.abs(b)) * 100).toFixed(1)}%` : '—']);
   };
-  line('main run, current rules', S);
-  const owners = mix([['social', Math.round(OWNERS / 4)], ['honest', Math.round(OWNERS / 4)], ['complainer', Math.round(OWNERS / 8)], ['premium', Math.round(OWNERS / 8)], ['unreliable', OWNERS - Math.round(OWNERS / 4) * 2 - Math.round(OWNERS / 8) * 2]]);
+  const owners = mix([['social', Math.round(OWNERS / 4)], ['loner', Math.round(OWNERS / 4)], ['honest', Math.round(OWNERS / 4)], ['premium', Math.round(OWNERS / 8)], ['unreliable', OWNERS - Math.round(OWNERS / 4) * 3 - Math.round(OWNERS / 8)]]);
   const variants: [string, SeasonSetup['tuning']][] = [
-    ['current rules (same mix)', {}],
+    ['current rules', {}],
     ['block fund threshold 0.6 → 0.4', { blockThreshold: 0.4 }],
+    ['block fund fee $300 → $150', { blockFee: 150 }],
     ['cross promo demand 1.06 → 1.12', { crossDemandMult: 1.12 }],
-    ['joint purchase cogs 0.94 → 0.90, cross promo 1.10', { jointCogsMult: 0.9, crossDemandMult: 1.1 }],
+    ['joint purchase 0.94 → 0.90 + cross promo 1.10', { jointCogsMult: 0.9, crossDemandMult: 1.1 }],
+    ['cross promo price 0.98 → 1.00', { crossPriceMult: 1 }],
+    ['joint 0.90, cross 1.10 at price 1.00, fund fee $150', { jointCogsMult: 0.9, crossDemandMult: 1.1, crossPriceMult: 1, blockFee: 150 }],
   ];
   for (const [label, tuning] of variants) line(label, byStrategy(runMany(side(8), SEED + 45_000, (seed) => base(seed, owners, { tuning }))));
-  table(['setup', 'social net worth', 'honest net worth', 'social ahead by', 'social prize rate', 'honest prize rate'], rows);
+  table(['rules', 'social net worth', 'honest (accepts offers)', 'loner (refuses all)', 'social ahead of loner', 'honest ahead of loner'], rows);
 }
 
 // ───────────── Q7: room size curve by place tier ─────────────

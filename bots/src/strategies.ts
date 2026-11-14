@@ -5,7 +5,7 @@ import { hashStr } from './rng';
 export type OwnerStrategy =
   | 'honest' | 'cut_all' | 'cut_taxes' | 'cut_bribe' | 'complainer' | 'dumper' | 'premium' | 'social' | 'unreliable'
   // simulator-only stand-ins for human play styles and isolated experiments
-  | 'newbie' | 'manager' | 'cash_wages';
+  | 'newbie' | 'manager' | 'cash_wages' | 'loner';
 export type OfficialStrategy = 'complaint_chaser' | 'hint_hunter' | 'bribe_taker';
 
 /** Characters populate() hands out to AI businesses. */
@@ -43,6 +43,7 @@ export const PROFILES: Record<OwnerStrategy, OwnerProfile> = {
   unreliable: { kit: 'standard', tier: 'any',   price: 'adaptive', shortcuts: 'none',  notice: 'pay',            complains: false, proposesDeals: true,  breaksDeals: true,  blockFund: false, launchEarly: false, reviewEvery: 7, loginEvery: 1, quality: 'basic' },
   newbie:     { kit: 'random',   tier: 'any',   price: 'fixed_random', shortcuts: 'none', notice: 'pay',         complains: false, proposesDeals: false, breaksDeals: false, blockFund: false, launchEarly: true,  reviewEvery: 0, loginEvery: 1, quality: 'basic' },
   manager:    { kit: 'standard', tier: 'any',   price: 'adaptive', shortcuts: 'none',  notice: 'pay',            complains: false, proposesDeals: false, breaksDeals: false, blockFund: false, launchEarly: false, reviewEvery: 0, loginEvery: 30, quality: 'basic' },
+  loner:      { kit: 'standard', tier: 'any',   price: 'adaptive', shortcuts: 'none',  notice: 'pay',            complains: false, proposesDeals: false, breaksDeals: false, blockFund: false, launchEarly: false, reviewEvery: 7, loginEvery: 1, quality: 'basic' },
   cash_wages: { kit: 'standard', tier: 'any',   price: 'adaptive', shortcuts: 'wages', notice: 'pay',            complains: false, proposesDeals: false, breaksDeals: false, blockFund: false, launchEarly: false, reviewEvery: 7, loginEvery: 1, quality: 'basic' },
 };
 
