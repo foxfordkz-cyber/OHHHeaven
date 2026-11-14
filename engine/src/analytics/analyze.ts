@@ -32,7 +32,10 @@ export function basisFromDays(days: DayReport[], source: Basis['source'], finesA
 export function currentBasis(b: BusinessState, w: WorldState): Basis {
   const monthStart = (dateOf(Math.max(1, w.day)).month - 1) * RULES.DAYS_PER_MONTH + 1;
   const finesActual = r2(-b.mtd.lines.filter((l) => l.kind === 'fine').reduce((s, l) => s + l.amount, 0));
-  const days = b.days.filter((d) => d.day >= monthStart && d.day <= w.day);
+  // Days before the doors opened carry no sales: counting them made a business that opened mid-month look
+  // empty ("room 6% full") while customers were queuing outside.
+  const from = Math.max(monthStart, b.openedDay ?? monthStart);
+  const days = b.days.filter((d) => d.day >= from && d.day <= w.day);
   if (days.length) return basisFromDays(days, 'mtd', finesActual);
   const last = b.history[b.history.length - 1];
   if (last && b.status !== 'setup') {

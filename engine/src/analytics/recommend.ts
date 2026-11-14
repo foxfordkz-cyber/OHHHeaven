@@ -395,6 +395,8 @@ export function recommend(b: BusinessState, w: WorldState, ctx: EngineCtx): Reco
   const out: Recommendation[] = [];
   const seen = new Set<string>();
   const all = RULES_LIST.map((r) => r(rc)).filter((r): r is Recommendation => !!r)
+    // a deal that would lose money is not advice (e.g. cross-promo when the room is already full)
+    .filter((r) => r.suggested?.type !== 'propose_deal' || !r.impact || r.impact.profitDeltaMonth >= 0)
     .sort((x, y) => SEV[x.severity] - SEV[y.severity] || (y.impact?.profitDeltaMonth ?? 0) - (x.impact?.profitDeltaMonth ?? 0));
   for (const r of all) {
     const k = r.suggested ? JSON.stringify(r.suggested) : r.id;
