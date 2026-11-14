@@ -3447,6 +3447,18 @@
       "field": "openingDelayDays",
       "add": 14,
       "appliesIf": "material found"
+     },
+     {
+      "field": "setupCost",
+      "add": 3000,
+      "appliesIf": "abatement work area includes plumbing work or wall removal: asbestos abatement permit with a work place safety plan by a registered design professional",
+      "note": "estimate"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 14,
+      "appliesIf": "abatement permit needed",
+      "note": "estimate"
      }
     ],
     "playerMoves": [
@@ -3474,10 +3486,11 @@
     "realFrequency": "Any pre-1987 building: most NYC storefronts",
     "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
     "supportingSources": [
+     "https://rules.cityofnewyork.us/wp-content/uploads/2025/04/Asbestos-Rules-2022-Final.pdf",
      "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-23455"
     ],
     "confidence": "estimate",
-    "note": "DOB (opened): before a permit in buildings constructed before April 1, 1987, an asbestos assessment is required unless no existing materials are disturbed; below the asbestos-project threshold an ACP-5 is filed. 15 RCNY Chapter 1 (search excerpt): ACP-7 notification fee $200 / $400 / $800 / $1,200 by size band. Survey price $400-$1,500 (contractor page) -> $1,000. Abatement $10-$25 per sq ft of material (cost guides) -> $15. 14 days is my estimate: DEP's notice period was not found."
+    "note": "DOB (opened): before a permit in buildings constructed before April 1, 1987, an asbestos assessment is required unless no existing materials are disturbed; below the asbestos-project threshold an ACP-5 is filed. 15 RCNY Chapter 1 (search excerpt): ACP-7 notification fee $200 / $400 / $800 / $1,200 by size band. Survey price $400-$1,500 (contractor page) -> $1,000. Abatement $10-$25 per sq ft of material (cost guides) -> $15. 14 days is my estimate: DEP's notice period was not found. DEP rules (opened, rules.cityofnewyork.us): minor project up to 25 linear ft or 10 sq ft; small project above that and under 260 linear ft / 160 sq ft; large project 260 linear ft or 160 sq ft and more, so 300 sq ft of floor tile is a large project; an asbestos abatement permit with a work place safety plan by a registered design professional is required when the work area includes plumbing work other than fixture replacement, removal of a non-rated wall over 45 sq ft, sprinkler or fire alarm parts or exit signs: typical of a cafe build-out."
    },
    {
     "id": "d00_premises_asbestos_scope",
@@ -4271,9 +4284,11 @@
     ],
     "realFrequency": "Older buildings",
     "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
-    "supportingSources": [],
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page"
+    ],
     "confidence": "estimate",
-    "note": "Estimates; the letter's fee and time were not found."
+    "note": "Buildings put up before 1938 were generally not required to have a CO unless later work changed use, egress or occupancy; the Letter of No Objection confirms the legal use and should say eating and drinking establishment; about a month through an expediter (secondary, search). Fee not found; $2,000 for drawings and the expediter is my estimate."
    },
    {
     "id": "d00_premises_old_legal_use",
@@ -5482,7 +5497,8 @@
       "optionId": "after_hours",
       "label": "Get an after-hours variance",
       "cost": {
-       "cash": 500
+       "cash": 1770,
+       "unit": "per 14 days"
       },
       "result": "legal night work"
      },
@@ -5502,10 +5518,11 @@
     "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
     "supportingSources": [
      "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
-     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf"
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+     "https://www.nyc.gov/site/buildings/industry/ahvs-renewal-guidelines-fees.page"
     ],
     "confidence": "verified",
-    "note": "1 RCNY §102-04(b)(4) (opened): work after hours without a variance permit $6,000 in a building other than a one- or two-family home. DEP schedule (opened): unreasonable construction noise §24-228, $560 first offense. Variance fee $500 is my estimate."
+    "note": "1 RCNY §102-04(b)(4) (opened): work after hours without a variance permit $6,000 in a building other than a one- or two-family home. DEP schedule (opened): unreasonable construction noise §24-228, $560 first offense. DOB AHV page (search excerpt): filing fee $130 for 1-3 days up to $650 for 13-14 days, plus $80 for each day of after-hours work; 14 days = $650 + $1,120 = $1,770."
    },
    {
     "id": "gas_turn_on_wait",
@@ -11330,7 +11347,8 @@
     "payrollTax": "add rate",
     "minOwnCashShare": "add",
     "cartPermitWaitMonths": "add",
-    "reputation": "add"
+    "reputation": "add",
+    "capacity": "mult on orders the shop can serve"
    },
    "D02": {
     "seats": "add or mult",
@@ -11832,6 +11850,11 @@
     "confidence": "verified"
    },
    {
+    "fact": "Asbestos: minor project up to 25 linear ft / 10 sq ft; large from 260 linear ft / 160 sq ft; abatement permit with a work place safety plan when the work area includes plumbing work, wall removal over 45 sq ft, sprinkler, fire alarm or exit sign parts",
+    "source": "https://rules.cityofnewyork.us/wp-content/uploads/2025/04/Asbestos-Rules-2022-Final.pdf",
+    "confidence": "verified"
+   },
+   {
     "fact": "Outdoor dining: sidewalk year-round; $1,050 four-year license ($2,100 both); DOT hearing on every roadway application",
     "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
     "confidence": "verified"
@@ -11844,7 +11867,7 @@
    "Fresh (after 2017) measurement of NYC gas turn-on delays.",
    "Typical private ADA Title III settlement for a small NYC restaurant with a step (only a $20,000 government penalty for Katz's Deli and court remarks).",
    "Property tax per sq ft attributable to a small storefront (used $20, an assumption).",
-   "Price of an after-hours variance (AHV) for a small job; DOB's 2026 notice mentions a standard fee without the amount on the pages read.",
+   "Official text of the after-hours variance fee ($130-$650 filing plus $80 a day was seen only in a search excerpt of the DOB page).",
    "Dining Out NYC revocable consent fee per sq ft for 2026 (diningoutnyc.info blocked in this session).",
    "Letter of No Objection fee and time for buildings without a CO.",
    "Typical consent fee a NYC landlord charges for a lease assignment.",
@@ -11885,6 +11908,12 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://www.nyc.gov/site/buildings/industry/ahvs-renewal-guidelines-fees.page",
+   "title": "DOB, AHV renewal guidelines and fees",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://achrnews.com/articles/159663-michigan-eatery-eliminates-cold-complaints-with-air-curtains",
    "title": "ACHR News, air curtains end cold-draft complaints",
    "checked": "2026-11-14",
@@ -11895,6 +11924,12 @@
    "title": "Alpha Contractors NY, commercial build-out cost NYC 2026",
    "checked": "2026-11-14",
    "confidence": "estimate"
+  },
+  {
+   "url": "https://rules.cityofnewyork.us/wp-content/uploads/2025/04/Asbestos-Rules-2022-Final.pdf",
+   "title": "DEP, final rule amending the asbestos rules (15 RCNY Chapter 1)",
+   "checked": "2026-11-14",
+   "confidence": "verified"
   },
   {
    "url": "https://peer.asee.org/change-orders-impact-on-project-cost",
@@ -12259,6 +12294,12 @@
   {
    "url": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates",
    "title": "NY1, Council repeals roll-down gate deadline, July 2, 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+   "title": "DOB, Letter of No Objection",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },

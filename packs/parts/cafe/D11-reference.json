@@ -24214,6 +24214,18 @@
      "field": "openingDelayDays",
      "add": 14,
      "appliesIf": "material found"
+    },
+    {
+     "field": "setupCost",
+     "add": 3000,
+     "appliesIf": "abatement work area includes plumbing work or wall removal: asbestos abatement permit with a work place safety plan by a registered design professional",
+     "note": "estimate"
+    },
+    {
+     "field": "openingDelayDays",
+     "add": 14,
+     "appliesIf": "abatement permit needed",
+     "note": "estimate"
     }
    ],
    "playerMoves": [
@@ -24241,7 +24253,7 @@
    "realFrequency": "Any pre-1987 building: most NYC storefronts",
    "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
    "seenIn": "page_opened",
-   "note": "DOB (opened): before a permit in buildings constructed before April 1, 1987, an asbestos assessment is required unless no existing materials are disturbed; below the asbestos-project threshold an ACP-5 is filed. 15 RCNY Chapter 1 (search excerpt): ACP-7 notification fee $200 / $400 / $800 / $1,200 by size band. Survey price $400-$1,500 (contractor page) -> $1,000. Abatement $10-$25 per sq ft of material (cost guides) -> $15. 14 days is my estimate: DEP's notice period was not found.",
+   "note": "DOB (opened): before a permit in buildings constructed before April 1, 1987, an asbestos assessment is required unless no existing materials are disturbed; below the asbestos-project threshold an ACP-5 is filed. 15 RCNY Chapter 1 (search excerpt): ACP-7 notification fee $200 / $400 / $800 / $1,200 by size band. Survey price $400-$1,500 (contractor page) -> $1,000. Abatement $10-$25 per sq ft of material (cost guides) -> $15. 14 days is my estimate: DEP's notice period was not found. DEP rules (opened, rules.cityofnewyork.us): minor project up to 25 linear ft or 10 sq ft; small project above that and under 260 linear ft / 160 sq ft; large project 260 linear ft or 160 sq ft and more, so 300 sq ft of floor tile is a large project; an asbestos abatement permit with a work place safety plan by a registered design professional is required when the work area includes plumbing work other than fixture replacement, removal of a non-rated wall over 45 sq ft, sprinkler or fire alarm parts or exit signs: typical of a cafe build-out.",
    "from": [
     "D01",
     "D15"
@@ -24249,6 +24261,7 @@
    "calibrationStatus": "revised",
    "cashExampleUSD": -14630,
    "supportingSources": [
+    "https://rules.cityofnewyork.us/wp-content/uploads/2025/04/Asbestos-Rules-2022-Final.pdf",
     "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-23455"
    ],
    "previousEffects": [
@@ -24387,14 +24400,16 @@
    "realFrequency": "Older buildings",
    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
    "seenIn": "page_opened",
-   "note": "Estimates; the letter's fee and time were not found.",
+   "note": "Buildings put up before 1938 were generally not required to have a CO unless later work changed use, egress or occupancy; the Letter of No Objection confirms the legal use and should say eating and drinking establishment; about a month through an expediter (secondary, search). Fee not found; $2,000 for drawings and the expediter is my estimate.",
    "from": [
     "D01",
     "D15"
    ],
    "calibrationStatus": "confirmed",
    "cashExampleUSD": -6900,
-   "supportingSources": [],
+   "supportingSources": [
+    "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page"
+   ],
    "calibrated": "D15",
    "group": "buildout_permits"
   },
@@ -27504,7 +27519,8 @@
      "optionId": "after_hours",
      "label": "Get an after-hours variance",
      "cost": {
-      "cash": 500
+      "cash": 1770,
+      "unit": "per 14 days"
      },
      "result": "legal night work"
     }
@@ -27512,7 +27528,7 @@
    "realFrequency": "DOB answered non-emergency complaints in 21.5 days on average in FY2026 (MMR)",
    "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
    "seenIn": "page_opened",
-   "note": "1 RCNY §102-04(b)(4) (opened): work after hours without a variance permit $6,000 in a building other than a one- or two-family home. DEP schedule (opened): unreasonable construction noise §24-228, $560 first offense. Variance fee $500 is my estimate.",
+   "note": "1 RCNY §102-04(b)(4) (opened): work after hours without a variance permit $6,000 in a building other than a one- or two-family home. DEP schedule (opened): unreasonable construction noise §24-228, $560 first offense. DOB AHV page (search excerpt): filing fee $130 for 1-3 days up to $650 for 13-14 days, plus $80 for each day of after-hours work; 14 days = $650 + $1,120 = $1,770.",
    "from": [
     "D01",
     "D15"
@@ -27523,7 +27539,8 @@
    "group": "buildout_permits",
    "supportingSources": [
     "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
-    "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf"
+    "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+    "https://www.nyc.gov/site/buildings/industry/ahvs-renewal-guidelines-fees.page"
    ]
   },
   {
@@ -83038,7 +83055,8 @@
      "payrollTax": "add rate",
      "minOwnCashShare": "add",
      "cartPermitWaitMonths": "add",
-     "reputation": "add"
+     "reputation": "add",
+     "capacity": "mult on orders the shop can serve"
     },
     "D02": {
      "seats": "add or mult",
@@ -83334,6 +83352,11 @@
      "confidence": "verified"
     },
     {
+     "fact": "Asbestos: minor project up to 25 linear ft / 10 sq ft; large from 260 linear ft / 160 sq ft; abatement permit with a work place safety plan when the work area includes plumbing work, wall removal over 45 sq ft, sprinkler, fire alarm or exit sign parts",
+     "source": "https://rules.cityofnewyork.us/wp-content/uploads/2025/04/Asbestos-Rules-2022-Final.pdf",
+     "confidence": "verified"
+    },
+    {
      "fact": "Outdoor dining: sidewalk year-round; $1,050 four-year license ($2,100 both); DOT hearing on every roadway application",
      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
      "confidence": "verified"
@@ -83346,7 +83369,7 @@
     "Fresh (after 2017) measurement of NYC gas turn-on delays.",
     "Typical private ADA Title III settlement for a small NYC restaurant with a step (only a $20,000 government penalty for Katz's Deli and court remarks).",
     "Property tax per sq ft attributable to a small storefront (used $20, an assumption).",
-    "Price of an after-hours variance (AHV) for a small job; DOB's 2026 notice mentions a standard fee without the amount on the pages read.",
+    "Official text of the after-hours variance fee ($130-$650 filing plus $80 a day was seen only in a search excerpt of the DOB page).",
     "Dining Out NYC revocable consent fee per sq ft for 2026 (diningoutnyc.info blocked in this session).",
     "Letter of No Objection fee and time for buildings without a CO.",
     "Typical consent fee a NYC landlord charges for a lease assignment.",
@@ -130119,6 +130142,11 @@
   {
    "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-23455",
    "title": "15 RCNY Chapter 1 (asbestos), ACP-7 fee tiers",
+   "checked": "2026-11-14"
+  },
+  {
+   "url": "https://rules.cityofnewyork.us/wp-content/uploads/2025/04/Asbestos-Rules-2022-Final.pdf",
+   "title": "DEP, final rule amending the asbestos rules (15 RCNY Chapter 1)",
    "checked": "2026-11-14"
   },
   {
