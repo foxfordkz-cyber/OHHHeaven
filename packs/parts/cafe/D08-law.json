@@ -3477,7 +3477,1195 @@
         "confidence": "estimate",
         "note": "The engine clamps multipliers at 1.5; leases reported in court decisions set 150%, 200%, or 150% rising to 200% after 30 days."
       }
-    ]
+    ],
+    "d08HowNumbersWereChecked": "D08 (law, inspections, fines, lawsuits), November 14, 2026. This session could not open web pages directly: the environment's network policy allows only package registries. Every number was read in web-search excerpts. verified = the excerpt came from the primary source itself (nyc.gov, the city rules library, sla.ny.gov, the statute text) and showed the number. estimate = the number came from press, law-firm or vendor pages, from memory, or from my own arithmetic; the note says which. Section numbers marked 'cited from memory' were not seen. Game-balance values (reputation hits, closure days, demand effects, event multipliers) are design choices.",
+    "mechanics": [
+      {
+        "id": "inspection_score_and_grade",
+        "title": "Health inspection as a score, not a list of fines",
+        "playerDecision": "How clean and how careful to run the shop (cleaning, pest control, food handling, certified supervisor on every shift), whether to buy a practice inspection, and what to do with a bad card: post it, fix and wait for re-inspection, or hide it.",
+        "engineMath": "At each health inspection sum the points of the shop's open scored violations (each violation carries points by condition level; the level rises with the months the trail has been open). Total 0-13 = A, 14-27 = B, 28+ = C. Initial inspection under 14: grade A, fines for scored violations waived, next cycle in 11-13 months. Initial 14+: re-inspection about 30 days later sets the grade; B brings the next cycle in 5-7 months, C in 3-5 months; 28+ brings an inspection every month until under 28. A violation at the 28-point level, or no permit, closes the shop. The posted grade multiplies demand (and delivery orders, since apps link to the lookup). Unscored violations (signs, grade card, smoking) are fined regardless of grade.",
+        "fieldsNeeded": [
+          "violations[].points {min, max, worst}",
+          "violations[].scored (boolean)",
+          "violations[].category (general | critical | public_health_hazard)",
+          "extra.inspectionPoints.gradeDemandMult {A, B, C, pending}",
+          "business state: grade, lastInspectionScore, nextInspectionDue"
+        ],
+        "numbers": [
+          {
+            "what": "Grade thresholds in points: A 0-13, B 14-27, C 28+",
+            "value": 14,
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/restaurant-grading-faq.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Next initial inspection after an A, months",
+            "value": 12,
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/inspection-cycle-and-letter-grading.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Next cycle after an initial score of 14-27, months (5-7)",
+            "value": 6,
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/inspection-cycle-and-letter-grading.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Next cycle after an initial score of 28+, months (3-5)",
+            "value": 4,
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/inspection-cycle-and-letter-grading.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Fines for scored violations when the initial inspection scores under 14, USD",
+            "value": 0,
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/insp-fines-chngs.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Demand multiplier for a posted B against an A (my estimate; Los Angeles study: A up to +6%, B +1-2%)",
+            "value": 0.96,
+            "source": "https://wagner.nyu.edu/impact/research/publications/what-are-financial-implications-public-quality-disclosure-evidence-new",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Food service inspections in fiscal year 2025",
+            "value": 38000,
+            "source": "https://a860-gpp.nyc.gov/downloads/xg94hv28t?locale=en",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "oath_hearing_choices",
+        "title": "What to do with a summons",
+        "playerDecision": "For each ticket: pay it, fix the problem and prove it before the hearing, take the agency's settlement, contest it, or ignore it. The default answer for an absent player is 'pay'.",
+        "engineMath": "Every violation found creates a summons with a hearing date one month out. Pay = base fine. Cure = the mitigated amount if the violation has one and the trail is closed before the hearing (fire tickets: half; backflow report: $50; first noise ticket: $0). Settle = a little under the base fine, no appeal. Contest = with the legal_help lever on, the ticket is dismissed only if the complaint was empty; otherwise base fine. Ignore = default amount (the schedule's maximum); after one more month unpaid it becomes a docketed judgment collected by a marshal: the amount plus interest is taken from cash, and the health permit renewal is held.",
+        "fieldsNeeded": [
+          "violations[].fine.mitigated",
+          "violations[].fine.default",
+          "violations[].cureEligible (boolean)",
+          "summons object {violationId, amount, hearingMonth, status}",
+          "extra.fineSchedules"
+        ],
+        "numbers": [
+          {
+            "what": "FDNY extinguisher ticket: first / mitigated / default, USD",
+            "value": 600,
+            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214",
+            "confidence": "verified"
+          },
+          {
+            "what": "Backflow report ticket mitigated if filed before the hearing, USD (from $500)",
+            "value": 50,
+            "source": "https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "First commercial music noise ticket with proof of correction, USD (from $2,000)",
+            "value": 0,
+            "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Grade card not posted: hearing / default, USD",
+            "value": 500,
+            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+            "confidence": "verified"
+          },
+          {
+            "what": "Requests to reopen a default, per summons",
+            "value": 1,
+            "source": "https://www.nyc.gov/site/oath/hearings/missed-hearings-default-frequently-asked-questions.page",
+            "confidence": "verified"
+          },
+          {
+            "what": "Share of a default penalty a city settlement program may waive",
+            "value": 0.5,
+            "source": "https://www.nyc.gov/site/oath/hearings/what-happens-if-i-do-not-pay.page",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "escalating_fine_schedule",
+        "title": "First, second, third offense",
+        "playerDecision": "Whether to stop after the first ticket. A repeat within 12 months costs two to four times as much.",
+        "engineMath": "Replace base + perMonth with a step list per violation: the n-th finding within a rolling window pays steps[min(n, last)]. The window is 12 months for sanitation, straws, foam and smoking, six years for retaliation. The existing perMonth values in this fragment approximate the steps until the engine has the field.",
+        "fieldsNeeded": [
+          "violations[].fine.steps [first, second, third]",
+          "violations[].fine.windowMonths",
+          "extra.fineSchedules"
+        ],
+        "numbers": [
+          {
+            "what": "Lidded-bin rule: first / second / third and later, USD (50 / 100 / 200)",
+            "value": 50,
+            "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
+            "confidence": "verified"
+          },
+          {
+            "what": "Foam ban within 12 months, USD (150 / 250 / 500)",
+            "value": 150,
+            "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/foam-containers.page",
+            "confidence": "verified"
+          },
+          {
+            "what": "Commercial music noise, USD (2,000 / 4,000 / 6,000)",
+            "value": 2000,
+            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-30850",
+            "confidence": "verified"
+          },
+          {
+            "what": "FDNY second violation of the same category, USD (extinguishers 1,500; exits and overcrowding 2,375)",
+            "value": 1500,
+            "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "closure_and_reopening",
+        "title": "Closed by the city",
+        "playerDecision": "How fast to fix what closed the shop, and whether to keep paying staff while the door is shut.",
+        "engineMath": "A closure sets sales to zero for closureDays; rent, insurance, loan payments and salaried wages continue; perishable stock worth cogsPerUnit x one day of orders is written off for each closed day up to three. The shop reopens after a scored but ungraded re-opening inspection that finds the closing violation gone; if the trail is still open the closure repeats. Demand runs 10% lower for two months after reopening.",
+        "fieldsNeeded": [
+          "business state: closedUntilDay",
+          "violations[].closureDays (exists)",
+          "extra.closure {spoilageDays, postClosureDemandMult, postClosureMonths}"
+        ],
+        "numbers": [
+          {
+            "what": "Closures in the year to September 30, 2026",
+            "value": 583,
+            "source": "https://restaurantinspectioncheck.com/nyc-restaurants-closed-by-health-department/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of inspected restaurants closed at least once that year",
+            "value": 0.025,
+            "source": "https://restaurantinspectioncheck.com/nyc-restaurants-closed-by-health-department/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of closures that cite mice",
+            "value": 0.44,
+            "source": "https://restaurantinspectioncheck.com/nyc-restaurants-closed-by-health-department/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Closures for serious violations, fiscal years 2012 and 2016 (1,051 and 566)",
+            "value": 566,
+            "source": "https://council.nyc.gov/press/2014/03/21/395/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Days closed before a re-opening inspection (my estimate; a tracker says re-inspection usually comes 1-3 days after the fix)",
+            "value": 5,
+            "source": "https://nycrestaurantinspections.com/closures",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "private_lawsuits",
+        "title": "Lawsuits from people, not agencies",
+        "playerDecision": "Which exposures to close before anyone is hurt (floor mats and a mopping log, a ramp and a usable website, allergen labels, a music license, lawful pay) and whether to carry liability insurance and legal help.",
+        "engineMath": "Each exposure is a counter, not a dice roll: while the risky option is active the counter grows by one a month (wet-season months only for slips); at its threshold a claim arrives as an announced event. Claim cost = settlement + legal fees. With general liability insurance the player pays the deductible and the premium rises at renewal; accessibility, wage and copyright claims are not covered by a basic policy and are paid in full. A claim takes 3-6 months to settle; cash is reserved when it arrives. Closing the exposure before the threshold resets the counter.",
+        "fieldsNeeded": [
+          "levers[].exposure (id of an entry in extra.lawsuits)",
+          "extra.lawsuits[] {thresholdMonths, cost, insured}",
+          "business state: exposure counters, open claims",
+          "violations[].foundBy value 'lawsuit'",
+          "officials[].role value 'plaintiff'"
+        ],
+        "numbers": [
+          {
+            "what": "Federal ADA Title III lawsuits in 2025",
+            "value": 8667,
+            "source": "https://www.adatitleiii.com/2026/02/ada-title-iii-federal-lawsuit-filings-fall-slightly-to-8667-in-2025/",
+            "confidence": "verified"
+          },
+          {
+            "what": "Website accessibility suits filed in New York federal courts in 2025",
+            "value": 1021,
+            "source": "https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/",
+            "confidence": "verified"
+          },
+          {
+            "what": "Customer slip-and-fall settlement, low end, USD (range 10,000-50,000, secondary source)",
+            "value": 10000,
+            "source": "https://www.latentinsure.com/blog/restaurant-risk-management",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Slip-and-fall share of restaurant insurance claims (secondary summary of insurer data)",
+            "value": 0.128,
+            "source": "https://www.latentinsure.com/blog/restaurant-risk-management",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Copyright statutory damages per song, minimum, USD (750-30,000; 150,000 if willful)",
+            "value": 750,
+            "source": "https://hartfordbusiness.com/article/sued-for-a-song-music-licensing-lawsuits-hit-ct-restaurants/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Average judgment per song in four Connecticut restaurant cases, USD",
+            "value": 3600,
+            "source": "https://hartfordbusiness.com/article/sued-for-a-song-music-licensing-lawsuits-hit-ct-restaurants/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Federal Disabled Access Credit, maximum per year, USD",
+            "value": 5000,
+            "source": "https://www.irs.gov/forms-pubs/about-form-8826",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "lease_and_landlord",
+        "title": "The lease after the signature",
+        "playerDecision": "At signing: take the landlord's form or pay a lawyer to negotiate a renewal option, a cap on yearly steps and on tax pass-through, and a holdover rate. Later: pay on time or face the demand; at the end of the term renew, move or close.",
+        "engineMath": "Lease object per business: term in months, yearly step (rent x 1.03 each anniversary), tax escalation (additional rent each July), renewal option yes or no, holdover multiplier. At expiry without an option the landlord's asking rent is the street's current rent times a reset factor; the player accepts, leaves (losing the build-out) or holds over at 150-200%. Unpaid rent: month 0 a 14-day demand, month 1 a court case with the landlord's legal fees added, about month 4 the marshal's lockout unless all arrears are paid first; the personal guarantee then claims what is still owed.",
+        "fieldsNeeded": [
+          "place or business lease {termMonths, stepPct, taxEscalationPct, renewalOption, holdoverMult}",
+          "extra.leaseLaw",
+          "business state: rentArrearsMonths"
+        ],
+        "numbers": [
+          {
+            "what": "Legal cap on commercial rent increases at renewal in New York City",
+            "value": 0,
+            "source": "https://www.rebny.com/policy/commercial-rent-control/",
+            "confidence": "verified"
+          },
+          {
+            "what": "Written rent demand before a nonpayment case, days",
+            "value": 14,
+            "source": "https://www.legalservicesnyc.org/resources/how-can-i-fight-a-commercial-eviction/",
+            "confidence": "verified"
+          },
+          {
+            "what": "Marshal's notice before eviction, days",
+            "value": 14,
+            "source": "https://www.korllp.com/commercial-nonpayment-eviction-nyc",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Holdover rent as a multiple of the last rent in leases enforced by New York courts (1.5 and 2.0)",
+            "value": 1.5,
+            "source": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Commercial tenant harassment civil penalty, USD (10,000-50,000)",
+            "value": 10000,
+            "source": "https://intro.nyc/local-laws/2019-185",
+            "confidence": "verified"
+          },
+          {
+            "what": "Commercial evictions carried out by city marshals, 2017-2025 (9.0% of 120,618)",
+            "value": 10900,
+            "source": "https://019b23c2-e6a2-a8d2-5863-12c506b45aad.share.connect.posit.cloud",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Reported rent increase that closed a Brooklyn cafe in 2025, USD a month",
+            "value": 4000,
+            "source": "https://multisite.nycnewsnetwork.com/clintonhill/?p=1349",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "compliance_calendar",
+        "title": "A calendar of small duties",
+        "playerDecision": "Keep the calendar yourself for free, pay for help, or let dates slide. Each duty is cheap; each missed one is a ticket.",
+        "engineMath": "Each entry of extra.complianceCalendar has a period and a due month counted from opening. When it comes due the engine charges the cost automatically unless the matching shortcut is active; if skipped, the matching violation trail opens that month. Agencies that track the duty in their own records (backflow reports, permit renewals) find the lapse without a visit: foundBy 'audit'.",
+        "fieldsNeeded": [
+          "extra.complianceCalendar[] {id, everyMonths, cost, shortcutId, violationId}",
+          "advice card 'due next month'"
+        ],
+        "numbers": [
+          {
+            "what": "Food Service Establishment Permit renewal, USD a year",
+            "value": 280,
+            "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+            "confidence": "verified"
+          },
+          {
+            "what": "FDNY open flame permit, USD a year",
+            "value": 210,
+            "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Backflow test, USD a year (my estimate)",
+            "value": 240,
+            "source": "https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Violations written in 2018 for missing backflow reports",
+            "value": 8780,
+            "source": "https://advocate.nyc.gov/press/williams-advocates-clean-water-legislation-council-hearing",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "complaint_channels",
+        "title": "Who can report you, and to whom",
+        "playerDecision": "For the attacker: which complaint to file. For the target: nothing can stop a complaint, only having nothing to find.",
+        "engineMath": "Route each report by violation family to its agency (see reports in this fragment: fire, buildings, sanitation, noise, health, consumer, water, human rights, labor, licensing societies, liquor). A complaint that finds nothing gives the filer a warning, as now. Add a cap taken from a real bill: after three empty complaints against one address within six months, further complaints from any player are not dispatched for the rest of that window. Complaints from non-player sources are tied to the player's own exposures: customers (food poisoning, allergy), neighbors (noise, trash), former workers (wage, retaliation).",
+        "fieldsNeeded": [
+          "reports[].agency",
+          "world state: empty complaints per address per six months",
+          "event hooks from extra.eventCatalog"
+        ],
+        "numbers": [
+          {
+            "what": "Unverified anonymous complaints within six months after which a 2026 Council bill would stop inspections",
+            "value": 3,
+            "source": "https://intro.nyc/0924-2026",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "one_time_shortcuts",
+        "title": "Shortcuts taken once",
+        "playerDecision": "During the build-out: file plans and wait, or build without a permit; hang the sign with or without a permit.",
+        "engineMath": "A shortcut with oneTime: true is chosen once, pays oneTimeAmount immediately and shortens the build-out, and leaves a trail that stays open until the work is legalized (the player then pays the permit cost anyway). This fragment stores such shortcuts with a monthly amount equal to oneTimeAmount / 12 so that today's engine does not overpay them.",
+        "fieldsNeeded": [
+          "shortcuts[].oneTime (boolean)",
+          "shortcuts[].oneTimeAmount",
+          "shortcuts[].phase ('buildout' | 'operating')"
+        ],
+        "numbers": [
+          {
+            "what": "Work without a permit: multiple of the permit fee",
+            "value": 21,
+            "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+            "confidence": "verified"
+          },
+          {
+            "what": "Work without a permit: minimum penalty, USD (maximum 15,000)",
+            "value": 6000,
+            "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "beer_wine_module",
+        "title": "Beer and wine in the evening",
+        "playerDecision": "Apply for a beer and wine license to sell in the evening, or stay a coffee shop.",
+        "engineMath": "A license setup item with a long wait unlocks an evening sales bonus and brings a new official (State Liquor Authority) who finds sales to minors by decoy: foundBy 'sting'. New York City adds a yearly license tax of 25% of the state license fee. Until the license fee and waiting time are sourced, the module stays off; the violation alcohol_to_minor and the shortcut skip_id_checks in this fragment are ready for it.",
+        "fieldsNeeded": [
+          "setup item beer_wine_license {cost, waitDays}",
+          "shortcuts[].requires",
+          "evening demand bonus"
+        ],
+        "numbers": [
+          {
+            "what": "Sale to a minor: first-offense fine, low end, USD (2,500-4,000; up to 10,000 per violation)",
+            "value": 2500,
+            "source": "https://sla.ny.gov/news/underage-drinking-compliance-checks-albany-county-august-2026",
+            "confidence": "verified"
+          },
+          {
+            "what": "NYC retail beer, wine and liquor license tax as a share of the state license fee",
+            "value": 0.25,
+            "source": "https://www.nyc.gov/site/finance/business/business-retail-beer-wine-and-liquor-license-tax.page",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "exotic"
+      }
+    ],
+    "lawsuits": [
+      {
+        "id": "customer_slip_claim",
+        "name": "Customer slips and falls",
+        "whoSues": "The injured customer, through a personal injury lawyer paid a share of the result",
+        "trigger": "Wet-season months with the floor_safety lever on 'nothing'",
+        "thresholdMonths": 3,
+        "cost": {
+          "low": 10000,
+          "high": 50000,
+          "tail": 575000
+        },
+        "insured": true,
+        "monthsToSettle": 6,
+        "whatHelps": "Entrance mats, wet-floor signs, a dated mopping log, general liability insurance",
+        "tier": "core",
+        "source": "https://www.latentinsure.com/blog/restaurant-risk-management",
+        "confidence": "estimate",
+        "note": "Range from a secondary summary of insurer data; the tail is a $575,000 settlement for an elderly woman who tripped in a Brooklyn restaurant (law firm's published result). The winter sidewalk is the D07 researcher's ground; this entry is the floor inside the door."
+      },
+      {
+        "id": "hot_drink_burn",
+        "name": "Burn from a hot drink",
+        "whoSues": "The burned customer or delivery worker",
+        "trigger": "Running over capacity for months: rushed handoffs, lids not pressed on, cups not seated in carriers",
+        "thresholdMonths": 6,
+        "cost": {
+          "low": null,
+          "high": null,
+          "tail": 50000000
+        },
+        "insured": true,
+        "monthsToSettle": 12,
+        "whatHelps": "Lids pressed on and checked, carriers for two or more cups, sleeves, a written handoff routine, liability insurance",
+        "tier": "deep",
+        "source": "https://www.insurancejournal.com/news/west/2025/03/17/815854.htm",
+        "confidence": "estimate",
+        "note": "No typical figure was found. The tail is the March 2025 Los Angeles verdict against a coffee chain; the famous 1992 fast-food case was settled for under $600,000."
+      },
+      {
+        "id": "allergic_reaction",
+        "name": "Allergic reaction",
+        "whoSues": "The customer; also a 311 complaint and an inspection",
+        "trigger": "No allergy notice, no allergen labels on food packed in the shop, shared pitchers and tongs",
+        "thresholdMonths": 6,
+        "cost": {
+          "low": null,
+          "high": null,
+          "tail": null
+        },
+        "insured": true,
+        "monthsToSettle": 9,
+        "whatHelps": "The notice and labels the law now requires, a separate pitcher for non-dairy milk, staff who ask before they pour",
+        "tier": "deep",
+        "source": "https://newyork.public.law/laws/n.y._public_health_law_section_1357",
+        "confidence": "estimate",
+        "note": "No settlement figures were found for cafes."
+      },
+      {
+        "id": "food_poisoning",
+        "name": "Foodborne illness",
+        "whoSues": "Customers, sometimes as a group; the Health Department inspects first",
+        "trigger": "Open trails for spoiled food, warm milk, home-made food or dirty surfaces",
+        "thresholdMonths": 2,
+        "cost": {
+          "low": null,
+          "high": null,
+          "tail": null
+        },
+        "insured": true,
+        "monthsToSettle": 9,
+        "whatHelps": "Cold holding at 41F or below, dated food, licensed suppliers, a thermometer log",
+        "tier": "core",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02955",
+        "confidence": "estimate",
+        "note": "No claim figures were found; the game uses the inspection and a demand dip instead."
+      },
+      {
+        "id": "access_barrier_suit",
+        "name": "Disability access: door, counter, restroom, website",
+        "whoSues": "A private plaintiff, often one of a few who file more than 100 suits each; or the city Commission on Human Rights",
+        "trigger": "The shortcut skip_accessibility_fixes",
+        "thresholdMonths": 6,
+        "cost": {
+          "low": 5000,
+          "high": 25000,
+          "tail": 125000
+        },
+        "insured": false,
+        "monthsToSettle": 4,
+        "whatHelps": "Readily achievable fixes (ramp, bell, lowered counter section, text menu online) and the federal tax credit of up to $5,000 a year",
+        "tier": "core",
+        "source": "https://www.adatitleiii.com/2026/02/ada-title-iii-federal-lawsuit-filings-fall-slightly-to-8667-in-2025/",
+        "confidence": "estimate",
+        "note": "Cost range is my estimate (settlements are confidential; each suit seeks about $1,000 in damages plus legal fees, NY1). The tail is the city Commission's maximum civil penalty, cited from memory."
+      },
+      {
+        "id": "wage_class_action",
+        "name": "Wage and hour suit",
+        "whoSues": "Current and former workers, together, reaching back six years; or the state Labor Department or the city",
+        "trigger": "Any wage shortcut active when a worker leaves",
+        "thresholdMonths": 1,
+        "cost": {
+          "low": 725000,
+          "high": 1750000,
+          "tail": 35500000
+        },
+        "insured": false,
+        "monthsToSettle": 18,
+        "whatHelps": "Time records, pay stubs, written pay notices, paying every hour, no retaliation",
+        "tier": "core",
+        "source": "https://www.law360.com/articles/2363776",
+        "confidence": "estimate",
+        "note": "The figures are 2025 settlements by multi-location New York restaurants and a chain, far above what a one-shop claim costs; for one shop the engine already computes the amount from the trail (2.0 x what was withheld). Listed to show scale."
+      },
+      {
+        "id": "music_copyright_suit",
+        "name": "Copyright suit over music",
+        "whoSues": "ASCAP, BMI or SESAC on behalf of songwriters",
+        "trigger": "The 'personal_account' option of the music lever",
+        "thresholdMonths": 12,
+        "cost": {
+          "low": 3000,
+          "high": 18000,
+          "tail": 150000
+        },
+        "insured": false,
+        "monthsToSettle": 6,
+        "whatHelps": "A licensed business music service or direct licenses",
+        "tier": "core",
+        "source": "https://hartfordbusiness.com/article/sued-for-a-song-music-licensing-lawsuits-hit-ct-restaurants/",
+        "confidence": "estimate",
+        "note": "Low = four songs at the $750 statutory minimum; high = a reported $18,000 judgment for nine songs; tail = the willful maximum for a single song."
+      },
+      {
+        "id": "trademark_dispute",
+        "name": "Trademark claim on the shop's name",
+        "whoSues": "A larger company with a similar registered name or logo",
+        "trigger": "Opening without a trademark search",
+        "thresholdMonths": 6,
+        "cost": {
+          "low": 5000,
+          "high": 50000,
+          "tail": null
+        },
+        "insured": false,
+        "monthsToSettle": 3,
+        "whatHelps": "A search before the sign is printed; an early federal application",
+        "tier": "exotic",
+        "source": "https://www.clickondetroit.com/news/2016/05/26/michigan-cafe-has-to-change-name-after-caribou-coffee-files-lawsuit",
+        "confidence": "estimate",
+        "note": "Low = the reported cost of renaming; high = the lawyers' estimate to fight in court."
+      }
+    ],
+    "requiredPostings": [
+      {
+        "item": "Letter grade card",
+        "where": "Front window or door, visible to passersby",
+        "law": "24 RCNY §23-07",
+        "enforcer": "DOHMH",
+        "fine": "$500 not posted ($1,000 default); $1,000 removed or defaced ($2,000 default)",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+        "confidence": "verified"
+      },
+      {
+        "item": "Food Service Establishment Permit",
+        "where": "Where customers can see it",
+        "law": "NYC Health Code §5.15",
+        "enforcer": "DOHMH",
+        "fine": "$200 ($400 default)",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+        "confidence": "verified"
+      },
+      {
+        "item": "Choking first aid poster",
+        "where": "Dining area",
+        "law": "NYC Administrative Code §17-172",
+        "enforcer": "DOHMH",
+        "fine": "Not found; the pack uses about $200",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01889",
+        "confidence": "estimate"
+      },
+      {
+        "item": "CPR equipment notice and kit (masks, gloves)",
+        "where": "Notice in customer area, kit on hand",
+        "law": "NYC Administrative Code §17-188",
+        "enforcer": "DOHMH",
+        "fine": "Not found; the pack uses about $200",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+        "confidence": "estimate"
+      },
+      {
+        "item": "Hand-wash signs",
+        "where": "Every hand sink and toilet room",
+        "law": "NYC Health Code §81.21(c)",
+        "enforcer": "DOHMH",
+        "fine": "$200 (2022 rule notice)",
+        "source": "https://rules.cityofnewyork.us/wp-content/uploads/2022/12/Ch.-23_NOI_12-1-22_First-Time-Health-Code-Violations.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "item": "Healthy Eating Information poster",
+        "where": "Where customers can see it",
+        "law": "NYC Health Code Article 81",
+        "enforcer": "DOHMH",
+        "fine": "$200",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/healthy-eating-information-poster-faq.pdf",
+        "confidence": "verified"
+      },
+      {
+        "item": "Food allergy poster for staff and allergy statement on menus",
+        "where": "Food preparation and service areas; every menu and online ordering page",
+        "law": "NY Public Health Law §1356; NYC Administrative Code §17-195",
+        "enforcer": "DOHMH",
+        "fine": "$100 summons from January 2027; state cap $125",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+        "confidence": "verified"
+      },
+      {
+        "item": "Allergen label on food made, packed and sold on the premises",
+        "where": "On each package",
+        "law": "NY Public Health Law §1357 (since November 12, 2026)",
+        "enforcer": "State and local health departments",
+        "fine": "None stated in the law",
+        "source": "https://newyork.public.law/laws/n.y._public_health_law_section_1357",
+        "confidence": "verified"
+      },
+      {
+        "item": "No smoking and no vaping signs; written smoking policy",
+        "where": "Entrances and rooms; policy shared with staff",
+        "law": "NYC Smoke-Free Air Act",
+        "enforcer": "DOHMH",
+        "fine": "$200-$400 first, $500-$1,000 second, $1,000-$2,000 third",
+        "source": "https://www.nyc.gov/site/doh/business/permits-and-licenses/smoke-free-air-act-exemptions-and-registrations.page",
+        "confidence": "estimate"
+      },
+      {
+        "item": "Private carter decal",
+        "where": "Front window or door",
+        "law": "NYC Administrative Code §16-116",
+        "enforcer": "DSNY",
+        "fine": "$100-$300",
+        "source": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "item": "Plastic straws available on request sign",
+        "where": "Any self-serve station",
+        "law": "NYC Administrative Code §16-401",
+        "enforcer": "DSNY, DOHMH, DCWP",
+        "fine": "$100 / $200 / $400",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03462",
+        "confidence": "verified"
+      },
+      {
+        "item": "Dogs allowed sign",
+        "where": "Entrance, only if pets are allowed at outdoor tables",
+        "law": "24 RCNY Chapter 32",
+        "enforcer": "DOHMH",
+        "fine": "Not found",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/dog-dining-factsheet.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "item": "Fire extinguisher tags, dated and initialed monthly",
+        "where": "On each extinguisher",
+        "law": "NYC Fire Code FC 906",
+        "enforcer": "FDNY",
+        "fine": "$600 ($300 mitigated, $1,000 default)",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214",
+        "confidence": "verified"
+      },
+      {
+        "item": "Posted highest price including any credit card surcharge",
+        "where": "Menu board and menus",
+        "law": "NY General Business Law §518",
+        "enforcer": "DCWP and other local consumer agencies",
+        "fine": "Up to $500 per violation",
+        "source": "https://newyork.public.law/laws/n.y._general_business_law_section_518",
+        "confidence": "verified"
+      },
+      {
+        "item": "'Your Rights at Work' poster, also handed to each worker",
+        "where": "Staff area; a copy on the first day",
+        "law": "NYC Administrative Code §32-102",
+        "enforcer": "DCWP",
+        "fine": "$500 after a 30-day cure",
+        "source": "https://www.crowell.com/en/insights/client-alerts/nyc-employers-required-to-post-and-distribute-newly-issued-workers-bill-of-rights",
+        "confidence": "estimate"
+      },
+      {
+        "item": "State and federal labor posters (minimum wage, tip rules, discrimination, safety and others)",
+        "where": "Staff area and in digital form",
+        "law": "NY Labor Law and federal law",
+        "enforcer": "NYS Department of Labor; U.S. Department of Labor",
+        "fine": "Varies; all posters are free downloads",
+        "source": "https://dol.ny.gov/posting-requirements",
+        "confidence": "estimate"
+      },
+      {
+        "item": "Written sexual harassment prevention policy, given to each worker at hire and at each yearly training",
+        "where": "Handed out; kept on file",
+        "law": "NY Labor Law §201-g",
+        "enforcer": "NYS Department of Labor; NYS Division of Human Rights",
+        "fine": "No fine in the section; the pack uses Labor Law §218 ($1,000 / $2,000 / $3,000)",
+        "source": "https://www.nysenate.gov/legislation/laws/LAB/201-G",
+        "confidence": "estimate"
+      },
+      {
+        "item": "Pay range in every job advertisement",
+        "where": "Every ad, online or in the window",
+        "law": "NYC Administrative Code §8-107(32); NY Labor Law §194-b",
+        "enforcer": "NYC Commission on Human Rights; NYS Department of Labor",
+        "fine": "City: $0 if a first violation is cured in 30 days, then up to $250,000; state: up to $3,000",
+        "source": "https://www.dol.ny.gov/pay-transparency",
+        "confidence": "estimate"
+      }
+    ],
+    "complianceCalendar": [
+      {
+        "id": "fse_permit_renewal",
+        "task": "Renew the Food Service Establishment Permit",
+        "everyMonths": 12,
+        "cost": 280,
+        "shortcutId": "let_permit_lapse",
+        "violationId": "no_fse_permit",
+        "trackedByAgency": true,
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+        "confidence": "verified"
+      },
+      {
+        "id": "backflow_test",
+        "task": "Backflow device test and report to Environmental Protection",
+        "everyMonths": 12,
+        "cost": 240,
+        "shortcutId": "skip_backflow_test",
+        "violationId": "backflow_not_tested",
+        "trackedByAgency": true,
+        "source": "https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "id": "extinguisher_service",
+        "task": "Yearly extinguisher service by an FDNY-certified company; monthly check initialed on the tag",
+        "everyMonths": 12,
+        "cost": 120,
+        "shortcutId": "skip_extinguisher_service",
+        "violationId": "fire_extinguisher_untagged",
+        "trackedByAgency": false,
+        "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/portable-fire-extinguishers-in-your-business.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "id": "open_flame_permit_renewal",
+        "task": "Renew the FDNY open flame permit, if candles are used",
+        "everyMonths": 12,
+        "cost": 210,
+        "shortcutId": "candles_no_permit",
+        "violationId": "candles_without_permit",
+        "trackedByAgency": true,
+        "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+        "confidence": "verified"
+      },
+      {
+        "id": "harassment_training",
+        "task": "Interactive sexual harassment prevention training for every worker",
+        "everyMonths": 12,
+        "cost": 0,
+        "shortcutId": "skip_harassment_training",
+        "violationId": "no_harassment_policy_training",
+        "trackedByAgency": false,
+        "source": "https://www.nysenate.gov/legislation/laws/LAB/201-G",
+        "confidence": "verified"
+      },
+      {
+        "id": "pest_control_visit",
+        "task": "Licensed exterminator visit and service record kept on site",
+        "everyMonths": 1,
+        "cost": 175,
+        "shortcutId": null,
+        "violationId": "pest_activity",
+        "trackedByAgency": false,
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "id": "music_license_renewal",
+        "task": "Keep the music license or business music subscription current",
+        "everyMonths": 12,
+        "cost": 420,
+        "shortcutId": null,
+        "violationId": "unlicensed_music",
+        "trackedByAgency": false,
+        "source": "https://musicforbusinessfinder.com/ascap-music-license-costs-guide/",
+        "confidence": "estimate"
+      },
+      {
+        "id": "health_inspection_cycle",
+        "task": "Unannounced health inspection: 11-13 months after an A, 5-7 after a B, 3-5 after a C",
+        "everyMonths": 12,
+        "cost": 0,
+        "shortcutId": null,
+        "violationId": null,
+        "trackedByAgency": true,
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/inspection-cycle-and-letter-grading.pdf",
+        "confidence": "verified"
+      },
+      {
+        "id": "posters_refresh",
+        "task": "Replace wage and rights posters when the law changes (minimum wage steps every January 1)",
+        "everyMonths": 12,
+        "cost": 0,
+        "shortcutId": null,
+        "violationId": "workers_rights_poster_missing",
+        "trackedByAgency": false,
+        "source": "https://dol.ny.gov/posting-requirements",
+        "confidence": "estimate"
+      },
+      {
+        "id": "sidewalk_and_setout",
+        "task": "Sweep the sidewalk and 18 inches of gutter daily; bins out one hour before closing or after 8 PM, in by opening",
+        "everyMonths": 1,
+        "cost": 85,
+        "shortcutId": "skip_sidewalk_sweeping",
+        "violationId": "dirty_sidewalk",
+        "trackedByAgency": false,
+        "source": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf",
+        "confidence": "estimate"
+      }
+    ],
+    "fineSchedules": {
+      "note": "Real step schedules for violations in this fragment and in the existing pack. first / second / third are amounts for repeat findings inside windowMonths; mitigated applies when the fix is proven by the hearing date; default applies when the hearing is missed. Until the engine reads steps, each violation's base and perMonth approximate them.",
+      "fire_extinguisher_untagged": {
+        "first": 600,
+        "mitigated": 300,
+        "default": 1000,
+        "second": 1500,
+        "secondMitigated": 750,
+        "secondDefault": 5000,
+        "confidence": "verified"
+      },
+      "blocked_exit": {
+        "first": 950,
+        "mitigated": 475,
+        "default": 1000,
+        "second": 2375,
+        "secondMitigated": 1185,
+        "secondDefault": 5000,
+        "confidence": "verified"
+      },
+      "overcrowding": {
+        "first": 950,
+        "mitigated": 475,
+        "default": 1000,
+        "second": 2375,
+        "secondMitigated": 1185,
+        "secondDefault": 5000,
+        "confidence": "verified"
+      },
+      "candles_without_permit": {
+        "first": 700,
+        "mitigated": 350,
+        "default": 1000,
+        "second": 1750,
+        "secondMitigated": 875,
+        "secondDefault": 5000,
+        "confidence": "verified"
+      },
+      "grade_card_hidden": {
+        "notPosted": 500,
+        "notPostedDefault": 1000,
+        "removed": 1000,
+        "removedDefault": 2000,
+        "confidence": "verified"
+      },
+      "trash_setout_violation": {
+        "first": 50,
+        "second": 100,
+        "third": 200,
+        "confidence": "verified"
+      },
+      "foam_containers": {
+        "first": 150,
+        "second": 250,
+        "third": 500,
+        "windowMonths": 12,
+        "confidence": "verified"
+      },
+      "single_use_handouts": {
+        "strawsFirst": 100,
+        "strawsSecond": 200,
+        "strawsThird": 400,
+        "utensilsFirst": 50,
+        "utensilsSecond": 150,
+        "utensilsThird": 250,
+        "windowMonths": 12,
+        "confidence": "verified"
+      },
+      "loud_music_noise": {
+        "first": 2000,
+        "firstWithCure": 0,
+        "second": 4000,
+        "third": 6000,
+        "firstMax": 8000,
+        "secondMax": 16000,
+        "thirdMax": 24000,
+        "confidence": "verified"
+      },
+      "backflow_not_tested": {
+        "first": 500,
+        "mitigated": 50,
+        "default": 1000,
+        "confidence": "verified"
+      },
+      "dirty_sidewalk": {
+        "low": 100,
+        "high": 300,
+        "confidence": "verified"
+      },
+      "business_trash_dumped": {
+        "low": 100,
+        "high": 300,
+        "confidence": "verified"
+      },
+      "smoking_vaping_allowed": {
+        "first": 200,
+        "firstMax": 400,
+        "second": 500,
+        "secondMax": 1000,
+        "third": 1000,
+        "thirdMax": 2000,
+        "windowMonths": 12,
+        "confidence": "estimate"
+      },
+      "alcohol_to_minor": {
+        "first": 2500,
+        "firstMax": 4000,
+        "max": 10000,
+        "confidence": "verified"
+      },
+      "retaliation_firing": {
+        "first": 1000,
+        "firstMax": 10000,
+        "repeatMax": 20000,
+        "liquidatedDamagesMax": 20000,
+        "windowMonths": 72,
+        "confidence": "verified"
+      },
+      "work_without_permit": {
+        "multipleOfPermitFee": 21,
+        "min": 6000,
+        "max": 15000,
+        "stopWorkOrderFirst": 6000,
+        "confidence": "verified"
+      },
+      "card_surcharge_undisclosed": {
+        "max": 500,
+        "confidence": "verified"
+      },
+      "allergen_notice_missing": {
+        "citySummonsFromJanuary2027": 100,
+        "stateMax": 125,
+        "confidence": "verified"
+      },
+      "obstructing_inspector": {
+        "first": 1000,
+        "confidence": "verified"
+      },
+      "pet_inside_shop": {
+        "byConditionLevel": [
+          200,
+          200,
+          250,
+          300,
+          350
+        ],
+        "confidence": "verified"
+      },
+      "bare_hand_contact": {
+        "byConditionLevel": [
+          250,
+          300,
+          350,
+          400,
+          600
+        ],
+        "confidence": "verified"
+      },
+      "hand_wash_station_down": {
+        "low": 300,
+        "high": 350,
+        "confidence": "verified"
+      }
+    },
+    "inspectionPointsD08": {
+      "note": "Points from the Health Department scoring worksheet (24 RCNY Chapter 23, Appendix 23-A) for violations added by this fragment and for the general violations a cafe meets most often. Levels I-V measure how bad the condition is, not how many times it was found. Extends extra.inspectionPoints of the pack.",
+      "points": {
+        "hand_wash_station_down": {
+          "code": "05D",
+          "category": "critical",
+          "levelIV": 10,
+          "levelV": 28,
+          "confidence": "verified"
+        },
+        "bare_hand_contact": {
+          "code": "04C",
+          "category": "public_health_hazard",
+          "min": 7,
+          "max": 10,
+          "worst": 28,
+          "confidence": "estimate",
+          "note": "Category and fines seen; the point values were not legible in the excerpt, so the public-health-hazard range of the existing pack is used."
+        },
+        "pet_inside_shop": {
+          "code": "04O",
+          "category": "critical",
+          "min": 5,
+          "max": 8,
+          "confidence": "estimate",
+          "note": "Category seen; point values not legible, the critical range is used."
+        },
+        "food_not_protected": {
+          "code": "06C",
+          "category": "critical",
+          "levels": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "confidence": "verified"
+        },
+        "in_use_utensil_storage": {
+          "code": "06E",
+          "category": "critical",
+          "levels": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "confidence": "verified"
+        },
+        "not_vermin_proof": {
+          "code": "08A",
+          "category": "general",
+          "levelIII": 4,
+          "levelIV": 5,
+          "confidence": "verified"
+        },
+        "plumbing_backflow_at_equipment": {
+          "code": "10B",
+          "category": "general",
+          "levels": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "levelV": 28,
+          "confidence": "verified"
+        }
+      },
+      "unscored": [
+        "grade_card_hidden",
+        "required_signs_missing",
+        "allergen_notice_missing",
+        "smoking_vaping_allowed",
+        "obstructing_inspector",
+        "foam_containers",
+        "single_use_handouts"
+      ],
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-136908",
+      "confidence": "verified"
+    },
+    "enforcementStats": {
+      "note": "Reference numbers for calibrating how often things happen. Not used in the month calculation.",
+      "items": [
+        {
+          "what": "Restaurants the Health Department inspects",
+          "value": 29000,
+          "year": 2025,
+          "source": "https://www.nyc.gov/site/doh/about/press/pr2025/health-department-celebrates-15th-anniversary-of-restaurant-grading-system.page",
+          "confidence": "verified"
+        },
+        {
+          "what": "Food service inspections, fiscal year 2025 (up from more than 30,000)",
+          "value": 38000,
+          "year": 2025,
+          "source": "https://a860-gpp.nyc.gov/downloads/xg94hv28t?locale=en",
+          "confidence": "verified"
+        },
+        {
+          "what": "Closures at 518 restaurants, October 2025 to September 2026",
+          "value": 583,
+          "year": 2026,
+          "source": "https://restaurantinspectioncheck.com/nyc-restaurants-closed-by-health-department/",
+          "confidence": "estimate"
+        },
+        {
+          "what": "Health Department fines paid by restaurants, fiscal year 2016, USD (down from 52 million in fiscal 2012)",
+          "value": 22000000,
+          "year": 2016,
+          "source": "https://council.nyc.gov/press/2014/03/21/395/",
+          "confidence": "estimate"
+        },
+        {
+          "what": "Average Health Department fines per restaurant per year, USD: 22,000,000 / 24,000 restaurants (my arithmetic, fiscal 2016)",
+          "value": 917,
+          "year": 2016,
+          "source": "https://council.nyc.gov/press/2014/03/21/395/",
+          "confidence": "estimate"
+        },
+        {
+          "what": "Share of restaurants posting an A (Council testimony, about fiscal 2016; 88% in 2014)",
+          "value": 0.93,
+          "year": 2016,
+          "source": "https://council.nyc.gov/press/2014/03/21/395/",
+          "confidence": "estimate"
+        },
+        {
+          "what": "Federal ADA Title III lawsuits",
+          "value": 8667,
+          "year": 2025,
+          "source": "https://www.adatitleiii.com/2026/02/ada-title-iii-federal-lawsuit-filings-fall-slightly-to-8667-in-2025/",
+          "confidence": "verified"
+        },
+        {
+          "what": "Federal website accessibility lawsuits, of them 1,021 in New York",
+          "value": 3117,
+          "year": 2025,
+          "source": "https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/",
+          "confidence": "verified"
+        },
+        {
+          "what": "Violations for missing backflow test reports (1,540 for no device)",
+          "value": 8780,
+          "year": 2018,
+          "source": "https://advocate.nyc.gov/press/williams-advocates-clean-water-legislation-council-hearing",
+          "confidence": "estimate"
+        },
+        {
+          "what": "Commercial share of evictions carried out by city marshals, 2017-2025 (120,618 in all)",
+          "value": 0.09,
+          "year": 2025,
+          "source": "https://019b23c2-e6a2-a8d2-5863-12c506b45aad.share.connect.posit.cloud",
+          "confidence": "estimate"
+        }
+      ]
+    },
+    "leaseLaw": {
+      "note": "What the law does and does not give a store tenant in New York City in 2026. Everything else is whatever the lease says.",
+      "rentCap": "None. No commercial rent control and no right to renew. A state bill to create a Commercial Rent Guidelines Board with 10-year renewals (S8319/A5568A) was referred to committee on January 7, 2026; a City Council resolution (Res. 496, June 2026) urges it; a 'Storefront Business Bill of Rights' (Intro 90) had a hearing; the Small Business Jobs Survival Act has been proposed for decades and never passed.",
+      "nonpayment": "Written 14-day rent demand (RPAPL §711(2)), then a nonpayment proceeding in Civil Court's commercial part, then a marshal's 14-day notice (RPAPL §749). Paying all arrears before the eviction stops it. Most leases bar set-offs and add the landlord's legal fees as additional rent.",
+      "holdover": "Leases enforced by New York courts set holdover rent at 150% or 200% of the last rent, sometimes 150% rising to 200% after 30 days.",
+      "taxEscalation": "Typical clause: the tenant pays a share of every increase in the building's real estate tax over a base year as additional rent; reported leases use 10% or 15% of the increase.",
+      "harassment": "Commercial tenant harassment (NYC Administrative Code §22-902): civil penalty $10,000 to $50,000 and a right to sue; refusing to renew is not harassment.",
+      "reportedOutcomes2025_2026": "A Brooklyn coffee shop closed after its rent nearly tripled; a 22-year-old bakery cafe closed after an extra $4,000 a month; a 38-year-old cafe on the Upper West Side closed over rent; a roaster's cafe closed when its lease expired. A landlord in one widely reported closing denied raising the rent at all.",
+      "sources": [
+        "https://www.rebny.com/policy/commercial-rent-control/",
+        "https://www.nysenate.gov/newsroom/press-releases/2026/julia-salazar/senator-salazar-and-assembly-member-gallagher-introduce",
+        "https://www.legalservicesnyc.org/resources/how-can-i-fight-a-commercial-eviction/",
+        "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+        "https://intro.nyc/local-laws/2019-185",
+        "https://brooklyn.news12.com/greenpoint-coffee-shop-sippy-caf-closing-after-rent-nearly-triples",
+        "https://www.westsiderag.com/2026/04/02/upper-west-side-cafe-set-to-close-after-38-years-it-breaks-our-hearts",
+        "https://multisite.nycnewsnetwork.com/clintonhill/?p=1349"
+      ],
+      "confidence": "estimate"
+    }
   },
   "sources": [
     {
@@ -3903,6 +5091,136 @@
     {
       "url": "https://therealdeal.com/new-york/2025/08/21/nyc-evictions-hit-seven-year-high-as-courts-clear-backlog",
       "title": "The Real Deal: NYC evictions hit seven-year high as courts clear backlog (August 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.rebny.com/policy/commercial-rent-control/",
+      "title": "REBNY: Commercial rent control (policy page, September 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/newsroom/press-releases/2026/julia-salazar/senator-salazar-and-assembly-member-gallagher-introduce",
+      "title": "NY Senate: legislation to stabilize rent for NYC small businesses (2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.korllp.com/commercial-nonpayment-eviction-nyc",
+      "title": "KOR LLP: Commercial non-payment cases in New York City",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.westsiderag.com/2026/04/02/upper-west-side-cafe-set-to-close-after-38-years-it-breaks-our-hearts",
+      "title": "West Side Rag: Upper West Side cafe set to close after 38 years (April 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://advocate.nyc.gov/press/williams-advocates-clean-water-legislation-council-hearing",
+      "title": "NYC Public Advocate: backflow violations figures at Council hearing",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/finance/business/business-retail-beer-wine-and-liquor-license-tax.page",
+      "title": "NYC Department of Finance: Retail Beer, Wine and Liquor License Tax",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nycrestaurantinspections.com/closures",
+      "title": "NYC Restaurant Inspections: closures tracker",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://rules.cityofnewyork.us/wp-content/uploads/2022/12/Ch.-23_NOI_12-1-22_First-Time-Health-Code-Violations.pdf",
+      "title": "DOHMH notice: first-time Health Code violations, Chapter 23 (2022)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01889",
+      "title": "NYC311: Choking poster",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02737",
+      "title": "NYC311: Food allergy poster",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.morganlewis.com/pubs/2025/06/new-york-labor-law-amendment-limits-damages-for-frequency-of-pay-violations",
+      "title": "Morgan Lewis: New York amendment limits damages for frequency-of-pay violations (2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20101220/greenwich-village-soho/city-businesses-fed-up-with-sidewalk-sign-crackdown",
+      "title": "DNAinfo: city businesses fed up with sidewalk sign crackdown (2010)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://themidtowngazette.com/2015/09/what-most-businesses-dont-know-sidewalk-signs-are-illegal",
+      "title": "Midtown Gazette: what most businesses don't know, sidewalk signs are illegal (2015)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cbsnews.com/amp/newyork/news/new-york-city-exterior-signs",
+      "title": "CBS New York: business owners fear city's order to take down signage (2019)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cbsnews.com/amp/newyork/news/nyc-restaurant-health-inspections-2023-2024",
+      "title": "CBS New York: health inspections at NYC restaurants are not happening as often (2024)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.dsslaw.com/case-results/elderly-woman-injured-after-trip-and-fall-in-ny-restaurant-575000-settlement/",
+      "title": "Law firm case result: $575,000 settlement, trip and fall in a New York restaurant",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://evgrieve.com/search/label/closures%202026?hl=en",
+      "title": "EV Grieve: East Village closures 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.foxbusiness.com/small-business/iconic-new-york-city-coffee-shop-closes-after-rent-higher-wages-take-a-toll",
+      "title": "Fox Business: New York City coffee shop closes after rent and higher wages take a toll",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.wmuk.org/wmuk-news/2025-11-03/kalamazoo-matcha-cafe-changes-name-to-matcharia-after-legal-pressures",
+      "title": "WMUK: matcha cafe changes its name after legal pressure (2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://qns.com/2011/10/health-department-fines-frustrate-queens-restaurant-owners/",
+      "title": "QNS: Health Department fines frustrate Queens restaurant owners (2011)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/cchr/downloads/pdf/FC rules 6.1.17 FINAL.pdf",
+      "title": "NYC Commission on Human Rights: Fair Chance Act rules",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.mashed.com/1981126/notable-nyc-restaurants-closed-by-health-inspections-2025/",
+      "title": "Mashed: notable NYC restaurants closed by health inspections in 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.jdsupra.com/legalnews/new-york-city-proposes-bill-that-sets-3659592/",
+      "title": "JD Supra: New York City bill on higher minimum wages and the tip credit (Int. 757, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.natlawreview.com/article/new-york-legislature-amends-pay-frequency-law-limit-damages-first-time-offenders",
+      "title": "National Law Review: New York amends pay frequency law",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://019b23c2-e6a2-a8d2-5863-12c506b45aad.share.connect.posit.cloud",
+      "title": "NYC evictions dashboard built on NYC Open Data, 2017-2025 (commercial share 9.0%)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://multisite.nycnewsnetwork.com/clintonhill/?p=1349",
+      "title": "NYC News Network: bakery cafe in Clinton Hill to close after 22 years (rent up $4,000 a month)",
       "checked": "2026-11-14"
     }
   ]
