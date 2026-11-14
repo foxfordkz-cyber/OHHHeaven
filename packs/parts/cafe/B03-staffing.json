@@ -1,0 +1,118 @@
+{
+  "id": "B03-staffing",
+  "part": "cafe",
+  "theme": "Staffing: roles and skill, cover of opening hours (build/FORMATS.md section 4, task B03 of round 3). Read by engine/src/niches/cafe/staffing.ts.",
+  "checked": "2026-11-14",
+  "howNumbersWereChecked": "No new search. extra.staffing is copied from packs/parts/cafe/D20-formats.json (task A1, numbers from fragments D05, D06, D14 with their sources); every estimate keeps its arithmetic in a *Note field. The integrator (B04) puts extra.staffing into packs/cafe.json; newRoles go into pack.staff and newLeverOptions into the lever they name.",
+  "extra": {
+    "staffing": {
+      "note": "What a shift lead and an experienced barista give, what a trainee costs, and whether the paid hours cover the open hours.",
+      "source": "packs/parts/cafe/D05-people.json (extra.staffModel, staff)",
+      "confidence": "estimate",
+      "roles": {
+        "barista": {
+          "speed": 1,
+          "quality": 0
+        },
+        "shift_lead": {
+          "speed": 1.1,
+          "quality": 0.02,
+          "lead": true
+        },
+        "trainee_barista": {
+          "speed": 0.55,
+          "speedWithLead": 0.75,
+          "quality": -0.025,
+          "trainee": true
+        }
+      },
+      "rolesNote": "D05 skillRamp (reading of Perfect Daily Grind time marks, not measurements): after twelve months a barista works at 1.1 of the trained speed, adds 0.02 to quality, can train others and open alone: that is the shift lead. A new hire works at 0.4 in weeks 1-2, 0.7 in weeks 3-6 and 0.85 in months 2-3, with quality -0.03 to -0.02. Averaged over the first 13 weeks with someone to train them: (2 x 0.4 + 4 x 0.7 + 7 x 0.85) / 13 = 0.73, rounded to 0.75. Without a lead the new hire stays on register and bar-back longer: I take the mean of the first two stages, (0.4 + 0.7) / 2 = 0.55. https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+      "ordersPerPaidHour": 14,
+      "ordersPerPaidHourNote": "Takeaway orders per paid hour of a trained barista, averaged over the month. The pack's 1,700 orders per person a month / 160 hours = 10.6 is for a shop where 40% of orders are seated; with a seated order costing 1.8 of a takeaway order (service.sitInLaborMult) the same team makes 10.625 x (1 + 0.4 x 0.8) = 14.0 takeaway orders an hour. The reference shop keeps its 1,700.",
+      "rushOrdersPerPersonHour": 25,
+      "rushNote": "D14 and D06: one barista alone makes about 30 drinks an hour on a two-group machine, 1.2 drinks an order: 25 orders an hour per person on the floor in the rush. https://www.ekuep.com/en/two-groups",
+      "rushCrewShare": 0.5,
+      "rushCrewOwner": 1,
+      "rushCrewNote": "People at the bar in the morning rush = rushCrewOwner + rushCrewShare x workers. D14 puts half the team on the rush; the pack counts the owner or the hired manager as a fifth pair of hands (pack.capacity.note).",
+      "leadNeededFrom": 3,
+      "withLead": {
+        "quality": 0.03
+      },
+      "noLead": {
+        "speedMult": 0.9,
+        "quality": -0.03
+      },
+      "leadNote": "With three or more workers and no shift lead nobody assigns the stations. speedMult: D05 stations, a two-barista bar makes 35 to 45 drinks an hour; the bottom of the band against its middle is 35 / 40 = 0.875, rounded to 0.9. The two quality numbers are my estimates of the same size as the engine's penalty for a short-staffed day (0.04).",
+      "minOnFloor": 2,
+      "minOnFloorNote": "pack.capacity.minStaff: two people is the legal and practical floor (a Food Protection Certificate holder on site every open hour).",
+      "openHoursPerDay": {
+        "standard": 12,
+        "long": 15,
+        "short": 8
+      },
+      "leverPaidHours": {
+        "hours": {
+          "long": 90
+        }
+      },
+      "openHoursNote": "By option of the pack lever 'hours': 7am-7pm is 12 hours, 6am-9pm is 15. The long option already costs $2,300 a month in the pack, which is three more hours a day for one person (90 hours at about $25.50 with payroll taxes), so it brings 90 paid hours with it. 'short' (7am-3pm) is a proposed new option: see newLeverOptions.",
+      "ownerHoursPerMonth": 160,
+      "ownerHoursNote": "pack.extra.referenceMonth prices the owner's 160 hours at $4,800; a hired manager works the same hours.",
+      "uncoveredHourWeight": 0.69,
+      "uncoveredNote": "Hours nobody can cover are cut from the end of the day. D06 neighborhood hour curve: the last four open hours carry 0.07 + 0.06 + 0.05 + 0.05 = 0.23 of the day, 0.0575 an hour against the average 1 / 12 = 0.0833: 0.69.",
+      "newRoles": [
+        {
+          "id": "trainee_barista",
+          "name": "New barista (first 90 days)",
+          "hourlyWage": 18,
+          "tipped": true,
+          "cashWage": 18,
+          "hoursPerMonth": 120,
+          "licenseRequired": null,
+          "source": "https://culinaryagents.com/jobs/716734-Barista",
+          "confidence": "estimate",
+          "note": "D05: 2026 postings start at $17.00 (the legal minimum) and $18.50 plus tips; $18 is the midpoint for a hire with little bar experience. 120 hours is 28 hours a week."
+        }
+      ],
+      "newLeverOptions": [
+        {
+          "leverId": "hours",
+          "option": {
+            "id": "short",
+            "label": "7am - 3pm",
+            "monthlyCost": 0,
+            "effects": {
+              "demand": -0.2
+            }
+          },
+          "source": "packs/parts/cafe/D06-demand.json (extra.hourCurve)",
+          "confidence": "estimate",
+          "note": "Closing at 3 pm gives up the hours 3 to 7 pm: 23% of the day on a neighborhood block and 16% on an office block (D06 hour curves); 0.2 is the mean. The saving is in people: 8 open hours need 480 floor hours a month instead of 720."
+        }
+      ],
+      "leverSpeed": {
+        "sourcing": {
+          "specialty": 0.85
+        }
+      },
+      "leverSpeedNote": "Speed of the bar by lever option. Specialty sourcing: D06 gives one minute for an espresso and two for a milk drink; a house menu at half and half is 1.5 minutes a drink, a specialty menu at one quarter and three quarters is 1.75: 1.5 / 1.75 = 0.86, rounded to 0.85. The split of the menus is my estimate."
+    }
+  },
+  "sources": [
+    {
+      "id": "d06",
+      "title": "D06 demand fragment, branch claude/jolly-volta-dv0cll",
+      "url": "packs/parts/cafe/D06-demand.json"
+    },
+    {
+      "id": "d05",
+      "title": "D05 people fragment, branch claude/jolly-volta-dv0cll",
+      "url": "packs/parts/cafe/D05-people.json"
+    },
+    {
+      "id": "d14",
+      "title": "D14 mechanics fragment and spec, branch claude/jolly-volta-dv0cll",
+      "url": "packs/parts/cafe/D14-mechanics.json"
+    }
+  ]
+}
