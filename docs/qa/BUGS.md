@@ -84,18 +84,6 @@ node scripts/e2e/journey.mjs
 
 **Кому:** B09 (`client/src/screens/end/PlanScreen.tsx`): на 402 показать заголовки плана из `teaser` статуса тарифа и кнопку на `/pro` (B14 просил о том же в своём журнале, просьба 4). Проверка: шаг `plan-final` прогона.
 
-## 2. Совет «Too many empty seats» предлагает изменение, которое по его же числу теряет деньги
-
-**Тяжесть: высокая (кнопка Apply ведёт в минус; «Apply all» применяет и его).**
-
-Today → «What to change» → «Too many empty seats −$902/mo — Shrink to 10». Число справа — это прогноз прибыли после изменения (`impact.profitDeltaMonth`), и он отрицательный.
-
-Причина в коде: `engine/src/analytics/recommend.ts`, правило `manySeats` (строка ~136) и вторая ветка `fewSeats` (~119) не проверяют знак `d`, а остальные правила проверяют (`if (d <= 0) return null;` в строках 174, 186, 358). Починка — одна строка `if (d <= 0) return null;` перед `return rec('many_seats', …)`.
-
-![Today: −$902/mo у совета, обрезанные суммы справа](bugs/02-today-advice.png)
-
-**Кому:** ведущий (`engine/src/analytics/` — в задании B09 только `realWorldPlan` и `roadmapFor`); показ — B08.
-
 ## 17. Ветка показа «больше мест»: лист «Resize the room» не показывает последствия до нажатия
 
 **Тяжесть: средняя-высокая (это одна из двух веток, которые выбирает жюри на сцене; правило волны — «решение и сразу последствие»).** Сборка B04 `c49c646`, 23:45 UTC, `node scripts/e2e/pitch-show.mjs --branch seats`.
@@ -190,6 +178,18 @@ Books: «Wages, rent and monthly bills are paid on Feb 30», «closed Jan 30», 
 ## Исправлено
 
 Номера, которые больше не воспроизводятся в последней сборке; оставлены, чтобы было видно, что проверено.
+
+### 2. Совет «Too many empty seats» предлагает изменение, которое по его же числу теряет деньги — исправлено в сборке B04 `9198651` (сборщик: `if (d <= 0) return null` и тест), проверено прогоном 23:55 UTC: на Today нет советов с минусом
+
+**Тяжесть: высокая (кнопка Apply ведёт в минус; «Apply all» применяет и его).**
+
+Today → «What to change» → «Too many empty seats −$902/mo — Shrink to 10». Число справа — это прогноз прибыли после изменения (`impact.profitDeltaMonth`), и он отрицательный.
+
+Причина в коде: `engine/src/analytics/recommend.ts`, правило `manySeats` (строка ~136) и вторая ветка `fewSeats` (~119) не проверяют знак `d`, а остальные правила проверяют (`if (d <= 0) return null;` в строках 174, 186, 358). Починка — одна строка `if (d <= 0) return null;` перед `return rec('many_seats', …)`.
+
+![Today: −$902/mo у совета, обрезанные суммы справа](bugs/02-today-advice.png)
+
+**Кому:** ведущий (`engine/src/analytics/` — в задании B09 только `realWorldPlan` и `roadmapFor`); показ — B08.
 
 ### 4. После «Save settings» Today не показывает обещанное — исправлено в сборке B04 `c72ad4d`
 
