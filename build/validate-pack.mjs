@@ -77,7 +77,7 @@ function checkList(key, fn, { needSource = true } = {}) {
     if (!str(it.id) || !idRe.test(it.id)) err(`${at}: id в snake_case обязателен`);
     else if (ids.has(`${key}:${it.id}`)) err(`${at}: повтор id`);
     else ids.set(`${key}:${it.id}`, true);
-    if (!str(it.name) && !str(it.title)) err(`${at}: нет name/title`);
+    if (!str(it.name) && !str(it.title) && !str(it.category)) err(`${at}: нет name/title`);
     for (const k of ['name', 'title', 'label', 'what', 'text', 'category', 'whereToFind']) if (str(it[k]) && cyr.test(it[k])) err(`${at}.${k}: текст для игрока должен быть на английском`);
     if (needSource) {
       if (!str(it.source) || !/^https?:\/\//.test(it.source)) (it.confidence === 'estimate' && str(it.note) ? warn : err)(`${at}: нет ссылки source`);
@@ -182,7 +182,7 @@ checkList('ruleCards', (it, at) => {
 });
 
 // У каждого нарушения должен быть способ в него попасть
-const reachable = new Set([...arr('shortcuts').map((s) => s.violation), ...arr('levers').flatMap((l) => (l.options || []).map((o) => o.causes))]);
+const reachable = new Set([...arr('setup').map((x) => x && x.withoutItViolation), ...arr('shortcuts').map((s) => s.violation), ...arr('levers').flatMap((l) => (l.options || []).map((o) => o.causes))]);
 arr('violations').forEach((v) => { if (v && v.id && !reachable.has(v.id)) warn(`violations (${v.id}): ни один shortcut или lever к нему не ведёт`); });
 
 // Минимальный объём
