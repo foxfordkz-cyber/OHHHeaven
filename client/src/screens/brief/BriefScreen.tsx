@@ -6,10 +6,10 @@ import { useEffect, useMemo, useState } from 'react';
 import type { Ack, Action, OwnerView } from '@ohh/shared/types';
 import { dateOf } from '@ohh/shared/rules';
 import { Badge, Banner, Button, Card, List, ListRow, MoneyText, Stat, TopBar, formatMoney, formatNumber, useT, type IconName } from '../../ui';
-import { readMemory, writeMemory, type BriefMemory } from './memory';
+import { keepAway, readMemory, writeMemory, type BriefMemory } from './memory';
 import { calendarFile } from './ics';
 import {
-  clockAt, happenings, inTime, lookNow, monthName, monthNews, myStanding, nextReport, pickDecision, resolveSince, rival, round2, snapshotAway, upcoming,
+  clockAt, dayLabel, happenings, inTime, lookNow, monthLength, monthName, monthNews, myStanding, nextReport, pickDecision, resolveSince, rival, round2, snapshotAway, upcoming,
   type Decision, type DecisionOption, type Happening,
 } from './model';
 
@@ -36,12 +36,8 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
   // The away summary comes once: keep it before the next poll replaces the view.
   useEffect(() => {
     const snap = snapshotAway(view);
-    if (!snap) return;
-    const cur = readMemory(memoryKey);
-    if (cur.away?.toDay === snap.toDay && cur.away.fromDay === snap.fromDay) return;
-    const next = { ...cur, away: snap };
-    writeMemory(memoryKey, next);
-    setMem(next);
+    const next = snap ? keepAway(memoryKey, snap) : null;
+    if (next) setMem(next);
   }, [view, memoryKey]);
 
   const since = useMemo(() => resolveSince(view, mem), [view, mem]);
@@ -79,11 +75,11 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
 
   const sinceLine = since.source === 'away' || since.source === 'look'
     ? days > 0
-      ? tr(`${days === 1 ? '1 day' : `${formatNumber(days)} days`} since you were here · ${dateOf(since.day).label} → ${view.world.date.label}`, `Прошло дней: ${formatNumber(days)} · ${dateOf(since.day).label} → ${view.world.date.label}`)
-      : tr(`You are up to date · ${view.world.date.label}`, `Всё прочитано · ${view.world.date.label}`)
+      ? tr(`${days === 1 ? '1 day' : `${formatNumber(days)} days`} since you were here · ${dayLabel(since.day)} → ${dayLabel(today)}`, `Прошло дней: ${formatNumber(days)} · ${dayLabel(since.day)} → ${dayLabel(today)}`)
+      : tr(`You are up to date · ${dayLabel(today)}`, `Всё прочитано · ${dayLabel(today)}`)
     : since.source === 'month'
-      ? tr(`Since ${monthName(dateOf(since.day + 1).month)} began · ${view.world.date.label}`, `С начала месяца (${monthName(dateOf(since.day + 1).month)}) · ${view.world.date.label}`)
-      : view.world.date.label;
+      ? tr(`Since ${monthName(dateOf(since.day + 1).month)} began · ${dayLabel(today)}`, `С начала месяца (${monthName(dateOf(since.day + 1).month)}) · ${dayLabel(today)}`)
+      : dayLabel(today);
 
   return (
     <main className="screen stack" aria-label={tr('Your brief', 'Твоя сводка')}>
@@ -110,7 +106,7 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
         </Card>
       )}
 
-      <NextCard next={next} ahead={ahead} now={now} onDone={finish} done={since.source === 'look' && days === 0} />
+      <NextCard next={next} ahead={ahead} length={monthLength(view)} now={now} onDone={finish} done={since.source === 'look' && days === 0} />
     </main>
   );
 }
@@ -126,7 +122,7 @@ function HappenedCard({ items }: { items: Happening[] }) {
       {items.length > 0 && (
         <List>
           {shown.map((h) => (
-            <ListRow key={h.id} icon={KIND_ICON[h.kind]} iconTone={h.tone} title={h.title} subtitle={`${dateOf(h.day).label}${h.text ? ` · ${h.text}` : ''}`} />
+            <ListRow key={h.id} icon={KIND_ICON[h.kind]} iconTone={h.tone} title={h.title} subtitle={`${dayLabel(h.day)}${h.text ? ` · ${h.text}` : ''}`} />
           ))}
         </List>
       )}
@@ -170,7 +166,7 @@ function CashCard({ cashThen, cashNow, rankThen, rankNow, boardSize }: { cashThe
 function DecisionCard({ decision, deps, cash }: { decision: Decision; deps: BriefDeps; cash: number }) {
   const tr = useT();
   const [busy, setBusy] = useState<string | null>(null);
-  const [done, setDone] = useState<{ option: DecisionOption; error?: string } | null>(null);
+  const [done, setDone] = useState<{ decisionId: string; option: DecisionOption; error?: string } | null>(null);
 
   const choose = async (o: DecisionOption) => {
     if (o.to) return deps.navigate(o.to);
@@ -178,20 +174,22 @@ function DecisionCard({ decision, deps, cash }: { decision: Decision; deps: Brie
     setBusy(o.id);
     const ack = await deps.act(o.action);
     setBusy(null);
-    setDone({ option: o, error: ack.ok ? undefined : ack.error ?? tr('That did not work. Try again.', 'Не получилось. Попробуй ещё раз.') });
+    setDone({ decisionId: decision.id, option: o, error: ack.ok ? undefined : ack.error ?? tr('That did not work. Try again.', 'Не получилось. Попробуй ещё раз.') });
   };
 
   if (done && !done.error) {
     return (
       <Card tone="profit" title={tr('Done', 'Готово')} subtitle={done.option.result} aria-label={tr('Decision made', 'Решение принято')}>
         <p className="small" style={{ margin: 0 }}>{tr(`Cash now: ${formatMoney(cash)}. The effect shows in the next day report.`, `В кассе: ${formatMoney(cash)}. Результат — в отчёте следующего дня.`)}</p>
-        <Button variant="secondary" icon="store" onClick={() => deps.navigate('/biz/today')}>{tr('Open my business', 'Открыть мой бизнес')}</Button>
+        {decision.id !== done.decisionId && decision.kind !== 'calm'
+          ? <Button iconRight="arrowRight" onClick={() => setDone(null)}>{tr(`Next: ${decision.title}`, `Дальше: ${decision.title}`)}</Button>
+          : <Button variant="secondary" icon="store" onClick={() => deps.navigate('/biz/today')}>{tr('Open my business', 'Открыть мой бизнес')}</Button>}
       </Card>
     );
   }
 
-  const tone = decision.kind === 'notice' ? 'warn' : 'default';
-  const deadline = decision.deadlineDay !== undefined ? <Badge tone="warn" icon="clock">{tr(`by ${dateOf(decision.deadlineDay).label}`, `до ${dateOf(decision.deadlineDay).label}`)}</Badge> : undefined;
+  const tone = decision.kind === 'restart' ? 'loss' : decision.kind === 'notice' || decision.kind === 'closed' ? 'warn' : 'default';
+  const deadline = decision.deadlineDay !== undefined ? <Badge tone="warn" icon="clock">{tr(`by ${dayLabel(decision.deadlineDay)}`, `до ${dayLabel(decision.deadlineDay)}`)}</Badge> : undefined;
   return (
     <Card tone={tone} title={decision.title} subtitle={decision.text} action={deadline} aria-label={tr('Decision for today', 'Решение на сегодня')}>
       <p className="xsmall faint" style={{ margin: 0 }}>{tr('Your decision today', 'Твоё решение сегодня')}</p>
@@ -230,16 +228,16 @@ function MonthCard({ news }: { news: NonNullable<ReturnType<typeof monthNews>> }
   );
 }
 
-function NextCard({ next, ahead, now, onDone, done }: { next: ReturnType<typeof nextReport>; ahead: ReturnType<typeof upcoming>; now: () => number; onDone(): void; done: boolean }) {
+function NextCard({ next, ahead, length, now, onDone, done }: { next: ReturnType<typeof nextReport>; ahead: ReturnType<typeof upcoming>; length: string; now: () => number; onDone(): void; done: boolean }) {
   const tr = useT();
   const when = next.ms === null ? tr('when the city resumes', 'когда город снова пойдёт') : `${inTime(next.ms)} · ${clockAt(next.ms, now())}`;
   const ics = next.ms === null || next.seasonOver ? null : calendarFile(next, now());
   return (
-    <Card title={next.seasonOver ? tr('The season is over', 'Сезон окончен') : tr(`Next: the ${monthName(next.month)} report`, `Дальше: отчёт за ${monthName(next.month)}`)} subtitle={next.seasonOver ? tr('See the final standings and your personal plan.', 'Смотри итоги и свой личный план.') : tr(`Lands ${when}. In this city a month passes in one real day.`, `Придёт ${when}. В этом городе месяц идёт одни сутки.`)}>
+    <Card title={next.seasonOver ? tr('The season is over', 'Сезон окончен') : tr(`Next: the ${monthName(next.month)} report`, `Дальше: отчёт за ${monthName(next.month)}`)} subtitle={next.seasonOver ? tr('See the final standings and your personal plan.', 'Смотри итоги и свой личный план.') : `${tr(`Lands ${when}.`, `Придёт ${when}.`)} ${length}`}>
       {ahead.length > 0 && (
         <List>
           {ahead.map((u) => (
-            <ListRow key={u.id} icon="clock" iconTone="info" title={u.title} subtitle={`${dateOf(u.day).label}${u.ms === null ? '' : ` · ${inTime(u.ms)}`}`} />
+            <ListRow key={u.id} icon="clock" iconTone="info" title={u.title} subtitle={`${dayLabel(u.day)}${u.ms === null ? '' : ` · ${inTime(u.ms)}`}`} />
           ))}
         </List>
       )}

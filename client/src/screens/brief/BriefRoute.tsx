@@ -6,6 +6,7 @@ import { Button, Card, Skeleton, TopBar, useT } from '../../ui';
 import { useCatalog } from '../../app/catalog';
 import { useGame, useStoreState, useView } from '../../app/store';
 import { BriefScreen } from './BriefScreen';
+import { briefKey } from './memory';
 import { NEAR_RADIUS_FALLBACK_M, nearbyIds } from './model';
 
 export function BriefRoute() {
@@ -50,5 +51,5 @@ export function BriefRoute() {
     );
   }
 
-  return <BriefScreen deps={{ view, memoryKey: `${mode}:${worldId}:${view.me.id}`, act: game.act, navigate: (to) => navigate(to), near }} />;
+  return <BriefScreen deps={{ view, memoryKey: briefKey(mode, worldId, view.me.id), act: game.act, navigate: (to) => navigate(to), near }} />;
 }

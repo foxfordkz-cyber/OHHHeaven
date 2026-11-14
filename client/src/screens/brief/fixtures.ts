@@ -4,8 +4,8 @@ import type { CaseNotice, Deal, MonthReport, OwnerView } from '@ohh/shared/types
 import { RULES } from '@ohh/shared/rules';
 import { demoConfig, ownerView, worldPublic } from '../../app/fixtures';
 
-export type BriefFixture = 'away' | 'notice' | 'offer' | 'month' | 'calm' | 'none';
-export const BRIEF_FIXTURES: BriefFixture[] = ['away', 'notice', 'offer', 'month', 'calm', 'none'];
+export type BriefFixture = 'away' | 'notice' | 'offer' | 'month' | 'closed' | 'bankrupt' | 'calm' | 'none';
+export const BRIEF_FIXTURES: BriefFixture[] = ['away', 'notice', 'offer', 'month', 'closed', 'bankrupt', 'calm', 'none'];
 
 const liveConfig = { ...demoConfig, id: 'live', name: 'New York', demo: false, dayMs: RULES.DAY_MS_LIVE };
 
@@ -42,6 +42,8 @@ export function briefFixture(name: BriefFixture): OwnerView {
     case 'notice': return { ...base, notices: [notice] };
     case 'offer': return { ...base, deals: [...base.deals, offer] };
     case 'month': return monthState();
+    case 'closed': return { ...base, business: { ...base.business!, status: 'closed', closedUntilDay: 77 } };
+    case 'bankrupt': return { ...base, business: { ...base.business!, status: 'bankrupt', bankruptDay: 72, cash: -2_496 }, recommendations: [], away: { days: 6, profit: -9_180, items: base.away!.items } };
     case 'calm': return { ...base, away: null, recommendations: [], me: { ...base.me, inbox: [] } };
     case 'none': return { ...base, business: null, away: null };
   }

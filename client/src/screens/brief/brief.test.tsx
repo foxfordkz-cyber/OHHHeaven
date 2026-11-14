@@ -2,12 +2,15 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Ack, Action } from '@ohh/shared/types';
 import { RULES } from '@ohh/shared/rules';
+import { MemoryRouter } from 'react-router-dom';
+import { createStaticStore, StoreProvider } from '../../app/store';
+import { BriefEntry } from './BriefEntry';
 import { BriefScreen } from './BriefScreen';
 import { briefFixture, BRIEF_FIXTURES } from './fixtures';
 import { calendarText } from './ics';
 import { readMemory, writeMemory } from './memory';
 import { fixturePlaces } from '../../app/fixtures';
-import { happenings, nearbyIds, nextReport, pickDecision, resolveSince, rival, snapshotAway, upcoming } from './model';
+import { dayLabel, dealNews, happenings, loanPayment, monthLength, nearbyIds, nextReport, pickDecision, resolveSince, rival, snapshotAway, upcoming } from './model';
 
 const NOW = Date.UTC(2026, 10, 15, 9, 0);
 
@@ -78,7 +81,18 @@ describe('the one decision', () => {
     expect(d.kind).toBe('deal');
     expect(d.title).toContain('Ortiz Espresso Bar');
     expect(d.options[0].action).toEqual({ type: 'answer_deal', dealId: 'd-loan-3', accept: true });
-    expect(d.options[0].result).toMatch(/\+\$8,000 now/);
+    expect(d.options[0].result).toMatch(/\+\$8,000 now, then \$1,428 a month for 6 months \(2% a month, \$8,569 in all\)/);
+  });
+
+  it('loan payments are the engine annuity, not a flat split', () => {
+    expect(loanPayment(8_000, 2, 6)).toBe(1_428.21);
+    expect(loanPayment(6_000, 0, 3)).toBe(2_000);
+  });
+
+  it('game days read in the viewer language', () => {
+    expect(dayLabel(74)).toBe('Thu, Mar 14');
+    localStorage.setItem('fy-lang', 'ru');
+    expect(dayLabel(74)).toBe('чт, 14 марта');
   });
 
   it('otherwise the advice with the biggest effect, applied in one tap', () => {
@@ -86,6 +100,26 @@ describe('the one decision', () => {
     expect(d.kind).toBe('advice');
     expect(d.options[0].action?.type).toBe('set_orders');
     expect(d.options[0].result).toMatch(/Forecast: \+\$1,180 a month/);
+  });
+
+  it('"Apply" on a suggested deal says it only sends an offer that waits for an answer', () => {
+    const v = briefFixture('calm');
+    const rec = { id: 'r-jp', severity: 'warn' as const, title: 'Buy together with a neighbor', text: 'Joint purchase cuts ingredient costs.', suggested: { type: 'propose_deal' as const, toBusinessId: 'b03', terms: { type: 'joint_purchase' as const, months: 3 } }, impact: { profitDeltaMonth: 410 } };
+    const d = pickDecision({ ...v, recommendations: [rec] })!;
+    expect(d.options[0].result).toBe('Sends Ortiz Espresso Bar an offer: joint purchase for 3 months. They have 3 game days to answer; the answer shows up here. Forecast: +$410 a month.');
+  });
+
+  it('closed by inspection: what was found, with the reopening day', () => {
+    const d = pickDecision(briefFixture('closed'))!;
+    expect(d).toMatchObject({ kind: 'closed', deadlineDay: 77 });
+    expect(d.options[0].to).toBe('/biz/today');
+  });
+
+  it('bankrupt: see what went wrong first, start again second', () => {
+    const d = pickDecision(briefFixture('bankrupt'))!;
+    expect(d.kind).toBe('restart');
+    expect(d.options.map((o) => o.to)).toEqual(['/end', '/start']);
+    expect(d.text).toContain('−$2,496');
   });
 
   it('nothing urgent: a nudge to try a price in Manage', () => {
@@ -116,6 +150,35 @@ describe('what happened and what is ahead', () => {
     const h = happenings(v, resolveSince(v, {}), new Set(['b09']), 20).filter((x) => x.kind === 'neighbor');
     expect(h.map((x) => x.title.split(' ')[0])).toEqual(['Blade']);
     expect(h[0].text).toMatch(/Within a block of you/);
+  });
+
+  it('an offer that expired while I was away is shown as missed; an accepted offer of mine as good news', () => {
+    const v = briefFixture('away');
+    const since = resolveSince(v, {});
+    const deals = [
+      { id: 'x1', fromBusinessId: 'b03', toBusinessId: 'b01', terms: { type: 'joint_purchase' as const, months: 2 }, status: 'expired' as const, proposedDay: 69, expiresDay: 72 },
+      { id: 'x2', fromBusinessId: 'b01', toBusinessId: 'b04', terms: { type: 'cross_promo' as const, months: 1 }, status: 'active' as const, proposedDay: 70, expiresDay: 73, startDay: 71 },
+      { id: 'x3', fromBusinessId: 'b03', toBusinessId: 'b01', terms: { type: 'joint_purchase' as const, months: 2 }, status: 'expired' as const, proposedDay: 60, expiresDay: 63 },
+    ];
+    const news = dealNews({ ...v, deals }, since);
+    expect(news.map((n) => n.id)).toEqual(['missed:x1', 'yes:x2']);
+    expect(news[0].title).toBe('Missed: Ortiz Espresso Bar offered joint purchase for 2 months');
+    expect(news[1].title).toContain('Little Ember Café accepted');
+  });
+
+  it('a same-day letter counts while it is unread', () => {
+    const v = briefFixture('calm');
+    const look = { day: 74, cash: 1, rank: 2, months: 1 };
+    const letter = { id: 'l1', day: 74, kind: 'deal' as const, title: 'Late offer', text: '', read: false };
+    expect(happenings({ ...v, me: { ...v.me, inbox: [letter] } }, resolveSince(v, { look })).map((h) => h.title)).toEqual(['Late offer']);
+    expect(happenings({ ...v, me: { ...v.me, inbox: [{ ...letter, read: true }] } }, resolveSince(v, { look }))).toEqual([]);
+  });
+
+  it('the month length is said from the real day length, not assumed', () => {
+    const live = briefFixture('away');
+    expect(monthLength(live)).toBe('In this city a month passes in one real day.');
+    const demo = { ...live, world: { ...live.world, config: { ...live.world.config, dayMs: RULES.DAY_MS_DEMO } } };
+    expect(monthLength(demo)).toBe('In this demo city a month lasts 1 min.');
   });
 
   it('nearby = places closer than the radius to mine', () => {
@@ -180,6 +243,19 @@ describe('/brief on screen', () => {
     expect(screen.getByLabelText('Decision made').textContent).toContain('−$1,200 today');
   });
 
+  it('after a decision, the next thing that waits is one tap away', async () => {
+    const view = briefFixture('notice');
+    const navigate = vi.fn();
+    const act = async (): Promise<Ack> => ({ ok: true });
+    const { rerender } = render(<BriefScreen deps={{ view, memoryKey: 't:next', act, navigate, now: () => NOW }} />);
+    fireEvent.click(screen.getByRole('button', { name: /Pay \$1,200/ }));
+    await waitFor(() => expect(screen.getByLabelText('Decision made')).toBeTruthy());
+    // the store refreshes: the notice is answered, the advice is next
+    rerender(<BriefScreen deps={{ view: { ...view, notices: [] }, memoryKey: 't:next', act, navigate, now: () => NOW }} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Next: Add a barista on busy days' }));
+    expect(screen.getByRole('button', { name: 'Apply' })).toBeTruthy();
+  });
+
   it('a refused action keeps the choice open and says why', async () => {
     renderBrief('offer', { act: async () => ({ ok: false, error: 'The offer has expired' }) });
     fireEvent.click(screen.getByRole('button', { name: 'Accept' }));
@@ -206,5 +282,30 @@ describe('/brief on screen', () => {
     expect(screen.getByText('February report')).toBeTruthy();
     expect(screen.getByText('New')).toBeTruthy();
     expect(screen.getByText(/vs last month/)).toBeTruthy();
+  });
+});
+
+describe('BriefEntry — the door to /brief on other screens', () => {
+  it('keeps the away summary, so the brief has it after the poll erases it', () => {
+    const away = briefFixture('notice');
+    const store = createStaticStore(away);
+    const onOpen = vi.fn();
+    const { rerender } = render(<MemoryRouter><StoreProvider store={store}><BriefEntry view={away} onOpen={onOpen} /></StoreProvider></MemoryRouter>);
+    expect(readMemory('local:dev:u-maya').away?.cashThen).toBe(35_180);
+    const card = screen.getByLabelText('Your brief');
+    expect(card.textContent).toContain('6 days since your last look');
+    expect(card.textContent).toContain('Fine notice: $1,200');
+    expect(card.textContent).toContain('+$3,240');
+    fireEvent.click(screen.getByRole('button', { name: 'See what happened' }));
+    expect(onOpen).toHaveBeenCalled();
+    // the next poll: no away in the view, the door still knows the gap
+    rerender(<MemoryRouter><StoreProvider store={store}><BriefEntry view={{ ...away, away: null }} onOpen={onOpen} /></StoreProvider></MemoryRouter>);
+    expect(screen.getByLabelText('Your brief').textContent).toContain('6 days since your last look');
+  });
+
+  it('renders nothing without a business', () => {
+    const v = briefFixture('none');
+    const { container } = render(<MemoryRouter><StoreProvider store={createStaticStore(v)}><BriefEntry view={v} /></StoreProvider></MemoryRouter>);
+    expect(container.textContent).toBe('');
   });
 });
