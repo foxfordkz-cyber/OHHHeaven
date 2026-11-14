@@ -1,1 +1,4533 @@
-{"extra":{"eventCatalog":[],"mechanics":[]}}
+{
+ "id": "cafe_d15_calibration_premises",
+ "theme": "premises, build-out, entry and lease",
+ "referenceCafe": {
+  "rentMonthly": 6000,
+  "carryingCostPerDayPreOpening": 230,
+  "salesMonthly": 51000,
+  "grossMarginPerDayOpen": 1258,
+  "buildoutLight": 70000,
+  "note": "Mid-tier 800 sq ft cafe from packs/cafe.json and the D01 fragment; cashExampleUSD in each event is computed on it."
+ },
+ "extra": {
+  "eventCatalog": [
+   {
+    "id": "d00_premises_guaranty_scope",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "lease negotiation (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "exitLiability",
+      "set": "remaining_lease_rent",
+      "note": "full personal guaranty: the owner owes every month left on the lease"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "label": "Negotiate a good guy guaranty with a lawyer",
+      "cost": {
+       "usd": 9500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Liability ends 6 months after a clean surrender; one extra month of deposit ($6,000) is the landlord's price.",
+      "optionId": "good_guy",
+      "resultEffects": [
+       {
+        "field": "depositMonths",
+        "add": 1
+       },
+       {
+        "field": "exitLiability",
+        "set": "rent_until_surrender_plus_6_months"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "label": "Offer a 9-month deposit instead of any guaranty",
+      "cost": {
+       "usd": 36000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "$54,000 total deposit locked for the lease; liability limited to the deposit.",
+      "optionId": "no_guaranty_big_deposit",
+      "resultEffects": [
+       {
+        "field": "depositMonths",
+        "add": 6
+       },
+       {
+        "field": "exitLiability",
+        "set": "deposit_only"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "label": "Sign the full guaranty",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No cash now; a closure in month 24 of a 10-year lease leaves up to 96 x $6,000 = $576,000 personally owed until the landlord re-lets.",
+      "optionId": "full_personal"
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "confidence": "estimate",
+    "note": "Structure from the SBS Commercial Lease Guide and broker explanations of the good guy guaranty (liability ends at surrender, earlier debts stay). The deposit trade (3 months with a full guaranty, 4 with good guy, 9 without any) is the D01 lever. Exposure example is arithmetic on the reference rent.",
+    "cashExampleUSD": -576000,
+    "supportingSources": [
+     "https://www.metro-manhattan.com/blog/what-is-the-good-guy-guarantee-in-new-york-city-commercial-real-estate/"
+    ],
+    "tier": "core",
+    "name": "Guaranty reaches the owner"
+   },
+   {
+    "id": "d00_premises_surrender_clawback",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "early surrender (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -38000,
+      "note": "3 free months ($18,000) + the unamortized landlord allowance ($20,000 example) fall due on an early surrender"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "roadmap",
+      "id": "negotiate_exit_terms",
+      "label": "Negotiate a written release that waives the concessions",
+      "cost": {
+       "usd": 14500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Pay two months as a surrender fee ($12,000) plus counsel; clawback waived.",
+      "resultEffects": [
+       {
+        "field": "cash",
+        "add": -14500
+       }
+      ]
+     },
+     {
+      "kind": "choice",
+      "id": "budget_clawback",
+      "label": "Budget the contractual clawback and leave",
+      "cost": {
+       "usd": 38000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Leave on schedule; the $38,000 is paid from the sale or personally under a full guaranty."
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "confidence": "estimate",
+    "note": "Free-rent and allowance clawbacks on default or early surrender are standard lease drafting (SBS guide; Bisnow on security deposits and guaranties). Amounts: three free months at $6,000 (D01 free_rent_deal) and the D01 example allowance of $20,000. The two-month surrender fee is my estimate.",
+    "cashExampleUSD": -38000,
+    "supportingSources": [
+     "https://www.bisnow.com/new-york/news/other/key-considerations-for-determining-the-appropriate-security-deposit-and-good-guy-guarantee-77148"
+    ],
+    "tier": "core",
+    "name": "Exit clauses claw back concessions"
+   },
+   {
+    "id": "d00_premises_landlord_access",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "landlord conduct (announced one month ahead as escalating notices)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 14
+     },
+     {
+      "field": "cash",
+      "add": -5000,
+      "note": "emergency counsel"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "emergency_counsel",
+      "label": "Document everything and go to court with counsel",
+      "cost": {
+       "usd": 7500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Access restored in about 5 days instead of 14; the landlord faces a harassment penalty and the tenant may sue for damages.",
+      "resultEffects": [
+       {
+        "field": "closureDays",
+        "add": 5
+       }
+      ]
+     },
+     {
+      "kind": "choice",
+      "id": "negotiated_exit",
+      "label": "Negotiate an exit with counsel",
+      "cost": {
+       "usd": 3000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Business ends; deposit returned only if arrears are zero; build-out lost (book value of the $70,000 build-out)."
+     }
+    ],
+    "source": "https://intro.nyc/local-laws/2019-185",
+    "confidence": "estimate",
+    "note": "NYC commercial tenant harassment law (Admin Code 22-901 et seq.): preventing the tenant from entering is a listed act; civil penalties of $1,000-$10,000 in the 2016 law and up to $50,000 per property in later amendments (sources conflict); rent stays owed. 14 days closed and the legal costs are my estimates; daily cost while closed = $1,258 of lost margin + $200 rent.",
+    "cashExampleUSD": -25412,
+    "supportingSources": [
+     "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-42543",
+     "https://www.nycbar.org/get-legal-help/article/landlord-tenant/commercial-tenant-harassment-lawyer/"
+    ],
+    "tier": "core",
+    "name": "Landlord blocks access to the leased shop"
+   },
+   {
+    "id": "d00_premises_landlord_permit",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "build-out phase (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "lawyer_letter",
+      "label": "Lawyer's letter citing the lease's cooperation clause",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Delay cut to 14 days.",
+      "resultEffects": [
+       {
+        "field": "openingDelayDays",
+        "add": 14
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "label": "Signed with a permit-cooperation clause and rent starting at permit",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 120,
+       "days": 0
+      },
+      "result": "Rent does not run during the delay (rent x1.02 for the whole lease is the price).",
+      "optionId": "delivery_and_permit_clause"
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-42543",
+    "confidence": "estimate",
+    "note": "DOB filings need the owner's authorization; a refusal stalls the job. 30 days = one month of carrying cost at $230 a day = $6,900. Clause pricing from the D01 lever (starts_with_permits: rent x1.02).",
+    "cashExampleUSD": -6900,
+    "tier": "core",
+    "name": "Landlord refuses cooperation on permitted work"
+   },
+   {
+    "id": "d00_premises_lease_court",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "failed negotiation (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -10000,
+      "note": "litigation retainer"
+     },
+     {
+      "field": "quality",
+      "add": -0.01,
+      "note": "owner time diverted"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "litigation_counsel",
+      "label": "Hire litigation counsel and preserve records",
+      "cost": {
+       "usd": 10000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Case proceeds; outcome per the dispute (no dice): the player keeps the lease if rent is current."
+     },
+     {
+      "kind": "choice",
+      "id": "advisory_settlement",
+      "label": "Settle with free SBS lease help",
+      "cost": {
+       "usd": 6000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No legal bill, but the settlement concedes about one month of rent ($6,000) or an earlier exit date."
+     }
+    ],
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01277",
+    "confidence": "estimate",
+    "note": "NYC SBS offers free commercial lease assistance (advice and negotiation), not litigation representation (311). The $10,000 retainer is my estimate for NYC commercial litigation.",
+    "cashExampleUSD": -10000,
+    "tier": "core",
+    "name": "A lease dispute moves beyond advisory help"
+   },
+   {
+    "id": "d00_premises_lease_rent_start",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "rent commencement date passes before opening (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.0,
+      "note": "full rent with zero revenue from rent commencement to opening"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "free_rent_deal",
+      "label": "Free rent that starts when the building permit is issued",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 120,
+       "days": 0
+      },
+      "result": "Rent clock waits for the permit (rent x1.02 for the lease).",
+      "optionId": "starts_with_permits"
+     },
+     {
+      "kind": "lever",
+      "id": "construction_pace",
+      "label": "Pay for after-hours work",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 5740,
+       "days": 0
+      },
+      "result": "Build-out days x0.75.",
+      "optionId": "after_hours"
+     },
+     {
+      "kind": "choice",
+      "id": "negotiate_extension",
+      "label": "Ask the landlord for one more free month",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 60,
+       "days": 0
+      },
+      "result": "One month free in exchange for +1% rent for the term (my estimate)."
+     }
+    ],
+    "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+    "confidence": "estimate",
+    "note": "Same mechanism as D01 free_rent_runs_out: light renovation 123 days vs 90 free days = 33 paid days ($6,600); standard 160 days = $14,000; heavy 280 days = $38,000 (D01 timeline).",
+    "cashExampleUSD": -6600,
+    "supportingSources": [
+     "https://www.nycourts.gov/REPORTER/3dseries/2018/2018_07925.htm"
+    ],
+    "tier": "core",
+    "name": "Rent starts while the fit-out is unfinished"
+   },
+   {
+    "id": "d00_premises_lease_hours",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "player cuts hours below the lease (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1500,
+      "note": "default notice and lawyer if hours are cut below the covenant"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "staff_required_hours",
+      "label": "Staff the hours the lease requires",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 1260,
+       "days": 0
+      },
+      "result": "Two extra hours a day x 30 days x $21 = $1,260 a month of wages; no default."
+     },
+     {
+      "kind": "choice",
+      "id": "consent_to_hours",
+      "label": "Negotiate written consent to shorter hours",
+      "cost": {
+       "usd": 1000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Landlord asks a small fee or rent step; my estimate $1,000 one-time."
+     }
+    ],
+    "source": "https://www.nycourts.gov/REPORTER/3dseries/2018/2018_07925.htm",
+    "confidence": "estimate",
+    "note": "Continuous-operation covenants are enforceable lease defaults. Wage math uses the pack's $21 barista rate.",
+    "cashExampleUSD": -1500,
+    "tier": "deep",
+    "name": "Shorter trading hours conflict with the lease"
+   },
+   {
+    "id": "d00_premises_short_tenure_capex",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "player plans expansion with under 36 months of tenure (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "writeOffRisk",
+      "formula": "capex x (1 - months left / 60)",
+      "note": "example: $30,000 expansion with 18 months left = $21,000 lost if not renewed"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "secure_renewal_first",
+      "label": "Buy a 5-year renewal option before investing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 180,
+       "days": 0
+      },
+      "result": "Option at a fixed 3% step: rent +3% now ($180 a month)."
+     },
+     {
+      "kind": "choice",
+      "id": "portable_investment",
+      "label": "Spend on movable equipment instead",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Equipment keeps resale value (about 30% of new); fixed improvements stay with the landlord."
+     }
+    ],
+    "source": "https://community.squareup.com/t5/Community-News/Let-s-Talk-Business-Losing-Your-Location-with-Ryan-Wanner/ba-p/719865",
+    "confidence": "estimate",
+    "note": "Arithmetic example; the 3% option premium and 30% resale are my estimates.",
+    "cashExampleUSD": -21000,
+    "tier": "deep",
+    "name": "Expansion investment lacks secure tenure"
+   },
+   {
+    "id": "d00_premises_landlord_utility_exit",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "announced building service interruption (one month ahead)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 3
+     },
+     {
+      "field": "reputation",
+      "add": -0.01
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "repairs_and_abatement",
+      "label": "Negotiate documented repairs and a rent abatement",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Lawyer letter; abatement of 10% of rent for affected months ($600) offsets part of the loss.",
+      "resultEffects": [
+       {
+        "field": "rent",
+        "mult": 0.9
+       }
+      ]
+     },
+     {
+      "kind": "choice",
+      "id": "prepare_relocation",
+      "label": "Prepare to relocate",
+      "cost": {
+       "usd": 5000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Broker and design fees to scout a new site."
+     }
+    ],
+    "source": "https://community.squareup.com/t5/Community-News/Let-s-Talk-Business-Losing-Your-Location-with-Ryan-Wanner/ba-p/719865",
+    "confidence": "estimate",
+    "note": "3 closed days a month for two months = 6 x ($1,258 + $200) = $8,748. Abatement size my estimate.",
+    "cashExampleUSD": -8748,
+    "tier": "deep",
+    "name": "Repeated property dependencies change the stay-or-leave decision"
+   },
+   {
+    "id": "d00_closures_nyc_event_repair_dispute_surrender",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "documented repair dispute (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "repair_settlement",
+      "label": "Settle for repairs and stay",
+      "cost": {
+       "usd": 3000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Closed 30 days while the landlord repairs; rent abated during closure by agreement.",
+      "resultEffects": [
+       {
+        "field": "rent",
+        "mult": 0.0,
+        "durationMonths": 1
+       }
+      ]
+     },
+     {
+      "kind": "choice",
+      "id": "surrender_and_move",
+      "label": "Surrender for a payment and move",
+      "cost": {
+       "usd": -15000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Landlord pays about $15,000 for early possession (my estimate); build-out is lost and a new site must be built."
+     }
+    ],
+    "source": "https://www.westsiderag.com/2025/10/06/coffee-shop-set-to-replace-iconic-uws-cafe-lalo",
+    "confidence": "estimate",
+    "note": "Case evidence (Cafe Lalo); amounts are my estimates. 30 closed days = $37,740 of lost margin.",
+    "cashExampleUSD": -37740,
+    "tier": "deep",
+    "name": "Repair dispute reaches lease surrender"
+   },
+   {
+    "id": "d00_closures_nyc_event_renewal_fight",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "written refusal 6 months before expiry (announced)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "leaseEndsInMonths",
+      "set": 6
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "relocate",
+      "label": "Relocate before the end",
+      "cost": {
+       "usd": 88000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "A new light build-out ($70,000) plus a 3-month deposit; awareness x0.7 at the new address.",
+      "resultEffects": [
+       {
+        "field": "awareness",
+        "mult": 0.7
+       }
+      ]
+     },
+     {
+      "kind": "choice",
+      "id": "schedule_closure",
+      "label": "Close on schedule",
+      "cost": {
+       "usd": 5000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Removal and final costs; deposit returned under a clean surrender."
+     }
+    ],
+    "source": "https://www.timeout.com/newyork/news/beloved-silver-moon-bakery-is-permanently-closing-at-the-end-of-the-month-031125",
+    "confidence": "estimate",
+    "note": "Refusal to renew is not harassment (Admin Code 22-902). Relocation costs from the cafe pack (light build-out, 3-month deposit).",
+    "cashExampleUSD": -88000,
+    "tier": "deep",
+    "name": "Owner declines a renewal dispute"
+   },
+   {
+    "id": "d00_closures_nyc_event_arrears_catchup",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "arrears above 2 months of rent (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1500,
+      "note": "monthly catch-up on $18,000 of arrears over 12 months"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "funded_plan",
+      "label": "Negotiate a funded 12-month repayment",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 1500,
+       "days": 0
+      },
+      "result": "Lease kept if every installment is paid."
+     },
+     {
+      "kind": "choice",
+      "id": "orderly_surrender",
+      "label": "Surrender with legal advice",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Arrears may be netted against the deposit; good guy liability ends at surrender."
+     }
+    ],
+    "source": "https://ny.eater.com/2023/3/20/23648664/neils-coffee-shop-closes-nyc-diner",
+    "confidence": "estimate",
+    "note": "$18,000 = three months of reference rent; plan length my estimate.",
+    "cashExampleUSD": -18000,
+    "tier": "deep",
+    "name": "Old arrears outlast current trading"
+   },
+   {
+    "id": "d00_closures_nyc_event_pass_through_jump",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "renewal offer (announced 6 months ahead)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.08,
+      "note": "renewal resets the tax base year and adds a step"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "negotiate_total_cost",
+      "label": "Negotiate total occupancy cost and a cap on tax pass-throughs",
+      "cost": {
+       "usd": 3500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Increase limited to +4%."
+     },
+     {
+      "kind": "choice",
+      "id": "move_before_renewal",
+      "label": "Move before committing",
+      "cost": {
+       "usd": 70000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "New build-out and awareness reset."
+     }
+    ],
+    "source": "https://www.thelodownny.com/leslog/2017/07/cup-saucer-classic-lower-east-side-diner-is-closing-next-week.html",
+    "confidence": "estimate",
+    "note": "8% = 3% step + 5% from re-basing a tax share that grows about 4.7% a year (Class 4 billable value growth projected for FY2027) on an $18 per sq ft tax: my estimate.",
+    "cashExampleUSD": -5760.0,
+    "supportingSources": [
+     "https://www.rosenbergestis.com/media/blog/nyc-property-tax/new-york-city-property-tax-levy-and-provisional-rates-for-fiscal-year-2027-final-rates-could-still-change"
+    ],
+    "tier": "deep",
+    "name": "Renewal includes a tax pass-through increase"
+   },
+   {
+    "id": "d00_closures_nyc_event_owner_landlord_exit",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "owner's announced exit",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "leaseEndsInMonths",
+      "set": 6
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "lease_from_owner",
+      "label": "Offer to lease the space from the retiring owner",
+      "cost": {
+       "usd": 18000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "New lease at market rent with a 3-month deposit."
+     },
+     {
+      "kind": "choice",
+      "id": "leave",
+      "label": "Let the owner re-let to someone else",
+      "cost": {
+       "usd": 5000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Removal costs; the business ends at this address."
+     }
+    ],
+    "source": "https://ny.eater.com/2017/10/17/16483070/cafe-orlin-closed-nyc",
+    "confidence": "estimate",
+    "note": "Case evidence; amounts are pack figures.",
+    "cashExampleUSD": -18000,
+    "tier": "deep",
+    "name": "Owner-landlord wants to stop operating"
+   },
+   {
+    "id": "d00_closures_nyc_event_menu_revenue_ceiling",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "rent above 15% of sales for 3 months (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "rentToSalesCheck",
+      "threshold": 0.15,
+      "note": "fires when rent exceeds 15% of sales for 3 months"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "redesign_menu",
+      "label": "Redesign the permitted menu (food, evening service)",
+      "cost": {
+       "usd": 17190,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Ventless oven for hot food (D13 price): ticket +$1.50, demand +6%.",
+      "resultEffects": [
+       {
+        "field": "demand",
+        "mult": 1.06
+       }
+      ]
+     },
+     {
+      "kind": "choice",
+      "id": "move_to_cheaper_premises",
+      "label": "Move to premises that fit the offer",
+      "cost": {
+       "usd": 70000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Rent falls to the cheaper tier ($3,000 a month at $45 per sq ft)."
+     }
+    ],
+    "source": "https://evgrieve.com/2017/02/ost-cafe-closes-on-sunday.html",
+    "confidence": "estimate",
+    "note": "Reference shop: $6,000 / $51,000 = 11.8% of sales; at the prime tier ($21,733 a month) the same sales give 43%. 15% is my threshold (the pack's rentPct benchmark is 8%).",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "Permitted offer cannot carry the rent"
+   },
+   {
+    "id": "d00_closures_nyc_event_relocation_repeats",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "lease exit (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "awareness",
+      "mult": 0.7
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 90
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "smaller_address",
+      "label": "Take a smaller address and tell the regulars",
+      "cost": {
+       "usd": 45000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Takeaway-window build-out (D13 kiosk_buildout $45,000); awareness x0.8 instead of x0.7.",
+      "resultEffects": [
+       {
+        "field": "awareness",
+        "mult": 0.8
+       }
+      ]
+     },
+     {
+      "kind": "choice",
+      "id": "wind_down",
+      "label": "Stop relocating and wind down",
+      "cost": {
+       "usd": 5000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Final costs only."
+     }
+    ],
+    "source": "https://www.ilovetheupperwestside.com/a-beloved-upper-west-side-cafe-is-closing-after-nearly-four-decades/",
+    "confidence": "estimate",
+    "note": "90 days without sales = 90 x $230 carrying cost = $20,700 plus the new build-out.",
+    "cashExampleUSD": -90700,
+    "tier": "deep",
+    "name": "A relocated cafe faces another lease exit"
+   },
+   {
+    "id": "d00_closures_nyc_event_insurer_rent_timing",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "open insurance claim during closure (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cashFrozenDays",
+      "add": 90,
+      "note": "business-interruption payout arrives after rent is due"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "interim_rent_plan",
+      "label": "Negotiate a written interim rent arrangement",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Rent deferred until the claim pays; deferred rent due within 6 months."
+     },
+     {
+      "kind": "choice",
+      "id": "bridge_loan",
+      "label": "Bridge with a short loan",
+      "cost": {
+       "usd": 1080,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "$18,000 for 3 months at 24% a year = $1,080 interest (my estimate)."
+     }
+    ],
+    "source": "https://tollbit.gothamist.com/2017/05/24/kushner_evict_pudge_knuckles.php",
+    "confidence": "estimate",
+    "note": "Three months of rent ($18,000) at risk while the claim is open; durations my estimates.",
+    "cashExampleUSD": -18000,
+    "tier": "deep",
+    "name": "Insurer timing collides with rent enforcement"
+   },
+   {
+    "id": "d00_closures_nyc_event_bare_handover",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "surrender terms (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -5000,
+      "note": "removal and disposal to deliver an empty room"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "sell_and_remove",
+      "label": "Sell equipment and furniture before the deadline",
+      "cost": {
+       "usd": -6000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Used equipment sells for about 25% of the $25,000 new value; removal is netted out."
+     },
+     {
+      "kind": "choice",
+      "id": "leave_fixtures",
+      "label": "Negotiate leaving fixtures in place",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Landlord keeps the counter and hood as fixtures; deposit returned if accepted in writing."
+     }
+    ],
+    "source": "https://westviewnews.org/2019/02/04/villagers-speak-as-cornelia-street-cafe-curtain-comes-down/gcapsis/",
+    "confidence": "estimate",
+    "note": "Removal cost and 25% resale are my estimates; equipment value from the pack (~$25,000).",
+    "cashExampleUSD": -5000,
+    "tier": "deep",
+    "name": "The lease exit requires an empty room"
+   },
+   {
+    "id": "d00_closures_nyc_event_espresso_exclusivity",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "lease due diligence (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.8,
+      "note": "drip and tea only: espresso drinks barred by a neighbor's exclusive"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "negotiate_carve_out",
+      "label": "Negotiate a carve-out with the landlord and the neighbor",
+      "cost": {
+       "usd": 3500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Espresso allowed; often limited to a share of sales."
+     },
+     {
+      "kind": "choice",
+      "id": "choose_other_premises",
+      "label": "Choose another space",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "30 more days of search before signing."
+     }
+    ],
+    "source": "https://www.dnainfo.com/new-york/20171027/forest-hills/paris-baguette-radioshack-starbucks-107-06-continental-ave-forest-hills/",
+    "confidence": "estimate",
+    "note": "0.8 = demand left when espresso drinks (most of a cafe's menu) go; my estimate at the floor of the allowed range.",
+    "cashExampleUSD": -7548.0,
+    "tier": "deep",
+    "name": "Neighbor’s lease excludes espresso sales"
+   },
+   {
+    "id": "d00_world_event_landlord_authority_unclear",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "lease negotiation (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "leaseSigningDelayDays",
+      "add": 21
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "verify_authority",
+      "label": "Verify ownership and signatory through counsel",
+      "cost": {
+       "usd": 1000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Title and LLC records checked; signing proceeds in 7 days.",
+      "resultEffects": [
+       {
+        "field": "leaseSigningDelayDays",
+        "add": 7
+       }
+      ]
+     },
+     {
+      "kind": "choice",
+      "id": "keep_alternatives",
+      "label": "Keep a second space under review",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Broker time; no exclusivity lost."
+     }
+    ],
+    "source": "https://www.reddit.com/r/smallbusinessuk/comments/1t5hz8l/looking_for_advice_regarding_a_potential_space/",
+    "confidence": "estimate",
+    "note": "Durations and fees are my estimates.",
+    "cashExampleUSD": -1000,
+    "tier": "deep",
+    "name": "An undisclosed partner delays the lease decision"
+   },
+   {
+    "id": "d00_world_event_split_premises_dependency",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "kitchen unit lease ends (announced)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.9,
+      "note": "menu reduced while production moves"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "rent_shared_kitchen",
+      "label": "Move production to a shared kitchen",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 3700,
+       "days": 0
+      },
+      "result": "A Brooklyn shared prep kitchen listed at $3,700 a month (D13 source); menu restored."
+     },
+     {
+      "kind": "choice",
+      "id": "reduce_menu",
+      "label": "Sell only what the front unit can make",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Demand x0.9 stays."
+     }
+    ],
+    "source": "https://www.channelnewsasia.com/singapore/some-retailers-cut-losses-or-shut-stores-rental-rates-rebound-even-higher-pre-covid-5617966",
+    "confidence": "estimate",
+    "note": "Shared kitchen price from The Kitchen Door listing (D13).",
+    "cashExampleUSD": -3700,
+    "supportingSources": [
+     "https://www.thekitchendoor.com/kitchen-rental/brooklyn-commerical-prep-kitchen"
+    ],
+    "tier": "deep",
+    "name": "One essential unit loses its lease"
+   },
+   {
+    "id": "d00_world_event_outside_seating_withdrawn",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "landlord withdraws permission (announced)",
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "durationMonths": 7,
+    "effects": [
+     {
+      "field": "seats",
+      "add": -10
+     },
+     {
+      "field": "demand",
+      "mult": 0.97
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "recost_indoor",
+      "label": "Re-cost the menu for indoor capacity",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Prices +3% to hold margin; demand x0.97 by elasticity."
+     },
+     {
+      "kind": "lever",
+      "id": "outdoor_seating",
+      "label": "Apply for a city sidewalk cafe instead",
+      "cost": {
+       "usd": 2550,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Dining Out NYC license fee (cafe pack); 240-day wait.",
+      "optionId": "sidewalk_cafe"
+     }
+    ],
+    "source": "https://www.8days.sg/eatanddrink/newsandreviews/mentai-ya-founder-opens-coffee-chirashi-cafe-grab-driver-632991",
+    "confidence": "estimate",
+    "note": "Ten seats = the D02 sidewalk example; 3% = the sidewalk season lift in D02 reversed.",
+    "cashExampleUSD": -10710.0,
+    "tier": "deep",
+    "name": "Essential outdoor seats are withdrawn"
+   },
+   {
+    "id": "d00_labor_finance_crt_review",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "lease in the CRT zone at $250,000+ a year (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "taxFiling",
+      "set": "CRT returns",
+      "note": "Manhattan south of 96th St and annual base rent of $250,000 or more"
+     },
+     {
+      "field": "cash",
+      "add": -500,
+      "note": "accountant time a year"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "claim_small_business_credit",
+      "label": "Review base rent and claim the small business credit",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Full credit when total income is under $5 million and base rent under $500,000 (phase-out to $550,000): tax due $0; returns still filed."
+     },
+     {
+      "kind": "choice",
+      "id": "eligible_alternative_site",
+      "label": "Compare a site north of 96th St or outside Manhattan",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No CRT at all."
+     }
+    ],
+    "source": "https://nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page",
+    "confidence": "verified",
+    "note": "DOF: CRT applies to tenants in Manhattan south of 96th Street with annual or annualized gross rent of $250,000 or more; effective rate 3.9% after the 35% base-rent reduction; CR-A 2025-26 instructions describe the small business credit for base rents under $500,000 with a phase-out to $550,000. Prime-tier example: $326 x 800 sq ft = $260,800 a year: filing required; at 3.9% before credit = $10,171 a year. Mid tier ($72,000) is below the threshold. Seen in search excerpts of the DOF pages.",
+    "cashExampleUSD": -500,
+    "supportingSources": [
+     "https://www.nyc.gov/assets/finance/downloads/pdf/commercial_rent/cr-a-instructions-2025-26.pdf"
+    ],
+    "tier": "core",
+    "name": "A rent change requires CRT eligibility review"
+   },
+   {
+    "id": "free_rent_runs_out",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "free period ends before opening (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.0,
+      "note": "full rent due with zero revenue"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "free_rent_deal",
+      "label": "Six free months for a higher rent",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 240,
+       "days": 0
+      },
+      "result": "Rent x1.04; light renovation opens inside the free period.",
+      "optionId": "six_months_higher_rent"
+     },
+     {
+      "kind": "lever",
+      "id": "free_rent_deal",
+      "label": "Free rent starts at permit",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 120,
+       "days": 0
+      },
+      "result": "Rent x1.02; permit delays stop costing rent.",
+      "optionId": "starts_with_permits"
+     },
+     {
+      "kind": "lever",
+      "id": "construction_pace",
+      "label": "After-hours construction",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 5740,
+       "days": 0
+      },
+      "result": "Build-out days x0.75.",
+      "optionId": "after_hours"
+     }
+    ],
+    "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+    "confidence": "estimate",
+    "note": "Kept. D01 timeline: light 123 days vs 90 free = $6,600; standard 160 days = $14,000; heavy 280 days = $38,000 of rent before the first sale. Office free-rent norms (10-12 months per lease in 2026) do not apply to retail; no retail statistic found.",
+    "cashExampleUSD": -6600,
+    "supportingSources": [
+     "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail"
+    ],
+    "tier": "core",
+    "name": "The free rent ends before you open"
+   },
+   {
+    "id": "landlord_late_delivery",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "landlord work unfinished at lease start (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 60
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "label": "Delivery-and-permit clause",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Rent does not run until delivery; signing takes 10 days longer.",
+      "optionId": "delivery_and_permit_clause"
+     },
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Survey first",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Architect walk-through and asbestos survey reveal hidden landlord work before signing (my estimate of $2,500).",
+      "optionId": "survey_first"
+     }
+    ],
+    "source": "https://itkowitz.com/?p=4676",
+    "confidence": "estimate",
+    "note": "Kept. 60 days with a plain lease = 60 x $230 = $13,800 of carrying cost.",
+    "cashExampleUSD": -13800,
+    "tier": "core",
+    "name": "The landlord hands over the space late"
+   },
+   {
+    "id": "first_timer_turned_away",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "first-time tenant on a prime block (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "depositMonths",
+      "add": 3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "label": "Sign a full personal guaranty",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Deposit back to 3 months; personal exposure to the remaining lease.",
+      "optionId": "full_personal"
+     },
+     {
+      "kind": "lever",
+      "id": "entry_mode",
+      "label": "Buy an operating shop with an assignable lease",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Takeover path; landlord consent price applies (assignment_consent_price).",
+      "optionId": "buy_operating_shop"
+     }
+    ],
+    "source": "https://www.entrepreneur.com/growth-strategies/no-one-would-rent-me-a-cafe-in-trendy-nyc-neighborhoods/438828",
+    "confidence": "estimate",
+    "note": "Kept. +3 months = $18,000 more cash locked. SBS-guide practitioners: 1-3 months typical for established tenants.",
+    "cashExampleUSD": -18000,
+    "supportingSources": [
+     "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    ],
+    "tier": "core",
+    "name": "Landlords will not rent to a first-timer"
+   },
+   {
+    "id": "letter_of_credit_wait",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "landlord asks for a letter of credit (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "leaseSigningDelayDays",
+      "add": 18
+     },
+     {
+      "field": "monthlyFees",
+      "add": 23
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "label": "Pay the deposit in cash instead",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No bank fee, no 18 days; the landlord holds the cash.",
+      "optionId": "full_personal"
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/security-deposit/",
+    "confidence": "estimate",
+    "note": "Kept: 1.5% a year on $18,000 = $23 a month.",
+    "cashExampleUSD": -276,
+    "tier": "deep",
+    "name": "The bank needs three weeks for the letter of credit"
+   },
+   {
+    "id": "vacancy_leverage",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "district vacancy above the city average (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "freeRentMonths",
+      "add": 1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "free_rent_deal",
+      "label": "Ask for the extra month",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "$6,000 saved; the price is the address: blocks with many empty stores carry about 3% less foot traffic (D06 empty_storefronts_spread).",
+      "optionId": "three_months"
+     }
+    ],
+    "source": "https://comptroller.nyc.gov/reports/whos-minding-the-storefronts/",
+    "confidence": "estimate",
+    "note": "Kept. SBS testimony: citywide storefront vacancy 11.4% in March 2025.",
+    "cashExampleUSD": 6000,
+    "tier": "deep",
+    "name": "Empty storefronts give tenants leverage"
+   },
+   {
+    "id": "tax_escalation_bill",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "landlord's tax bills (calendar)",
+    "months": [
+     7,
+     1
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "add": 60
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "label": "Cap tax pass-throughs at signing",
+      "cost": {
+       "usd": 3500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Escalation capped at 3% a year of the base-year tax."
+     },
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Ask for the base year before signing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "A recent base year keeps year-one escalation near $0."
+     }
+    ],
+    "source": "https://www.carltonfields.com/leasing-retail-stores-in-new-york-city/",
+    "confidence": "estimate",
+    "note": "Kept and re-sourced: Class 4 FY2027 provisional rate 10.658% (FY2026 10.848%) while Class 4 billable value is projected to grow 4.7%: 800 sq ft x $18 tax x 4.7% = $677 a year = $56 a month. Bills fall on July 1 and January 1 for buildings assessed over $250,000.",
+    "cashExampleUSD": -720,
+    "supportingSources": [
+     "https://www.rosenbergestis.com/media/blog/nyc-property-tax/new-york-city-property-tax-levy-and-provisional-rates-for-fiscal-year-2027-final-rates-could-still-change",
+     "https://portal.311.nyc.gov/article/?kanumber=KA-01252"
+    ],
+    "tier": "deep",
+    "name": "The property-tax escalation bill arrives"
+   },
+   {
+    "id": "annual_rent_step",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "lease anniversary (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "free_rent_deal",
+      "label": "Trade a higher step for more free months at signing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "The step itself is fixed in the lease; the only move is at signing.",
+      "optionId": "six_months_higher_rent"
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/blog/rentescalations",
+    "confidence": "estimate",
+    "note": "Kept: fires in lease month 13, 25, ... ($6,000 -> $6,180). Brokers quote 3% fixed steps; no survey found.",
+    "cashExampleUSD": -2160,
+    "tier": "core",
+    "name": "Rent goes up 3%"
+   },
+   {
+    "id": "assignment_consent_price",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "takeover needs landlord consent (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.1
+     },
+     {
+      "field": "depositMonths",
+      "add": 2
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "Full review before the offer",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Consent terms known before the price is agreed; price reduced by the extra rent over the remaining term (my rule).",
+      "optionId": "full_review"
+     },
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "label": "Offer a good guy guaranty to ease consent",
+      "cost": {
+       "usd": 6000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "One extra deposit month instead of two.",
+      "optionId": "good_guy"
+     }
+    ],
+    "source": "https://itkowitz.com/?p=505",
+    "confidence": "estimate",
+    "note": "Kept: +10% rent = $600 a month; +2 months deposit = $12,000.",
+    "cashExampleUSD": -19200,
+    "supportingSources": [
+     "https://www.metro-manhattan.com/subleasing-assignment/"
+    ],
+    "tier": "core",
+    "name": "The landlord names a price for consent"
+   },
+   {
+    "id": "short_lease_left",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "bought lease has under 3 years left (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.25,
+      "note": "at renewal"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "Negotiate a lease extension as a closing condition",
+      "cost": {
+       "usd": 3500,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "New 10-year term at +10% instead of +25% at renewal.",
+      "optionId": "full_review"
+     }
+    ],
+    "source": "https://www.bizbuysell.com/new-york/coffee-shops-and-cafes-for-sale/",
+    "confidence": "estimate",
+    "note": "Kept: +25% = $1,500 a month after renewal; holdover would cost 150-200%.",
+    "cashExampleUSD": -18000,
+    "tier": "deep",
+    "name": "Three years left on the lease you bought"
+   },
+   {
+    "id": "allowance_paid_after_the_work",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "build-out with landlord allowance (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -20000,
+      "note": "bridged until completion, then returned"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "free_rent_deal",
+      "label": "Take extra free rent instead of an allowance",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "$20,000 of allowance swapped for 3 free months ($18,000) that need no bridging."
+     },
+     {
+      "kind": "choice",
+      "id": "bridge_finance",
+      "label": "Bridge with a short loan",
+      "cost": {
+       "usd": 600,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "$20,000 x 12% a year x 3 months = $600."
+     }
+    ],
+    "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+    "confidence": "estimate",
+    "note": "Kept. Allowances are typically paid as reimbursement after completion (lease glossaries); a lien on the job blocks payout.",
+    "cashExampleUSD": -600,
+    "tier": "deep",
+    "name": "The landlord's contribution arrives after you have paid"
+   },
+   {
+    "id": "free_rent_ends",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "freeUntilDay (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.0,
+      "note": "rent switches on at freeUntilDay; inbox notice 7 days before"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_option",
+      "label": "Long free period at signing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 240,
+       "days": 0
+      },
+      "result": "Six free months for rent x1.04 (same as D01 six_months_higher_rent).",
+      "optionId": "long_free"
+     },
+     {
+      "kind": "lever",
+      "id": "rush_build",
+      "label": "Rush the build-out",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 5740,
+       "days": 0
+      },
+      "result": "Build-out days x0.75 (D01 after_hours price)."
+     }
+    ],
+    "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+    "confidence": "estimate",
+    "note": "Calibrated to the D01 numbers so the two fragments agree; cash effect = $6,000 a month from the switch-on day.",
+    "cashExampleUSD": -6000,
+    "tier": "core",
+    "name": "Free rent ends"
+   },
+   {
+    "id": "lease_renewal_offer",
+    "sourceFragment": "D10-deaths-nonobvious-year",
+    "calibrationStatus": "revised",
+    "trigger": "lease end (announced 6 months ahead)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.3,
+      "note": "central case; 'hot block' variant x2 from reported 2x-3x offers"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_terms",
+      "label": "Lease signed with a renewal option at a fixed step",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 180,
+       "days": 0
+      },
+      "result": "Renewal at +3% instead of +30% (option premium: rent +3% from signing, my estimate).",
+      "optionId": "option"
+     },
+     {
+      "kind": "mechanic",
+      "id": "relocate_or_close",
+      "label": "Relocate",
+      "cost": {
+       "usd": 88000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "New light build-out and deposit; awareness x0.7."
+     }
+    ],
+    "source": "https://greenpointers.com/2025/08/21/greenpoint-coffee-shop-sippy-cafe-will-close-this-october/",
+    "confidence": "estimate",
+    "note": "Revised from x2 to x1.3 central: x2 is the low end of the reported 2x-3x offers for single named cafes, not a typical value; no statistic of renewal increases exists. Manhattan retail corridor asking rents rose 3% year over year (CBRE Q1 2026). Keep x2 only as an announced 'hot block' variant.",
+    "cashExampleUSD": -21600.0,
+    "supportingSources": [
+     "https://cbre.com/insights/figures/manhattan-retail-figures-q1-2026",
+     "https://brooklyn.news12.com/greenpoint-coffee-shop-sippy-caf-closing-after-rent-nearly-triples"
+    ],
+    "previousEffects": [
+     {
+      "field": "rent",
+      "mult": 2
+     }
+    ],
+    "tier": "core",
+    "name": "The renewal letter"
+   },
+   {
+    "id": "building_sold",
+    "sourceFragment": "D10-deaths-nonobvious-year",
+    "calibrationStatus": "confirmed",
+    "trigger": "sale announced",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.0,
+      "note": "no money now; renewal right lost unless the lease option was recorded"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_terms",
+      "label": "Record a memorandum of lease with the renewal option",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "The option survives the sale (recording and lawyer time, my estimate).",
+      "optionId": "option"
+     },
+     {
+      "kind": "mechanic",
+      "id": "relocate_or_close",
+      "label": "Plan relocation",
+      "cost": {
+       "usd": 5000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Scouting costs."
+     }
+    ],
+    "source": "https://brooklyn.news12.com/2025/12/10/popular-juice-shop-in-crown-heights-closes-its-doors/1nmkac7r25b71vtq38DmnB",
+    "confidence": "estimate",
+    "note": "Kept. Effect realized at renewal through lease_renewal_offer.",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "The building is sold"
+   },
+   {
+    "id": "tax_escalation_bill",
+    "sourceFragment": "D10-deaths-nonobvious-year",
+    "calibrationStatus": "revised",
+    "trigger": "July 1 and January 1 tax bills (calendar)",
+    "months": [
+     7,
+     1
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1800,
+      "note": "catch-up bill of about 2.5% of yearly base rent (equals rent x1.3 for one month)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_terms",
+      "label": "Negotiate a recent base year or a cap",
+      "cost": {
+       "usd": 3500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Catch-up bill falls to about $700 (12 months x $56).",
+      "optionId": "cap"
+     },
+     {
+      "kind": "lever",
+      "id": "cash_reserve",
+      "label": "Keep a tax reserve",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 150,
+       "days": 0
+      },
+      "result": "$150 a month set aside covers the bill."
+     }
+    ],
+    "source": "https://www.thelodownny.com/?p=111961",
+    "confidence": "estimate",
+    "note": "Revised form only: the same 2.5% of yearly base rent expressed as a one-off $1,800 instead of rent x1.3 for one month (the engine applies rent multipliers to every following month otherwise). Dates from the DOF billing calendar.",
+    "cashExampleUSD": -1800,
+    "supportingSources": [
+     "https://portal.311.nyc.gov/article/?kanumber=KA-01252"
+    ],
+    "previousEffects": [
+     {
+      "field": "rent",
+      "mult": 1.3
+     }
+    ],
+    "tier": "core",
+    "name": "Real estate tax bill from the landlord"
+   },
+   {
+    "id": "rent_step_anniversary",
+    "sourceFragment": "D08-law",
+    "calibrationStatus": "confirmed",
+    "trigger": "lease anniversary (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Negotiate a cap at signing",
+      "cost": {
+       "usd": 3500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "2% steps instead of 3% (my estimate of a negotiated cap)."
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/blog/rentescalations",
+    "confidence": "estimate",
+    "note": "Duplicate of D01 annual_rent_step: keep one in the merge.",
+    "cashExampleUSD": -2160,
+    "tier": "core",
+    "name": "Lease anniversary: the rent steps up"
+   },
+   {
+    "id": "rent_default_notice",
+    "sourceFragment": "D08-law",
+    "calibrationStatus": "confirmed",
+    "trigger": "rent unpaid (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 4,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1500,
+      "note": "legal fees billed under the lease"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Pay arrears in full before judgment",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Proceeding stops; fees still owed."
+     },
+     {
+      "kind": "choice",
+      "id": "payment_plan",
+      "label": "Ask for a payment plan",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Plan over 6 months; default ends the plan."
+     }
+    ],
+    "source": "https://www.legalservicesnyc.org/resources/how-can-i-fight-a-commercial-eviction/",
+    "confidence": "estimate",
+    "note": "Kept: RPAPL 711(2) 14-day written demand, then a nonpayment case and a marshal's 14-day notice (RPAPL 749). Follows from the player's cash, never chance.",
+    "cashExampleUSD": -1500,
+    "tier": "core",
+    "name": "A 14-day rent demand is served"
+   },
+   {
+    "id": "tax_escalation_bill",
+    "sourceFragment": "D08-law",
+    "calibrationStatus": "revised",
+    "trigger": "tax bills (calendar)",
+    "months": [
+     7,
+     1
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "add": 60
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Cap pass-throughs at signing",
+      "cost": {
+       "usd": 3500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Capped at 3% a year of the base."
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/blog/rentescalations",
+    "confidence": "estimate",
+    "note": "Revised from rent x1.02 ($120 a month) to +$60 a month to match D01 and the Class 4 growth math ($56).",
+    "cashExampleUSD": -720,
+    "supportingSources": [
+     "https://www.rosenbergestis.com/media/blog/nyc-property-tax/new-york-city-property-tax-levy-and-provisional-rates-for-fiscal-year-2027-final-rates-could-still-change"
+    ],
+    "previousEffects": [
+     {
+      "field": "rent",
+      "mult": 1.02
+     }
+    ],
+    "tier": "deep",
+    "name": "The landlord bills your share of the property tax increase"
+   },
+   {
+    "id": "lease_renewal_reset",
+    "sourceFragment": "D08-law",
+    "calibrationStatus": "revised",
+    "trigger": "lease end (announced)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Negotiate with a lawyer and market comps",
+      "cost": {
+       "usd": 3500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Increase cut to +15% (my estimate)."
+     },
+     {
+      "kind": "mechanic",
+      "id": "relocate_or_close",
+      "label": "Leave",
+      "cost": {
+       "usd": 88000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Relocation costs."
+     }
+    ],
+    "source": "https://brooklyn.news12.com/greenpoint-coffee-shop-sippy-caf-closing-after-rent-nearly-triples",
+    "confidence": "estimate",
+    "note": "Revised from x1.5 to x1.3 so D08, D10 and D01 agree on a central renewal case (see lease_renewal_offer).",
+    "cashExampleUSD": -21600.0,
+    "previousEffects": [
+     {
+      "field": "rent",
+      "mult": 1.5
+     }
+    ],
+    "tier": "deep",
+    "name": "The lease ends: renew at the landlord's price or leave"
+   },
+   {
+    "id": "landlord_pressure",
+    "sourceFragment": "D08-law",
+    "calibrationStatus": "confirmed",
+    "trigger": "landlord conduct (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.95
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Lawyer's letter citing the harassment law",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Pressure stops after one month (D08 rule)."
+     }
+    ],
+    "source": "https://intro.nyc/local-laws/2019-185",
+    "confidence": "estimate",
+    "note": "Kept: penalty to the landlord $10,000-$50,000 per D08 (sources conflict on the lower bound).",
+    "cashExampleUSD": -7650.0,
+    "tier": "exotic",
+    "name": "The landlord wants the space back early"
+   },
+   {
+    "id": "holdover_after_expiry",
+    "sourceFragment": "D08-law",
+    "calibrationStatus": "confirmed",
+    "trigger": "lease expired without renewal (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.5
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Sign a short extension before expiry",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Rent +10% for the extension instead of +50%."
+     }
+    ],
+    "source": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+    "confidence": "estimate",
+    "note": "Kept: leases in court decisions set 150%, 200%, or 150% rising to 200%.",
+    "cashExampleUSD": -6000.0,
+    "outOfBoundsReason": "Lease holdover clauses set 150%-200% of rent (court decisions).",
+    "tier": "exotic",
+    "name": "Staying past the end of the lease"
+   },
+   {
+    "id": "landlord_blocks_the_sale",
+    "sourceFragment": "D09-money",
+    "calibrationStatus": "confirmed",
+    "trigger": "sale needs assignment (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "salePrice",
+      "mult": 0.5
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "roadmap",
+      "id": "negotiate_exit_terms",
+      "label": "Assignment clause 'consent not unreasonably withheld' at signing",
+      "cost": {
+       "usd": 3500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Landlord must justify a refusal; sale proceeds at about 2.0x owner earnings (BizBuySell median)."
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/subleasing-assignment/",
+    "confidence": "estimate",
+    "note": "Kept as a sale-price effect (not a demand or cost multiplier). BizBuySell coffee shops: median earnings multiple 2.0, revenue multiple 0.41; a shop without a transferable lease sells for equipment.",
+    "supportingSources": [
+     "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    ],
+    "tier": "core",
+    "name": "The landlord will not sign the assignment"
+   },
+   {
+    "id": "still_on_the_lease_after_sale",
+    "sourceFragment": "D09-money",
+    "calibrationStatus": "confirmed",
+    "trigger": "buyer defaults after assignment (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -36000,
+      "note": "with a good guy guaranty: up to 6 months of rent; with a full guaranty: the rest of the term"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "mechanic",
+      "id": "exit_sale",
+      "label": "Get a written release from the landlord at assignment",
+      "cost": {
+       "usd": 12000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Release often costs a fee; my estimate 2 months of rent."
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/subleasing-assignment/",
+    "confidence": "estimate",
+    "note": "Arithmetic on the reference rent.",
+    "cashExampleUSD": -36000,
+    "tier": "deep",
+    "name": "The buyer stops paying rent and the landlord calls you"
+   },
+   {
+    "id": "deposit_kept_by_landlord",
+    "sourceFragment": "D09-money",
+    "calibrationStatus": "confirmed",
+    "trigger": "surrender (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -5000,
+      "note": "restoration charge deducted from the $18,000 deposit"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "mechanic",
+      "id": "exit_closure",
+      "label": "Leave clean and paid up with photos",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Cleaning and patching; full deposit back."
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/blog/what-is-the-good-guy-guarantee-in-new-york-city-commercial-real-estate/",
+    "confidence": "estimate",
+    "note": "Restoration charge my estimate.",
+    "cashExampleUSD": -5000,
+    "tier": "deep",
+    "name": "The landlord keeps part of the deposit"
+   },
+   {
+    "id": "d00_premises_seller_tax_claim",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "Notice of Claim to Purchaser (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "closingDelayDays",
+      "add": 90
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "escrow_and_counsel",
+      "label": "Hold the funds in escrow and resolve with tax counsel",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Closing waits up to 90 days; the state is paid from escrow up to the price; buyer protected."
+     },
+     {
+      "kind": "choice",
+      "id": "renegotiate_or_walk",
+      "label": "Renegotiate the price or walk away",
+      "cost": {
+       "usd": 1000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Deposit on the letter of intent at risk; my estimate $1,000 of fees."
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+    "confidence": "verified",
+    "note": "TB-ST-70: the buyer must notify the Tax Department at least 10 days before paying or taking possession; the Department answers within 5 business days and must state the amount within 90 days; buyer liability is capped at the higher of price or fair market value. Same event as D01 sellers_tax_claim: keep one in the merge.",
+    "cashExampleUSD": -18000,
+    "supportingSources": [
+     "https://www.tax.ny.gov/bus/doingbus/buy.htm"
+    ],
+    "tier": "core",
+    "name": "Seller tax claim holds up closing"
+   },
+   {
+    "id": "d00_premises_permit_transfer",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "takeover closing (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 22
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_permit_timing",
+      "label": "Apply for the buyer's own permit before closing",
+      "cost": {
+       "usd": 280,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Permit fee $280; no gap.",
+      "optionId": "apply_before_closing"
+     },
+     {
+      "kind": "choice",
+      "id": "certificate_of_authority_early",
+      "label": "File for the sales tax Certificate of Authority 20 days ahead",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 20
+      },
+      "result": "Required before the first sale."
+     }
+    ],
+    "source": "https://www.tax.ny.gov/bus/doingbus/buy.htm",
+    "confidence": "estimate",
+    "note": "Health permits do not pass to a buyer (the cafe pack's fse_permit note; Health Code); a new applicant may open on day 22 after applying. 22 days closed = 22 x $1,258 = $27,700 of margin.",
+    "cashExampleUSD": -27676,
+    "supportingSources": [
+     "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+     "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-44016"
+    ],
+    "tier": "core",
+    "name": "Seller credentials do not transfer"
+   },
+   {
+    "id": "d00_premises_takeover_asset_list",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "asset sale offer (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 10000,
+      "note": "items excluded from the asset list must be bought"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "document_scope",
+      "label": "Document exactly what transfers, with a lawyer",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Excluded items priced into the offer."
+     },
+     {
+      "kind": "choice",
+      "id": "decline",
+      "label": "Decline until the scope is complete",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "Deal delayed or lost."
+     }
+    ],
+    "source": "https://robinpzander.com/lessons-learned-building-and-selling-robins-cafe/",
+    "confidence": "estimate",
+    "note": "$10,000 = a grinder, refrigeration and POS left out (pack prices ~$6,000-$10,000).",
+    "cashExampleUSD": -10000,
+    "tier": "core",
+    "name": "The seller offers selected assets rather than a turnkey business"
+   },
+   {
+    "id": "d00_world_event_predecessor_brand_confusion",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "takeover opening (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.95
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "fix_listings_and_sign",
+      "label": "Fix map listings and replace the sign",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Confusion ends after one month."
+     },
+     {
+      "kind": "choice",
+      "id": "opening_message",
+      "label": "Explain the handover in opening communications",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Demand x0.97 instead of x0.95."
+     }
+    ],
+    "source": "https://www.pressherald.com/2025/10/23/model-t-coffee-in-portland-arts-district-has-closed/",
+    "confidence": "estimate",
+    "note": "Sign cost from the pack (signage $1,500).",
+    "cashExampleUSD": -5100.0,
+    "tier": "deep",
+    "name": "Customers mistake your shop for its predecessor"
+   },
+   {
+    "id": "d00_world_event_expansion_before_debt_recovery",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "second lease while debt outstanding (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "cashBufferRequired",
+      "add": 30000,
+      "note": "existing debt service plus 3 months of the new site's rent"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "rebuild_funding_plan",
+      "label": "Rebuild the funding plan with all obligations",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Second site allowed only with the buffer in cash."
+     },
+     {
+      "kind": "choice",
+      "id": "defer_new_lease",
+      "label": "Defer the new lease until a funded milestone",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 180
+      },
+      "result": "Opportunity may go to another tenant."
+     }
+    ],
+    "source": "https://www.reddit.com/r/smallbusiness/comments/144nqve/expansion_advice/",
+    "confidence": "estimate",
+    "note": "$30,000 = 3 x $6,000 rent + 6 months x $2,000 debt service (my example).",
+    "cashExampleUSD": -30000,
+    "tier": "deep",
+    "name": "The next attractive site arrives before debt is covered"
+   },
+   {
+    "id": "d00_closures_nyc_event_flagship_nontransfer",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "branch below break-even 3 months (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.8,
+      "note": "second site only"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "resize_branch",
+      "label": "Resize hours and menu at the branch",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Labor cut by one shift ($3,360 a month at $21 x 160 h)."
+     },
+     {
+      "kind": "choice",
+      "id": "consolidate",
+      "label": "Close the branch",
+      "cost": {
+       "usd": 5000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Lease exit costs per the guaranty."
+     }
+    ],
+    "source": "https://ny.eater.com/2024/1/5/24022407/nyc-restaurant-closings-january-2024",
+    "confidence": "estimate",
+    "note": "0.8 is the floor-adjacent estimate for a branch missing its checkpoint.",
+    "cashExampleUSD": -45288.0,
+    "tier": "deep",
+    "name": "A second address misses demand"
+   },
+   {
+    "id": "sellers_tax_claim",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "Notice of Claim (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "closingDelayDays",
+      "add": 90
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "File the bulk sale notice 10 days ahead",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Claim handled from escrow.",
+      "optionId": "full_review"
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_bulk_sale_notice",
+      "label": "Skip the notice",
+      "cost": {
+       "usd": -2000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Saves fees now; buyer becomes liable for the seller's tax (sellers_tax_debt_inherited)."
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+    "confidence": "verified",
+    "note": "Kept: TB-ST-70 timings.",
+    "cashExampleUSD": -18000,
+    "tier": "core",
+    "name": "The state claims the seller's unpaid sales tax"
+   },
+   {
+    "id": "sellers_tax_debt_inherited",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "buyer skipped notice (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -30000,
+      "note": "capped at the purchase price"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "File the bulk sale notice",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Liability avoided.",
+      "optionId": "full_review"
+     }
+    ],
+    "source": "https://totalfood.com/buying-a-restaurant-watch-out-for-the-sellers-sales-tax-liabilities/",
+    "confidence": "estimate",
+    "note": "Kept as a design example; cap from TB-ST-70.",
+    "cashExampleUSD": -30000,
+    "supportingSources": [
+     "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    ],
+    "tier": "core",
+    "name": "A tax bill arrives for the previous owner's sales"
+   },
+   {
+    "id": "overstated_cash_sales",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "takeover without review (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.8
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "Full review: tax returns and card statements",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "True sales found; price cut by 2.0 x the overstated earnings.",
+      "optionId": "full_review"
+     }
+    ],
+    "source": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
+    "confidence": "estimate",
+    "note": "Kept. BizBuySell median earnings multiple 2.0 means each overstated $1 of earnings costs $2 of price.",
+    "cashExampleUSD": -46600,
+    "supportingSources": [
+     "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    ],
+    "tier": "core",
+    "name": "The sales were never what the listing said"
+   },
+   {
+    "id": "equipment_lien_surprise",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "takeover without review (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -6000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "UCC lien search",
+      "cost": {
+       "usd": 250,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Lien found; seller pays it off at closing.",
+      "optionId": "full_review"
+     }
+    ],
+    "source": "https://acquisitionstars.com/buying-a-business/coffee-shop",
+    "confidence": "estimate",
+    "note": "Kept; UCC search cost my estimate.",
+    "cashExampleUSD": -6000,
+    "tier": "deep",
+    "name": "The espresso machine belongs to a lender"
+   },
+   {
+    "id": "permit_gap_at_closing",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "takeover closing (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 22
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_permit_timing",
+      "label": "Apply before closing",
+      "cost": {
+       "usd": 280,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No gap.",
+      "optionId": "apply_before_closing"
+     },
+     {
+      "kind": "shortcut",
+      "id": "trade_on_sellers_permit",
+      "label": "Trade on the seller's permit",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Saves the gap; violation no_fse_permit if inspected."
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-44016",
+    "confidence": "estimate",
+    "note": "Kept: 22 days = $27,700 of margin.",
+    "cashExampleUSD": -27676,
+    "tier": "core",
+    "name": "Closed for 22 days after the handover"
+   },
+   {
+    "id": "sellers_unpaid_health_fines",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "takeover (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "Check Health Department records first",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 3
+      },
+      "result": "Fines settled by the seller before closing.",
+      "optionId": "full_review"
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article5.pdf",
+    "confidence": "estimate",
+    "note": "Kept: 14 days x $230 = $3,220 if pre-opening.",
+    "cashExampleUSD": -3220,
+    "tier": "deep",
+    "name": "The seller left unpaid Health Department fines"
+   },
+   {
+    "id": "inherited_unemployment_rate",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "takeover (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "payrollTax",
+      "add": 0.02
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "Ask for the seller's UI rate notice",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Price adjusted by about $350 per worker a year.",
+      "optionId": "full_review"
+     }
+    ],
+    "source": "https://dol.ny.gov/transfers-business-and-your-contribution-rate",
+    "confidence": "estimate",
+    "note": "Kept: +2 points on the $17,600 wage base = $352 per worker a year.",
+    "cashExampleUSD": -1408,
+    "tier": "deep",
+    "name": "You inherit the seller's unemployment-insurance record"
+   },
+   {
+    "id": "regulars_test_new_owner",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "takeover (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "awareness",
+      "mult": 0.7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_transition",
+      "label": "Keep the team and the menu",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Awareness 0.9 instead of 0.63.",
+      "optionId": "keep_team_and_menu"
+     },
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "label": "Pay a retention bonus to the old team",
+      "cost": {
+       "usd": 2000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Staff stay through the handover (my estimate of $500 x 4)."
+     }
+    ],
+    "source": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
+    "confidence": "estimate",
+    "note": "Kept at the 0.7 floor.",
+    "cashExampleUSD": -11322.0,
+    "tier": "core",
+    "name": "The regulars notice the new owner"
+   },
+   {
+    "id": "old_equipment_gives_out",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "bought machine past its life (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -7600
+     },
+     {
+      "field": "closureDays",
+      "add": 2
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "Technician inspection before closing",
+      "cost": {
+       "usd": 350,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Age and condition priced in.",
+      "optionId": "full_review"
+     },
+     {
+      "kind": "lever",
+      "id": "contingency_level",
+      "label": "Hold a 15% reserve",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Replacement paid without debt.",
+      "optionId": "standard"
+     }
+    ],
+    "source": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+    "confidence": "estimate",
+    "note": "Kept. Inspection fee my estimate.",
+    "cashExampleUSD": -10116,
+    "tier": "deep",
+    "name": "The machine you bought with the shop dies"
+   },
+   {
+    "id": "equity_injection_gap",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "SBA-financed purchase (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "minOwnCashShare",
+      "add": 0.1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "entry_mode",
+      "label": "Choose a smaller project",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "10% of a $150,000 purchase = $15,000 instead of $30,000.",
+      "optionId": "key_money_takeover"
+     }
+    ],
+    "source": "https://www.whitefordlaw.com/news-events/client-alert-sba-issues-sop-50-10-8-key-changes-impacting-sba-7a-lending",
+    "confidence": "estimate",
+    "note": "Kept: SBA SOP 50 10 8 10% equity injection.",
+    "cashExampleUSD": -30000,
+    "tier": "deep",
+    "name": "The bank wants 10% of your own money"
+   },
+   {
+    "id": "acquisition_tax_at_closing",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "takeover closing (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -3550
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "Allocate the price with an accountant",
+      "cost": {
+       "usd": 1000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Fair allocation; tax only on furniture, fixtures and equipment.",
+      "optionId": "full_review"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+    "confidence": "estimate",
+    "note": "Kept: 8.875% x $40,000.",
+    "cashExampleUSD": -3550,
+    "tier": "deep",
+    "name": "Sales tax is due on the equipment you bought"
+   },
+   {
+    "id": "inherited_sick_leave_balances",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "takeover with staff (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1680
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "Count balances and cut the price",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Price reduced by $1,680.",
+      "optionId": "full_review"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -1680,
+    "tier": "deep",
+    "name": "The staff you kept arrive with sick days owed"
+   },
+   {
+    "id": "franchise_cooling_off",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "franchise path (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "franchise_brand",
+      "label": "Use the 14 days for franchisee calls and a lawyer review",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Disclosure risks found before signing.",
+      "optionId": "new_local_brand"
+     }
+    ],
+    "source": "https://www.ftc.gov/business-guidance/resources/consumers-guide-buying-franchise",
+    "confidence": "verified",
+    "note": "Kept: FTC rule, signing on day 15.",
+    "cashExampleUSD": -3220,
+    "tier": "deep",
+    "name": "Fourteen days with the disclosure document"
+   },
+   {
+    "id": "franchise_royalty_bite",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "revised",
+    "trigger": "franchise path (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "fees",
+      "basis": "pct_revenue",
+      "amount": 0.085,
+      "note": "royalty 6% + marketing 2.5%"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "franchise_brand",
+      "label": "National brand",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "10.9% of sales; awareness 0.8.",
+      "optionId": "national_brand"
+     },
+     {
+      "kind": "lever",
+      "id": "franchise_brand",
+      "label": "Small-format brand",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "6% of sales; awareness 0.4.",
+      "optionId": "small_format_brand"
+     }
+    ],
+    "source": "https://franchise.gregoryscoffee.com/",
+    "confidence": "estimate",
+    "note": "Revised form: a royalty is a cost on revenue, not a demand cut, so it is written as fees 8.5% of revenue ($4,335 a month at $51,000) instead of revenue x0.915.",
+    "cashExampleUSD": -52020,
+    "supportingSources": [
+     "https://www.franchising.inspirebrands.com/dunkin"
+    ],
+    "previousEffects": [
+     {
+      "field": "revenue",
+      "mult": 0.915
+     }
+    ],
+    "tier": "core",
+    "name": "The royalty comes off the top"
+   },
+   {
+    "id": "franchise_buildout_not_yours",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "franchise path (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "setupCost",
+      "mult": 2.05
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "franchise_brand",
+      "label": "Small-format brand",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Minimum investment $98,000.",
+      "optionId": "small_format_brand"
+     }
+    ],
+    "source": "https://www.franchising.inspirebrands.com/dunkin",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -235150,
+    "outOfBoundsReason": "Franchise disclosure documents: Gregorys from $459,150, Dunkin' from $443,000, against the independent cafe's $224,000.",
+    "tier": "deep",
+    "name": "The franchisor dictates the build-out"
+   },
+   {
+    "id": "young_franchise_system",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "franchise path (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "awareness",
+      "mult": 0.9
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "franchise_brand",
+      "label": "Pick a brand with existing franchisees",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Awareness of the established brand.",
+      "optionId": "national_brand"
+     }
+    ],
+    "source": "https://dailycoffeenews.com/2026/02/18/backed-by-craveworthy-gregorys-coffee-launches-franchising",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -3774.0,
+    "tier": "exotic",
+    "name": "The brand has never had a franchisee"
+   },
+   {
+    "id": "takeover_listing",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "listing appears on the map (announced)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "askingPrice",
+      "formula": "0.46 x the address's annual sales (BizBuySell average revenue multiple), 2025 median sale $176,500",
+      "note": "sale-to-ask about 0.90"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "buy_business",
+      "label": "Make an offer at 90% of asking",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Typical sale-to-ask ratio 0.90 (BizBuySell)."
+     },
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "label": "Full review before the offer",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Hidden facts (tax debt, liens, true sales) revealed.",
+      "optionId": "full_review"
+     }
+    ],
+    "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+    "confidence": "verified",
+    "note": "BizBuySell coffee shops and cafes: median sale price $150,000 (five-year), 2025 median $176,500, median revenue multiple 0.41 (average 0.46), median earnings multiple 2.0, sale-to-ask 0.90. Reference shop: 0.41 x $612,000 = $251,000; keen-cray's rule (20% of sales, $80,000-$200,000) is lower than this benchmark.",
+    "cashExampleUSD": -176500,
+    "tier": "core",
+    "name": "A cafe on your map is for sale"
+   },
+   {
+    "id": "bulk_sale_claim",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "Notice of Claim (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "closingDelayDays",
+      "add": 90
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "bulk_sale_notice",
+      "label": "File the bulk sale notice",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Escrow handles the claim."
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+    "confidence": "verified",
+    "note": "Same calibration as D01 sellers_tax_claim.",
+    "cashExampleUSD": -18000,
+    "tier": "deep",
+    "name": "The state claims the seller's sales tax"
+   },
+   {
+    "id": "seller_tax_debt_surfaces",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "buyer skipped notice (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -30000,
+      "note": "capped at the purchase price"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "bulk_sale_notice",
+      "label": "File the notice before closing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Liability avoided."
+     }
+    ],
+    "source": "https://www.aprio.com/insights-events/bulk-sales-in-new-york-how-a-purchaser-was-left-responsible-for-a-sellers-sales-tax-liability-ins-article-tax/",
+    "confidence": "estimate",
+    "note": "Same calibration as D01 sellers_tax_debt_inherited.",
+    "cashExampleUSD": -30000,
+    "tier": "core",
+    "name": "The seller's tax debt is now yours"
+   },
+   {
+    "id": "rebrand_loses_regulars",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "revised",
+    "trigger": "takeover with a new name (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "keep_name",
+      "label": "Keep the name for six months",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Demand x1.0 at handover; rebrand later."
+     }
+    ],
+    "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+    "confidence": "estimate",
+    "note": "Revised from x0.5 to x0.7: D01 puts regulars kept at 0.63 with a rebrand vs 0.9 with a quiet handover (ratio 0.7); 0.5 doubled the effect of the same assumption.",
+    "cashExampleUSD": -33966.0,
+    "previousEffects": [
+     {
+      "field": "demand",
+      "mult": 0.5
+     }
+    ],
+    "tier": "deep",
+    "name": "Regulars do not know the new name"
+   },
+   {
+    "id": "supervisory_licenses_released",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "July each year (calendar)",
+    "months": [
+     7
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cartPermitWaitMonths",
+      "add": -12
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cart_site",
+      "label": "Private lot with a Restricted Area permit",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 1500,
+       "days": 0
+      },
+      "result": "No queue; foot traffic x0.6.",
+      "optionId": "private_lot"
+     },
+     {
+      "kind": "shortcut",
+      "id": "rent_a_permit",
+      "label": "Rent a permit",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 850,
+       "days": 0
+      },
+      "result": "Immediate; violation illegal_permit_rental."
+     }
+    ],
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03354",
+    "confidence": "estimate",
+    "note": "Kept: 2,200 a year from FY2027 (January 2026 law).",
+    "cashExampleUSD": 0,
+    "tier": "core",
+    "name": "The city releases 2,200 new cart licenses"
+   },
+   {
+    "id": "vending_enforcement_sweep",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced sweep",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1000
+     },
+     {
+      "field": "closureDays",
+      "add": 7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cart_site",
+      "label": "Licensed spot",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Not affected.",
+      "optionId": "private_lot"
+     }
+    ],
+    "source": "https://documentedny.com/2026/03/06/street-vendors-criminal-summons-crackdowns-mamdani/",
+    "confidence": "estimate",
+    "note": "Kept. Conflicts by id with D13 vending_enforcement_sweep (demand x0.8): the merge should keep D01's version for unlicensed carts and D13's for licensed ones.",
+    "cashExampleUSD": -1000,
+    "tier": "core",
+    "name": "Vending enforcement sweeps the corridor"
+   },
+   {
+    "id": "commissary_has_no_room",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "cart path (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 30
+     },
+     {
+      "field": "monthlyFees",
+      "add": 300
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cart_site",
+      "label": "Book a commissary before buying the cart",
+      "cost": {
+       "usd": 750,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Deposit secures the space.",
+      "optionId": "public_sidewalk"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -3600,
+    "tier": "deep",
+    "name": "No commissary has a space for your cart"
+   },
+   {
+    "id": "market_season_ends",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "calendar",
+    "months": [
+     11,
+     12,
+     1,
+     2,
+     3
+    ],
+    "durationMonths": 5,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "popup_venue",
+      "label": "Shared corner all year",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 1500,
+       "days": 0
+      },
+      "result": "Trades all year; host can end it.",
+      "optionId": "shared_corner"
+     }
+    ],
+    "source": "https://www.6sqft.com/smorgasburg-returns-for-16th-year-this-april-with-new-vendors/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "outOfBoundsReason": "A seasonal market is closed out of season: zero demand is the market calendar, not a multiplier estimate.",
+    "tier": "core",
+    "name": "The market season ends"
+   },
+   {
+    "id": "host_ends_the_arrangement",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "end of term (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 30
+     },
+     {
+      "field": "awareness",
+      "mult": 0.7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "popup_venue",
+      "label": "Written term with a renewal right",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Event can only fire at term end.",
+      "optionId": "shared_corner"
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -12000,
+    "tier": "deep",
+    "name": "The host wants the corner back"
+   },
+   {
+    "id": "parks_kiosk_rfp",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced RFP",
+    "months": [
+     5,
+     6
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "rent",
+      "add": 3333
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "entry_mode",
+      "label": "Bid",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Proposal costs; fee = max($40,000, 4% of gross).",
+      "optionId": "market_or_shared_corner"
+     }
+    ],
+    "source": "https://a856-cityrecord.nyc.gov/RequestDetail/20240628149",
+    "confidence": "verified",
+    "note": "Kept: Dag Hammarskjold Park award, year 1 $40,000 vs 4%.",
+    "cashExampleUSD": -40000,
+    "tier": "exotic",
+    "name": "The Parks Department asks for kiosk proposals"
+   },
+   {
+    "id": "commissary_rent_hike",
+    "sourceFragment": "D13-formats",
+    "calibrationStatus": "revised",
+    "trigger": "contract renewal (calendar)",
+    "months": [
+     1,
+     7
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "commissary_fee",
+      "mult": 1.25
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "commissary_choice",
+      "label": "Cheaper depot further away",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": -300,
+       "days": 0
+      },
+      "result": "Capacity x0.92 (longer push).",
+      "optionId": "cheap_outer_depot"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+    "confidence": "estimate",
+    "note": "Revised from x1.33 to x1.25 to stay inside the 0.7-1.3 band without a source ($750 -> $940).",
+    "cashExampleUSD": -2280,
+    "previousEffects": [
+     {
+      "field": "commissary_fee",
+      "mult": 1.33
+     }
+    ],
+    "tier": "deep",
+    "name": "Your commissary raises its fee"
+   },
+   {
+    "id": "park_kiosk_rfp",
+    "sourceFragment": "D13-formats",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced RFP",
+    "months": [
+     2,
+     7
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "rentFormula",
+      "set": "max(minimum/12, share x revenue)",
+      "note": "Harlem Meer: $20,000 vs 9%"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cart_spot",
+      "label": "Bid for the kiosk",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Wins at the offered share; guaranteed minimum due even in a bad season.",
+      "optionId": "park_concession"
+     }
+    ],
+    "source": "https://static.nycgovparks.org/images/pagefiles/203/Harlem-Meer-Step-2-NPH-Final-approved-__676adfc6612a7.pdf",
+    "confidence": "estimate",
+    "note": "Choice event.",
+    "cashExampleUSD": -20000,
+    "tier": "deep",
+    "name": "Park kiosk license up for bid"
+   },
+   {
+    "id": "transit_stall_rfp",
+    "sourceFragment": "D13-formats",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced RFP",
+    "months": [
+     3,
+     9
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "rentFormula",
+      "set": "0.15 x revenue",
+      "note": "Grand Central Madison one-year license"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cart_spot",
+      "label": "Bid 15% of gross",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "One-year license.",
+      "optionId": "park_concession"
+     }
+    ],
+    "source": "https://www.mta.info/document/186826",
+    "confidence": "estimate",
+    "note": "Choice event.",
+    "cashExampleUSD": -36000.0,
+    "tier": "deep",
+    "name": "Station stalls up for bid"
+   }
+  ],
+  "mechanics": [],
+  "notCalibrated": []
+ }
+}
