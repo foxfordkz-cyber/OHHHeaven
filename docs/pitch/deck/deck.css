@@ -130,6 +130,7 @@ strong { color: var(--text); font-weight: 600; }
   gap: 16px;
 }
 .card.tint { background: linear-gradient(var(--accent-tint), var(--accent-tint)), var(--card); border-color: var(--accent-line); }
+.card p, .card li { font-size: var(--fs-sm); }
 .card ul { padding-left: 1.1em; display: flex; flex-direction: column; gap: 10px; }
 
 /* Numbers stand on the page: number, then a caption with unit and period (DESIGN.md, rule 6). */
@@ -197,3 +198,18 @@ tr.us td { background: var(--accent-tint); color: var(--text); }
 .title-page h1 { font-size: 120px; }
 .title-page .lead { font-size: var(--fs-xl); max-width: 1500px; color: var(--text); }
 .title-page .meta { display: flex; gap: 20px; flex-wrap: wrap; }
+
+/* Two-part page: text on the left, real phone screens on the right, full content height. */
+.split { display: flex; gap: 48px; flex: 1; min-height: 0; }
+.split > .text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
+.phones { display: flex; gap: 28px; flex: none; min-height: 0; }
+.phones .shot { width: 340px; flex: none; }
+.phones .shot img { object-fit: cover; object-position: top center; }
+.page.bleed { padding-top: 64px; }
+.steps { list-style: none; display: flex; flex-direction: column; gap: 18px; padding: 0; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 52px 1fr; gap: 0 18px; font-size: var(--fs-sm); }
+.steps li::before { content: counter(s); grid-row: span 2; width: 52px; height: 52px; border-radius: 14px; background: var(--fill); color: var(--text); font-weight: 600; display: grid; place-items: center; }
+.steps li b { color: var(--text); font-weight: 600; }
+.steps li span { color: var(--text-2); font-size: var(--fs-xs); }
+.quote { font-size: var(--fs-lg); color: var(--text); line-height: 1.3; }
+.quote cite { display: block; margin-top: 10px; font-size: 22px; font-style: normal; color: var(--text-3); }

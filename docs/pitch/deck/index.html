@@ -9,8 +9,8 @@
 <body>
 <!--
   Ten pages, in the order of the judging criteria (build/ROUND3.md, B17):
-  pain and user → product live → what is real → what people pay for and why they return →
-  money → why it is new → team and how it was built in 24 hours.
+  pain and user (1–2) → product live (3–4) → what is real (5) → what people pay for and why they return (6) →
+  money (7) → why it is new (8) → team and how it was built in 24 hours (9) → close (10).
   Every number has its source in the page footnote or in docs/pitch/USER.md / MONEY.md.
   A number that is not in yet is shown as <span class="tbd">…</span>, never invented.
   Screenshots are real screens of the running product (docs/qa/screens/ or img/, see img/README.md).
@@ -27,7 +27,7 @@
 </svg>
 
 <!-- 1. Title and the pain in one line -->
-<section class="page title-page" id="p1-title">
+<section class="page title-page" id="title">
   <svg class="mark"><use href="#mark"/></svg>
   <div class="kicker">First Year</div>
   <h1>Would you risk your family’s savings<br>on a coffee shop?</h1>
@@ -40,8 +40,7 @@
   <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>1 / 10</span></div>
 </section>
 
-<!-- 2. Who and what hurts -->
-<section class="page" id="p2-user">
+<section class="page" id="user">
   <div class="kicker">Who we sell to</div>
   <h2>One person: an American, 21–45, who dreams of opening a place and is afraid of losing the savings.</h2>
   <div class="cols-3">
@@ -52,88 +51,112 @@
   <div class="card tint fill">
     <h3>The pain, in owners’ words</h3>
     <p><span class="tbd">two quotes from docs/pitch/USER.md, with links</span></p>
-    <p class="small">What they do today instead: spreadsheets, YouTube, a $2,000 course, a consultant — none lets them make the first-year mistakes for free.</p>
+    <p class="small">What they do today instead: spreadsheets, forums, courses, a consultant — none lets them make the first-year mistakes without paying for them.</p>
   </div>
   <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>2 / 10</span></div>
 </section>
 
-<!-- 3. Product, live -->
-<section class="page" id="p3-product">
-  <div class="kicker">The product — live now</div>
-  <h2>Idea → address → opening plan → a year of decisions → your plan.</h2>
-  <div class="flow">
-    <div class="step"><b>Idea</b>“A coffee shop near the subway”</div>
-    <div class="step"><b>Place</b>A real NYC block: foot traffic, rivals within 250 m, rent</div>
-    <div class="step"><b>Opening</b>Every choice has a price and days: equipment, seats, staff, roaster</div>
-    <div class="step"><b>Year</b>Price, staff, hours; neighbours, complaints, inspections</div>
-    <div class="step"><b>Plan</b>Your address, your costs, your permits, with official links</div>
-  </div>
-  <div class="row fill">
-    <figure class="shot grow"><img src="img/map.png" alt="City map with places"><figcaption>Map: where to open</figcaption></figure>
-    <figure class="shot grow"><img src="img/start.png" alt="Opening decisions"><figcaption>Opening: you make each decision</figcaption></figure>
-    <figure class="shot grow"><img src="img/biz.png" alt="My business"><figcaption>Manage: forecast before you apply</figcaption></figure>
+<section class="page bleed" id="product">
+  <div class="split">
+    <div class="text">
+      <div class="kicker">The product — live now</div>
+      <h2>From an idea to your own first year, on a real block.</h2>
+      <ol class="steps">
+        <li><b>Idea</b><span>“Coffee near the subway”</span></li>
+        <li><b>Place</b><span>A real East Village storefront: rent, size, foot traffic, rivals</span></li>
+        <li><b>Opening</b><span>Permits, build-out, equipment — each with a price and days</span></li>
+        <li><b>The year</b><span>Price, staff, hours; neighbours, complaints, inspections</span></li>
+        <li><b>Your plan</b><span>Your address, your costs, your permits, with official links</span></li>
+      </ol>
+    </div>
+    <div class="phones">
+      <figure class="shot phone"><img src="img/start-place.png" alt="A storefront card: rent, size, foot traffic, competitors"><figcaption>Pick a real storefront</figcaption></figure>
+      <figure class="shot phone"><img src="img/start-setup.png" alt="Opening setup with the computed first-year result"><figcaption>See the first year before you sign</figcaption></figure>
+      <figure class="shot phone"><img src="img/biz-manage.png" alt="Manage tab with the projected month"><figcaption>Change a decision, see the forecast</figcaption></figure>
+    </div>
   </div>
   <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>3 / 10</span></div>
 </section>
 
-<!-- 4. What is real: the engine -->
-<section class="page" id="p4-real">
-  <div class="kicker">What is real</div>
-  <h2>The value is computed, not scripted.</h2>
-  <div class="cols-3">
-    <div class="card">
-      <h3>A pure engine</h3>
-      <p>Every input is an <strong>Action</strong>. The same code runs on the server and in the browser. No randomness: an event is announced in advance or follows from a decision.</p>
-    </div>
-    <div class="card">
-      <h3>Real numbers, with sources</h3>
-      <p>Rent, wages, permits, taxes, equipment. Every number carries a <strong>source</strong> and is marked <strong>verified</strong> or <strong>estimate</strong>; a validator rejects a pack without them.</p>
-    </div>
-    <div class="card">
-      <h3>A market that saturates</h3>
-      <p>Demand comes from real foot traffic; cafés within 250 m share it. A seventh rival pushes the first one from 6,865 to 4,941 orders a month.</p>
-    </div>
+<section class="page bleed" id="city">
+  <div class="kicker">One city, many owners</div>
+  <h2>Your decision changes the street. A neighbour’s shortcut becomes a case.</h2>
+  <div class="row fill">
+    <figure class="shot grow"><img src="img/city.png" alt="The public city screen: map, leaders, city feed, QR to join"><figcaption>The shared city on a projector: leaders, events, a complaint in the feed, a QR to join</figcaption></figure>
+    <figure class="shot phone" style="width:340px;flex:none"><img src="img/biz-network.png" alt="Neighbours list with deal records"><figcaption>Neighbours: deal, join, or report</figcaption></figure>
   </div>
-  <div class="cols-4">
-    <div class="kpi"><b class="num">638</b><span>automated tests, green</span></div>
-    <div class="kpi"><b class="num">7</b><span>packages: engine, server, client, AI, bots…</span></div>
-    <div class="kpi"><b class="num"><span class="tbd">DATA.md</span></b><span>sourced numbers in the packs</span></div>
-    <div class="kpi"><b class="num">2</b><span>businesses: coffee shop, barbershop</span></div>
-  </div>
-  <p class="small">Check it: <span class="num">npm test</span> · <span class="num">node scripts/smoke.mjs</span> · <span class="num">npx tsx sim/audit/saturation.ts</span></p>
+  <p class="small">Residents run by the computer are labelled AI. People can take the inspector’s role.</p>
   <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>4 / 10</span></div>
 </section>
 
-<!-- 5. What we sell and why they return -->
-<section class="page" id="p5-sell">
-  <div class="kicker">What we sell</div>
-  <h2>Free: the city and your first month. Paid: the whole year and the plan you take home.</h2>
-  <div class="cols-2 fill">
-    <div class="card">
-      <span class="badge">Free</span>
-      <ul>
-        <li>The city, your idea, your address</li>
-        <li>The opening plan and your first month</li>
-      </ul>
+<section class="page bleed" id="real">
+  <div class="split">
+    <div class="text">
+      <div class="kicker">What is real</div>
+      <h2>The value is computed, not scripted.</h2>
+      <div class="cols-3">
+        <div class="card">
+          <h3>A pure engine</h3>
+          <p>Every input is an <strong>Action</strong>. The same code runs on the server and in the browser. No dice: an event is announced in advance or follows from a decision.</p>
+        </div>
+        <div class="card">
+          <h3>Sourced numbers</h3>
+          <p>Rent, wages, permits, taxes, equipment. Each carries a <strong>source</strong> and is marked <strong>verified</strong> or <strong>estimate</strong>. The validator rejects a pack without them.</p>
+        </div>
+        <div class="card">
+          <h3>A market that fills up</h3>
+          <p>Demand comes from foot traffic; cafés within 250 m share it. With six rivals the first café drops from 6,865 to 4,941 orders a month.</p>
+        </div>
+      </div>
+      <div class="cols-3">
+        <div class="kpi"><b class="num">73 of 138</b><span>key numbers verified at the primary source; the rest marked estimate</span><span class="src">node scripts/validate-all.mjs</span></div>
+        <div class="kpi"><b class="num"><span class="tbd">tests</span></b><span>automated tests, all green</span><span class="src">npm test</span></div>
+        <div class="kpi"><b class="num">7</b><span>packages: shared, engine, AI, host, server, bots, client</span><span class="src">package.json</span></div>
+      </div>
+      <p class="small">Check it yourself: npm test · node scripts/smoke.mjs · npx tsx sim/audit/saturation.ts</p>
     </div>
-    <div class="card tint">
-      <span class="badge accent">$19 / month</span>
-      <ul>
-        <li>The whole first year</li>
-        <li>Your personal plan: your address, rent, build-out, equipment, staff, permits — with official links</li>
-        <li>The advisor; every business type</li>
-      </ul>
+    <div class="phones">
+      <figure class="shot phone"><img src="img/biz-books.png" alt="Books: sales, cost of goods, taxes owed with due dates"><figcaption>Real taxes, real due dates</figcaption></figure>
     </div>
-  </div>
-  <div class="card">
-    <h3>Why come back tomorrow</h3>
-    <p>The city runs on its own clock: <strong>one game month passes every real day</strong>. Tomorrow there is a new month report, a neighbour’s move, maybe an inspection — and one decision waiting for you.</p>
   </div>
   <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>5 / 10</span></div>
 </section>
 
-<!-- 6. Money -->
-<section class="page" id="p6-money">
+<section class="page bleed" id="sell">
+  <div class="split">
+    <div class="text">
+      <div class="kicker">What we sell · why come back</div>
+      <h2>Free: the city and your first month. Paid: the whole year and the plan you take home.</h2>
+      <div class="cols-2">
+        <div class="card">
+          <span class="badge">Free</span>
+          <ul>
+            <li>The city, your idea, your storefront</li>
+            <li>The opening plan and your first month</li>
+          </ul>
+        </div>
+        <div class="card tint">
+          <span class="badge accent">$19 / month</span>
+          <ul>
+            <li>The whole first year</li>
+            <li>Your personal plan with sources and official links</li>
+            <li>The advisor; every business type</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Why come back tomorrow</h3>
+        <p>The city keeps its own clock: <strong>one game month passes every real day</strong>. Tomorrow there is a new month report, a neighbour’s move, maybe an inspection — and one decision waiting for you.</p>
+      </div>
+    </div>
+    <div class="phones">
+      <figure class="shot phone"><img src="img/biz-away.png" alt="While you were away: days passed, cash change, events"><figcaption>What happened while you were away</figcaption></figure>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>6 / 10</span></div>
+</section>
+
+<section class="page" id="money">
   <div class="kicker">Why it makes money</div>
   <h2>Subscription only. Coffee shop → every small business → every city.</h2>
   <div class="cols-4">
@@ -147,11 +170,10 @@
     <p><span class="tbd">steps and paying users from docs/pitch/MONEY.md (model.mjs prints every number)</span></p>
   </div>
   <p class="small">Every assumption is marked as an assumption in docs/pitch/MONEY.md. Price, retention and acquisition are not yet tested with users.</p>
-  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>6 / 10</span></div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>7 / 10</span></div>
 </section>
 
-<!-- 7. Why it is new -->
-<section class="page" id="p7-new">
+<section class="page" id="new">
   <div class="kicker">Is it new</div>
   <h2>Games are fiction. Courses are lectures. Calculators are blank. We are a rehearsal.</h2>
   <div class="card fill">
@@ -164,23 +186,10 @@
       <tr class="us"><td>First Year</td><td>A year of your shop on real NYC numbers, shared city, your plan</td><td>$19 / month</td><td>—</td></tr>
     </table>
   </div>
-  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>7 / 10</span></div>
-</section>
-
-<!-- 8. The city is shared -->
-<section class="page" id="p8-city">
-  <div class="kicker">One city, many owners</div>
-  <h2>Your decision changes the street. A neighbour’s shortcut becomes a case.</h2>
-  <div class="row fill">
-    <figure class="shot grow"><img src="img/city.png" alt="Public city screen"><figcaption>The shared city</figcaption></figure>
-    <figure class="shot grow"><img src="img/desk.png" alt="Inspector desk"><figcaption>Complaint → inspection → result in the books</figcaption></figure>
-  </div>
-  <p class="small">Residents run by the computer are labelled AI. People can take the inspector’s role.</p>
   <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>8 / 10</span></div>
 </section>
 
-<!-- 9. Team and how it was built -->
-<section class="page" id="p9-team">
+<section class="page" id="team">
   <div class="kicker">Team and how it was built</div>
   <h2>Two people and a crew of AI agents, in 24 hours, in the open.</h2>
   <div class="cols-2 fill">
@@ -201,8 +210,7 @@
   <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>First Year</span><span>9 / 10</span></div>
 </section>
 
-<!-- 10. Close -->
-<section class="page title-page" id="p10-close">
+<section class="page title-page" id="close">
   <svg class="mark"><use href="#mark"/></svg>
   <h1>Rehearse before you risk.</h1>
   <p class="lead">Next test: do future owners come back tomorrow, and do they pay?</p>

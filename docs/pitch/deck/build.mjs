@@ -33,6 +33,8 @@ try {
       overflowY: el.scrollHeight - el.clientHeight,
       overflowX: el.scrollWidth - el.clientWidth,
       tbd: el.querySelectorAll('.tbd').length,
+      // content must end above the footer line (bottom 100 px of the page)
+      intoFooter: Math.max(0, ...[...el.querySelectorAll('*')].filter((c) => !c.closest('.foot') && !c.closest('svg')).map((c) => c.getBoundingClientRect().bottom - el.getBoundingClientRect().top)) - 980,
       missingImages: [...el.querySelectorAll('img')].filter((img) => !img.complete || img.naturalWidth === 0).map((img) => img.getAttribute('src')),
     })),
   );
@@ -46,6 +48,10 @@ try {
     const notes = [];
     if (r.overflowY > 1 || r.overflowX > 1) {
       notes.push(`overflow ${r.overflowX}×${r.overflowY}px`);
+      bad = true;
+    }
+    if (r.intoFooter > 0) {
+      notes.push(`content runs ${Math.ceil(r.intoFooter)}px into the footer`);
       bad = true;
     }
     if (r.missingImages.length) {
