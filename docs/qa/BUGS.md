@@ -79,6 +79,14 @@ Today → «What to change» → «Too many empty seats −$902/mo — Shrink to
 
 **Кому:** ведущий (`engine/src/analytics/` — в задании B09 только `realWorldPlan` и `roadmapFor`); показ — B08.
 
+## 17. Ветка показа «больше мест»: лист «Resize the room» не показывает последствия до нажатия
+
+**Тяжесть: средняя-высокая (это одна из двух веток, которые выбирает жюри на сцене; правило волны — «решение и сразу последствие»).** Сборка B04 `c49c646`, 23:45 UTC, `node scripts/e2e/pitch-show.mjs --branch seats`.
+
+Manage → «Resize» → лист «Resize the room»: шаговик мест, «Cafe chair × 6 $294», «Two-top table × 6 $210», правило «18 sq ft per seat». Прогноза месяца с новым числом мест нет, хотя движок его считает (`what_if` с полем `size`, `shared/src/types.ts`). Для цены прогноз есть («Next 30 days: now → with your changes»), для мест — нет. Подробности и снимок — `PITCH-CHECK.md`.
+
+**Кому:** B08 (`client/src/screens/business/ManageTab.tsx`, лист «Resize the room»).
+
 ## 14. Момент оплаты без кнопки: «open First Year Pro on /pro» — текстом
 
 **Тяжесть: средняя (20% оценки — «что продаём»; это единственное место, где игрок решает платить).** Сборка B04 `4b76a07`, 23:20 UTC.

@@ -35,9 +35,9 @@ async function freePort() {
 
 /**
  * Starts the game from `root` on a free port with an empty snapshot folder (builds the client when client/dist is missing).
- * Returns { url, stop }. The server is stopped when the process exits.
+ * `env` adds variables (e.g. PITCH=1, CLOCK_KEY). Returns { url, stop }. The server is stopped when the process exits.
  */
-export async function startServer(root, log = console.log) {
+export async function startServer(root, log = console.log, env = {}) {
   if (!existsSync(join(root, 'client/dist/index.html'))) {
     log('client/dist is missing: npm run build');
     const b = spawnSync('npm', ['run', 'build'], { cwd: root, stdio: 'inherit' });
@@ -46,7 +46,7 @@ export async function startServer(root, log = console.log) {
   const port = await freePort();
   const snap = mkdtempSync(join(tmpdir(), 'ohh-e2e-'));
   const child = spawn(process.execPath, [join(root, 'node_modules/tsx/dist/cli.mjs'), 'server/src/main.ts'], {
-    cwd: root, env: { ...process.env, PORT: String(port), HOST: '127.0.0.1', SNAPSHOT_DIR: snap, DEMO_RESTART_MIN: '0' }, stdio: ['ignore', 'pipe', 'pipe'],
+    cwd: root, env: { ...process.env, PORT: String(port), HOST: '127.0.0.1', SNAPSHOT_DIR: snap, DEMO_RESTART_MIN: '0', ...env }, stdio: ['ignore', 'pipe', 'pipe'],
   });
   let errOut = '';
   child.stderr.on('data', (d) => { errOut += d; });
