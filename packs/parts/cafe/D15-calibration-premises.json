@@ -7702,155 +7702,1477 @@
     "supportingSources": [],
     "confidence": "estimate",
     "note": "Estimate."
-   }
-  ],
-  "notCalibrated": [
+   },
    {
     "id": "saturday_room_full",
     "sourceFragment": "D02",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "No free table",
+    "text": "People walk in, look for a seat, find none and leave without ordering.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: seated orders above 85% of seat capacity in the month (weekend mornings first)",
+    "realSignal": "Your own seat utilization: seated orders divided by seat capacity",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.95,
+      "note": "people who would have taken it to go leave at the sight of a full room"
+     },
+     {
+      "field": "quality",
+      "add": -0.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "seating_layout",
+      "optionId": "more_twos",
+      "label": "Swap four-tops for two-tops",
+      "cost": {
+       "cash": 400
+      },
+      "result": "effective seats x 1.15 (D02)"
+     },
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "optionId": "weekend_no_laptops",
+      "label": "No laptops on weekends",
+      "cost": {
+       "reputation": -0.01
+      },
+      "result": "turns x 1.2 at peak"
+     }
+    ],
+    "realFrequency": "Every busy shop on weekends",
+    "source": "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales",
+    "supportingSources": [
+     "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "D02 game values kept; the owner quote (NPR) is qualitative. 85% utilization is D02's trigger."
    },
    {
     "id": "laptop_camp",
     "sourceFragment": "D02",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "The room turns into an office",
+    "text": "Remote workers hold half the tables from nine to five on one coffee each.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: laptop policy 'open' and seat utilization above 70%",
+    "realSignal": "Devices on your guest Wi-Fi for more than 90 minutes at 11am",
+    "effects": [
+     {
+      "field": "seatTurns",
+      "mult": 0.85
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "optionId": "peak_limits",
+      "label": "No laptops 8-11 am and 12-2 pm",
+      "cost": {
+       "reputation": -0.01
+      },
+      "result": "turns back to 1.0 at peak"
+     },
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "optionId": "minimum_spend",
+      "label": "One order per 90 minutes",
+      "cost": {},
+      "result": "turns x 0.95 and ticket +$1"
+     }
+    ],
+    "realFrequency": "Cold months; Wi-Fi data 2026: one-time visitors stay 32 minutes, the most frequent nearly two hours",
+    "source": "https://bloomintelligence.com/coffee-shop-marketing/",
+    "supportingSources": [
+     "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales"
+    ],
+    "confidence": "estimate",
+    "note": "D02 values kept."
    },
    {
     "id": "solo_guests_hold_big_tables",
     "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "morning_line_out_the_door",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "seat_count_at_inspection",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "cellar_stairs_tax",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "aisle_too_narrow",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "neighbor_noise_complaint",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "roll_down_gate_deadline",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "winter_draft_at_the_door",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "vestibule_must_come_down",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "open_mic_over_capacity",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "One person, four chairs",
+    "text": "Every four-top has one guest, a laptop and a coat on it. The room is a third occupied and completely full.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: table mix mostly four-tops and solo guests above half",
+    "realSignal": "Count at 9am: tables in use against chairs in use",
+    "effects": [
+     {
+      "field": "seats",
+      "mult": 0.75
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "seating_layout",
+      "optionId": "bar_rail",
+      "label": "Window bar rail for solo guests",
+      "cost": {
+       "cash": 1200
+      },
+      "result": "seats x 1.0"
+     }
+    ],
+    "realFrequency": "Daily in many shops",
+    "source": "https://bloomintelligence.com/coffee-shop-marketing/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 value; rail cost is my estimate."
    },
    {
     "id": "tight_tables_reviews",
     "sourceFragment": "D02",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "\"We sat in a stranger's lap\"",
+    "text": "Reviews start to mention elbows, bags and overheard phone calls.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "decision: size set above the room's comfortable count (sq ft per seat below 15)",
+    "realSignal": "Share of new reviews that mention space or noise",
+    "effects": [
+     {
+      "field": "reputation",
+      "add": -0.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "fewer_seats",
+      "label": "Take out two tables",
+      "cost": {
+       "seats": -4
+      },
+      "result": "no effect"
+     }
+    ],
+    "realFrequency": "Packed rooms",
+    "source": "https://www.hospitalitynet.org/news/4039649.html",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 game value."
    },
    {
     "id": "quiet_room_afternoons",
     "sourceFragment": "D02",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "Dead room at 3pm",
+    "text": "Forty chairs, four guests. The shop looks closed from the street.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: afternoon utilization under 15%",
+    "realSignal": "Your own seat utilization",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.98
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "optionId": "open",
+      "label": "Invite remote workers in the afternoon",
+      "cost": {},
+      "result": "room looks alive"
+     }
+    ],
+    "realFrequency": "Oversized rooms",
+    "source": "https://www.hospitalitynet.org/news/4039649.html",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 value."
    },
    {
-    "id": "permit_ready_after_buildout",
-    "sourceFragment": "D14",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "no_seat_left",
-    "sourceFragment": "D14",
-    "reason": "not reached in this session"
+    "id": "morning_line_out_the_door",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "The line reaches the door",
+    "text": "At 8:30 the queue runs to the entrance. People on the sidewalk look in and keep walking.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: morning peak demand above bar capacity (25 orders an hour per bar barista) so the line passes 6 people",
+    "realSignal": "People visible in line from the door at the morning peak",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.95,
+      "note": "share of the morning peak lost"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "staff",
+      "id": "barista",
+      "label": "Add a second barista 7-10 am",
+      "cost": {
+       "monthly": 1530,
+       "note": "3 h x 30 days x $17"
+      },
+      "result": "bar capacity doubles at peak"
+     },
+     {
+      "kind": "lever",
+      "id": "order_ahead",
+      "optionId": "on",
+      "label": "Order-ahead app",
+      "cost": {
+       "pctRevenue": 0.03
+      },
+      "result": "part of the line leaves the room"
+     }
+    ],
+    "realFrequency": "Every busy morning",
+    "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Queue response (D06 from Lu et al., paper opened by D06): up to 5 people in line nobody leaves; 6-10 people cost like a 3.2% price rise, 10-15 like 8.3% more; D06 turns it into 10% of arrivals walking away at 6-10 people ahead and 30% at 11-15. One barista pours about 25 orders an hour at the bar. D02's 0.95 is consistent with the 6-10 band."
    },
    {
     "id": "line_out_the_door",
     "sourceFragment": "D14",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "Line out the door at 8 am",
+    "text": "The morning rush is longer than your bar can pour. Past six people the line is on the sidewalk and half of the newcomers walk on.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: line longer than 10 people",
+    "realSignal": "peak-hour arrivals above bar throughput (floorZones)",
+    "mergedWith": "morning_line_out_the_door",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.9,
+      "note": "30% of arrivals at the peak walk away; peak is about a third of the day"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "staff",
+      "id": "barista",
+      "label": "Second barista at peak",
+      "cost": {
+       "monthly": 1530
+      },
+      "result": "line under 6"
+     }
+    ],
+    "realFrequency": "Busy blocks",
+    "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Queue response (D06 from Lu et al., paper opened by D06): up to 5 people in line nobody leaves; 6-10 people cost like a 3.2% price rise, 10-15 like 8.3% more; D06 turns it into 10% of arrivals walking away at 6-10 people ahead and 30% at 11-15. One barista pours about 25 orders an hour at the bar. 30% x one third of daily orders = 10%."
    },
    {
-    "id": "garden_complaint",
-    "sourceFragment": "D10",
-    "reason": "not reached in this session"
+    "id": "no_seat_left",
+    "sourceFragment": "D14",
+    "group": "room",
+    "name": "Every seat taken",
+    "text": "Laptops hold the tables. Guests who wanted to sit take it to go, or leave.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: seats full and laptop share above half",
+    "realSignal": "dine-in arrivals x dwell time above seats",
+    "mergedWith": "saturday_room_full",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.95
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "optionId": "peak_limits",
+      "label": "Peak-hour laptop limit",
+      "cost": {
+       "reputation": -0.01
+      },
+      "result": "seats free up"
+     }
+    ],
+    "realFrequency": "See saturday_room_full",
+    "source": "https://bloomintelligence.com/coffee-shop-marketing/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D14 duplicate."
+   },
+   {
+    "id": "seat_count_at_inspection",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "The inspector counts chairs",
+    "text": "Stools at the window, the bench, the two tables outside: everything counts toward 20.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: seats indoor + outdoor >= 20 and no customer toilet",
+    "realSignal": "Health Department inspection (at least once a year, sooner after a complaint)",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 300,
+      "unit": "each inspection"
+     },
+     {
+      "field": "inspectionPoints",
+      "add": 10
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "stay_at_19_seats",
+      "label": "Remove seats to 19",
+      "cost": {
+       "seats": -1
+      },
+      "result": "no violation"
+     },
+     {
+      "kind": "setup",
+      "id": "customer_restroom",
+      "label": "Build the toilet",
+      "cost": {
+       "cash": 12000
+      },
+      "result": "seats allowed"
+     }
+    ],
+    "realFrequency": "At every inspection while it lasts",
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 (page opened by D02): Health Code §81.22(b), customer toilet at 20 or more seats; code 5E, $300 and 10 points. Not reopened here."
+   },
+   {
+    "id": "permit_ready_after_buildout",
+    "sourceFragment": "D14",
+    "group": "room",
+    "name": "Health permit ready",
+    "text": "22 days after you applied you may open even if the pre-permit inspection has not come.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "schedule: Health permit application date + 22 days (application filed when the build-out is finished)",
+    "realSignal": "FSE permit application date + 22 days",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 22
+     },
+     {
+      "field": "setupCost",
+      "add": 280
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "apply_at_substantial_completion",
+      "label": "Apply when the room is substantially done",
+      "cost": {},
+      "result": "permit wait overlaps the last week of work"
+     }
+    ],
+    "realFrequency": "Every opening",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "NYC Business (opened): fee $280 ($25 more for frozen desserts); open 22 days after you apply even without a pre-permit inspection. Correction to the pack: waitDays 21 -> 22."
    },
    {
     "id": "d00_premises_access_route",
     "sourceFragment": "D00",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "Extra seating blocks the accessible route",
+    "text": "A layout change obstructs access to service or toilets.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: extra tables narrow the route to the counter or toilet below 36 inches",
+    "realSignal": "Owner adds furniture or stock to the previously accessible route.",
+    "effects": [
+     {
+      "field": "accessExposure",
+      "add": 15000,
+      "note": "demand letter and settlement, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "seating_layout",
+      "optionId": "accessible_route",
+      "label": "Keep a 36-inch route",
+      "cost": {
+       "seats": -2
+      },
+      "result": "no exposure"
+     }
+    ],
+    "realFrequency": "New York had 1,471 federal ADA Title III suits in 2025, third in the country (Seyfarth)",
+    "source": "https://www.ada.gov/law-and-regs/design-standards/2010-stds/",
+    "supportingSources": [
+     "https://www.jdsupra.com/legalnews/ada-title-iii-federal-lawsuit-filings-2632226/",
+     "https://www.audacy.com/1010wins/news/local/katzs-deli-settles-americans-with-disabilities-act-lawsuit"
+    ],
+    "confidence": "estimate",
+    "note": "2010 ADA Standards (D02, page opened by D02): 36-inch clear walking surfaces (32 inches for at most 24 inches of length); 5% of dining spaces accessible. $15,000 is my estimate of a private settlement plus own lawyer; a 2013 federal settlement with Katz's Deli carried a $20,000 civil penalty."
+   },
+   {
+    "id": "aisle_too_narrow",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "The route to the counter is 28 inches",
+    "text": "With the extra tables in, a wheelchair cannot reach the register.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "as d00_premises_access_route",
+    "realSignal": "Narrowest point of the path from the door to the counter and to the restroom (36 inches required)",
+    "mergedWith": "d00_premises_access_route",
+    "effects": [
+     {
+      "field": "accessExposure",
+      "add": 15000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "seating_layout",
+      "optionId": "accessible_route",
+      "label": "36-inch route",
+      "cost": {
+       "seats": -2
+      },
+      "result": "no exposure"
+     }
+    ],
+    "realFrequency": "See d00_premises_access_route",
+    "source": "https://www.ada.gov/law-and-regs/design-standards/2010-stds/",
+    "supportingSources": [
+     "https://www.jdsupra.com/legalnews/ada-title-iii-federal-lawsuit-filings-2632226/"
+    ],
+    "confidence": "estimate",
+    "note": "D02 duplicate."
    },
    {
     "id": "d00_premises_entrance_step",
     "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_event_capacity",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_odor_home",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "An entrance step excludes customers",
+    "text": "The shop must assess feasible access improvements and service alternatives.",
+    "tier": "core",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: a serial filer works the avenue; every shop with a step and no ramp or bell gets a letter",
+    "realSignal": "Access survey records a step that prevents independent entry.",
+    "effects": [
+     {
+      "field": "accessExposure",
+      "add": 15000,
+      "appliesIf": "step and no alternative"
+     },
+     {
+      "field": "demand",
+      "mult": 0.99,
+      "note": "guests with strollers and wheelchairs go elsewhere"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "portable_ramp",
+      "label": "Portable ramp and a call bell",
+      "cost": {
+       "cash": 600
+      },
+      "result": "readily achievable alternative; exposure x 0.3 (estimate)"
+     },
+     {
+      "kind": "setup",
+      "id": "permanent_ramp",
+      "label": "Re-pitch the entrance",
+      "cost": {
+       "cash": 12000
+      },
+      "result": "exposure 0"
+     }
+    ],
+    "realFrequency": "New York: 1,471 federal ADA Title III suits in 2025; filings are shifting to state court",
+    "source": "https://www.jdsupra.com/legalnews/ada-title-iii-federal-lawsuit-filings-2632226/",
+    "supportingSources": [
+     "https://www.ada.gov/law-and-regs/design-standards/2010-stds/",
+     "https://www.audacy.com/1010wins/news/local/katzs-deli-settles-americans-with-disabilities-act-lawsuit"
+    ],
+    "confidence": "estimate",
+    "note": "Federal count verified only through a law-firm summary (search). Ramp prices are my estimates; a ramp on the sidewalk needs city approval."
    },
    {
     "id": "d00_premises_toilet_route",
     "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_ac_neighbor",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_public_landlord_use",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "Customers reach the toilet through food preparation",
+    "text": "The proposed shared bathroom route conflicts with health requirements.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: layout sends customers to the toilet through the food preparation area",
+    "realSignal": "Layout shows patron access crossing preparation, food storage or washing areas.",
+    "effects": [
+     {
+      "field": "inspectionPoints",
+      "add": 5
+     },
+     {
+      "field": "fine",
+      "add": 300
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "move_door",
+      "label": "Reroute the toilet door",
+      "cost": {
+       "cash": 3000
+      },
+      "result": "no violation"
+     }
+    ],
+    "realFrequency": "Small long rooms",
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Points and fine by analogy with code 5E; estimates."
    },
    {
     "id": "d00_premises_exit_storage",
     "sourceFragment": "D00",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "Bulk supplies consume the exit passage",
+    "text": "A discounted large delivery creates an unsafe storage layout.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: bulk delivery stored in the exit passage",
+    "realSignal": "Player orders stock beyond storage capacity and cartons occupy an exit route.",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 1000,
+      "note": "Fire Department summons, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "smaller_orders",
+      "label": "Order weekly, not monthly",
+      "cost": {
+       "cogsMult": 1.01
+      },
+      "result": "passage clear"
+     }
+    ],
+    "realFrequency": "Small rooms",
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-144597",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate; the fine schedule was not opened."
+   },
+   {
+    "id": "d00_premises_event_capacity",
+    "sourceFragment": "D00",
+    "group": "room",
+    "name": "A private event changes the occupancy plan",
+    "text": "A planned gathering must be checked against lawful capacity and assembly requirements.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: event with more than 74 people in a room without a Place of Assembly certificate",
+    "realSignal": "Proposed event attendance or configuration exceeds the approved small-shop layout.",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 2500
+     },
+     {
+      "field": "setupCost",
+      "add": 250,
+      "appliesIf": "temporary certificate bought"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "temporary_pa_certificate",
+      "label": "Temporary Place of Assembly certificate",
+      "cost": {
+       "cash": 250
+      },
+      "result": "legal event"
+     },
+     {
+      "kind": "choice",
+      "id": "cap_guests",
+      "label": "Cap at 74 people",
+      "cost": {},
+      "result": "no permit"
+     }
+    ],
+    "realFrequency": "Events",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 numbers: penalty $2,500 ($12,500 on default), temporary certificate $250; standing people count at 5 sq ft each."
+   },
+   {
+    "id": "open_mic_over_capacity",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Eighty people for the open mic",
+    "text": "The room is approved for fewer than 75. Somebody posts a photo of the crowd; somebody else calls 311.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "as d00_premises_event_capacity",
+    "realSignal": "People in the room against the number on the Certificate of Occupancy",
+    "mergedWith": "d00_premises_event_capacity",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 2500
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "temporary_pa_certificate",
+      "label": "Temporary certificate",
+      "cost": {
+       "cash": 250
+      },
+      "result": "legal"
+     }
+    ],
+    "realFrequency": "Events",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 duplicate."
+   },
+   {
+    "id": "d00_premises_odor_home",
+    "sourceFragment": "D00",
+    "group": "room",
+    "name": "Cafe exhaust enters a neighboring home",
+    "text": "The discharge arrangement needs technical investigation.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "decision: exhaust or roaster discharge near a window of a home; neighbor complaint",
+    "realSignal": "Documented odor complaint identifies cafe exhaust entering a residence.",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 560,
+      "note": "first DEP air violation, estimate by analogy"
+     },
+     {
+      "field": "setupCost",
+      "add": 5000,
+      "appliesIf": "fix: carbon filter or duct extension, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "exhaust_filter",
+      "label": "Carbon filter on the exhaust",
+      "cost": {
+       "cash": 5000
+      },
+      "result": "complaint closed"
+     },
+     {
+      "kind": "choice",
+      "id": "no_roasting",
+      "label": "Buy roasted beans",
+      "cost": {
+       "cogsMult": 1.02
+      },
+      "result": "no odor"
+     }
+    ],
+    "realFrequency": "Mixed-use buildings",
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02313",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "Estimates; DEP's odor penalty was not opened."
+   },
+   {
+    "id": "d00_premises_ac_neighbor",
+    "sourceFragment": "D00",
+    "group": "room",
+    "name": "The rooftop condenser is noisy in an apartment",
+    "text": "Equipment placement creates a noise issue beyond the cafe boundary.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     6,
+     7,
+     8,
+     9
+    ],
+    "durationMonths": 2,
+    "trigger": "decision: condenser on the roof or in the yard under an apartment window",
+    "realSignal": "DEP complaint or acoustic survey identifies the cafe circulation device.",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 560,
+      "unit": "first offense; $1,120 second, $1,680 third"
+     },
+     {
+      "field": "setupCost",
+      "add": 4000,
+      "appliesIf": "relocate or enclose the unit, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "condenser_enclosure",
+      "label": "Acoustic enclosure",
+      "cost": {
+       "cash": 4000
+      },
+      "result": "below 42 dB(A)"
+     }
+    ],
+    "realFrequency": "Summer complaints",
+    "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf"
+    ],
+    "confidence": "verified",
+    "note": "DEP penalty schedule (opened): circulation device noise above 42 dB(A), §24-227(a): $560 first offense ($875 on default), $1,120 second, $1,680 third; repeats counted within two years at the same premises. Enclosure price is my estimate."
+   },
+   {
+    "id": "neighbor_noise_complaint",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "The apartment upstairs calls 311",
+    "text": "An inspector takes a sound reading in the bedroom above your speakers.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: music volume above the residential limit; upstairs neighbor calls 311",
+    "realSignal": "311 noise complaints for the address",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 3200,
+      "unit": "first offense; $6,400 second, $9,600 third",
+      "note": "$0 for a first offense if compliance is certified within 30 days"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "certify_fix",
+      "label": "Fix and certify within 30 days",
+      "cost": {
+       "cash": 500
+      },
+      "result": "first penalty $0"
+     },
+     {
+      "kind": "lever",
+      "id": "music_level",
+      "optionId": "low",
+      "label": "Keep music low",
+      "cost": {},
+      "result": "no violation"
+     }
+    ],
+    "realFrequency": "Mixed-use buildings",
+    "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "DEP penalty schedule (opened): §24-231(a) music from a commercial establishment above permitted levels, $3,200 first offense ($8,000 default), $6,400, $9,600; a zero penalty may be imposed for a first offense on certification of compliance within 30 days. Correction to D02, which had $2,000."
+   },
+   {
+    "id": "winter_draft_at_the_door",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Cold blast at every door swing",
+    "text": "Each customer lets January in. The two tables by the entrance stay empty and guests keep their coats on.",
+    "tier": "core",
+    "scale": "city",
+    "months": [
+     12,
+     1,
+     2
+    ],
+    "durationMonths": 3,
+    "trigger": "calendar: cold months for shops with no air curtain or vestibule",
+    "realSignal": "Days in the month with a mean temperature under 40 degrees F at Central Park",
+    "effects": [
+     {
+      "field": "seats",
+      "mult": 0.9
+     },
+     {
+      "field": "quality",
+      "add": -0.02
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "air_curtain",
+      "label": "Air curtain over the door",
+      "cost": {
+       "cash": 1500
+      },
+      "result": "no effect"
+     },
+     {
+      "kind": "setup",
+      "id": "winter_vestibule",
+      "label": "Storm vestibule Nov 15 - Apr 15",
+      "cost": {
+       "cash": 3000
+      },
+      "result": "no effect; must come down by April 15"
+     }
+    ],
+    "realFrequency": "Every winter",
+    "source": "https://achrnews.com/articles/159663-michigan-eatery-eliminates-cold-complaints-with-air-curtains",
+    "supportingSources": [
+     "https://portal.311.nyc.gov/article/?kanumber=KA-02227"
+    ],
+    "confidence": "estimate",
+    "note": "D02 values; equipment prices are my estimates."
+   },
+   {
+    "id": "vestibule_must_come_down",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "April 15: the vestibule comes down",
+    "text": "Storm enclosures are legal only from November 15 to April 15. After that the box at your door is an illegal structure.",
+    "tier": "exotic",
+    "scale": "city",
+    "months": [
+     4
+    ],
+    "durationMonths": 1,
+    "trigger": "calendar: April 15 for shops with a storm enclosure",
+    "realSignal": "The date; 311 complaint category for awnings, canopies and storm enclosures",
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.1,
+      "appliesIf": "left up"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "remove_by_april_15",
+      "label": "Take it down on time",
+      "cost": {
+       "cash": 300
+      },
+      "result": "no complaint"
+     }
+    ],
+    "realFrequency": "Yearly",
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02227",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02: NYC311 lets the public report enclosures left up after April 15; fine not found."
+   },
+   {
+    "id": "roll_down_gate_deadline",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "The roll-down gate deadline",
+    "text": "The city says every solid security gate must be replaced with a see-through one by July 1. Quotes run $6,000 to $7,000 a gate.",
+    "tier": "exotic",
+    "scale": "city",
+    "months": [
+     7
+    ],
+    "durationMonths": 0,
+    "trigger": "cancelled: the July 1, 2026 deadline was repealed by the Council on June 30, 2026",
+    "realSignal": "Buildings Department service notice of February 17, 2026; City Council vote on Int 0910-A, June 30, 2026 (51-0)",
+    "effects": [
+     {
+      "field": "cash",
+      "add": 0,
+      "note": "nothing to pay; event kept only as a 'read the Council calendar' card"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "wait_and_watch",
+      "label": "Do not replace the gate yet",
+      "cost": {},
+      "result": "saves $6,500"
+     }
+    ],
+    "realFrequency": "Once",
+    "source": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "NY1 and the DOB newsletter (search excerpts): the Council voted 51-0 on June 30, 2026 for Intro 910-A, which repeals Local Law 75 of 2009; DOB had paused enforcement. Signature status not confirmed. Correction to D02's -$6,500."
+   },
+   {
+    "id": "cellar_stairs_tax",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Every gallon of milk climbs the stairs",
+    "text": "Stock lives in the cellar. Each restock takes a barista off the bar for four minutes.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "decision: stock stored in the cellar",
+    "realSignal": "Trips downstairs per shift",
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.97
+     },
+     {
+      "field": "seats",
+      "add": 3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "daily_restock_list",
+      "label": "One restock run before opening",
+      "cost": {},
+      "result": "staff 0.99"
+     }
+    ],
+    "realFrequency": "Most old storefronts",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 values."
+   },
+   {
+    "id": "garden_complaint",
+    "sourceFragment": "D10",
+    "group": "room",
+    "name": "A neighbor complains about the back yard",
+    "text": "Someone upstairs calls 311 about the tables in your yard. The Buildings Department orders the space vacated.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "durationMonths": 6,
+    "trigger": "decision: back-yard seating not allowed by the Certificate of Occupancy; neighbor calls 311",
+    "realSignal": "DOB complaints and partial vacate orders",
+    "effects": [
+     {
+      "field": "seats",
+      "mult": 0.7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "check_co_before_lease",
+      "label": "Check the CO for the yard",
+      "cost": {},
+      "result": "price the yard at zero"
+     }
+    ],
+    "realFrequency": "Old rear yards",
+    "source": "https://www.dnainfo.com/new-york/20141006/east-village/city-waited-3-decades-rule-yaffa-cafes-back-patio-illegal-manager-says",
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page"
+    ],
+    "confidence": "estimate",
+    "note": "D10 value."
    },
    {
     "id": "d00_world_event_snowmelt_counter_damage",
     "sourceFragment": "D00",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "A known roof leak reaches the coffee counter",
+    "text": "Water damages several essential items in the same work area.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3
+    ],
+    "durationMonths": 1,
+    "trigger": "state: known roof leak not fixed by the landlord; thaw after snow",
+    "realSignal": "A common announced thaw scenario affects a site with an unresolved roof leak.",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 2
+     },
+     {
+      "field": "cash",
+      "add": -3000,
+      "note": "grinder and stock, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "repair_deadline",
+      "label": "Landlord repairs within 10 days of notice",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "leak fixed before the thaw"
+     }
+    ],
+    "realFrequency": "Old roofs",
+    "source": "https://www.lehighvalleypublicmedia.org/news/parkland-east-penn/a-bit-overwhelming-nowhere-coffee-co-temporarily-closed-in-emmaus-following-heavy-losses-from-water-damage/",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/RPP/227"
+    ],
+    "confidence": "estimate",
+    "note": "Estimates."
    },
    {
     "id": "d00_street_hidden_sign",
     "sourceFragment": "D00",
-    "reason": "not reached in this session"
+    "group": "room",
+    "name": "A shed hides the existing cafe sign",
+    "text": "The lawful business sign becomes obscured by protective construction.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: the building puts up a sidewalk shed",
+    "realSignal": "A shared construction scenario places a shed over the existing sign.",
+    "effects": [
+     {
+      "field": "footTraffic",
+      "mult": 0.9
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "shed_banner",
+      "label": "Banner on the shed",
+      "cost": {
+       "cash": 500
+      },
+      "result": "footTraffic 0.95, estimate"
+     }
+    ],
+    "realFrequency": "Common; D18 owns sheds",
+    "source": "https://www.nyc.gov/site/buildings/safety/sidewalk-sheds.page",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "The pack's sidewalk_shed value (0.9) reused; D18 calibrates the shed itself."
+   },
+   {
+    "id": "d00_premises_public_landlord_use",
+    "sourceFragment": "D00",
+    "group": "room",
+    "name": "A public-landlord storefront cannot accept the proposed wet use",
+    "text": "The attractive available space does not fit the landlord program use restrictions.",
+    "tier": "exotic",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "attribute: NYCHA or other public-landlord storefront with use restrictions",
+    "realSignal": "Cafe applicant finds no existing restaurant infrastructure in a NYCHA listing.",
+    "effects": [
+     {
+      "field": "leaseAvailable",
+      "set": false,
+      "appliesIf": "wet use not allowed"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "dry_concept",
+      "label": "Packaged coffee and pastries only",
+      "cost": {
+       "demandMult": 0.8
+      },
+      "result": "lease possible"
+     }
+    ],
+    "realFrequency": "Rare",
+    "source": "https://www.nyc.gov/site/nycha/business/store-leasing.page",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Qualitative."
    }
-  ]
+  ],
+  "notCalibrated": []
  },
  "sources": [
   {
    "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-23455",
    "title": "15 RCNY Chapter 1 (asbestos), ACP-7 fee tiers",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.ada.gov/law-and-regs/design-standards/2010-stds/",
+   "title": "2010 ADA Standards for Accessible Design",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://achrnews.com/articles/159663-michigan-eatery-eliminates-cold-complaints-with-air-curtains",
+   "title": "ACHR News, air curtains end cold-draft complaints",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -7881,6 +9203,12 @@
   {
    "url": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
    "title": "BizBuySell, coffee shop and cafe valuation benchmarks",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://bloomintelligence.com/coffee-shop-marketing/",
+   "title": "Bloom Intelligence, Wi-Fi dwell times at US coffee shops 2026",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -7917,6 +9245,18 @@
   {
    "url": "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail",
    "title": "Cushman & Wakefield, Manhattan Retail MarketBeat Q3 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+   "title": "Lu, Musalem, Olivares, Schilkrut: measuring the effect of queues on customer purchases (deli counter)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf",
+   "title": "DEP, hospitality industry guide to environmental compliance",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -8029,6 +9369,12 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-144597",
+   "title": "NYC Fire Code, means of egress maintenance",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide",
    "title": "Cushman & Wakefield, retail fit-out cost guide",
    "checked": "2026-11-14",
@@ -8065,8 +9411,20 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+   "title": "NYC Health Code Article 81 (food preparation and food establishments)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
    "title": "Habitat, holdover rent premiums enforced by NY courts",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.hospitalitynet.org/news/4039649.html",
+   "title": "Hospitality Net, table spacing and diner satisfaction",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -8085,6 +9443,12 @@
   {
    "url": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
    "title": "DHC Legal via JD Supra, build-out provisions in NYC restaurant leases",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.audacy.com/1010wins/news/local/katzs-deli-settles-americans-with-disabilities-act-lawsuit",
+   "title": "1010 WINS, Katz's Deli ADA settlement with a $20,000 penalty",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -8131,6 +9495,12 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates",
+   "title": "NY1, Council repeals roll-down gate deadline, July 2, 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.metro-manhattan.com/security-deposit/",
    "title": "Metro Manhattan Office Space, security deposits",
    "checked": "2026-11-14",
@@ -8149,8 +9519,26 @@
    "confidence": "verified"
   },
   {
+   "url": "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales",
+   "title": "NPR 2014, cafe without laptops",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/site/nycha/business/store-leasing.page",
+   "title": "NYCHA store leasing",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://thenycalliance.org/news-item/Con-Edison-Gas-Service",
    "title": "NYC Hospitality Alliance, Con Edison gas service check before a lease",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02313",
+   "title": "NYC311, odor complaints",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -8251,8 +9639,20 @@
    "confidence": "verified"
   },
   {
+   "url": "https://www.jdsupra.com/legalnews/ada-title-iii-federal-lawsuit-filings-2632226/",
+   "title": "Seyfarth Shaw, ADA Title III federal filings 2025",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about",
    "title": "NYC Business, shared kitchens",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/site/buildings/safety/sidewalk-sheds.page",
+   "title": "DOB, sidewalk sheds",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -8299,6 +9699,12 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+   "title": "NYC Business, temporary Place of Assembly certificate",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/",
    "title": "Triumph Electric, Con Edison service upgrade guide 2026",
    "checked": "2026-11-14",
@@ -8311,8 +9717,26 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02227",
+   "title": "NYC311, sidewalk storm enclosures",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.lehighvalleypublicmedia.org/news/parkland-east-penn/a-bit-overwhelming-nowhere-coffee-co-temporarily-closed-in-emmaus-following-heavy-losses-from-water-damage/",
+   "title": "Lehigh Valley Public Media, cafe closed by water damage",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
    "title": "WebstaurantStore, two-group espresso machine price",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.dnainfo.com/new-york/20141006/east-village/city-waited-3-decades-rule-yaffa-cafes-back-patio-illegal-manager-says",
+   "title": "DNAinfo, East Village cafe back patio ruled illegal",
    "checked": "2026-11-14",
    "confidence": "estimate"
   }
