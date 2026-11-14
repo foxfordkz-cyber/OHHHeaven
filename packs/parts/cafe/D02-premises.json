@@ -1,0 +1,3102 @@
+{
+  "id": "cafe",
+  "part": "D02",
+  "theme": "Premises and the physics of the room",
+  "checked": "2026-11-14",
+  "howNumbersWereChecked": "",
+  "sizing": {
+    "unitName": "seat",
+    "min": 6,
+    "max": 40,
+    "default": 18,
+    "sqftPerUnit": 21,
+    "unitsServedPerSizeMonth": 170,
+    "takeawayShare": 0.6,
+    "cleaningCostPerSizeMonth": 15,
+    "crowdPenaltyAbove": 0.85,
+    "emptyPenaltyBelow": 0.3,
+    "source": "https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-10-means-of-egress",
+    "confidence": "estimate",
+    "note": "Revised by D02. sqftPerUnit 18 -> 21: the engine divides 60% of the floor by this number, and 18 put 26 seats into 800 sq ft, above the research notes' own 15-25. Floor budget for 800 sq ft (extra.floorPlan): service bar 120, queue and pickup 70, accessible restroom 60, back of house 120, entry 25 = 395 sq ft that never holds a chair; 405 sq ft is left for seating; at 18 net sq ft per seat that is 22 seats, and 480 / 22 = 21. Anchors: the building code counts 15 net sq ft per person at tables and chairs and 5 net sq ft per standing person (Table 1004.5; NY State and model code values, the NYC 2022 table was not opened); vendor seating charts give 11-14 sq ft per seat for fast food, 12-15 full service, 18-20 fine dining; a Russian planning guide gives 1.6 sq m (17 sq ft) per guest. unitsServedPerSizeMonth stays 170, now with a derivation: 12 open hours, mean seat occupancy 47%, mean stay 60 minutes (70% short stays of 35 minutes, 30% laptop stays of 120 minutes) = 5.6 seated orders per seat a day. Stay lengths: Bloom Intelligence Wi-Fi data, 25 US coffee shops, June-September 2026: 32 minutes for a one-time visitor, almost two hours for the most frequent ones. takeawayShare stays 0.6: no public to-go split exists for independent cafes; the National Restaurant Association puts off-premises at nearly 75% of all restaurant traffic, drive-thru included. crowdPenaltyAbove 0.9 -> 0.85: solo guests hold two-tops, so a room is full when well under all chairs are taken (see extra.mechanics effective_seats_and_table_mix). emptyPenaltyBelow 0.4 -> 0.3: evidence that an empty room repels coffee buyers is weak (one 2025 survey study on crowding as social proof), so the penalty should start later. Both thresholds stay game-balance values."
+  },
+  "setup": [
+    {
+      "id": "customer_restroom",
+      "name": "Customer restroom upgrade (needed for 20 or more seats)",
+      "kind": "buildout",
+      "cost": 12000,
+      "required": false,
+      "lifespanMonths": 180,
+      "withoutItViolation": "no_patron_toilet",
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://portal.311.nyc.gov/article/?kanumber=KA-01351",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+      "confidence": "estimate",
+      "note": "Same id as in the pack; the price stays the earlier allowance (no public NYC price was found), the rule is now exact. Health Code 81.22(b), seen in a search excerpt of the code: food service establishments with a seating capacity of 20 or more shall provide toilet facilities for patrons, except premises where a permitted food service establishment operated on or before December 5, 1977; such an old premises loses the exemption when it does a renovation that needs a Department of Buildings permit. Patrons and staff may share one toilet, but patrons may not be sent through the kitchen, food prep, storage or dishwashing area (81.22(d)). The U.S. Access Board sets no minimum room size; its smallest sample single-user plan is 7 ft x 5 ft (35 sq ft) and a typical room is about 48 sq ft, plus the door clearance. A single-occupant toilet room must carry an all-gender sign next to the door (Local Law 79 of 2016)."
+    },
+    {
+      "id": "portable_entrance_ramp",
+      "name": "Portable threshold ramp for a one-step entrance",
+      "kind": "equipment",
+      "cost": 157,
+      "required": false,
+      "lifespanMonths": 120,
+      "source": "https://reliableramps.com/products/alumiramp-threshold-ramp-tr06n",
+      "confidence": "verified",
+      "checkedVia": "search_excerpt",
+      "note": "Retailer listing seen in a search excerpt: AlumiRamp aluminum threshold ramp $112.99 for a 6-inch rise, $156.99 for a 12-inch rise. A stopgap, not a compliant ramp: the ADA Standards allow 1:12 at most (1:10 for a rise up to 6 inches and 1:8 up to 3 inches only in existing buildings with no room), so a 7-inch step needs 7 feet of ramp. A permanent ramp that reaches onto the sidewalk needs a Transportation Department revocable consent; for a building put up before December 6, 1969 it may project no more than 44 inches. No public price for a permanent storefront ramp in NYC was found."
+    },
+    {
+      "id": "automatic_door_operator",
+      "name": "Automatic door opener with push plate",
+      "kind": "equipment",
+      "cost": 5000,
+      "required": false,
+      "lifespanMonths": 120,
+      "source": "https://ufiredoors.com/blog/ada-door-operator-cost/",
+      "confidence": "estimate",
+      "note": "Vendor guides: a low-energy swing door operator runs $2,000-$5,000 installed nationally; one New York / New Jersey installer puts most complete openings at $7,500-$15,000. $5,000 is the top of the national range, taken as the low end for NYC. Not required by law for an existing door that a wheelchair user can open."
+    },
+    {
+      "id": "dedicated_espresso_circuit",
+      "name": "Dedicated 208-240V circuit for the espresso machine",
+      "kind": "buildout",
+      "cost": 1250,
+      "required": false,
+      "lifespanMonths": 240,
+      "source": "https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
+      "confidence": "estimate",
+      "note": "Vendor guides: a two-group machine wants its own 30-amp circuit at 208-240V, a three-group machine about 40 amps; each grinder needs a separate 110V circuit. Adding one 220V circuit costs $500-$2,000 depending on the panel and the distance (vendor ballpark, not an NYC quote); $1,250 is the midpoint. Already present in a former cafe."
+    },
+    {
+      "id": "electrical_service_upgrade",
+      "name": "Electrical service upgrade to 200 amps",
+      "kind": "buildout",
+      "cost": 8000,
+      "required": false,
+      "lifespanMonths": 360,
+      "waitDays": 84,
+      "agency": "Con Edison; NYC Department of Buildings (electrical permit)",
+      "source": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/",
+      "confidence": "estimate",
+      "note": "Needed when the panel cannot carry the bar: a two-group espresso machine (30 A), dishwasher, ice machine, fridges and air conditioning together. Price: a directory page gives $5,500-$10,000 for a 200-amp panel upgrade in NYC, a national guide $5,000-$15,000 for small commercial three-phase service; $8,000 is the middle. No official price exists. Wait: one NYC electrician quotes 4-12 weeks from the load letter, a 2026 guide 12-24 weeks (6-10 weeks for Con Edison layout drawings, 3-5 weeks of inspections); 84 days is the overlap. Rent runs the whole time."
+    },
+    {
+      "id": "backflow_preventer",
+      "name": "Backflow prevention device on the water line",
+      "kind": "buildout",
+      "cost": 3500,
+      "required": false,
+      "lifespanMonths": 240,
+      "agency": "NYC Department of Environmental Protection (DEP)",
+      "link": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+      "withoutItViolation": "backflow_not_tested",
+      "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+      "confidence": "estimate",
+      "note": "DEP FAQ, seen in a search excerpt: backflow devices are mandated for businesses that pose a risk to the public water supply, and once installed must be tested every 12 months by a certified tester; failure can bring fines or disconnection of water service. Restaurants are on the list (contractor sources). Price: contractor blogs give $2,000-$5,000 for the project plus a $350 plan review fee (unverified); $3,500 is the midpoint. A former cafe usually has one already: then only the yearly test is due."
+    },
+    {
+      "id": "grease_interceptor_unit",
+      "name": "Under-sink grease interceptor, installed",
+      "kind": "buildout",
+      "cost": 2500,
+      "required": false,
+      "lifespanMonths": 180,
+      "agency": "NYC Department of Environmental Protection (DEP)",
+      "link": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page",
+      "withoutItViolation": "grease_interceptor_neglect",
+      "source": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page",
+      "confidence": "estimate",
+      "note": "DEP, seen in a search excerpt: every business that disposes of grease should have a properly sized grease interceptor (15 RCNY 19-11); food waste grinders are not allowed in NYC commercial establishments. Price: national cost guides put an indoor under-sink unit at $500-$3,000 installed and add 30%-50% for labor in New York; $2,500 is my figure inside that band. Must be installed by a licensed master plumber. A former cafe has one; a former shop or salon does not, and the build-out price for such a space should already include it."
+    },
+    {
+      "id": "hvac_replacement",
+      "name": "Replace the air conditioning unit",
+      "kind": "equipment",
+      "cost": 15000,
+      "required": false,
+      "lifespanMonths": 180,
+      "source": "https://www.vincomechanical.com/hvac-replacement-cost-nyc",
+      "confidence": "estimate",
+      "note": "NYC contractor pages: small commercial split systems and rooftop units $8,000-$40,000; a 5-10 ton rooftop replacement with curb adapter and rigging $18,000-$45,000; a national guide puts 4-5 ton units at $9,000-$14,500 installed. An 800 sq ft cafe needs about 3-5 tons; $15,000 is my figure for one unit with rigging. Most small leases make the tenant pay for repair and replacement of the unit that serves the space: ask who owns it before signing. The 15-year life is a planning value."
+    },
+    {
+      "id": "see_through_security_grille",
+      "name": "See-through roll-down security grille",
+      "kind": "equipment",
+      "cost": 6500,
+      "required": false,
+      "lifespanMonths": 240,
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.nyc.gov/assets/buildings/pdf/security_grille-sn.pdf",
+      "source": "https://gothamist.com/news/nyc-council-scrambles-to-reverse-impending-ban-on-metal-storefront-security-gates",
+      "confidence": "estimate",
+      "note": "Gothamist, 2026: a bakery owner was quoted $6,000-$7,000 to replace one gate; other reports give $5,000-$20,000. Local Law 75 of 2009 required every grille on a Group B or M storefront to be at least 70% see-through by July 1, 2026; on June 30, 2026 the City Council voted 51-0 (Int 0910-A) to drop the deadline, so the 70% rule now applies only when a grille is newly installed or replaced. A new grille still needs a Buildings Department permit."
+    },
+    {
+      "id": "storefront_awning",
+      "name": "Fabric storefront awning with the shop name",
+      "kind": "other",
+      "cost": 2600,
+      "required": false,
+      "lifespanMonths": 96,
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+      "source": "https://sinra.ai/projects/permits/general-construction-153-second-avenue-manhattan-850583358",
+      "confidence": "estimate",
+      "note": "Job costs declared on recent Buildings Department filings, read through a permit aggregator: a single storefront awning $2,000 in Sunset Park, $2,800 in the East Village, $2,600 in an Upper East Side landmark district; retractable ones run to $15,000. The awning is a permitted job. Zoning limits what it may say: lettering no taller than 12 inches, no more than 12 sq ft, name and address only (as summarized in a LISC storefront guide; the zoning text was not opened). The 8-year fabric life is a planning value."
+    },
+    {
+      "id": "winter_vestibule",
+      "name": "Seasonal entrance vestibule (storm enclosure)",
+      "kind": "other",
+      "cost": 4500,
+      "required": false,
+      "lifespanMonths": 5,
+      "agency": "NYC Department of Buildings",
+      "link": "https://portal.311.nyc.gov/article/?kanumber=KA-02227",
+      "source": "https://www.signsny.com/outdoor/winter-vestibules",
+      "confidence": "estimate",
+      "note": "One NYC fabricator lists temporary vestibules at $4,500-$10,000 with seasonal installation and removal included; $4,500 is the low end for a single door. NYC311, seen in a search excerpt: storm enclosures are allowed only from November 15 to April 15 and may not stand more than 18 inches beyond the street line; a fabricator cites a larger allowance of 25 sq ft for eating and drinking places with a 5-foot clear sidewalk (not checked against the Building Code). The cost returns every winter."
+    },
+    {
+      "id": "air_curtain",
+      "name": "Air curtain over the front door",
+      "kind": "equipment",
+      "cost": 1450,
+      "required": false,
+      "lifespanMonths": 120,
+      "source": "https://www.pickcomfort.com/cost-air-curtain-typical-prices-what-affects-quote/",
+      "confidence": "estimate",
+      "note": "Cost guide: a 48-inch unheated unit with professional installation is about $1,450; the installed range for one entrance is $900-$4,000, a heated unit can double the price, and the Northeast runs 10%-25% higher. A trade magazine case (ACHR News) describes a restaurant that ended cold-draft complaints with one."
+    },
+    {
+      "id": "roadway_cafe_license",
+      "name": "Dining Out NYC roadway cafe license",
+      "kind": "license",
+      "cost": 4550,
+      "required": false,
+      "waitDays": 120,
+      "agency": "NYC Department of Transportation (Dining Out NYC)",
+      "link": "https://www.diningoutnyc.info/apply",
+      "withoutItViolation": "unlicensed_sidewalk_cafe",
+      "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+      "confidence": "verified",
+      "checkedVia": "search_excerpt",
+      "note": "City Council report (April 2025), seen in a search excerpt: $1,050 for a four-year roadway cafe license, a $2,500 security deposit and a public hearing notice fee of up to $1,000 that every roadway application pays = $4,550; on top comes a yearly fee of $5 to $25 per sq ft by sector. The 120 days are the three to five months the 2026 Charter Revision Commission report gives for roadway applications (sidewalk ones take six to eight). Since Local Law 135 of 2026 (signed August 31, 2026) roadway cafes may stay up all year. The structure itself is a separate item."
+    },
+    {
+      "id": "roadway_cafe_structure",
+      "name": "Roadway cafe structure: barriers, platform, furniture",
+      "kind": "furniture",
+      "cost": 20000,
+      "required": false,
+      "lifespanMonths": 48,
+      "source": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants",
+      "confidence": "estimate",
+      "note": "Streetsblog, April 2025: a roadway setup can easily cost more than $35,000 with city fees, construction and insurance; rental companies quote about $20,000 a season; one owner spent just over $5,000 on a simple one. $20,000 is the rental-season figure used as a purchase price for a plain compliant setup. Until 2026 the structure had to be taken down and stored every winter."
+    },
+    {
+      "id": "place_of_assembly_certificate",
+      "name": "Place of Assembly Certificate of Operation (75 or more people)",
+      "kind": "permit",
+      "cost": 235,
+      "required": false,
+      "waitDays": 60,
+      "agency": "NYC Department of Buildings; Fire Department (FDNY) annual permit",
+      "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page",
+      "withoutItViolation": "overcrowding_over_occupancy",
+      "source": "https://www.nyc.gov/assets/buildings/pdf/pa_guide.pdf",
+      "confidence": "estimate",
+      "note": "Buildings Department, seen in search excerpts: a Place of Assembly Certificate of Operation is required when the Certificate of Occupancy allows 75 or more people indoors (200 outdoors); within a year the Fire Department's annual Place of Assembly permit must follow, and its fee rises with the occupancy. The $235 ($200 filing + $35 processing) is from an older Buildings guide and may be out of date; the Fire Department fee was not found. The 60 days are my allowance. The real cost of crossing 74 people is not this fee: an assembly space needs a second exit, filed seating plans and trained fire safety staff."
+    },
+    {
+      "id": "temporary_place_of_assembly",
+      "name": "Temporary Place of Assembly certificate for one event",
+      "kind": "permit",
+      "cost": 250,
+      "required": false,
+      "waitDays": 14,
+      "agency": "NYC Department of Buildings",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+      "withoutItViolation": "overcrowding_over_occupancy",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+      "confidence": "verified",
+      "checkedVia": "search_excerpt",
+      "note": "NYC Business, seen in a search excerpt: the fee is $250, plus $100 for every day the request is late; it must be filed at least 10 business days before the event (14 calendar days). The legal way to hold one open-mic night or launch party for 75 or more people in a room that is normally under the line."
+    },
+    {
+      "id": "landmarks_storefront_permit",
+      "name": "Landmarks permit for a storefront, sign or awning",
+      "kind": "permit",
+      "cost": 0,
+      "required": false,
+      "waitDays": 21,
+      "agency": "NYC Landmarks Preservation Commission (LPC)",
+      "link": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "confidence": "estimate",
+      "note": "Applies only in a historic district or a landmark building. Commission pages, seen in search excerpts: any change to the outside of a storefront needs a permit, signs, awnings and lighting included; planters and A-frames that are not attached to the building do not. A 2018 fact sheet says staff aim to issue rule-conforming permits in 10 business days (FasTrack) or 15: 21 calendar days here. Staff will not approve a storefront with more than three kinds of signs. No fee was found, so the cost is 0; the price is the wait and the designer's drawings."
+    },
+    {
+      "id": "storefront_glass_panel",
+      "name": "Replace one storefront glass panel",
+      "kind": "other",
+      "cost": 1150,
+      "required": false,
+      "source": "https://www.insightglass.com/how-much-do-storefront-windows-cost/",
+      "confidence": "estimate",
+      "note": "Glazier guides (not NYC): a fixed panel of about 4 x 6 feet costs $800-$1,500 installed, a storefront window $500-$3,000 by size and glass type; $1,150 is the midpoint for one panel. Emergency board-up is extra. Used by the break-in event; most leases make the tenant responsible for the glass."
+    }
+  ],
+  "monthlyCosts": [
+    {
+      "id": "sidewalk_cafe_consent_fee",
+      "name": "Sidewalk cafe yearly fee to the city (8 seats)",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 60,
+      "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+      "confidence": "estimate",
+      "note": "Fee rates seen in a search excerpt of the City Council report: $6, $10, $18 or $31 per sq ft a year for a sidewalk cafe by sector; the $6 rate covers about 80% of the city and $31 applies in parts of Manhattan. Area is my estimate: 8 seats x 15 sq ft = 120 sq ft. 120 x $6 / 12 = $60 a month; in the top sector 120 x $31 / 12 = $310. Charge only while a sidewalk cafe is licensed. Local Law 145 of 2026 lets cafes pay in quarterly installments from about May 2027."
+    },
+    {
+      "id": "roadway_cafe_consent_fee",
+      "name": "Roadway cafe yearly fee to the city",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 830,
+      "source": "https://nyc.streetsblog.org/2026/08/13/year-round-outdoor-dining-poised-to-return-under-council-bill",
+      "confidence": "estimate",
+      "note": "Streetsblog, August 2026: a roadway cafe of the maximum size costs a restaurant nearly $10,000 a year in city fees, about $27 a day: $10,000 / 12 = $830. Rates run $5 to $25 per sq ft a year by sector (City Council report), so a small setup in the cheapest sector pays far less. Charge only while a roadway cafe is licensed."
+    },
+    {
+      "id": "backflow_annual_test",
+      "name": "Yearly backflow device test",
+      "kind": "maintenance",
+      "basis": "fixed",
+      "amount": 21,
+      "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+      "confidence": "estimate",
+      "note": "DEP requires a test by a certified tester every 12 months (seen in a search excerpt of the DEP FAQ). Testing companies charge $150-$350 per device; $250 / 12 = $21 a month. The pack's maintenance line already names the backflow test: do not add both."
+    },
+    {
+      "id": "hvac_service_contract",
+      "name": "Air conditioning service contract",
+      "kind": "maintenance",
+      "basis": "fixed",
+      "amount": 100,
+      "source": "https://oxmaint.com/industries/hvac/hvac-maintenance-budget-planning-optimizing-spend",
+      "confidence": "estimate",
+      "note": "Vendor guides: quarterly preventive maintenance on one rooftop unit costs $180-$350 a visit, or $500-$2,500 per unit a year; small retail plans $500-$1,200. $1,200 a year = $100 a month for one unit. Charged through the hvac_care lever, not as a fixed line."
+    },
+    {
+      "id": "illuminated_sign_fee",
+      "name": "Yearly use fee for an illuminated sign",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 4,
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650",
+      "confidence": "estimate",
+      "note": "From the research notes (Administrative Code Table 28-112.2, not opened by me): the yearly fee for an illuminated sign is $45 up to 30 sq ft and $70 for 30-50 sq ft; $45 / 12 = $3.75. Only if the shop has a lit sign."
+    }
+  ],
+  "levers": [
+    {
+      "id": "laptop_policy",
+      "name": "Laptops and Wi-Fi",
+      "options": [
+        {
+          "id": "open",
+          "label": "Laptops welcome, free Wi-Fi all day",
+          "monthlyCost": 0
+        },
+        {
+          "id": "peak_limits",
+          "label": "No laptops at lunch and on weekends",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.02
+          },
+          "seatTurnsMult": 1.2
+        },
+        {
+          "id": "no_wifi",
+          "label": "No Wi-Fi, outlets covered, screens off the tables",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.04
+          },
+          "seatTurnsMult": 1.4
+        }
+      ],
+      "note": "seatTurnsMult multiplies sizing.unitsServedPerSizeMonth (new field, see extra.mechanics seat_camping_dwell_mix). Derivation: with 30% of seated guests staying 120 minutes and 70% staying 35, the mean stay is 60 minutes; removing the long stays at peak hours brings it to about 50 (x1.2 turns), removing them all day to about 43 (x1.4). Demand losses are my estimates: seated laptop guests are about 12% of all orders (40% seated x 30%), and a part of them goes elsewhere. A real owner's account (NPR, 2014): a bakery cafe that switched off Wi-Fi and then banned screens at lunch saw sales rise, because people had been walking in, finding no table and leaving.",
+      "source": "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales"
+    },
+    {
+      "id": "seating_layout",
+      "name": "Seating layout",
+      "options": [
+        {
+          "id": "comfortable",
+          "label": "Two-tops about two feet apart (18 sq ft per seat)",
+          "monthlyCost": 0
+        },
+        {
+          "id": "tight",
+          "label": "Squeeze the tables together (15 sq ft per seat)",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.03
+          },
+          "seatsFitMult": 1.2
+        },
+        {
+          "id": "communal",
+          "label": "One communal table and a window bar",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.01
+          },
+          "seatTurnsMult": 1.15
+        },
+        {
+          "id": "lounge",
+          "label": "Sofas and armchairs (22 sq ft per seat)",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": 0.03
+          },
+          "seatsFitMult": 0.82,
+          "seatTurnsMult": 0.85
+        }
+      ],
+      "note": "seatsFitMult multiplies how many seats the address holds (18 / 15 = 1.2; 18 / 22 = 0.82). Evidence for the quality loss: Cornell field study in a New York restaurant (Robson and Kimes, 2009): guests at tables 20 inches or less apart were less satisfied in almost every category and less likely to return, although they left sooner; a 2011 survey of more than 1,000 Americans found strong objection to tables 6 and 12 inches apart. Communal seating raises turns because a solo guest takes one chair instead of a table for two or four. Lounge numbers are my estimates.",
+      "source": "https://www.hospitalitynet.org/news/4039649.html"
+    },
+    {
+      "id": "queue_setup",
+      "name": "Line and pickup",
+      "options": [
+        {
+          "id": "single_line",
+          "label": "One register, the line forms where it can",
+          "monthlyCost": 0
+        },
+        {
+          "id": "organized",
+          "label": "Marked line, menu readable from the door, separate pickup shelf",
+          "monthlyCost": 40,
+          "effects": {
+            "demand": 0.02
+          }
+        },
+        {
+          "id": "order_ahead",
+          "label": "Order-ahead by phone with a pickup shelf",
+          "monthlyCost": 90,
+          "effects": {
+            "demand": 0.04,
+            "capacity": -0.03
+          }
+        }
+      ],
+      "note": "Evidence: a supermarket deli study (Lu, Musalem, Olivares, Schilkrut, Management Science 2013) found that shoppers react to how long the line looks, not to how fast it moves, and that the effect on buying is strong and non-linear; the working paper put a moderately longer line on a par with a 5% price rise. So a line that looks short (hidden bend, people waiting at pickup instead of in the queue) loses fewer buyers. Order-ahead costs bar capacity: Starbucks said a mid-teens percent of its mobile orders went uncompleted in spring 2024 because bars could not keep up. The effect sizes and monthly costs are game values.",
+      "source": "https://pubsonline.informs.org/doi/abs/10.1287/mnsc.1120.1686"
+    },
+    {
+      "id": "restroom_access",
+      "name": "Restroom access",
+      "options": [
+        {
+          "id": "customers_only",
+          "label": "Customers only: door code printed on the receipt",
+          "monthlyCost": 0
+        },
+        {
+          "id": "open_to_all",
+          "label": "Open to anyone who asks",
+          "monthlyCost": 150,
+          "effects": {
+            "reputation": 0.02
+          }
+        },
+        {
+          "id": "staff_only",
+          "label": "No public restroom (legal only under 20 seats)",
+          "monthlyCost": 0,
+          "effects": {
+            "reputation": -0.03
+          }
+        }
+      ],
+      "note": "The law: under 20 seats a cafe owes customers no restroom; at 20 or more it must provide one (Health Code 81.22). The engine should refuse staff_only at 20 or more seats or attach the violation no_patron_toilet. Starbucks ended its open-door restroom policy on January 27, 2025 and now requires a purchase. The $150 for extra paper, soap and cleaning and the $40 saved are my estimates."
+    },
+    {
+      "id": "hvac_care",
+      "name": "Air conditioning and ventilation",
+      "options": [
+        {
+          "id": "contract",
+          "label": "Quarterly service contract",
+          "monthlyCost": 100
+        },
+        {
+          "id": "none",
+          "label": "Call someone when it breaks",
+          "monthlyCost": 0,
+          "causes": "ventilation_inadequate"
+        }
+      ],
+      "note": "Contract price: vendor guides give $500-$2,500 a year per rooftop unit; $1,200 a year here. Without service the unit fails when it works hardest: see extra.eventCatalog ac_fails_in_heat_wave and extra.mechanics deferred_building_maintenance."
+    },
+    {
+      "id": "entrance_winter",
+      "name": "Front door in winter",
+      "options": [
+        {
+          "id": "nothing",
+          "label": "Just the door",
+          "monthlyCost": 0
+        },
+        {
+          "id": "air_curtain",
+          "label": "Air curtain over the door",
+          "monthlyCost": 25
+        },
+        {
+          "id": "vestibule",
+          "label": "Seasonal vestibule, November 15 to April 15",
+          "monthlyCost": 375,
+          "effects": {
+            "quality": 0.02
+          }
+        }
+      ],
+      "note": "The air curtain needs the setup item air_curtain ($1,450); $25 a month is my estimate for its electricity. The vestibule is $4,500 a season spread over 12 months. Without either, the seats nearest the door are lost on cold days: extra.eventCatalog winter_draft_at_the_door."
+    },
+    {
+      "id": "outdoor_seating",
+      "name": "Outdoor seats",
+      "options": [
+        {
+          "id": "none",
+          "label": "No outdoor seats",
+          "monthlyCost": 0
+        },
+        {
+          "id": "sidewalk_cafe",
+          "label": "Licensed sidewalk cafe, 8 seats",
+          "monthlyCost": 60,
+          "effects": {
+            "demand": 0.03
+          },
+          "outdoorSeats": 8,
+          "monthsActive": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "id": "roadway_cafe",
+          "label": "Licensed roadway cafe, 16 seats",
+          "monthlyCost": 830,
+          "effects": {
+            "demand": 0.05
+          },
+          "outdoorSeats": 16,
+          "monthsActive": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        }
+      ],
+      "note": "Needs the license first (setup sidewalk_cafe_license or roadway_cafe_license; without it the option is the existing shortcut sidewalk_tables). Outdoor seats count toward the 20-seat restroom line. Fees: sidewalk $6 per sq ft a year in the cheapest sector (x 120 sq ft / 12 = $60; $310 in the top Manhattan sector); roadway about $10,000 a year for the largest setup. The demand lift and the months people really sit outside are my estimates; roadway cafes may legally stay all year since 2026."
+    },
+    {
+      "id": "music_tempo",
+      "name": "Music",
+      "options": [
+        {
+          "id": "calm",
+          "label": "Slow, quiet playlist",
+          "monthlyCost": 0,
+          "seatTurnsMult": 0.9
+        },
+        {
+          "id": "upbeat",
+          "label": "Faster playlist at peak hours",
+          "monthlyCost": 0,
+          "seatTurnsMult": 1.1
+        }
+      ],
+      "note": "Evidence: Milliman (Journal of Consumer Research, 1986) found restaurant guests stay longer under slow music with no change in food spending; a 2024 field experiment in a restaurant measured 80 minutes under slow music against 57 under fast, with no significant difference in the bill. The 10% either way for a cafe is my estimate. Licensing the music is a separate cost (see D08).",
+      "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/"
+    },
+    {
+      "id": "step_at_the_door",
+      "name": "Step at the entrance",
+      "options": [
+        {
+          "id": "ramp_and_bell",
+          "label": "Portable ramp, call bell and a sign at the door",
+          "monthlyCost": 0
+        },
+        {
+          "id": "ignore",
+          "label": "Leave the step as it is",
+          "monthlyCost": 0,
+          "causes": "accessibility_barrier"
+        }
+      ],
+      "note": "Only for an address with a step at the door. The ramp is the setup item portable_entrance_ramp ($157). Federal law asks an existing business to remove barriers where that is readily achievable; a small business may claim the Disabled Access Credit for the cost (IRS Form 8826, up to $5,000 a year)."
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "squeeze_extra_seats",
+      "name": "Add chairs past the 19-seat line without a customer restroom",
+      "what": "A few more chairs lift seated sales by about 3%, and you skip a $12,000 restroom. With 20 or more seats and no toilet for customers the Health Department writes a critical violation: $300 each inspection, and the fix is still owed.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.03
+      },
+      "violation": "no_patron_toilet"
+    },
+    {
+      "id": "skip_restroom_upkeep",
+      "name": "Stop restocking and checking the restroom",
+      "what": "Nobody checks paper, soap, the bin or the door closer during the shift: about $60 a month of supplies and time saved. An inspector who finds the restroom not properly supplied writes $200.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 60
+      },
+      "violation": "toilet_not_supplied"
+    },
+    {
+      "id": "prop_door_open_with_ac",
+      "name": "Prop the front door open with the air conditioning on",
+      "what": "An open door pulls in passers-by: about 1% more sales in summer. It has been illegal for every NYC business since 2015: $250 for each open door or window, more for repeats, and the city inspects thousands of shops every summer.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "ac_door_open"
+    },
+    {
+      "id": "unpermitted_sign",
+      "name": "Hang a big lit sign without a permit",
+      "what": "You skip the licensed sign hanger and the Buildings Department filing: about $150 a month spread over the first year. One anonymous 311 call brings an inspector; in 2018 hundreds of small shops faced $6,000 fines for exactly this.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 150
+      },
+      "violation": "sign_without_permit"
+    },
+    {
+      "id": "sidewalk_sign_and_bench",
+      "name": "A-frame sign and a bench out on the sidewalk",
+      "what": "A sign in the walking path and a bench at the curb catch about 1% more buyers. Anything more than 3 feet from your wall or taller than 5 feet is a sidewalk obstruction: $50 the first time, $100 after, up to $300.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "sidewalk_obstruction"
+    },
+    {
+      "id": "stock_in_the_exit_path",
+      "name": "Stack deliveries in the back hallway and at the rear door",
+      "what": "No storage room, so milk crates and cup boxes live in the exit path: you save about $100 a month on off-site storage or a bigger space. A blocked exit is a Fire Department summons of about $950, more for a repeat.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 100
+      },
+      "violation": "blocked_egress"
+    },
+    {
+      "id": "skip_backflow_test",
+      "name": "Skip the yearly backflow test",
+      "what": "The device on your water line must be tested by a certified tester every 12 months: about $250 a year. Skip it and the city can fine you or shut off your water.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 21
+      },
+      "violation": "backflow_not_tested"
+    },
+    {
+      "id": "standing_room_events",
+      "name": "Pack the room for open-mic nights",
+      "what": "Eighty people in a room approved for fewer than 75 bring about 2% more sales a month. More people than the Certificate of Occupancy allows is an immediately hazardous violation: about $2,400, or $12,000 if you ignore the summons. The legal way is a $250 temporary permit filed 10 business days ahead.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.02
+      },
+      "violation": "overcrowding_over_occupancy"
+    },
+    {
+      "id": "cellar_seating",
+      "name": "Put customer tables in the cellar",
+      "what": "The cellar is free space: tables down there add about 3% to sales. A cellar approved for storage is not approved for customers: occupancy contrary to the Certificate of Occupancy costs about $1,200 and the tables have to go.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.03
+      },
+      "violation": "cellar_used_for_customers"
+    },
+    {
+      "id": "loud_evening_music",
+      "name": "Turn the music up for evening events under apartments",
+      "what": "A loud room keeps an evening crowd: about 1% more sales. Music from a business may not pass 42 decibels inside a neighbor's home. The first violation is $2,000, cut to $0 only if you prove you fixed it.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "commercial_noise"
+    }
+  ],
+  "violations": [
+    {
+      "id": "no_patron_toilet",
+      "name": "No customer toilet with 20 or more seats",
+      "law": "NYC Health Code §81.22(b), §81.22(d); 24 RCNY Chapter 23, Appendix 23-C, code 05E",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 300,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 350
+      },
+      "closureDays": 0,
+      "reputationHit": 0.05,
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "confidence": "verified",
+      "checkedVia": "search_excerpt",
+      "note": "Penalty schedule, seen in a search excerpt: code 05E, critical, \"Toilet facilities not provided for patrons\" (81.22(b)) $300, $350 on default; the same amounts for no employee toilet (81.22(a)) and for a shared toilet reached through the kitchen, prep, storage or dishwashing area (81.22(d)). The fine repeats at every inspection until the toilet exists or the seats go back under 20. The points for 05E were not seen."
+    },
+    {
+      "id": "toilet_not_supplied",
+      "name": "Restroom not properly supplied",
+      "law": "NYC Health Code §81.22(c); 24 RCNY Chapter 23, Appendix 23-C, code 10A",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 200,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 200
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "confidence": "verified",
+      "checkedVia": "search_excerpt",
+      "note": "Penalty schedule, seen in a search excerpt: code 10A, general violation, \"Toilet facility not properly supplied\" (81.22(c)) $200. In practice: no toilet paper, no soap or towels, no covered bin, door that does not close by itself."
+    },
+    {
+      "id": "ventilation_inadequate",
+      "name": "Ventilation missing or in disrepair",
+      "law": "NYC Health Code §81.19(c); 24 RCNY Chapter 23, Appendix 23-C, code 10D",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 200,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 200
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "confidence": "verified",
+      "checkedVia": "search_excerpt",
+      "note": "Penalty schedule, seen in a search excerpt: code 10D, ventilation not provided, improperly installed or in disrepair, leading to odors, smoke and fumes: $200 at every listed level. 81.19(c) also requires a mechanical vent in the restroom. The fine is small; the real cost of neglected air conditioning is the failure in a heat wave."
+    },
+    {
+      "id": "ac_door_open",
+      "name": "Door or window open while the air conditioning runs",
+      "law": "NYC Administrative Code §20-910 (Local Law 92 of 2015)",
+      "official": "dcwp_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 250,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 500
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and",
+      "confidence": "estimate",
+      "note": "The law covers every NYC business since 2015 (DCWP, seen in a search excerpt); allowed exceptions include deliveries and serving outdoor customers. Amounts are from 2015 press reports of the law, not from a current schedule: $250 for each open door or window, $500 for later violations. In 2024 the city made nearly 6,300 such inspections and wrote 89 violations."
+    },
+    {
+      "id": "sign_without_permit",
+      "name": "Business sign installed without a permit",
+      "law": "NYC Administrative Code §28-105.1; 1 RCNY §102-01 (Buildings penalty schedule)",
+      "official": "dob_inspector",
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 6000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings",
+      "confidence": "estimate",
+      "note": "CBS New York, 2018-2019: a spike in complaints, many of them anonymous 311 calls, left many store owners facing $6,000 fines; the Buildings Department counted 1,046 illegal-sign complaints in 2018 against 310 in all of 2017. Local Law 28 of 2019 then froze violations for signs that existed on February 9, 2019 (extended to January 1, 2023 by Local Law 29 of 2021); a sign hung today is not covered. The current schedule amount was not seen: $6,000 is the 2018 figure. A wall sign of 6 sq ft or less with no lighting needs no permit."
+    },
+    {
+      "id": "sidewalk_obstruction",
+      "name": "Sign, bench or goods blocking the sidewalk",
+      "law": "NYC Administrative Code §16-118(2)(a); 16 RCNY §19-103 (Sanitation penalty schedule)",
+      "official": "dsny_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 50,
+        "perMonth": 50,
+        "pctOfSaved": 0,
+        "max": 300
+      },
+      "closureDays": 0,
+      "reputationHit": 0,
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-99532",
+      "confidence": "verified",
+      "checkedVia": "search_excerpt",
+      "note": "Sanitation penalty schedule, seen in a search excerpt: sidewalk obstruction under 16-118(2)(a) $50 for a first offense, $100 for a second or third, $300 at most. NYC311: sandwich and A-frame signs must not reach more than 3 feet into the sidewalk from the building or stand higher than 5 feet. Game formula: $100 from the second month, capped at $300."
+    },
+    {
+      "id": "blocked_egress",
+      "name": "Exit path blocked by storage",
+      "law": "NYC Fire Code Chapter 10 (means of egress to be kept clear); summons returnable to OATH",
+      "official": "fdny_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 950,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 5000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.tfp1.com/blog/fdny-violation-codes/",
+      "confidence": "estimate",
+      "note": "No official Fire Department schedule was opened. A fire-protection company's 2026 summary of the schedule gives the egress category a standard first penalty of $950 ($475 if corrected in time, $1,000 at most) and $2,375 for a repeat within 18 months ($5,000 at most); other vendor guides give $500-$2,500. The Fire Code section number is cited from memory."
+    },
+    {
+      "id": "backflow_not_tested",
+      "name": "Backflow device missing or not tested",
+      "law": "10 NYCRR §5-1.31 (State Sanitary Code); 15 RCNY §20-04 (NYC water supply rules)",
+      "official": "dep_inspector",
+      "foundBy": [
+        "audit",
+        "inspection"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0,
+      "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+      "confidence": "estimate",
+      "note": "DEP FAQ, seen in a search excerpt: the device must be tested every 12 months by a certified tester, and failure can bring fines or disconnection of the water service. The $500 per untested device comes from a testing company's site, not from DEP. A City Council bill (Int 0768-2026) would raise the penalty for not installing a device to $1,000-$10,000; its status was not confirmed. Found by audit: DEP knows which annual reports are missing. Section numbers are cited from memory."
+    },
+    {
+      "id": "overcrowding_over_occupancy",
+      "name": "More people inside than the Certificate of Occupancy allows",
+      "law": "NYC Administrative Code §28-118.3.2, §28-117.1; NYC Building Code §303.1.2; 1 RCNY §102-01",
+      "official": "dob_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 2400,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 12500
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf",
+      "confidence": "estimate",
+      "note": "Buildings penalty schedule copies seen in search excerpts: occupancy contrary to the Certificate of Occupancy (28-118.3.2), Class 1 (immediately hazardous): $2,400 standard, $12,000 on default, no cure and no stipulation; law-firm summaries of the current schedule give $2,500 and $12,500. Copies of different years disagree, hence estimate. A room used by 75 or more people also needs a Place of Assembly Certificate of Operation (28-117.1); the penalty for lacking one was not found. Under 75 people a cafe is classed as business use (Group B) and one exit can serve up to 74."
+    },
+    {
+      "id": "cellar_used_for_customers",
+      "name": "Customer seating in a cellar approved only for storage",
+      "law": "NYC Administrative Code §28-118.3.2; 1 RCNY §102-01",
+      "official": "dob_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 1200,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 6250
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf",
+      "confidence": "estimate",
+      "note": "Same section as overcrowding, Class 2 (major): $1,200 standard and $6,000 on default in the schedule copies seen, $1,250 and $6,250 in law-firm summaries; it can be cured by filing a certificate of correction after the tables are gone. Legalizing cellar seating means amending the Certificate of Occupancy: exits, ceiling height, ventilation, an accessible route."
+    },
+    {
+      "id": "accessibility_barrier",
+      "name": "Step at the entrance with no accessible way in",
+      "law": "Americans with Disabilities Act, Title III, 42 U.S.C. §12182(b)(2)(A)(iv); NYC Administrative Code §8-107(4), §8-126",
+      "official": "human_rights_investigator",
+      "foundBy": [
+        "complaint"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny",
+      "confidence": "estimate",
+      "note": "Not a city inspection: a private lawsuit or a human rights complaint. NY1, 2019: a wave of suits against small NYC eateries, one over an eight-inch step, each asking up to $1,000 in damages plus attorney's fees and the fix itself. No public figure for a typical settlement was found; the lawyers' fees on both sides are usually the larger part. Federal filings under ADA Title III numbered 8,667 in 2025 (Seyfarth Shaw count). The NYC Human Rights Commission can add civil penalties of up to $125,000 (cited from memory). The $1,000 is the damages claim only."
+    },
+    {
+      "id": "commercial_noise",
+      "name": "Music or equipment noise above the limit in a neighbor's home",
+      "law": "NYC Administrative Code §24-231(a) (commercial music), §24-227 (circulation devices)",
+      "official": "dep_inspector",
+      "foundBy": [
+        "complaint"
+      ],
+      "fine": {
+        "base": 2000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 2000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
+      "confidence": "verified",
+      "checkedVia": "search_excerpt",
+      "note": "DEP documents, seen in search excerpts: music from a commercial establishment may not exceed 42 dB(A) measured inside a receiving dwelling; one air-handling device may not exceed 42 dB(A) there and several together 45 dB(A). A first commercial music violation based on a reading in a residence can be reduced from $2,000 to $0 if the owner admits it and certifies the fix. Penalties for repeats were not seen."
+    }
+  ],
+  "officials": [
+    {
+      "id": "health_inspector",
+      "name": "Health inspector",
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "role": "inspector",
+      "checks": [
+        "no_fse_permit",
+        "no_food_protection_cert",
+        "dirty_surfaces",
+        "pest_activity",
+        "spoiled_food",
+        "unapproved_food_source",
+        "no_patron_toilet",
+        "toilet_not_supplied",
+        "ventilation_inadequate"
+      ],
+      "realProcess": "Unannounced, at least once a year. The inspector walks the whole shop with a thermometer and a flashlight, counts the seats, checks the restroom, the hand sinks, the lighting and the vents, and scores each violation in points: under 14 is an A. Fines are decided afterwards at a city hearing (OATH).",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "note": "Same id as in the pack: three D02 violations added to the checks, the rest unchanged."
+    },
+    {
+      "id": "dep_inspector",
+      "name": "Water, sewer and noise inspector",
+      "agency": "NYC Department of Environmental Protection (DEP)",
+      "role": "inspector",
+      "checks": [
+        "grease_interceptor_neglect",
+        "backflow_not_tested",
+        "commercial_noise"
+      ],
+      "realProcess": "DEP inspectors open the grease interceptor and ask for cleaning records, track which businesses have not filed the yearly backflow test, and answer 311 noise complaints by taking a sound reading inside the neighbor's apartment.",
+      "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+      "note": "Same id as in the pack: backflow and noise added."
+    },
+    {
+      "id": "dob_inspector",
+      "name": "Buildings inspector",
+      "agency": "NYC Department of Buildings (DOB)",
+      "role": "inspector",
+      "checks": [
+        "sign_without_permit",
+        "overcrowding_over_occupancy",
+        "cellar_used_for_customers"
+      ],
+      "realProcess": "Comes after a 311 complaint, compares what he sees with the Certificate of Occupancy and the permits on file, and writes a summons to a city hearing (OATH). Immediately hazardous conditions cannot be cured by paperwork.",
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf"
+    },
+    {
+      "id": "fdny_inspector",
+      "name": "Fire inspector",
+      "agency": "Fire Department of the City of New York (FDNY)",
+      "role": "inspector",
+      "checks": [
+        "blocked_egress"
+      ],
+      "realProcess": "Walks the exits, checks that the path to every door is clear, looks at the extinguisher tags and, in rooms for 75 or more people, the Place of Assembly permit and the posted capacity. Violations go to a city hearing (OATH).",
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf"
+    },
+    {
+      "id": "dsny_agent",
+      "name": "Sanitation enforcement agent",
+      "agency": "NYC Department of Sanitation (DSNY)",
+      "role": "inspector",
+      "checks": [
+        "sidewalk_obstruction"
+      ],
+      "realProcess": "Patrols the block and answers 311 complaints about blocked sidewalks. Anything a business leaves in the walking path can be ticketed on the spot: signs, benches, crates, planters.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+    },
+    {
+      "id": "human_rights_investigator",
+      "name": "Human rights investigator",
+      "agency": "NYC Commission on Human Rights",
+      "role": "inspector",
+      "checks": [
+        "accessibility_barrier"
+      ],
+      "realProcess": "Acts on a complaint from a person who could not get in or be served. In real life most cases never reach the Commission: a private lawyer files in federal court and the owner settles and fixes the entrance.",
+      "source": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_no_restroom",
+      "name": "Report a cafe with no customer restroom (311)",
+      "text": "In real life: a 311 complaint to the Health Department. An inspector counts the seats; with 20 or more there must be a supplied toilet for customers. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "no_patron_toilet",
+        "toilet_not_supplied"
+      ]
+    },
+    {
+      "id": "report_overcrowding",
+      "name": "Report an overcrowded room or blocked exit (311)",
+      "text": "In real life: a 311 complaint sent to the Buildings and Fire Departments. Inspectors compare the crowd with the Certificate of Occupancy, walk the exits and look into the cellar. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "overcrowding_over_occupancy",
+        "blocked_egress",
+        "cellar_used_for_customers"
+      ]
+    },
+    {
+      "id": "report_illegal_sign",
+      "name": "Report a sign without a permit (311)",
+      "text": "In real life: a 311 complaint to the Buildings Department, which may be anonymous. In 2018 such calls tripled and left hundreds of shops with $6,000 fines. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "sign_without_permit"
+      ]
+    },
+    {
+      "id": "report_blocked_sidewalk",
+      "name": "Report a blocked sidewalk (311)",
+      "text": "In real life: a 311 complaint about signs, benches or goods in the walking path. Sanitation enforcement tickets what it finds. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "sidewalk_obstruction"
+      ]
+    },
+    {
+      "id": "report_open_door_ac",
+      "name": "Report an open door with the air conditioning on (311)",
+      "text": "In real life: a 311 complaint to the Department of Consumer and Worker Protection in summer. An inspector checks whether cold air is pouring out of an open door. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "ac_door_open"
+      ]
+    },
+    {
+      "id": "report_access_barrier",
+      "name": "Report an entrance a wheelchair user cannot use",
+      "text": "In real life: a complaint to the NYC Commission on Human Rights, or a lawsuit. If there is a step and no ramp, bell or other way in, the owner pays damages and legal fees and still has to fix it. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "accessibility_barrier"
+      ]
+    },
+    {
+      "id": "report_noise",
+      "name": "Report loud music or equipment (311)",
+      "text": "In real life: a 311 noise complaint. A DEP inspector takes a reading inside the neighbor's apartment; music over 42 decibels there is a violation. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "commercial_noise"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "summer_open_door_sweep",
+      "name": "City sweep: doors open with the air conditioning on",
+      "text": "Inspectors walk the shopping streets in the hottest weeks looking for cold air pouring out of open doors.",
+      "effect": {
+        "field": "inspections",
+        "mult": 1.2
+      },
+      "months": 3,
+      "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and",
+      "confidence": "estimate",
+      "note": "DCWP, seen in a search excerpt: nearly 6,300 inspections and 89 violations for open doors in 2024. The 20% rise in inspection pressure is a game value."
+    },
+    {
+      "id": "sign_complaint_wave",
+      "name": "Wave of sign complaints on the avenue",
+      "text": "Someone is calling 311 about every storefront sign on the strip. Buildings inspectors have to answer each call.",
+      "effect": {
+        "field": "inspections",
+        "mult": 1.3
+      },
+      "months": 3,
+      "source": "https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/",
+      "confidence": "estimate",
+      "note": "Real case: 1,046 illegal-sign complaints in 2018 against 310 in all of 2017, concentrated in southern Brooklyn (Buildings Department figures quoted by a local paper). The multiplier is a game value."
+    },
+    {
+      "id": "water_rate_rise",
+      "name": "Water and sewer rates go up on July 1",
+      "text": "The Water Board raises rates every July. Ice, espresso, dishwashing and the restroom all run through the meter.",
+      "effect": {
+        "field": "utilities",
+        "mult": 1.01
+      },
+      "months": 12,
+      "source": "https://www.nyc.gov/site/dep/pay-my-bills/how-we-bill-you.page",
+      "confidence": "estimate",
+      "note": "DEP, seen in a search excerpt: the combined water and sewer charge was $13.07 per 100 cubic feet in the year from July 1, 2025; a 6% rise was proposed for July 1, 2026 (adoption not confirmed). Water is roughly a seventh of the pack's utilities line by my estimate (about 12 hundred-cubic-feet a month = $157 of $1,100): 6% x 14% = about 1%."
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "no_patron_toilet",
+      "title": "Seat 20 needs a toilet",
+      "text": "A cafe with 20 or more seats must give customers a toilet, and they may not walk through the kitchen or storage to reach it. No toilet: $300 at every inspection. Premises that held a food permit by December 5, 1977 are exempt until they renovate.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264"
+    },
+    {
+      "id": "toilet_not_supplied",
+      "title": "A stocked restroom",
+      "text": "A restroom without toilet paper, soap, a covered bin or a self-closing door is \"not properly supplied\": $200. A one-person restroom must also carry an all-gender sign on the wall next to the door (Local Law 79 of 2016).",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/single-occupant-toilet-signage.page"
+    },
+    {
+      "id": "occupancy_75",
+      "title": "The 75-person line",
+      "text": "A room for fewer than 75 people is classed as business space and one exit can serve up to 74. At 75 it becomes a place of assembly: second exit, a Buildings certificate and a yearly Fire Department permit. People are counted, not chairs.",
+      "source": "https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-3-use-and-occupancy-classification"
+    },
+    {
+      "id": "occupant_load",
+      "title": "How the code counts people",
+      "text": "The building code counts one person per 15 sq ft where there are tables and chairs and one per 5 sq ft where people stand. A 70 sq ft queue area counts as 14 people, so a crowded line can take a room over its limit before the seats do.",
+      "source": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf"
+    },
+    {
+      "id": "overcrowding_over_occupancy",
+      "title": "Over capacity",
+      "text": "More people inside than the Certificate of Occupancy allows is an immediately hazardous violation: about $2,400, or $12,000 if you skip the hearing, and it cannot be cured with paperwork. For one big night, a temporary permit costs $250, filed 10 business days ahead.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation"
+    },
+    {
+      "id": "cellar_used_for_customers",
+      "title": "The cellar is storage",
+      "text": "A cellar listed as storage on the Certificate of Occupancy may hold stock, not customers. Seating down there is \"occupancy contrary to the Certificate\": about $1,200, $6,000 on default. Making it legal means exits, ceiling height and an amended certificate.",
+      "source": "https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf"
+    },
+    {
+      "id": "accessibility_barrier",
+      "title": "One step at the door",
+      "text": "The Americans with Disabilities Act asks an existing business to remove barriers where it is readily achievable. A step with no ramp or bell invites a lawsuit: damages of up to $1,000, the other side's legal fees and the fix. Federal courts saw 8,667 such suits in 2025.",
+      "source": "https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/"
+    },
+    {
+      "id": "ada_inside",
+      "title": "Access inside the room",
+      "text": "At least 5% of your seats must be usable from a wheelchair: a table 28 to 34 inches high with 27 inches of knee room, reached by a route at least 36 inches wide. Moving two chairs is free; a lawsuit over a blocked aisle is not.",
+      "source": "https://www.corada.com/documents/2010ADAStandards/226"
+    },
+    {
+      "id": "ada_tax_credit",
+      "title": "The government shares the cost of access",
+      "text": "A business with sales of $1 million or less, or no more than 30 full-time workers, can claim the Disabled Access Credit for ramps, doors and restroom changes on IRS Form 8826: up to $5,000 a year.",
+      "source": "https://www.irs.gov/pub/irs-pdf/f8826.pdf"
+    },
+    {
+      "id": "ac_door_open",
+      "title": "Shut the front door",
+      "text": "Since 2015 every NYC business must keep doors and windows closed while the air conditioning runs: $250 per open door or window, more for repeats. In 2024 the city made nearly 6,300 such inspections and wrote 89 violations.",
+      "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and"
+    },
+    {
+      "id": "sign_without_permit",
+      "title": "Signs get reported",
+      "text": "A sign over 6 sq ft, or any lit sign, needs a Buildings permit and a licensed sign hanger. In 2018 anonymous 311 complaints about signs tripled to more than 1,000 and many small shops faced $6,000 fines before the Council froze them.",
+      "source": "https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings"
+    },
+    {
+      "id": "awning_lettering",
+      "title": "What an awning may say",
+      "text": "An awning is a permitted job, and zoning limits its text: the shop's name and address, letters no taller than 12 inches, no more than 12 sq ft of lettering. Photos, menus and phone numbers printed on the fabric are what inspectors cite.",
+      "source": "https://www.lisc.org/media/filer_public/1b/91/1b916163-0300-4298-9439-4981884e9abd/corridor_challenge_storefront_improvement_design_guidelines_-___final.pdf"
+    },
+    {
+      "id": "landmark_storefront",
+      "title": "Landmark blocks",
+      "text": "In a historic district any change to the outside of a storefront needs a Landmarks permit first: sign, awning, lighting, paint. Staff permits take about 10 to 15 business days. Planters and A-frames that are not fixed to the building need none.",
+      "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
+    },
+    {
+      "id": "security_grille",
+      "title": "Roll-down gates",
+      "text": "A 2009 law told every shop to have a gate at least 70% see-through by July 1, 2026; owners were quoted $6,000 to $7,000 a gate. The Council dropped the deadline 51-0 on June 30, 2026. The 70% rule now applies only to a new or replaced gate.",
+      "source": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates"
+    },
+    {
+      "id": "sidewalk_obstruction",
+      "title": "Your sign on their sidewalk",
+      "text": "An A-frame sign may stand no more than 3 feet out from your wall and no taller than 5 feet. Beyond that, signs, benches and crates are sidewalk obstructions: $50 the first time, $100 the next two, up to $300.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+    },
+    {
+      "id": "sidewalk_cafe_geometry",
+      "title": "How much sidewalk you can use",
+      "text": "A sidewalk cafe must leave walkers a clear path of 8 feet or half the sidewalk, whichever is more, 9 feet at a corner and 15 feet from a subway stair or bus shelter, plus a 36-inch service aisle. Prices outside must equal prices inside.",
+      "source": "https://www.diningoutnyc.info/rules/sidewalk/siting-clearances"
+    },
+    {
+      "id": "outdoor_dining_fees",
+      "title": "What outdoor seats cost",
+      "text": "License $1,050 for four years; deposit $1,500 (sidewalk) or $2,500 (roadway); hearing notice up to $1,000; then $6 to $31 per sq ft a year on the sidewalk and $5 to $25 in the roadway. The cheapest rate covers about 80% of the city.",
+      "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf"
+    },
+    {
+      "id": "roadway_all_year",
+      "title": "Roadway cafes all year",
+      "text": "Until 2026 a roadway cafe had to come down every November 29 and return April 1. A law signed August 31, 2026 lets roadway cafes stay all year; year-round applications were set to open in September 2026.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604"
+    },
+    {
+      "id": "storm_enclosure",
+      "title": "Winter vestibules",
+      "text": "A storm enclosure at the door is allowed only from November 15 to April 15 and may stand no more than 18 inches beyond the building line. Left up in May, it is an illegal structure that anyone can report to 311.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02227"
+    },
+    {
+      "id": "lighting_levels",
+      "title": "Light is in the Health Code",
+      "text": "The Health Code sets light levels: 50 foot-candles where food is prepared, 20 at hand sinks, dishwashing and inside fridges, 10 in dry storage. Bulbs over food must be shatterproof or shielded. A moody dark bar is a violation.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238"
+    },
+    {
+      "id": "backflow_not_tested",
+      "title": "The backflow test",
+      "text": "The backflow device on your water line keeps cafe water out of the city main. It must be tested every 12 months by a certified tester, about $150 to $350. Skip it and the city can fine you or disconnect your water.",
+      "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page"
+    },
+    {
+      "id": "commercial_noise",
+      "title": "42 decibels upstairs",
+      "text": "Music from a business may not exceed 42 decibels measured inside a neighbor's home; one rooftop fan or compressor has the same limit, several together 45. A first music violation is $2,000, reduced to $0 only if you prove the fix.",
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf"
+    },
+    {
+      "id": "cellar_doors",
+      "title": "Sidewalk cellar doors",
+      "text": "Sidewalk cellar doors may stand open during a delivery only while a person guards the opening. The city inspects doors that are bent, wobbly or left open, and the owner answers for anyone who falls in.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02292"
+    },
+    {
+      "id": "no_food_grinder",
+      "title": "No garbage disposal",
+      "text": "Food waste grinders are not allowed in NYC businesses, and every business that sends grease down the drain should have a properly sized grease interceptor. Milk and coffee grounds go in the bin, not the sink.",
+      "source": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page"
+    },
+    {
+      "id": "blocked_egress",
+      "title": "Keep the way out clear",
+      "text": "Every path to an exit must stay clear at all times. Milk crates in the back hallway or a chair in front of the rear door is a Fire Department summons: about $950 the first time and more than double for a repeat within 18 months.",
+      "source": "https://www.tfp1.com/blog/fdny-violation-codes/"
+    },
+    {
+      "id": "ventilation_inadequate",
+      "title": "Air you have to maintain",
+      "text": "The Health Code requires working ventilation, and a mechanical vent in the restroom. Ventilation that is missing, badly installed or broken costs $200 at inspection. Most leases make the tenant, not the landlord, pay for the air conditioning unit.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593"
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "measure_the_room",
+      "title": "Measure what is left for seats",
+      "kind": "space",
+      "text": "Before you sign, draw the room. Bar about 120 sq ft, line and pickup 70, accessible restroom 60, sinks and storage 120, door area 25: close to 400 sq ft that never holds a chair. In 800 sq ft that leaves room for about 22 seats; in 500 sq ft for six."
+    },
+    {
+      "id": "decide_seat_count",
+      "title": "Pick your seat count: 19 or 20 is a real decision",
+      "kind": "idea",
+      "text": "With 20 or more seats, indoor and outdoor together, you must provide a customer restroom; with 75 or more people the room becomes a place of assembly. Decide the count before the architect draws: seat 20 can cost $12,000.",
+      "agency": "NYC Department of Health and Mental Hygiene",
+      "link": "https://portal.311.nyc.gov/article/?kanumber=KA-01351"
+    },
+    {
+      "id": "check_power_water_air",
+      "title": "Check the panel, the water line, the drain and the air conditioning",
+      "kind": "space",
+      "text": "Ask for the electrical panel size in amps: an espresso machine alone needs a 30-amp 220V circuit, and a service upgrade through Con Edison takes 3 to 6 months. Find the backflow device and the grease interceptor, and read in the lease who repairs the air conditioning unit.",
+      "agency": "Con Edison; NYC Department of Environmental Protection",
+      "link": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page"
+    },
+    {
+      "id": "check_the_front_door",
+      "title": "Look at the entrance the way a wheelchair user would",
+      "kind": "space",
+      "text": "A step at the door is the most common reason small NYC shops get sued. A compliant ramp needs one foot of length per inch of height, and on the sidewalk it needs a city consent. Budget the fix now; a small business can claim up to $5,000 a year back through IRS Form 8826.",
+      "agency": "NYC Department of Buildings; NYC Department of Transportation",
+      "link": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf"
+    },
+    {
+      "id": "check_landmark_and_sign_rules",
+      "title": "Find out if the block is landmarked before you design the front",
+      "kind": "permit",
+      "text": "In a historic district every outside change needs a Landmarks permit before the Buildings Department will act: sign, awning, lighting, even paint. Outside one, a sign over 6 sq ft or with lights still needs a permit and a licensed sign hanger.",
+      "setupItemId": "landmarks_storefront_permit",
+      "fee": 0,
+      "waitDays": 21,
+      "agency": "NYC Landmarks Preservation Commission",
+      "link": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
+    },
+    {
+      "id": "apply_roadway_cafe",
+      "title": "Optional: apply for a roadway cafe",
+      "kind": "permit",
+      "text": "A roadway cafe license is $1,050 for four years plus a $2,500 deposit, a hearing notice fee of up to $1,000 and a yearly fee per square foot. Review takes three to five months. Since 2026 the setup may stay all year, but the structure itself runs $5,000 to $35,000.",
+      "setupItemId": "roadway_cafe_license",
+      "fee": 4550,
+      "waitDays": 120,
+      "agency": "NYC Department of Transportation (Dining Out NYC)",
+      "link": "https://www.diningoutnyc.info/apply"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "hvac_contractor",
+      "category": "Air conditioning and ventilation service",
+      "what": "A commercial HVAC company for a quarterly service contract and for the day the unit fails",
+      "whereToFind": "Ask the landlord who installed the unit and ask neighboring restaurants who services theirs; get three bids that list visits, filters and labor rates",
+      "source": "https://oxmaint.com/industries/hvac/hvac-maintenance-budget-planning-optimizing-spend",
+      "confidence": "estimate",
+      "note": "No directory was checked; the advice follows vendor guides on service contracts."
+    },
+    {
+      "id": "sign_hanger_awning",
+      "category": "Signs, awnings and winter vestibules",
+      "what": "A licensed sign hanger who files the Buildings permit, makes the sign or awning and installs it; many also build seasonal vestibules",
+      "whereToFind": "The Buildings Department license search lists licensed sign hangers; sign shops in your borough quote the permit together with the sign",
+      "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+      "confidence": "estimate",
+      "note": "The Buildings Department page says larger signs need a permit obtained by a licensed sign hanger (already cited in the pack)."
+    },
+    {
+      "id": "master_plumber",
+      "category": "Licensed master plumber and backflow tester",
+      "what": "Installs the grease interceptor and the backflow device, files with the city, and tests the backflow device every year",
+      "whereToFind": "The Buildings Department license search for master plumbers; DEP keeps a list of certified backflow testers",
+      "link": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+      "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+      "confidence": "estimate",
+      "note": "DEP requires a certified tester for the yearly test; the tester list itself was not opened."
+    },
+    {
+      "id": "accessibility_help",
+      "category": "Accessibility advice",
+      "what": "An architect or accessibility consultant who walks the entrance, the route to the counter and the restroom and lists the cheapest fixes",
+      "whereToFind": "The Buildings Department publishes a storefront accessibility guide; the Mayor's Office for People with Disabilities and NYC Small Business Services answer questions for free",
+      "link": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf",
+      "source": "https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf",
+      "confidence": "estimate",
+      "note": "The Buildings Department presentation on storefront accessibility was found by search; the free advice offices are named from general knowledge and were not checked."
+    },
+    {
+      "id": "glass_and_gates",
+      "category": "Storefront glass and security gates",
+      "what": "A glazier with 24-hour board-up service and a gate company for roll-down grilles",
+      "whereToFind": "Ask the landlord and the neighbors; keep the glazier's number at the register, because a broken window has to be boarded the same night",
+      "source": "https://gothamist.com/news/nyc-council-scrambles-to-reverse-impending-ban-on-metal-storefront-security-gates",
+      "confidence": "estimate",
+      "note": "Gate prices from 2026 press reports ($6,000-$7,000 for one gate); glass prices from glazier guides outside NYC."
+    }
+  ],
+  "extra": {
+    "eventCatalog": [
+      {
+        "id": "saturday_room_full",
+        "name": "No free table",
+        "text": "People walk in, look for a seat, find none and leave without ordering.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "state: seated orders above 85% of what the seats can turn in the month",
+        "realSignal": "Your own seat utilization: seated orders divided by seat capacity",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.95
+          },
+          {
+            "field": "quality",
+            "add": -0.03
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seating_layout"
+          },
+          {
+            "kind": "lever",
+            "id": "laptop_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          }
+        ],
+        "realFrequency": "An owner's account on NPR (2014): \"We saw a lot of customers come in, look for a table, not find one and leave. It was money flowing out the door for us.\"",
+        "tier": "core",
+        "source": "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales",
+        "confidence": "estimate",
+        "note": "The 5% loss is a game value on top of the orders the engine already drops for lack of seats: it stands for people who would have taken their order to go but left when they saw a packed room."
+      },
+      {
+        "id": "laptop_camp",
+        "name": "The room turns into an office",
+        "text": "Remote workers hold half the tables from nine to five on one coffee each.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          10,
+          11,
+          12
+        ],
+        "trigger": "state: laptop policy 'open' and seat utilization above 70%",
+        "realSignal": "Devices on your guest Wi-Fi for more than 90 minutes at 11am",
+        "effects": [
+          {
+            "field": "seatTurns",
+            "mult": 0.85
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "laptop_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "music_tempo"
+          },
+          {
+            "kind": "lever",
+            "id": "seating_layout"
+          }
+        ],
+        "realFrequency": "Bloom Intelligence, Wi-Fi presence at 25 US coffee shops, June-September 2026: 32 minutes on site for a one-time visitor, nearly two hours for the most frequent visitors",
+        "tier": "core",
+        "source": "https://bloomintelligence.com/coffee-shop-marketing/",
+        "confidence": "estimate",
+        "note": "The cold-month list is my assumption (people who would work in a park come indoors); the 15% loss of turns is half of what the 'peak_limits' laptop policy wins back."
+      },
+      {
+        "id": "solo_guests_hold_big_tables",
+        "name": "One person, four chairs",
+        "text": "Every four-top has one guest, a laptop and a coat on it. The room is a third occupied and completely full.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "state: layout without a communal table or bar seats, parties of one at peak",
+        "realSignal": "Count at 9am: tables in use against chairs in use",
+        "effects": [
+          {
+            "field": "seats",
+            "mult": 0.75
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seating_layout"
+          }
+        ],
+        "realFrequency": "A roaster-cafe chief executive quoted in the press: someone working alone usually takes up two to four seats, and a $6 drink buys about 90 minutes",
+        "tier": "core",
+        "source": "https://www.yahoo.com/lifestyle/heres-exactly-long-sit-coffee-070007503.html",
+        "confidence": "estimate",
+        "note": "0.75 = chairs really used when half the tables for two hold one guest. The quote was seen in a search excerpt of a syndicated article, not in the original interview."
+      },
+      {
+        "id": "tight_tables_reviews",
+        "name": "\"We sat in a stranger's lap\"",
+        "text": "Reviews start to mention elbows, bags and overheard phone calls.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: seating layout 'tight' for two months or more",
+        "realSignal": "Share of new reviews that mention space or noise",
+        "effects": [
+          {
+            "field": "reputation",
+            "add": -0.03
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seating_layout"
+          }
+        ],
+        "realFrequency": "Cornell field study (2009): guests at tables 20 inches or less apart rated almost everything lower and were significantly less likely to return",
+        "tier": "deep",
+        "source": "https://www.hospitalitynet.org/news/4039649.html",
+        "confidence": "estimate",
+        "note": "The study was a fine-dining dinner room, one restaurant; the size of the effect for a coffee shop is a game value."
+      },
+      {
+        "id": "quiet_room_afternoons",
+        "name": "Dead room at 3pm",
+        "text": "Forty chairs, four guests. The shop looks closed from the street.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "state: seat utilization under 30% for the month",
+        "realSignal": "Your own seat utilization",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "laptop_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "seating_layout"
+          }
+        ],
+        "realFrequency": "Survey research (2025) finds a crowded restaurant works as social proof and lifts guests' pleasure; other marketing research finds the opposite for status goods. For coffee the effect is unproven.",
+        "tier": "deep",
+        "source": "https://www.mdpi.com/2071-1050/17/18/8400",
+        "confidence": "estimate",
+        "note": "Deliberately small. The honest move for an oversized room is the opposite of the crowded one: invite the laptops, or take chairs out and make it a lounge."
+      },
+      {
+        "id": "morning_line_out_the_door",
+        "name": "The line reaches the door",
+        "text": "At 8:30 the queue runs to the entrance. People on the sidewalk look in and keep walking.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "state: peak-hour orders above what the bar can make",
+        "realSignal": "People visible in line from the door at the morning peak",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "queue_setup"
+          },
+          {
+            "kind": "staff",
+            "id": "barista"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "Management Science (2013), supermarket deli data: buyers react to the length of the line, not to its speed; the working paper equates a moderately longer line with a 5% price increase. A 2024 survey of 1,202 US adults: 70% will wait at most 15 minutes in a physical line and 61% have left one.",
+        "tier": "core",
+        "source": "https://pubsonline.informs.org/doi/abs/10.1287/mnsc.1120.1686",
+        "confidence": "estimate",
+        "note": "5% taken from the working paper's price equivalence with the pack's price elasticity of -1.3 in mind (5% x 1.3 = 6.5%, rounded down). The deli is not a cafe; treat as an order of magnitude."
+      },
+      {
+        "id": "order_ahead_flood",
+        "name": "Phone orders bury the bar",
+        "text": "Twenty tickets print at 8:15. The people standing in front of you wait while cups for people who are not here yet line the counter.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: order-ahead switched on with the bar at minimum staff",
+        "realSignal": "Share of orders placed by phone at peak; minutes from order to handoff",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.95
+          },
+          {
+            "field": "quality",
+            "add": -0.02
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "queue_setup"
+          },
+          {
+            "kind": "staff",
+            "id": "barista"
+          }
+        ],
+        "realFrequency": "Starbucks, spring 2024: more than 3 in 10 drink orders came through the app and a mid-teens percent of mobile orders went uncompleted; a research firm found 8% of its customers waited 15 to 30 minutes. The fix it chose: a separate pickup area and a four-minute target.",
+        "tier": "deep",
+        "source": "https://www.customerexperiencedive.com/news/4-takeaways-starbucks-customer-experience/756355/",
+        "confidence": "estimate",
+        "note": "A chain's numbers, used as the direction of the effect; the 5% capacity loss matches the lever."
+      },
+      {
+        "id": "line_on_the_neighbors_stoop",
+        "name": "Your line is on the neighbors' stoop",
+        "text": "The weekend queue runs past three buildings. Residents call 311 about a blocked sidewalk and the landlord gets letters.",
+        "scale": "block",
+        "months": [
+          4,
+          5,
+          6,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "state: reputation above 0.85 and weekend demand above capacity for two months",
+        "realSignal": "311 complaints of a blocked sidewalk at your address",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.2
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "queue_setup"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Local press, Brooklyn, 2024: a bakery's weekend line of 20 minutes and more spilled across neighbors' stoops; in Manhattan residents describe lines of about a hundred people blocking a sidewalk several days a week",
+        "tier": "exotic",
+        "source": "https://greenpointers.com/2024/04/01/radio-bakery-stoop-sale/",
+        "confidence": "estimate",
+        "note": "A success problem. The real businesses in the source are evidence only and must not appear in the game."
+      },
+      {
+        "id": "seat_count_at_inspection",
+        "name": "The inspector counts chairs",
+        "text": "Stools at the window, the bench, the two tables outside: everything counts toward 20.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: 20 or more seats, indoors and outdoors together, with no customer restroom",
+        "realSignal": "Health Department inspection (at least once a year, sooner after a complaint)",
+        "effects": [
+          {
+            "field": "violation",
+            "id": "no_patron_toilet"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "setup",
+            "id": "customer_restroom"
+          },
+          {
+            "kind": "shortcut",
+            "id": "squeeze_extra_seats"
+          }
+        ],
+        "realFrequency": "Health Code 81.22(b); NYC311 adds that seating shared by several food businesses in a common space is counted in",
+        "tier": "core",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01351",
+        "confidence": "verified",
+        "checkedVia": "search_excerpt",
+        "note": "Not a random event: the inspection finds what is there."
+      },
+      {
+        "id": "accessibility_suit_wave",
+        "name": "Accessibility suits reach your avenue",
+        "text": "A law firm is filing suits against every shop on the strip with a step at the door. Papers arrive next month.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "announced one month ahead; hits every business that still has the barrier",
+        "realSignal": "Federal ADA Title III filings in New York courts (yearly count by Seyfarth Shaw: 8,667 nationwide in 2025)",
+        "effects": [
+          {
+            "field": "violation",
+            "id": "accessibility_barrier"
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "step_at_the_door"
+          },
+          {
+            "kind": "setup",
+            "id": "portable_entrance_ramp"
+          },
+          {
+            "kind": "setup",
+            "id": "automatic_door_operator"
+          }
+        ],
+        "realFrequency": "NY1 (2019): a surge of suits by a small group of plaintiffs against small NYC businesses; a law review article (2023) describes one lawyer filing dozens of near-identical suits, among them one in 2015 over a step with no ramp; The Guardian (2025) reports an East Village cafe owner served with a suit listing 35 violations",
+        "tier": "core",
+        "source": "https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny",
+        "confidence": "estimate",
+        "note": "The game should announce it, so the month before is the player's chance to fix the door. Real cases named in the sources are evidence only."
+      },
+      {
+        "id": "sign_complaint_wave",
+        "name": "Somebody is reporting every sign on the strip",
+        "text": "Anonymous 311 calls about storefront signs triple. Buildings inspectors must answer each one.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "announced one month ahead; hits every business with an unpermitted sign",
+        "realSignal": "Buildings Department illegal-sign complaints per year: 310 in 2017, 1,046 in 2018",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.3
+          },
+          {
+            "field": "violation",
+            "id": "sign_without_permit"
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "unpermitted_sign"
+          },
+          {
+            "kind": "setup",
+            "id": "signage"
+          },
+          {
+            "kind": "setup",
+            "id": "storefront_awning"
+          }
+        ],
+        "realFrequency": "One documented wave, 2018, centered on southern Brooklyn; it ended with Local Law 28 of 2019, a two-year freeze on such violations later extended to January 1, 2023",
+        "tier": "deep",
+        "source": "https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/",
+        "confidence": "estimate",
+        "note": "Mirrors the standard event of the same name in 'events'."
+      },
+      {
+        "id": "roll_down_gate_deadline",
+        "name": "The roll-down gate deadline",
+        "text": "The city says every solid security gate must be replaced with a see-through one by July 1. Quotes run $6,000 to $7,000 a gate.",
+        "scale": "city",
+        "months": [
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "trigger": "announced in February; on June 30 the Council cancels the deadline",
+        "realSignal": "Buildings Department service notice of February 17, 2026; City Council vote on Int 0910-A, June 30, 2026 (51-0)",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -6500,
+            "onlyIf": "the player buys the new grille"
+          }
+        ],
+        "durationMonths": 5,
+        "playerMoves": [
+          {
+            "kind": "setup",
+            "id": "see_through_security_grille"
+          },
+          {
+            "kind": "choice",
+            "id": "wait_for_the_council"
+          }
+        ],
+        "realFrequency": "Happened once, in 2026: a 2009 law with a 17-year fuse; the deadline was repealed the day before it took effect, after owners had already been quoted and some had paid",
+        "tier": "exotic",
+        "source": "https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates",
+        "confidence": "verified",
+        "checkedVia": "search_excerpt",
+        "note": "No dice: both halves are announced. The lesson is real: read deadlines, but watch the Council calendar. The new rule (70% see-through only when a gate is installed or replaced) stays."
+      },
+      {
+        "id": "open_door_sweep",
+        "name": "\"Shut the Front Door\" sweep",
+        "text": "City inspectors walk the avenues in the hottest weeks and ticket shops that cool the sidewalk.",
+        "scale": "city",
+        "months": [
+          6,
+          7,
+          8
+        ],
+        "trigger": "announced every spring; hits businesses using the open-door shortcut",
+        "realSignal": "DCWP seasonal enforcement announcement; 2024: nearly 6,300 inspections, 89 violations",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.2
+          },
+          {
+            "field": "violation",
+            "id": "ac_door_open"
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "prop_door_open_with_ac"
+          },
+          {
+            "kind": "lever",
+            "id": "entrance_winter"
+          }
+        ],
+        "realFrequency": "Every summer since 2016",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and",
+        "confidence": "verified",
+        "checkedVia": "search_excerpt",
+        "note": "Mirrors the standard event summer_open_door_sweep. An air curtain does not make an open door legal; it only helps when the door opens for customers."
+      },
+      {
+        "id": "winter_draft_at_the_door",
+        "name": "Cold blast at every door swing",
+        "text": "Each customer lets January in. The two tables by the entrance stay empty and guests keep their coats on.",
+        "scale": "city",
+        "months": [
+          12,
+          1,
+          2
+        ],
+        "trigger": "calendar: cold months, for shops with neither an air curtain nor a vestibule",
+        "realSignal": "Days in the month with a mean temperature under 40 degrees F at Central Park",
+        "effects": [
+          {
+            "field": "seats",
+            "mult": 0.9
+          },
+          {
+            "field": "quality",
+            "add": -0.02
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "entrance_winter"
+          },
+          {
+            "kind": "setup",
+            "id": "air_curtain"
+          },
+          {
+            "kind": "setup",
+            "id": "winter_vestibule"
+          }
+        ],
+        "realFrequency": "Every winter; a trade magazine case describes a restaurant whose cold-draft complaints stopped after an air curtain went in",
+        "tier": "core",
+        "source": "https://achrnews.com/articles/159663-michigan-eatery-eliminates-cold-complaints-with-air-curtains",
+        "confidence": "estimate",
+        "note": "10% = two of the standard 18 seats. The user's example of ice at the entrance belongs to D07; this is the indoor half of the same winter."
+      },
+      {
+        "id": "vestibule_must_come_down",
+        "name": "April 15: the vestibule comes down",
+        "text": "Storm enclosures are legal only from November 15 to April 15. After that the box at your door is an illegal structure.",
+        "scale": "city",
+        "months": [
+          4
+        ],
+        "trigger": "calendar, for shops that put up a vestibule",
+        "realSignal": "The date; 311 complaint category for awnings, canopies and storm enclosures",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.1,
+            "onlyIf": "the vestibule is left up"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "entrance_winter"
+          }
+        ],
+        "realFrequency": "Every year",
+        "tier": "exotic",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02227",
+        "confidence": "verified",
+        "checkedVia": "search_excerpt",
+        "note": "The fine for a late or oversized enclosure was not found; the engine can treat it as a Buildings complaint."
+      },
+      {
+        "id": "storefront_glass_broken",
+        "name": "Break-ins on the avenue",
+        "text": "Police report a run of overnight smash-and-grabs on your strip. Shops without a gate are the easy ones.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "announced one month ahead; hits shops with no security grille",
+        "realSignal": "Burglary complaints in the precinct over the last 28 days (NYPD weekly crime statistics)",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -1150
+          },
+          {
+            "field": "closureDays",
+            "add": 1
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "setup",
+            "id": "see_through_security_grille"
+          },
+          {
+            "kind": "setup",
+            "id": "storefront_glass_panel"
+          }
+        ],
+        "realFrequency": "Not counted here: no per-cafe frequency was found",
+        "tier": "deep",
+        "source": "https://www.insightglass.com/how-much-do-storefront-windows-cost/",
+        "confidence": "estimate",
+        "note": "$1,150 is one glass panel (glazier guides outside NYC); the stolen register drawer and the board-up are not priced. One day closed is my estimate."
+      },
+      {
+        "id": "landmark_notice",
+        "name": "Warning from the Landmarks Commission",
+        "text": "You changed the sign on a landmark block without a permit. The Commission wants an application, and possibly the old look back.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: new sign, awning or lighting in a historic district without the Landmarks permit",
+        "realSignal": "Whether the address lies in a historic district (Landmarks map)",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -2600,
+            "onlyIf": "the awning or sign has to be remade"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "setup",
+            "id": "landmarks_storefront_permit"
+          }
+        ],
+        "realFrequency": "Not found",
+        "tier": "exotic",
+        "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+        "confidence": "estimate",
+        "note": "No penalty amount was found; the cost shown is remaking a $2,600 awning to the approved design. Staff will not approve more than three kinds of signs on one storefront."
+      },
+      {
+        "id": "sidewalk_cafe_season",
+        "name": "Outdoor season",
+        "text": "From April the sidewalk tables fill before the room does.",
+        "scale": "city",
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "trigger": "calendar, for shops with a licensed sidewalk or roadway cafe",
+        "realSignal": "Months when the average daily high is above about 60 degrees F",
+        "effects": [
+          {
+            "field": "seats",
+            "add": 8
+          },
+          {
+            "field": "demand",
+            "mult": 1.03
+          }
+        ],
+        "durationMonths": 7,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "shortcut",
+            "id": "sidewalk_tables"
+          }
+        ],
+        "realFrequency": "Every year; sidewalk cafes are legal all year, roadway cafes all year since 2026",
+        "tier": "core",
+        "source": "https://www.diningoutnyc.info/rules/sidewalk/siting-clearances",
+        "confidence": "estimate",
+        "note": "The months and the 3% are my estimates. Outdoor seats count toward the 20-seat restroom line, and seasonal outdoor seating counts toward the plumbing fixture count (NYC Plumbing Code 403.1)."
+      },
+      {
+        "id": "community_board_review",
+        "name": "The community board reads your sidewalk plan",
+        "text": "Neighbors object to tables under their windows. If the board recommends against you, the city holds a hearing and you pay for the notice.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: applied for a sidewalk cafe",
+        "realSignal": "Community board recommendation on the application",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -1000,
+            "onlyIf": "the player goes to the hearing"
+          },
+          {
+            "field": "waitDays",
+            "add": 60,
+            "onlyIf": "the player goes to the hearing"
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "choice",
+            "id": "trim_the_plan"
+          },
+          {
+            "kind": "choice",
+            "id": "go_to_the_hearing"
+          }
+        ],
+        "realFrequency": "Charter Revision Commission report, 2026: sidewalk cafe applications take six to eight months; the hearing notice fee of up to $1,000 is charged when the board recommends disapproval",
+        "tier": "deep",
+        "source": "https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf",
+        "confidence": "estimate",
+        "note": "Trimming the plan (fewer tables, earlier closing) passes without the fee; the extra 60 days for a hearing are my estimate."
+      },
+      {
+        "id": "roadway_cafes_go_year_round",
+        "name": "Roadway cafes may stay all winter",
+        "text": "A new city law ends the yearly teardown: a roadway cafe no longer has to vanish on November 29.",
+        "scale": "city",
+        "months": [
+          9
+        ],
+        "trigger": "announced: law signed August 31, 2026",
+        "realSignal": "Local Law 135 of 2026; year-round applications from September 2026",
+        "effects": [
+          {
+            "field": "roadwayMonthsActive",
+            "set": 12
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "setup",
+            "id": "roadway_cafe_license"
+          }
+        ],
+        "realFrequency": "Once; the seasonal rule had been in force since the program began in 2024",
+        "tier": "deep",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+        "confidence": "verified",
+        "checkedVia": "search_excerpt",
+        "note": "Before the law owners had to store or rebuild the structure each spring; operators called storing it impossible (Streetsblog)."
+      },
+      {
+        "id": "outdoor_setup_out_of_bounds",
+        "name": "Your tables are over the line",
+        "text": "An inspector measures the sidewalk cafe: two tables sit in the clear path. You have 30 days to pull them back.",
+        "scale": "point",
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "trigger": "decision: more outdoor tables than the license drawing shows",
+        "realSignal": "Transportation Department inspection or a 311 complaint",
+        "effects": [
+          {
+            "field": "seats",
+            "add": -4
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          }
+        ],
+        "realFrequency": "Not found for the current program; an older city audit found 24 of 183 sidewalk cafes (13%) operating with no license at all",
+        "tier": "deep",
+        "source": "https://www.diningoutnyc.info/enforcement",
+        "confidence": "estimate",
+        "note": "The 30-day cure for a licensed cafe is from the pack's existing enforcement source; the walkers' clear path is 8 feet or half the sidewalk, whichever is more."
+      },
+      {
+        "id": "ac_fails_in_heat_wave",
+        "name": "The air conditioning dies in a heat wave",
+        "text": "The compressor quits on the third 95-degree day. The room is 88 degrees by noon and the milk fridge is struggling.",
+        "scale": "point",
+        "months": [
+          7,
+          8
+        ],
+        "trigger": "decision: no service contract for 12 months or more, or a unit past its 15 years; fires in the first heat wave after that",
+        "realSignal": "National Weather Service heat advisory for New York City",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.9
+          },
+          {
+            "field": "cash",
+            "add": -15000,
+            "onlyIf": "the unit has to be replaced"
+          },
+          {
+            "field": "violation",
+            "id": "ventilation_inadequate"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hvac_care"
+          },
+          {
+            "kind": "setup",
+            "id": "hvac_replacement"
+          }
+        ],
+        "realFrequency": "Not found as a statistic; contractors' guides say most small leases leave the unit to the tenant",
+        "tier": "core",
+        "source": "https://www.vincomechanical.com/hvac-replacement-cost-nyc",
+        "confidence": "estimate",
+        "note": "12 months and the 10% loss of the month's sales (about ten bad days at -30%) are my estimates. Overlaps D03: keep one copy when merging."
+      },
+      {
+        "id": "breaker_trips_at_peak",
+        "name": "The breaker trips at 8:40",
+        "text": "Espresso machine, dishwasher and ice maker all draw at once. The bar goes dark for ten minutes in the middle of the rush.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: a three-group machine, dishwasher or second fridge added without a new circuit or a service upgrade",
+        "realSignal": "Amps on the panel against the sum of the equipment nameplates",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "setup",
+            "id": "dedicated_espresso_circuit"
+          },
+          {
+            "kind": "setup",
+            "id": "electrical_service_upgrade"
+          }
+        ],
+        "realFrequency": "Not found; vendors warn to have an electrician check the panel before buying a machine",
+        "tier": "core",
+        "source": "https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
+        "confidence": "estimate",
+        "note": "A two-group machine wants a 30-amp 208-240V circuit of its own, a three-group about 40 amps. The 5% is a game value."
+      },
+      {
+        "id": "service_upgrade_wait",
+        "name": "Waiting for Con Edison",
+        "text": "The new machine is in the box. It stays there until the utility finishes the service upgrade.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: ordered the electrical service upgrade",
+        "realSignal": "Con Edison case status: load letter, layout drawings, inspection, connection",
+        "effects": [
+          {
+            "field": "waitDays",
+            "add": 84
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "setup",
+            "id": "electrical_service_upgrade"
+          },
+          {
+            "kind": "choice",
+            "id": "pick_a_space_with_enough_power"
+          }
+        ],
+        "realFrequency": "Contractor guides: 4-12 weeks by one, 12-24 weeks by another",
+        "tier": "core",
+        "source": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/",
+        "confidence": "estimate",
+        "note": "If this happens before opening, it is three more months of rent with no sales. D01 covers the same wait for gas."
+      },
+      {
+        "id": "building_gas_shutoff",
+        "name": "The building's gas is locked off",
+        "text": "The utility found a leak in the building's piping and shut the meter. Gas returns only after the landlord's plumber passes a pressure test.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "announced; hits shops in that building that heat water or bake with gas",
+        "realSignal": "Con Edison shutoff notice for the building",
+        "effects": [
+          {
+            "field": "closureDays",
+            "add": 3,
+            "onlyIf": "the water heater is gas"
+          },
+          {
+            "field": "demand",
+            "mult": 0.9,
+            "onlyIf": "the oven is gas"
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "choice",
+            "id": "all_electric_build_out"
+          },
+          {
+            "kind": "choice",
+            "id": "buy_an_electric_water_heater"
+          }
+        ],
+        "realFrequency": "Press cases: a Manhattan restaurant six weeks and counting without gas after a routine inspection; another four months without gas around its opening; a State Senate report collected more",
+        "tier": "deep",
+        "source": "https://w42st.com/post/gas-shutoff-drags-on-at-sesamo-leaving-restaurant-in-limbo-for-over-a-month/",
+        "confidence": "estimate",
+        "note": "The repair is the landlord's job and outside the tenant's control: the player's real move is made at build-out (no gas at all). Three closed days to install an electric heater are my estimate. Named businesses in the sources are evidence only."
+      },
+      {
+        "id": "backflow_notice",
+        "name": "Letter from DEP: where is your backflow test?",
+        "text": "The city did not receive this year's test report for the device on your water line.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: skipped the yearly test; fires 12 months after the last one",
+        "realSignal": "Anniversary of the last filed test report",
+        "effects": [
+          {
+            "field": "violation",
+            "id": "backflow_not_tested"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_backflow_test"
+          }
+        ],
+        "realFrequency": "Yearly for every device",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+        "confidence": "verified",
+        "checkedVia": "search_excerpt",
+        "note": "DEP: failure to test can bring fines or disconnection of water service."
+      },
+      {
+        "id": "cloudburst_floods_cellar",
+        "name": "Cloudburst: the sewer comes up through the cellar",
+        "text": "A flash flood warning is out for tomorrow. In a downpour the street sewer backs up through basement drains.",
+        "scale": "city",
+        "months": [
+          7,
+          8,
+          9
+        ],
+        "trigger": "announced one day ahead; hits shops that keep stock in the cellar on the floor",
+        "realSignal": "National Weather Service flash flood warning for New York City",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -1500
+          },
+          {
+            "field": "closureDays",
+            "add": 2
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "choice",
+            "id": "carry_the_stock_upstairs"
+          },
+          {
+            "kind": "choice",
+            "id": "cellar_storage_or_ground_floor"
+          }
+        ],
+        "realFrequency": "DEP: about 60% of the city's sewers carry storm water and sewage in one pipe and back up into buildings when rain overwhelms them. NYC311: food that touched sewage water must be thrown out.",
+        "tier": "core",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02997",
+        "confidence": "estimate",
+        "note": "$1,500 = half of the pack's $3,000 opening inventory kept downstairs. Two closed days are my estimate (a contractor's story has a restaurant back in four days after three feet of water). Sewer backup is normally not covered without a separate insurance endorsement. D07 owns the weather; this entry is the cellar's side of it."
+      },
+      {
+        "id": "grease_backup",
+        "name": "The floor drain comes back up",
+        "text": "Months of milk fat and grounds have closed the pipe. Grey water spreads behind the bar during service.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: grease interceptor not cleaned for three months or more",
+        "realSignal": "Grease depth in the interceptor against the 25% limit",
+        "effects": [
+          {
+            "field": "closureDays",
+            "add": 1
+          },
+          {
+            "field": "violation",
+            "id": "grease_interceptor_neglect"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_grease_trap_cleaning"
+          }
+        ],
+        "realFrequency": "Not found",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page",
+        "confidence": "estimate",
+        "note": "Gives the existing shortcut a physical consequence. Three months and one closed day are my estimates."
+      },
+      {
+        "id": "restroom_out_of_order",
+        "name": "\"Restroom out of order\"",
+        "text": "The only toilet is clogged again. With 20 or more seats, a cafe without a working customer toilet is in violation the moment an inspector walks in.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: restroom open to all with no upkeep for three months or more",
+        "realSignal": "Days per month with the sign on the door",
+        "effects": [
+          {
+            "field": "reputation",
+            "add": -0.02
+          },
+          {
+            "field": "violation",
+            "id": "toilet_not_supplied"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "restroom_access"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_restroom_upkeep"
+          }
+        ],
+        "realFrequency": "Not found",
+        "tier": "deep",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+        "confidence": "estimate",
+        "note": "The plumber's bill is not priced: no source."
+      },
+      {
+        "id": "restroom_line_of_passers_by",
+        "name": "Everybody's restroom",
+        "text": "The big chain down the block now asks for a purchase. Tourists and delivery riders ask at your counter instead.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "announced: a nearby chain closes its restroom to non-customers; affects shops with an open restroom",
+        "realSignal": "Starbucks code of conduct in force from January 27, 2025: a purchase is required to stay or use the restroom",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -150,
+            "onlyIf": "restroom open to all"
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "restroom_access"
+          }
+        ],
+        "realFrequency": "A national policy change, once; under 20 seats an NYC cafe owes the public no restroom at all",
+        "tier": "deep",
+        "source": "https://www.cnn.com/2025/01/14/food/starbucks-restroom-policy",
+        "confidence": "estimate",
+        "note": "That the traffic moves to neighbors is my inference, not a measured fact; the $150 is the lever's upkeep cost."
+      },
+      {
+        "id": "restroom_occupied_for_an_hour",
+        "name": "The restroom door stays locked",
+        "text": "Someone has been in the restroom for forty minutes. Guests are asking, and a barista has to knock.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: restroom open to all with no code lock",
+        "realSignal": "Minutes the restroom is unavailable during open hours",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.98
+          },
+          {
+            "field": "quality",
+            "add": -0.01
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "restroom_access"
+          }
+        ],
+        "realFrequency": "Public radio reporting (2017) describes cafe owners who put code locks on restrooms and trained staff after repeated incidents",
+        "tier": "exotic",
+        "source": "https://www.npr.org/sections/health-shots/2017/05/08/526523520/public-restrooms-become-ground-zero-in-the-opioid-epidemic",
+        "confidence": "estimate",
+        "note": "Kept to lost time and a worse room; nothing graver is modeled."
+      },
+      {
+        "id": "neighbor_noise_complaint",
+        "name": "The apartment upstairs calls 311",
+        "text": "An inspector takes a sound reading in the bedroom above your speakers.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: loud evening music, or long hours under apartments",
+        "realSignal": "311 noise complaints for the address",
+        "effects": [
+          {
+            "field": "violation",
+            "id": "commercial_noise"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "loud_evening_music"
+          },
+          {
+            "kind": "lever",
+            "id": "music_tempo"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Not counted here",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
+        "confidence": "verified",
+        "checkedVia": "search_excerpt",
+        "note": "42 dB(A) inside the dwelling; the first violation drops from $2,000 to $0 if the owner proves the fix. The same limit applies to a rooftop compressor."
+      },
+      {
+        "id": "peak_kw_bill_jump",
+        "name": "The electric bill jumps without more use",
+        "text": "The new oven pushed your peak load over the line. The utility now bills you for your highest 30 minutes as well as for what you use.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: equipment added that lifts peak demand above 10 kW",
+        "realSignal": "Peak kW on the Con Edison bill",
+        "effects": [
+          {
+            "field": "utilities",
+            "mult": 1.1
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "choice",
+            "id": "stagger_the_equipment"
+          },
+          {
+            "kind": "choice",
+            "id": "skip_the_oven"
+          }
+        ],
+        "realFrequency": "Structural: demand billing is how the larger commercial service class works",
+        "tier": "exotic",
+        "source": "https://nectarclimate.com/rates/consolidated-edison-coned",
+        "confidence": "estimate",
+        "note": "Third-party rate summaries put the demand delivery charge for Con Edison's general large class at about $34.50 per kW in winter and $44.05 in summer; the official tariff and the 10 kW threshold were not confirmed. The 10% is a game value."
+      },
+      {
+        "id": "open_mic_over_capacity",
+        "name": "Eighty people for the open mic",
+        "text": "The room is approved for fewer than 75. Somebody posts a photo of the crowd; somebody else calls 311.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: events that pack the room past its approved occupancy",
+        "realSignal": "People in the room against the number on the Certificate of Occupancy",
+        "effects": [
+          {
+            "field": "violation",
+            "id": "overcrowding_over_occupancy"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "standing_room_events"
+          },
+          {
+            "kind": "setup",
+            "id": "temporary_place_of_assembly"
+          }
+        ],
+        "realFrequency": "Not found",
+        "tier": "deep",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+        "confidence": "estimate",
+        "note": "Standing people count at 5 sq ft each, so 400 sq ft of cleared floor is 80 people on paper."
+      },
+      {
+        "id": "cellar_stairs_tax",
+        "name": "Every gallon of milk climbs the stairs",
+        "text": "Stock lives in the cellar. Each restock takes a barista off the bar for four minutes.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: storage moved to the cellar to free the ground floor for seats",
+        "realSignal": "Trips downstairs per shift",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.97
+          },
+          {
+            "field": "seats",
+            "add": 3
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "choice",
+            "id": "cellar_storage_or_ground_floor"
+          }
+        ],
+        "realFrequency": "A bar design rule of thumb from a Russian-language guide: a barista who walks more than three steps per drink works in an inefficient layout",
+        "tier": "deep",
+        "source": "https://alataucitybank.kz/business/osim/articles/sem-fundamentalnykh-printsipov-proektirovki-kofeynogo-bara",
+        "confidence": "estimate",
+        "note": "3% = about ten trips of four minutes in a shift of two people; three seats = 60 sq ft of storage turned into seating at 18 sq ft each. Both are my estimates."
+      },
+      {
+        "id": "cellar_hatch_left_open",
+        "name": "The sidewalk hatch stands open",
+        "text": "The delivery came at 8am and nobody stood by the open cellar doors. A passer-by photographs it for 311.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: deliveries through the sidewalk hatch at rush hour with no one posted",
+        "realSignal": "311 sidewalk cellar door complaints for the address",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.1
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "choice",
+            "id": "post_a_person_at_the_hatch"
+          },
+          {
+            "kind": "choice",
+            "id": "move_deliveries_before_seven"
+          }
+        ],
+        "realFrequency": "Not found",
+        "tier": "deep",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02292",
+        "confidence": "estimate",
+        "note": "NYC311: cellar doors may be open during a delivery as long as a person guards them. No fine amount was found; a fall is a liability claim against the owner and the tenant."
+      },
+      {
+        "id": "dim_bar_at_inspection",
+        "name": "Too dark behind the bar",
+        "text": "The inspector holds a light meter over the prep counter. Edison bulbs look good and read 15 foot-candles.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: decorative lighting chosen with no task lights over the bar",
+        "realSignal": "Foot-candles at the prep surface (50 required) and at the hand sink (20 required)",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -100
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "setup",
+            "id": "decor_lighting"
+          }
+        ],
+        "realFrequency": "Penalty schedule: lighting (code 10C) $100, and $0 the first time",
+        "tier": "exotic",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238",
+        "confidence": "estimate",
+        "note": "The $0-then-$100 reading of the schedule row comes from a garbled search excerpt; the light levels (540, 215 and 108 lux) were seen clearly in the code text."
+      },
+      {
+        "id": "aisle_too_narrow",
+        "name": "The route to the counter is 28 inches",
+        "text": "With the extra tables in, a wheelchair cannot reach the register.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "decision: seating layout 'tight'",
+        "realSignal": "Narrowest point of the path from the door to the counter and to the restroom (36 inches required)",
+        "effects": [
+          {
+            "field": "exposure",
+            "id": "accessibility_barrier"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seating_layout"
+          }
+        ],
+        "realFrequency": "A federal court case in Brooklyn turned on a step at the entrance and on the layout of the dining area",
+        "tier": "deep",
+        "source": "https://www.corada.com/documents/2010ADAStandards/226",
+        "confidence": "estimate",
+        "note": "'exposure' means the business joins those hit by accessibility_suit_wave even without a step. At least 5% of seats must be wheelchair-usable (ADA Standards 226.1)."
+      },
+      {
+        "id": "cafe_fees_by_quarter",
+        "name": "Outdoor dining fees can be paid by the quarter",
+        "text": "A new law lets cafes pay the yearly sidewalk and roadway fee in four installments.",
+        "scale": "city",
+        "months": [
+          5
+        ],
+        "trigger": "announced: Local Law 145 of 2026, in force about May 2027",
+        "realSignal": "Enacted September 12, 2026; effective 240 days later",
+        "effects": [
+          {
+            "field": "cashTiming",
+            "set": "quarterly"
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          }
+        ],
+        "realFrequency": "Once",
+        "tier": "exotic",
+        "source": "https://www.thecityreporter.nyc/2026/08/13/nyc-outdoor-dining-roadside-sheds-new-laws-restaraunts/",
+        "confidence": "estimate",
+        "note": "Enactment number and dates seen in a search excerpt of the Council record; the exact effective date is my arithmetic (September 12, 2026 + 240 days = May 10, 2027)."
+      },
+      {
+        "id": "backflow_penalty_bill",
+        "name": "Council bill: bigger fines for missing backflow devices",
+        "text": "A bill before the City Council would raise the penalty for not installing a backflow device to $1,000-$10,000.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "trigger": "announced if and when it passes",
+        "realSignal": "City Council record for Int 0768-2026",
+        "effects": [
+          {
+            "field": "fineBase",
+            "id": "backflow_not_tested",
+            "set": 1000
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_backflow_test"
+          },
+          {
+            "kind": "setup",
+            "id": "backflow_preventer"
+          }
+        ],
+        "realFrequency": "Pending in 2026; status not confirmed",
+        "tier": "exotic",
+        "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+        "confidence": "estimate",
+        "note": "Bill text seen only in a garbled search excerpt of the Council record; do not switch it on until the status is checked."
+      }
+    ]
+  },
+  "sources": []
+}
