@@ -182,6 +182,22 @@
       "note": "NYC311 and the DOHMH application packet: $70 a year (+$25 when making frozen desserts); it covers street fairs, flea markets and carnivals, expires one year after issue, and a supervisor with a Food Protection Certificate must be on site at all times. A cafe's own FSE permit covers only its own storefront. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
     },
     {
+      "id": "home_processor_registration",
+      "name": "NYS home processor registration (non-perishable baked goods from a home kitchen)",
+      "kind": "license",
+      "cost": 0,
+      "required": false,
+      "waitDays": 14,
+      "agency": "NYS Department of Agriculture and Markets",
+      "link": "https://agriculture.ny.gov/food-safety/home-processing",
+      "formats": [
+        "market_stall"
+      ],
+      "source": "https://agriculture.ny.gov/food-safety/home-processing",
+      "confidence": "estimate",
+      "note": "Registration (form FSI-898) with no fee: a carve-out from the Article 20-C license for shelf-stable home baked goods such as cookies, brownies and bars; nothing that needs refrigeration (no cream or cream-cheese frosting, no cheesecake). Guides say farmers markets are allowed with the certificate displayed; approval about two weeks. It does not make home baking an approved source for a cafe under the city Health Code, which is why the cafe pack's home_baked_pastries shortcut stays a violation. Street-fair acceptance in NYC not confirmed."
+    },
+    {
       "id": "market_stall_gear",
       "name": "10x10 tent, weights, folding tables, coolers, hand-wash station",
       "kind": "equipment",
@@ -888,6 +904,15 @@
             "quality": 0.04,
             "demand": 0.04
           }
+        },
+        {
+          "id": "bake_off_frozen",
+          "label": "Bake frozen croissants in a convection oven (bake-off)",
+          "monthlyCost": 600,
+          "effects": {
+            "quality": 0.01,
+            "demand": 0.02
+          }
         }
       ]
     },
@@ -1349,7 +1374,7 @@
       "reputationHit": 0.02,
       "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
       "confidence": "estimate",
-      "note": "NYC food service penalty schedule (Appendix 23-C) lists $400 and $600 for unlabeled unpasteurized juice packaged on premises, per the search excerpt."
+      "note": "NYC food service penalty schedule (Appendix 23-C) lists $400 and $600 for juice packaged on premises with no or an incomplete label or no warning statement, per the search excerpt. Article 81 requires ingredients, additives, the packager's name and address and a use-by date on unpasteurized juice bottled for direct sale to patrons."
     },
     {
       "id": "cooking_without_hood",
@@ -1819,6 +1844,18 @@
       "title": "The apps keep your customers",
       "text": "NYC tried to make delivery apps share diners' names and emails with restaurants. Courts held the law unconstitutional in 2024, so delivery customers stay the app's, not yours.",
       "source": "https://www.hunton.com/privacy-and-cybersecurity-law-blog/federal-court-invalidates-nyc-law-requiring-food-delivery-apps-to-share-customer-data-with-restaurants"
+    },
+    {
+      "id": "landmarks_storefront",
+      "title": "Historic districts guard storefronts",
+      "text": "In a NYC historic district any change to a storefront's exterior, an awning or outdoor dining fixed to the building needs a Landmarks permit. Staff can approve simple work that removes no historic material.",
+      "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
+    },
+    {
+      "id": "juice_wholesale_haccp",
+      "title": "Selling juice wholesale changes the rules",
+      "text": "Juice you bottle for your own customers needs a full label and warning. Sell bottles to other shops and the federal Juice HACCP rule applies, even if the juice never leaves New York.",
+      "source": "https://foodsafetyprocessors.ces.ncsu.edu/juice-haccp/"
     }
   ],
   "roadmap": [
@@ -1974,6 +2011,7 @@
         "demand": "Morning rush 7-10 a.m. carries the day; one barista at a two-group machine makes about 60-80 drinks an hour (cafe pack capacity). In January-February demand drops harder than for a seated cafe because nobody stays inside.",
         "risks": [
           "Queue on the sidewalk in front of a neighbour's door: complaints and a landlord dispute",
+          "Cutting a window into a storefront in a historic district needs a Landmarks Preservation Commission permit (staff-level if no historic material is removed)",
           "Weather: no indoor seats to shelter customers",
           "Landlord carve-outs: a window inside another tenant's lease is a sublease that can end when that lease ends",
           "Lower ticket: pastries sell less without a table"
@@ -2151,6 +2189,7 @@
         "equipment": "Convection or deck oven, spiral mixer, proofer/retarder, sheeter (later), walk-in or extra reach-ins, bakers' benches.",
         "staff": "1-2 bakers starting 3-5 a.m. plus counter staff; bakers are the hardest hire and the most expensive hours.",
         "demand": "Morning and weekend; holiday orders (Thanksgiving pies, Christmas) are the year's peaks; wholesale accounts smooth the week.",
+        "benchmarks": "Square's NYC menu data: croissants average $5.30 (range $3.80-$7.50). A frozen bake-off croissant costs about $1.04 (96-piece case $100.07 at Bakers Authority), so a cafe can sell 'baked here' pastry without a baker; a from-scratch croissant needs flour, butter, labor and a 3-day process.",
         "risks": [
           "Ingredient swings: eggs averaged $5.69 a dozen in Q1 2025 and $2.27 in September 2026 (BLS via FRED); butter averaged a record $2.88/lb in 2024 and $1.54 in July 2026 (CME)",
           "Gas delays or a building gas shutoff stop the ovens",
@@ -2238,7 +2277,7 @@
         "id": "juice_bar",
         "name": "Juice and smoothie bar",
         "tier": "deep",
-        "differsFromCafe": "Produce instead of coffee: cost of goods is far higher and spoils in days. A cold-press juicer costs about $11,900; blenders are loud. Juice pressed and bottled for later sale must carry the unpasteurized warning label (fines $400-$600) and may need a HACCP plan approved by DOHMH. Demand peaks in January (resolutions, cleanses) and in summer heat, and is fashion-driven: NYC chains shrank sharply (Organic Avenue closed in 2015, Liquiteria shut, Juice Press closed East Village and Greenwich Street stores in 2025-2026).",
+        "differsFromCafe": "Produce instead of coffee: cost of goods is far higher and spoils in days. A cold-press juicer costs about $11,900; blenders are loud. Juice pressed and bottled for later sale to your own customers must carry a label with ingredients, packager, a use-by date and the unpasteurized warning (fines $400-$600); bottles sold wholesale to other shops fall under the federal Juice HACCP rule (21 CFR Part 120), which applies even to juice that never leaves the state. Demand peaks in January (resolutions, cleanses) and in summer heat, and is fashion-driven: NYC chains shrank sharply (Organic Avenue closed in 2015, Liquiteria shut, Juice Press closed East Village and Greenwich Street stores in 2025-2026).",
         "startCost": {
           "min": 120000,
           "typical": 190000,
@@ -2252,8 +2291,9 @@
           "seats": 6
         },
         "permits": [
-          "FSE permit; HACCP plan if bottling juice for later sale",
-          "Unpasteurized juice warning label (Health Code Article 81, 21 CFR 101.17(g))"
+          "FSE permit",
+          "Label on juice bottled on site: ingredients, packager, use-by date, unpasteurized warning (Health Code Article 81)",
+          "Federal Juice HACCP (21 CFR Part 120) only if selling bottles wholesale"
         ],
         "equipment": "Cold-press juicer, commercial blenders with enclosures, produce washing sink, reach-in fridges, bottle sealer or capper.",
         "staff": "2 at peaks; daily produce prep before opening.",
@@ -2313,7 +2353,8 @@
         "demand": "Afternoon and evening, summer peak, near schools and universities; delivery share high.",
         "risks": [
           "Tariffs on Taiwanese inputs",
-          "Saturation: chains open near each other",
+          "Saturation: Manhattan's Chinatown has more than 30 standalone boba shops within two miles (Next City); Chinese chains such as Mixue, Heytea, Teapulse and Cotti opened in New York in 2025 and launch new drinks every two weeks",
+          "Neighbourhood shops closing: Shiny Tea on the Upper West Side (April 2025), Vivi on Third Avenue (September 2025)",
           "Time-temperature rules for cooked pearls",
           "Straw law fines $100-$400"
         ],
@@ -2335,7 +2376,10 @@
           "https://pos.toasttab.com/blog/on-the-line/how-much-does-it-cost-to-open-a-boba-shop",
           "https://www.market-prospects.com/articles/from-trade-wars-to-bubble-tea-when-global-tariffs-impact-a-local-industry",
           "https://www.ktvu.com/news/tariffs-impact-boba-guys-us-based-bubble-tea-factory",
-          "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page"
+          "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+          "https://nextcity.org/forefront/view/the-bobafication-of-manhattans-chinatown",
+          "https://news.bgov.com/new-york-brief/chinese-tea-chains-are-brewing-a-new-us-obsession",
+          "https://evgrieve.com/2025/09/closings-vivi-bubble-tea-on-3rd-avenue.html"
         ]
       },
       {
@@ -2364,7 +2408,7 @@
         ],
         "equipment": "Wine fridge, kegerator, glassware, simple hot food line.",
         "staff": "Evening server-bartender; anyone serving must be 18+; owner or manager on site for license compliance.",
-        "demand": "Thursday-Saturday evenings; neighbourhoods with residents rather than office districts.",
+        "demand": "Thursday-Saturday evenings; neighbourhoods with residents rather than office districts. NYC examples of the hybrid: Kobrick Coffee Co. in Chelsea (coffee by day, beer and wine in the evening), HOM Cafe & Wine in Park Slope, Aperitivo by Carta in the West Village (Time Out, 2026). Perfect Daily Grind (August 2025): wine lengthens the selling day and brings an evening crowd; licensing is the first step.",
         "risks": [
           "License wait: 6-12 months with rent running",
           "Community board stipulations: closing hours, no outdoor drinks",
@@ -4761,6 +4805,60 @@
           "cafe",
           "bubble_tea"
         ]
+      },
+      {
+        "id": "chinese_tea_chain_arrives",
+        "name": "A big tea chain opens nearby",
+        "text": "A fast-growing tea chain opens two doors down with opening-week deals and a new drink every two weeks.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Openings of Mixue, Heytea, Teapulse, Cotti and similar chains in New York (2025)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.85,
+            "formats": [
+              "bubble_tea"
+            ]
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "lever",
+            "id": "pearl_batches"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Several openings a year in Chinatown, Flushing and Midtown",
+        "tier": "core",
+        "source": "https://news.bgov.com/new-york-brief/chinese-tea-chains-are-brewing-a-new-us-obsession",
+        "confidence": "estimate",
+        "note": "Next City: more than 30 standalone boba shops within two miles of Manhattan's Chinatown; a local owner said chains' promotions take business from small shops. The 15% hit is my estimate.",
+        "formats": [
+          "bubble_tea",
+          "juice_bar"
+        ]
       }
     ]
   },
@@ -4818,6 +4916,11 @@
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01825",
       "title": "portal.311.nyc.gov/article/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://agriculture.ny.gov/food-safety/home-processing",
+      "title": "agriculture.ny.gov/food-safety/home-processing",
       "checked": "2026-11-14"
     },
     {
@@ -5161,6 +5264,16 @@
       "checked": "2026-11-14"
     },
     {
+      "url": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "title": "www.nyc.gov/site/lpc/applications/storefronts.page",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://foodsafetyprocessors.ces.ncsu.edu/juice-haccp/",
+      "title": "foodsafetyprocessors.ces.ncsu.edu/juice-haccp/",
+      "checked": "2026-11-14"
+    },
+    {
       "url": "https://totalfood.com/getting-restaurant-open-easier-nyc-hospitality-alliance-con-edison/",
       "title": "totalfood.com/getting-restaurant-open-easier-nyc-hospitality-alliance-con",
       "checked": "2026-11-14"
@@ -5228,6 +5341,21 @@
     {
       "url": "https://www.ktvu.com/news/tariffs-impact-boba-guys-us-based-bubble-tea-factory",
       "title": "www.ktvu.com/news/tariffs-impact-boba-guys-us-based-bubble-tea-factory",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nextcity.org/forefront/view/the-bobafication-of-manhattans-chinatown",
+      "title": "nextcity.org/forefront/view/the-bobafication-of-manhattans-chinatown",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://news.bgov.com/new-york-brief/chinese-tea-chains-are-brewing-a-new-us-obsession",
+      "title": "news.bgov.com/new-york-brief/chinese-tea-chains-are-brewing-a-new-us-obse",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://evgrieve.com/2025/09/closings-vivi-bubble-tea-on-3rd-avenue.html",
+      "title": "evgrieve.com/2025/09/closings-vivi-bubble-tea-on-3rd-avenue.html",
       "checked": "2026-11-14"
     },
     {
