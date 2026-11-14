@@ -5,8 +5,8 @@ import type {
   Analytics, BusinessState, CaseCard, CityView, ClientView, CommonPack, DayReport, DayWeather, Deal, FeedItem, GameEvent,
   IdeaMatch, InboxItem, MonthReport, NicheId, OfficialView, OpenRecommendation, OwnerView, Pack, PackSet, Place, Player,
   PublicBusiness, Recommendation, RoadmapItem, Standing, StandingOrders, WorldConfig, WorldPublic,
-} from '@shared/types';
-import { RULES, dateOf } from '@shared/rules';
+} from '@ohh/shared/types';
+import { RULES, dateOf } from '@ohh/shared/rules';
 
 export const FIXTURE_DAY = 74;
 

@@ -1,4 +1,4 @@
-import type { OfficialRole } from '@shared/types';
+import type { OfficialRole } from '@ohh/shared/types';
 
 /** Who am I in a given world. Stored in localStorage so the same token brings the player back. */
 export interface Session {

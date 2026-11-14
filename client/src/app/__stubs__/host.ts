@@ -4,8 +4,8 @@
 import type {
   Action, ActionResult, BusinessState, CityView, ClientView, DayReport, OfficialRole, OfficialView, OpenRecommendation, OwnerView,
   Player, PublicBusiness, Query, RealWorldPlan, RoadmapItem, Standing, WorldConfig, WorldPublic, WorldState,
-} from '@shared/types';
-import { RULES, dateOf } from '@shared/rules';
+} from '@ohh/shared/types';
+import { RULES, dateOf } from '@ohh/shared/rules';
 import type { EngineCtx, HostDeps } from '../host-types';
 import {
   FIXTURE_DAY, fixtureAnalytics, fixtureEvents, fixtureFeed, fixtureOpenRecommendations, fixturePacks, fixturePlaces,
