@@ -382,6 +382,9 @@
         "evidence": "secondary",
         "note": "Not a government penalty: the record models a lawsuit so the engine can price the risk. Max $45,000 is the average slip, fall or customer injury claim of a small business in The Hartford's 2025 review (Insurance Journal, December 10, 2025); it was $20,000 in 2015. Base $2,500 is my planning value for what an insured owner pays: a $1,000-$2,500 deductible plus a premium increase at renewal. The claim arrives months after the fall: the New York deadline to sue for personal injury is three years (CPLR §214)."
       }
+    ],
+    "fixesExistingIds": [
+      "sidewalk_shed"
     ]
   },
   "officials": [
@@ -391,7 +394,13 @@
       "agency": "NYC Department of Sanitation (DSNY)",
       "role": "inspector",
       "checks": [
-        "snow_ice_not_cleared"
+        "snow_ice_not_cleared",
+        "dirty_sidewalk",
+        "improper_trash_setout",
+        "commercial_waste_in_litter_basket",
+        "recycling_not_separated",
+        "illegal_posting",
+        "sidewalk_obstruction"
       ],
       "realProcess": "Uniformed enforcement agents and sanitation police walk commercial blocks during set 'routing times' and after every snowfall. They write a summons on the spot to the business or the owner; no warning is required. The summons is answered at the Office of Administrative Trials and Hearings (OATH) or paid.",
       "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/street-sidewalk-rules-businesses.page",
@@ -496,6 +505,199 @@
       "confidence": "estimate",
       "evidence": "calc",
       "note": "Applies only on days with a National Weather Service warning (blizzard, winter storm, flash flood, tropical storm). open_as_usual: full wages against 40% of normal traffic, and workers who cannot get in are simply absent. skeleton_crew: wages for half the staff; shifts cancelled the night before cost nothing. close_for_the_day: no sales and no wages if staff were told before they reported; anyone who already reported is owed call-in pay of 3 hours at the minimum wage (12 NYCRR §146-1.5; the State Labor Department applies it to weather closings). The effects written here are month-level placeholders: 1-2 warning days a month in winter. The shortcut storm_day_no_call_in_pay is the illegal variant."
+    },
+    {
+      "id": "trash_setup",
+      "name": "Trash: bins and pickups",
+      "options": [
+        {
+          "id": "bins_three_pickups",
+          "label": "Lidded bins, private carter three nights a week",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "bins_daily_pickup",
+          "label": "Lidded bins, carter six nights a week",
+          "monthlyCost": 180,
+          "effects": {
+            "quality": 0.01
+          }
+        },
+        {
+          "id": "bags_on_curb",
+          "label": "Black bags on the curb, no bins",
+          "monthlyCost": -15,
+          "effects": {
+            "quality": -0.01
+          },
+          "causes": "improper_trash_setout"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "The pack already charges $250 a month for the carter (monthlyCosts.waste); the costs here are differences from it. Six pickups instead of three: no published New York price was found (each waste zone has its own maximum-rate table); +$180 is my planning value, about 70% more for twice the stops. Bags instead of bins saves only the bins: two 44-gallon rigid lidded bins at about $90 each replaced every year = $15 a month. Three pickups a week means food waste sits two nights: in June-September that feeds the rodent events (see extra.mechanics.trash_and_rodent_pressure)."
+    },
+    {
+      "id": "sidewalk_care",
+      "name": "Your stretch of sidewalk",
+      "options": [
+        {
+          "id": "sweep_open_close",
+          "label": "Sweep at opening and before closing, out to 18 inches into the street",
+          "monthlyCost": 85,
+          "effects": {}
+        },
+        {
+          "id": "sweep_and_power_wash",
+          "label": "Sweep twice a day and power-wash once a month",
+          "monthlyCost": 235,
+          "effects": {
+            "quality": 0.01
+          }
+        },
+        {
+          "id": "ignore",
+          "label": "It is the city's sidewalk",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.02
+          },
+          "causes": "dirty_sidewalk"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "Sweeping: 10 minutes a day of a $17.00 worker x 30 days = $85. Power wash: $150 a visit is my planning value for a 20-foot storefront; no New York price list was found. The duty is real: DSNY makes owners and tenants clean the sidewalk and the gutter 18 inches into the street, even when someone else dropped the litter."
+    },
+    {
+      "id": "cooling_plan",
+      "name": "Summer: air conditioning and the door",
+      "activeMonths": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "options": [
+        {
+          "id": "serviced_doors_closed",
+          "label": "Air conditioner serviced in spring, door kept shut",
+          "monthlyCost": 60,
+          "effects": {}
+        },
+        {
+          "id": "unserviced",
+          "label": "Run it until it breaks",
+          "monthlyCost": 0,
+          "effects": {},
+          "failsIn": "heat_wave_ac_failure"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "Charged May-September. $60 a month = one spring service visit of about $300 spread over five months (planning value). 'unserviced' has no fine; it decides whether the heat_wave_ac_failure event hits this shop (rule 4: the breakdown follows from the choice, not from dice). Propping the door open with the air conditioning on is the shortcut ac_with_open_door."
+    },
+    {
+      "id": "shed_response",
+      "name": "A sidewalk shed over your door",
+      "options": [
+        {
+          "id": "wait_it_out",
+          "label": "Wait for it to come down",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "sign_and_lights",
+          "label": "Hang a temporary sign on the shed and light your entrance",
+          "monthlyCost": 150,
+          "effects": {
+            "demand": 0.03
+          }
+        },
+        {
+          "id": "press_the_owner",
+          "label": "Lawyer letter for a rent credit; report idle months to 311",
+          "monthlyCost": 250,
+          "effects": {
+            "rent": -0.05
+          }
+        }
+      ],
+      "source": "https://www.nyc.gov/site/buildings/safety/construction-site-signage-requirements.page",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "Only shown while a shed covers the storefront. Sign: the Buildings Department lets a business whose lawful sign is blocked put a temporary sign on the face of the shed directly in front of the storefront; $150 a month = a $1,200 banner and LED strip written off over 8 months (planning value). The +3% recovers about half of the measured loss (3.5-9.7% of weekly transactions). Rent credit: nothing in the law gives a tenant a credit for a shed; it is whatever the lease says. -5% of rent for a $250-a-month lawyer retainer is my estimate of a negotiated outcome, not a right. Local Law 48 of 2025 fines the building owner for months with no work, which is the tenant's leverage."
+    },
+    {
+      "id": "disruption_playbook",
+      "name": "When the street is torn up or the train is out",
+      "options": [
+        {
+          "id": "ride_it_out",
+          "label": "Change nothing",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "signs_and_regulars",
+          "label": "'We are open' signs at both corners, a punch card for regulars",
+          "monthlyCost": 200,
+          "effects": {
+            "demand": 0.03
+          }
+        },
+        {
+          "id": "push_delivery_and_preorder",
+          "label": "Push pickup orders and delivery while the block is hard to reach",
+          "monthlyCost": 100,
+          "effects": {
+            "demand": 0.02
+          }
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "Only shown during a street, subway or utility disruption. The city pays nothing for lost sales (Small Business Services FAQ, 2022), so the owner pays for any mitigation. $200 = printed signs and a 10th-drink-free card at about 1% of sales; +3% is my estimate of what it wins back out of a 10-22% loss. Delivery: $100 of listing promotion; delivery orders also pay the platform commission that the pack models elsewhere."
+    },
+    {
+      "id": "event_day_plan",
+      "name": "Parade, fair or race on your street",
+      "options": [
+        {
+          "id": "normal_day",
+          "label": "A normal day",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "staff_up_and_stock",
+          "label": "Extra barista, double pastry order, cups stocked the night before",
+          "monthlyCost": 120,
+          "effects": {
+            "capacity": 0.03
+          }
+        },
+        {
+          "id": "window_menu",
+          "label": "Sell five fast items from the door, no seating",
+          "monthlyCost": 60,
+          "effects": {
+            "capacity": 0.05,
+            "quality": -0.01
+          }
+        }
+      ],
+      "source": "https://www.nyc.gov/html/dot/html/pr2026/nyc-dot-kicks-off-2026-open-streets-season.shtml",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "Applies on announced event days only. $120 = one extra 7-hour shift at $17.00. Deliveries cannot reach a closed street, so stock arrives the day before. The capacity gains are month-level placeholders; on the day itself the window menu roughly doubles orders per hour (design value). The crowd is only worth what you can serve."
     }
   ],
   "shortcuts": [
@@ -518,6 +720,66 @@
         "amount": 35
       },
       "violation": "call_in_pay_unpaid"
+    },
+    {
+      "id": "bags_on_curb",
+      "name": "Trash bags on the curb, no bins",
+      "what": "You skip the lidded bins and put black bags straight on the sidewalk. Since March 2024 every business must use bins with secure lids. Bags also feed the rats on your own block.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 15
+      },
+      "violation": "improper_trash_setout"
+    },
+    {
+      "id": "dump_in_litter_basket",
+      "name": "Use the corner litter basket instead of a carter",
+      "what": "Staff carry the shop's trash to the city basket on the corner. You save the private carter's bill. City baskets are for pedestrians only, and a cup with your logo in the bag is all the proof an agent needs.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 250
+      },
+      "violation": "commercial_waste_in_litter_basket"
+    },
+    {
+      "id": "skip_recycling",
+      "name": "Everything in one bag",
+      "what": "No sorting: cardboard, milk jugs and trash go out together and the carter charges less. Businesses must separate recyclables.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 40
+      },
+      "violation": "recycling_not_separated"
+    },
+    {
+      "id": "flyers_on_poles",
+      "name": "Tape flyers to lampposts",
+      "what": "Fifty flyers on poles and construction fences instead of paid ads. Posting on public property is illegal, and each flyer is its own ticket.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 150
+      },
+      "violation": "illegal_posting"
+    },
+    {
+      "id": "sign_in_the_walkway",
+      "name": "A-frame sign and bench out in the walkway",
+      "what": "You put the sandwich board and a bench where people have to walk around them. More passers-by notice the shop. Anything more than 3 feet from your wall is an obstruction.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "sidewalk_obstruction"
+    },
+    {
+      "id": "ac_with_open_door",
+      "name": "Door propped open with the air conditioning on",
+      "what": "An open door and a wave of cold air pull people in off a hot sidewalk. It is illegal for every store in the city, and it adds to your electric bill.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "open_door_ac"
     }
   ],
   "violations": [
@@ -566,6 +828,159 @@
       "confidence": "estimate",
       "evidence": "official_excerpt",
       "note": "Attorney General wage page as quoted by web search: in most cases restaurant or hotel workers should receive three hours of pay at the applicable minimum wage when they report and are sent home. Law firms report the State Labor Department applies call-in pay to closings for bad weather. Saved amount: one sent-home shift per worker per winter month, 3 h x $17.00 = $51, less about an hour actually paid = $35. Unpaid wages are owed back with 100% liquidated damages (Labor Law §198(1-a)), hence pctOfSaved 2, as for the other wage violations in the pack."
+    },
+    {
+      "id": "dirty_sidewalk",
+      "name": "Dirty sidewalk or gutter in front of the shop",
+      "law": "NYC Administrative Code §16-118(2)(a)",
+      "official": "sanitation_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 50,
+        "perMonth": 50,
+        "pctOfSaved": 0,
+        "max": 300
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
+      "confidence": "estimate",
+      "evidence": "official_excerpt",
+      "note": "DSNY cleaning rules for businesses, as quoted by web search: owners and tenants must clean the sidewalk along the building and the gutter 18 inches from the curb into the street, including tree pits; $50 for the first offense. The Sanitation Foundation gives $100 for each later one; the penalty schedule caps the violation at $300. 311 adds that the rule applies even if someone else caused the mess. Agents ticket commercial blocks during fixed routing hours."
+    },
+    {
+      "id": "improper_trash_setout",
+      "name": "Trash set out in bags or at the wrong time",
+      "law": "NYC Administrative Code §16-120; DSNY commercial containerization and set-out rules (Title 16, Rules of the City of New York)",
+      "official": "sanitation_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 50,
+        "perMonth": 50,
+        "pctOfSaved": 0,
+        "max": 200
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
+      "confidence": "estimate",
+      "evidence": "official_excerpt",
+      "note": "DSNY, March 2024, as quoted by web search: starting March 1, 2024 all businesses must put trash in bins with secure lids; fines start at $50 for a first offense, $100 for a second and $200 for every one after. The business set-out page: bins go out one hour before closing or after 8:00 PM, come off the curb by the time the business reopens, and may be stored within 3 feet of the building line. Recycling in bags or bundles may go out after 8 PM. The exact rule section number was not confirmed."
+    },
+    {
+      "id": "commercial_waste_in_litter_basket",
+      "name": "Business trash in a public litter basket",
+      "law": "NYC Administrative Code §16-120(e); §16-116 (businesses must use a licensed private carter)",
+      "official": "sanitation_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 100,
+        "perMonth": 125,
+        "pctOfSaved": 0,
+        "max": 350
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://dsny.cityofnewyork.us/?p=1198",
+      "confidence": "estimate",
+      "evidence": "official_excerpt",
+      "note": "DSNY collection and set-out laws for businesses, as quoted by web search: 'Under no circumstances can a merchant dispose of any garbage or recyclable materials in a DSNY litter basket'; $100 first offense, $250 second, $350 third and later. The code presumes that the person whose name appears on garbage found in the basket put it there."
+    },
+    {
+      "id": "recycling_not_separated",
+      "name": "Recyclables not separated",
+      "law": "NYC Administrative Code §16-306; 16 RCNY §1-10",
+      "official": "sanitation_agent",
+      "foundBy": [
+        "inspection"
+      ],
+      "fine": {
+        "base": 100,
+        "perMonth": 100,
+        "pctOfSaved": 0,
+        "max": 400
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "confidence": "estimate",
+      "evidence": "official_excerpt",
+      "note": "DSNY business pages as quoted by web search: $100 first offense, $200 second, $400 third and later for failing to separate recyclables. The section numbers are from memory and need a check against the code."
+    },
+    {
+      "id": "illegal_posting",
+      "name": "Flyers posted on public property",
+      "law": "NYC Administrative Code §10-119, §10-121",
+      "official": "sanitation_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 750,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 9000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://intro.nyc/0302-2024",
+      "confidence": "estimate",
+      "evidence": "secondary",
+      "note": "Each flyer is a separate violation: $75-$150 for a first offense and $150-$250 for later ones within 12 months (§10-121 as summarized in City Council Introduction 302 of 2024). Base $750 = ten flyers at $75. Max $9,000: a new pet shop in Clinton Hill was fined almost $9,000 for flyers announcing its opening (DNAinfo). The law presumes the business named on the flyer posted it."
+    },
+    {
+      "id": "sidewalk_obstruction",
+      "name": "Sign, bench or goods blocking the sidewalk",
+      "law": "NYC Administrative Code §16-118 and §19-136 (sidewalk obstructions); 311 guidance: within 3 feet of the building",
+      "official": "sanitation_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 100,
+        "perMonth": 100,
+        "pctOfSaved": 0,
+        "max": 300
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
+      "confidence": "estimate",
+      "evidence": "secondary",
+      "note": "311, as quoted by web search: sandwich and A-frame signs must not extend more than 3 feet into the sidewalk from the building. Fine amounts are from press reports, not a current schedule: $100 for a first sign violation and up to $300 after (DSNY to the Midtown Gazette, 2015); a Brooklyn coffee shop was fined $300 by the Sanitation Department for a sidewalk sign (Fox News). The section numbers need a check."
+    },
+    {
+      "id": "open_door_ac",
+      "name": "Air conditioning running with the door open",
+      "law": "NYC Administrative Code §20-910 (Local Law 92 of 2015)",
+      "official": "dcwp_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 250,
+        "perMonth": 250,
+        "pctOfSaved": 0,
+        "max": 1000
+      },
+      "closureDays": 0,
+      "reputationHit": 0,
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf",
+      "confidence": "estimate",
+      "evidence": "official_excerpt",
+      "note": "DCWP business flyer as quoted by web search: 'The law prohibiting stores from leaving doors or windows open while air conditioning is running now applies to all stores regardless of size'; the only exception on the inspection checklist is a door open for deliveries. Press reports of the law give $250 for a first offense and up to $1,000. Enforcement is light: in 2023 DCWP made nearly 2,300 inspections and wrote 58 violations for open doors."
     }
   ],
   "ruleCards": [
@@ -586,6 +1001,60 @@
       "title": "Sending staff home in a storm",
       "text": "Close early for weather and you still owe pay: under New York's hospitality wage order a worker who reports for a shift is owed at least 3 hours at the minimum wage, or the scheduled shift if shorter. Decide before they travel, not after.",
       "source": "https://dol.ny.gov/hospitality-wage-order-faq"
+    },
+    {
+      "id": "trash_bins",
+      "title": "Bins with lids",
+      "text": "Since March 1, 2024 every NYC business must set out trash in bins with secure lids: out one hour before closing or after 8 PM, back in before you reopen. Bags on the curb cost $50, then $100, then $200 each time.",
+      "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-"
+    },
+    {
+      "id": "clean_18_inches",
+      "title": "18 inches into the street",
+      "text": "You must keep your sidewalk clean and the gutter too, 18 inches out from the curb, even if someone else dropped the litter. $50 the first time, $100 after that. Agents come during fixed hours for your block.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page"
+    },
+    {
+      "id": "litter_basket",
+      "title": "The corner basket is not yours",
+      "text": "City litter baskets are for pedestrians. Shop trash in a basket costs $100, then $250, then $350, and a cup with your name on it is treated as proof. Every business must hire a licensed private carter.",
+      "source": "https://dsny.cityofnewyork.us/?p=1198"
+    },
+    {
+      "id": "open_door_ac",
+      "title": "Shut the door",
+      "text": "No store in New York City may run air conditioning with its doors or windows open (Local Law 92 of 2015). The only exception is a door open for deliveries. Fines start at $250 and reach $1,000.",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf"
+    },
+    {
+      "id": "sidewalk_shed_rules",
+      "title": "Sidewalk sheds",
+      "text": "A shed over your door cuts restaurant and bar transactions by 3.5-9.7% a week. Since 2025 shed permits last 90 days, not a year, and owners pay monthly penalties when no work is done. You may hang a temporary sign on the shed in front of your store.",
+      "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses"
+    },
+    {
+      "id": "no_pay_for_construction",
+      "title": "Nobody pays for the dig",
+      "text": "When the city tears up your street, your sales are your problem. The City's own FAQ: it 'does not have any programs or grants to reimburse a business for lost revenue because of construction.' Ask about the project before you sign a lease.",
+      "source": "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf"
+    },
+    {
+      "id": "sidewalk_sign_3_feet",
+      "title": "A-frame signs",
+      "text": "A sandwich board is tolerated only close to your wall: no more than 3 feet out from the building. Further out it is a sidewalk obstruction. Fines run $100 to $300, and a shed or a narrow sidewalk leaves you no legal spot at all.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+    },
+    {
+      "id": "flyers_are_tickets",
+      "title": "Flyers on poles",
+      "text": "Taping flyers to lampposts, mailboxes or fences is illegal posting: $75 to $150 for each flyer the first time, $150 to $250 after. Ten flyers is ten tickets. One new Brooklyn shop was fined almost $9,000.",
+      "source": "https://intro.nyc/0302-2024"
+    },
+    {
+      "id": "congestion_zone",
+      "title": "Congestion Relief Zone",
+      "text": "Below 60th Street in Manhattan cars pay $9 a day at peak hours; delivery trucks pay $14.40 or $21.60 every time they enter. Suppliers pass it on. In year one foot traffic in the zone rose 3.4% against 1.4% for the borough.",
+      "source": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational"
     }
   ],
   "sources": [
@@ -633,6 +1102,47 @@
       "url": "https://longisland.news12.com/2026/01/22/hudson-valley-customers-face-ice-melt-shortage-ahead-of-major-snowstorm/1mt40tbth8IHiDHAC6zw1E",
       "title": "News 12: ice melt shortage ahead of the January 2026 storm",
       "checked": "2026-11-14"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_sidewalk_and_trash",
+      "name": "Report a dirty sidewalk, trash bags or uncleared snow (311)",
+      "text": "The Sanitation Department sends an enforcement agent to the address. If the sidewalk is clean and the bins are out properly, you get a warning for a false report.",
+      "role": "inspector",
+      "checks": [
+        "dirty_sidewalk",
+        "improper_trash_setout",
+        "commercial_waste_in_litter_basket",
+        "snow_ice_not_cleared",
+        "sidewalk_obstruction",
+        "illegal_posting"
+      ]
+    },
+    {
+      "id": "report_open_door_ac",
+      "name": "Report a store cooling the street (311)",
+      "text": "Consumer and Worker Protection checks whether the door is propped open with the air conditioning on.",
+      "role": "inspector",
+      "checks": [
+        "open_door_ac"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "sidewalk_shed",
+      "name": "Sidewalk shed goes up on your block",
+      "text": "Scaffolding covers your storefront while the building repairs its facade. Fewer people notice the shop, and nobody can tell you when it comes down.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 0.93
+      },
+      "months": 12,
+      "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
+      "confidence": "estimate",
+      "evidence": "official_excerpt",
+      "note": "Fix of the existing event (was 0.9 for 3 months, both my predecessor's estimates). The city's 2024 study with Mastercard: restaurants and bars under a shed saw weekly transactions fall 3.5-9.7% in the six months after it went up; Manhattan businesses lost $3,900-$9,500 a month. 0.93 is the midpoint (6.6%). Length: the average shed permit in March 2026 was 557 days old (West Side Rag analysis of Buildings Department data), so 12 months is still short; the engine caps an event at a season."
     }
   ]
 }
