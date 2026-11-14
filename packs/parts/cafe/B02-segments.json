@@ -1,0 +1,237 @@
+{
+  "id": "B02-segments",
+  "part": "engine/src/niches/cafe/segments.ts",
+  "theme": "Guest groups by place and time: commuters, residents, students, visitors (build/FORMATS.md, section 2)",
+  "howToInsert": "Copy extra.guestSegments into packs/cafe.json -> extra.guestSegments. Nothing else. The part divides out the engine's weekday pattern itself, so extra.weekdayMult may stay or go.",
+  "source": "packs/parts/cafe/D20-formats.json (task A1), extra.guestSegments, unchanged",
+  "confidence": "estimate",
+  "extra": {
+    "guestSegments": {
+      "note": "Four groups of guests. D06 has five; remote workers with laptops are folded into residents (see residents.note). Shares by block are D06 planning values: nobody publishes this split. The shifts are deviations from the average customer the engine already models (footfall.priceSensitivity 2.7; quality 0.93 and reputation 0.74 per unit), so a shop at the reference price with quality 0.5, the reference room and no walk-aways gets a fit of exactly 1. priceShift rule: each group's shift is set so that the price that earns most from that group alone sits at the group's ticket in D06 (commuters $6.50, residents $9, students $6, tourists $12). With a marginal cost of about $4.90 an order (goods $2.21, cups and card fees $0.50, labor $2.20) the best price is e / (e - 1) x 4.90, where e is the group's sensitivity x 0.75 (the share of the block's buyers a shop does not already hold). D06 bounds a cafe's elasticity between 1.3 and 4.7; the cap is used for students.",
+      "source": "packs/parts/cafe/D06-demand.json (extra.guestSegments, extra.weekdayProfiles, extra.monthCurve, extra.hourCurve)",
+      "confidence": "estimate",
+      "segments": [
+        {
+          "id": "office",
+          "name": "Office commuters",
+          "sitShare": 0.1,
+          "morningShare": 0.55,
+          "dwellHours": 0.25,
+          "priceShift": 2.7,
+          "qualityShift": -1.2,
+          "seatPull": 0.03,
+          "waitPull": 2.0,
+          "regularShare": 0.55,
+          "week": [
+            1.15,
+            1.45,
+            1.41,
+            1.33,
+            0.91,
+            0.44,
+            0.31
+          ],
+          "months": [
+            0.9,
+            0.96,
+            1.02,
+            1.04,
+            1.05,
+            1.03,
+            0.95,
+            0.9,
+            1.07,
+            1.09,
+            1.02,
+            0.97
+          ],
+          "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+          "confidence": "estimate",
+          "note": "sitShare 0.1: D06 seatUse. week and months: D06 office profiles (Placer.ai share of weekday office visits 2025: Tue 24.3%, Wed 23.7%, Thu 21.8%, Fri 12.4%). morningShare 0.55 is set so that an office block (60% commuters) has 44% of its orders between 7 and 10 am, the sum of the D06 office hour curve 0.12 + 0.18 + 0.14: 0.6 x 0.55 + 0.15 x 0.15 + 0.2 x 0.38 + 0.05 x 0.2 = 0.44. dwellHours 0.25: my estimate, a quarter of an hour at a window stool. priceShift +2.7: ticket $6.50 gives e x 0.75 = 6.5 / (6.5 - 4.9) = 4.06, e = 5.4, shift = 5.4 - 2.7. D06 says commuters pay for speed before 9 am: that is waitPull; over a month they buy about 20 cups, so the price of the cup is the largest line of their coffee budget. qualityShift -1.2: the cup is fuel; cancels the engine's quality term and a third of its reputation term. My estimate. seatPull 0.03: nobody sits. waitPull 2.0: a week in which 10% of customers walked away from the line costs exp(-0.2) = 18% of this group; D06: they leave at more than about five people in line. regularShare 0.55: low end of D06's 55-65% steady share of regulars."
+        },
+        {
+          "id": "residents",
+          "name": "Residents and regulars",
+          "sitShare": 0.53,
+          "morningShare": 0.38,
+          "dwellHours": 0.75,
+          "priceShift": 0.4,
+          "qualityShift": -0.4,
+          "seatPull": 0.2,
+          "waitPull": 0.5,
+          "regularShare": 0.65,
+          "week": [
+            0.9,
+            0.93,
+            0.96,
+            0.98,
+            1.09,
+            1.15,
+            0.99
+          ],
+          "months": [
+            0.9,
+            0.94,
+            1.02,
+            1.04,
+            1.03,
+            1.04,
+            0.97,
+            0.93,
+            1.03,
+            1.08,
+            1.01,
+            1.01
+          ],
+          "source": "https://www.businesswire.com/news/home/20231207135338/en",
+          "confidence": "estimate",
+          "note": "D06 residents (55% of a residential block, seatUse 0.4) plus remote workers with laptops (15%, seatUse 1.0): sitShare = (0.55 x 0.4 + 0.15 x 1.0) / 0.70 = 0.53. dwellHours: D14 gives half an hour for an ordinary visit and one hour with laptops; D06 says a remote worker holds a seat two to four hours. Weighted by seated guests: (0.22 x 0.5 + 0.15 x 1.1) / 0.37 = 0.74, rounded to 0.75. week: D06 neighborhood profile (Toast 2023: Saturday +15%, Friday +9%, Monday -10%). months: D06 neighborhood curve, which follows the subway index computed from MTA data. morningShare 0.38: D06 neighborhood hour curve has 0.36 between 7 and 10 am for the whole block. priceShift +0.4: ticket $9 gives e x 0.75 = 9 / 4.1 = 2.2, e = 2.9, shift +0.2; raised to +0.4 because D06 says they notice every price change. qualityShift -0.4 on a mid block: the engine already pays +40% demand for quality and reputation 0.7; on a mid-rent block part of that is not there. The tier of the block moves both (tierPriceShift, tierQualityShift). seatPull 0.2 (a room of 30 seats against 18 draws +22% of this group; remote workers are in it), waitPull 0.5 (D06: they forgive a line): my estimates. regularShare 0.65: top of D06's 55-65%."
+        },
+        {
+          "id": "students",
+          "name": "Students",
+          "sitShare": 0.8,
+          "morningShare": 0.2,
+          "dwellHours": 1.5,
+          "priceShift": 3.6,
+          "qualityShift": -1.0,
+          "seatPull": 0.4,
+          "waitPull": 0.5,
+          "regularShare": 0.4,
+          "week": [
+            1.1,
+            1.15,
+            1.15,
+            1.15,
+            1.05,
+            0.75,
+            0.65
+          ],
+          "months": [
+            0.91,
+            1.18,
+            1.18,
+            1.18,
+            1.07,
+            0.64,
+            0.59,
+            0.64,
+            1.23,
+            1.23,
+            1.18,
+            0.97
+          ],
+          "source": "https://www.governor.ny.gov/news/governor-hochul-announces-third-consecutive-rise-student-enrollment-city-university-new-york",
+          "confidence": "estimate",
+          "note": "sitShare 0.8: D06 seatUse. D06: afternoons and evenings, term time only, high price sensitivity, leave if prices rise or seats are gone. dwellHours 1.5: my estimate between an ordinary visit (0.5 h) and D06's two to four hours for a laptop seat. week and months: my estimates from the academic calendar (fall term September to mid-December, spring term late January to mid-May, summer at about half); months average 1. morningShare 0.2: my estimate. priceShift +3.6: ticket $6 would give e = 7.3; capped at the top of D06's range, e x 0.75 = 4.7, e = 6.3, shift = 6.3 - 2.7. qualityShift -1.0: my estimate (a cheap drink and a table). seatPull 0.4: a room of 30 seats against 18 draws exp(0.4) = +49% of this group. regularShare 0.4: my estimate (they leave every summer)."
+        },
+        {
+          "id": "tourists",
+          "name": "Tourists and day visitors",
+          "sitShare": 0.5,
+          "morningShare": 0.15,
+          "dwellHours": 0.5,
+          "priceShift": -1.0,
+          "qualityShift": 1.2,
+          "seatPull": 0.12,
+          "waitPull": 1.0,
+          "regularShare": 0.05,
+          "week": [
+            0.87,
+            0.87,
+            0.88,
+            0.88,
+            1.1,
+            1.25,
+            1.15
+          ],
+          "months": [
+            0.85,
+            0.88,
+            0.97,
+            1.02,
+            1.06,
+            1.06,
+            1.04,
+            1.04,
+            1.02,
+            1.05,
+            0.99,
+            1.02
+          ],
+          "source": "https://www.6sqft.com/nyc-tourism-in-2025-decline-in-international-visitors/",
+          "confidence": "estimate",
+          "note": "sitShare 0.5 and the $12 ticket: D06. D06: low price sensitivity, 10 am to 5 pm, they choose by the map rating and come once. week and months: D06 tourist profiles (estimates). dwellHours 0.5: D14 standard visit. priceShift -1.0: ticket $12 gives e x 0.75 = 12 / 7.1 = 1.69, e = 2.25, shift -0.45; lowered to -1.0 because a one-time visitor has no remembered price to compare with (my estimate). qualityShift +1.2: quality stands in for the map rating, my estimate. regularShare 0.05: they do not come back (D06)."
+        }
+      ],
+      "mixByBlock": {
+        "residential": {
+          "residents": 0.7,
+          "students": 0.12,
+          "tourists": 0.1,
+          "office": 0.08
+        },
+        "office": {
+          "office": 0.6,
+          "residents": 0.2,
+          "tourists": 0.15,
+          "students": 0.05
+        },
+        "campus": {
+          "students": 0.45,
+          "residents": 0.35,
+          "office": 0.15,
+          "tourists": 0.05
+        },
+        "tourist": {
+          "tourists": 0.45,
+          "office": 0.25,
+          "residents": 0.25,
+          "students": 0.05
+        }
+      },
+      "mixNote": "D06 extra.guestSegments.mixByBlock with remote workers added to residents. Planning values.",
+      "blockRules": {
+        "residentialBase": 1,
+        "office": {
+          "anchor": "subway",
+          "reachM": 250,
+          "ridersRef": 2500,
+          "maxWeight": 8
+        },
+        "campus": {
+          "anchor": "college",
+          "reachM": 400,
+          "weight": 8
+        },
+        "tourist": {
+          "museum": 8,
+          "plaza": 6,
+          "park": 2,
+          "reachM": 200
+        },
+        "note": "Weights of the four block types for one place; the guest mix is the weighted average of mixByBlock. residential is always 1. office = min(maxWeight, sum over subway stations within reachM of riders a day / ridersRef x nearness). campus = weight x nearness of the nearest college. tourist = the largest of museum, plaza and park weights x nearness. nearness = 1 - distance / reach, the same shape as the engine's overlap(). Reach distances repeat ANCHOR_REACH_M in shared/src/place.ts where they exist (subway 250, college 400); 200 m for tourist anchors is the park reach. The weights are my estimates, chosen so that the 116 storefronts of the East Village map split into all four types: 67 residential, 10 office, 23 campus, 16 tourist (node packs/parts/cafe/D20-examples.mjs, section A). The map has no true office district: the most commuter-heavy door has 49% commuters.",
+        "confidence": "estimate"
+      },
+      "tierPriceShift": {
+        "prime": -0.8,
+        "mid": 0,
+        "cheap": 0.5
+      },
+      "tierNote": "Added to the residents' priceShift and qualityShift: residents of a prime block (rent $326 per sq ft in pack.extra.rentByTier) mind the price less and pay for quality; residents of a cheap block the opposite. My estimates.",
+      "refSeats": 18,
+      "seatSpan": 12,
+      "seatNote": "seatIndex = clamp((seats - refSeats) / seatSpan, -1, 1). 18 is pack.sizing.default; 6 seats (pack.sizing.min) give -1, 30 seats give +1.",
+      "waitWindowDays": 7,
+      "multBounds": [
+        0.5,
+        1.6
+      ],
+      "tierQualityShift": {
+        "prime": 1.0,
+        "mid": 0,
+        "cheap": -0.3
+      }
+    }
+  }
+}
