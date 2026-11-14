@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920">
+<title>First Year — pitch</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body>
+<!--
+  Ten pages, in the order of the judging criteria (build/ROUND3.md, B17):
+  pain and user (1–2) → product live (3–4) → what is real (5) → what people pay for and why they return (6) →
+  how people find us (7) → money (8) → why it is new (9) → team, how it was built, closing line (10).
+  Every number has its source in the page footnote or in docs/pitch/USER.md / MONEY.md.
+  A number that is not in yet is shown as <span class="tbd">…</span>, never invented.
+  Screenshots are real screens of the running product (docs/qa/screens/ or img/, see img/README.md).
+  Build: node docs/pitch/deck/build.mjs
+-->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 32 32">
+    <rect width="32" height="32" rx="9" fill="#141513"/>
+    <path d="M6.5 13.2 9 8h14l2.5 5.2v.9a2.3 2.3 0 0 1-4.6.2 2.3 2.3 0 0 1-4.6 0 2.3 2.3 0 0 1-4.6 0 2.3 2.3 0 0 1-4.6-.2Z" fill="#fff"/>
+    <path d="M9 18v6.2h14V18" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="13.6" y="19.2" width="4.8" height="5" rx="0.8" fill="#e3c260"/>
+  </symbol>
+</svg>
+
+<!-- 1. Title and the pain in one line -->
+<section class="page title-page" id="title">
+  <svg class="mark" viewBox="0 0 32 32"><use href="#mark"/></svg>
+  <div class="kicker">First Year</div>
+  <h1>Would you risk your family’s savings on a coffee shop?</h1>
+  <p class="lead">Live the first year of your own coffee shop on real New York rent, permits, wages and taxes — before you sign a lease. Leave with a plan that is yours.</p>
+  <div class="meta">
+    <span class="badge accent">Web, B2C</span>
+    <span class="badge">Live city: one game month per real day</span>
+    <span class="badge">Public URL: <span class="tbd">deploy URL</span></span>
+  </div>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>1 / 10</span></div>
+</section>
+
+<section class="page" id="user">
+  <div class="kicker">Who we sell to</div>
+  <h2>One person: an American, 21–45, who dreams of opening a place and is afraid of losing the savings.</h2>
+  <div class="cols-4">
+    <div class="kpi"><b class="num">5.67M</b><span>new business applications in 2025, a record</span><span class="src">Census Business Formation Statistics</span></div>
+    <div class="kpi"><b class="num">300K</b><span>of them in food service and accommodation</span><span class="src">Census BFS, NAICS 72</span></div>
+    <div class="kpi"><b class="num">1 in 2</b><span>new food and lodging places closed within five years</span><span class="src">BLS Business Employment Dynamics</span></div>
+    <div class="kpi"><b class="num">64%</b><span>of employer businesses started on personal or family savings</span><span class="src">Kauffman, Census survey (2014 data)</span></div>
+  </div>
+  <div class="cols-2 fill">
+    <div class="card tint">
+      <p class="quote">“It was pure economics: rents, expenses. We just can’t afford it.”<cite>Dandy Espresso, Madison Ave — closed five months after opening. DNAinfo, 2014</cite></p>
+    </div>
+    <div class="card tint">
+      <p class="quote">“After six months and spending thousands of dollars… we are still waiting for clearance to open up.”<cite>Café owner, 75 Second Ave, East Village — closed before opening. EV Grieve, 2022</cite></p>
+    </div>
+  </div>
+  <p class="small">No owner in these stories was ruined by bad coffee. Rent, wages, debt, permits — all visible only from inside the year. Sources and ten quotes: docs/pitch/USER.md</p>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>2 / 10</span></div>
+</section>
+
+<section class="page bleed" id="product">
+  <div class="split">
+    <div class="text">
+      <div class="kicker">The product — live now</div>
+      <h2>From an idea to your own first year, on a real block.</h2>
+      <ol class="steps">
+        <li><b>Idea</b><span>“Coffee near the subway”</span></li>
+        <li><b>Place</b><span>A real East Village storefront: rent, size, foot traffic, rivals</span></li>
+        <li><b>Opening</b><span>Permits, build-out, equipment — each with a price and days</span></li>
+        <li><b>The year</b><span>Price, staff, hours; neighbours, complaints, inspections</span></li>
+        <li><b>Your plan</b><span>Your address, your costs, your permits, with official links</span></li>
+      </ol>
+    </div>
+    <div class="phones">
+      <figure class="shot phone"><img src="img/start-place.png" alt="A storefront card: rent, size, foot traffic, competitors"><figcaption>Pick a real storefront</figcaption></figure>
+      <figure class="shot phone"><img src="img/start-setup.png" alt="Opening setup with the computed first-year result"><figcaption>See the first year before you sign</figcaption></figure>
+      <figure class="shot phone"><img src="img/biz-manage.png" alt="Manage tab with the projected month"><figcaption>Change a decision, see the forecast</figcaption></figure>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>3 / 10</span></div>
+</section>
+
+<section class="page bleed" id="city">
+  <div class="kicker">One city, many owners</div>
+  <h2>Your decision changes the street. A neighbour’s shortcut becomes a case.</h2>
+  <div class="row fill">
+    <figure class="shot grow"><img src="img/city.jpg" alt="The public city screen: map, leaders, city feed, QR to join"><figcaption>The shared city on a projector: leaders, events, a complaint in the feed, a QR to join</figcaption></figure>
+    <figure class="shot phone clip" style="width:340px;flex:none"><img src="img/biz-network.png" alt="Neighbours list with deal records"><figcaption>Neighbours: deal, join, or report</figcaption></figure>
+  </div>
+  <p class="small">Residents run by the computer are labelled AI. People can take the inspector’s role.</p>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>4 / 10</span></div>
+</section>
+
+<section class="page bleed" id="real">
+  <div class="split">
+    <div class="text">
+      <div class="kicker">What is real</div>
+      <h2>The value is computed, not scripted.</h2>
+      <div class="cols-3">
+        <div class="card">
+          <h3>A pure engine</h3>
+          <p>Every input is an <strong>Action</strong>. The same code runs on the server and in the browser. No dice: an event is announced in advance or follows from a decision.</p>
+        </div>
+        <div class="card">
+          <h3>Sourced numbers</h3>
+          <p>Rent, wages, permits, taxes, equipment. Each carries a <strong>source</strong> and is marked <strong>verified</strong> or <strong>estimate</strong>. The validator rejects a pack without them.</p>
+        </div>
+        <div class="card">
+          <h3>A market that fills up</h3>
+          <p>Demand comes from foot traffic; cafés within 250 m share it. With six rivals the first café drops from 6,865 to 4,941 orders a month.</p>
+        </div>
+      </div>
+      <div class="cols-3">
+        <div class="kpi"><b class="num">73 of 138</b><span>key numbers verified at the primary source; the rest marked estimate</span><span class="src">node scripts/validate-all.mjs</span></div>
+        <div class="kpi"><b class="num">639</b><span>automated tests, all green</span><span class="src">npm test, 14 Nov 22:17 UTC</span></div>
+        <div class="kpi"><b class="num">7</b><span>packages: shared, engine, AI, host, server, bots, client</span><span class="src">package.json</span></div>
+      </div>
+      <p class="small">Check it yourself: npm test · node scripts/smoke.mjs · npx tsx sim/audit/saturation.ts</p>
+    </div>
+    <div class="phones">
+      <figure class="shot phone"><img src="img/biz-books.png" alt="Books: sales, cost of goods, taxes owed with due dates"><figcaption>Real taxes, real due dates</figcaption></figure>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>5 / 10</span></div>
+</section>
+
+<section class="page bleed" id="sell">
+  <div class="split">
+    <div class="text">
+      <div class="kicker">What we sell · why come back</div>
+      <h2>Free: the first month. Paid: the year and your plan.</h2>
+      <div class="card">
+        <span class="badge">Free</span>
+        <p>The city, your idea, your storefront, the opening plan, your first month.</p>
+      </div>
+      <div class="card tint">
+        <span class="badge accent">$19 / month</span>
+        <p>The whole year, the advisor, every business type — and your plan with sources and official links.</p>
+      </div>
+      <div class="card">
+        <h3>Why come back tomorrow</h3>
+        <p>One game month passes every real day: a report, a neighbour’s move, a decision waiting.</p>
+      </div>
+    </div>
+    <div class="phones">
+      <figure class="shot phone"><img src="img/biz-away.png" alt="While you were away: days passed, cash change, events"><figcaption>Tomorrow: what happened while you were away</figcaption></figure>
+      <figure class="shot phone"><img src="img/end.png" alt="Season over: where you lost money"><figcaption>Year end: where you lost money</figcaption></figure>
+      <figure class="shot phone"><img src="img/plan.png" alt="Your real-world plan: money to start, every month"><figcaption>What you take home: your plan</figcaption></figure>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>6 / 10</span></div>
+</section>
+
+<section class="page bleed tight" id="people">
+  <div class="kicker">How people find us</div>
+  <h2>One real moment, then their own numbers.</h2>
+  <div class="cols-3">
+    <div class="card ad">
+      <span class="badge">Ad 1 · the wait</span>
+      <p class="hook">“$127,779 spent. Zero customers. Rent keeps running while the permits come.”</p>
+      <div class="crop"><img src="img/start-waiting.png" style="object-position: 50% 6%" alt="Waiting for permits: spent so far, cash left, rent running"></div>
+    </div>
+    <div class="card ad">
+      <span class="badge">Ad 2 · the neighbour</span>
+      <p class="hook">“Bean prices jumped. The barbershop next door wants a deal. You have three days.”</p>
+      <div class="crop"><img src="img/biz-away.png" style="object-position: 50% 9%" alt="While you were away: price jump, a neighbour's offer"></div>
+    </div>
+    <div class="card ad">
+      <span class="badge">Ad 3 · the year</span>
+      <p class="hook">“Our café’s rent ran $64,220 above the norm in year one. We learned it in a game.”</p>
+      <div class="crop"><img src="img/end.png" style="object-position: 50% 57%" alt="Season over: where you lost money, rent above the norm"></div>
+    </div>
+  </div>
+  <div class="flow">
+    <div class="step"><b>Ad</b>one real moment</div><span class="arrow">→</span>
+    <div class="step"><b>“What would you open?”</b>one question, no sign-up</div><span class="arrow">→</span>
+    <div class="step"><b>Your plan</b>a real storefront, its cost, its permits</div><span class="arrow">→</span>
+    <div class="step"><b>First month free</b>open and run your shop</div><span class="arrow">→</span>
+    <div class="step paid"><b>$19 / month</b>the year and your plan</div>
+  </div>
+  <p class="small">Drafts from real screens of one test run; none has run yet. Assumed: free → paid <span class="tbd" data-model="inputs.freeToPaid" data-format="pct">B16</span>, cost per payer <span class="tbd" data-model="inputs.cacPaid" data-format="usd0">B16</span> (docs/pitch/model.mjs).</p>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>7 / 10</span></div>
+</section>
+
+<section class="page" id="money">
+  <div class="kicker">Why it makes money</div>
+  <h2>Subscription only, sold to the person. Coffee shops → every small business → every city.</h2>
+  <div class="cols-4">
+    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.ltv" data-format="usd0">LTV</span></b><span>lifetime value of a payer</span><span class="src">model.mjs, from assumptions</span></div>
+    <div class="kpi"><b class="num"><span class="tbd" data-model="inputs.cacPaid" data-format="usd0">CAC</span></b><span>cost to acquire a payer</span><span class="src">assumption</span></div>
+    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.ltvToCac" data-format="x">LTV/CAC</span></b><span>LTV to CAC</span><span class="src">model.mjs</span></div>
+    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.payersForTarget" data-format="count">payers</span></b><span>paying members for $100M ARR</span><span class="src">model.mjs</span></div>
+  </div>
+  <div class="cols-3 fill">
+    <div class="card"><span class="badge accent">1 · now</span><h3>Coffee shops, New York</h3><p>One city’s sourced numbers. About 300,000 food and lodging business applications a year in the US.</p></div>
+    <div class="card"><span class="badge">2</span><h3>Every small business</h3><p>Same engine, a new data pack. The barbershop already runs on the same code.</p></div>
+    <div class="card"><span class="badge">3</span><h3>Every city</h3><p>A city is a data pack: rents, wages, permits, taxes — checked by the same validator.</p></div>
+  </div>
+  <p class="small">Price <span class="tbd" data-model="inputs.priceMonthly" data-format="usd0">$19</span>/month or <span class="tbd" data-model="inputs.priceAnnual" data-format="usd0">annual</span>/year. Every number on this page is printed by node docs/pitch/model.mjs; each input is marked fact or assumption there. Price, retention and acquisition are not yet tested with users.</p>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>8 / 10</span></div>
+</section>
+
+<section class="page" id="new">
+  <div class="kicker">Is it new</div>
+  <h2>Games: fun without truth. Courses: truth without practice. Templates: a document without consequences.</h2>
+  <div class="card fill">
+    <table>
+      <tr><th>What people use today</th><th>Price</th><th>What is missing</th></tr>
+      <tr><td>Café tycoon games</td><td class="num">$5–$20</td><td>Invented economy: no real rent, no permits, no laws</td></tr>
+      <tr><td>Courses, city workshops</td><td class="num">free–$80</td><td>Lectures, not practice; not your block</td></tr>
+      <tr><td>Plan templates, Excel models</td><td class="num">$20/mo; $99–$149</td><td>Your own guesses in; no neighbours, no time, no consequences</td></tr>
+      <tr><td>ChatGPT</td><td class="num">$20/mo</td><td>Plausible numbers without sources; does not live the year</td></tr>
+      <tr><td>Consultant</td><td class="num">$3,000–$15,000+</td><td>Expensive before the lease; decides for you</td></tr>
+      <tr class="us"><td>First Year</td><td class="num">$19/mo</td><td>Live the year on sourced NYC numbers, in a shared city, and leave with your plan</td></tr>
+    </table>
+  </div>
+  <p class="small">We found no simulator of a real first year for future owners (search, 14 Nov 2026). That is not proof none exists. Products, prices and links: docs/pitch/COMPETITORS.md</p>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>9 / 10</span></div>
+</section>
+
+<section class="page tight" id="team">
+  <div class="kicker">Team and how it was built</div>
+  <h2>Two people and AI agents, 24 hours, in the open.</h2>
+  <div class="cols-3">
+    <div class="kpi"><b class="num">58</b><span>agent tasks in three rounds: 17, 17, 24</span><span class="src">build/tasks, build/ROUND2.md, build/ROUND3.md</span></div>
+    <div class="kpi"><b class="num">300+</b><span>commits since 08:12 UTC, 14 Nov</span><span class="src">git log</span></div>
+    <div class="kpi"><b class="num">639</b><span>tests, all green</span><span class="src">npm test</span></div>
+  </div>
+  <div class="cols-2">
+    <div class="card">
+      <h3>People</h3>
+      <ul>
+        <li><strong>foxfordkz-cyber</strong> — lead: product, game design, the contract between packages</li>
+        <li><strong>diiaanns07-droid</strong> — build: skeleton, integration, deployment, research</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>How</h3>
+      <ul>
+        <li>A written contract between seven packages; every agent owns named files</li>
+        <li>A branch merges only when type check, tests and the end-to-end run are green</li>
+        <li>An audit found five holes in the economy; four were closed the same night</li>
+      </ul>
+    </div>
+  </div>
+  <div class="closing"><b>Rehearse before you risk.</b><span>Play: <span class="tbd">public URL</span> · Code: github.com/foxfordkz-cyber/OHHHeaven</span></div>
+  <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>10 / 10</span></div>
+</section>
+
+</body>
+</html>
