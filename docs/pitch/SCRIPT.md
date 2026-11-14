@@ -80,7 +80,7 @@ One question — what would you open — and you see your own storefront and its
 
 ## 3:32–4:06 · Страница 8 — деньги
 
-▸ Числа — из модели B16 (`docs/pitch/model.mjs`, коммит 29f39ee): на странице их подставляет сборка. Если модель поменялась — читаем числа со слайда, не из этого текста.
+▸ Числа — из модели B16 (`docs/pitch/model.mjs`, коммит 897ac38): на странице их подставляет сборка. Если модель поменялась — читаем числа со слайда, не из этого текста.
 
 We sell only to the person: nineteen dollars a month or one forty-nine a year.
 On public benchmarks a payer is worth one hundred twenty dollars and costs forty-seven to reach: two and a half times.
