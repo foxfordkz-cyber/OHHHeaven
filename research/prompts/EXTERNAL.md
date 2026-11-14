@@ -54,3 +54,20 @@ For each of these four small businesses in New York City in 2026: (a) barbershop
 5) The most common illegal shortcuts owners take to earn more (unlicensed staff, cash off the books, selling tobacco to under-21, unregistered short-term rentals under Local Law 18, cutting heat, illegal basement units, oversize security deposits) and the real penalty for each with the statute.
 Mark estimates clearly.
 ```
+
+## E5 — GPT Pro (пользователь): питч, деньги и вопросы жюри → `docs/pitch/gpt-pitch.md`
+
+```text
+You are the pitch coach for a two-person student team at a 24-hour product hackathon (Business Cup 2.0, Astana; organizer Zimran, a company that builds global B2C apps and cares about one clear user, one pain, a working product, retention and monetization). The final is a 5-minute pitch plus 2 minutes of questions. Answer in Russian; write the pitch text itself in English. Use web research and give a primary-source link for every number.
+
+Product: "First Year" — a multiplayer web game where an adult rehearses the first year of a small business in real New York. User: a 25–45-year-old with a job and a family who wants to start a business and is afraid to lose savings. Pain: they do not know what really awaits them — documents, money, suppliers, taxes, inspections. In the game they pick a real storefront on a real map (OpenStreetMap), get the real opening checklist (LLC, permits with fees and waiting days), a setup with real prices (a coffee shop needs about $141,000 to open and $224,000 in total liquidity), then run the shop: price, staff, seats, cleaning. The city runs by itself: one game month is one real day, 12 days a season, 10–15 minutes a day. They can cut corners (cash wages off the books) and get caught: neighbours report them, city officials (other players or AI) inspect, real fines apply. Neighbours also cooperate: joint purchasing, cross-promotion, a block fund, loans, partnerships. At the end the player gets a personal real-world plan: budget, documents with links, where to find suppliers, and the three mistakes that cost the most. What works today: the whole loop in the browser on phone and laptop, two niches (coffee shop, barbershop), AI-run neighbours, real NYC cost data.
+
+Deliver:
+1) A 5-minute pitch script (max 700 words) with timing by seconds: pain, user, 2-minute live demo, why they pay, market, what is next.
+2) A demo script by clicks for those 2 minutes, with one sentence to say at each step.
+3) A money model to $100,000 a year. The weak spot: a $5 entry with a prize pool looks like gambling and pays almost nothing (10 players: first prize $22.50). Propose and compare subscription, a paid personal plan, sponsor-funded seasons, and sales to courses and colleges; pick one main model and show the arithmetic.
+4) Evidence of the pain: how many Americans want to start a business versus do it, small-business survival rates, top reasons for failure, cost to open a coffee shop in NYC.
+5) The 15 hardest jury questions with 30-word answers, including: "Is this gambling?", "Are you teaching tax evasion?", "Why New York if you are in Astana?", "How is this better than Big Ambitions or a business course?", "Who pays first?".
+6) Which track fits best — MONEY ("Where does money hurt?"), ENTERTAINMENT, or SKILLS ("What do people fail to master?") — and why.
+Be blunt about what is weak.
+```

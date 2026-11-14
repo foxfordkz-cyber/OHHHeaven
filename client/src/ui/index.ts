@@ -1,4 +1,5 @@
 import './ui.css';
+import './layout.css';
 
 export * from './components';
 export * from './game';

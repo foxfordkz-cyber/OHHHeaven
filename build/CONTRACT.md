@@ -159,7 +159,7 @@ export function interpretIdea(input: { text: string; packs: PackSet }): Promise<
 export function writeDebrief(input: { business: BusinessState; analytics: Analytics; plan: RealWorldPlan; rank: number }): Promise<Debrief>
 ```
 
-Функции с ИИ никогда не бросают исключение и отвечают не дольше 8 секунд; иначе — запасной путь (`origin: 'deck'` или `'rules'`). Событие объявляется не позже чем за `EVENT_NOTICE_DAYS` до начала и действует на всех одинаково; эффекты — только `EffectTarget` с множителем 0,7–1,3. Ключ API — только в окружении сервера. Без ключа игра работает полностью.
+Функции с ИИ никогда не бросают исключение и отвечают не дольше 8 секунд; иначе — запасной путь (`origin: 'deck'` или `'rules'`). Событие объявляется не позже чем за `EVENT_NOTICE_DAYS` до начала и действует на всех одинаково; эффекты — только `EffectTarget` с множителем 0,7–1,3. Ключ API — только в окружении сервера. Без ключа игра работает полностью. **Провайдеры — Google Gemini и xAI Grok** (решение пользователя, 18:46 UTC): `AI_PROVIDER` = `gemini`, `grok` или `mock`; ключи `GEMINI_API_KEY`, `XAI_API_KEY`; модель — `AI_MODEL`.
 
 ## 9. Клиент (агенты 08–12)
 
