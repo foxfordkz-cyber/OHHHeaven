@@ -8,7 +8,9 @@ import type { BizDeps, BizTabId } from './deps';
 import { signedCount } from './forecast';
 import { dayLabel, effectIsGood, effectText, multChange, num, plural, realWait, relDay, shortDate, signedUsd, usd, WEATHER_ICON } from './format';
 import { NoticeCard } from './NoticeCard';
-import { checkPromise, clearPromise, loadPromise, promiseExpired, type ForecastPromise, type PromiseCheck } from './promise';
+import { diffOrders, draftFrom, mergeOrders } from './orders';
+import { forecastPromise } from './Outlook';
+import { checkPromise, clearPromise, loadPromise, promiseExpired, savePromise, type ForecastPromise, type PromiseCheck } from './promise';
 import { chartSeries, kpiText, lostReasons, lostTotal, pickDays, topRecommendations, upcomingEvents } from './today';
 import { SetupPanel } from './StatusScreens';
 import { pick } from '../../ui/i18n';
@@ -42,14 +44,14 @@ export function TodayTab({ deps, onRule, onGo }: { deps: BizDeps; onRule(id: str
       )}
       {open && <DayCard deps={deps} kpis={v.analytics?.nicheKpis ?? []} />}
       {decision && (adviceOnTop
-        ? <Recommendations deps={deps} onRule={onRule} waiting />
+        ? <Recommendations deps={deps} onRule={onRule} onPromise={setPromise} waiting />
         : <DecisionCard decision={decision} deps={deps} onGo={onGo} />)}
       {open && (
         <Card title="Last 30 days" aside={<span className="bz-legend"><span><i className="bz-swatch" style={{ background: 'var(--bz-accent)' }} />sold</span><span><i className="bz-swatch" style={{ background: 'var(--bz-bad)' }} />walked away</span></span>}>
           <Chart30 days={b.days} />
         </Card>
       )}
-      {!adviceOnTop && <Recommendations deps={deps} onRule={onRule} />}
+      {!adviceOnTop && <Recommendations deps={deps} onRule={onRule} onPromise={setPromise} />}
       <Ahead deps={deps} />
       {decision?.kind !== 'offer' && pendingNotices(notices).length === 0 && v.deals.some((d) => d.status === 'proposed' && d.toBusinessId === b.id) && (
         <Card title="An offer is waiting" aside="Network">
@@ -223,7 +225,7 @@ export function Chart30({ days }: { days: DayReport[] }) {
   );
 }
 
-function Recommendations({ deps, onRule, waiting = false }: { deps: BizDeps; onRule(id: string): void; waiting?: boolean }) {
+function Recommendations({ deps, onRule, onPromise, waiting = false }: { deps: BizDeps; onRule(id: string): void; onPromise(p: ForecastPromise): void; waiting?: boolean }) {
   const recs = topRecommendations(deps.view.recommendations);
   const [results, setResults] = useState<Record<string, ApplyResult>>({});
   const [busy, setBusy] = useState(false);
@@ -231,8 +233,25 @@ function Recommendations({ deps, onRule, waiting = false }: { deps: BizDeps; onR
   const record = (rs: ApplyResult[]) => setResults((old) => ({ ...old, ...Object.fromEntries(rs.map((r) => [r.id, r])) }));
   const pending = recs.filter((r) => r.suggested && !results[r.id]?.ok);
 
-  const one = async (r: Recommendation) => { setBusy(true); record([await applyRecommendation(deps, r)]); setBusy(false); };
-  const all = async () => { setBusy(true); record(await applyAll(deps, pending)); setBusy(false); };
+  // A change of standing orders keeps its forecast, so tomorrow Today can say whether it held.
+  const orderRecs = (rs: Recommendation[]) => rs.filter((r) => r.suggested?.type === 'set_orders');
+  const patchOf = (rs: Recommendation[]) => {
+    const b = deps.view.business!;
+    let o = draftFrom(b.orders);
+    for (const r of orderRecs(rs)) if (r.suggested?.type === 'set_orders') o = mergeOrders(o, r.suggested.orders);
+    return diffOrders(b.orders, o);
+  };
+  const run = async (rs: Recommendation[], apply: () => Promise<ApplyResult[]>) => {
+    setBusy(true);
+    const promise = orderRecs(rs).length ? await forecastPromise(deps, patchOf(rs)) : null;
+    const done = await apply();
+    const ordersOk = orderRecs(rs).every((r) => done.find((x) => x.id === r.id)?.ok);
+    if (promise && ordersOk) { savePromise(promise); onPromise(promise); }
+    record(done);
+    setBusy(false);
+  };
+  const one = (r: Recommendation) => run([r], async () => [await applyRecommendation(deps, r)]);
+  const all = () => run(pending, () => applyAll(deps, pending));
 
   return (
     <Card title={waiting ? pick('What to change — waiting for you', 'Что поменять — ждёт тебя') : 'What to change'} aside={pending.length > 1 ? <Button variant="primary" disabled={busy || !deps.online} onClick={all}>Apply all</Button> : undefined}>

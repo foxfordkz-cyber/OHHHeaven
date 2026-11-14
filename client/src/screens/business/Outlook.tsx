@@ -6,7 +6,9 @@ import { Card, Stat } from './__stubs__/ui';
 import type { BizDeps } from './deps';
 import { dayLabel, num, shortDate, signedUsd, usd, usd2 } from './format';
 import { deltaOf, fieldChanged, isolate, outlookOf, signedCount, type FieldKey, type Outlook } from './forecast';
-import { useWhatIf, type WhatIfState } from './useWhatIf';
+import { changeList as namesOf } from './forecast';
+import { reportDayFor, type ForecastPromise } from './promise';
+import { useWhatIf, type WhatIf, type WhatIfState } from './useWhatIf';
 import { pick } from '../../ui/i18n';
 
 export interface OutlookPair {
@@ -24,6 +26,31 @@ export function useOutlook(deps: BizDeps, diff: Partial<StandingOrders>, enabled
   const base = useWhatIf(deps.query, {}, enabled && deps.online, undefined, day);
   const draft = useWhatIf(deps.query, diff, enabled && deps.online && changed, undefined, day);
   return { base, next: changed ? draft : base, changed };
+}
+
+/** Longest wait for the forecast before an Apply goes ahead without one. */
+export const PROMISE_WAIT_MS = 5000;
+
+/**
+ * The forecast to keep when the owner applies `patch` from anywhere but Manage (Today's advice):
+ * two what_if queries — as it runs and with the patch. null when there is nothing to promise.
+ */
+export async function forecastPromise(deps: BizDeps, patch: Partial<StandingOrders>): Promise<ForecastPromise | null> {
+  const b = deps.view.business;
+  if (!b || !Object.keys(patch).length) return null;
+  const draft = { ...b.orders, ...patch, staff: patch.staff ?? b.orders.staff, levers: patch.levers ?? b.orders.levers, shortcuts: patch.shortcuts ?? b.orders.shortcuts };
+  const unit = unitOf(deps);
+  const ask = (orders: Partial<StandingOrders>) => deps.query<WhatIf>({ type: 'what_if', orders }).then((a) => (a.ok && a.data ? outlookOf(a.data.projected, unit) : null)).catch(() => null);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<[null, null]>((r) => { timer = setTimeout(() => r([null, null]), PROMISE_WAIT_MS); });
+  const [before, after] = await Promise.race([Promise.all([ask({}), ask(patch)]), timeout]).finally(() => clearTimeout(timer));
+  const day = deps.view.world.day;
+  return {
+    businessId: b.id, appliedDay: day, changes: namesOf(b.orders, draft, deps.pack, deps.common),
+    before: before && { ordersPerDay: before.ordersPerDay, profit: before.profit },
+    after: after && { ordersPerDay: after.ordersPerDay, profit: after.profit },
+    reportDay: reportDayFor(day),
+  };
 }
 
 export const unitOf = (deps: BizDeps) => deps.pack?.sizing.unitName ?? 'seat';
