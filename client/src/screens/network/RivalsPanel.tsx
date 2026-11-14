@@ -4,7 +4,7 @@
 import type { Action, CaseNotice, Deal, OwnerView, PackSet, Place, PublicBusiness } from '../../../../shared/src/types';
 import { dateOf } from '../../../../shared/src/rules';
 import { AiBadge, Badge, Button, Card, formatDuration, List, ListRow, MoneyText, useT } from './ui';
-import { act, formatDistance, money, NICHE_LABEL, rankText, trustLabel, type MyReport, type NetworkExtra } from './logic';
+import { act, formatDistance, money, NICHE_LABEL, rankText, termsSummary, trustLabel, type MyReport, type NetworkExtra } from './logic';
 import {
   ladderLine, msToMonthClose, nextMonthCloseDay, noticeChoices, offerChoices, reportMove, teamUpMove,
   type Ladder, type ReportMove, type Rival, type RivalNews, type TeamUpMove,
@@ -55,6 +55,7 @@ function OfferCard(props: { deal: Deal; view: OwnerView; author?: PublicBusiness
         {author?.isAi && <AiBadge />}
         <span className="xsmall faint nw-push">{author ? trustLabel(author.trust) : ''}</span>
       </div>
+      <div className="nw-offer__terms">{termsSummary(deal.terms)}</div>
       <Choices choices={[accept, decline]} />
       <div className="row-between">
         <Badge tone="warn" icon="hourglass">{left <= 0 ? tr('Expires today', 'Истекает сегодня') : tr(`${left} game ${left === 1 ? 'day' : 'days'} to answer`, `Дней на ответ: ${left}`)}</Badge>
@@ -161,7 +162,7 @@ export function TwoMoves(props: { team: TeamUpMove; report: ReportMove; onTeamUp
     <div className="nw-moves">
       <div className="nw-move">
         <Button block icon="handshake" onClick={props.onTeamUp} disabled={!team.allowed}>{tr('Team up', 'Объединиться')}</Button>
-        <div className="xsmall">{team.allowed ? <><strong>{team.title.replace(/^Team up: /, '')}</strong> · {team.value}</> : <span className="muted">{team.reason}</span>}</div>
+        <div className="xsmall">{team.allowed ? <><strong>{team.name}</strong> · {team.value}</> : <span className="muted">{team.reason}</span>}</div>
       </div>
       <div className="nw-move">
         <Button block variant="danger" icon="flag" onClick={props.onReport} disabled={!report.allowed}>{tr('Report', 'Пожаловаться')}</Button>
@@ -254,7 +255,7 @@ function NewsList({ items, onOpen }: { items: RivalNews[]; onOpen: (id: string) 
         <ListRow
           key={n.id} icon={n.icon} iconTone={TONE[n.tone]}
           onClick={n.businessId ? () => onOpen(n.businessId!) : undefined}
-          title={n.text}
+          title={n.count && n.count > 1 ? `${n.text} · ${n.count} times` : n.text}
           subtitle={<><span className={`nw-meaning nw-meaning--${n.tone}`}>{n.meaning}</span> <span className="faint">· {dateOf(n.day).label}</span></>}
         />
       ))}
