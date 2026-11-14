@@ -64,7 +64,7 @@ export function TodayTab({ deps, onRule, onGo }: { deps: BizDeps; onRule(id: str
 function NextUp({ deps }: { deps: BizDeps }) {
   const w = deps.view.world;
   const monthEnd = dateOf(w.day).month * RULES.DAYS_PER_MONTH;
-  const running = w.phase === 'running';
+  const running = w.phase === 'running' && !w.config.paused;
   return (
     <p className="bz-small bz-muted">
       {running && w.msToNextDay > 0 ? pick(`Next game day ${realWait(w.msToNextDay)}. `, `Следующий игровой день ${realWait(w.msToNextDay).replace('in ', 'через ')}. `) : ''}
