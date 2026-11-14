@@ -256,7 +256,7 @@ export function pickDecision(view: OwnerView): Decision | null {
       options: [
         {
           id: 'apply', label: pick('Apply', 'Применить'), action: advice.suggested, primary: true, tone: delta && delta > 0 ? 'profit' : 'neutral',
-          result: delta ? pick(`Forecast: ${formatMoney(delta, { signed: true })} a month. You see it in tomorrow's day report.`, `Прогноз: ${formatMoney(delta, { signed: true })} в месяц. Увидишь в отчёте завтрашнего дня.`) : pick('Takes effect from the next game day.', 'Действует со следующего игрового дня.'),
+          result: [applyNote(view, advice.suggested), delta ? pick(`Forecast: ${formatMoney(delta, { signed: true })} a month.`, `Прогноз: ${formatMoney(delta, { signed: true })} в месяц.`) : ''].filter(Boolean).join(' '),
         },
         { id: 'manage', label: pick('Change it myself', 'Настроить самому'), to: '/biz/manage', result: pick('Opens Manage with a forecast for every change.', 'Откроет «Управление» с прогнозом каждого изменения.') },
       ],
@@ -267,6 +267,19 @@ export function pickDecision(view: OwnerView): Decision | null {
     text: pick('Your standing orders keep running. Try a price change and watch the forecast.', 'Распоряжения работают сами. Попробуй сменить цену и посмотри прогноз.'),
     options: [{ id: 'manage', label: pick('Try a new price', 'Попробовать другую цену'), to: '/biz/manage', primary: true, result: pick('Manage shows the month forecast before you apply.', '«Управление» покажет прогноз месяца до применения.') }],
   };
+}
+
+/** What "Apply" really does, in words: a proposal waits for an answer, an order changes from tomorrow. */
+function applyNote(view: OwnerView, a: Action): string {
+  switch (a.type) {
+    case 'propose_deal': {
+      const who = nameOf(view, a.toBusinessId);
+      return pick(`Sends ${who} an offer: ${termsTitle(a.terms)}. They have ${plural(RULES.DEAL_OFFER_DAYS, 'game day')} to answer; the answer shows up here.`, `Отправит ${who} предложение: ${termsTitle(a.terms)}. На ответ — ${RULES.DEAL_OFFER_DAYS} игровых дня; ответ появится здесь.`);
+    }
+    case 'launch': return pick('Opens the doors today.', 'Откроет двери сегодня.');
+    case 'resize': return pick(`Changes the room to ${formatNumber(a.size)} seats; the cost is in the text above.`, `Зал станет на ${formatNumber(a.size)} мест; цена — в тексте выше.`);
+    default: return pick('Your standing orders change from the next game day; you see it in the day report.', 'Распоряжения изменятся со следующего игрового дня; результат — в отчёте дня.');
+  }
 }
 
 const sev = (s: 'info' | 'warn' | 'critical') => (s === 'critical' ? 2 : s === 'warn' ? 1 : 0);

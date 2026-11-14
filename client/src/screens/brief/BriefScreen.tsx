@@ -166,7 +166,7 @@ function CashCard({ cashThen, cashNow, rankThen, rankNow, boardSize }: { cashThe
 function DecisionCard({ decision, deps, cash }: { decision: Decision; deps: BriefDeps; cash: number }) {
   const tr = useT();
   const [busy, setBusy] = useState<string | null>(null);
-  const [done, setDone] = useState<{ option: DecisionOption; error?: string } | null>(null);
+  const [done, setDone] = useState<{ decisionId: string; option: DecisionOption; error?: string } | null>(null);
 
   const choose = async (o: DecisionOption) => {
     if (o.to) return deps.navigate(o.to);
@@ -174,14 +174,16 @@ function DecisionCard({ decision, deps, cash }: { decision: Decision; deps: Brie
     setBusy(o.id);
     const ack = await deps.act(o.action);
     setBusy(null);
-    setDone({ option: o, error: ack.ok ? undefined : ack.error ?? tr('That did not work. Try again.', 'Не получилось. Попробуй ещё раз.') });
+    setDone({ decisionId: decision.id, option: o, error: ack.ok ? undefined : ack.error ?? tr('That did not work. Try again.', 'Не получилось. Попробуй ещё раз.') });
   };
 
   if (done && !done.error) {
     return (
       <Card tone="profit" title={tr('Done', 'Готово')} subtitle={done.option.result} aria-label={tr('Decision made', 'Решение принято')}>
         <p className="small" style={{ margin: 0 }}>{tr(`Cash now: ${formatMoney(cash)}. The effect shows in the next day report.`, `В кассе: ${formatMoney(cash)}. Результат — в отчёте следующего дня.`)}</p>
-        <Button variant="secondary" icon="store" onClick={() => deps.navigate('/biz/today')}>{tr('Open my business', 'Открыть мой бизнес')}</Button>
+        {decision.id !== done.decisionId && decision.kind !== 'calm'
+          ? <Button iconRight="arrowRight" onClick={() => setDone(null)}>{tr(`Next: ${decision.title}`, `Дальше: ${decision.title}`)}</Button>
+          : <Button variant="secondary" icon="store" onClick={() => deps.navigate('/biz/today')}>{tr('Open my business', 'Открыть мой бизнес')}</Button>}
       </Card>
     );
   }

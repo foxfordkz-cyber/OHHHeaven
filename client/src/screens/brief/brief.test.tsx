@@ -102,6 +102,13 @@ describe('the one decision', () => {
     expect(d.options[0].result).toMatch(/Forecast: \+\$1,180 a month/);
   });
 
+  it('"Apply" on a suggested deal says it only sends an offer that waits for an answer', () => {
+    const v = briefFixture('calm');
+    const rec = { id: 'r-jp', severity: 'warn' as const, title: 'Buy together with a neighbor', text: 'Joint purchase cuts ingredient costs.', suggested: { type: 'propose_deal' as const, toBusinessId: 'b03', terms: { type: 'joint_purchase' as const, months: 3 } }, impact: { profitDeltaMonth: 410 } };
+    const d = pickDecision({ ...v, recommendations: [rec] })!;
+    expect(d.options[0].result).toBe('Sends Ortiz Espresso Bar an offer: joint purchase for 3 months. They have 3 game days to answer; the answer shows up here. Forecast: +$410 a month.');
+  });
+
   it('closed by inspection: what was found, with the reopening day', () => {
     const d = pickDecision(briefFixture('closed'))!;
     expect(d).toMatchObject({ kind: 'closed', deadlineDay: 77 });
@@ -234,6 +241,19 @@ describe('/brief on screen', () => {
     await waitFor(() => expect(screen.getByLabelText('Decision made')).toBeTruthy());
     expect(sent).toEqual([{ type: 'answer_notice', caseId: 'c-health-1', response: 'pay' }]);
     expect(screen.getByLabelText('Decision made').textContent).toContain('−$1,200 today');
+  });
+
+  it('after a decision, the next thing that waits is one tap away', async () => {
+    const view = briefFixture('notice');
+    const navigate = vi.fn();
+    const act = async (): Promise<Ack> => ({ ok: true });
+    const { rerender } = render(<BriefScreen deps={{ view, memoryKey: 't:next', act, navigate, now: () => NOW }} />);
+    fireEvent.click(screen.getByRole('button', { name: /Pay \$1,200/ }));
+    await waitFor(() => expect(screen.getByLabelText('Decision made')).toBeTruthy());
+    // the store refreshes: the notice is answered, the advice is next
+    rerender(<BriefScreen deps={{ view: { ...view, notices: [] }, memoryKey: 't:next', act, navigate, now: () => NOW }} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Next: Add a barista on busy days' }));
+    expect(screen.getByRole('button', { name: 'Apply' })).toBeTruthy();
   });
 
   it('a refused action keeps the choice open and says why', async () => {
