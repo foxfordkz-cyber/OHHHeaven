@@ -47,6 +47,11 @@ describe('providerChain', () => {
     expect(providerChain().map(l => l.name)).toEqual(['gemini', 'grok']);
   });
 
+  it('ignores names it does not know, including object built-ins', () => {
+    setEnv({ GEMINI_API_KEY: 'g', AI_PROVIDER: 'constructor,openai' });
+    expect(providerChain()).toEqual([{ name: 'gemini', model: 'gemini-3.5-flash' }]);
+  });
+
   it('skips a provider without a key', () => {
     setEnv({ XAI_API_KEY: 'x', AI_PROVIDER: 'gemini' });
     expect(providerChain()).toEqual([{ name: 'grok', model: 'grok-4.20-non-reasoning' }]);

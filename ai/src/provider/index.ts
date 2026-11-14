@@ -46,7 +46,7 @@ export interface ChainLink { name: ProviderName; model: string }
 export function providerChain(): ChainLink[] {
   const raw = (env('AI_PROVIDER') ?? '').toLowerCase();
   if (raw === 'mock' || raw === 'none' || raw === 'off' || raw === 'rules') return [];
-  const named = raw.split(/[,\s>]+/).filter((n): n is ProviderName => n in PROVIDERS);
+  const named = raw.split(/[,\s>]+/).filter((n): n is ProviderName => Object.hasOwn(PROVIDERS, n));
   // Named providers first, then the other auto providers as backups. Anthropic only when named.
   const order = [...new Set([...named, ...AUTO_ORDER])];
   const withKeys = order.filter(n => env(PROVIDERS[n].keyEnv));
