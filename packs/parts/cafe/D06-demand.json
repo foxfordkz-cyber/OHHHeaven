@@ -359,6 +359,24 @@
           "source": "https://squareup.com/townsquare/square-data-repeat-v-one-time-customer-tipping-trends",
           "confidence": "estimate",
           "evidence": "industry_via_search"
+        },
+        {
+          "what": "New York City workers whose usual place of work is home, 2024",
+          "value": 0.125,
+          "unit": "share of workers",
+          "note": "Census survey figure for the 'usual' mode; across the US about 27% of full working days were worked from home in mid-2025, so the share at home on a given day is higher than 12.5%",
+          "source": "https://www.osc.ny.gov/reports/rate-new-yorkers-working-home-more-doubled-2019-access-uneven",
+          "confidence": "estimate",
+          "evidence": "primary_via_search"
+        },
+        {
+          "what": "Coffee orders placed on DoorDash in the US, July 2025 - July 2026",
+          "value": 80000000,
+          "unit": "orders",
+          "note": "The busiest day was Friday December 19 with nearly 280,000 orders; office coffee and tea orders build through the week and peak on Fridays (DoorDash for Business, 2026 report on 2025 orders)",
+          "source": "https://keyt.com/stacker-food-drink/2026/09/23/top-local-coffee-shops-for-national-coffee-day-according-to-doordash-data/",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
         }
       ],
       "confidence": "estimate",
@@ -825,7 +843,7 @@
           "current": "35% on day one, 75-day time constant",
           "status": "not_found",
           "evidence": "anecdote",
-          "basis": "No measured opening curve. Owners four months in still ask on forums when numbers settle; blogs give 6-18 months to break even, 18-30 in crowded cities; one cafe's own figure: 20-70% of first-time customers do not return within 100 days",
+          "basis": "No measured opening curve. Owners four months in still ask on forums when numbers settle; blogs give 6-18 months to break even, 18-30 in crowded cities; one cafe's own figure: 20-70% of first-time customers do not return within 100 days. Chains: Placer.ai notes that a new location in an unfamiliar market traditionally settles at about 75% of an established market's visits after an opening 'honeymoon', and that recent openings run below that",
           "source": "https://coffeeforums.com/threads/expected-sales-growth-rate-for-a-new-independent-craft-coffee-shop.19522"
         },
         {
@@ -3657,6 +3675,73 @@
         "source": "https://reviewtrackers.com/reports/customer-reviews-stats",
         "confidence": "estimate"
       }
+    },
+    "marketingMath": {
+      "note": "What $100 of advertising buys and what it must do to pay for itself. Prices are 2026 benchmark figures from agency reports, not platform disclosures. No measurement of visits per dollar for a cafe was found, so instead of a made-up conversion rate this block gives the break-even: one extra order contributes $8.50 x 67.9% = $5.77, so $100 is repaid by 18 extra orders: one new regular who comes three times a week for six weeks.",
+      "contributionPerOrder": 5.77,
+      "ordersToRepay100": 18,
+      "channels": [
+        {
+          "id": "meta_local",
+          "name": "Instagram and Facebook ads within a mile",
+          "per100": {
+            "impressions": 12000,
+            "clicks": 125
+          },
+          "basis": "Food and beverage CPM about $8.14 ($8-15 with local targeting); restaurant cost per click $0.72-$0.85",
+          "breakEven": "18 orders from 12,000 views: 1 view in 670 must become an order",
+          "source": "https://www.webtonic.io/blog/food-service-catering-facebook-ads-statistics",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
+        },
+        {
+          "id": "google_search",
+          "name": "Google search ads ('coffee near me')",
+          "per100": {
+            "clicks": 49
+          },
+          "basis": "Median cost per click for restaurants and food $2.05 (range $1.54-$2.77), among the cheapest industries; all-industry average $5.42",
+          "breakEven": "18 orders from 49 clicks: more than one click in three must become an order, or fewer if some become regulars",
+          "source": "https://wordstream.com/blog/2026-google-ads-benchmarks",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
+        },
+        {
+          "id": "map_listing",
+          "name": "Free map and review listings kept current",
+          "per100": {},
+          "basis": "Costs time, not money. 68% of consumers want at least four stars; replying to reviews raised ratings by 0.12 stars in the one controlled study",
+          "breakEven": "Free",
+          "source": "https://www.brightlocal.com/research/local-consumer-review-survey/",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
+        },
+        {
+          "id": "loyalty",
+          "name": "Loyalty rewards",
+          "per100": {
+            "freeDrinks": 45
+          },
+          "basis": "$100 of ingredients is 45 free drinks at $2.21, earned by 450 paid visits on a ten-stamp card",
+          "breakEven": "18 of those 450 visits must be visits that would not have happened: 4%",
+          "source": "https://squareup.com/us/en/the-bottom-line/reaching-customers/coffee-shop-loyalty-program",
+          "confidence": "estimate",
+          "evidence": "assumption"
+        },
+        {
+          "id": "handed_flyers",
+          "name": "Flyers handed to passers-by",
+          "per100": {
+            "flyers": 1000
+          },
+          "basis": "About 10 cents a printed flyer (my estimate) plus an hour or two of paid time; legal when handed over, a violation when posted (rule card illegal_posting)",
+          "breakEven": "18 orders from 1,000 flyers: under 2%",
+          "source": "https://intro.nyc/0302-2024",
+          "confidence": "estimate",
+          "evidence": "assumption"
+        }
+      ],
+      "confidence": "estimate"
     }
   },
   "levers": [
@@ -4740,6 +4825,11 @@
       "how": "search result, page not opened"
     },
     {
+      "url": "https://keyt.com/stacker-food-drink/2026/09/23/top-local-coffee-shops-for-national-coffee-day-according-to-doordash-data/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
       "url": "https://kitchennmbrs.app/en/knowledge-base/starting-a-restaurant-business-plan/how-do-i-calculate-if-my-restaurant-location-has-enough-foot-traffic-for-my-revenue-target",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
@@ -4881,6 +4971,11 @@
     },
     {
       "url": "https://whitehutchinson.com/news/lenews/2023/march/article109.shtml",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://wordstream.com/blog/2026-google-ads-benchmarks",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
     },
@@ -5095,6 +5190,11 @@
       "how": "search result, page not opened"
     },
     {
+      "url": "https://www.osc.ny.gov/reports/rate-new-yorkers-working-home-more-doubled-2019-access-uneven",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
       "url": "https://www.placer.ai/anchor/articles/august-2025-placer-ai-office-index-an-end-of-summer-slump",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
@@ -5136,6 +5236,11 @@
     },
     {
       "url": "https://www.venable.com/insights/publications/2025/12/ftc-signals-heightened-enforcement-of-new",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.webtonic.io/blog/food-service-catering-facebook-ads-statistics",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
     }
