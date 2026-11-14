@@ -6,7 +6,7 @@ import placesJson from '../../../../data/places.json';
 import realJson from '../../../../data/real-businesses.json';
 import { CityMap } from '../../map/CityMap';
 import { WEATHER_ICON, type RealBusinessLabel } from '../../map/geo';
-import { FEED_ICON, clockState, dayProgress, feedRows, formatCountdown, leaderBoards, money, msLeft, seasonDays } from './cityModel';
+import { FEED_ICON, clockState, closestRaces, dayProgress, daysToReports, feedRows, formatCountdown, leaderBoards, money, msLeft, seasonDays } from './cityModel';
 import { QrCode } from './QrCode';
 import { sendClock, useCityView, type ClockCommand } from './useCityView';
 import './city.css';
@@ -36,6 +36,8 @@ export function CityScreen({ view, places, worldId, joinUrl, receivedAt, onClock
   const progress = dayProgress(world, since);
   const left = msLeft(world, since);
   const boards = useMemo(() => leaderBoards(view), [view]);
+  const races = useMemo(() => closestRaces(view), [view]);
+  const toReports = daysToReports(world.day);
   const feed = useMemo(() => feedRows(view.feed, 7), [view.feed]);
   const today = view.weather.find((w) => w.day === world.day) ?? view.weather[0];
   const forecast = view.weather.filter((w) => w.day > world.day).slice(0, 6);
@@ -105,6 +107,21 @@ export function CityScreen({ view, places, worldId, joinUrl, receivedAt, onClock
           <div><dt>AI</dt><dd>{world.stats.aiBusinesses}</dd></div>
           <div><dt>Bankrupt</dt><dd>{world.stats.bankrupt}</dd></div>
         </dl>
+
+        {races.length > 0 && world.phase !== 'ended' && (
+          <section className="cs-races" aria-label="Races to watch">
+            <h2>Races to watch</h2>
+            <ul>
+              {races.map((r) => (
+                <li key={r.niche}>
+                  <span className="cs-races__niche">{r.label}</span>
+                  <span><strong>{r.leader}</strong> leads <strong>{r.chaser}</strong> by <b>{money(r.gap)}</b>{r.prize ? <> · #1 takes {money(r.prize)}</> : null}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="cs-races__next">{toReports === 0 ? 'Monthly books close today.' : `Monthly books close in ${toReports} game day${toReports === 1 ? '' : 's'}: the ranks can flip.`}</p>
+          </section>
+        )}
 
         <section className="cs-leaders" aria-label="Leaders">
           {boards.length === 0 && <p className="cs-empty">No standings yet.</p>}
