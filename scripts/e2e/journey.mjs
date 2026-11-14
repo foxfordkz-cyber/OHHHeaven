@@ -224,7 +224,7 @@ async function walk(browser, width) {
       // One card per decision: take a non-recommended, lawful option on the first card that has options and check that
       // the numbers on top move (decision → consequence); take the recommended option on the others.
       const monthly = page.locator('[data-testid="dx-monthly"]');
-      let cards = 0; let moved = null; let firstShot = false;
+      let cards = 0; let moved = null; let firstShot = false; let nextOnScreen = null;
       for (let i = 0; i < 30; i++) {
         const card = page.locator('section.dx-card');
         if (!(await card.count())) break;
@@ -256,6 +256,8 @@ async function walk(browser, width) {
         }
         const next = page.getByRole('button', { name: /^Next|See what it adds up to/ });
         if (!(await next.count())) break;
+        // The action bar is meant to stick to the bottom of the screen (BUGS.md, №16): is "Next" on screen without scrolling?
+        if (cards === 1) { const b = await next.first().boundingBox(); const vh = page.viewportSize().height; nextOnScreen = b ? b.y + b.height <= vh : null; }
         if (await next.first().isDisabled()) {
           const rest = btn(/Use recommended for/);
           if (await rest.count()) await rest.first().click(); else throw new Error(`stuck on decision "${title}": Next is disabled`);
@@ -266,7 +268,7 @@ async function walk(browser, width) {
         await sleep(250);
       }
       if (!firstShot) await shot('setup-choice');
-      walked = `${cards} decision cards; first own choice: ${moved ?? 'none had options'}`;
+      walked = `${cards} decision cards; first own choice: ${moved ?? 'none had options'}${nextOnScreen === false ? '; "Next" is BELOW THE FOLD (sticky bar does not stick)' : nextOnScreen ? '; "Next" on screen' : ''}`;
     } else {
       const all = btn(/Use recommended for all/);
       if (await all.count()) await all.first().click();
