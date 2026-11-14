@@ -246,6 +246,12 @@ describe('report to the city', () => {
     expect(reportOutcomeText({ targetBusinessId: 'x', reportId: 'r', day: 1, status: 'taken' })).toBe('Inspection in progress');
     expect(reportInboxItems(ownerView).map((i) => i.id)).toEqual(['i1']);
   });
+
+  it('reads a top-level myReports field first, if the host sends one', () => {
+    const top = { ...ownerView, myReports: [{ targetBusinessId: 'b_fade', reportId: 'report_unsanitary', day: 40, outcome: 'fined' as const }] };
+    expect(myReports(top).map((r) => r.targetBusinessId)).toEqual(['b_fade']);
+    expect(myReports({ ...ownerView, extra: undefined })).toEqual([]);
+  });
 });
 
 describe('actions', () => {

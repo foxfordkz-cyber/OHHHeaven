@@ -10,7 +10,8 @@ export const CROSS_PROMO_MAX_METERS = 400;
 /** build/tasks/13-engine-deals.md §1: partnership share bounds. */
 export const PARTNER_SHARE_MIN_PCT = 5;
 export const PARTNER_SHARE_MAX_PCT = 49;
-export const TIMED_DEAL_MAX_MONTHS = 6;
+/** engine/src/deals/validate.ts DEAL_MAX_MONTHS (agent 13); the sheet also caps it by the months left in the season. */
+export const TIMED_DEAL_MAX_MONTHS = 12;
 export const LOAN_MAX_MONTHS = 12;
 
 export type DealKind = DealTerms['type'];
@@ -351,9 +352,9 @@ export function reportOptions(packs: PackSet | null, niche: NicheId): PackReport
   return all.filter((r, i) => all.findIndex((x) => x.id === r.id) === i);
 }
 
-/** My reports and their outcomes: structured `extra.myReports` when the host sends it. */
-export function myReports(view: OwnerView & { extra?: Partial<NetworkExtra> }): MyReport[] {
-  const list = view.extra?.myReports;
+/** My reports and their outcomes: `myReports` (requested contract field) or `extra.myReports`, when the host sends one. */
+export function myReports(view: OwnerView & { extra?: Partial<NetworkExtra>; myReports?: MyReport[] }): MyReport[] {
+  const list = view.myReports ?? view.extra?.myReports;
   return Array.isArray(list) ? [...list].sort((a, b) => b.day - a.day) : [];
 }
 

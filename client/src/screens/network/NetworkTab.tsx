@@ -302,7 +302,7 @@ function BlockFundCard(props: { view: OwnerView; onAct: (a: Action) => unknown }
         </p>
         <div className="row-between small">
           <span><strong className="num">{bf.contributors} of {bf.eligible}</strong> neighbors chip in</span>
-          <span className="muted">{info.required} needed</span>
+          <span className="muted">{info.required} needed for the bonus</span>
         </div>
         <ProgressBar value={bf.eligible ? bf.contributors / bf.eligible : 0} tone={info.active ? 'profit' : 'accent'} label="Neighbors who chip in" />
         <p className={`nw-blockline${info.active ? ' is-active' : ''}`} role="status">{info.line}</p>
