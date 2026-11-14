@@ -132,6 +132,12 @@ export function Paywall({ view, status, statusError, busy, result, offline, embe
             />
           ))}
         </List>
+        <p className="xsmall muted">
+          {tr(
+            'When Pro comes up: never before your doors open. A letter in your inbox says the day your free month ends, and the Pro tab counts the days. After that day the cafe runs on its last orders until you decide.',
+            'Когда появляется Pro: не раньше открытия дверей. Письмо во входящих называет день конца бесплатного месяца, вкладка Pro считает дни. После этого дня кофейня работает по последним распоряжениям, пока вы не решите.',
+          )}
+        </p>
       </Card>
 
       <Card tone="flat" title={tr('Come back for the next report', 'Возвращайтесь к следующему отчёту')}>

@@ -5,7 +5,7 @@
 // Бесплатно: город, идея, место, план открытия и первый полный месяц своей кофейни (в этот месяц открыт и личный план).
 // Pro: весь год (решения после первого месяца), личный план с источниками, советник без лимита, все виды бизнеса.
 import type { Express, NextFunction, Request, Response } from 'express';
-import type { Action, BusinessState, NicheId, Player, Query, RealWorldPlan, WorldState } from '@ohh/shared';
+import type { Action, BusinessState, InboxItem, NicheId, Player, Query, RealWorldPlan, WorldState } from '@ohh/shared';
 import { RULES } from '@ohh/shared';
 import { answer, type EngineCtx } from '@ohh/host';
 import type { WorldRuntime } from './runtime';
@@ -188,6 +188,51 @@ export function countAdvisorQuestion(w: WorldState, playerId: string): WorldStat
   return patchPlayer(w, playerId, { billingUsage: { advisorUsed: used } });
 }
 
+const usd = (n: number): string => `$${n.toFixed(2)}`;
+const fmtPrice = (cents: number): string => `$${(cents / 100).toFixed(cents % 100 === 0 ? 0 : 2)}`;
+
+/**
+ * Письма о тарифе во входящие игрока — по одному разу: когда открылись двери (до какого дня бесплатно)
+ * и когда бесплатный месяц кончился (кофейня на автопилоте). Входящие показывают Today и сводка возвращения,
+ * так игрок узнаёт о тарифе в игре, а не только на /pro. Отправленные id лежат в extra.billingNotices.
+ */
+export function billingNotices(w: WorldState, playerId: string, env: BillingEnv): WorldState {
+  const p = playerOf(w, playerId);
+  if (!p || p.kind !== 'owner' || p.isAi) return w;
+  const e = entitlement(w, playerId, env);
+  if (e.stage !== 'free_month' && e.stage !== 'autopilot') return w;
+  const sent = new Set(Array.isArray(p.extra?.billingNotices) ? (p.extra!.billingNotices as string[]) : []);
+  const biz = businessesOf(w, playerId).filter((b) => b.status !== 'bankrupt').at(-1);
+  const ref = biz ? { type: 'business' as const, id: biz.id } : undefined;
+  const items: InboxItem[] = [];
+  if (!sent.has('free') && e.stage === 'free_month') {
+    items.push({
+      id: `billing:free:${playerId}`, day: w.day, kind: 'system', read: false, ref,
+      title: `Free until day ${e.freeEndsDay}`,
+      text: `Your doors are open and your first full month is free. After day ${e.freeEndsDay} the cafe keeps running on your last orders; ${PRO_NAME} (${fmtPrice(PRICES.month)} a month) keeps every control for the rest of the year. Details on ${PAYWALL_PATH}.`,
+    });
+    sent.add('free');
+  }
+  if (!sent.has('autopilot') && e.stage === 'autopilot') {
+    const orders = biz ? ` Price ${usd(biz.orders.price)}, ${Object.values(biz.orders.staff).reduce((a, n) => a + n, 0)} on staff — as you left them.` : '';
+    items.push({
+      id: `billing:autopilot:${playerId}`, day: Math.min(w.day, (e.freeEndsDay ?? w.day) + 1), kind: 'system', read: false, ref,
+      title: 'Your free month is over: the cafe is on autopilot',
+      text: `Since day ${(e.freeEndsDay ?? w.day) + 1} your cafe runs on the orders you gave.${orders} Rent, wages and rivals keep moving. ${PRO_NAME} gives the controls back: ${PAYWALL_PATH}.`,
+    });
+    sent.add('free');
+    sent.add('autopilot');
+  }
+  if (items.length === 0) return w;
+  return {
+    ...w,
+    version: w.version + 1,
+    players: w.players.map((x) => (x.id === playerId
+      ? ({ ...x, inbox: [...x.inbox, ...items], extra: { ...((x as BilledPlayer).extra ?? {}), billingNotices: [...sent] } } as Player)
+      : x)),
+  };
+}
+
 /** Что игрок получит в личном плане — только заголовки и счёт строк, без самих шагов и ссылок. */
 export interface PlanTeaser {
   businessName: string;
@@ -346,6 +391,16 @@ export function mountBilling(app: Express, host: BillingHost, opts: BillingOptio
         rt.world = countAdvisorQuestion(rt.world, pid);
         rt.saveSoon();
       });
+    }
+    next();
+  });
+
+  // письма о тарифе: проверяем при каждом опросе картины игроком (клиент опрашивает каждые 2–15 секунд)
+  app.get('/api/worlds/:id/view', who, (req: BReq, _res: Response, next: NextFunction) => {
+    const rt = req.billingRt;
+    if (rt && req.billingPlayer) {
+      const w = billingNotices(rt.world, req.billingPlayer, env);
+      if (w !== rt.world) { rt.world = w; rt.saveSoon(); }
     }
     next();
   });
