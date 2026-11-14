@@ -137,7 +137,7 @@ describe('staffing: cover of the open hours', () => {
 });
 
 describe('staffing: the day', () => {
-  it('alone it keeps the engine units: four trained baristas with a lead-free penalty off make the pack 1,700 a month each', () => {
+  it('alone it keeps the engine units: trained baristas without the no-lead penalty make the pack 1,700 orders a month each', () => {
     // two baristas: no lead needed, so the engine's old limit is exact
     expect(part.capacityDay!(day(shop({ barista: 2 }), pack, 100))).toBe(100);
     expect(part.capacityDay!(day(shop({ barista: 4 }), pack, 100))).toBe(100);

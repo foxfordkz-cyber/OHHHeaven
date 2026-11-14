@@ -224,7 +224,7 @@ function serviceAnswers(pack: Pack): boolean {
 
 /**
  * Orders capacityDay speaks in. With the service part: takeaway orders (service converts seated work itself).
- * Alone: the engine's mixed orders, so a team of trained baristas without a lead-free penalty keeps the pack's
+ * Alone: the engine's mixed orders, so a team of trained baristas without the no-lead penalty keeps the pack's
  * unitsPerStaffMonth exactly: 1,700 / (160 h × 14.0) = 0.759 of a takeaway order.
  */
 function ordersUnit(pack: Pack, cfg: StaffingCfg): number {
