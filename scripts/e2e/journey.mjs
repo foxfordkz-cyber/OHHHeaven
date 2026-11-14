@@ -113,7 +113,7 @@ async function walk(browser, width) {
       r.note = String(e.message ?? e).split('\n')[0].slice(0, 300);
     }
     r.ms = Date.now() - t0;
-    await sleep(300);
+    await sleep(700); // screens fade in: a shot taken at once is blank
     r.overflowPx = await overflow();
     r.shot = relative(OUT, await shot(id));
     r.errors = errors.slice(before);
@@ -168,6 +168,7 @@ async function walk(browser, width) {
     await page.goto(`${BASE}/?world=${W}&mode=remote`, { waitUntil: 'domcontentloaded' });
     const idea = await visible(page.locator('#idea'), 15000);
     await sleep(800);
+    await shot('home-guest');
     await idea.fill('A coffee shop near the subway with fresh pastries');
     await click(/See my plan|Показать план/);
     await page.waitForURL(/\/start/, { timeout: 8000 });
@@ -243,28 +244,212 @@ async function walk(browser, width) {
     return `${state.biz.name}: cash ${Math.round(state.biz.cash)}`;
   }, openApi);
 
-  // 7. Permits → open
+  // 7. Permits → open. Days go by 5 at a time, like a player who comes back every few days.
+  let signedDay = (await view())?.world?.day ?? 0;
   await step('permits', 'Waiting for permits: days pass, then "Open doors"', async () => {
     await page.goto(`${BASE}/start?world=${W}`, { waitUntil: 'domcontentloaded' });
-    await visible(page.getByText(/Permits and licenses|Open doors|Open the doors/), 15000);
-    for (let i = 0; i < 6; i++) {
-      const v = await view();
-      if ((v.roadmap ?? []).every((s) => s.status === 'done' || s.status === 'ready' || !s.waitDays)) break;
-      ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 20 }), 'advance');
+    await visible(page.getByText(/Permits and licenses|Open doors|Open the doors|Ready to open/), 15000);
+    await sleep(800);
+    const waitText = await text();
+    await shot('permits-waiting');
+    let opened = false;
+    for (let i = 0; i < 40 && !opened; i++) {
+      const open = btn(/^Open doors$|^Open the doors$/);
+      if (await open.count() && !(await open.first().isDisabled())) {
+        await open.first().click();
+        for (let k = 0; k < 20; k++) { const v = await view(); if (v.business?.status === 'open') { opened = true; break; } await sleep(250); }
+        if (opened) break;
+      }
+      ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 5 }), 'advance');
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      await sleep(600);
     }
-    await page.reload({ waitUntil: 'domcontentloaded' });
-    const open = await visible(btn(/^Open doors$|Open the doors/), 15000);
-    if (await open.isDisabled()) throw new Error('"Open doors" still disabled after 120 days');
-    await open.click();
-    for (let i = 0; i < 40; i++) { const v = await view(); if (v.business?.status === 'open') { state.biz = v.business; return `opened on day ${v.world.day}`; } await sleep(250); }
-    throw new Error('business is not open after "Open doors"');
+    const v = await view();
+    if (!opened) throw new Error(`not open after 200 days of waiting (day ${v.world.day})`);
+    state.biz = v.business;
+    const rentNote = (waitText.match(/Rent keeps running[^.]*\./) ?? [''])[0];
+    return `signed day ${signedDay}, opened day ${v.world.day} (${v.world.day - signedDay} days of rent before the first sale); cash ${Math.round(v.business.cash)}${rentNote ? '' : '; no rent warning on screen'}`;
   }, async () => {
-    for (let i = 0; i < 6; i++) { const r = await act({ type: 'launch' }); if (r.ok) return; ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 20 }), 'advance'); }
+    for (let i = 0; i < 40; i++) { const r = await act({ type: 'launch' }); if (r.ok) return; ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 5 }), 'advance'); }
     throw new Error('launch failed');
   });
 
   ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 3 }), 'advance 3 days');
-  return { results, errors, state, page, ctx, dir, W, view, act, step, btn, visible, click, text, shot };
+
+  // 8. Business tabs: each opens, has content, no horizontal scroll
+  const dismissAway = async () => {
+    const away = page.getByRole('dialog', { name: 'While you were away' });
+    if (await away.count()) { await away.getByRole('button', { name: /Got it/ }).click().catch(() => {}); await sleep(250); }
+  };
+  await step('biz', 'My business opens after the doors open (first sales)', async () => {
+    await page.goto(`${BASE}/biz?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await visible(page.getByRole('tablist', { name: 'My business' }), 15000);
+    await sleep(500);
+    const awayShown = await page.getByRole('dialog', { name: 'While you were away' }).count();
+    if (awayShown) await shot('biz-away');
+    await dismissAway();
+    const tabs = await page.getByRole('tab').allInnerTexts();
+    const v = await view();
+    const sold = v.business?.today ?? v.business?.lastDay ?? null;
+    return `tabs: ${tabs.map((t) => t.replace(/\s+/g, ' ').trim()).join(', ')}${awayShown ? '; "While you were away" shown' : ''}${sold ? `; last day ${JSON.stringify(sold).slice(0, 80)}` : ''}`;
+  });
+  for (const tab of ['Today', 'Manage', 'Books', 'Network', 'Insights']) {
+    await step(`tab-${tab.toLowerCase()}`, `Tab ${tab}: opens and shows its content`, async () => {
+      await dismissAway();
+      const t = page.getByRole('tab', { name: new RegExp(`^${tab}`) });
+      if (!(await t.count())) throw new Error(`no tab "${tab}"`);
+      await t.first().click();
+      await sleep(900);
+      const panel = page.getByRole('tabpanel').first();
+      const body = ((await panel.innerText().catch(() => '')) || (await text())).replace(/\s+/g, ' ');
+      if (body.length < 40) throw new Error(`tab "${tab}" is almost empty: "${body}"`);
+      if (/on its way|Coming soon/i.test(body)) throw new Error(`tab "${tab}" is a placeholder: "${body.slice(0, 120)}"`);
+      const buttons = await panel.locator('button:not([disabled]), input:not([disabled]), select:not([disabled])').count();
+      return `${body.length} chars, ${buttons} enabled controls; starts: "${body.slice(0, 110)}"`;
+    });
+  }
+
+  // 9. Manage: change the price, see the forecast before saving, save, see it on the next day
+  await step('whatif', 'Manage: price +$0.50 → forecast changes before saving → Save settings → next day uses it', async () => {
+    await dismissAway();
+    await page.getByRole('tab', { name: /^Manage/ }).first().click();
+    // The business screen draws cards with its own copy of the kit (section.bz-card > h3), the rest of the app with client/src/ui (.card__title).
+    const fc = page.locator('section.bz-card, div.card').filter({ has: page.locator('h3, .card__title', { hasText: /^Projected month/ }) }).last();
+    await visible(fc, 10000);
+    for (let i = 0; i < 20 && /Counting/.test(await fc.innerText()); i++) await sleep(300);
+    const before = (await fc.innerText()).replace(/\s+/g, ' ');
+    const priceBefore = (await view()).business.orders.price;
+    const inc = page.getByRole('button', { name: 'Increase price' });
+    for (let i = 0; i < 5; i++) await inc.click();
+    await visible(page.getByText(/Projected month with your changes/), 5000);
+    let after = before;
+    for (let i = 0; i < 20; i++) { await sleep(300); after = (await fc.innerText()).replace(/\s+/g, ' '); if (after !== before && !/updating/.test(after)) break; }
+    if (after === before) throw new Error('forecast did not change after +$0.50');
+    await shot('whatif-before-save');
+    await click(/Save settings/);
+    await sleep(800);
+    const banner = (await text()).match(/(Saved|saved|Changes start|start on)[^.]*\./)?.[0] ?? '';
+    const v1 = await view();
+    const priceAfter = v1.business.orders.price;
+    if (Math.abs(priceAfter - priceBefore - 0.5) > 0.01) throw new Error(`price in the engine ${priceBefore} → ${priceAfter}, expected +0.50`);
+    ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 1 }), 'advance');
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await dismissAway();
+    await page.getByRole('tab', { name: /^Today/ }).first().click().catch(() => {});
+    await sleep(800);
+    const today = await text();
+    const shown = today.includes(priceAfter.toFixed(2));
+    return `price ${priceBefore.toFixed(2)} → ${priceAfter.toFixed(2)}; forecast "${before.slice(0, 70)}" → "${after.slice(0, 70)}"; after save: "${banner.slice(0, 80)}"; next day Today ${shown ? 'shows' : 'does NOT show'} the new price`;
+  }, async () => { await act({ type: 'set_orders', orders: { price: (await view()).business.orders.price + 0.5 } }); });
+
+  // 10. A neighbour (through the API), a deal and a report from the Network tab
+  const rival = { name: `Rival Cuts ${width}` };
+  {
+    const j = ack(await call('POST', `/api/worlds/${W}/join`, { name: `Rival ${width}`, kind: 'owner' }), 'join rival');
+    rival.token = j.token;
+    const places = unwrap(await call('GET', '/api/places'));
+    const me = places.find((p) => p.id === state.biz.placeId);
+    const taken = new Set(((await view()).businesses ?? []).map((b) => b.placeId));
+    const dist = (a, b) => Math.hypot((a.lat - b.lat) * 111000, (a.lng - b.lng) * 84000);
+    const near = places.filter((p) => !taken.has(p.id) && p.suitableFor.includes('barbershop')).sort((a, b) => dist(a, me) - dist(b, me));
+    for (const p of near.slice(0, 15)) {
+      const rec = unwrap(await call('POST', `/api/worlds/${W}/query`, { type: 'recommend_opening', niche: 'barbershop', placeId: p.id }, rival.token)) ?? [];
+      const kit = rec.find((k) => k.cashLeft >= 0) ?? rec[0];
+      if (!kit) continue;
+      const r = await call('POST', `/api/worlds/${W}/action`, { type: 'open_business', niche: 'barbershop', placeId: p.id, name: rival.name, kitId: kit.kitId, size: kit.size, items: kit.items }, rival.token);
+      if (r.ok) { rival.place = p; rival.m = Math.round(dist(p, me)); break; }
+    }
+    for (let i = 0; i < 40 && rival.place; i++) { const r = await call('POST', `/api/worlds/${W}/action`, { type: 'launch' }, rival.token); if (r.ok) break; await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 5 }); }
+    rival.biz = unwrap(await call('GET', `/api/worlds/${W}/view`, undefined, rival.token))?.business;
+  }
+  await step('deal', `Network: propose a cross-promo to a neighbour (${rival.m ?? '?'} m away), the neighbour accepts`, async () => {
+    if (!rival.biz) throw new Error('no neighbour could open nearby (setup through the API)');
+    await page.goto(`${BASE}/biz/network?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await sleep(1000);
+    await dismissAway();
+    await page.getByRole('button', { name: new RegExp(rival.name) }).first().click({ timeout: 10000 });
+    await click(/Propose a deal|Team up/, 5000);
+    const sheet = page.getByRole('dialog', { name: new RegExp(`Deal with ${rival.name}|${rival.name}`) }).last();
+    await sheet.getByRole('radio', { name: /Cross-promo/ }).first().click({ timeout: 5000 });
+    await shot('deal-sheet');
+    await sheet.getByRole('button', { name: /Send offer|Send|Propose/ }).first().click();
+    await sleep(800);
+    const deal = ((await view()).deals ?? []).find((d) => d.toBusinessId === rival.biz.id && d.status === 'proposed');
+    if (!deal) throw new Error('the offer did not reach the engine');
+    const acc = await call('POST', `/api/worlds/${W}/action`, { type: 'answer_deal', dealId: deal.id, accept: true }, rival.token);
+    await page.keyboard.press('Escape').catch(() => {});
+    const st = ((await view()).deals ?? []).find((d) => d.id === deal.id)?.status;
+    return `deal ${deal.id} ${JSON.stringify(deal.terms).slice(0, 80)}; neighbour answer ${acc.ok ? 'ok' : acc.error}; status ${st}`;
+  });
+  await step('report', 'Network: report the neighbour to the city, the case reaches an inspector', async () => {
+    if (!rival.biz) throw new Error('no neighbour to report');
+    await page.goto(`${BASE}/biz/network?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await sleep(1000);
+    await dismissAway();
+    const region = page.getByRole('region', { name: 'Report to the city' });
+    if (await region.count()) await region.getByRole('button', { name: /Report/ }).first().click();
+    else { await page.getByRole('button', { name: new RegExp(rival.name) }).first().click(); await click(/Report/, 5000); }
+    const rs = page.getByRole('dialog', { name: /Report/ }).last();
+    const combo = rs.getByRole('combobox', { name: 'Business' });
+    if (await combo.count()) await combo.selectOption(rival.biz.id);
+    const radio = rs.locator('input[type="radio"]');
+    if (await radio.count()) await radio.first().check();
+    await shot('report-sheet');
+    await rs.getByRole('button', { name: /Send report|Send|Report/ }).last().click();
+    await sleep(800);
+    const o = ack(await call('POST', `/api/worlds/${W}/join`, { name: `Inspector ${width}`, kind: 'official', role: 'inspector' }), 'join official');
+    const q = unwrap(await call('GET', `/api/worlds/${W}/view`, undefined, o.token))?.queue ?? [];
+    const c = q.find((x) => x.business?.id === rival.biz.id);
+    if (!c) throw new Error('report sent, but no case for the neighbour in the inspector queue');
+    return `case in the inspector queue: ${String(c.id ?? '')} ${String(c.origin ?? '')} ${String(c.violationId ?? c.reportId ?? '')}`.trim();
+  });
+
+  // 11. A month passes: the month report shows in Books
+  await step('month', 'A month passes: the month report appears in Books', async () => {
+    ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 32 }), 'advance');
+    await page.goto(`${BASE}/biz?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await visible(page.getByRole('tablist', { name: 'My business' }), 15000);
+    await sleep(600);
+    if (await page.getByRole('dialog', { name: 'While you were away' }).count()) await shot('month-away');
+    await dismissAway();
+    await page.getByRole('tab', { name: /^Books/ }).first().click();
+    await sleep(800);
+    const v = await view();
+    const h = v.business?.history ?? [];
+    if (!h.length) throw new Error('no month in business.history after 32 days');
+    const last = h[h.length - 1];
+    return `${h.length} month(s); last: revenue ${Math.round(last.revenue ?? 0)}, profit ${Math.round(last.profit ?? 0)}, cash ${Math.round(v.business.cash)}; status ${v.business.status}`;
+  });
+
+  // 12. End of season → debrief → personal plan
+  if (WITH_END) {
+    await step('end', 'Season ends: place, debrief and "Open my plan"', async () => {
+      for (let i = 0; i < 10; i++) {
+        const v = await view();
+        if (v.world.phase !== 'running') break;
+        ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 60 }), 'advance');
+      }
+      const v = await view();
+      if (v.world.phase === 'running') throw new Error(`season still running on day ${v.world.day}`);
+      await page.goto(`${BASE}/end?world=${W}`, { waitUntil: 'domcontentloaded' });
+      await visible(btn(/Open my plan/), 15000);
+      await sleep(600);
+      const t = await text();
+      return `phase ${v.world.phase}, day ${v.world.day}; business ${v.business?.status ?? 'none'}; "${t.slice(0, 120)}"`;
+    });
+    await step('plan-final', 'Personal plan: budget, monthly costs, documents with links, suppliers, print', async () => {
+      await click(/Open my plan/);
+      const art = await visible(page.getByRole('article', { name: 'Your real-world plan' }), 15000);
+      await sleep(600);
+      const t = (await art.innerText()).replace(/\s+/g, ' ');
+      const links = await art.locator('a[href^="http"]').count();
+      const print = await btn(/Print/).count();
+      const generic = ['about 800 sq ft', '$22,000 in prime Manhattan'].filter((g) => t.includes(g));
+      return `${t.length} chars, ${links} outside links, print button ${print ? 'yes' : 'NO'}${generic.length ? `; generic text: ${generic.join(', ')}` : ''}`;
+    });
+  }
+
+  return { results, errors, state, page, ctx, dir, W };
 }
 
 // ───────────── main ─────────────
