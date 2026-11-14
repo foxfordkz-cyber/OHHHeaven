@@ -15,7 +15,8 @@ except Exception:
 COMMON = json.load(open('packs/_common.json'))
 CHECKED = '2026-11-14'
 sys.path.insert(0, HERE)
-from D12_patches import CAFE_PATCHES, COMMON_PATCHES, NEW_SOURCES, CHECKED_ONLY  # noqa: E402
+from D12_patches import CAFE_PATCHES, COMMON_PATCHES, NEW_SOURCES, CHECKED_ONLY, LEVER_NOTES, SHORTCUT_NOTES  # noqa: E402
+import D12_patches  # noqa: E402
 
 def find(pack, section, rid):
     sec = pack
@@ -56,6 +57,33 @@ def apply(pack, patches):
 
 cafe_frag, cafe_rows = apply(CAFE, CAFE_PATCHES)
 common_frag, common_rows = apply(COMMON, COMMON_PATCHES)
+# levers: add source/confidence/note to each option that has a number
+levers = {l['id']: copy.deepcopy(l) for l in CAFE['levers']}
+for ln in LEVER_NOTES:
+    for o in levers[ln['lever']]['options']:
+        if o['id'] == ln['option']:
+            o.update({k: ln[k] for k in ('note', 'source', 'confidence')})
+            if ln['lever'] == 'hours' and ln['option'] == 'long':
+                cafe_rows.append(('levers[hours].options[long]', {'monthlyCost': o['monthlyCost']}, {'monthlyCost': 2000}, ln['source'], 'пересчёт от ставки $18 вместо $21', 'estimate'))
+                o['monthlyCost'] = 2000
+cafe_frag['levers'] = [levers[k] for k in levers if any(ln['lever'] == k for ln in LEVER_NOTES)]
+shortcuts = []
+for sc in CAFE['shortcuts']:
+    if sc['id'] in SHORTCUT_NOTES:
+        sc = copy.deepcopy(sc)
+        sc['note'], sc['source'] = SHORTCUT_NOTES[sc['id']]
+        sc['confidence'] = 'estimate'
+        shortcuts.append(sc)
+cafe_frag['shortcuts'] = shortcuts
+common_sc = []
+for sc in COMMON['shortcuts']:
+    if sc['id'] in getattr(D12_patches, 'COMMON_SHORTCUT_NOTES', {}):
+        sc = copy.deepcopy(sc)
+        sc['note'], sc['source'] = D12_patches.COMMON_SHORTCUT_NOTES[sc['id']]
+        sc['confidence'] = 'estimate'
+        common_sc.append(sc)
+if common_sc:
+    common_frag['shortcuts'] = common_sc
 cafe_frag['sources'] = [dict(s, checked=CHECKED) for s in NEW_SOURCES]
 cafe_frag['extra'] = cafe_frag.get('extra', {})
 cafe_frag['extra']['d12CheckedUnchanged'] = CHECKED_ONLY

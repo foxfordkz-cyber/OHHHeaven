@@ -106,5 +106,163 @@
       "source": "https://dol.ny.gov/minimum-wage-0",
       "confidence": "verified"
     }
-  }
+  },
+  "shortcuts": [
+    {
+      "id": "cash_wages",
+      "name": "Pay staff in cash, off the books",
+      "what": "No payroll taxes, no workers' comp, no pay stubs: you keep about 11.6% of payroll each month. A tax audit or one unhappy worker brings back the taxes for both halves, plus penalties.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.116
+      },
+      "violation": "off_books_payroll",
+      "note": "My arithmetic from rates seen: employer FICA 7.65% (IRS Pub. 15, 2026) + NY UI 1.79% effective (4.1% on the first $17,600, NY DOL) + FUTA 0.10% effective (IRS Topic 759) + workers' comp 2% planning rate + disability 0.04% (NYSIF 2026) = 11.58% of payroll.",
+      "source": "https://www.irs.gov/publications/p15",
+      "confidence": "estimate"
+    },
+    {
+      "id": "contractor_1099",
+      "name": "Book employees as 1099 contractors",
+      "what": "You skip employer payroll taxes and insurance, about 10% of payroll. People who work your schedule on your equipment are employees: the state bills the taxes back with interest.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.1
+      },
+      "violation": "misclassification",
+      "note": "My arithmetic: the same employer taxes without the workers' comp planning rate, 7.65% + 1.79% + 0.10% + 0.04% = 9.58%, rounded to 10%.",
+      "source": "https://www.irs.gov/publications/p15",
+      "confidence": "estimate"
+    },
+    {
+      "id": "underreport_sales",
+      "name": "Ring cash sales off the register",
+      "what": "About a tenth of sales never reaches the books: you keep the sales tax on it and pay no income tax on it, about 3% of sales in all. Auditors compare card sales, supplier invoices and supplies used.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.03
+      },
+      "violation": "sales_tax_fraud",
+      "note": "My arithmetic: a tenth of sales off the books keeps 10% x 8.875% = 0.89% of sales in sales tax (NYC rate, Pub. 718) plus income and self-employment tax on the profit of those sales, 10% x 72% gross margin x 31.1% = 2.24%: about 3.1% of sales.",
+      "source": "https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf",
+      "confidence": "estimate"
+    },
+    {
+      "id": "keep_sales_tax",
+      "name": "Spend the sales tax you collected",
+      "what": "You file the return but hold back collected sales tax worth 4.5% of sales. It works like a loan from the state at 10% for the first month and 1% for each month after, and you are personally liable for it.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.045
+      },
+      "violation": "sales_tax_not_remitted",
+      "note": "Game cap, see extra.shortcutNotes: 4.5% of sales, about half of the 8.875% a cafe collects (Pub. 718) and all of the 4.5% a barbershop collects. Late remittance: 10% for the first month and 1% a month after, up to 30% (Tax Law §1145, seen).",
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+      "confidence": "estimate"
+    },
+    {
+      "id": "no_workers_comp",
+      "name": "Skip workers' compensation insurance",
+      "what": "Saves the premium, about 2% of payroll. The state can fine up to $2,000 for every 10 days without coverage and post a stop-work order; if someone is hurt, you pay the claim yourself.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.02
+      },
+      "violation": "no_wc_insurance",
+      "note": "The game's planning premium of 2% of payroll (taxes.workers_comp). Insureon reports coffee shops pay about $88 a month on average across the US (seen); a New York quote depends on class code and payroll.",
+      "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "confidence": "estimate"
+    },
+    {
+      "id": "skip_overtime_pay",
+      "name": "Pay straight time for overtime",
+      "what": "Hours over 40 a week are paid at the normal rate instead of time and a half, about 4% of payroll. A wage claim reaches back six years and doubles what you owe.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.04
+      },
+      "violation": "unpaid_overtime",
+      "note": "My arithmetic: if 8% of paid hours are over 40 a week, skipping the half-time premium saves 8% x 0.5 = 4% of payroll.",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "confidence": "estimate"
+    },
+    {
+      "id": "off_the_clock",
+      "name": "Unpaid opening and closing time",
+      "what": "Staff set up before clocking in and clean after clocking out: about 8% of hours go unpaid, which pushes real pay below the legal wage. Owed back double, plus penalties.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.08
+      },
+      "violation": "below_minimum_wage",
+      "note": "My arithmetic: 15 minutes before and 20 minutes after an 8-hour shift = 35 / 480 = 7.3% of hours, rounded to 8%.",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "confidence": "estimate"
+    },
+    {
+      "id": "personal_on_business",
+      "name": "Run personal bills through the business",
+      "what": "Groceries, the family phone plan and the car go on the business card as expenses, cutting taxable profit: worth about $450 a month in tax. An audit disallows them and adds 20%, or 75% for fraud.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 450
+      },
+      "violation": "personal_expenses",
+      "note": "My arithmetic: about $1,450 a month of personal spending booked as expenses x the game's 31.1% profit tax (17% income + 14.13% self-employment) = $450.",
+      "source": "https://www.irs.gov/payments/accuracy-related-penalty",
+      "confidence": "estimate"
+    },
+    {
+      "id": "skip_i9",
+      "name": "Hire without Form I-9",
+      "what": "No ID check, no form, start tomorrow. Saves a little paperwork for each hire. A federal audit fines every missing form, whether or not the worker is allowed to work.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 15
+      },
+      "violation": "no_i9",
+      "note": "My estimate: about half an hour of the owner's time per hire at $30 an hour = $15. The fine is $288-$2,861 per form (28 CFR 85.5, seen).",
+      "source": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+      "confidence": "estimate"
+    },
+    {
+      "id": "skip_tax_filings",
+      "name": "Skip the bookkeeper and file nothing",
+      "what": "No bookkeeper and no quarterly returns: saves about $400 a month. Late-filing penalties grow every month, and with no return the state estimates what you owe for you.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 400
+      },
+      "violation": "returns_not_filed",
+      "note": "Equals the cafe pack's bookkeeping line ($400 a month, research notes estimate). The IRS minimum failure-to-file penalty is $525 for returns due after 2025 (seen).",
+      "source": "https://www.irs.gov/payments/failure-to-file-penalty",
+      "confidence": "estimate"
+    },
+    {
+      "id": "no_paid_sick_leave",
+      "name": "Deny paid sick leave",
+      "what": "Sick workers stay home unpaid or come in anyway: saves about $70 per worker a month. The city awards three times the unpaid wages or $250, whichever is more, plus $500 for each denial.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 70
+      },
+      "violation": "sick_leave_denied",
+      "note": "My arithmetic: 40 paid hours a year x $21 / 12 = $70 per worker a month (cafe pack after D12: 40 x $18 / 12 = $60). DCWP penalty: three times the unpaid wages or $250, plus $500 per denial (first pass; nyc.gov not reachable from this session).",
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "confidence": "estimate"
+    },
+    {
+      "id": "card_only",
+      "name": "Refuse cash",
+      "what": "Card only: no cash counting, no bank runs, about $150 a month saved. Stores in New York City must accept cash: $750 for the first violation, $1,350 for the second, $1,500 after that.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 150
+      },
+      "violation": "refusing_cash",
+      "note": "My estimate: about $150 a month of counting, bank runs and change orders. Refusing cash costs $750, $1,350, then $1,500 per violation (NYC Business restaurant page, 6 RCNY §6-72, seen).",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "estimate"
+    }
+  ]
 }
