@@ -1,12 +1,13 @@
 // Rivals and prizes in plain sight (task B18): what needs my answer, who my main rival is, where I stand and how far
 // the prize is, and what changed next door with one line on what it means for me. Behavior and data only: the look
 // comes from the shared components of client/src/ui.
+import { Fragment, useState, type ReactNode } from 'react';
 import type { Action, CaseNotice, Deal, OwnerView, PackSet, Place, PublicBusiness } from '../../../../shared/src/types';
 import { dateOf } from '../../../../shared/src/rules';
 import { AiBadge, Badge, Button, Card, formatDuration, List, ListRow, MoneyText, useT } from './ui';
 import { act, formatDistance, money, NICHE_LABEL, termsSummary, trustLabel, type MyReport, type NetworkExtra } from './logic';
 import {
-  ladderLine, msToMonthClose, nextMonthCloseDay, noticeChoices, offerChoices, reportMove, teamUpMove,
+  ladderLine, msToMonthClose, nextMonthCloseDay, noticeChoices, offerChoices, reportMove, revealedReporters, teamUpMove,
   type Ladder, type ReportMove, type Rival, type RivalNews, type TeamUpMove,
 } from './rivals';
 import type { DealKind } from './logic';
@@ -25,19 +26,50 @@ function useMonthClose(view: OwnerView): string {
 
 // ───────────── incoming: offers and fine notices, with what each answer does ─────────────
 
-export function IncomingCard(props: { view: OwnerView; packs: PackSet | null; offers: Deal[]; nameOf: (id: string) => PublicBusiness | undefined; onAct: (a: Action) => unknown }) {
+/** Answers shown before «Show all»: the rival card stays on the first phone screen. */
+export const INCOMING_FIRST = 1;
+
+export function IncomingCard(props: {
+  view: View; packs: PackSet | null; offers: Deal[]; nameOf: (id: string) => PublicBusiness | undefined; onAct: (a: Action) => unknown;
+  distanceOf: (id: string) => number | null; onTeamUp: (id: string, kind: DealKind | null) => void; onReport: (id: string) => void;
+}) {
   const tr = useT();
+  const [all, setAll] = useState(false);
   const { view, offers } = props;
-  const notices = view.notices.filter((n) => n.status === 'notice');
-  if (offers.length + notices.length === 0) return null;
+  // the most urgent first: fine notices (silence means you pay), then who reported me, then offers by deadline
+  const items: { key: string; node: ReactNode }[] = [
+    ...view.notices.filter((n) => n.status === 'notice').map((n) => ({ key: n.caseId, node: <NoticeCard notice={n} view={view} packs={props.packs} onAct={props.onAct} /> })),
+    ...revealedReporters(view).flatMap((r) => {
+      const biz = props.nameOf(r.businessId);
+      if (!biz) return [];
+      const team = teamUpMove(view, biz, props.distanceOf(biz.id));
+      return [{
+        key: r.id,
+        node: (
+          <div className="nw-offer nw-offer--loss" data-reveal={r.businessId}>
+            <div className="nw-offer__head"><strong>{r.title}</strong><span className="xsmall faint nw-push">{dateOf(r.day).label}</span></div>
+            <p className="small muted nw-why">{r.text} {tr('Strike back with a report, or turn them into a partner.', 'Ответьте жалобой или сделайте их партнёром.')}</p>
+            <TwoMoves team={team} report={reportMove(view, props.packs, biz)} onTeamUp={() => props.onTeamUp(biz.id, team.kind)} onReport={() => props.onReport(biz.id)} />
+          </div>
+        ),
+      }];
+    }),
+    ...[...offers].sort((x, y) => x.expiresDay - y.expiresDay).map((d) => ({ key: d.id, node: <OfferCard deal={d} view={view} author={props.nameOf(d.fromBusinessId)} onAct={props.onAct} /> })),
+  ];
+  if (items.length === 0) return null;
+  const shown = all ? items : items.slice(0, INCOMING_FIRST);
   return (
     <Card
       title={tr('Waiting for your answer', 'Ждёт вашего ответа')} tone="accent" aria-label="Waiting for your answer"
-      subtitle={tr(`${offers.length + notices.length} to decide`, `Решений: ${offers.length + notices.length}`)}
+      subtitle={tr(`${items.length} to decide`, `Решений: ${items.length}`)}
     >
       <div className="stack">
-        {notices.map((n) => <NoticeCard key={n.caseId} notice={n} view={view} packs={props.packs} onAct={props.onAct} />)}
-        {offers.map((d) => <OfferCard key={d.id} deal={d} view={view} author={props.nameOf(d.fromBusinessId)} onAct={props.onAct} />)}
+        {shown.map((x) => <Fragment key={x.key}>{x.node}</Fragment>)}
+        {items.length > INCOMING_FIRST && (
+          <Button block variant="ghost" onClick={() => setAll((v) => !v)}>
+            {all ? tr('Show only the most urgent', 'Только самое срочное') : tr(`Show all ${items.length}`, `Показать все: ${items.length}`)}
+          </Button>
+        )}
       </div>
     </Card>
   );

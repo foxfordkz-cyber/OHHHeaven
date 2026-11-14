@@ -168,6 +168,10 @@ describe('Network tab: offers, my deals, block fund', () => {
   it('accepts and declines incoming offers', () => {
     const onAct = setup();
     const offers = screen.getByRole('region', { name: 'Waiting for your answer' });
+    // the most urgent answer shows first; the rest are one tap away
+    expect(offers.querySelectorAll('[data-deal]').length).toBe(1);
+    expect(offers.querySelector('[data-deal="d2"]')).not.toBeNull();   // Bowery's offer expires first
+    fireEvent.click(within(offers).getByRole('button', { name: 'Show all 2' }));
     const fromFade = offers.querySelector<HTMLElement>('[data-deal="d1"]')!;
     expect(fromFade.textContent).toContain('Fade Factory');
     expect(fromFade.textContent).toContain('kept 1 · broke 0');
@@ -328,6 +332,29 @@ describe('Network tab: rivals and prizes in plain sight', () => {
     expect(card.textContent).toContain('$1,780 in total, $1,380 more than paying');
     fireEvent.click(within(card).getByRole('button', { name: 'Pay' }));
     expect(onAct).toHaveBeenLastCalledWith({ type: 'answer_notice', caseId: 'c_fine', response: 'pay' });
+  });
+});
+
+describe('Network tab: a neighbor who reported me falsely', () => {
+  it('shows who it was and lets me strike back or team up', () => {
+    const reveal = { id: 'law:c7:reveal', day: TODAY - 2, kind: 'case' as const, title: 'The report came from Fade Factory', text: 'Fade Factory reported you to the city, and the inspection found nothing. They were fined $500.', ref: { type: 'business' as const, id: 'b_fade' }, read: false };
+    const view = { ...ownerView, me: { ...ownerView.me, inbox: [...ownerView.me.inbox, reveal] } };
+    const onAct = setup(view);
+    const box = screen.getByRole('region', { name: 'Waiting for your answer' });
+    expect(box.querySelector('[data-deal]')).toBeNull();            // who reported me goes before offers
+    const card = box.querySelector<HTMLElement>('[data-reveal="b_fade"]')!;
+    expect(card.textContent).toContain('The report came from Fade Factory');
+    expect(card.textContent).toContain('If you are right: they pay');
+    fireEvent.click(within(card).getByRole('button', { name: 'Report' }));
+    const sheet = screen.getByRole('dialog', { name: 'Report to the city' });
+    expect(sheet.textContent).toContain('About Fade Factory');
+    expect(onAct).not.toHaveBeenCalled();
+  });
+
+  it('an old reveal (over a game month) is gone', () => {
+    const reveal = { id: 'law:c1:reveal', day: TODAY - 31, kind: 'case' as const, title: 'The report came from Fade Factory', text: '', ref: { type: 'business' as const, id: 'b_fade' }, read: true };
+    setup({ ...ownerView, me: { ...ownerView.me, inbox: [reveal] } });
+    expect(document.querySelector('[data-reveal]')).toBeNull();
   });
 });
 

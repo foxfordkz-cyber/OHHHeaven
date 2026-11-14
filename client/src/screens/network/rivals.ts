@@ -2,7 +2,7 @@
 // Who my main rival is, where I stand in my niche and how far the prize is, what changed next door and what it
 // means for me, and the two moves I can make with any neighbor. Every number comes from OwnerView, the packs or RULES.
 import type { BusinessState, Deal, FeedItem, NicheId, OwnerView, PackSet, Place, PublicBusiness } from '../../../../shared/src/types';
-import { RULES, dateOf } from '../../../../shared/src/rules';
+import { RULES } from '../../../../shared/src/rules';
 import { nicheBoard, type BoardRow } from '../end/prizes';
 import {
   CROSS_PROMO_MAX_METERS, dealAvailability, dealEffect, defaultTerms, distanceBetween, falseReports, formatDistance,
@@ -403,9 +403,21 @@ export function noticeChoices(fine: number, closureDays: number): Choice[] {
   ];
 }
 
-export function nextReportDayLabel(view: View): string | null {
-  const l = reportLimit(view);
-  return l.allowed || l.nextDay === undefined ? null : dateOf(l.nextDay).label;
+export interface Revealed { id: string; day: number; businessId: string; title: string; text: string }
+
+/** How long a revealed reporter stays in «Waiting for your answer»: one game month. */
+export const REVEAL_SHOW_DAYS = RULES.DAYS_PER_MONTH;
+
+/**
+ * A neighbor whose report on me turned out false twice: the engine tells me who (engine/src/law/cases.ts falseReport,
+ * inbox `law:<case>:reveal`, ref to their business). Newest first, from the last game month.
+ */
+export function revealedReporters(view: OwnerView): Revealed[] {
+  return view.me.inbox
+    .filter((i) => /:reveal$/.test(i.id) && i.ref?.type === 'business' && i.day > view.world.day - REVEAL_SHOW_DAYS)
+    .filter((i) => view.neighbors.some((n) => n.id === i.ref!.id && n.status !== 'bankrupt'))
+    .sort((a, b) => b.day - a.day)
+    .map((i) => ({ id: i.id, day: i.day, businessId: i.ref!.id, title: i.title, text: i.text }));
 }
 
 const round2 = (n: number) => Math.round(n * 100) / 100;

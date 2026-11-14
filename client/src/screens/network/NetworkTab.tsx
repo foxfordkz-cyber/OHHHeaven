@@ -84,7 +84,12 @@ export function NetworkTab(props: NetworkTabProps) {
       )}
       {!me && <p className="muted">Open your business to make deals with neighbors. You can already look around.</p>}
 
-      {me && <IncomingCard view={view} packs={packs} offers={groups.incoming} nameOf={bizOf} onAct={onAct} />}
+      {me && (
+        <IncomingCard
+          view={view} packs={packs} offers={groups.incoming} nameOf={bizOf} onAct={onAct} distanceOf={(id) => rowOf(id)?.distanceM ?? null}
+          onTeamUp={(id, dealKind) => setPanel({ kind: 'deal', id, dealKind })} onReport={(id) => setPanel({ kind: 'report', id })}
+        />
+      )}
 
       {me && (
         <RivalCard
