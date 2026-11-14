@@ -128,7 +128,7 @@ export function PlanPlaceBlock({ me }: { me: PersonalPlan }) {
             {me.equipment.map((e) => <tr key={e.id} className="plan-row"><td>{e.qty > 1 ? `${e.name} × ${e.qty}` : e.name}</td><td className="num">{money(e.total)}</td></tr>)}
           </tbody></table>
         </div>
-        {me.firstOrder && <p className="plan-note">{tr('First order', 'Первый заказ')}: <strong className="num">{money(me.firstOrder.amount)}</strong>{me.firstOrder.sourcing ? ` — ${me.firstOrder.sourcing}` : ''}. {tr(`You sell at ${money(me.price, { cents: true })} a ${me.unitName}.`, `Цена: ${money(me.price, { cents: true })} за заказ.`)}</p>}
+        {me.firstOrder && <p className="plan-note">{tr('First order', 'Первый заказ')}: <strong className="num">{money(me.firstOrder.amount)}</strong>{me.firstOrder.sourcing ? ` — ${me.firstOrder.sourcing}` : ''}. {tr(`You sell at ${money(me.price, { cents: true })} each.`, `Цена: ${money(me.price, { cents: true })} за заказ.`)}</p>}
       </section>
     </div>
   );
@@ -165,7 +165,7 @@ export function StepMine({ mine, day }: { mine?: PlanStepMine; day?: number }) {
   return (
     <div className="plan-step__mine small">
       <span className={`plan-status plan-status--${mine.status}`}>{tr(en, ru)}{wait}</span>
-      {mine.mine && <span>{mine.mine}</span>}
+      {mine.mine && <span className="plan-step__yours"><strong>{tr('Yours', 'У вас')}:</strong> {mine.mine}</span>}
     </div>
   );
 }

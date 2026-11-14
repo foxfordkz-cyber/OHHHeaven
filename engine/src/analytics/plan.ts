@@ -142,6 +142,9 @@ export interface PersonalPlan {
 }
 export type PersonalRealWorldPlan = RealWorldPlan & { extra: { personal: PersonalPlan } };
 
+/** Insurance the owner buys (not the unemployment insurance tax). */
+const isInsurance = (m: { label: string }): boolean => /insurance|owner's policy/i.test(m.label) && !/unemployment/i.test(m.label);
+
 const EQUIPMENT_KINDS = new Set<PackSetupItem['kind']>(['equipment', 'furniture']);
 const PERMIT_KINDS = new Set<PackSetupItem['kind']>(['permit', 'license']);
 
@@ -284,7 +287,7 @@ function suppliersPart(b: BusinessState, pack: Pack, items: PricedItem[], equipm
     else if (/equipment_new|equipment, new/.test(k)) why[s.id] = equipmentTotal > 0 ? `You priced ${plural(items.filter((i) => EQUIPMENT_KINDS.has(i.def.kind)).length, 'item')} new: ${usd(equipmentTotal)}.` : '';
     else if (/equipment_used|used/.test(k)) why[s.id] = equipmentTotal > 0 ? `Your list costs ${usd(equipmentTotal)} new. Used machines and furniture are where a first owner saves most.` : '';
     else if (/pos|payment|register/.test(k)) why[s.id] = has('pos') ? `Your register is in the budget: ${usd(items.find((i) => i.def.id === 'pos')!.amount)}.` : '';
-    else if (/insurance/.test(k)) { const l = line(/insurance/i); why[s.id] = l ? `Your books show ${usd(l.amount)} a month for insurance.` : 'Workers’ comp is required before your first hire.'; }
+    else if (/insurance/.test(k)) { const ins = monthly.filter(isInsurance).reduce((x, m) => x + m.amount, 0); why[s.id] = ins > 0 ? `Your books show ${usd(ins)} a month for insurance.` : 'Workers’ comp is required before your first hire.'; }
     else if (/pest/.test(k)) { const o = lever('pest_control'); why[s.id] = o ? (o.causes ? `You chose “${o.label}”: that is a violation an inspector fines.` : `You chose “${o.label}”.`) : ''; }
     else if (/contractor|architect/.test(k)) why[s.id] = items.some((i) => partOf(i.def) === 'buildout') ? `Your build-out budget is ${usd(items.filter((i) => partOf(i.def) === 'buildout').reduce((x, i) => x + i.amount, 0))}.` : '';
     else if (/disposable|cup/.test(k)) { const l = line(/cup|packag|dispos/i); why[s.id] = l ? `Your books show ${usd(l.amount)} a month.` : ''; }
@@ -295,7 +298,7 @@ function suppliersPart(b: BusinessState, pack: Pack, items: PricedItem[], equipm
   return { why, order };
 }
 
-function stepsPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, place: PlanPlace | null, items: PricedItem[], staff: PlanStaffLine[], payroll: Money, equipmentTotal: Money, summary: PlanSummary): Record<string, PlanStepMine> {
+function stepsPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, place: PlanPlace | null, items: PricedItem[], staff: PlanStaffLine[], payroll: Money, equipmentTotal: Money, summary: PlanSummary, monthly: { label: string; amount: Money }[]): Record<string, PlanStepMine> {
   const out: Record<string, PlanStepMine> = {};
   for (const s of roadmapFor(b.niche, b, w, ctx)) {
     const it = s.setupItemId ? items.find((i) => i.def.id === s.setupItemId) : undefined;
@@ -315,12 +318,22 @@ function stepsPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, 
       mine = `Your opening order: ${usd(it?.amount ?? def.cost)}${src ? `, “${chosenOption(src, b.orders).label}” sourcing` : ''}.`;
     } else if (it) {
       mine = `${it.def.name}: ${usd(it.amount)} in your budget.`;
+    } else if (s.kind === 'idea' && place && /space|scout|find|premises/.test(s.id)) {
+      mine = `You chose ${place.address}: ${num(place.sqft)} sq ft, ${plural(b.size, pack.sizing.unitName)}, ${usd(place.rentMonth)} a month${place.formerUse ? `, a former ${place.formerUse}` : ''}.`;
+    } else if (s.kind === 'idea' && place && /occupancy/.test(s.id)) {
+      mine = `Ask the landlord of ${place.address} for its Certificate of Occupancy before you sign.`;
+    } else if (s.kind === 'idea' && /concept|format/.test(s.id)) {
+      mine = `Your format: ${plural(b.size, pack.sizing.unitName)}, ${usdRate(b.orders.price)} a ${pack.unit.name}, a team of ${staff.reduce((x, r) => x + r.count, 0)}.`;
+    } else if (s.kind === 'idea' && /plan|budget/.test(s.id)) {
+      mine = `This page is that plan: ${usd(summary.cashBeforeFirstSale)} before the first sale and ${usd(summary.reserve)} in reserve.`;
+    } else if (/insurance/.test(s.id) && monthly.some(isInsurance)) {
+      mine = `Your books: ${monthly.filter(isInsurance).map((m) => `${m.label.replace(/ paid$/, '')} ${usd(m.amount)}`).join(', ')} a month.`;
     } else if (s.kind === 'space' && place) {
       mine = `${place.address}: ${num(place.sqft)} sq ft, ${usd(place.rentMonth)} a month${place.deposit ? `, deposit ${usd(place.deposit)}${place.depositMonths ? ` (${place.depositMonths} months)` : ''}` : ''}.`;
     } else if (s.kind === 'people' && staff.length) {
       mine = `Your team: ${staff.map((r) => `${r.count} × ${r.name} at ${usd(r.hourlyWage)}/h`).join(', ')} — ${usd(payroll)} a month before payroll taxes.`;
     } else if (s.kind === 'launch') {
-      mine = summary.opened ? `You opened on day ${b.openedDay}, ${plural(summary.daysToOpen, 'day')} after the lease.` : `About ${plural(summary.daysToOpen, 'day')} after the lease.`;
+      mine = `${summary.opened ? `You opened on day ${b.openedDay}, ${plural(summary.daysToOpen, 'day')} after the lease.` : `About ${plural(summary.daysToOpen, 'day')} after the lease.`} Your reserve: ${usd(summary.reserve)}.`;
     }
     out[s.id] = { status: s.status, ...(s.readyDay != null ? { readyDay: s.readyDay } : {}), ...(mine ? { mine } : {}) };
   }
@@ -353,7 +366,7 @@ export function personalPlan(b: BusinessState, w: WorldState, ctx: EngineCtx, mo
     summary,
     risks: risksPart(b, w, ctx, pack, pp, summary, fixedMonth),
     supplierWhy: sup.why, supplierOrder: sup.order,
-    steps: stepsPart(b, w, ctx, pack, pp, items, staff, r2(cmOpen.payroll), equipmentTotal, summary),
+    steps: stepsPart(b, w, ctx, pack, pp, items, staff, r2(cmOpen.payroll), equipmentTotal, summary, monthly),
   };
 }
 

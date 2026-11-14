@@ -69,7 +69,8 @@ export const PLAN_PRINT_CSS = `
   .plan-status { background: none !important; color: #111 !important; padding: 0; font-size: 6.5pt; }
   .plan-status::before { content: '['; } .plan-status::after { content: ']'; }
   .plan-step__mine { margin-left: 14pt; font-size: 7pt; }
-  .plan-step > .faint { margin-left: 14pt; }
+  .plan-step > .faint, .plan-general { margin-left: 14pt; }
+  .plan-general { display: none; }
   .plan-kit .plan-kit__list { display: table !important; }
 }
 `;

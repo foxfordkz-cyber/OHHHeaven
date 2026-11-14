@@ -151,7 +151,9 @@ export function PlanView({ plan, cards, actions, day }: { plan: RealWorldPlan; c
                 {s.waitDays !== undefined && <span>{s.waitDays} {s.waitDays === 1 ? 'day' : 'days'}</span>}
               </div>
               <StepMine mine={me?.steps[s.id]} day={day} />
-              <div className="small"><Lead text={s.text} /></div>
+              {me?.steps[s.id]?.mine
+                ? <div className="small muted plan-general"><span className="plan-general__tag">In general:</span> <Lead text={s.text} /></div>
+                : <div className="small"><Lead text={s.text} /></div>}
               {s.link ? <PlanLink href={s.link}>Official page <Icon name="arrowRight" size={12} /></PlanLink> : <span className="xsmall faint">No official page in our data yet: ask the agency.</span>}
             </li>
           ))}
