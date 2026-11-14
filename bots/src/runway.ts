@@ -5,10 +5,10 @@
 //   cash on the day the lease is signed  = start capital − the setup bill            (rec.total)
 //   − rent while the room is built and permits wait                                  (rec.daysToOpen days)
 //   − the losses of the first months, while the regulars are still finding the shop (awareness ramp)
-//   = the lowest the bank account gets. A careful owner wants it to stay above one month of fixed costs.
+//   = the lowest the bank account gets. A careful owner signs only if it stays above zero.
 import type { NicheId, OpenRecommendation, Pack, Place } from '../../shared/src/types';
 import { RULES } from '../../shared/src/rules';
-import { awarenessAt, footfallParams, isTakeover, rentMonthOf, rivalsOf, takeoverRules } from '../../shared/src/place';
+import { awarenessAt, buildoutOf, footfallParams, isTakeover, rentMonthOf, rivalsOf, takeoverRules } from '../../shared/src/place';
 import type { EngineCtx } from './__stubs__/engine';
 
 export interface Runway {
@@ -79,5 +79,17 @@ export function runwayOf(ctx: EngineCtx, niche: NicheId, place: Place, rec: Open
   return { waitRent, fixedMonth: fixed, matureOrdersDay: Math.min(cap, demandDay), matureProfitMonth: mature > 0 ? mature * keep : mature, rampLoss: loss, lowestCash: lowest, breakEvenDay: breakEven };
 }
 
-/** A careful owner signs only if the account never drops below one month of fixed costs on the way to break-even. */
-export const lastsThroughRamp = (r: Runway | null): boolean => !r || r.lowestCash >= r.fixedMonth;
+/**
+ * Short before any plan is priced: the room alone (build-out, or the asking price of a shop for sale) plus the rent
+ * of the build-out wait already exceed the savings. A cheap first look that spares the full recommendation.
+ */
+export function obviouslyShort(ctx: EngineCtx, niche: NicheId, place: Place): boolean {
+  const pack = ctx.packs.niches[niche];
+  if (!pack || !footfallParams(pack)) return false;
+  const build = buildoutOf(pack, place);
+  const room = (build?.cost ?? 0) + (isTakeover(pack, place) ? place.forSale?.askingPrice ?? 0 : 0);
+  return room + (rentMonthOf(place) * (build?.days ?? 0)) / RULES.DAYS_PER_MONTH > pack.startCapital;
+}
+
+/** A careful owner signs only if the money lasts until the shop pays for itself: the account never drops below zero. */
+export const lastsThroughRamp = (r: Runway | null): boolean => !r || r.lowestCash >= 0;
