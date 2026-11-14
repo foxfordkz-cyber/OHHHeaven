@@ -257,7 +257,7 @@ export const conditionalCosts = {
 };
 
 // Решения до открытия: в extra.preOpeningChoices, а не в levers (движок считает levers каждый месяц).
-export const preOpening = ['entry_mode', 'franchise_brand', 'contingency_level', 'contractor_choice', 'construction_pace', 'free_rent_deal', 'guaranty_type', 'lease_contingencies', 'lease_terms', 'site_due_diligence', 'opening_mode', 'takeover_due_diligence', 'takeover_permit_timing', 'takeover_transition', 'utility_concept', 'tax_structure', 'loan_rate_type'];
+export const preOpening = ['entry_mode', 'franchise_brand', 'contingency_level', 'contractor_choice', 'construction_pace', 'free_rent_deal', 'guaranty_type', 'lease_contingencies', 'lease_terms', 'site_due_diligence', 'opening_mode', 'takeover_due_diligence', 'takeover_permit_timing', 'takeover_transition', 'utility_concept', 'tax_structure', 'loan_rate_type', 'lease_negotiation', 'permit_help', 'takeover_terms', 'exit_terms'];
 
 // Порядок основного пути: открыть кафе с нуля в бывшем кафе (как в жизни, по шагам).
 // Общие шаги (LLC, EIN, аренда, страховка) — в _common.roadmap; sign_lease из _common идёт после negotiate_exit_terms.

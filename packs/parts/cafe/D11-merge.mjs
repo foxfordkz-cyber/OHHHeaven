@@ -20,6 +20,9 @@ const common = read(path.join(ROOT, 'packs/_common.json'));
 // Фрагменты: основной JSON каждого задания. Служебные файлы D00 (аудит, дедупликация) читаются отдельно.
 const SKIP = /audit|dedup|validation|reference|merge-log|base|\.common\./;
 const fragFiles = fs.readdirSync(HERE).filter((f) => /^D\d\d-.*\.json$/.test(f) && !SKIP.test(f)).sort();
+// порядок: основные файлы по алфавиту, затем копии второго исполнителя (DNN-...<ветка>.json) — сразу после основного файла задания, чтобы основной исполнитель применялся последним и выигрывал
+const isAlt = (f) => /\.[a-z]+\.json$/.test(f.replace(/\.common\.json$/, '')) && !/\.common\.json$/.test(f);
+fragFiles.sort((a, b) => a.slice(0, 3).localeCompare(b.slice(0, 3)) || (isAlt(b) - isAlt(a)) || a.localeCompare(b));
 const frags = fragFiles.map((f) => ({ tag: f.slice(0, 3), file: f, calib: /calibration/.test(f), p: read(path.join(HERE, f)) }));
 
 const SECTIONS = ['setup', 'monthlyCosts', 'staff', 'taxes', 'levers', 'shortcuts', 'violations', 'officials', 'reports', 'events', 'ruleCards', 'roadmap', 'suppliers'];
@@ -97,12 +100,20 @@ for (const sec of SECTIONS) {
     for (const p of patches.sort((a, b) => score(sec, a.tag, a.r) - score(sec, b.tag, b.r))) {
       const { id, ...rest } = p.r;
       if (rest.fine && rec.fine) rest.fine = { ...rec.fine, ...rest.fine };
+      if (sec === 'levers' && rest.addsOptionsTo !== undefined) continue; // применяется после выбора основной записи
       rec = { ...rec, ...rest };
     }
     if (winner) {
       const keepEngine = {};
       if (baseRec) for (const k of ['costBasis', 'rate', 'afterBuildout', 'includedInTakeover', 'scalesWithSize']) if (baseRec.r[k] !== undefined && winner.r[k] === undefined) keepEngine[k] = baseRec.r[k];
       rec = { ...structuredClone(winner.r), ...keepEngine };
+    }
+    // D15: запись addsOptionsTo добавляет варианты к существующему рычагу, а не заменяет их
+    for (const p of patches) if (sec === 'levers' && p.r.addsOptionsTo !== undefined && Array.isArray(rec.options)) {
+      const have = new Set(rec.options.map((o) => o.id));
+      const add = (p.r.options || []).filter((o) => !have.has(o.id));
+      rec = { ...rec, options: [...rec.options, ...add] };
+      log.optionsAdded = [...(log.optionsAdded || []), `${cid} +${add.length} (${p.tag})`];
     }
     if (!rec.id && !winner && patches.length) { log.dropped.push({ section: sec, id: cid, why: 'only partial patches without a base record' }); continue; }
     rec.id = cid;
@@ -158,6 +169,13 @@ for (const sec of SECTIONS) {
   finalSec[sec] = keep;
 }
 
+// оценка без расчёта: берём расчёт из записи того же события в каталоге фрагмента; если его нет — честная пометка
+const catNotes = new Map();
+for (const f of frags) for (const e of [...((f.p.extra && f.p.extra.eventCatalog) || []), ...((f.p.extra && f.p.extra.eventCalibration) || [])]) if (e && e.id && e.note && !catNotes.has(e.id)) catNotes.set(e.id, `${f.tag} eventCatalog: ${e.note}`);
+for (const sec of SECTIONS) for (const r of finalSec[sec]) if (r.confidence === 'estimate' && !(typeof r.note === 'string' && r.note.trim())) {
+  r.note = catNotes.get(r.id) || `Estimate without a written calculation in its fragment (${(provenance[sec] && provenance[sec][r.id] && provenance[sec][r.id].chosen) || 'unknown'}); D11 flags it for a check.`;
+  log.notesFilled = [...(log.notesFilled || []), `${sec}.${r.id}`];
+}
 // ---------- ссылки ----------
 const leverAlias = (id) => aliasOf('levers', id);
 const shortcutAlias = (id) => aliasOf('shortcuts', id);

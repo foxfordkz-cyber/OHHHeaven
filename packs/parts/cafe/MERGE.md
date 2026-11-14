@@ -1,13 +1,15 @@
-# MERGE — сборка пакета кафе из фрагментов D00–D17 (задание D11)
+# MERGE — сборка пакета кафе из фрагментов D00–D19 (задание D11)
 
 Сборщик: D11, ветка `claude/jolly-volta-dv0cll`, 14 ноября 2026. Сборка воспроизводится одной командой, см. раздел 9.
 
 ## 1. Вердикт
 
-1. `packs/cafe.next.json` собран из основы и 17 фрагментов. Валидатор: **0 ошибок**, 1 предупреждение (раздел 7).
-2. Пакет вырос с 6 событий и 5 рычагов до 695 событий с числами в `extra.eventCatalog`, 94 рычагов, 79 срезанных углов, 87 нарушений, 352 карточек правил и плана открытия из 76 шагов по порядку.
-3. Повторы склеены: 172 записи под чужими `id` сведены к одному `id`, ещё 85 событий склеены по названию и по отметкам калибровщиков. Старые `id` сохранены в `extra.aliases`.
-4. Движок на новом пакете работает: из 233 тестов движка падает 1. Это тест `real-packs` на маржу. Честное кафе с управляющим теперь оставляет $2 300–3 400 в месяц до налогов владельца, тест ждёт от $2 800. Причины и что делать — в разделе 6.
+<!-- D11:auto:verdict -->
+1. `packs/cafe.next.json` собран из основы и 18 файлов фрагментов (D00, D01, D02, D03, D04, D05, D06, D07, D08, D09, D10, D12, D13, D14, D15, D16, D17). Валидатор: **0 ошибок**, 1 предупреждение (раздел 7).
+2. Пакет вырос с 6 событий и 5 рычагов до 698 событий с числами в `extra.eventCatalog` (533 откалиброваны в D15–D19), 94 рычагов, 79 срезанных углов, 87 нарушений, 352 карточек правил и плана открытия из 76 шагов по порядку.
+3. Повторы склеены: 172 записи под чужими `id` сведены к одному `id`, ещё 102 события склеены по названию и по отметкам калибровщиков (`duplicateOf`). Старые `id` сохранены в `extra.aliases` и в `aliases` у событий.
+<!-- /D11:auto:verdict -->
+4. Движок на новом пакете работает: из 229 тестов движка падает 1, сквозной прогон игры (smoke) зелёный. Это тест `real-packs` на маржу. Честное кафе с управляющим теперь оставляет $2 300–3 400 в месяц до налогов владельца, тест ждёт от $2 800. Причины и что делать — в разделе 6.
 5. Главное для ведущего — 23 механики по важности (раздел 4). Первая из них — ошибка движка, её нашёл D14: места в зале ограничивают и тех, кто берёт кофе с собой.
 
 ## 2. Что вошло
@@ -31,7 +33,7 @@
 | D12 | `claude/vigilant-lamport-u5wgaj` | `D12-number-check.json` (правки для `_common` — в `D12-number-check.common.json`, в сборку кафе не входят) |
 | D13 | `claude/sharp-goldberg-vai9pv` | `D13-formats.json` |
 | D14 | `claude/epic-volta-lhqkam` | `D14-mechanics.json`, `D14-mechanics-spec.md` |
-| D15 | `claude/sharp-goldberg-vai9pv` | `D15-calibration-premises.json` (второй исполнитель D15, `claude/awesome-bohr-7697u3`, сдал пока только отчёт: `D15-calibration-premises.awesome.md`) |
+| D15 | `claude/awesome-bohr-7697u3` и `claude/sharp-goldberg-vai9pv` | Два исполнителя одного задания: `D15-calibration-premises.json` (awesome-bohr, 195 событий, применяется вторым и выигрывает) и `D15-calibration-premises.sharp.json` (sharp-goldberg, 206 событий). 180 событий у них общие. |
 | D16 | `claude/clever-darwin-vbh10q` | `D16-calibration-equipment-food.json` |
 | D17 | `claude/inspiring-ptolemy-thi9ip` | `D17-calibration-people-money.json` |
 | D18 | `claude/gifted-thompson-lwbuji` | на 18:25 UTC только журнал `D18-calibration-street-demand.md`, JSON нет |
@@ -41,25 +43,32 @@
 
 ### 2.2. Счётчики по разделам
 
+<!-- D11:auto:counts -->
 | Раздел | main (v1) | записей во фрагментах | уникальных id после склейки | в cafe.next.json | исправлено записей main | вынесено в extra |
 |---|---|---|---|---|---|---|
 | setup | 33 | 164 | 147 | 107 | 21 | 40 |
 | monthlyCosts | 16 | 60 | 62 | 30 | 7 | 32 |
 | staff | 2 | 15 | 12 | 8 | 2 | 4 |
 | taxes | 1 | 14 | 13 | 12 | 1 | 1 |
-| levers | 5 | 154 | 124 | 94 | 5 | 30 |
+| levers | 5 | 165 | 128 | 94 | 5 | 34 |
 | shortcuts | 8 | 126 | 90 | 79 | 8 | 11 |
 | violations | 11 | 159 | 101 | 87 | 11 | 14 |
 | officials | 3 | 43 | 17 | 14 | 3 | 2 |
 | reports | 4 | 50 | 35 | 32 | 0 | 3 |
-| events | 6 | 65 | 58 | 55 | 4 | 3 |
+| events | 6 | 74 | 66 | 63 | 4 | 3 |
 | ruleCards | 23 | 376 | 352 | 352 | 4 | 0 |
 | roadmap | 14 | 99 | 96 | 76 | 2 | 0 |
 | suppliers | 12 | 67 | 68 | 60 | 5 | 8 |
+<!-- /D11:auto:counts -->
 
-Сверх разделов: `extra.eventCatalog` — 695 событий с числами (было 0 в main), из них 461 откалиброваны в D15–D17; `extra.mechanics` — 138 предложенных механик; `extra.mechanicsRanked` — 23 механики по важности; `extra.effectFields` — словарь 100 полей эффектов. Справочник `D11-reference.json`: 640 неочевидных фактов, 177 историй закрытий, 158 событий без чисел, полные записи всех событий и механик, записи других форматов.
+<!-- D11:auto:extraSummary -->
+Сверх разделов: `extra.eventCatalog` — 698 событий с числами (в main 0), из них 533 откалиброваны в D15–D19 (применено калибровок: 767, файлы: D15-calibration-premises.sharp.json, D15-calibration-premises.json, D16-calibration-equipment-food.json, D17-calibration-people-money.json); `extra.mechanics` — 145 предложенных механик; `extra.mechanicsRanked` — 23 механик по важности; `extra.effectFields` — словарь 108 полей эффектов. Справочник `D11-reference.json`: 640 неочевидных фактов, 177 историй закрытий, 152 событий без чисел, полные записи всех событий и механик, 110 записей других форматов.
 
-Новые обязательные предметы, добавлены во все три набора: `dob_alteration_filing_fee` ($915, пошлина Департамента зданий за перепланировку) и `asbestos_survey_acp5` ($900, обследование на асбест перед разрешением). Наборы подорожали на $2 600–3 600: эти два предмета и кофемолка по новой цене. Все наборы укладываются в стартовый капитал $224 000 (самый дорогой стоит $173 831).
+Наборы (с новыми обязательными предметами): lean — <!-- D11:auto:extraSummary -->36 496 (main <!-- D11:auto:extraSummary -->33 882); standard — <!-- D11:auto:extraSummary -->43 780 (main <!-- D11:auto:extraSummary -->41 166); premium — <!-- D11:auto:extraSummary -->73 831 (main <!-- D11:auto:extraSummary -->70 217); стартовый капитал <!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 005 КБ, в gzip 585 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 672.
+<!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 005 КБ, в gzip 585 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 672.
+<!-- /D11:auto:extraSummary -->
+
+Новые обязательные предметы, добавлены во все три набора: `dob_alteration_filing_fee` ($915, пошлина Департамента зданий за перепланировку) и `asbestos_survey_acp5` ($900, обследование на асбест перед разрешением). Наборы подорожали на $2 600–3 600: эти два предмета и кофемолка по новой цене.
 
 ### 2.3. Как выбиралась запись, если версий несколько
 
@@ -101,6 +110,10 @@
 | `D11-reference.json → parts` | исследовательские заметки D00–D16 | Журналы поиска, аудиты, сравнения, «не найдено». |
 
 Ничего не выброшено. Одна запись удалена как точная копия общего пакета: `labor_investigator` уже есть в `_common`. Девять налогов D09 с нулевой ставкой — справочные: они остались в `taxes` и денег не списывают. Пороги и настоящие ставки — в их `note`.
+
+<!-- D11:auto:moved -->
+Вынесено из разделов: в `D11-reference.json → formatRecords` — 110, в `extra.conditionalMonthlyCosts` — 22, в `extra.preOpeningChoices` — 20, в `extra.roadmapPaths` — takeover 6, franchise 2, cart 5, popup 2. Варианты, добавленные к рычагам записями `addsOptionsTo`: free_rent_deal +1 (D15), site_due_diligence +2 (D15), contractor_choice +1 (D15), takeover_transition +1 (D15), lease_contingencies +2 (D15), laptop_policy +2 (D15), seating_layout +3 (D15). Расчёт подставлен из каталога для оценок без `note`: events.holdover_after_expiry, events.d00_street_hidden_sign, events.peak_kw_bill_jump.
+<!-- /D11:auto:moved -->
 
 ## 4. Механики для ведущего — по важности
 
@@ -164,7 +177,10 @@
 
 ### 5.3. Все числовые расхождения между фрагментами
 
-113 расхождений; итог — значение в `cafe.next.json`. ✓ — у фрагмента `verified`. Пометка «(D11)» — правка сборщика. «Вынесено в extra» — запись ушла в форматы или в условные расходы.
+Итог — значение в `cafe.next.json`. ✓ — у фрагмента `verified`. Пометка «(D11)» — правка сборщика. «Вынесено в extra» — запись ушла в форматы или в условные расходы.
+
+<!-- D11:auto:contradictions -->
+Всего расхождений: 115.
 
 | Запись | Поле | Версии | Итог |
 |---|---|---|---|
@@ -182,14 +198,14 @@
 | `setup.landmarks_storefront_permit` | cost | D01 (lpc_storefront_permit) 320; D02 0 | **320** |
 | `setup.con_ed_security_deposit` | cost | D01 1600; D09 (utility_deposit) 1800 | **1600** |
 | `setup.electrical_service_upgrade` | cost | D01 9000; D02 8000 | **9000** |
-| `setup.mfv_unit_permit` | cost | D01 (mobile_food_unit_permit) 75 ✓; D13 200 ✓ | **(вынесено в extra)** |
-| `setup.mfv_unit_permit` | waitDays | D01 (mobile_food_unit_permit) 180 ✓; D13 365 ✓ | **(вынесено в extra)** |
-| `setup.food_cart_new` | cost | D01 (coffee_cart_unit) 16500; D13 15000 | **(вынесено в extra)** |
-| `setup.food_cart_new` | lifespanMonths | D01 (coffee_cart_unit) 84; D13 120 | **(вынесено в extra)** |
-| `setup.tfse_permit` | waitDays | D01 30 ✓; D13 14 ✓ | **(вынесено в extra)** |
+| `setup.mfv_unit_permit` | cost | D01 (mobile_food_unit_permit) 75 ✓; D13 200 ✓ | **вынесено в extra** |
+| `setup.mfv_unit_permit` | waitDays | D01 (mobile_food_unit_permit) 180 ✓; D13 365 ✓ | **вынесено в extra** |
+| `setup.food_cart_new` | cost | D01 (coffee_cart_unit) 16500; D13 15000 | **вынесено в extra** |
+| `setup.food_cart_new` | lifespanMonths | D01 (coffee_cart_unit) 84; D13 120 | **вынесено в extra** |
+| `setup.tfse_permit` | waitDays | D01 30 ✓; D13 14 ✓ | **вынесено в extra** |
 | `setup.takeover_due_diligence` | cost | D01 (acquisition_legal_and_accounting) 6000; D14 7500 | **7500** |
-| `setup.restricted_area_permit` | cost | D01 (restricted_area_vending_permit) 75 ✓; D13 200 ✓ | **(вынесено в extra)** |
-| `setup.restricted_area_permit` | waitDays | D01 (restricted_area_vending_permit) 21 ✓; D13 45 ✓ | **(вынесено в extra)** |
+| `setup.restricted_area_permit` | cost | D01 (restricted_area_vending_permit) 75 ✓; D13 200 ✓ | **вынесено в extra** |
+| `setup.restricted_area_permit` | waitDays | D01 (restricted_area_vending_permit) 21 ✓; D13 45 ✓ | **вынесено в extra** |
 | `setup.sba_guaranty_fee` | cost | D01 2550; D09 (loan_guaranty_fee) 1700 | **1700** |
 | `setup.portable_entrance_ramp` | cost | D02 157 ✓; D10 (portable_ramp) 300 | **157** |
 | `setup.ac_replacement` | cost | D02 (hvac_replacement) 15000; D03 8500 | **8500** |
@@ -198,8 +214,8 @@
 | `setup.snow_kit` | cost | D07 160; D14 (ice_melt_and_shovels) 180 | **160** |
 | `monthlyCosts.sick_leave_cover` | amount | BASE 70; D12 60 | **60** |
 | `monthlyCosts.maintenance` | amount | BASE 300; D03 45 | **45** |
-| `monthlyCosts.franchise_royalty` | amount | D01 0.06; D13 0.07 | **(вынесено в extra)** |
-| `monthlyCosts.commissary_fee` | amount | D01 600; D13 750 | **(вынесено в extra)** |
+| `monthlyCosts.franchise_royalty` | amount | D01 0.06; D13 0.07 | **вынесено в extra** |
+| `monthlyCosts.commissary_fee` | amount | D01 600; D13 750 | **вынесено в extra** |
 | `monthlyCosts.backflow_test` | amount | D02 (backflow_annual_test) 21; D03 38 | **38** |
 | `monthlyCosts.turnover_replacement` | amount | D05 113; D10 (staff_replacement) 105 | **113** |
 | `staff.barista` | hourlyWage | BASE 21; D05 21; D12 18 | **18** |
@@ -216,13 +232,13 @@
 | `violations.work_without_permit` | closureDays | D01 30; D03 0 ✓; D08 0 ✓; D14 20 | **0** |
 | `violations.stop_work_order_ignored` | fine.perMonth | D01 (stop_work_order_violation) 0; D08 6000 | **6000** |
 | `violations.stop_work_order_ignored` | closureDays | D01 (stop_work_order_violation) 14; D08 0 | **0** |
-| `violations.vending_without_license` | closureDays | D01 (unlicensed_mobile_vending) 7; D13 0 | **(вынесено в extra)** |
-| `violations.no_tfse_permit` | fine.base | D01 (no_temporary_food_permit) 200; D13 1000 | **(вынесено в extra)** |
-| `violations.permit_holder_absent` | closureDays | D01 (illegal_permit_rental) 14; D13 30 | **(вынесено в extra)** |
+| `violations.vending_without_license` | closureDays | D01 (unlicensed_mobile_vending) 7; D13 0 | **вынесено в extra** |
+| `violations.no_tfse_permit` | fine.base | D01 (no_temporary_food_permit) 200; D13 1000 | **вынесено в extra** |
+| `violations.permit_holder_absent` | closureDays | D01 (illegal_permit_rental) 14; D13 30 | **вынесено в extra** |
 | `violations.occupancy_contrary_to_co` | fine.base | D01 400 ✓; D02 (cellar_used_for_customers) 1250 ✓; D10 (illegal_occupancy) 1250 | **400** |
 | `violations.occupancy_contrary_to_co` | fine.max | D01 25000 ✓; D02 (cellar_used_for_customers) 6250 ✓ | **25000** |
 | `violations.occupancy_contrary_to_co` | closureDays | D01 30 ✓; D02 (cellar_used_for_customers) 0 ✓; D10 (illegal_occupancy) 0 | **30** |
-| `violations.propane_without_cof` | closureDays | D01 (no_certificate_of_fitness) 0 ✓; D13 3 | **(вынесено в extra)** |
+| `violations.propane_without_cof` | closureDays | D01 (no_certificate_of_fitness) 0 ✓; D13 3 | **вынесено в extra** |
 | `violations.sign_without_permit` | fine.base | D02 1250 ✓; D08 6000 | **0** (D11) |
 | `violations.sign_without_permit` | fine.max | D02 6250 ✓; D08 15000 | **null** (D11) |
 | `violations.sidewalk_obstruction` | fine.base | D02 50 ✓; D07 50 ✓; D08 (sidewalk_sign_obstruction) 100; D10 100 | **50** |
@@ -268,12 +284,14 @@
 | `violations.unlicensed_music` | fine.base | D08 3000; D10 1500 | **3000** |
 | `violations.unlicensed_music` | fine.perMonth | D08 500; D10 0 | **500** |
 | `violations.unlicensed_music` | fine.max | D08 30000; D10 150000 | **30000** |
-| `violations.alcohol_to_minor` | fine.base | D08 2500 ✓; D13 (sale_to_minor) 3000 ✓ | **(вынесено в extra)** |
+| `violations.alcohol_to_minor` | fine.base | D08 2500 ✓; D13 (sale_to_minor) 3000 ✓ | **вынесено в extra** |
 | `events.coffee_price_spike` | effect.mult | BASE 1.05; D04 1.07; D12 1.05 | **1.05** |
 | `events.coffee_price_spike` | months | BASE 3; D04 6; D12 3 | **3** |
 | `events.milk_price_up` | effect.mult | BASE 1.03; D04 1.01; D12 1.03 | **1.03** |
 | `events.sidewalk_shed` | effect.mult | BASE 0.9; D07 0.93; D10 0.9; D12 0.93 | **0.93** |
 | `events.sidewalk_shed` | months | BASE 3; D07 12; D10 12; D12 6 | **12** |
+| `events.sign_complaint_wave` | effect.mult | D02 1.3; D15 1.5 | **1.5** |
+| `events.sign_complaint_wave` | months | D02 3; D15 1 | **1** |
 | `events.chain_opens_nearby` | effect.mult | D06 0.93; D10 (chain_opens_next_door) 0.88 | **0.93** |
 | `events.chain_opens_nearby` | months | D06 6; D10 (chain_opens_next_door) 12 | **6** |
 | `events.january_slump` | effect.mult | D06 0.92; D07 0.92; D10 (january_trough) 0.88 | **0.92** |
@@ -281,7 +299,7 @@
 | `events.street_dig_long` | months | D07 12; D10 (street_dig) 9 | **12** |
 | `events.minimum_wage_march_2027` | effect.mult | D09 1.035; D10 (wage_step_january) 1.03 ✓ | **1.035** |
 | `events.minimum_wage_march_2027` | months | D09 10; D10 (wage_step_january) 12 ✓ | **10** |
-
+<!-- /D11:auto:contradictions -->
 ## 6. Что будет с игрой, если подменить пакет
 
 Проверено на копии: `packs/cafe.next.json` подставлен на место `packs/cafe.json`, после проверки `cafe.json` возвращён из git.
@@ -352,7 +370,12 @@ node packs/parts/cafe/D11-merge.mjs
 node build/validate-pack.mjs packs/cafe.next.json
 ```
 
+```bash
+node packs/parts/cafe/D11-report.mjs
+```
+
 - `D11-collect.mjs` подтягивает файлы `packs/parts/cafe/` из всех веток; второй исполнитель того же задания сохраняется с суффиксом ветки.
+- `D11-report.mjs` пересчитывает автоматические блоки этого отчёта: вердикт, счётчики, сводку `extra`, переносы, таблицу расхождений.
 - `D11-merge.mjs` собирает `packs/cafe.next.json`, `D11-reference.json` и журнал `D11-merge-log.json`: откуда каждая запись, все склейки, переносы, правки ссылок, противоречия.
 - Решения сборщика — `D11-decisions.mjs`: склейки `alias`, выбор `prefer`, переносы, правки `override`, порядок плана. Механики — `D11-mechanics-ranked.mjs`.
 - Калибровки D15–D19 подхватываются сами, если файл называется `DNN-calibration-*.json`. События ищутся по `id` и по старым `id` из `aliases`. Если калибровщик пометил `duplicateOf`, события склеиваются.

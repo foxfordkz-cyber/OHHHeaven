@@ -7,19 +7,29 @@
  "howToRead": "extra.eventCalibration holds one record per event id of the source fragment (sourceFragment). It replaces that event's months, durationMonths and effects, and adds cost/result to each player move. Ids are unchanged.",
  "extra": {
   "calibrationSummary": {
-   "events": 150,
-   "core": 106,
-   "deep": 40,
-   "exotic": 4,
+   "events": 239,
+   "core": 144,
+   "deep": 81,
+   "exotic": 14,
    "byFragment": {
     "D00": 91,
-    "D05": 59
+    "D05": 59,
+    "D09": 53,
+    "D10": 15,
+    "D01": 9,
+    "D08": 2,
+    "D03": 3,
+    "D13": 1,
+    "D06": 2,
+    "D07": 1,
+    "D04": 1,
+    "D14": 2
    },
    "byConfidence": {
-    "verified": 58,
-    "estimate": 92
+    "verified": 89,
+    "estimate": 150
    },
-   "duplicatesMarked": 38
+   "duplicatesMarked": 50
   },
   "eventCalibration": [
    {
@@ -10382,6 +10392,5466 @@
     "confidence": "verified",
     "note": "CRS report R43729 (updated May 13, 2026, search extract): authority lapsed for wages after Dec 31, 2025; 473 groups urged extension on Nov 2, 2026 (Shelby Report), no extension found.",
     "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "sales_tax_quarter_due",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: ST-100 due the 20th after quarters ending Feb, May, Aug, Nov",
+    "months": [
+     3,
+     6,
+     9,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 13379,
+      "note": "3 x $51,000 x 8.875% = $13,579 minus the $200 vendor credit (on-time only)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "tax_reserve_account",
+      "label": "Sweep trust money (sales tax, withholding) to a separate account daily",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "free second business account"
+       },
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "cashShortOnDueDate",
+        "add": 0
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "keep_sales_tax",
+      "cost": [],
+      "result": [],
+      "violation": "sales_tax_not_remitted"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/vendor_collection_credit.htm",
+    "confidence": "verified",
+    "note": "Vendor credit 5% up to $200 a quarter, on time and paid in full (TB-ST-925 extract). Assumes all sales taxable; with the pack's taxableShare the bill is smaller.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://www.tax.ny.gov/forms/current-forms/st/st100i.htm"
+    ]
+   },
+   {
+    "id": "payroll_tax_deposit_15th",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: monthly 941 deposit on the 15th (lookback under $50,000)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 3562,
+      "note": "15.3% x ($13,440 wages + $2,000 tips) = $2,362 + about $1,200 withheld federal income tax"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "tax_reserve_account",
+      "label": "Sweep trust money (sales tax, withholding) to a separate account daily",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "free second business account"
+       },
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "cashShortOnDueDate",
+        "add": 0
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "spend_payroll_withholding",
+      "cost": [],
+      "result": [],
+      "violation": "payroll_tax_not_deposited"
+     }
+    ],
+    "source": "https://www.irs.gov/publications/p15",
+    "confidence": "verified",
+    "note": "IRS Pub 15 (2026). NYS withholding goes separately on NYS-1 within 5 business days of a payroll that brings the unpaid total to $700 (D09).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "quarter_end_payroll_returns",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: NYS-45 due the last day of Apr, Jul, Oct, Jan",
+    "months": [
+     1,
+     4,
+     7,
+     10
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1653,
+      "month": 4,
+      "note": "Q1: 4.1% x $10,080 x 4 baristas"
+     },
+     {
+      "field": "cashOut",
+      "add": 1233,
+      "month": 7,
+      "note": "Q2: 4.1% x ($17,600 - $10,080) x 4"
+     },
+     {
+      "field": "cashOut",
+      "add": 0,
+      "month": 10,
+      "note": "Q3: wage base reached"
+     },
+     {
+      "field": "cashOut",
+      "add": 168,
+      "month": 1,
+      "note": "Q4 NYS-45 $0 + FUTA 0.6% x $7,000 x 4 = $168 with Form 940"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "tax_reserve_account",
+      "label": "Sweep trust money (sales tax, withholding) to a separate account daily",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "free second business account"
+       },
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "cashShortOnDueDate",
+        "add": 0
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "cash_wages",
+      "cost": [],
+      "result": [],
+      "violation": "off_books_payroll"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/forms/publications/wt/nys50.htm",
+    "confidence": "verified",
+    "note": "Fix: D09 used $2,940 a month (140 h); at the pack's 160 h the base is reached in June: Q1 $1,653, Q2 $1,233, Q3-Q4 $0. Wage base $17,600 and 4.1% new-employer rate verified (NYS-50, DOL rate page).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "quarter_end_payroll_returns.note": "per-quarter amounts recomputed at 160 h"
+    },
+    "supportingSources": [
+     "https://dol.ny.gov/unemployment-insurance-rate-information"
+    ]
+   },
+   {
+    "id": "estimated_tax_due",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: 1040-ES due Apr 15, Jun 15, Sep 15, Jan 15",
+    "months": [
+     1,
+     4,
+     6,
+     9
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 9078,
+      "month": 4,
+      "note": "Jan-Mar: 3 x $3,026"
+     },
+     {
+      "field": "cashOut",
+      "add": 6052,
+      "month": 6,
+      "note": "Apr-May: 2 months"
+     },
+     {
+      "field": "cashOut",
+      "add": 9078,
+      "month": 9,
+      "note": "Jun-Aug"
+     },
+     {
+      "field": "cashOut",
+      "add": 12104,
+      "month": 1,
+      "note": "Sep-Dec: 4 months"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "estimated_tax_plan",
+      "optionId": "pay_quarterly",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 9078
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "estimated_tax_plan",
+      "optionId": "pay_in_april",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 53,
+        "note": "7% a year on the unpaid instalment"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/publications/p505",
+    "confidence": "verified",
+    "note": "Due dates: IRS Pub 505 (2026). Uneven periods (3, 2, 3, 4 months) are the real schedule.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://www.irs.gov/newsroom/interest-rates-remain-the-same-for-the-fourth-quarter-of-2026"
+    ]
+   },
+   {
+    "id": "april_double_bill",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: April 15 with estimated_tax_plan = pay_in_april",
+    "months": [
+     4
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 45378,
+      "note": "last year's $36,300 + first instalment $9,078"
+     },
+     {
+      "field": "cashOut",
+      "add": 1270,
+      "note": "7% interest on short instalments, about half a year on $36,300"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "estimated_tax_plan",
+      "optionId": "pay_quarterly",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 9078,
+        "note": "each quarter instead"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -1270
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "irs_installment",
+      "label": "Ask for an installment agreement",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 178,
+        "note": "IRS setup fee for an online plan; estimate"
+       },
+       {
+        "field": "monthlyCost",
+        "add": 212,
+        "note": "7% on $36,300"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/newsroom/interest-rates-remain-the-same-for-the-fourth-quarter-of-2026",
+    "confidence": "verified",
+    "note": "7% underpayment interest Q4 2026; the same rate applies to estimated-tax underpayments.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "five_paydays_month",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: months with five Fridays in 2026 (Jan, May, Jul, Oct)",
+    "months": [
+     1,
+     5,
+     7,
+     10
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "payrollCash",
+      "mult": 1.154,
+      "note": "5 / 4.33 weeks: $15,510 instead of $13,440"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "bill_timing",
+      "label": "Move rent or supplier payments off the fifth Friday",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "cash_reserve",
+      "label": "Hold one extra week of payroll",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3104,
+        "note": "one-time"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "pay_staff_every_two_weeks",
+      "cost": [],
+      "result": [],
+      "violation": "pay_frequency_violation"
+     }
+    ],
+    "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+    "confidence": "verified",
+    "note": "Fridays counted from the 2026 calendar: Jan 2-30, May 1-29, Jul 3-31, Oct 2-30.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "holiday_weekend_payout_gap",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "calendar: Monday bank holidays (MLK, Presidents, Memorial, Labor, Columbus Day)",
+    "months": [
+     1,
+     2,
+     5,
+     9,
+     10
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashDelayDays",
+      "add": 4,
+      "note": "about $6,660 not yet in the bank on the 1st"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "payout_schedule",
+      "optionId": "instant",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 130,
+        "note": "1.95% on $6,660"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashDelayDays",
+        "add": -4
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "bill_timing",
+      "label": "Pay rent on the 3rd by agreement",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/3807",
+    "confidence": "verified",
+    "note": "Fix: Square US instant transfer fee is now 1.95%, not 1.75%.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "payout_schedule.instant": "fee 1.75% -> 1.95% (Square US help)"
+    }
+   },
+   {
+    "id": "january_cash_squeeze",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: January",
+    "months": [
+     1
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 12272,
+      "note": "estimated tax Sep-Dec $12,104 + FUTA $168"
+     },
+     {
+      "field": "payrollCash",
+      "mult": 1.154,
+      "note": "five Fridays in January 2026"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "estimated_tax_plan",
+      "optionId": "pay_quarterly",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 12104
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "tax_reserve_account",
+      "label": "Sweep trust money (sales tax, withholding) to a separate account daily",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "free second business account"
+       },
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "cashShortOnDueDate",
+        "add": 0
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "bill_timing",
+      "label": "Prepay January rent in December",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 6000,
+        "month": 12
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/publications/p505",
+    "confidence": "estimate",
+    "note": "D09 arithmetic; FUTA uses four workers. Demand is at its yearly low (D06/D07)."
+   },
+   {
+    "id": "policy_anniversary_audit",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: 12 months after each liability or comp policy starts",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1590,
+      "note": "sales declared $400,000, real $612,000: +53% of a $3,000 liability premium"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "label": "Declare realistic sales and payroll",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 133
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -1590
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "lowball_payroll_to_insurer",
+      "cost": [],
+      "result": [],
+      "violation": "wc_premium_misrepresentation"
+     }
+    ],
+    "source": "https://www.thehartford.com/business-insurance/premium-audit",
+    "confidence": "estimate",
+    "note": "Fix: D09 left months empty; the audit follows the policy start, so any month.",
+    "fixesFragmentValue": {
+     "policy_anniversary_audit.months": "[] -> all"
+    }
+   },
+   {
+    "id": "prime_rate_move",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "announced: FOMC decision (8 meetings a year)",
+    "months": [
+     1,
+     3,
+     4,
+     6,
+     7,
+     9,
+     10,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "loanRate",
+      "add": 0.0025,
+      "note": "+$14 a month per $100,000 on a variable 10-year loan; direction is set by the announced scenario"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "loan_rate_type",
+      "optionId": "fixed",
+      "cost": [
+       {
+        "field": "loanRate",
+        "add": 0.005,
+        "note": "fixed rates price above variable; estimate"
+       }
+      ],
+      "result": [
+       {
+        "field": "loanRate",
+        "add": -0.0025
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "loan_rate_type",
+      "optionId": "variable",
+      "cost": [
+       {
+        "field": "loanRate",
+        "add": 0.0025
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.bankrate.com/rates/interest-rates/wall-street-prime-rate/",
+    "confidence": "estimate",
+    "note": "Prime 7.00% in Oct-Nov 2026 (Bankrate, secondary). FOMC months are my 2026 calendar list (not opened).",
+    "fixesFragmentValue": {
+     "prime_rate_move.months": "[] -> FOMC months"
+    }
+   },
+   {
+    "id": "insurance_market_hardening",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "announced: citywide renewal increases, applied at each shop's renewal",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "insurance",
+      "mult": 1.07
+     },
+     {
+      "field": "ownerHealthInsurance",
+      "mult": 1.129
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "optionId": "broker_shop",
+      "label": "Shop the renewal through a broker",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 3
+       }
+      ],
+      "result": [
+       {
+        "field": "insurance",
+        "mult": 0.97
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "optionId": "higher_deductible",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1500,
+        "note": "deductible risk rises from $1,000 to $2,500"
+       }
+      ],
+      "result": [
+       {
+        "field": "insurance",
+        "mult": 0.92
+       }
+      ]
+     }
+    ],
+    "source": "https://insurancejournal.com/news/east/2026/10/14/888784.htm",
+    "confidence": "estimate",
+    "note": "D09 values; fills months.",
+    "fixesFragmentValue": {
+     "insurance_market_hardening.months": "[] -> all"
+    }
+   },
+   {
+    "id": "workers_comp_loss_cost_cut",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "announced: NY loss costs -21.9% for policies from Oct 1, 2026",
+    "months": [
+     10
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "workersComp",
+      "mult": 0.85,
+      "note": "carriers apply their own multipliers, so less than 21.9%"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "optionId": "broker_shop",
+      "label": "Re-quote at renewal",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "workersComp",
+        "mult": 0.95
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "no_workers_comp",
+      "cost": [],
+      "result": [],
+      "violation": "no_wc_insurance"
+     }
+    ],
+    "source": "https://www.dfs.ny.gov/reports_and_publications/press_releases/pr20260715",
+    "confidence": "verified",
+    "note": "DFS letter July 15, 2026 / NYCIRB RC 2659: -21.9% overall loss cost level effective Oct 1, 2026; loss costs, not rates.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "processor_reprices",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "announced: processor raises the per-tap fee by 5 cents",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "cardFixedFee",
+      "mult": 1.33,
+      "outsideBandReason": "it is a price change of 5 cents, not a demand multiplier",
+      "note": "$0.15 -> $0.20 x 5,400 card orders = +$270 a month"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "card_fee_policy",
+      "optionId": "switch_processor",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 6
+       },
+       {
+        "field": "cashOut",
+        "add": 300,
+        "note": "new readers; estimate"
+       }
+      ],
+      "result": [
+       {
+        "field": "cardFixedFee",
+        "mult": 0.75
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "card_fee_policy",
+      "optionId": "minimum_card_amount",
+      "label": "No card minimum: illegal surcharge risk avoided; nudge cash",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.998
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "surprise_card_fee",
+      "cost": [],
+      "result": [],
+      "violation": "card_surcharge_violation"
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees",
+    "confidence": "estimate",
+    "note": "Square in-person 2.6% + 15 cents (Free plan) is the pack's base."
+   },
+   {
+    "id": "debit_fee_cap_struck_down",
+    "sourceFragment": "D09",
+    "tier": "exotic",
+    "trigger": "announced: Eighth Circuit affirms vacatur of Regulation II",
+    "months": [
+     11
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "cardFees",
+      "mult": 1.0,
+      "note": "flat-rate processors pass nothing through today"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "card_fee_policy",
+      "optionId": "interchange_plus",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": [
+       {
+        "field": "cardFees",
+        "mult": 1.0,
+        "note": "small tickets gain little: the 21 cents fixed part is 2.5% of $8.50"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "card_fee_policy",
+      "optionId": "stay_flat",
+      "cost": [
+       {
+        "field": "cardFees",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://bankingjournal.aba.com/2026/11/eighth-circuit-affirms-vacatur-of-regulation-ii/",
+    "confidence": "estimate",
+    "note": "D09; no effect on a flat-rate shop."
+   },
+   {
+    "id": "restaurant_shakeout",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "announced: closures wave",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "saleMultiple",
+      "mult": 0.95
+     },
+     {
+      "field": "usedEquipmentPrice",
+      "mult": 0.9
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "used_equipment",
+      "optionId": "buy_used",
+      "label": "Buy cheap used equipment now",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 6
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -2000,
+        "note": "10% off a $20,000 upgrade"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "exit_sale",
+      "label": "Delay a planned sale a year",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0
+       }
+      ],
+      "result": [
+       {
+        "field": "saleMultiple",
+        "mult": 1.05
+       }
+      ]
+     }
+    ],
+    "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+    "confidence": "verified",
+    "note": "BizBuySell 2025: average earnings multiple fell 5% to 2.23; sold median 2.00 (search extract).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "restaurant_shakeout.months": "[] -> all"
+    }
+   },
+   {
+    "id": "sba_rules_tighten",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "announced: SBA policy notices",
+    "months": [
+     3,
+     10
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "loanAvailable",
+      "formula": "non-citizen owners excluded; guaranty fee 2% of the guaranteed part up to $150,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "startup_loan",
+      "optionId": "microloan",
+      "cost": [
+       {
+        "field": "loanRate",
+        "add": 0.02,
+        "note": "microlenders price above 7(a); estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "startup_loan",
+      "optionId": "own_cash",
+      "cost": [
+       {
+        "field": "capacity",
+        "mult": 0.85,
+        "note": "lean kit"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.sba.gov/article/2026/03/09/sba-bans-foreign-nationals-accessing-sba-backed-loans",
+    "confidence": "verified",
+    "note": "D09 verified.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "city_loan_fund_opens",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "announced: NYC Future Fund (relaunched March 2026)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "loanAvailable",
+      "formula": "$25,000-$500,000 at 7.5%, repayment as a share of monthly revenue (from about 2%), personal guaranty from 20% owners, UCC filing"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "emergency_financing",
+      "optionId": "city_fund",
+      "label": "Refinance a $40,000 cash advance",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 10
+       },
+       {
+        "field": "ownerDebt",
+        "add": 40000,
+        "contingent": true,
+        "note": "personal guaranty"
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -6500,
+        "note": "$6,750 holdback -> about $250 interest"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "emergency_financing",
+      "optionId": "none",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/business-services/financial-assistance/nyc-future-fund",
+    "confidence": "verified",
+    "note": "Fix: D09 had a 3% origination fee; the official page (search extract) shows 7.5%, revenue-based repayment and a guaranty, and no origination fee was found. Rate fell from 9% to 7.5% in March 2026.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "city_loan_fund_opens.effects": "3% origination fee not found -> removed"
+    }
+   },
+   {
+    "id": "minimum_wage_bill",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "announced: Albany votes on overriding the 2027 off-ramp ($17.60 from March 1, 2027)",
+    "months": [
+     3
+    ],
+    "durationMonths": 10,
+    "effects": [
+     {
+      "field": "wages",
+      "mult": 1.01,
+      "note": "the floor rises 3.5%; a $21 cafe raises less (compression); call-in and spread-of-hours pay rise 3.5%"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "optionId": "standard",
+      "cost": [
+       {
+        "field": "wages",
+        "mult": 1.01
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "optionId": "above",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 1430
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.governor.ny.gov/new-york-state-minimum-wage-2027",
+    "confidence": "verified",
+    "note": "Governor's page (search extract): no inflation increase on Jan 1, 2027 because an off-ramp condition was met; NYC stays $17.00; the Governor proposed changing the off-ramp so the increase would apply from March 1, 2027 if the Legislature agrees. Fix: D09 applied +3.5% to all wages; for a shop paying $21 only floor-linked items move fully.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "minimum_wage_bill.effects.wages": "1.035 -> 1.01"
+    }
+   },
+   {
+    "id": "health_plan_renewal",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "calendar: NY State of Health open enrollment",
+    "months": [
+     11,
+     12,
+     1
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "ownerHealthInsurance",
+      "mult": 0.973
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "owner_health_cover",
+      "optionId": "silver",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 807,
+        "note": "2026 lowest-cost silver, NYC"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "owner_health_cover",
+      "optionId": "none",
+      "cost": [
+       {
+        "field": "ownerRisk",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -807
+       }
+      ]
+     }
+    ],
+    "source": "https://info.nystateofhealth.ny.gov/sites/default/files/2026%20Lowest%20Cost%20SIlver%20Plan%20by%20County.pdf",
+    "confidence": "verified",
+    "note": "D09.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "bank_says_no",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: loan application with under 10% own cash or a non-citizen owner",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "loanAvailable",
+      "formula": "SBA 7(a) only if own cash >= 10% of the project and every owner is a citizen"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "startup_loan",
+      "optionId": "own_cash",
+      "cost": [
+       {
+        "field": "capacity",
+        "mult": 0.85
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "startup_loan",
+      "optionId": "cdfi",
+      "label": "Apply to a CDFI or the city fund",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 10
+       },
+       {
+        "field": "loanRate",
+        "add": 0.01
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.fedsmallbusiness.org/reports/survey/2026/2026-report-on-employer-firms",
+    "confidence": "verified",
+    "note": "Fed Small Business Credit Survey 2026 (2025 data, search extract): 42% of applicants got the full amount, 36% some, 22% none; small banks fully approved 57%.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "bank_says_no.months": "[] -> all"
+    }
+   },
+   {
+    "id": "cash_advance_calls",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: cash below two weeks of fixed costs",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 8,
+    "effects": [
+     {
+      "field": "cashIn",
+      "add": 40000
+     },
+     {
+      "field": "monthlyCost",
+      "add": 6885,
+      "id": "mca_daily_holdback",
+      "note": "13.5% of $51,000 until $54,000 is repaid (factor 1.35)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "emergency_financing",
+      "optionId": "city_fund",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 10
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -6635
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "emergency_financing",
+      "optionId": "none",
+      "label": "Cut costs instead",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 10
+       },
+       {
+        "field": "quality",
+        "add": -0.02
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.merchantmaverick.com/merchant-cash-advances-aprs/",
+    "confidence": "estimate",
+    "note": "Factor 1.1-1.5 (secondary). Profit $9,719 -> $2,834 while the holdback runs.",
+    "fixesFragmentValue": {
+     "cash_advance_calls.months": "[] -> all"
+    }
+   },
+   {
+    "id": "second_advance_to_pay_the_first",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: took an advance and sales fell or stayed flat",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 8,
+    "effects": [
+     {
+      "field": "monthlyCost",
+      "add": 13770,
+      "note": "two holdbacks: 27% of sales; profit $9,719 -> about -$4,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "emergency_financing",
+      "optionId": "negotiate",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 8
+       },
+       {
+        "field": "cashOut",
+        "add": 1000,
+        "note": "lawyer letter"
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -5000
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "cost": [
+       {
+        "field": "cashIn",
+        "add": 7800
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://news.bloomberglaw.com/bankruptcy-law/merchant-cash-advances-piling-up-in-small-business-bankruptcies",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "second_advance_to_pay_the_first.months": "[] -> all"
+    }
+   },
+   {
+    "id": "advance_default_freeze",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "decision: stopped paying a cash advance",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "cashFrozenDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Challenge it as a disguised loan (usury)",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 5000,
+        "note": "estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "cost": [
+       {
+        "field": "cashIn",
+        "add": 7800
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://ag.ny.gov/press-release/2025/attorney-general-james-announces-1-billion-settlement-predatory-lender",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "advance_default_freeze.months": "[] -> all"
+    }
+   },
+   {
+    "id": "intro_rate_ends",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "decision: part of the opening on a 0% card",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "monthlyCost",
+      "add": 350,
+      "note": "$20,000 x 21% / 12"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "startup_loan",
+      "optionId": "refinance",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 600,
+        "note": "3% balance-transfer fee"
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -350
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "cash_reserve",
+      "label": "Pay down from profit",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 5000
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nerdwallet.com/business/credit-cards/best/zero-percent-apr",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "intro_rate_ends.months": "[] -> all"
+    }
+   },
+   {
+    "id": "family_loan_paperwork",
+    "sourceFragment": "D09",
+    "tier": "exotic",
+    "trigger": "calendar: April, if a family loan over $10,000 has no note",
+    "months": [
+     4
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "monthlyCost",
+      "add": 195,
+      "note": "interest at the applicable federal rate on $50,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "startup_loan",
+      "optionId": "family_note",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 300,
+        "note": "lawyer drafts the note; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "startup_loan",
+      "optionId": "gift",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/pub/irs-drop/rr-26-21.pdf",
+    "confidence": "estimate",
+    "note": "D09."
+   },
+   {
+    "id": "retirement_rollover_risk",
+    "sourceFragment": "D09",
+    "tier": "exotic",
+    "trigger": "decision: ROBS funding",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "ownerNetWorth",
+      "formula": "retirement savings put in are lost on closure"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "startup_loan",
+      "optionId": "robs",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 150,
+        "note": "plan administration; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "startup_loan",
+      "optionId": "own_cash",
+      "cost": [
+       {
+        "field": "capacity",
+        "mult": 0.85
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/retirement-plans/rollovers-as-business-start-ups-compliance-project",
+    "confidence": "verified",
+    "note": "D09.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "retirement_rollover_risk.months": "[] -> all"
+    }
+   },
+   {
+    "id": "startup_cost_surprise",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: first April after opening",
+    "months": [
+     4
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "taxableProfit",
+      "add": 24000,
+      "note": "$29,000 of start-up costs: only $5,000 deducted now, the rest over 180 months"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "tax_timing",
+      "optionId": "accountant",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 500
+       }
+      ],
+      "result": [
+       {
+        "field": "taxableProfit",
+        "add": -3000,
+        "note": "better split into equipment (bonus depreciation) vs start-up costs; estimate"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "tax_timing",
+      "optionId": "none",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/instructions/i1040sc",
+    "confidence": "verified",
+    "note": "D09 (IRC 195).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "first_profit_tax_cliff",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "calendar: April after the first profitable year with pay_in_april",
+    "months": [
+     4
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 36300,
+      "note": "a full year of owner tax, about 31% of profit"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "estimated_tax_plan",
+      "optionId": "pay_quarterly",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 9078
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "irs_installment",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 212
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/publications/p505",
+    "confidence": "verified",
+    "note": "D09.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "tax_audit_letter",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: underreport_sales or ring_drinks_as_groceries active, or 1099-K above reported sales",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 20000,
+      "formula": "tax on estimated hidden sales for up to 12 quarters + penalty + 14.5% interest",
+      "note": "10% of $612,000 hidden for 3 years x 8.875% = $16,300 + penalty and interest"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Hire a tax representative",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3000
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "voluntary_disclosure",
+      "label": "Come forward before the audit",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 16300
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -3700,
+        "note": "penalties usually waived; interest stays"
+       }
+      ]
+     }
+    ],
+    "source": "https://chamberlainlaw.com/salt-blawg/new-york-division-of-tax-appeals-less-records-means-more-leeway-for-taxing-authorities",
+    "confidence": "estimate",
+    "note": "Interest rate 14.5% for sales tax in 2026 (tax.ny.gov).",
+    "fixesFragmentValue": {
+     "tax_audit_letter.months": "[] -> all"
+    },
+    "supportingSources": [
+     "https://www.tax.ny.gov/pay/interest/2026/p4.htm"
+    ]
+   },
+   {
+    "id": "tax_debt_escalation",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: trust taxes unpaid for 3+ months",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "cashFrozenDays",
+      "add": 10
+     },
+     {
+      "field": "reputation",
+      "mult": 0.95
+     },
+     {
+      "field": "monthlyCost",
+      "add": 164,
+      "note": "14.5% a year on $13,579 of sales tax"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "irs_installment",
+      "label": "Installment agreement with the state",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 1300,
+        "note": "the debt over 12 months, interest on top"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "keep_sales_tax",
+      "cost": [],
+      "result": [],
+      "violation": "sales_tax_not_remitted"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/enforcement/collections/",
+    "confidence": "estimate",
+    "note": "Order notice -> warrant -> levy -> license suspension is real; timing is a design choice.",
+    "fixesFragmentValue": {
+     "tax_debt_escalation.months": "[] -> all",
+     "tax_debt_escalation.effects": "added 14.5% interest"
+    },
+    "supportingSources": [
+     "https://www.tax.ny.gov/pay/interest/2026/p4.htm"
+    ]
+   },
+   {
+    "id": "vendor_credit_lost",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "calendar: the 20th is missed",
+    "months": [
+     3,
+     6,
+     9,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1558,
+      "note": "$200 credit + 10% of $13,579"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "tax_reserve_account",
+      "label": "Sweep trust money (sales tax, withholding) to a separate account daily",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "free second business account"
+       },
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "cashShortOnDueDate",
+        "add": 0
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_tax_filings",
+      "cost": [],
+      "result": [],
+      "violation": "returns_not_filed"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/vendor_collection_credit.htm",
+    "confidence": "verified",
+    "note": "D09.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "monthly_filer_switch",
+    "sourceFragment": "D09",
+    "tier": "exotic",
+    "trigger": "decision: taxable receipts of $300,000 or more in a quarter",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "salesTaxDue",
+      "formula": "monthly"
+     },
+     {
+      "field": "cashOut",
+      "add": 800,
+      "note": "the $200 quarterly credit is lost for a year (monthly filers do not get it)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "tax_reserve_account",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "hours",
+      "optionId": "standard",
+      "label": "Stay below the threshold",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.95
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm",
+    "confidence": "verified",
+    "note": "$300,000 in a quarter; back to quarterly after four quarters below (tax.ny.gov extract).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "monthly_filer_switch.months": "[] -> all"
+    }
+   },
+   {
+    "id": "tip_credit_found",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "calendar: April, if tips run through payroll and a bookkeeper files Form 8846",
+    "months": [
+     4
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashIn",
+      "add": 1836,
+      "note": "7.65% of $24,000 reported tips; reduction for wages under $5.15 is zero at $21"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "accountant",
+      "label": "File Form 8846",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 150
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "keep_tips",
+      "cost": [],
+      "result": [],
+      "violation": "tip_theft"
+     }
+    ],
+    "source": "https://www.irs.gov/businesses/small-businesses-self-employed/fica-tip-credit-for-employers",
+    "confidence": "verified",
+    "note": "IRS FICA tip credit page and Form 8846 (search extract): non-refundable, 1-year carryback / 20-year carryforward.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "processor_holds_funds",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "decision: keyed catering payment over $2,000 on a new account, or 3 disputes in a month",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashFrozenDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "payout_schedule",
+      "optionId": "instant",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 30
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "bill_timing",
+      "optionId": "bank_transfer_invoice",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.npr.org/sections/alltechconsidered/2015/11/20/456635063/square-goes-public-and-fields-a-flood-of-customer-complaints",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "processor_holds_funds.months": "[] -> all"
+    }
+   },
+   {
+    "id": "card_dispute",
+    "sourceFragment": "D09",
+    "tier": "exotic",
+    "trigger": "decision: online, keyed or invoice payments",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cashFrozenDays",
+      "add": 60,
+      "on": "disputed amount"
+     },
+     {
+      "field": "cashOut",
+      "add": 15,
+      "note": "Stripe dispute fee; $0 on Square"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "card_fee_policy",
+      "optionId": "keep_proof",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "bill_timing",
+      "optionId": "refund",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1.0,
+        "unit": "x disputed amount"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.chargebackgurus.com/blog/stripe-dispute-fees",
+    "confidence": "estimate",
+    "note": "Stripe $15 per dispute + $15 if countered (since June 17, 2025); Square no fee (secondary).",
+    "fixesFragmentValue": {
+     "card_dispute.months": "[] -> all"
+    }
+   },
+   {
+    "id": "slip_and_fall_claim",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: wet floor, icy entrance or broken step left unfixed",
+    "months": [
+     12,
+     1,
+     2
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1000,
+      "note": "deductible"
+     },
+     {
+      "field": "insurance",
+      "mult": 1.15
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cleaning",
+      "optionId": "standard",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 130
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 126
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+    "confidence": "estimate",
+    "note": "D09 (overlap D07/D19)."
+   },
+   {
+    "id": "burglary_wave",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "announced: break-ins on the block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1000,
+      "note": "deductible if insured; $8,000 if not"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 126
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "security_gate",
+      "label": "Roll-down gate and alarm",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3500,
+        "note": "estimate"
+       },
+       {
+        "field": "monthlyCost",
+        "add": 40
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "burglary_wave.months": "[] -> all"
+    }
+   },
+   {
+    "id": "water_from_upstairs",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "announced: cold snap (D07)",
+    "months": [
+     1,
+     2
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 14
+     },
+     {
+      "field": "cashOut",
+      "add": 1000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 126
+       }
+      ],
+      "result": [
+       {
+        "field": "cashIn",
+        "add": 1.0,
+        "unit": "x lost profit after 72 hours"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "landlord_claim",
+      "label": "Claim against the upstairs owner",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 6
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+    "confidence": "estimate",
+    "note": "D09 (daysClosed renamed closureDays)."
+   },
+   {
+    "id": "power_cut_spoilage_uninsured",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "announced: heat-wave outage (D07)",
+    "months": [
+     7,
+     8
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 600,
+      "note": "a week of milk and pastry"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "optionId": "plus_breakdown",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 40
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -600
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "cooler_ice",
+      "label": "Move milk to coolers with ice",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 60
+       },
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -400
+       }
+      ]
+     }
+    ],
+    "source": "https://www.propertycasualty360.com/fcs/2023/11/12/insurance-coverage-qa-power-outage-and-spoilage/",
+    "confidence": "estimate",
+    "note": "D09."
+   },
+   {
+    "id": "sewer_backup_uninsured",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "decision: skip_grease_trap_cleaning for 3+ months",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 3
+     },
+     {
+      "field": "cashOut",
+      "add": 3000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "optionId": "plus_sewer",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 20
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "grease_trap_service",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 100
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.propertycasualty360.com/fcs/2023/11/12/insurance-coverage-qa-power-outage-and-spoilage/",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "sewer_backup_uninsured.months": "[] -> all"
+    }
+   },
+   {
+    "id": "staff_lawsuit_uninsured",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "decision: a labor shortcut is found, or a firing during a complaint",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 10000,
+      "note": "defense, game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "epli_cover",
+      "optionId": "policy",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 150
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -7500,
+        "note": "deductible about $2,500; wage claims excluded"
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "off_the_clock",
+      "cost": [],
+      "result": [],
+      "violation": "unpaid_overtime"
+     }
+    ],
+    "source": "https://www.insureon.com/small-business-insurance/employment-practices-liability/cost",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "staff_lawsuit_uninsured.months": "[] -> all"
+    }
+   },
+   {
+    "id": "buyer_makes_an_offer",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: six months of positive reported profit",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 5,
+    "effects": [
+     {
+      "field": "salePrice",
+      "add": 233000,
+      "note": "2.0 x $116,600 owner earnings"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "exit_sale",
+      "optionId": "accept",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 23300,
+        "note": "broker 10%; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "exit_sale",
+      "optionId": "decline",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+    "confidence": "verified",
+    "note": "Sold median earnings multiple 2.00, average 2.20 (BizBuySell 2025, search extract); size effect: about $600k revenue can reach 2.5x.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "buyer_makes_an_offer.months": "[] -> all"
+    }
+   },
+   {
+    "id": "buyer_checks_the_books",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: underreport_sales used in the last 12 months",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "salePrice",
+      "add": -122000,
+      "note": "2.0 x $61,000 hidden profit"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "exit_sale",
+      "optionId": "clean_books",
+      "label": "Report everything for 12 months before selling",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 5400,
+        "note": "the sales tax on the hidden 10% for a year"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "underreport_sales",
+      "cost": [],
+      "result": [],
+      "violation": "sales_tax_fraud"
+     }
+    ],
+    "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "buyer_checks_the_books.months": "[] -> all"
+    }
+   },
+   {
+    "id": "landlord_blocks_the_sale",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: sale with no assignment clause or under 5 lease years left",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "salePrice",
+      "mult": 0.5,
+      "outsideBandReason": "the sale collapses to an asset sale; not a demand multiplier"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_terms",
+      "optionId": "assignment_clause",
+      "label": "Negotiate assignment rights at signing",
+      "cost": [
+       {
+        "field": "rent",
+        "mult": 1.01,
+        "note": "estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "exit_sale",
+      "optionId": "pay_landlord",
+      "label": "Pay the landlord's consent fee",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 12000,
+        "note": "two months of rent; estimate"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/subleasing-assignment/",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "landlord_blocks_the_sale.months": "[] -> all"
+    }
+   },
+   {
+    "id": "still_on_the_lease_after_sale",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "decision: sold with an assignment and no written release",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "ownerDebt",
+      "add": 36000,
+      "contingent": true,
+      "note": "six months of rent if the buyer stops paying"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "exit_sale",
+      "optionId": "release",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1500,
+        "note": "lawyer; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "exit_sale",
+      "optionId": "accept_risk",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/subleasing-assignment/",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "still_on_the_lease_after_sale.months": "[] -> all"
+    }
+   },
+   {
+    "id": "closing_auction",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: close the business",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashIn",
+      "add": 7800,
+      "note": "25% of $36,500 minus 15% commission"
+     },
+     {
+      "field": "cashOut",
+      "add": 692,
+      "note": "sales tax on the sale"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "optionId": "auction",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 10
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "optionId": "sell_items",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 30
+       },
+       {
+        "field": "rent",
+        "mult": 1.0,
+        "note": "one more month"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashIn",
+        "add": 4000
+       }
+      ]
+     }
+    ],
+    "source": "https://www.tagexbrands.com/restaurant-closure-equipment-liquidation/",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "closing_auction.months": "[] -> all"
+    }
+   },
+   {
+    "id": "deposit_kept_by_landlord",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "decision: close with rent owed or the space not restored",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashIn",
+      "add": 6000,
+      "note": "$18,000 deposit minus a month of arrears and $6,000 restoration"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "optionId": "restore",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3000
+       },
+       {
+        "field": "ownerHours",
+        "add": 20
+       }
+      ],
+      "result": [
+       {
+        "field": "cashIn",
+        "add": 6000
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "optionId": "walk_away",
+      "cost": [
+       {
+        "field": "cashIn",
+        "add": -6000
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/blog/what-is-the-good-guy-guarantee-in-new-york-city-commercial-real-estate/",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "deposit_kept_by_landlord.months": "[] -> all"
+    }
+   },
+   {
+    "id": "tax_bill_after_closing",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: closed with unpaid trust taxes",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "ownerDebt",
+      "add": 17000,
+      "note": "a quarter of sales tax with penalty plus a month of withholding"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "optionId": "pay_trust_taxes_first",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 17000
+       }
+      ],
+      "result": [
+       {
+        "field": "ownerDebt",
+        "add": -17000
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "keep_sales_tax",
+      "cost": [],
+      "result": [],
+      "violation": "sales_tax_not_remitted"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pdf/memos/sales/m20-2s.pdf",
+    "confidence": "verified",
+    "note": "D09; trust taxes survive closing and bankruptcy.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "tax_bill_after_closing.months": "[] -> all"
+    }
+   },
+   {
+    "id": "personal_bankruptcy",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "decision: guaranteed debts above non-exempt assets",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 4,
+    "effects": [
+     {
+      "field": "ownerDebt",
+      "formula": "guaranteed rent, loans and cards to zero; trust taxes stay"
+     },
+     {
+      "field": "cashOut",
+      "add": 338,
+      "note": "Chapter 7 filing fee"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "optionId": "chapter7",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 2000,
+        "note": "lawyer; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "optionId": "settle",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 20
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nvb.uscourts.gov/filing/filing-fees/fee-schedule/",
+    "confidence": "verified",
+    "note": "D09.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "personal_bankruptcy.months": "[] -> all"
+    }
+   },
+   {
+    "id": "forgiven_debt_tax",
+    "sourceFragment": "D09",
+    "tier": "exotic",
+    "trigger": "calendar: January after a settled debt",
+    "months": [
+     1
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "taxableProfit",
+      "formula": "+ forgiven amount unless insolvent"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "accountant",
+      "label": "File Form 982 (insolvency)",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 200
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "accountant",
+      "optionId": "pay",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 0.31,
+        "unit": "x forgiven amount"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/publications/p4681",
+    "confidence": "verified",
+    "note": "D09.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "unsold_gift_cards_at_exit",
+    "sourceFragment": "D09",
+    "tier": "exotic",
+    "trigger": "decision: sold gift cards and then sold or closed",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "salePrice",
+      "formula": "minus outstanding balances"
+     },
+     {
+      "field": "cashOut",
+      "add": 2000,
+      "note": "outstanding balance honored or refunded; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "exit_closure",
+      "optionId": "honor",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 2000
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "exit_sale",
+      "optionId": "buyer_assumes",
+      "cost": [
+       {
+        "field": "salePrice",
+        "add": -2000
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://dos.ny.gov/news/consumer-alert-nys-division-consumer-protection-alerts-consumers-new-laws-related-gift-cards",
+    "confidence": "estimate",
+    "note": "NY: gift cards sold on or after Dec 10, 2022 are valid 9 years, no fees (Division of Consumer Protection).",
+    "fixesFragmentValue": {
+     "unsold_gift_cards_at_exit.months": "[] -> all"
+    }
+   },
+   {
+    "id": "unemployment_rate_notice",
+    "sourceFragment": "D09",
+    "tier": "deep",
+    "trigger": "calendar: rate notice for an experienced employer with charges",
+    "months": [
+     1
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "unemploymentTax",
+      "add": 0.02,
+      "note": "example: +2 points on $17,600 = +$352 per worker a year; up to about 9.5% at the worst"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "complaint_handling",
+      "optionId": "investigate",
+      "label": "Contest wrong charges",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "voluntary_contribution",
+      "label": "Pay a voluntary contribution to buy a lower rate",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1000,
+        "note": "estimate"
+       }
+      ],
+      "result": [
+       {
+        "field": "unemploymentTax",
+        "add": -0.01
+       }
+      ]
+     }
+    ],
+    "source": "https://dol.ny.gov/unemployment-insurance-rate-information",
+    "confidence": "estimate",
+    "note": "D09; month moved from 2 to 1 (rates apply from the calendar year).",
+    "fixesFragmentValue": {
+     "unemployment_rate_notice.months": "[2] -> [1]"
+    }
+   },
+   {
+    "id": "owner_savings_run_out",
+    "sourceFragment": "D09",
+    "tier": "core",
+    "trigger": "decision: owner draw above profit after tax",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "ownerDraw",
+      "formula": "forced down to profit after tax"
+     },
+     {
+      "field": "monthlyCost",
+      "add": 350,
+      "note": "personal card debt at 21% on $20,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "owner_household",
+      "optionId": "lower_draw",
+      "cost": [
+       {
+        "field": "ownerDraw",
+        "add": -1500
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "owner_health_cover",
+      "optionId": "none",
+      "cost": [
+       {
+        "field": "ownerRisk",
+        "add": 1
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.fedsmallbusiness.org/reports/survey/2026/2026-report-on-employer-firms",
+    "confidence": "estimate",
+    "note": "D09.",
+    "fixesFragmentValue": {
+     "owner_savings_run_out.months": "[] -> all"
+    }
+   },
+   {
+    "id": "key_barista_leaves",
+    "sourceFragment": "D10",
+    "tier": "core",
+    "trigger": "decision: the most senior barista (12+ months) quits under the staff model",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.9
+     },
+     {
+      "field": "demand",
+      "mult": 0.97,
+      "note": "regulars who followed the barista"
+     },
+     {
+      "field": "cashOut",
+      "add": 2706
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "optionId": "above",
+      "label": "Counter-offer",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 1430
+       }
+      ],
+      "result": [
+       {
+        "field": "demand",
+        "mult": 1.03
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "cross_training",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 110
+       }
+      ],
+      "result": [
+       {
+        "field": "staffAvailability",
+        "add": 0.05
+       }
+      ]
+     }
+    ],
+    "source": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/",
+    "confidence": "estimate",
+    "note": "Fix: D10 charged $2,500 'middle of the range'; Black Box 2025 hard cost is $2,706 (search extract). Months were empty: any month.",
+    "fixesFragmentValue": {
+     "key_barista_leaves.months": "[] -> all",
+     "key_barista_leaves.replacement": "2500 -> 2706"
+    }
+   },
+   {
+    "id": "staff_walkout",
+    "sourceFragment": "D10",
+    "tier": "core",
+    "trigger": "decision: keep_tips or unpaid_trial_shifts active and a public complaint",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 16,
+      "note": "Gorilla Coffee figure: 16 x $1,700 x 0.68 = $18,500 of lost profit"
+     },
+     {
+      "field": "demand",
+      "mult": 0.85,
+      "note": "month after reopening; D10 reading"
+     },
+     {
+      "field": "cashOut",
+      "add": 10824,
+      "note": "4 replacements x $2,706"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "pay_back_now",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1.0,
+        "unit": "x owed"
+       }
+      ],
+      "result": [
+       {
+        "field": "closureDays",
+        "add": -11
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "optionId": "above",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 1430
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "keep_tips",
+      "cost": [],
+      "result": [],
+      "violation": "tip_theft"
+     }
+    ],
+    "source": "https://www.brooklynpaper.com/gorilla-warfare-as-entire-staff-quits-fifth-ave-coffee-bar",
+    "confidence": "estimate",
+    "note": "Added the rehiring cost; demand 0.85 is at the edge of the band and only for the month after reopening.",
+    "duplicateOf": "whole_team_walks_out",
+    "fixesFragmentValue": {
+     "staff_walkout.months": "[] -> all",
+     "staff_walkout.effects": "closureDays value -> add; added cashOut"
+    }
+   },
+   {
+    "id": "union_petition",
+    "sourceFragment": "D10",
+    "tier": "exotic",
+    "trigger": "decision: staff_petition ignored for 3 months",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "wages",
+      "mult": 1.08,
+      "note": "a first contract; no statistic for independents"
+     },
+     {
+      "field": "ownerHours",
+      "add": 10,
+      "note": "bargaining"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "optionId": "above",
+      "label": "Voluntary raise before an election",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 1430
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Bargain with counsel",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 5000,
+        "note": "estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "fire_union_organizers",
+      "cost": [],
+      "result": [],
+      "violation": "unfair_labor_practice"
+     }
+    ],
+    "source": "https://dailycoffeenews.com/2024/06/11/philadelphias-ocf-coffee-closing-all-shops-after-union-push",
+    "confidence": "estimate",
+    "note": "D10 value; months filled.",
+    "fixesFragmentValue": {
+     "union_petition.months": "[] -> all"
+    }
+   },
+   {
+    "id": "wage_step_january",
+    "sourceFragment": "D10",
+    "tier": "core",
+    "trigger": "calendar: January 1 indexation (announced by October 1)",
+    "months": [
+     1
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "wages",
+      "mult": 1.0,
+      "note": "2027: off-ramp met, NYC stays $17.00; in a year with a step, floor-linked pay rises by the step"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "optionId": "standard",
+      "cost": [
+       {
+        "field": "wages",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "hours",
+      "optionId": "standard",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.926
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.governor.ny.gov/new-york-state-minimum-wage-2027",
+    "confidence": "verified",
+    "note": "Governor's page (search extract): no increase on Jan 1, 2027 (off-ramp); Governor proposes March 1, 2027 if the Legislature agrees (see D09 minimum_wage_bill). Fix: D10 had x1.03.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "wage_step_january.effects.wages": "1.03 -> 1.0 for 2027"
+    }
+   },
+   {
+    "id": "owner_burnout",
+    "sourceFragment": "D10",
+    "tier": "core",
+    "trigger": "decision: owner_hours >= sixty for 9 months",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "quality",
+      "mult": 0.95
+     },
+     {
+      "field": "reputation",
+      "mult": 0.97
+     },
+     {
+      "field": "ownerHours",
+      "add": -20,
+      "note": "forced rest"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "owner_schedule",
+      "optionId": "one_day_off",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 780,
+        "note": "a lead covers 4 days a month: 32 h x $24 x 1.084 - already-paid hours; estimate"
+       }
+      ],
+      "result": [
+       {
+        "field": "quality",
+        "add": 0.03
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "cross_training",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 110
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://urbanmilwaukee.com/?p=1084521",
+    "confidence": "estimate",
+    "note": "D10 values; months filled.",
+    "duplicateOf": "owner_runs_on_empty",
+    "fixesFragmentValue": {
+     "owner_burnout.months": "[] -> all"
+    }
+   },
+   {
+    "id": "flu_takes_the_only_supervisor",
+    "sourceFragment": "D10",
+    "tier": "core",
+    "trigger": "calendar: flu season, if the owner is the only certificate holder",
+    "months": [
+     1,
+     2
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 5
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cross_training",
+      "optionId": "second_certificate",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 339
+       }
+      ],
+      "result": [
+       {
+        "field": "closureDays",
+        "add": -5
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_food_protection_cert",
+      "cost": [],
+      "result": [],
+      "violation": "no_food_protection_cert"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+    "confidence": "estimate",
+    "note": "D10 value; 5 x $1,700 x 0.68 = $5,780 lost profit."
+   },
+   {
+    "id": "theft_discovered",
+    "sourceFragment": "D10",
+    "tier": "deep",
+    "trigger": "decision: cash_controls = trust for 3+ months with a manager on deposits",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 765,
+      "note": "1.5% of $51,000 a month"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cash_controls",
+      "optionId": "cameras_and_stock",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 160
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -700
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "legal_help",
+      "label": "Police report and civil recovery",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 10
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.odt.co.nz/regions/central-otago/theft-lockdown-lead-cafe-owners-close-business",
+    "confidence": "estimate",
+    "note": "The common '4% of sales' theft figure is secondary and untraceable; D10's 1.5% kept.",
+    "fixesFragmentValue": {
+     "theft_discovered.months": "[] -> all"
+    }
+   },
+   {
+    "id": "sales_tax_warrant",
+    "sourceFragment": "D10",
+    "tier": "core",
+    "trigger": "decision: two quarters of sales tax unpaid",
+    "months": [
+     3,
+     6,
+     9,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 30,
+      "outsideBandReason": "padlock until paid or an installment agreement is signed"
+     },
+     {
+      "field": "cashOut",
+      "add": 8500,
+      "note": "30% max penalty on two quarters ($27,158) is $8,147, plus 14.5% interest"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "irs_installment",
+      "label": "Installment payment agreement with the state",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 2500
+       }
+      ],
+      "result": [
+       {
+        "field": "closureDays",
+        "add": -25
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "keep_sales_tax",
+      "cost": [],
+      "result": [],
+      "violation": "sales_tax_not_remitted"
+     }
+    ],
+    "source": "https://www.brooklynpaper.com/vox-popped-outlaw-coffeeshop-closed-down-by-taxman-again",
+    "confidence": "estimate",
+    "note": "Penalty cap 30% and interest 14.5% verified (tax.ny.gov). 30 closed days is D10's simplification.",
+    "supportingSources": [
+     "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_and_use_tax_penalties.htm",
+     "https://www.tax.ny.gov/pay/interest/2026/p4.htm"
+    ]
+   },
+   {
+    "id": "comp_audit_bill",
+    "sourceFragment": "D10",
+    "tier": "deep",
+    "trigger": "calendar: comp policy anniversary",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 650,
+      "note": "0.4% of $165,000 payroll"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cash_reserve",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 650
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "label": "Report payroll changes mid-term",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.craneagency.com/why-workers-compensation-premiums-increase-at-audit/",
+    "confidence": "estimate",
+    "note": "D10 value.",
+    "duplicateOf": "workers_comp_audit_bill",
+    "fixesFragmentValue": {
+     "comp_audit_bill.months": "[] -> all"
+    }
+   },
+   {
+    "id": "cash_advance_offer",
+    "sourceFragment": "D10",
+    "tier": "core",
+    "trigger": "calendar: January-February, if cash is below a month of fixed costs",
+    "months": [
+     1,
+     2
+    ],
+    "durationMonths": 8,
+    "effects": [
+     {
+      "field": "cashIn",
+      "add": 40000
+     },
+     {
+      "field": "monthlyCost",
+      "add": 6885,
+      "note": "15% of $45,900 card sales; factor 1.4 = $56,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "financing",
+      "optionId": "decline",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "cash_reserve",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 6000
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nycourts.gov/reporter/pdfs/2020/2020_30413.pdf",
+    "confidence": "estimate",
+    "note": "D10 terms.",
+    "duplicateOf": "cash_advance_calls"
+   },
+   {
+    "id": "pay_frequency_claim",
+    "sourceFragment": "D10",
+    "tier": "deep",
+    "trigger": "decision: biweekly_pay active and a worker leaves",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 12,
+      "note": "first violation since May 2025: interest only, about $12 a month of late wages"
+     },
+     {
+      "field": "cashOut",
+      "add": 500,
+      "note": "lawyer letter answer; estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "weekly_payroll",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3104,
+        "note": "one week of float"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "biweekly_pay",
+      "cost": [],
+      "result": [],
+      "violation": "pay_frequency_violation"
+     }
+    ],
+    "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+    "confidence": "verified",
+    "note": "D10 used 16% interest; NY judgment interest is 9% (my reading, CPLR 5004). After a prior finding: 100% of late wages.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "d00_labor_finance_pay_frequency",
+    "fixesFragmentValue": {
+     "pay_frequency_claim.months": "[] -> all"
+    }
+   },
+   {
+    "id": "gift_card_hangover",
+    "sourceFragment": "D10",
+    "tier": "deep",
+    "trigger": "calendar: January-February",
+    "months": [
+     1,
+     2
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "cashShift",
+      "add": -3060,
+      "note": "6% of December sales redeemed: cups out, no cash in"
+     },
+     {
+      "field": "cashOut",
+      "add": 178,
+      "note": "tax due at redemption if not set up (D00 gift_redemption)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "gift_cards",
+      "optionId": "track_liability",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "gift_cards",
+      "optionId": "none",
+      "label": "Stop selling gift cards",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.995,
+        "note": "December sales lost"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://dos.ny.gov/news/consumer-alert-nys-division-consumer-protection-alerts-consumers-new-laws-related-gift-cards",
+    "confidence": "verified",
+    "note": "Gift cards: 9 years, no fees, cash back under $5 (NY Division of Consumer Protection extract).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "processor_reserve",
+    "sourceFragment": "D10",
+    "tier": "exotic",
+    "trigger": "decision: two chargebacks in a month",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cashFrozen",
+      "add": 4590,
+      "note": "10% of a month of card sales held 90 days"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "refund_policy",
+      "optionId": "fast_refunds",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 50
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "card_fee_policy",
+      "optionId": "switch_processor",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 6
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nerdwallet.com/business/software/learn/square-concern",
+    "confidence": "estimate",
+    "note": "D10 value.",
+    "duplicateOf": "processor_holds_funds",
+    "fixesFragmentValue": {
+     "processor_reserve.months": "[] -> all"
+    }
+   },
+   {
+    "id": "workers_stay_home",
+    "sourceFragment": "D10",
+    "tier": "deep",
+    "trigger": "announced: immigration enforcement in the neighborhood",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.93
+     },
+     {
+      "field": "footTraffic",
+      "mult": 0.97
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cross_training",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 110
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "optionId": "above",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 1430
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_i9",
+      "cost": [],
+      "result": [],
+      "violation": "no_i9"
+     }
+    ],
+    "source": "https://www.citylandnyc.org/dependent-on-immigrant-workforce-city-hospitality-industry-concerned-about-ice-raids/",
+    "confidence": "estimate",
+    "note": "D10 values.",
+    "duplicateOf": "immigration_enforcement_chill",
+    "fixesFragmentValue": {
+     "workers_stay_home.months": "[] -> all"
+    }
+   },
+   {
+    "id": "manager_misconduct_claim",
+    "sourceFragment": "D10",
+    "tier": "deep",
+    "trigger": "decision: harassment_training skipped and a complaint ignored",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 15000
+     },
+     {
+      "field": "reputation",
+      "mult": 0.95
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "harassment_training",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 10
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "epli_cover",
+      "optionId": "policy",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 150
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -12500
+       }
+      ]
+     }
+    ],
+    "source": "https://law360.com/articles/582027",
+    "confidence": "estimate",
+    "note": "D10 value.",
+    "fixesFragmentValue": {
+     "manager_misconduct_claim.months": "[] -> all"
+    }
+   },
+   {
+    "id": "sellers_tax_claim",
+    "sourceFragment": "D01",
+    "tier": "core",
+    "trigger": "decision: buying a cafe with a bulk-sale notice; the state answers with a Notice of Claim",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "closingDelayDays",
+      "add": 90
+     },
+     {
+      "field": "rent",
+      "mult": 1.0,
+      "note": "rent runs if the lease was already assigned"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 2500
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_bulk_sale_notice",
+      "cost": [],
+      "result": [],
+      "violation": "bulk_sale_not_notified"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+    "confidence": "estimate",
+    "note": "D01 (TB-ST-70); overlap with D15.",
+    "duplicateOf": "d00_premises_seller_tax_claim"
+   },
+   {
+    "id": "sellers_tax_debt_inherited",
+    "sourceFragment": "D01",
+    "tier": "core",
+    "trigger": "decision: bought without a bulk-sale notice",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 30000,
+      "note": "the seller's sales tax debt, capped at the price or asset value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 2500
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -30000
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_bulk_sale_notice",
+      "cost": [],
+      "result": [],
+      "violation": "bulk_sale_not_notified"
+     }
+    ],
+    "source": "https://totalfood.com/buying-a-restaurant-watch-out-for-the-sellers-sales-tax-liabilities/",
+    "confidence": "estimate",
+    "note": "D01 design example."
+   },
+   {
+    "id": "acquisition_tax_at_closing",
+    "sourceFragment": "D01",
+    "tier": "deep",
+    "trigger": "decision: buying a cafe's equipment",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 3550,
+      "note": "8.875% x $40,000 of equipment"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "allocation",
+      "label": "Allocate the price in the contract",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 500
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "entry_mode",
+      "optionId": "from_scratch",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3550,
+        "note": "new equipment is taxed too"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+    "confidence": "estimate",
+    "note": "D01."
+   },
+   {
+    "id": "contractor_adds_sales_tax",
+    "sourceFragment": "D01",
+    "tier": "deep",
+    "trigger": "decision: lease silent on who owns improvements",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 3728,
+      "note": "5.3% of a $70,000 build-out"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "optionId": "capital_improvement",
+      "label": "Lease says improvements belong to the landlord",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -3728
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3728
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/advisory_opinions/sales/24-54s.htm",
+    "confidence": "estimate",
+    "note": "D01 assumption (60% labor and markup)."
+   },
+   {
+    "id": "inherited_sick_leave_balances",
+    "sourceFragment": "D01",
+    "tier": "deep",
+    "trigger": "decision: kept the seller's staff",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1680,
+      "note": "4 x 20 h x $21 over the year, only if the shop has 5+ employees"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "cost": [
+       {
+        "field": "salePrice",
+        "add": -1680
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "no_paid_sick_leave",
+      "cost": [],
+      "result": [],
+      "violation": "sick_leave_denied"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+    "confidence": "verified",
+    "note": "DCWP: balances carry over to a successor employer (D01).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "inherited_sick_leave_balances.note": "unpaid if 4 or fewer employees"
+    }
+   },
+   {
+    "id": "inherited_unemployment_rate",
+    "sourceFragment": "D01",
+    "tier": "deep",
+    "trigger": "decision: bought the business and its staff",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "unemploymentTax",
+      "add": 0.02
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 500
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "takeover_transition",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://dol.ny.gov/transfers-business-and-your-contribution-rate",
+    "confidence": "estimate",
+    "note": "D01 design value: +$352 per worker a year."
+   },
+   {
+    "id": "equity_injection_gap",
+    "sourceFragment": "D01",
+    "tier": "deep",
+    "trigger": "decision: SBA loan for a purchase with a seller note",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "minOwnCashShare",
+      "add": 0.1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "entry_mode",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 30000
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "standby_note",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.whitefordlaw.com/news-events/client-alert-sba-issues-sop-50-10-8-key-changes-impacting-sba-7a-lending",
+    "confidence": "estimate",
+    "note": "D01 (SOP 50 10 8)."
+   },
+   {
+    "id": "letter_of_credit_wait",
+    "sourceFragment": "D01",
+    "tier": "deep",
+    "trigger": "decision: landlord wants a letter of credit",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "leaseSigningDelayDays",
+      "add": 18
+     },
+     {
+      "field": "monthlyCost",
+      "add": 23,
+      "note": "1.5% a year on $18,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "cash_deposit",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 18000
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "letter_of_credit",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 23
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.metro-manhattan.com/security-deposit/",
+    "confidence": "estimate",
+    "note": "D01."
+   },
+   {
+    "id": "franchise_royalty_bite",
+    "sourceFragment": "D01",
+    "tier": "core",
+    "trigger": "decision: entry_mode = franchise",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "monthlyCost",
+      "add": 4335,
+      "note": "8.5% of $51,000 (Gregorys 6% + 2.5%)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "franchise_brand",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 4335
+       }
+      ],
+      "result": [
+       {
+        "field": "demand",
+        "mult": 1.1,
+        "note": "brand pull; estimate"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "entry_mode",
+      "optionId": "independent",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://franchise.gregoryscoffee.com/",
+    "confidence": "estimate",
+    "note": "D01. Expressed as a cost line so the multiplier stays in band.",
+    "fixesFragmentValue": {
+     "franchise_royalty_bite.effects": "revenue x0.915 -> monthlyCost $4,335"
+    }
+   },
+   {
+    "id": "ex_worker_wage_claim",
+    "sourceFragment": "D08",
+    "tier": "core",
+    "trigger": "decision: head count drops while a wage shortcut is active",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "audit",
+      "add": 1,
+      "scope": "wage-and-hour, 6 years, all workers"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "worker_complaints",
+      "optionId": "investigate",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1.0,
+        "unit": "x owed"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "keep_tips",
+      "cost": [],
+      "result": [],
+      "violation": "tip_theft"
+     },
+     {
+      "kind": "shortcut",
+      "id": "unpaid_trial_shifts",
+      "cost": [],
+      "result": [],
+      "violation": "unpaid_training_time"
+     }
+    ],
+    "source": "https://www.law360.com/articles/2363776",
+    "confidence": "estimate",
+    "note": "Same rule as D05 wage_claim_from_former_barista: a claim makes the audit certain.",
+    "duplicateOf": "wage_claim_from_former_barista",
+    "fixesFragmentValue": {
+     "ex_worker_wage_claim.effects": "inspections x1.5 -> audit +1"
+    }
+   },
+   {
+    "id": "harassment_training_due",
+    "sourceFragment": "D08",
+    "tier": "deep",
+    "trigger": "calendar: yearly",
+    "months": [
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 84
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "harassment_prevention",
+      "optionId": "policy_and_training",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_harassment_training",
+      "cost": [],
+      "result": [],
+      "violation": "no_harassment_policy_training"
+     }
+    ],
+    "source": "https://www.ny.gov/combating-sexual-harassment-workplace/sexual-harassment-prevention-model-policy-and-training",
+    "confidence": "verified",
+    "note": "Fix: staffAvailability 0.99 -> the paid hour as cash.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "yearly_harassment_training_due",
+    "fixesFragmentValue": {
+     "harassment_training_due.effects": "staffAvailability 0.99 -> cashOut 84; months all -> 12"
+    }
+   },
+   {
+    "id": "pos_processor_outage_day",
+    "sourceFragment": "D03",
+    "tier": "core",
+    "trigger": "announced: processor outage",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.985
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "offline_mode",
+      "label": "Turn offline mode on in advance",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": [
+       {
+        "field": "demand",
+        "mult": 1.012
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "backup_card_terminal",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 299
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://techcrunch.com/2023/09/08/square-day-long-outage-resolved",
+    "confidence": "estimate",
+    "note": "D03 value; offline limits verified in Square help (24 h)."
+   },
+   {
+    "id": "offline_payments_lost",
+    "sourceFragment": "D03",
+    "tier": "deep",
+    "trigger": "decision: register logged out before upload",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 765,
+      "note": "half a day of card sales"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "plan_for_outages",
+      "label": "Rule: never log out with queued payments",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -765
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "connectivity_backup",
+      "optionId": "failover",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 40
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+    "confidence": "verified",
+    "note": "Fix: D03 had no effect; $765 is its own note.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "fixesFragmentValue": {
+     "offline_payments_lost.effects": "[] -> cashOut 765"
+    }
+   },
+   {
+    "id": "card_reader_dies",
+    "sourceFragment": "D03",
+    "tier": "deep",
+    "trigger": "decision: one card reader, no spare",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.97
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "backup_card_terminal",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 59,
+        "note": "a spare contactless reader; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "cash_only_days",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.97
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://squareup.com/us/en/hardware/register",
+    "confidence": "estimate",
+    "note": "D03. NYC requires accepting cash (Local Law 34 of 2020), so cash keeps the shop open."
+   },
+   {
+    "id": "delivery_worker_pay_rise",
+    "sourceFragment": "D13",
+    "tier": "core",
+    "trigger": "calendar: April 1 indexation of app delivery pay",
+    "months": [
+     4
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "deliveryShare",
+      "mult": 0.97
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "delivery_plan",
+      "optionId": "own_pickup",
+      "label": "Push pickup ordering",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 50
+       }
+      ],
+      "result": [
+       {
+        "field": "deliveryShare",
+        "mult": 1.02
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "delivery_plan",
+      "optionId": "stay",
+      "cost": [
+       {
+        "field": "deliveryShare",
+        "mult": 0.97
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nyc.gov/site/dca/workers/Delivery-Worker-Public-Hearing-Minimum-Pay-Rate.page",
+    "confidence": "verified",
+    "note": "DCWP: $22.13 an hour before tips from April 1, 2026 (up 3.2% from $21.44); annual adjustment announced by Feb 1; all apps in early 2027.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "chain_baristas_strike",
+    "sourceFragment": "D06",
+    "tier": "exotic",
+    "trigger": "announced: strike at a chain's unionized stores",
+    "months": [
+     11,
+     12,
+     1,
+     2
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 1.03,
+      "note": "only within 250 m of a struck store"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "label": "Advertise your own staff terms",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 60
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "loyalty",
+      "label": "Loyalty card for new customers",
+      "cost": [
+       {
+        "field": "cogs",
+        "mult": 1.01
+       }
+      ],
+      "result": [
+       {
+        "field": "demand",
+        "mult": 1.01
+       }
+      ]
+     }
+    ],
+    "source": "https://www.aljazeera.com/economy/2025/12/5/starbucks-union-workers-face-off-as-old-tensions-over-wages-spill-over",
+    "confidence": "estimate",
+    "note": "The gain needs the shop to serve the extra customers (capacity) and is gone in 3 months."
+   },
+   {
+    "id": "surcharge_complaints_sweep",
+    "sourceFragment": "D06",
+    "tier": "deep",
+    "trigger": "announced: consumer sweep on posted prices and surcharges",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "card_pricing",
+      "optionId": "dual_price",
+      "label": "Post card and cash prices side by side",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "hidden_card_surcharge",
+      "cost": [],
+      "result": [],
+      "violation": "card_surcharge_undisclosed"
+     }
+    ],
+    "source": "https://rules.cityofnewyork.us/wp-content/uploads/2026/03/NOA-DCWP-Restaurant-Surcharges.pdf",
+    "confidence": "estimate",
+    "note": "NY GBL 518 (since Feb 11, 2024): the total card price must be posted and the surcharge cannot exceed the card fee."
+   },
+   {
+    "id": "immigration_enforcement_chill",
+    "sourceFragment": "D07",
+    "tier": "deep",
+    "trigger": "announced: arrests in the news",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "footTraffic",
+      "mult": 0.95
+     },
+     {
+      "field": "staffAvailability",
+      "mult": 0.97
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "disruption_playbook",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "hours",
+      "optionId": "standard",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.98
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://bronx.news12.com/2026/08/21/flatbush-businesses-say-fewer-customers-higher-costs-are-squeezing-their-bottom-line/6DCqS40HPKdqklRHGkExuh",
+    "confidence": "estimate",
+    "note": "D07 values."
+   },
+   {
+    "id": "supplier_credit_hold",
+    "sourceFragment": "D04",
+    "tier": "deep",
+    "trigger": "decision: cash went negative or supplier payments delayed past 30 days",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cogs",
+      "mult": 1.015
+     },
+     {
+      "field": "ownerHours",
+      "add": 8,
+      "note": "someone with cash must meet every delivery"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "supply_route",
+      "optionId": "pay_on_time",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 4000,
+        "note": "clear the overdue balance"
+       }
+      ],
+      "result": [
+       {
+        "field": "cogs",
+        "mult": 0.985
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "safety_stock",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1500
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.cafeimports.com/north-america/blog/?p=29619",
+    "confidence": "estimate",
+    "note": "D04 value; added the owner-time cost."
+   },
+   {
+    "id": "seller_tax_debt_surfaces",
+    "sourceFragment": "D14",
+    "tier": "core",
+    "trigger": "decision: paid the seller without a bulk-sale notice",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 30000,
+      "note": "seller's sales tax debt, capped at the price (see D01)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "bulk_sale_notice",
+      "optionId": "file",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -30000
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_bulk_sale_notice",
+      "cost": [],
+      "result": [],
+      "violation": "bulk_sale_not_notified"
+     }
+    ],
+    "source": "https://www.aprio.com/insights-events/bulk-sales-in-new-york-how-a-purchaser-was-left-responsible-for-a-sellers-sales-tax-liability-ins-article-tax/",
+    "confidence": "estimate",
+    "note": "Fix: D14 had no effects, months or duration.",
+    "duplicateOf": "sellers_tax_debt_inherited",
+    "fixesFragmentValue": {
+     "seller_tax_debt_surfaces": "effects [], months [], durationMonths 0 -> filled"
+    }
+   },
+   {
+    "id": "bulk_sale_claim",
+    "sourceFragment": "D14",
+    "tier": "deep",
+    "trigger": "decision: bulk-sale notice filed and the seller owes tax",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "closingDelayDays",
+      "add": 90
+     },
+     {
+      "field": "cashFrozen",
+      "add": 15000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "bulk_sale_notice",
+      "optionId": "escrow",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "bulk_sale_notice",
+      "optionId": "walk_away",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 2000
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+    "confidence": "estimate",
+    "note": "Fix: D14 had no effects.",
+    "duplicateOf": "sellers_tax_claim",
+    "fixesFragmentValue": {
+     "bulk_sale_claim": "effects [] -> filled"
+    }
    }
   ]
  }

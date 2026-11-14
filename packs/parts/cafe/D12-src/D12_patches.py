@@ -205,7 +205,7 @@ REVIEW = [
     ('cafe', 'unit.refPrice / cogsPerUnit', '8.5 / 2.21', 'kept', 'Публичной статистики среднего чека нет (искал). Входные цены проверены: кофе $9.25/фунт, молоко $4.10/галлон (FRED, октябрь 2026), стакан 4.6¢.'),
     ('cafe', 'market.unitsPerSlotMonth / priceElasticity / weights', '6000 / -1.3', 'not_found', 'Игровые значения. Эластичность спроса на кофе в кофейне в первоисточниках не найдена; это часть задания 80 (codex), часть A.'),
     ('cafe', 'capacity.unitsPerStaffMonth', 1700, 'not_found', 'Измерений «заказов на бариста в час» в первоисточниках нет; 10.6 заказа на оплаченный час — расчёт заметок.'),
-    ('cafe', 'sizing (18 sq ft на место, 170 заказов на место, 60% навынос)', '18 / 170 / 0.6', 'not_found', 'Норма площади на место для общепита в NYC — в Строительном кодексе (occupant load 15 net sq ft на место за столами), но nyc.gov недоступен; правило «20 мест — гостевой туалет» осталось с первого прохода.'),
+    ('cafe', 'sizing (18 sq ft на место, 170 заказов на место, 60% навынос)', '18 / 170 / 0.6', 'not_found', 'Норма плотности зала — в таблице occupant load Строительного кодекса NYC (по памяти около 15 net sq ft на человека за столами; не открыто, amlegal отвечает 403). Правило «20 мест — гостевой туалет» подтверждено через поиск (Health Code и 10 NYCRR 14-1.142, 311): не действует для помещений, где разрешённое заведение общепита работало до 5 декабря 1977 года; места на общей площадке нескольких заведений суммируются.'),
     # setup
     ('cafe', 'setup[security_deposit]', 18000, 'kept', 'Справочник аренды SBS (nyc.gov) недоступен; три месяца — решение заметок, путеводитель говорит «обычно два».'),
     ('cafe', 'setup[buildout] + extra.buildout.classes', '87.5 / 225 / 400 за кв. фут', 'kept', 'Опора через поиск: медиана открытия во «втором поколении» помещения ~$73 за кв. фут против ~$193 в новом (национальный опрос, вторичный); сайт подрядчика alphacontractorsny вне сети сессии. Сроки 60/90/180 дней — оценка.'),
@@ -326,3 +326,20 @@ EXTRA_MECHANICS = [
                  {'what': 'Albany County package', 'value': 395, 'source': 'https://www.llcpublishers.com/pricing', 'confidence': 'verified'}],
      'tier': 'exotic'},
 ]
+
+# the consolidated Chapter 23 PDF on nyc.gov refuses this session; these two were read in the adopted rule text
+for _p in CAFE_PATCHES:
+    if _p.get('id') in ('pest_activity', 'spoiled_food'):
+        _p['set']['source'] = RULES21
+
+DCWP26 = 'https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DCWP-NOA-Rules-Relating-to-Earned-Safe-and-Sick-Time-Act.pdf'
+COMMON_PATCHES += [
+    {'section': 'violations', 'id': 'sick_leave_denied', 'why': 'правила DCWP, вступившие 23.07.2026: при «политике или практике» не давать больничные каждый работник получает $500 за каждый календарный год (Admin Code §20-924(d)(v)); статьи закона теперь увидены',
+     'set': {'law': 'NYC Administrative Code §§20-912, 20-913, 20-924 (Earned Safe and Sick Time Act); 6 RCNY Chapter 7 (protected time off rules, effective July 23, 2026)',
+             'source': DCWP26,
+             'note': 'DCWP notice of adoption, rules effective July 23, 2026 (seen on rules.cityofnewyork.us): "protected time off" replaces "safe/sick time"; since the 2025 amendment employers also give 32 hours of unpaid protected time off on the first day of work and on the first day of each calendar year; where an employer has an official or unofficial policy or practice of not providing protected time off, each employee is entitled to $500 per calendar year the policy remains in effect (§20-924(d)(v)), on top of the hours owed and other relief. First pass (DCWP FAQ, nyc.gov, not reopened): three times the wages that should have been paid or $250, whichever is greater, per instance, and $500 for each unlawful denial. Game formula: $500 + 3 x what was kept; with more than one worker the real per-employee $500 is higher: needs fine.perStaff.'}},
+]
+for _p in CAFE_PATCHES:
+    if _p.get('id') == 'sick_leave_cover':
+        _p['set']['note'] = _p['set']['note'].replace('(law-firm alerts on the ESSTA amendments; the DCWP page could not be opened from this session)', '(DCWP adopted rules effective July 23, 2026, seen on rules.cityofnewyork.us)')
+NEW_SOURCES.append({'url': DCWP26, 'title': 'DCWP: notice of adoption, protected time off rules, effective July 23, 2026'})

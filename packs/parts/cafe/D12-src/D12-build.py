@@ -2,10 +2,12 @@
 """D12: build the corrected-records fragment from the cafe pack (v2, branch claude/keen-cray-yytcbp)
 and packs/_common.json. Each patch keeps the record id; the fragment holds full corrected records.
 Also prints the "was -> now -> source" table for the report.
-Run from the repo root:  python3 packs/parts/cafe/D12-build.py"""
+Run from the repo root:  python3 packs/parts/cafe/D12-src/D12-build.py"""
 import json, subprocess, copy, sys, os
+sys.dont_write_bytecode = True
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+SRC = os.path.dirname(os.path.abspath(__file__))
+HERE = os.path.dirname(SRC)
 def load_git(ref, path):
     return json.loads(subprocess.check_output(['git', 'show', f'{ref}:{path}']))
 try:
@@ -14,7 +16,7 @@ except Exception:
     CAFE = json.load(open('packs/cafe.json'))
 COMMON = json.load(open('packs/_common.json'))
 CHECKED = '2026-11-14'
-sys.path.insert(0, HERE)
+sys.path.insert(0, SRC)
 from D12_patches import CAFE_PATCHES, COMMON_PATCHES, NEW_SOURCES, CHECKED_ONLY, LEVER_NOTES, SHORTCUT_NOTES  # noqa: E402
 import D12_patches  # noqa: E402
 
@@ -35,7 +37,7 @@ def apply(pack, patches):
     for p in patches:
         section, rid, upd = p['section'], p.get('id'), p['set']
         rec = copy.deepcopy(find(pack, section, rid))
-        before = {k: rec.get(k) for k in upd if k != 'note'}
+        before = copy.deepcopy({k: rec.get(k) for k in upd if k != 'note'})
         for k, v in upd.items():
             if isinstance(v, dict) and isinstance(rec.get(k), dict) and k not in ('fine',):
                 rec[k].update(v)
@@ -108,3 +110,28 @@ with open(os.path.join(HERE, 'D12-review.md'), 'w') as f:
 from collections import Counter
 print(Counter(r[3] for r in D12_patches.REVIEW))
 print(len(cafe_rows), 'cafe patches,', len(common_rows), 'common patches,', len(CHECKED_ONLY), 'checked-only')
+
+# checked-only and link tables, then the report
+rows = CHECKED_ONLY
+with open(os.path.join(HERE, 'D12-checked.md'), 'w') as f:
+    f.write('\n## 4б. Перепроверенные числа с пометкой verified (%d)\n\n| Где | Значение | Что увидено | Ссылка |\n|---|---|---|---|\n' % len(rows))
+    for r in rows:
+        f.write(f"| `{r['where']}` | {r['value']} | {r['seen']} | {r['source']} |\n")
+import collections
+L = [l.rstrip('\n').split('\t') for l in open(os.path.join(HERE, 'D12-linkcheck.tsv'))]
+cnt = collections.Counter(x[1] for x in L)
+why = {'403': 'отказ сайта автоматическому запросу', '000': 'хост вне сети сессии', '429': 'лимит запросов'}
+with open(os.path.join(HERE, 'D12-links.md'), 'w') as f:
+    f.write(f"\n## 4в. Ссылки из `sources` и полей `source`\n\nВсего {len(L)} адресов (`D12-linkcheck.tsv`): 200 — {cnt['200']}, 403 — {cnt['403']}, вне сети сессии — {cnt['000']}, 429 — {cnt['429']}. Все {cnt['200']} открывшихся страниц сверены по заголовку с описанием в `sources`: каждая ведёт на заявленное. Страница REBNY открывается, но цифры в ней рисует скрипт. Не открылись:\n\n")
+    for u, code in L:
+        if code != '200':
+            f.write(f"- {code} — {u} — {why.get(code, code)}\n")
+parts = [os.path.join(SRC, 'D12-head.md'), os.path.join(HERE, 'D12-table.md'), os.path.join(SRC, 'D12-tail.md'),
+         os.path.join(HERE, 'D12-review.md'), os.path.join(HERE, 'D12-checked.md'), os.path.join(HERE, 'D12-links.md'), os.path.join(SRC, 'D12-end.md')]
+with open(os.path.join(HERE, 'D12-number-check.md'), 'w') as f:
+    for p in parts:
+        f.write(open(p).read())
+        f.write('\n')
+for p in parts[1:2] + parts[3:6]:
+    os.remove(p)
+print('report written')
