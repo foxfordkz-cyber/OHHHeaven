@@ -1,0 +1,144 @@
+{
+  "id": "barbershop",
+  "version": 1,
+  "name": "Barbershop",
+  "tagline": "Three to five chairs, licensed barbers, regulars who follow the person holding the clippers.",
+  "startCapital": 95000,
+  "unit": {
+    "name": "haircut", "refPrice": 40, "priceMin": 20, "priceMax": 90, "cogsPerUnit": 1.5,
+    "confidence": "estimate",
+    "note": "SKELETON, to be verified. Neighborhood NYC shops charge $25-35, mid-market $40-60, upscale $70+. Cost per cut: neck strip, blade, disinfectant, cape wash, product."
+  },
+  "market": {
+    "unitsPerSlotMonth": 760, "priceElasticity": -1.1,
+    "weights": { "price": 0.25, "quality": 0.3, "reputation": 0.3, "location": 0.15 },
+    "confidence": "estimate",
+    "note": "SKELETON. 4 chairs x about 190 cuts a month at the reference price and average quality."
+  },
+  "capacity": {
+    "unitsPerStaffMonth": 240, "minStaff": 1, "maxStaff": 8, "hardCapUnits": null,
+    "note": "SKELETON. One full-time barber: about 11 cuts a day x 22 days. A chair without a barber earns nothing."
+  },
+  "sizing": {
+    "unitName": "chair", "min": 2, "max": 8, "default": 4,
+    "sqftPerUnit": 100, "unitsServedPerSizeMonth": 420, "takeawayShare": 0,
+    "cleaningCostPerSizeMonth": 40, "crowdPenaltyAbove": 0.85, "emptyPenaltyBelow": 0.35,
+    "confidence": "estimate",
+    "note": "SKELETON. One chair can host two barber shifts: open about 70 hours a week, about 1.4 cuts per chair-hour."
+  },
+  "setup": [
+    { "id": "security_deposit", "name": "Security deposit (2 months of rent)", "kind": "deposit", "cost": 12000, "required": true,
+      "confidence": "estimate", "note": "SKELETON. 2 x $6,000 mid-tier rent." },
+    { "id": "barber_chair", "name": "Hydraulic barber chair", "kind": "equipment", "cost": 900, "required": true, "scalesWithSize": true, "lifespanMonths": 120,
+      "confidence": "estimate", "note": "SKELETON. Mid-range new chair." },
+    { "id": "shop_owner_license", "name": "Barber Shop Owner license", "kind": "license", "cost": 60, "required": true,
+      "waitDays": 30, "agency": "NYS Department of State, Division of Licensing Services", "link": "https://dos.ny.gov/barber-shop-owner",
+      "withoutItViolation": "no_shop_license",
+      "source": "https://dos.ny.gov/barber-shop-owner", "confidence": "estimate", "note": "SKELETON. Fee and wait to be verified on the DOS page." }
+  ],
+  "kits": [
+    { "id": "lean", "name": "Lean start", "size": 3, "items": [ { "id": "security_deposit", "qty": 1 }, { "id": "barber_chair", "qty": 3 }, { "id": "shop_owner_license", "qty": 1 } ], "pitch": "Three chairs, used fixtures, the cheapest legal way to open." },
+    { "id": "standard", "name": "Standard", "size": 4, "items": [ { "id": "security_deposit", "qty": 1 }, { "id": "barber_chair", "qty": 4 }, { "id": "shop_owner_license", "qty": 1 } ], "pitch": "Four chairs and new mid-range equipment." },
+    { "id": "premium", "name": "Premium", "size": 5, "items": [ { "id": "security_deposit", "qty": 1 }, { "id": "barber_chair", "qty": 5 }, { "id": "shop_owner_license", "qty": 1 } ], "pitch": "Five chairs, premium chairs and a full build-out." }
+  ],
+  "monthlyCosts": [
+    { "id": "utilities", "name": "Electricity, water and gas", "kind": "utilities", "basis": "fixed", "amount": 450, "confidence": "estimate", "note": "SKELETON." },
+    { "id": "liability_insurance", "name": "General and professional liability insurance", "kind": "insurance", "basis": "fixed", "amount": 90, "confidence": "estimate", "note": "SKELETON." },
+    { "id": "card_processing", "name": "Card processing", "kind": "fees", "basis": "pct_revenue", "amount": 0.026, "confidence": "estimate", "note": "SKELETON. Square in-person rate." }
+  ],
+  "staff": [
+    { "id": "barber", "name": "Licensed barber", "hourlyWage": 20, "tipped": true, "cashWage": 17, "hoursPerMonth": 160, "licenseRequired": "NYS Barber license",
+      "confidence": "estimate", "note": "SKELETON. No tip credit in NY miscellaneous industries: cash wage equals the minimum wage." },
+    { "id": "receptionist", "name": "Front desk and shop assistant", "hourlyWage": 17, "hoursPerMonth": 120, "licenseRequired": null,
+      "confidence": "estimate", "note": "SKELETON. NYC minimum wage 2026." }
+  ],
+  "taxes": [
+    { "id": "nyc_service_sales_tax", "name": "NYC sales tax on barbering services", "base": "taxable_revenue", "rate": 0.045, "due": "quarterly",
+      "appliesIf": "haircuts and shaves sold in New York City", "confidence": "estimate", "note": "SKELETON. City tax only; no state or MCTD tax on the service." },
+    { "id": "retail_sales_tax", "name": "Sales tax on retail products", "base": "taxable_revenue", "rate": 0.08875, "due": "quarterly",
+      "appliesIf": "pomade, shampoo and other products sold to take home", "confidence": "estimate", "note": "SKELETON." }
+  ],
+  "levers": [
+    { "id": "cleaning", "name": "Shop cleaning", "options": [
+      { "id": "daily", "label": "Sweep after every cut, full clean daily", "monthlyCost": 400, "effects": { "quality": 0.03 } },
+      { "id": "minimal", "label": "Sweep when it piles up", "monthlyCost": 100, "effects": { "quality": -0.05 }, "causes": "dirty_shop" }
+    ] }
+  ],
+  "shortcuts": [
+    { "id": "unlicensed_barber", "name": "Put an unlicensed barber on a chair",
+      "what": "Cheaper hands on a chair today. If a state inspector walks in, the shop owner pays the fine.",
+      "saves": { "basis": "per_staff", "amount": 300 }, "violation": "unlicensed_barber_working" },
+    { "id": "skip_sterilization", "name": "Skip disinfecting tools between clients",
+      "what": "Saves disinfectant and a few minutes per cut. Dirty tools are a sanitary violation.",
+      "saves": { "basis": "fixed", "amount": 150 }, "violation": "unsanitized_tools" },
+    { "id": "barbers_1099", "name": "Call your barbers 1099 contractors",
+      "what": "No payroll taxes or workers' comp. If you set their hours and prices, the state calls them employees.",
+      "saves": { "basis": "pct_payroll", "amount": 0.12 }, "violation": "misclassified_barbers" }
+  ],
+  "violations": [
+    { "id": "no_shop_license", "name": "Operating a barber shop without a license", "law": "NY General Business Law Art. 28",
+      "official": "dos_inspector", "foundBy": ["inspection", "complaint"], "fine": { "base": 500 }, "closureDays": 0, "reputationHit": 0.1,
+      "confidence": "estimate", "note": "SKELETON. Fine amount to be verified in GBL Art. 28." },
+    { "id": "unlicensed_barber_working", "name": "Unlicensed barber working in the shop", "law": "NY General Business Law Art. 28",
+      "official": "dos_inspector", "foundBy": ["inspection", "complaint"], "fine": { "base": 500 }, "closureDays": 0, "reputationHit": 0.1,
+      "confidence": "estimate", "note": "SKELETON." },
+    { "id": "unsanitized_tools", "name": "Tools not disinfected between clients", "law": "19 NYCRR (barber shop sanitary rules)",
+      "official": "dos_inspector", "foundBy": ["inspection", "complaint"], "fine": { "base": 250 }, "closureDays": 0, "reputationHit": 0.15,
+      "confidence": "estimate", "note": "SKELETON." },
+    { "id": "dirty_shop", "name": "Unsanitary shop", "law": "19 NYCRR (barber shop sanitary rules)",
+      "official": "dos_inspector", "foundBy": ["inspection", "complaint"], "fine": { "base": 250 }, "closureDays": 0, "reputationHit": 0.1,
+      "confidence": "estimate", "note": "SKELETON." },
+    { "id": "misclassified_barbers", "name": "Employees misclassified as independent contractors", "law": "NY Labor Law Art. 18; NY Workers' Compensation Law",
+      "official": "dol_investigator", "foundBy": ["audit", "complaint"], "fine": { "pctOfSaved": 1.5 }, "closureDays": 0, "reputationHit": 0.05,
+      "confidence": "estimate", "note": "SKELETON." }
+  ],
+  "officials": [
+    { "id": "dos_inspector", "name": "State licensing inspector", "agency": "NYS Department of State, Division of Licensing Services", "role": "inspector",
+      "checks": ["no_shop_license", "unlicensed_barber_working", "unsanitized_tools", "dirty_shop"],
+      "realProcess": "SKELETON.", "source": "https://dos.ny.gov/barber-shop-owner" },
+    { "id": "dol_investigator", "name": "Labor standards investigator", "agency": "NYS Department of Labor", "role": "tax_auditor",
+      "checks": ["misclassified_barbers"], "realProcess": "SKELETON.", "source": "https://dol.ny.gov/" }
+  ],
+  "reports": [
+    { "id": "report_unlicensed", "name": "Report an unlicensed barber or shop (NYS Department of State)",
+      "text": "The Division of Licensing Services sends an inspector. If you are wrong, you get a warning.",
+      "role": "inspector", "checks": ["no_shop_license", "unlicensed_barber_working"] },
+    { "id": "report_unsanitary", "name": "Report unsanitary conditions",
+      "text": "An inspector checks tools, towels and the floor. If you are wrong, you get a warning.",
+      "role": "inspector", "checks": ["unsanitized_tools", "dirty_shop"] },
+    { "id": "report_labor", "name": "Report wage theft or fake contractors (NYS Department of Labor)",
+      "text": "A labor investigator audits the payroll. If you are wrong, you get a warning.",
+      "role": "tax_auditor", "checks": ["misclassified_barbers"] }
+  ],
+  "events": [
+    { "id": "holiday_rush", "name": "Holiday rush", "effect": { "field": "demand", "mult": 1.15 }, "months": 1, "confidence": "estimate", "note": "SKELETON." },
+    { "id": "january_slump", "name": "January slump", "effect": { "field": "demand", "mult": 0.88 }, "months": 1, "confidence": "estimate", "note": "SKELETON." },
+    { "id": "flu_season", "name": "Flu season: barbers out sick", "effect": { "field": "staffAvailability", "mult": 0.9 }, "months": 1, "confidence": "estimate", "note": "SKELETON." }
+  ],
+  "ruleCards": [
+    { "id": "shop_license", "title": "Barber Shop Owner license", "text": "SKELETON. A barber shop in New York needs a state license before it opens.", "source": "https://dos.ny.gov/barber-shop-owner" },
+    { "id": "barber_license", "title": "Every barber needs a license", "text": "SKELETON. Only a state-licensed barber may cut hair for pay.", "source": "https://dos.ny.gov/barber" },
+    { "id": "no_tip_credit", "title": "No tip credit for barbers", "text": "SKELETON. Barbers must get the full minimum wage before tips.", "source": "https://dol.ny.gov/minimum-wage-0" }
+  ],
+  "roadmap": [
+    { "id": "choose_model", "title": "Choose how barbers work for you", "kind": "idea", "text": "SKELETON. Employees on hourly pay or commission, or true chair renters." },
+    { "id": "get_shop_license", "title": "Apply for the Barber Shop Owner license", "kind": "permit", "text": "SKELETON. Apply to the NYS Department of State before you open.",
+      "setupItemId": "shop_owner_license", "fee": 60, "waitDays": 30, "agency": "NYS Department of State", "link": "https://dos.ny.gov/barber-shop-owner" },
+    { "id": "hire_barbers", "title": "Hire licensed barbers", "kind": "people", "text": "SKELETON. Check every license in the state lookup before the first shift." }
+  ],
+  "suppliers": [
+    { "id": "chairs_equipment", "category": "Barber chairs and stations", "what": "SKELETON. Chairs, stations, mirrors, shampoo bowls.",
+      "whereToFind": "SKELETON.", "confidence": "estimate", "note": "SKELETON." },
+    { "id": "tools", "category": "Clippers and tools", "what": "SKELETON.", "whereToFind": "SKELETON.", "confidence": "estimate", "note": "SKELETON." },
+    { "id": "booking_pos", "category": "Booking and point of sale", "what": "SKELETON.", "whereToFind": "SKELETON.", "confidence": "estimate", "note": "SKELETON." }
+  ],
+  "manager": { "monthlySalary": 4500, "confidence": "estimate", "note": "SKELETON." },
+  "benchmarks": { "cogsPct": 0.06, "laborPct": 0.5, "rentPct": 0.12, "netMarginPct": 0.1, "confidence": "estimate", "note": "SKELETON." },
+  "sources": [
+    { "url": "https://dos.ny.gov/barber-shop-owner", "title": "NYS Department of State: Barber Shop Owner license", "checked": "2026-11-14" }
+  ],
+  "extra": {
+    "rentByTier": { "note": "SKELETON" },
+    "staffLoyalty": { "note": "SKELETON" }
+  }
+}
