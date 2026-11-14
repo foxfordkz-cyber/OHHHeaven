@@ -20,7 +20,7 @@ export interface BillingState {
 export function offlineStatus(): BillingStatus {
   return {
     plan: 'free', stage: 'open_world', canManage: true, freeEndsDay: null, daysLeft: null, advisorLeft: null, pro: null,
-    checkout: 'test-unlock', prices: { month: 1900, year: null, currency: 'usd' }, locked: [], teaser: null, stripeConfigured: false,
+    checkout: 'test-unlock', prices: { month: 1900, year: 14900, currency: 'usd' }, locked: [], teaser: null, stripeConfigured: false,
   };
 }
 

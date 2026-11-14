@@ -68,6 +68,9 @@ describe('billing env', () => {
     expect(form['line_items[0][price_data][recurring][interval]']).toBe('month');
     expect(String(form.success_url)).toContain('session_id={CHECKOUT_SESSION_ID}');
     expect(formEncode({ a: 'x y', b: undefined, 'c[d]': 1 })).toBe('a=x%20y&c%5Bd%5D=1');
+    const yearly = checkoutForm({ worldId: 'demo', playerId: 'p7', interval: 'year', origin: 'https://fy.example', env: billingEnv({}) });
+    expect(yearly['line_items[0][price_data][unit_amount]']).toBe(14_900);
+    expect(yearly['line_items[0][price_data][recurring][interval]']).toBe('year');
     const fixed = checkoutForm({ worldId: 'demo', playerId: 'p7', interval: 'month', origin: 'https://fy.example', env: { ...billingEnv({}), stripePriceMonth: 'price_123' } });
     expect(fixed['line_items[0][price]']).toBe('price_123');
     expect(fixed['line_items[0][price_data][unit_amount]']).toBeUndefined();
@@ -179,7 +182,7 @@ describe('Stripe test checkout', () => {
       if (init.method === 'POST') {
         const form = new URLSearchParams(init.body);
         const id = `cs_test_${calls.length}`;
-        sessions.set(id, { id, object: 'checkout.session', mode: 'subscription', status: 'open', payment_status: 'unpaid', client_reference_id: form.get('client_reference_id'), amount_total: Number(form.get('line_items[0][price_data][unit_amount]')) });
+        sessions.set(id, { id, object: 'checkout.session', mode: 'subscription', status: 'open', payment_status: 'unpaid', client_reference_id: form.get('client_reference_id'), amount_total: Number(form.get('line_items[0][price_data][unit_amount]')), metadata: { world: form.get('metadata[world]'), player: form.get('metadata[player]'), interval: form.get('metadata[interval]') } });
         return { ok: true, status: 200, json: async () => ({ ...sessions.get(id), url: `https://checkout.stripe.com/c/pay/${id}` }) };
       }
       const id = decodeURIComponent(url.split('/').pop()!);
@@ -193,7 +196,7 @@ describe('Stripe test checkout', () => {
     const auth = { Authorization: `Bearer ${token}` };
     expect((await billing(app, token)).body.data).toMatchObject({ checkout: 'stripe-test', stripeConfigured: true });
 
-    const start = await request(app).post('/api/worlds/demo/billing/checkout').set(auth).send({ interval: 'month' }).expect(200);
+    const start = await request(app).post('/api/worlds/demo/billing/checkout').set(auth).send({ interval: 'year' }).expect(200);
     expect(start.body.data).toMatchObject({ unlocked: false, mode: 'stripe-test' });
     expect(start.body.data.url).toMatch(/^https:\/\/checkout\.stripe\.com\//);
     expect(calls[0].url).toBe('https://api.stripe.com/v1/checkout/sessions');
@@ -213,7 +216,8 @@ describe('Stripe test checkout', () => {
     sessions.set(sessionId, { ...sessions.get(sessionId)!, status: 'complete', payment_status: 'paid' });
     const done = await request(app).post('/api/worlds/demo/billing/confirm').set(auth).send({ sessionId }).expect(200);
     expect(done.body.data).toMatchObject({ unlocked: true, mode: 'stripe-test' });
-    expect(done.body.data.status.pro).toMatchObject({ via: 'stripe-test', interval: 'month' });
+    expect(done.body.data.status.pro).toMatchObject({ via: 'stripe-test', interval: 'year' });
+    expect(new URLSearchParams(calls[0].body).get('line_items[0][price_data][unit_amount]')).toBe('14900');
     expect((await billing(app, other.token)).body.data.plan).toBe('free');
   });
 

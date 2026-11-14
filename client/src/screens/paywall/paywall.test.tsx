@@ -6,7 +6,7 @@ import { DevStore } from '../../app/dev';
 import { ownerView, ownerViewSetup } from '../../app/fixtures';
 import { createBillingApi, isPaywallError, type BillingApi, type BillingStatus } from './billing';
 import { exampleStatus } from './index';
-import { compareRows, heroFor, monthsLeft, nextReport, priceLabel, rivalAbove } from './logic';
+import { compareRows, heroFor, monthsLeft, nextReport, priceLabel, rivalAbove, yearlySaving } from './logic';
 import { nudgeFor } from './ProNudge';
 import { PaywallRoute } from './PaywallRoute';
 
@@ -47,13 +47,14 @@ describe('what the plan screen says', () => {
   it('puts the stakes in the headline: days left, the orders that will freeze, autopilot', () => {
     const s = exampleStatus('free_month');
     const h = heroFor('free_month', s, ownerView, en);
-    expect(h.title).toBe('Free month: 16 days left');
+    expect(h.title).toBe('Free until day 90: 16 days left');
     expect(h.text).toContain('day 90');
     expect(h.text).toContain('$6.40');
     expect(heroFor('autopilot', exampleStatus('autopilot'), ownerView, en).title).toBe('Your cafe is on autopilot');
     expect(heroFor('free_month', null, ownerView, en).title).not.toContain('undefined');
     expect(priceLabel(1900, 'month', en)).toBe('$19 / month');
-    expect(priceLabel(15_000, 'year', en)).toBe('$150 / year');
+    expect(priceLabel(14_900, 'year', en)).toBe('$149 / year');
+    expect(yearlySaving(1900, 14_900)).toBe(35);
   });
 
   it('nudges only when there is something to decide', () => {
@@ -109,7 +110,8 @@ describe('/pro', () => {
     show(ownerView, fakeApi(exampleStatus('free_month')));
     await screen.findByText('Your personal plan, from your game');
     expect(screen.getByText('$142,380')).toBeTruthy();
-    expect(screen.getByText(/24 permit and setup steps/)).toBeTruthy();
+    expect(screen.getByText(/24 permit and setup steps, 9 suppliers, 4 lessons/)).toBeTruthy();
+    expect(screen.getByText(/Open in your free month\. After day 90 it stays in Pro/)).toBeTruthy();
   });
 
   it('before opening: the free month has not started, nothing to buy yet but the offer is visible', async () => {
@@ -159,7 +161,7 @@ describe('billing api', () => {
 describe('the Pro tab waits for the status before it shows numbers', () => {
   it('never prints "undefined"', async () => {
     show(ownerView, fakeApi(exampleStatus('free_month')));
-    await waitFor(() => expect(document.body.textContent).toContain('16 days left'));
+    await waitFor(() => expect(document.body.textContent).toContain('Free until day 90: 16 days left'));
     expect(document.body.textContent).not.toContain('undefined');
   });
 });

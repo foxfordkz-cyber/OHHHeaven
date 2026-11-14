@@ -13,8 +13,9 @@ import type { WorldRuntime } from './runtime';
 // ───────────── что продаём ─────────────
 
 export const PRO_NAME = 'First Year Pro';
-/** Цена в центах. Годовая — из docs/pitch/MONEY.md, пока её нет — null (продаём только помесячно). */
-export const PRICES: { month: number; year: number | null } = { month: 1900, year: null };
+/** Цена в центах: $19 в месяц, $149 в год — docs/pitch/MONEY.md (B16, ветка claude/cool-archimedes-blis6z, §1:
+ *  «7,8 месячной цены, скидка 35% от 12 × $19»). null у годовой — продаём только помесячно. */
+export const PRICES: { month: number; year: number | null } = { month: 1900, year: 14900 };
 /** Сколько вопросов советнику даём попробовать бесплатно. */
 export const FREE_ADVISOR_QUESTIONS = 3;
 /** Ниша, которая открыта бесплатно. */
@@ -238,6 +239,7 @@ export function checkoutForm(p: { worldId: string; playerId: string; interval: I
     'line_items[0][quantity]': 1,
     'metadata[world]': p.worldId,
     'metadata[player]': p.playerId,
+    'metadata[interval]': p.interval,
     'subscription_data[metadata][world]': p.worldId,
     'subscription_data[metadata][player]': p.playerId,
   };
@@ -400,7 +402,7 @@ export function mountBilling(app: Express, host: BillingHost, opts: BillingOptio
       const paid = s.status === 'complete' && (s.payment_status === 'paid' || s.payment_status === 'no_payment_required');
       if (!paid) { res.json({ ok: true, data: { unlocked: false, stripeStatus: s.status, status: status(rt, pid) } }); return; }
       if (!billingOf(rt.world.players.find((p) => p.id === pid))) {
-        const interval: Interval = s.mode === 'subscription' && typeof s.metadata === 'object' ? (checkoutInterval(s) ?? 'month') : 'month';
+        const interval: Interval = (s.metadata as Record<string, unknown> | undefined)?.interval === 'year' ? 'year' : 'month';
         rt.world = grantPro(rt.world, pid, { via: 'stripe-test', interval, sessionId });
         rt.saveSoon();
         host.log(`billing: ${rt.id}/${pid} paid in Stripe test mode (${sessionId})`);
@@ -410,10 +412,4 @@ export function mountBilling(app: Express, host: BillingHost, opts: BillingOptio
       res.status(502).json({ ok: false, error: `Could not check the payment with Stripe: ${(e as Error).message}` });
     }
   });
-}
-
-function checkoutInterval(s: Record<string, unknown>): Interval | null {
-  const amount = typeof s.amount_total === 'number' ? s.amount_total : null;
-  if (amount !== null && PRICES.year !== null && amount === PRICES.year) return 'year';
-  return amount === null ? null : 'month';
 }

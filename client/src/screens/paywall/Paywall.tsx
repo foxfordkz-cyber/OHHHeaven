@@ -3,7 +3,7 @@ import type { OwnerView } from '@ohh/shared/types';
 import { Badge, Banner, Button, Card, List, ListRow, MoneyText, Stat, TopBar, useT } from '../../ui';
 import { formatMoney } from '../../ui/format';
 import type { BillingStatus, Interval } from './billing';
-import { compareRows, heroFor, humanTime, monthsLeft, nextReport, priceLabel, PRO_NAME, rivalAbove, stakesOf } from './logic';
+import { compareRows, heroFor, humanTime, monthsLeft, nextReport, plural, priceLabel, PRO_NAME, rivalAbove, stakesOf, yearlySaving } from './logic';
 
 export interface PaywallProps {
   view: OwnerView;
@@ -34,7 +34,7 @@ export function Paywall({ view, status, statusError, busy, result, offline, embe
   const left = monthsLeft(view);
   const next = nextReport(view);
   const isPro = stage === 'pro' || stage === 'open_world';
-  const prices = status?.prices ?? { month: 1900, year: null, currency: 'usd' as const };
+  const prices = status?.prices ?? { month: 1900, year: 14900, currency: 'usd' as const };
   const testUnlock = (status?.checkout ?? 'test-unlock') === 'test-unlock';
   const Root = embedded ? 'div' : 'main';
 
@@ -74,7 +74,7 @@ export function Paywall({ view, status, statusError, busy, result, offline, embe
             </Button>
             {prices.year !== null && (
               <Button block variant="secondary" disabled={busy} onClick={() => onBuy('year')}>
-                {tr(`Yearly — ${priceLabel(prices.year, 'year', tr)}`, `На год — ${priceLabel(prices.year, 'year', tr)}`)}
+                {tr(`Yearly — ${priceLabel(prices.year, 'year', tr)}, save ${yearlySaving(prices.month, prices.year)}%`, `На год — ${priceLabel(prices.year, 'year', tr)}, выгода ${yearlySaving(prices.month, prices.year)}%`)}
               </Button>
             )}
           </div>
@@ -88,6 +88,9 @@ export function Paywall({ view, status, statusError, busy, result, offline, embe
 
       {isPro && (
         <Card title={tr('Your controls are open', 'Рычаги открыты')} subtitle={tr('Change price, staff and hours now — the forecast shows the effect before you apply.', 'Меняйте цену, штат и часы — прогноз покажет эффект до применения.')}>
+          {st.lastProfit !== null && st.lastProfit < 0 && (
+            <p className="small">{tr(`Month ${st.lastMonth} lost ${formatMoney(-st.lastProfit)}. Start with the price or the staff: Manage shows the month ahead before you apply.`, `Месяц ${st.lastMonth} — минус ${formatMoney(-st.lastProfit)}. Начните с цены или штата: Manage покажет следующий месяц до применения.`)}</p>
+          )}
           <div className="stack-sm">
             <Button block onClick={onManage} icon="edit">{tr('Open Manage', 'Открыть управление')}</Button>
             <Button block variant="secondary" onClick={onPlan} icon="doc">{tr('My personal plan', 'Мой личный план')}</Button>
@@ -96,7 +99,12 @@ export function Paywall({ view, status, statusError, busy, result, offline, embe
       )}
 
       {status?.teaser && (
-        <Card title={tr('Your personal plan, from your game', 'Ваш личный план — из вашей игры')} subtitle={isPro ? undefined : tr('In Pro: every line with its source and official link.', 'В Pro: каждая строка с источником и ссылкой на ведомство.')}>
+        <Card
+          title={tr('Your personal plan, from your game', 'Ваш личный план — из вашей игры')}
+          subtitle={isPro ? undefined : status.locked.includes('plan')
+            ? tr('In Pro: every line with its source and official link.', 'В Pro: каждая строка с источником и ссылкой на ведомство.')
+            : tr(`Open in your free month. After day ${status.freeEndsDay ?? '—'} it stays in Pro.`, `Открыт в бесплатный месяц. После ${status.freeEndsDay ?? '—'}-го дня — в Pro.`)}
+        >
           <div className="grid-3">
             <Stat small label={tr('Before the first sale', 'До первой продажи')} value={<MoneyText value={status.teaser.startupTotal} tone="none" />} />
             <Stat small label={tr('Every month', 'Каждый месяц')} value={<MoneyText value={status.teaser.monthlyTotal} tone="none" />} />
@@ -104,8 +112,8 @@ export function Paywall({ view, status, statusError, busy, result, offline, embe
           </div>
           <p className="small muted">
             {tr(
-              `${status.teaser.steps} permit and setup steps, ${status.teaser.suppliers} suppliers, ${status.teaser.lessons} lessons from your own months.`,
-              `${status.teaser.steps} шагов по разрешениям и запуску, ${status.teaser.suppliers} поставщиков, ${status.teaser.lessons} уроков из ваших месяцев.`,
+              `${plural(status.teaser.steps, 'permit and setup step', 'permit and setup steps')}, ${plural(status.teaser.suppliers, 'supplier', 'suppliers')}${status.teaser.lessons ? `, ${plural(status.teaser.lessons, 'lesson', 'lessons')} from your own months` : ''}.`,
+              `Шагов по разрешениям и запуску: ${status.teaser.steps}, поставщиков: ${status.teaser.suppliers}${status.teaser.lessons ? `, уроков из ваших месяцев: ${status.teaser.lessons}` : ''}.`,
             )}
           </p>
         </Card>

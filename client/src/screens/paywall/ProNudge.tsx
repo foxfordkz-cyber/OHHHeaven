@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Card, useT } from '../../ui';
 import { useOwnerView } from '../../app/store';
 import type { BillingApi, BillingStatus } from './billing';
-import { PRO_NAME, priceLabel, type Tr } from './logic';
+import { plural, PRO_NAME, priceLabel, type Tr } from './logic';
 import { useBilling } from './useBilling';
 
 export interface Nudge { tone: 'warn' | 'accent'; title: string; text: string; cta: string }
@@ -23,7 +23,7 @@ export function nudgeFor(s: BillingStatus | null, tr: Tr): Nudge | null {
   if (s.stage === 'free_month' && s.daysLeft !== null && s.daysLeft <= 20) {
     return {
       tone: 'accent',
-      title: s.daysLeft === 0 ? tr('Free month: last day', 'Бесплатный месяц: последний день') : tr(`Free month: ${s.daysLeft} days left`, `Бесплатный месяц: осталось ${s.daysLeft} дн.`),
+      title: s.daysLeft === 0 ? tr('Free month: last day', 'Бесплатный месяц: последний день') : tr(`Free month: ${plural(s.daysLeft, 'day', 'days')} left`, `Бесплатный месяц: осталось ${s.daysLeft} дн.`),
       text: tr(`After day ${s.freeEndsDay} your cafe runs on its last orders. ${PRO_NAME} keeps every control for the rest of the year.`, `После ${s.freeEndsDay}-го дня кофейня работает по последним распоряжениям. ${PRO_NAME} сохраняет все рычаги до конца года.`),
       cta: tr('See what Pro keeps', 'Что сохраняет Pro'),
     };

@@ -6,6 +6,9 @@ import type { BillingStatus, Stage } from './billing';
 
 export type Tr = (en: string, ru: string) => string;
 
+/** English count with its noun: 1 day, 2 days. */
+export const plural = (n: number, one: string, many: string): string => `${n} ${n === 1 ? one : many}`;
+
 export const PRO_NAME = 'First Year Pro';
 
 export interface Row { id: string; label: string; free: string | null; pro: string; /** closed for this player right now */ lockedNow: boolean }
@@ -42,6 +45,11 @@ export function compareRows(tr: Tr, s: Pick<BillingStatus, 'advisorLeft'> & Part
 export function priceLabel(cents: number, interval: 'month' | 'year', tr: Tr): string {
   const amount = `$${(cents / 100).toFixed(cents % 100 === 0 ? 0 : 2)}`;
   return interval === 'month' ? tr(`${amount} / month`, `${amount} в месяц`) : tr(`${amount} / year`, `${amount} в год`);
+}
+
+/** Share saved by the yearly plan against twelve monthly payments, in whole percent. */
+export function yearlySaving(month: number, year: number): number {
+  return Math.max(0, Math.round((1 - year / (month * 12)) * 100));
 }
 
 /** Months of the season still ahead, counting the current one. */
@@ -127,7 +135,7 @@ export function heroFor(stage: Stage, s: Pick<BillingStatus, 'freeEndsDay' | 'da
         tone: 'warn',
         title: s?.daysLeft === 0
           ? tr('Your free month ends today', 'Бесплатный месяц заканчивается сегодня')
-          : tr(`Free month: ${s?.daysLeft} days left`, `Бесплатный месяц: осталось ${s?.daysLeft} дн.`),
+          : tr(`Free until day ${s?.freeEndsDay}: ${plural(s?.daysLeft ?? 0, 'day', 'days')} left`, `Бесплатно до ${s?.freeEndsDay}-го дня: осталось ${s?.daysLeft} дн.`),
         text: tr(
           `On day ${s?.freeEndsDay} your controls lock. The cafe keeps running on your last orders${orders ? ` (${orders})` : ''} while the neighbours keep moving.`,
           `На ${s?.freeEndsDay}-й день решения закроются. Кофейня продолжит работать по последним распоряжениям${orders ? ` (${orders})` : ''}, а соседи — двигаться.`,

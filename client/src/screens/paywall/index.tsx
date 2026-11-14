@@ -16,7 +16,7 @@ export function exampleStatus(stage: Stage, over: Partial<BillingStatus> = {}): 
   return {
     plan: pro ? 'pro' : 'free', stage, canManage: stage !== 'autopilot', freeEndsDay: stage === 'before_opening' ? null : 90,
     daysLeft: stage === 'free_month' ? 16 : stage === 'before_opening' ? null : 0, advisorLeft: pro ? null : 2, pro,
-    checkout: 'test-unlock', prices: { month: 1900, year: null, currency: 'usd' },
+    checkout: 'test-unlock', prices: { month: 1900, year: 14900, currency: 'usd' },
     locked: pro ? [] : stage === 'autopilot' ? ['decisions', 'plan', 'niches'] : ['niches'],
     teaser: stage === 'before_opening' ? null : TEASER, stripeConfigured: false, ...over,
   };
