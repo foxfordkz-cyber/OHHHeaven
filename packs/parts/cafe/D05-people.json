@@ -2171,6 +2171,2520 @@
         "what": "Holiday rush with a short roster: overtime and long days. Yearly harassment prevention training must be done for anyone hired a year ago. Workers' compensation policy audit follows the policy year."
       }
     ],
-    "peopleCalendarNote": "A planning calendar built from the rules and patterns in this fragment; due dates for Forms 941 and NYS-45 (the last day of the month after each quarter) and W-2 (January 31) are from memory, not opened this session."
+    "peopleCalendarNote": "A planning calendar built from the rules and patterns in this fragment; due dates for Forms 941 and NYS-45 (the last day of the month after each quarter) and W-2 (January 31) are from memory, not opened this session.",
+    "eventCatalog": [
+      {
+        "id": "no_call_no_show_opening",
+        "name": "The opener does not show up",
+        "text": "It is 6:40 am, the door is locked and the opener is not answering the phone. The morning rush starts in 20 minutes.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Scheduling set to \"night before\", or pay under the market wage, for two months in a row.",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "Food preparation and serving workers had a 4.0% absence rate in 2025, against 3.2% for all workers (BLS, quoted by Deputy).",
+        "tier": "core",
+        "source": "https://www.deputy.com/blog/restaurant-no-shows-what-they-cost-and-how-to-cover",
+        "confidence": "estimate",
+        "note": "Arithmetic: one lost morning is about a third of one day's sales, 1 / 90 of the month; three in a month is 3%. My estimate of three."
+      },
+      {
+        "id": "barista_gives_notice",
+        "name": "A trained barista gives two weeks' notice",
+        "text": "One of your experienced baristas found a job closer to home. Two weeks from now you are one person short.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "A worker's tenure pressure reaches 1 (extra.mechanics.turnover_and_replacement): market pay, no benefits, about 24 months on the job.",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 0.92
+          },
+          {
+            "field": "cash",
+            "add": -2706
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_benefits"
+          },
+          {
+            "kind": "lever",
+            "id": "training"
+          },
+          {
+            "kind": "lever",
+            "id": "job_ads"
+          },
+          {
+            "kind": "staff",
+            "id": "trainee_barista"
+          }
+        ],
+        "realFrequency": "Monthly quits in accommodation and food services ran 3.6% to 5.0% in June to September 2026 (BLS JOLTS); median tenure in food preparation and serving was 2.2 years in January 2026 (BLS).",
+        "tier": "core",
+        "source": "https://www.bls.gov/news.release/jolts.t04.htm",
+        "confidence": "estimate",
+        "note": "Cash: hard replacement cost per hourly worker, Black Box Intelligence 2025. Capacity: one of five people replaced by a trainee at 40% to 85% speed for three months averages about 8% lost."
+      },
+      {
+        "id": "barista_quits_by_text",
+        "name": "Quit by text, mid-week",
+        "text": "\"Not coming back, sorry.\" No notice, and tomorrow's close has nobody on it.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Scheduling set to \"night before\", a wage shortcut in force, or tips cut, for three months.",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 0.8
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "staff",
+            "id": "part_time_barista"
+          }
+        ],
+        "realFrequency": "Not measured separately; 70% of workers aged 16 to 19 have been with their employer 12 months or less (BLS tenure, January 2024).",
+        "tier": "core",
+        "source": "https://www.bls.gov/news.release/tenure.htm",
+        "confidence": "estimate",
+        "note": "One of five people gone with no overlap = 20% for a month. A temp barista from a staffing app costs $29 to $40 an hour in New York City (the platform's own rate page)."
+      },
+      {
+        "id": "shift_lead_gets_an_offer",
+        "name": "Your shift lead gets an offer from a chain",
+        "text": "A chain offers your lead a supervisor job with benefits. The lead tells you before answering.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Lead pay within $1 of chain postings, no benefits, for six months.",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_benefits"
+          },
+          {
+            "kind": "staff",
+            "id": "shift_lead"
+          }
+        ],
+        "realFrequency": "2026 postings: a venture-backed chain lists shift leads at $21 an hour; the largest chain's flagship pays baristas $19.31 after certification.",
+        "tier": "deep",
+        "source": "https://jobs.generalcatalyst.com/companies/blank-street/jobs/86227204-barista-manhattan",
+        "confidence": "estimate",
+        "note": "With the pack's $24 lead wage this does not fire by default. The lead usually holds a Food Protection Certificate, so see certificate_holder_leaves."
+      },
+      {
+        "id": "certificate_holder_leaves",
+        "name": "The only other certificate holder quits",
+        "text": "The person who left was the one who ran the shop with a Food Protection Certificate on your days off.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Fewer than three certificate holders (owner included) and one of them leaves.",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_food_protection_cert"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "staff",
+            "id": "shift_lead"
+          }
+        ],
+        "realFrequency": "Follows from turnover: with two holders and 50% yearly turnover, a gap is expected within the year.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+        "confidence": "estimate",
+        "note": "Until a new holder passes the exam (14 days in the pack) the owner must be on site every open hour, or shifts run uncovered: $400 and 10 points per inspection (existing violation no_food_protection_cert)."
+      },
+      {
+        "id": "new_hire_disappears",
+        "name": "New hire works three shifts and disappears",
+        "text": "You paid for 15 hours of training. On day four the new barista stops answering.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Hiring by word of mouth with no paid trial and no references.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -300
+          },
+          {
+            "field": "capacity",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "interview_screening"
+          },
+          {
+            "kind": "lever",
+            "id": "training"
+          },
+          {
+            "kind": "lever",
+            "id": "job_ads"
+          }
+        ],
+        "realFrequency": "Short tenure is the norm for the youngest workers: 70% of those aged 16 to 19 have 12 months or less with their employer (BLS).",
+        "tier": "deep",
+        "source": "https://www.bls.gov/news.release/tenure.htm",
+        "confidence": "estimate",
+        "note": "Arithmetic: 15 h x $18 + employer taxes = about $300. The vacancy restarts."
+      },
+      {
+        "id": "trainee_on_bar_at_rush",
+        "name": "Trainee alone on bar at 8:30 am",
+        "text": "The line is out the door and the newest hire is pulling shots. Drinks come out slow and wrong.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Training set to \"shadow only\" while a hire is in the first six weeks.",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 0.9
+          },
+          {
+            "field": "quality",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "training"
+          },
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          }
+        ],
+        "realFrequency": "Operators put new baristas on register and bar-back for two to six weeks before the bar (Perfect Daily Grind).",
+        "tier": "core",
+        "source": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+        "confidence": "estimate",
+        "note": "Effects are my estimates from the skill ramp in extra.staffModel."
+      },
+      {
+        "id": "overtime_creep",
+        "name": "Two people out, two people at 55 hours",
+        "text": "You never replaced the baristas who left. The ones who stayed are covering, and the payroll report shows 30 overtime hours a week.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Paid hours needed by the schedule exceed 40 a week per person for a full month.",
+        "effects": [
+          {
+            "field": "wages",
+            "mult": 1.1
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "staff",
+            "id": "part_time_barista"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_overtime_pay"
+          },
+          {
+            "kind": "shortcut",
+            "id": "flat_salary_no_overtime"
+          }
+        ],
+        "realFrequency": "Follows from the roster. Overtime is 1.5 times the regular rate after 40 hours in a week (12 NYCRR 146-1.4).",
+        "tier": "core",
+        "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+        "confidence": "estimate",
+        "note": "Arithmetic: 30 overtime hours a week x 4.33 x $10.50 premium = $1,364 on a $13,440 payroll = +10%. Fatigue then raises the tenure pressure of the people covering."
+      },
+      {
+        "id": "open_to_close_doubles",
+        "name": "Open-to-close doubles",
+        "text": "Someone works 6:30 am to 7:30 pm with a long break in the middle. The day spans 13 hours.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Any scheduled day whose first clock-in and last clock-out are more than 10 hours apart.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -17
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "shortcut",
+            "id": "no_spread_of_hours"
+          }
+        ],
+        "realFrequency": "Follows from the schedule: one extra hour at the $17.00 minimum for each such day, whatever the worker's wage (12 NYCRR 146-1.6).",
+        "tier": "deep",
+        "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+        "confidence": "estimate",
+        "note": "The amount is per day and per worker; ten doubles a month cost $170."
+      },
+      {
+        "id": "drawer_comes_up_short",
+        "name": "The drawer is short again",
+        "text": "Third time this month the cash count is $60 to $180 under the register report.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Cash controls set to \"trust\" for two months.",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cash_controls"
+          },
+          {
+            "kind": "shortcut",
+            "id": "dock_pay_for_shortages"
+          }
+        ],
+        "realFrequency": "Vendor figures put employee theft near 4% of restaurant sales and 75% of inventory shrink (attributed to the National Restaurant Association, second-hand). A Washington coffee-stand barista skimmed about $1,600 and staged a robbery to hide it.",
+        "tier": "core",
+        "source": "https://www.heraldnet.com/news/lynnwood-barista-accused-of-faking-a-robbery/",
+        "confidence": "estimate",
+        "note": "The 2% is my estimate for a small owner-present shop. Taking the shortage out of pay is illegal (violation illegal_deductions)."
+      },
+      {
+        "id": "deposits_never_reached_the_bank",
+        "name": "The deposits never reached the bank",
+        "text": "Your accountant finds that several cash deposits recorded by the manager were never made.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "A hired manager handles deposits and cash controls stay on \"trust\" for six months.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -12000
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cash_controls"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "manager",
+            "id": "manager"
+          }
+        ],
+        "realFrequency": "Reported cases: a South Carolina cafe manager, over $12,000, found by the accountant's audit; an Iowa coffee-store manager, about $18,400 in five months of 2025; a chain store manager, $37,896 in 25 missing deposits.",
+        "tier": "deep",
+        "source": "https://www.yahoo.com/news/former-isle-palms-caf-manager-210904482.html",
+        "confidence": "estimate",
+        "note": "Game value is the smallest of the three reported cases."
+      },
+      {
+        "id": "free_drinks_for_friends",
+        "name": "Free drinks for friends",
+        "text": "Milk and beans are running out faster than the register says they should.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "One shared register login and no void or discount report for three months.",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.02
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cash_controls"
+          }
+        ],
+        "realFrequency": "No clean statistic; void and refund schemes show a median loss of about $1,200 a month in fraud studies quoted by a vendor.",
+        "tier": "deep",
+        "source": "https://www.katalystos.com/blog/employee-theft-and-pos-fraud-in-restaurants",
+        "confidence": "estimate",
+        "note": "The 2% on cost of goods is my estimate (about $265 a month at the reference point). A written shift-drink allowance removes most of it."
+      },
+      {
+        "id": "tip_jar_fight",
+        "name": "Morning crew against closing crew",
+        "text": "The openers do most of the sales; the closers do the cleaning and get the smaller jar. Two people stop speaking.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Tip rule set to \"each shift keeps its own\" or no written rule, for two months.",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "tip_pool_rules"
+          },
+          {
+            "kind": "shortcut",
+            "id": "keep_tips"
+          },
+          {
+            "kind": "shortcut",
+            "id": "manager_in_tip_pool"
+          }
+        ],
+        "realFrequency": "Tip disputes were part of the 2023 Nashville and 2026 California coffee-shop walkouts.",
+        "tier": "core",
+        "source": "https://www.wsmv.com/2023/06/23/barista-parlor-locations-close-following-employee-walkout/",
+        "confidence": "estimate",
+        "note": "A pool split by hours worked with a posted sheet is the common fix; records of the pool must be kept six years (12 NYCRR 146-2.17)."
+      },
+      {
+        "id": "wage_claim_from_former_barista",
+        "name": "A former barista files a wage claim",
+        "text": "A letter from the state Labor Department asks for six years of schedules, time records, pay stubs and pay notices for the whole staff.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Any wage shortcut in force during the employment of a worker who then leaves.",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 2
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "punish_the_complainer"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cash_wages"
+          },
+          {
+            "kind": "lever",
+            "id": "epli_cover"
+          }
+        ],
+        "realFrequency": "In 2025 the state Labor Department recovered more than $35 million in stolen wages from more than 5,000 employers, the most since 2015.",
+        "tier": "core",
+        "source": "https://dol.ny.gov/wage-theft-resources",
+        "confidence": "estimate",
+        "note": "The audit covers every worker, not only the one who complained. The lawful move is to stop the shortcut and pay what is owed before the investigator computes it; an employment practices policy does not cover wage claims."
+      },
+      {
+        "id": "barista_asks_about_missing_overtime",
+        "name": "A barista asks why the overtime is missing",
+        "text": "One of your team has done the arithmetic on the pay stub and asks, politely, in front of the others.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "An overtime, call-in or spread-of-hours shortcut in force for one month.",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "punish_the_complainer"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_overtime_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "complaint_handling"
+          }
+        ],
+        "realFrequency": "Most labor cases begin with one worker's question or complaint (state Labor Department process).",
+        "tier": "core",
+        "source": "https://dol.ny.gov/wages-and-hours-frequently-asked-questions",
+        "confidence": "estimate",
+        "note": "Paying the difference now costs 1.0 x; a claim later costs 2.0 x; punishing the worker adds the retaliation penalty."
+      },
+      {
+        "id": "unemployment_claim_notice",
+        "name": "Notice of potential charges",
+        "text": "The state tells you that someone you let go has claimed unemployment benefits and that your account may be charged.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "You fire or lay off a worker, or cut their hours to 30 a week or fewer.",
+        "effects": [
+          {
+            "field": "uiAccountCharge",
+            "add": 2940
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "lever",
+            "id": "complaint_handling"
+          }
+        ],
+        "realFrequency": "The maximum weekly benefit rose from $504 to $869 on October 13, 2025; 2026 employer rates run 1.7% to 9.5%, new employers 4.1%.",
+        "tier": "core",
+        "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+        "confidence": "estimate",
+        "note": "Search-seen (primary, NY DOL employer guide IA 318.2): the last employer is charged seven times the weekly benefit first, the rest is shared by wage history, up to 26 weeks; no charge for misconduct or a quit without good cause if the employer answers on time. Arithmetic: a $21, 40-hour barista earns $10,920 a quarter; benefit about 1/26 of that = $420; 7 x $420 = $2,940 charged. The 1/26 rule is from memory."
+      },
+      {
+        "id": "customer_harasses_staff",
+        "name": "A regular will not leave a barista alone",
+        "text": "He comes every day, comments on her body and waits for her shift to end. She tells you she is scared.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Announced for every shop on the block at the same time; what follows depends on the complaint-handling choice.",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.998
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "complaint_handling"
+          },
+          {
+            "kind": "lever",
+            "id": "harassment_prevention"
+          }
+        ],
+        "realFrequency": "No count found. New York's Human Rights Law makes the employer liable for harassment by customers once it knows and fails to act.",
+        "tier": "core",
+        "source": "https://www.ny.gov/sites/default/files/2023-04/Worker_Toolkit.pdf",
+        "confidence": "estimate",
+        "note": "Banning the customer costs one regular (about 0.2% of sales, my estimate). Ignoring it leads to the violation harassment_complaint_ignored and usually to a resignation."
+      },
+      {
+        "id": "complaint_about_the_lead",
+        "name": "Two baristas complain about the shift lead",
+        "text": "They say the lead makes jokes about their accents and gives the bad shifts to whoever objects.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "No harassment policy or training for six months, or a lead given power over schedules.",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "complaint_handling"
+          },
+          {
+            "kind": "lever",
+            "id": "harassment_prevention"
+          },
+          {
+            "kind": "lever",
+            "id": "epli_cover"
+          }
+        ],
+        "realFrequency": "Employment claims cost small businesses $27,000 to $54,000 a case on average (an insurer's figure).",
+        "tier": "core",
+        "source": "https://www.munichre.com/hsb/en/products/specialty-liability-insurance/epl-plus.html",
+        "confidence": "estimate",
+        "note": "Discrimination by national origin is covered the same way as sexual harassment; the state law applies to every employer."
+      },
+      {
+        "id": "staff_petition",
+        "name": "The staff hand you a petition",
+        "text": "All four baristas have signed a letter asking for steadier schedules and a raise. One mentions a union.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Hours cut and pay at or under market and a complaint ignored, within three months.",
+        "effects": [
+          {
+            "field": "wages",
+            "mult": 1.07
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_benefits"
+          },
+          {
+            "kind": "shortcut",
+            "id": "fire_union_organizers"
+          }
+        ],
+        "realFrequency": "A Brooklyn coffee shop's staff filed for a union unanimously in November 2022 after hours and pay were cut; small chains in the city followed in 2023 and 2024.",
+        "tier": "deep",
+        "source": "https://www.brooklynpaper.com/ocean-hill-the-daily-press-unionizes",
+        "confidence": "estimate",
+        "note": "The 7% is a $1.50 raise on $21. Acting together about pay is protected with or without a union, in a shop of any size."
+      },
+      {
+        "id": "whole_team_walks_out",
+        "name": "The whole team walks out",
+        "text": "A sign on the door reads \"closed for staff issues\". Nobody came in today.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "A late or missed payroll, or tips withheld, for two pay periods.",
+        "effects": [
+          {
+            "field": "closureDays",
+            "add": 5
+          },
+          {
+            "field": "reputation",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "keep_tips"
+          },
+          {
+            "kind": "shortcut",
+            "id": "pay_every_two_weeks"
+          },
+          {
+            "kind": "lever",
+            "id": "complaint_handling"
+          }
+        ],
+        "realFrequency": "Reported cases: a California coffee house closed after a walkout over unpaid wages and tips (March 2026); in Kansas City nine of ten staff quit together (2023); Nashville locations closed after a walkout over tips (2023).",
+        "tier": "core",
+        "source": "https://timesofsandiego.com/business/2026/04/08/la-mesa-coffee-public-square-closed-unpaid-wages/",
+        "confidence": "estimate",
+        "note": "Five closure days is my estimate of the time to pay up and rehire enough people to open."
+      },
+      {
+        "id": "payroll_friday_account_short",
+        "name": "Payroll Friday and the account is short",
+        "text": "Rent cleared on Monday. Friday's payroll is $3,100 and the balance is $1,900.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Cash on hand below one week of payroll on payday.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -3100
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "shortcut",
+            "id": "pay_every_two_weeks"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cash_wages"
+          }
+        ],
+        "realFrequency": "In a survey of 391 restaurant owners, 51% had gone without their own paycheck in the past year to make payroll (Clarify Capital, quoted in trade press).",
+        "tier": "core",
+        "source": "https://modernrestaurantmanagement.com/?p=40802",
+        "confidence": "estimate",
+        "note": "Arithmetic: $13,440 / 4.33 = $3,104 a week. Wages come first: paying staff late is the fastest route to a walkout and to the pay-frequency violation."
+      },
+      {
+        "id": "burn_or_fall_behind_the_bar",
+        "name": "A barista is burned at the steam wand",
+        "text": "Rushing through the line, a barista scalds a hand, or slips on a wet floor behind the bar, and needs urgent care.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Cleaning set to \"wipe and go\" or the roster stretched thin for three months.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "shortcut",
+            "id": "no_workers_comp"
+          },
+          {
+            "kind": "shortcut",
+            "id": "free_help_from_friends"
+          }
+        ],
+        "realFrequency": "In an insurer's study of restaurant claims (2013 to 2017) cuts were about a third of claims and slips and falls paid 4.5 times as much; cafes lost 45% more work time than other restaurants.",
+        "tier": "core",
+        "source": "https://riskandinsurance.com/lost-time-and-your-latte/",
+        "confidence": "estimate",
+        "note": "With a policy the insurer pays treatment and lost wages. Without one you pay both, and the state adds up to $2,000 for every 10 days uninsured (_common violation no_wc_insurance)."
+      },
+      {
+        "id": "barista_wrist",
+        "name": "Your fastest barista develops wrist pain",
+        "text": "Tamping and steaming 300 drinks a day has caught up with your best barista. The doctor says rest.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The same person on the espresso machine for nearly every rush for 12 months.",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "lever",
+            "id": "training"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          }
+        ],
+        "realFrequency": "\"Barista wrist\" claims took an average of 366 days to return to work in the same insurer's study.",
+        "tier": "deep",
+        "source": "https://riskandinsurance.com/lost-time-and-your-latte/",
+        "confidence": "estimate",
+        "note": "Rotating stations and training a second strong bar person are the lawful moves; the capacity loss is my estimate."
+      },
+      {
+        "id": "workers_comp_audit_bill",
+        "name": "Workers' compensation audit",
+        "text": "The insurer audits last year's payroll. You grew, and you paid a cleaner in cash who had no insurance of their own.",
+        "scale": "point",
+        "months": [
+          12
+        ],
+        "realSignal": "Actual payroll above the estimate given to the insurer, or payments to uninsured contractors, at the policy anniversary.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -800
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "contractor_1099"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cash_wages"
+          }
+        ],
+        "realFrequency": "Every policy is audited after its year; payments to uninsured subcontractors are added to payroll.",
+        "tier": "core",
+        "source": "https://www.fisherphillips.com/en/news-insights/do-your-contractors-carry-workers-compensation-coverage-how-it-can-impact-your-policy-and-5-ways-to-prepare-for-insurance-audits-and-disputes.html",
+        "confidence": "estimate",
+        "note": "Arithmetic: $40,000 of extra payroll x the 2% planning rate in _common = $800. The 2026 state loss cost for the restaurant class (9072) is $1.03 per $100 of payroll before the insurer's multiplier (Workers' Compensation Board class list)."
+      },
+      {
+        "id": "owner_runs_on_empty",
+        "name": "You have not had a day off in eleven weeks",
+        "text": "You forget an order to the dairy, snap at a regular and fall asleep doing the books.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Own hours at 80 a week for three months, or 60 for nine.",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.95
+          },
+          {
+            "field": "closureDays",
+            "add": 3
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "manager",
+            "id": "manager"
+          }
+        ],
+        "realFrequency": "78% of hospitality business owners reported burnout in a 2024 survey (Bionic, quoted second-hand); restaurant general managers average 55 to 60 hours a week.",
+        "tier": "core",
+        "source": "https://www.thehartford.com/insights-center/business-management/restaurant-owner-stress-management-tips",
+        "confidence": "estimate",
+        "note": "Effects are game-balance values. An LLC owner has no paid sick leave, no unemployment insurance and no workers' compensation unless bought."
+      },
+      {
+        "id": "owner_sick_nobody_can_open",
+        "name": "You are sick and nobody else can open",
+        "text": "You have the only keys, the only alarm code and the only Food Protection Certificate.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The owner is the only certificate holder or key holder.",
+        "effects": [
+          {
+            "field": "closureDays",
+            "add": 2
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "staff",
+            "id": "shift_lead"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_food_protection_cert"
+          }
+        ],
+        "realFrequency": "Follows from the setup; the 4.0% absence rate applies to owners too.",
+        "tier": "core",
+        "source": "https://www.deputy.com/blog/restaurant-no-shows-what-they-cost-and-how-to-cover",
+        "confidence": "estimate",
+        "note": "Two days is my estimate. Certifying two leads costs about $770 once (setup item extra_food_protection_certs)."
+      },
+      {
+        "id": "manager_resigns",
+        "name": "The manager you rely on resigns",
+        "text": "After six months of 50-hour weeks at the lowest legal salary, your manager takes a job with a restaurant group.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Manager paid at the exempt floor and working over 45 hours a week for six months.",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "manager",
+            "id": "manager"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_benefits"
+          }
+        ],
+        "realFrequency": "Food service managers in the New York metro averaged $93,730 a year in May 2025 (BLS), 41% above the $66,300 exempt floor.",
+        "tier": "deep",
+        "source": "https://www.bls.gov/regions/northeast/news-release/2026/occupationalemploymentandwages_newyork_20260605.htm",
+        "confidence": "estimate",
+        "note": "The owner goes back to 60 to 80 hours until a replacement is found."
+      },
+      {
+        "id": "fifth_hire_turns_sick_leave_paid",
+        "name": "Your fifth employee makes sick leave paid",
+        "text": "With five people on payroll, every worker's 40 hours of safe and sick leave must now be paid.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Headcount reaches five employees, part-timers included.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -350
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "staff",
+            "id": "part_time_barista"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "shortcut",
+            "id": "no_paid_sick_leave"
+          }
+        ],
+        "realFrequency": "Follows from headcount.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+        "confidence": "estimate",
+        "note": "Arithmetic: 5 x 40 h x $21 / 12 = $350 a month if every hour is used (the pack's line \"Paid sick leave cover\", $70 per worker). With four employees the same hours are protected but unpaid."
+      },
+      {
+        "id": "tenth_hire_retirement_program",
+        "name": "Ten employees: the state retirement program applies",
+        "text": "A letter says you must register for New York Secure Choice or certify that you offer a retirement plan.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Ten or more employees for a full calendar year and two years in business.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": 0
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "manager",
+            "id": "manager"
+          }
+        ],
+        "realFrequency": "2026 registration deadlines: March 18 (30 or more employees), May 15 (15 to 29), July 15 (10 to 14).",
+        "tier": "exotic",
+        "source": "https://www.mercer.com/en-us/insights/law-and-policy/most-new-york-employers-have-secure-choice-deadlines-approaching/",
+        "confidence": "estimate",
+        "note": "No employer contribution; the work is payroll set-up. Penalties had not been announced when the sources were written. A one-shop cafe rarely reaches ten."
+      },
+      {
+        "id": "new_hire_uses_protected_hours",
+        "name": "A new hire takes protected time in week one",
+        "text": "On the third shift your new barista calls in: a child is sick. The 32 unpaid protected hours are available from the first day.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Any hire after February 22, 2026.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sick_call_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "shortcut",
+            "id": "punish_the_complainer"
+          }
+        ],
+        "realFrequency": "New rule: Local Law 145 gives every worker 32 unpaid hours on hire and again each January 1.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+        "confidence": "estimate",
+        "note": "You may not ask for a note for three days or less, nor make the worker find a replacement ($500 per instance)."
+      },
+      {
+        "id": "regulars_follow_the_barista",
+        "name": "Regulars ask where your barista went",
+        "text": "The barista who knew sixty orders by heart has left. A few regulars now stop at the place where she works.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "A barista with 12 months or more at the shop leaves.",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_benefits"
+          },
+          {
+            "kind": "lever",
+            "id": "training"
+          }
+        ],
+        "realFrequency": "No measurement found; owners describe it often.",
+        "tier": "deep",
+        "source": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+        "confidence": "estimate",
+        "note": "The 2% for two months is my estimate and should be treated as a design value."
+      },
+      {
+        "id": "review_names_a_rude_barista",
+        "name": "One-star review: \"the barista rolled her eyes\"",
+        "text": "A new review describes a slow line and a short-tempered barista on her eleventh straight day.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Roster stretched (no day of rest, overtime creep) or training on \"shadow only\" for two months.",
+        "effects": [
+          {
+            "field": "reputation",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "lever",
+            "id": "training"
+          },
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          }
+        ],
+        "realFrequency": "See the demand researcher's part for how ratings move sales.",
+        "tier": "deep",
+        "source": "https://www.deputy.com/blog/restaurant-no-shows-what-they-cost-and-how-to-cover",
+        "confidence": "estimate",
+        "note": "Effect size is a game-balance value."
+      },
+      {
+        "id": "former_barista_posts_about_tips",
+        "name": "A former barista posts about the tips",
+        "text": "A video about \"where the tip jar really goes\" at your shop is passed around the neighborhood.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The shortcut keep_tips or manager_in_tip_pool in force when a worker leaves.",
+        "effects": [
+          {
+            "field": "reputation",
+            "mult": 0.92
+          },
+          {
+            "field": "demand",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "keep_tips"
+          },
+          {
+            "kind": "shortcut",
+            "id": "manager_in_tip_pool"
+          },
+          {
+            "kind": "lever",
+            "id": "tip_pool_rules"
+          }
+        ],
+        "realFrequency": "Tips were a stated cause of the 2023 Nashville walkout and the 2026 California one, both covered by local news.",
+        "tier": "deep",
+        "source": "https://www.wsmv.com/2023/06/23/barista-parlor-locations-close-following-employee-walkout/",
+        "confidence": "estimate",
+        "note": "Effects are game-balance values; the legal bill is the tip_theft or tip_pool_ineligible violation."
+      },
+      {
+        "id": "minor_back_to_school_hours",
+        "name": "School starts: your 17-year-old cannot close",
+        "text": "From September the student who closed all summer may work 4 hours on school nights and must be done by 10 pm.",
+        "scale": "point",
+        "months": [
+          9
+        ],
+        "realSignal": "A worker under 18 on the roster when school starts.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "staff",
+            "id": "part_time_barista"
+          },
+          {
+            "kind": "shortcut",
+            "id": "minors_no_papers"
+          }
+        ],
+        "realFrequency": "Follows from the roster and the school calendar.",
+        "tier": "deep",
+        "source": "https://dol.ny.gov/hours-work-minors",
+        "confidence": "estimate",
+        "note": "Working papers move to a state database on May 9, 2027; fines for a first violation now reach $10,000."
+      },
+      {
+        "id": "january_hours_squeeze",
+        "name": "January: sales drop, hours get cut",
+        "text": "Fewer customers until March. Either you cut shifts, and part-timers start looking, or you keep them and labor eats the month.",
+        "scale": "city",
+        "months": [
+          1,
+          2
+        ],
+        "realSignal": "The slowest sales months of the year (see the demand researcher's monthly index).",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "shortcut",
+            "id": "send_home_no_call_in_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          }
+        ],
+        "realFrequency": "Yearly pattern.",
+        "tier": "core",
+        "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+        "confidence": "estimate",
+        "note": "Cutting a shift after the worker has arrived costs call-in pay (3 hours). Hours cut to 30 a week or fewer also require the unemployment notice (Record of Employment)."
+      },
+      {
+        "id": "students_leave_for_summer",
+        "name": "Finals and summer break",
+        "text": "College terms end. Student baristas cut their hours for exams, then leave the city for the summer.",
+        "scale": "city",
+        "months": [
+          5,
+          6
+        ],
+        "realSignal": "University term dates: finals in May, summer break from late May.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.93
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "lever",
+            "id": "job_ads"
+          },
+          {
+            "kind": "staff",
+            "id": "part_time_barista"
+          }
+        ],
+        "realFrequency": "Yearly pattern near every campus.",
+        "tier": "core",
+        "source": "https://www.bls.gov/news.release/jolts.t04.htm",
+        "confidence": "estimate",
+        "note": "Same event as in events; the 7% is my estimate."
+      },
+      {
+        "id": "back_to_school_hiring",
+        "name": "September: students are back and looking for shifts",
+        "text": "The fall term starts. Applications double, and people with barista experience are among them.",
+        "scale": "city",
+        "months": [
+          9
+        ],
+        "realSignal": "University term dates: the fall term begins in late August or early September.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 1.03
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "job_ads"
+          },
+          {
+            "kind": "lever",
+            "id": "interview_screening"
+          },
+          {
+            "kind": "staff",
+            "id": "part_time_barista"
+          }
+        ],
+        "realFrequency": "Yearly pattern.",
+        "tier": "core",
+        "source": "https://www.bls.gov/news.release/jolts.t04.htm",
+        "confidence": "estimate",
+        "note": "The best month to rebuild the bench before the holidays; the 3% is my estimate."
+      },
+      {
+        "id": "holiday_time_off_requests",
+        "name": "Holiday week: everyone wants the same days off",
+        "text": "Thanksgiving through New Year. Half the team asks for the same days.",
+        "scale": "city",
+        "months": [
+          11,
+          12
+        ],
+        "realSignal": "The calendar.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Yearly pattern.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+        "confidence": "estimate",
+        "note": "Same event as in events. A holiday schedule fixed in October is the cheap move; New York law requires no holiday premium pay."
+      },
+      {
+        "id": "summer_hiring_squeeze",
+        "name": "Summer hiring squeeze",
+        "text": "Every patio, rooftop and ice cream window is hiring at once.",
+        "scale": "city",
+        "months": [
+          5,
+          6,
+          7
+        ],
+        "realSignal": "National Restaurant Association summer hiring forecast; job-board posting counts.",
+        "effects": [
+          {
+            "field": "wages",
+            "mult": 1.02
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_benefits"
+          },
+          {
+            "kind": "lever",
+            "id": "job_ads"
+          }
+        ],
+        "realFrequency": "About 450,000 seasonal restaurant jobs were projected for summer 2026.",
+        "tier": "core",
+        "source": "https://www.restaurantdive.com/news/nra-restaurants-summer-hiring-surge-low-labor-supply-wage-growth/823673/",
+        "confidence": "estimate",
+        "note": "Same event as in events."
+      },
+      {
+        "id": "chain_raises_pay",
+        "name": "A chain on your block raises barista pay",
+        "text": "The chain two doors down posts a new starting wage.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Chain job postings in the area (pay must be stated in every New York City ad, so it is public).",
+        "effects": [
+          {
+            "field": "wages",
+            "mult": 1.03
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_benefits"
+          },
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          }
+        ],
+        "realFrequency": "Chains reprice roughly once a year.",
+        "tier": "core",
+        "source": "https://jobs.generalcatalyst.com/companies/blank-street/jobs/86227204-barista-manhattan",
+        "confidence": "estimate",
+        "note": "Same event as in events. Independents answer with steadier schedules and tips as often as with wages."
+      },
+      {
+        "id": "chain_closes_stores_nearby",
+        "name": "A chain closes stores: trained baristas on the market",
+        "text": "A coffee chain shuts several stores in the borough. Dozens of trained baristas are looking this month.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Announced chain closures.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 1.03
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "job_ads"
+          },
+          {
+            "kind": "staff",
+            "id": "barista"
+          },
+          {
+            "kind": "lever",
+            "id": "interview_screening"
+          }
+        ],
+        "realFrequency": "The largest chain closed 54 New York City stores in September 2025 (city worker-protection agency count).",
+        "tier": "deep",
+        "source": "https://columbianewsservice.com/2025/09/30/tearing-my-family-apart-starbucks-closes-dozens-of-city-stores/",
+        "confidence": "estimate",
+        "note": "Hiring is faster and experienced people accept the posted wage; the 3% is my estimate."
+      },
+      {
+        "id": "labor_market_loosens",
+        "name": "More people are looking for restaurant work",
+        "text": "City unemployment edges up and restaurant jobs are down on the year. Your job ad gets more replies.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "NYS Department of Labor monthly unemployment rate and restaurant employment for New York City.",
+        "effects": [
+          {
+            "field": "wages",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "job_ads"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "New York City restaurant jobs were down by up to about 9,600 on the year in 2026 and unemployment stood near 4.8% in October 2026 (secondary reports of state data).",
+        "tier": "deep",
+        "source": "https://www.vitalcitynyc.org/nyc-minimum-wage-increase-restaurant-industry/",
+        "confidence": "estimate",
+        "note": "Wages rarely fall; the 1% stands for slower raises. Figures need checking against the state series."
+      },
+      {
+        "id": "tip_fatigue",
+        "name": "Customers start skipping the tip screen",
+        "text": "More people tap \"no tip\" on the card reader. The pooled tips are down a tenth.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Quarterly average tip percentage for quick-service restaurants (Toast).",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "tipping_setup"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "Quick-service tips have been flat at 15.8% for seven quarters to Q2 2026; full service touched a seven-year low of 19.1% in 2025.",
+        "tier": "deep",
+        "source": "https://pos.toasttab.com/blog/data/restaurant-tipping-trends",
+        "confidence": "estimate",
+        "note": "A tenth off $3.13 an hour is 31 cents an hour of take-home pay; the capacity effect stands for the extra quit pressure."
+      },
+      {
+        "id": "protected_time_off_enforcement",
+        "name": "City enforcement push on protected time off",
+        "text": "The city worker-protection agency starts a data-driven sweep of employers with leave complaints.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "City press releases on enforcement of the Protected Time Off Law.",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sick_call_policy"
+          },
+          {
+            "kind": "shortcut",
+            "id": "no_paid_sick_leave"
+          }
+        ],
+        "realFrequency": "Announced with the February 22, 2026 expansion covering 4.3 million workers.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/mayors-office/news/2026/02/mayor-mamdani-announces-major-expansion-of-protected-time-off-fo",
+        "confidence": "estimate",
+        "note": "Same event as in events."
+      },
+      {
+        "id": "state_wage_theft_sweep",
+        "name": "State labor investigators target restaurants",
+        "text": "The state Labor Department announces record wage-theft recoveries and new investigation funding.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "State Labor Department announcements and yearly recovery totals.",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "off_the_clock"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_overtime_pay"
+          },
+          {
+            "kind": "shortcut",
+            "id": "pay_every_two_weeks"
+          }
+        ],
+        "realFrequency": "More than $35 million recovered from more than 5,000 employers in 2025; wage theft has been larceny under state law since 2023.",
+        "tier": "deep",
+        "source": "https://dol.ny.gov/wage-theft-resources",
+        "confidence": "estimate",
+        "note": "The 1.3 is a game-balance value."
+      },
+      {
+        "id": "i9_audit_notices",
+        "name": "Federal I-9 audit notices reach restaurants",
+        "text": "Immigration and Customs Enforcement serves notices of inspection on food businesses.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "ICE worksite enforcement announcements; revisions to its Form I-9 fact sheet.",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_i9"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cash_wages"
+          }
+        ],
+        "realFrequency": "On March 16, 2026 ICE reclassified many common Form I-9 errors as substantive violations; fines run $288 to $2,861 per form.",
+        "tier": "core",
+        "source": "https://www.morganlewis.com/pubs/2026/04/ice-rewrites-the-rules-on-form-i-9-violations",
+        "confidence": "estimate",
+        "note": "Same event as in events."
+      },
+      {
+        "id": "work_permits_end",
+        "name": "Work permits end for a group of workers",
+        "text": "A federal protected-status program ends on a stated date.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "USCIS and Federal Register notices of Temporary Protected Status terminations.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.94
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "staff",
+            "id": "trainee_barista"
+          },
+          {
+            "kind": "lever",
+            "id": "job_ads"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_i9"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cash_wages"
+          }
+        ],
+        "realFrequency": "Terminations for several countries took effect in July and August 2026; about 4,800 restaurant workers were reported gone from New York City since March 2025.",
+        "tier": "deep",
+        "source": "https://blogs.duanemorris.com/immigrationlaw/2026/07/24/tps-terminations-are-coming-fast-what-employers-need-to-know-right-now/",
+        "confidence": "estimate",
+        "note": "Same event as in events. Re-verify on the date, not before, and accept any valid document the worker chooses."
+      },
+      {
+        "id": "stomach_bug_week",
+        "name": "Stomach bug goes through the team",
+        "text": "One sick barista becomes three.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          11,
+          12
+        ],
+        "realSignal": "City health department seasonal illness reports.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.85
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sick_call_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "shortcut",
+            "id": "no_paid_sick_leave"
+          }
+        ],
+        "realFrequency": "Winter pattern.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+        "confidence": "estimate",
+        "note": "Same event as in events. Telling sick staff to come in adds a food-safety violation to the leave violation."
+      },
+      {
+        "id": "jury_duty_summons",
+        "name": "A barista is called for jury duty",
+        "text": "A summons arrives for one of your full-timers.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Announced to all players for the same month; county jury calls are routine.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "shortcut",
+            "id": "punish_the_complainer"
+          }
+        ],
+        "realFrequency": "No rate found. Juror fee $72 a day since June 8, 2025; employers with more than 10 employees pay the first three days.",
+        "tier": "deep",
+        "source": "https://www.littler.com/news-analysis/asap/nys-legislature-increases-daily-jury-duty-fee-40-72",
+        "confidence": "estimate",
+        "note": "Same event as in events. A five-person shop pays nothing but must hold the job."
+      },
+      {
+        "id": "family_leave_for_a_full_timer",
+        "name": "A full-timer takes 12 weeks of Paid Family Leave",
+        "text": "One of your experienced baristas is having a child and gives you 30 days' notice of a 12-week leave.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Announced a quarter ahead to all players alike; applies to a worker with 26 weeks on the job.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.8
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "staff",
+            "id": "trainee_barista"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_disability_pfl_insurance"
+          },
+          {
+            "kind": "shortcut",
+            "id": "punish_the_complainer"
+          }
+        ],
+        "realFrequency": "No usage rate found. Benefit in 2026: 67% of pay up to $1,228.53 a week, $14,742.36 over 12 weeks, paid by the insurer.",
+        "tier": "core",
+        "source": "https://paidfamilyleave.ny.gov/2026",
+        "confidence": "estimate",
+        "note": "One of five people = 20% of hours. The wages you do not pay fund a temporary hire; the job must be held, and without the insurance the claim is yours. The 30 days' notice and the 26-week condition are from memory."
+      },
+      {
+        "id": "pumping_breaks_on_return",
+        "name": "A returning barista needs pumping breaks",
+        "text": "Back from leave, she needs 30 minutes two or three times a shift, and somewhere private that is not the bathroom.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "A worker returns within three years of a birth.",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          }
+        ],
+        "realFrequency": "No rate found. Since June 19, 2024 each break of up to 30 minutes is paid (Labor Law 206-c), for every employer.",
+        "tier": "exotic",
+        "source": "https://www.littler.com/publication-press/publication/new-york-now-requires-paid-lactation-breaks",
+        "confidence": "estimate",
+        "note": "Arithmetic: 1 to 1.5 paid hours a shift needing cover, about 1% of team hours."
+      },
+      {
+        "id": "w2_season_tip_codes",
+        "name": "W-2 season: staff ask where their tips are",
+        "text": "Your baristas want the tips on their W-2 so they can use the new federal deduction.",
+        "scale": "country",
+        "months": [
+          1,
+          2
+        ],
+        "realSignal": "IRS final regulations of April 10, 2026 on the deduction for qualified tips; W-2 forms due January 31.",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "unreported_cash_tips"
+          },
+          {
+            "kind": "lever",
+            "id": "tipping_setup"
+          }
+        ],
+        "realFrequency": "Applies to tax years from 2025; the deduction is capped at $25,000 and phases out above $150,000 of income.",
+        "tier": "deep",
+        "source": "https://rsmus.com/insights/tax-alerts/2026/no-tax-tips-final-rules-confirm-qualifying-occupations-tip-definition.html",
+        "confidence": "estimate",
+        "note": "If cash tips were kept off payroll the staff lose the deduction and know whom to blame. The occupation code goes in box 14b of the 2026 W-2."
+      },
+      {
+        "id": "yearly_harassment_training_due",
+        "name": "Yearly harassment training is due",
+        "text": "A year has passed since the opening team was trained.",
+        "scale": "point",
+        "months": [
+          12
+        ],
+        "realSignal": "Twelve months since each worker's last training.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -105
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "harassment_prevention"
+          }
+        ],
+        "realFrequency": "Every employer, every employee, every year (Labor Law 201-g).",
+        "tier": "core",
+        "source": "https://newyork.public.law/laws/n.y._labor_law_section_201-g",
+        "confidence": "estimate",
+        "note": "Arithmetic: 5 x 1 paid hour x $21."
+      },
+      {
+        "id": "snow_day_half_the_team",
+        "name": "Snowstorm: half the team cannot get in",
+        "text": "Trains are suspended. Two people made it; by 11 am there are no customers and you want to close.",
+        "scale": "city",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "National Weather Service winter storm warning for New York City.",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.93
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          },
+          {
+            "kind": "lever",
+            "id": "owner_hours"
+          },
+          {
+            "kind": "shortcut",
+            "id": "send_home_no_call_in_pay"
+          }
+        ],
+        "realFrequency": "See the weather researcher's part for storm counts.",
+        "tier": "core",
+        "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+        "confidence": "estimate",
+        "note": "People who came and are sent home are owed call-in pay (3 hours). Texting before they leave home costs nothing. The 7% is two lost days."
+      },
+      {
+        "id": "heat_behind_the_bar",
+        "name": "Heat wave behind the bar",
+        "text": "It is 96 degrees outside and hotter next to the espresso machine and the dish sanitizer.",
+        "scale": "city",
+        "months": [
+          6,
+          7,
+          8
+        ],
+        "realSignal": "National Weather Service heat advisory for New York City.",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "bench_depth"
+          },
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          }
+        ],
+        "realFrequency": "New York has no binding indoor heat standard: the state bill with an 80-degree threshold has not passed; the mayor's June 2026 order promises guidance for indoor work by March 1, 2027.",
+        "tier": "deep",
+        "source": "https://documentedny.com/2026/06/22/nyc-mayor-signs-heat-safety-order/",
+        "confidence": "estimate",
+        "note": "Extra water breaks and a second person at the bar are the moves; the 5% is my estimate. Cooling equipment is in the equipment researcher's part."
+      },
+      {
+        "id": "minimum_wage_bill_passes_scenario",
+        "name": "Scenario: the City Council passes the $30 minimum wage bill",
+        "text": "A what-if: the first step of Int. 757 takes effect and the tipped wage starts to phase out.",
+        "scale": "city",
+        "months": [
+          1
+        ],
+        "realSignal": "Status of Int. 757 on the City Council's legislation site; as of the sources it is a proposal, not law.",
+        "effects": [
+          {
+            "field": "wages",
+            "mult": 1.08
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "tipping_setup"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Introduced March 10, 2026: $30 by 2030 for large employers; $27 in 2030 and $29 in 2031 for small ones; no tip credit. The city's power to set a wage above the state's is disputed.",
+        "tier": "exotic",
+        "source": "https://www.littler.com/news-analysis/asap/new-york-city-proposes-bill-sets-higher-minimum-wages-and-eliminates-tip-credits",
+        "confidence": "estimate",
+        "note": "Arithmetic for a small employer, my straight-line reading: $17 to $27 over four years is $2.50 a year, so about $19.50 in 2027; a $21 barista would expect about $1.70 more to keep the gap, +8%. The bill's own 2027 step was not in the results. Use only as a labelled scenario."
+      }
+    ]
   }
 }
