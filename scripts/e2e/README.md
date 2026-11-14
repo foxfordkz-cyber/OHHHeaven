@@ -35,9 +35,10 @@ Each run creates its own demo city through the API and pauses its clock, so the 
 
 On every step: a full-page screenshot, horizontal overflow, page errors, console errors, failed requests and 5xx answers from the API. A step that fails in the UI is written down with a screenshot and then done through the API, so one broken button does not hide everything after it. Exit code 1 when any UI step failed.
 
-## Two more measurements
+## Three more checks
 
 - `first-minute.mjs` — a newcomer on a phone with the demo city running at its own speed (no paused clock): seconds until the first decision, the first number that answers it, the signed lease, the open doors and the first sale; the longest stretch with nothing to decide. Writes `TIMELINE.md`.
+- `pitch-show.mjs` — the five-minute stage show from `docs/pitch/RUNBOOK.md` in four browsers: Maya's and Viktor's phones by their codes, the projector by the guest code, the presenter desk `/pitch`. Maya takes the jury's branch on her phone (`--branch price` or `seats`), reports Viktor; the desk runs the city to the fine notice; Viktor pays on his phone; the desk goes back to the start. Writes `PITCH.md` and screenshots.
 - `perf.mjs` — the first screen on a desktop and on a phone throttled like Lighthouse mobile (Slow 4G, CPU ×4): bytes over the wire, which files are large and whether they are compressed, time until the idea field is ready, LCP, long tasks.
 
 Output: `RUN.md` (one line per step) and `results.json` in `docs/qa/runs/<time>/` (not committed). Findings live in `docs/qa/BUGS.md`; whether each screen gives the player a decision, a visible consequence and a reason to come back is in `docs/qa/HOOK.md`.
