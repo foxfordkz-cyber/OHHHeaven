@@ -142,6 +142,9 @@ export interface PersonalPlan {
 }
 export type PersonalRealWorldPlan = RealWorldPlan & { extra: { personal: PersonalPlan } };
 
+/** Insurance the owner buys (not the unemployment insurance tax). */
+const isInsurance = (m: { label: string }): boolean => /insurance|owner's policy/i.test(m.label) && !/unemployment/i.test(m.label);
+
 const EQUIPMENT_KINDS = new Set<PackSetupItem['kind']>(['equipment', 'furniture']);
 const PERMIT_KINDS = new Set<PackSetupItem['kind']>(['permit', 'license']);
 
@@ -213,7 +216,8 @@ function summaryPart(b: BusinessState, pack: Pack, place: Place | undefined, ite
   };
 }
 
-function risksPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, place: PlanPlace | null, summary: PlanSummary, fixedMonth: Money): PlanRisk[] {
+/** `covered` — risks the season's lessons already tell (the plan shows those as lessons, not twice). */
+function risksPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, place: PlanPlace | null, summary: PlanSummary, fixedMonth: Money, covered: ReadonlySet<PlanRisk['id']>): PlanRisk[] {
   const out: PlanRisk[] = [];
   const a = analyze(b, w, ctx);
   const months = b.history.filter((m) => m.revenue > 0);
@@ -265,7 +269,7 @@ function risksPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, 
       why: 'There was no seat or the line was too long at the busy hour.',
       fix: 'Staff and seat for the busiest hour, not the average one.' });
   }
-  return out.sort((x, y) => (y.amount ?? -1) - (x.amount ?? -1)).slice(0, 3);
+  return out.filter((r) => !covered.has(r.id)).sort((x, y) => (y.amount ?? -1) - (x.amount ?? -1)).slice(0, 3);
 }
 
 /** Supplier id → which of the player's choices it serves. Ids of packs/cafe.json; other niches get the generic list. */
@@ -281,10 +285,18 @@ function suppliersPart(b: BusinessState, pack: Pack, items: PricedItem[], equipm
     if (/bean|coffee/.test(k)) why[s.id] = `${sourcing ? `You chose “${sourcing.label}” beans and milk. ` : ''}${inv ? `Your opening order is ${usd(inv.amount)}.` : ''}`.trim();
     else if (/dairy|milk/.test(k) && sourcing) why[s.id] = `With “${sourcing.label}” sourcing; deliveries several times a week.`;
     else if (/pastry/.test(k)) why[s.id] = items.some((i) => /pastry/.test(i.def.id)) ? 'You bought a pastry case: line up a licensed bakery before day one.' : '';
-    else if (/equipment_new|equipment, new/.test(k)) why[s.id] = equipmentTotal > 0 ? `You priced ${plural(items.filter((i) => EQUIPMENT_KINDS.has(i.def.kind)).length, 'item')} new: ${usd(equipmentTotal)}.` : '';
-    else if (/equipment_used|used/.test(k)) why[s.id] = equipmentTotal > 0 ? `Your list costs ${usd(equipmentTotal)} new. Used machines and furniture are where a first owner saves most.` : '';
+    else if (/equipment_new|equipment, new/.test(k)) {
+      const fresh = items.filter((i) => EQUIPMENT_KINDS.has(i.def.kind) && !/_used$/.test(i.def.id));
+      why[s.id] = fresh.length ? `You priced ${plural(fresh.length, 'item')} new: ${usd(fresh.reduce((x, i) => x + i.amount, 0))}.` : '';
+    }
+    else if (/equipment_used|used/.test(k)) {
+      // items whose id ends in _used are second-hand alternatives (none in packs/cafe.json yet; see agents/r3-B07.md)
+      const used = items.filter((i) => /_used$/.test(i.def.id));
+      why[s.id] = used.length ? `You chose ${plural(used.length, 'used piece')}: ${usd(used.reduce((x, i) => x + i.amount, 0))}.`
+        : equipmentTotal > 0 ? `Your list costs ${usd(equipmentTotal)} new. Used machines and furniture are where a first owner saves most.` : '';
+    }
     else if (/pos|payment|register/.test(k)) why[s.id] = has('pos') ? `Your register is in the budget: ${usd(items.find((i) => i.def.id === 'pos')!.amount)}.` : '';
-    else if (/insurance/.test(k)) { const l = line(/insurance/i); why[s.id] = l ? `Your books show ${usd(l.amount)} a month for insurance.` : 'Workers’ comp is required before your first hire.'; }
+    else if (/insurance/.test(k)) { const ins = monthly.filter(isInsurance).reduce((x, m) => x + m.amount, 0); why[s.id] = ins > 0 ? `Your books show ${usd(ins)} a month for insurance.` : 'Workers’ comp is required before your first hire.'; }
     else if (/pest/.test(k)) { const o = lever('pest_control'); why[s.id] = o ? (o.causes ? `You chose “${o.label}”: that is a violation an inspector fines.` : `You chose “${o.label}”.`) : ''; }
     else if (/contractor|architect/.test(k)) why[s.id] = items.some((i) => partOf(i.def) === 'buildout') ? `Your build-out budget is ${usd(items.filter((i) => partOf(i.def) === 'buildout').reduce((x, i) => x + i.amount, 0))}.` : '';
     else if (/disposable|cup/.test(k)) { const l = line(/cup|packag|dispos/i); why[s.id] = l ? `Your books show ${usd(l.amount)} a month.` : ''; }
@@ -295,7 +307,7 @@ function suppliersPart(b: BusinessState, pack: Pack, items: PricedItem[], equipm
   return { why, order };
 }
 
-function stepsPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, place: PlanPlace | null, items: PricedItem[], staff: PlanStaffLine[], payroll: Money, equipmentTotal: Money, summary: PlanSummary): Record<string, PlanStepMine> {
+function stepsPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, place: PlanPlace | null, items: PricedItem[], staff: PlanStaffLine[], payroll: Money, equipmentTotal: Money, summary: PlanSummary, monthly: { label: string; amount: Money }[]): Record<string, PlanStepMine> {
   const out: Record<string, PlanStepMine> = {};
   for (const s of roadmapFor(b.niche, b, w, ctx)) {
     const it = s.setupItemId ? items.find((i) => i.def.id === s.setupItemId) : undefined;
@@ -315,19 +327,40 @@ function stepsPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, 
       mine = `Your opening order: ${usd(it?.amount ?? def.cost)}${src ? `, “${chosenOption(src, b.orders).label}” sourcing` : ''}.`;
     } else if (it) {
       mine = `${it.def.name}: ${usd(it.amount)} in your budget.`;
+    } else if (s.kind === 'idea' && place && /space|scout|find|premises/.test(s.id)) {
+      mine = `You chose ${place.address}: ${num(place.sqft)} sq ft, ${plural(b.size, pack.sizing.unitName)}, ${usd(place.rentMonth)} a month${place.formerUse ? `, a former ${place.formerUse}` : ''}.`;
+    } else if (s.kind === 'idea' && place && /occupancy/.test(s.id)) {
+      mine = `Ask the landlord of ${place.address} for its Certificate of Occupancy before you sign.`;
+    } else if (s.kind === 'idea' && /concept|format/.test(s.id)) {
+      mine = `Your format: ${plural(b.size, pack.sizing.unitName)}, ${usdRate(b.orders.price)} a ${pack.unit.name}, a team of ${staff.reduce((x, r) => x + r.count, 0)}.`;
+    } else if (s.kind === 'idea' && /plan|budget/.test(s.id)) {
+      mine = `This page is that plan: ${usd(summary.cashBeforeFirstSale)} before the first sale and ${usd(summary.reserve)} in reserve.`;
+    } else if (/insurance/.test(s.id) && monthly.some(isInsurance)) {
+      mine = `Your books: ${monthly.filter(isInsurance).map((m) => `${m.label.replace(/ paid$/, '')} ${usd(m.amount)}`).join(', ')} a month.`;
     } else if (s.kind === 'space' && place) {
       mine = `${place.address}: ${num(place.sqft)} sq ft, ${usd(place.rentMonth)} a month${place.deposit ? `, deposit ${usd(place.deposit)}${place.depositMonths ? ` (${place.depositMonths} months)` : ''}` : ''}.`;
     } else if (s.kind === 'people' && staff.length) {
       mine = `Your team: ${staff.map((r) => `${r.count} × ${r.name} at ${usd(r.hourlyWage)}/h`).join(', ')} — ${usd(payroll)} a month before payroll taxes.`;
     } else if (s.kind === 'launch') {
-      mine = summary.opened ? `You opened on day ${b.openedDay}, ${plural(summary.daysToOpen, 'day')} after the lease.` : `About ${plural(summary.daysToOpen, 'day')} after the lease.`;
+      mine = `${summary.opened ? `You opened on day ${b.openedDay}, ${plural(summary.daysToOpen, 'day')} after the lease.` : `About ${plural(summary.daysToOpen, 'day')} after the lease.`} Your reserve: ${usd(summary.reserve)}.`;
     }
     out[s.id] = { status: s.status, ...(s.readyDay != null ? { readyDay: s.readyDay } : {}), ...(mine ? { mine } : {}) };
   }
   return out;
 }
 
-export function personalPlan(b: BusinessState, w: WorldState, ctx: EngineCtx, monthly: { label: string; amount: Money }[], reserve: Money, fixedMonth: Money): PersonalPlan {
+/** Risks whose story a lesson of the season already tells (lessons() titles). */
+function coveredByLessons(titles: string[]): Set<PlanRisk['id']> {
+  const out = new Set<PlanRisk['id']>();
+  for (const t of titles) {
+    if (/^Rent above/i.test(t)) out.add('rent');
+    if (/^Customers turned away/i.test(t)) out.add('lost');
+    if (/^Fine/i.test(t)) out.add('fines');
+  }
+  return out;
+}
+
+export function personalPlan(b: BusinessState, w: WorldState, ctx: EngineCtx, monthly: { label: string; amount: Money }[], reserve: Money, fixedMonth: Money, lessonTitles: string[] = []): PersonalPlan {
   const pack = packOf(ctx, b.niche);
   const place = placeOf(ctx, b.placeId);
   const items = pricedItems(b, pack, place);
@@ -351,9 +384,9 @@ export function personalPlan(b: BusinessState, w: WorldState, ctx: EngineCtx, mo
     equipment, equipmentTotal,
     firstOrder: inv ? { name: inv.def.name, amount: inv.amount, sourcing: src ? chosenOption(src, b.orders).label : null } : null,
     summary,
-    risks: risksPart(b, w, ctx, pack, pp, summary, fixedMonth),
+    risks: risksPart(b, w, ctx, pack, pp, summary, fixedMonth, coveredByLessons(lessonTitles)),
     supplierWhy: sup.why, supplierOrder: sup.order,
-    steps: stepsPart(b, w, ctx, pack, pp, items, staff, r2(cmOpen.payroll), equipmentTotal, summary),
+    steps: stepsPart(b, w, ctx, pack, pp, items, staff, r2(cmOpen.payroll), equipmentTotal, summary, monthly),
   };
 }
 
@@ -366,6 +399,7 @@ export function realWorldPlan(b: BusinessState, w: WorldState, ctx: EngineCtx): 
   const reserve = r2(6 * fixedMonth);
   const startup = startupBudget(b, ctx);
   const monthly = monthlyFromBooks(b, w, ctx);
+  const learned = lessons(b, w, ctx);
   return {
     niche: b.niche, businessName: b.name,
     startupBudget: startup, startupTotal: sumLines(startup),
@@ -373,8 +407,8 @@ export function realWorldPlan(b: BusinessState, w: WorldState, ctx: EngineCtx): 
     reserveAdvised: reserve,
     breakEvenUnitsMonth: a.breakEvenUnitsMonth, paybackMonths: a.paybackMonths,
     checklist: checklist(b, ctx), suppliers: pack.suppliers,
-    lessons: lessons(b, w, ctx),
+    lessons: learned,
     disclaimer: DISCLAIMER,
-    extra: { personal: personalPlan(b, w, ctx, monthly, reserve, fixedMonth) },
+    extra: { personal: personalPlan(b, w, ctx, monthly, reserve, fixedMonth, learned.map((l) => l.title)) },
   };
 }

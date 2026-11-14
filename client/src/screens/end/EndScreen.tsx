@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import type { Debrief, OwnerView, PackRuleCard, Query } from '@ohh/shared/types';
-import { Badge, Button, Card, Icon, MoneyText, RuleCard, Skeleton } from '../../ui';
+import { Badge, Card, Icon, MoneyText, RuleCard, Skeleton } from '../../ui';
 import { useGame, useOwnerView } from '../../app/store';
 import { money, nicheName, ordinal } from '../insights/format';
 import { OriginBadge } from '../insights/Advisor';
 import { Leaderboards } from './Leaderboards';
 import { myResult } from './prizes';
 import { useRuleCards } from './rulecards';
+import { PlanTeaser } from './PlanTeaser';
 import './end.css';
 
 export type AskFn = (q: Query) => Promise<unknown>;
@@ -44,7 +44,6 @@ export function LostMoney({ items, cards }: { items: Debrief['lostMoneyOn']; car
 
 /** /end — place in the niche, the payout, and the debrief: where the money went, what worked, what to do next time. */
 export function EndScreen({ view, ask, cards, planHref = '/end/plan' }: { view: OwnerView; ask: AskFn; cards?: PackRuleCard[]; planHref?: string }) {
-  const navigate = useNavigate();
   const result = myResult(view);
   const { debrief, loading, failed } = useDebrief(ask);
   const ruleCards = useRuleCards(cards);
@@ -93,9 +92,7 @@ export function EndScreen({ view, ask, cards, planHref = '/end/plan' }: { view: 
         )}
       </section>
 
-      <Card tone="accent" title="Your real-world plan" subtitle="Budget, documents in order, suppliers and these lessons — to keep, print or send.">
-        <Button block icon="doc" onClick={() => navigate(planHref)}>Open my plan</Button>
-      </Card>
+      <PlanTeaser ask={ask} href={planHref} />
 
       <section className="stack" aria-label="Leaderboards">
         <div className="row-between"><h2 className="h2" style={{ margin: 0 }}>Leaderboards</h2>{testMoney && <Badge>test money</Badge>}</div>

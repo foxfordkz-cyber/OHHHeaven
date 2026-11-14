@@ -68,3 +68,15 @@
 .plan-kit__toggle { background: none; border: 0; padding: 6px 0; color: var(--info); cursor: pointer; text-align: left; min-height: 32px; }
 .plan-kit:not([data-open]) .plan-kit__list { display: none; }
 .plan-wrap { white-space: normal !important; }
+.plan-step__yours { color: var(--text); }
+.plan-general { margin-left: 28px; }
+.plan-general__tag { font-weight: 650; }
+
+/* On a computer the plan reads as one document: a single sheet, sections divided by rules instead of separate cards. */
+@media (min-width: 1024px) {
+  .plan { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-3); box-shadow: var(--shadow-1); padding: var(--s-6) var(--s-8); gap: 0; }
+  .plan .plan-block { background: none; border: 0; border-radius: 0; box-shadow: none; padding: var(--s-5) 0; border-top: 1px solid var(--border); }
+  .plan > .plan-header { border-top: 0; padding-top: 0; }
+  .plan-pair { gap: var(--s-6); }
+  .plan .plan-check { background: var(--surface-2); border: 0; border-radius: var(--r-2); padding: var(--s-4); margin: var(--s-2) 0 var(--s-4); }
+}

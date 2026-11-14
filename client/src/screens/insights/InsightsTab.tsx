@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import type { OwnerView } from '@ohh/shared/types';
-import { Badge, Button, Card, Icon, ProgressBar } from '../../ui';
+import { Badge, Card, Icon, ProgressBar } from '../../ui';
 import { useGame, useOwnerView } from '../../app/store';
 import { LeaderboardCard } from '../end/Leaderboards';
 import { usePackInfo, type PackInfo } from '../end/rulecards';
+import { PlanTeaser } from '../end/PlanTeaser';
 import { AdvisorCard, type AskFn } from './Advisor';
 import { BreakEvenChart, CapacityBars, CostBar, TrendChart } from './Charts';
 import { int, money, pct, unitWord } from './format';
@@ -20,14 +21,6 @@ function TitleTip({ k, children }: { k: string; children: string }) {
   return <Tip k={k} className="ins-title-tip">{children} <Icon name="info" size={14} /></Tip>;
 }
 
-function PlanCta({ href }: { href: string }) {
-  const navigate = useNavigate();
-  return (
-    <Card tone="accent" title="Your real-world plan" subtitle="Budget, documents in order, suppliers and the lessons of your season. Take it with you.">
-      <Button block icon="doc" onClick={() => navigate(href)}>Open my plan</Button>
-    </Card>
-  );
-}
 
 /** The Insights tab of /biz: the business seen with an owner's eyes. Shows only numbers from the view. */
 export function InsightsTab({ view, ask, links = LINKS, names = {} }: { view: OwnerView; ask: AskFn; links?: InsightsLinks; names?: PackNames }) {
@@ -38,7 +31,7 @@ export function InsightsTab({ view, ask, links = LINKS, names = {} }: { view: Ow
       <div className="stack ins">
         <Card title="Analytics start when your doors open" subtitle={b ? 'Rent is already running. Here you will see break-even, payback, costs against the industry and taxes ahead.' : 'Open a business to see its numbers.'} />
         <AdvisorCard view={view} ask={ask} />
-        {b && <PlanCta href={links.plan} />}
+        {b && <PlanTeaser ask={ask} href={links.plan} />}
       </div>
     );
   }
@@ -163,7 +156,7 @@ export function InsightsTab({ view, ask, links = LINKS, names = {} }: { view: Ow
       )}
 
       <LeaderboardCard view={view} onOpen={() => navigate(links.leaderboards)} />
-      <PlanCta href={links.plan} />
+      <PlanTeaser ask={ask} href={links.plan} />
     </div>
   );
 }
