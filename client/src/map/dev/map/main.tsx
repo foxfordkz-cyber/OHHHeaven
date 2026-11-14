@@ -17,7 +17,7 @@ function DevMap() {
     <div style={{ position: 'fixed', inset: 0 }}>
       <CityMap
         places={fx.places} businesses={fx.businesses} myBusinessId={fx.myBusinessId}
-        weather={weather} events={fx.events} day={fx.day} blockFunds={fx.blockFunds}
+        weather={weather} events={fx.events} day={fx.day} blockFunds={fx.blockFunds} realBusinesses={fx.realBusinesses}
         mode={mode} niche={niche} offline={params.has('offline')} intro={!params.has('nointro')}
         onPick={(id) => setPicked(id)} onOpenBusiness={(id) => setOpened(id)}
       />

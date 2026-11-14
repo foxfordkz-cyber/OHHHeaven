@@ -12,7 +12,8 @@ import type { BlockFundStatus, DayWeather, GameEvent, NicheId, PackSet, Place, P
 import { dateOf } from '@ohh/shared/rules';
 import {
   NICHE_META, WEATHER_ICON, activeFundBlocks, blockLines, blockSegments, businessFeatures, businessMarkers, centerOf,
-  closedBlocks, liveEvents, partnerLines, placeFeatures, todayWeather, type BizMarker, type LngLat,
+  closedBlocks, liveEvents, partnerLines, placeFeatures, realFeatures, todayWeather, type BizMarker, type LngLat,
+  type RealBusinessLabel,
 } from './geo';
 import { isTileFailure, nightStyle, offlineStyle, type StyleSpecification } from './mapStyle';
 import { PlaceCard } from './PlaceCard';
@@ -34,6 +35,8 @@ export interface CityMapProps {
   day?: number;
   /** Lit streets: blocks whose fund is active this month. */
   blockFunds?: BlockFundStatus[];
+  /** Real working places (data/real-businesses.json): grey dots, names when zoomed in. Labels only. */
+  realBusinesses?: RealBusinessLabel[];
   /** Real sizing for "how many seats fit"; defaults are used until packs load. */
   packs?: PackSet;
   /** Force the offline snapshot (otherwise it switches on its own when tiles fail). */
@@ -64,10 +67,21 @@ const isSmallScreen = () => typeof window !== 'undefined' && window.innerWidth <
 type GeoData = Parameters<GeoJSONSource['setData']>[0];
 
 function installOverlays(map: MapLibreMap) {
-  for (const id of ['ohh-fund', 'ohh-closed', 'ohh-deals', 'ohh-places', 'ohh-biz']) {
+  for (const id of ['ohh-real', 'ohh-fund', 'ohh-closed', 'ohh-deals', 'ohh-places', 'ohh-biz']) {
     if (!map.getSource(id)) map.addSource(id, { type: 'geojson', data: EMPTY as GeoData });
   }
   const add = (layer: Parameters<MapLibreMap['addLayer']>[0]) => { if (!map.getLayer(layer.id)) map.addLayer(layer); };
+  add({
+    id: 'ohh-real-dot', type: 'circle', source: 'ohh-real', minzoom: 14.5,
+    paint: { 'circle-color': '#6b76a3', 'circle-opacity': 0.75, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 14.5, 1.5, 18, 4], 'circle-stroke-color': '#0a0f1f', 'circle-stroke-width': 0.8 },
+  });
+  if (map.getStyle().glyphs) {
+    add({
+      id: 'ohh-real-name', type: 'symbol', source: 'ohh-real', minzoom: 16.2,
+      layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Regular'], 'text-size': 10.5, 'text-offset': [0, 0.9], 'text-anchor': 'top', 'text-optional': true, 'text-max-width': 9 },
+      paint: { 'text-color': '#7c87b5', 'text-halo-color': '#0a0f1f', 'text-halo-width': 1.3 },
+    });
+  }
   add({ id: 'ohh-fund-glow', type: 'line', source: 'ohh-fund', layout: { 'line-cap': 'round' }, paint: { 'line-color': '#7ee081', 'line-width': 18, 'line-blur': 12, 'line-opacity': 0.45 } });
   add({ id: 'ohh-fund-line', type: 'line', source: 'ohh-fund', layout: { 'line-cap': 'round' }, paint: { 'line-color': '#b6f7c1', 'line-width': 3 } });
   add({ id: 'ohh-closed-glow', type: 'line', source: 'ohh-closed', layout: { 'line-cap': 'round' }, paint: { 'line-color': '#ff2d55', 'line-width': 20, 'line-blur': 12, 'line-opacity': 0.5 } });
@@ -158,7 +172,7 @@ function declutter(map: MapLibreMap, pins: Map<string, Marker>, markers: BizMark
 export function CityMap(props: CityMapProps) {
   const {
     places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness,
-    blockFunds, packs, offline: forceOffline = false, intro = true, orbit = false, className, style,
+    blockFunds, packs, realBusinesses, offline: forceOffline = false, intro = true, orbit = false, className, style,
   } = props;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -173,6 +187,7 @@ export function CityMap(props: CityMapProps) {
   const [zoomedOut, setZoomedOut] = useState(true);
 
   const segments = useMemo(() => blockSegments(places), [places]);
+  const realFC = useMemo(() => realFeatures(realBusinesses), [realBusinesses]);
   const placeFC = useMemo(() => placeFeatures(places, businesses, niche), [places, businesses, niche]);
   const markers = useMemo(() => businessMarkers(businesses, places, myBusinessId), [businesses, places, myBusinessId]);
   const bizFC = useMemo(() => businessFeatures(markers), [markers]);
@@ -288,6 +303,7 @@ export function CityMap(props: CityMapProps) {
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !styleEpoch) return;
+    setData(map, 'ohh-real', realFC);
     setData(map, 'ohh-places', placeFC);
     setData(map, 'ohh-biz', bizFC);
     setData(map, 'ohh-deals', mode === 'live' ? dealsFC : EMPTY);
@@ -295,7 +311,7 @@ export function CityMap(props: CityMapProps) {
     setData(map, 'ohh-closed', closedFC);
     for (const id of LAYERS_PICK) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', mode === 'pick' ? 'visible' : 'none');
     if (map.getLayer('ohh-biz-halo')) map.setLayoutProperty('ohh-biz-halo', 'visibility', mode === 'live' ? 'visible' : 'none');
-  }, [styleEpoch, placeFC, bizFC, dealsFC, fundFC, closedFC, mode]);
+  }, [styleEpoch, realFC, placeFC, bizFC, dealsFC, fundFC, closedFC, mode]);
 
   // selection highlight
   useEffect(() => {

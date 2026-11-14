@@ -1,8 +1,11 @@
 // Example data for /dev/map and /dev/city. Business names are made up; places are data/places.json.
 import placesJson from '../../../data/places.json';
+import realJson from '../../../data/real-businesses.json';
 import type { BlockFundStatus, DayWeather, GameEvent, NicheId, Place, PublicBusiness } from '@ohh/shared/types';
+import type { RealBusinessLabel } from './geo';
 
 export const places = placesJson as Place[];
+export const realBusinesses = realJson as RealBusinessLabel[];
 
 const NAMES: Record<NicheId, string[]> = {
   cafe: ['Night Owl Coffee', 'Bean Republic', 'Tompkins Roast', 'Cup & Ledger', 'Alphabet Espresso', 'Second Shot', 'Little Grind', 'Daybreak Café', 'First Pour', 'Steam Room', 'Corner Crema', 'Slow Drip', 'Avenue Brew', 'Ninth Street Cup', 'Latte Lab', 'Copper Kettle'],
