@@ -285,6 +285,157 @@
       "confidence": "estimate",
       "seenIn": "primary_search_extract",
       "note": "NYC311 and NYC Business, seen in extract: the permit costs $70 a year (plus $25 if you make frozen desserts), covers events that last 14 days or less, and one permit serves one event at a time: a second simultaneous event needs a second permit. Event organizers must notify the Health Department 30 days before the event with the list of vendors and their permit numbers; that notice period is used as the wait. A vendor without a valid permit faces a summons of $200-$2,000 and immediate closing of the stand."
+    },
+    {
+      "id": "business_purchase_price",
+      "name": "Purchase price of an operating coffee shop",
+      "kind": "other",
+      "cost": 233000,
+      "required": false,
+      "appliesTo": [
+        "takeover"
+      ],
+      "phase": "closing",
+      "costBasis": "multiple_of_owner_earnings",
+      "rate": 2,
+      "alternativeBasis": {
+        "basis": "multiple_of_annual_sales",
+        "rate": 0.41,
+        "low": 0.3,
+        "high": 0.57
+      },
+      "earningsMultipleRange": [
+        1.5,
+        2.55
+      ],
+      "includes": [
+        "build-out in place",
+        "equipment and furniture",
+        "goodwill and regulars",
+        "assignment of the lease"
+      ],
+      "excludes": [
+        "security deposit (new)",
+        "Health permit (new application)",
+        "opening inventory",
+        "working capital",
+        "sales tax on the equipment part of the price"
+      ],
+      "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "BizBuySell valuation benchmarks for coffee shops and cafes sold in 2021-2025, seen in extract: median price 2.00 times the seller's yearly earnings (middle half 1.50-2.55) and 0.41 times yearly revenue (0.30-0.57); median sale price in 2025 $176,500. Calculation for the pack's reference shop: owner earnings $9,719 a month x 12 = $116,628 x 2.0 = $233,256; cross-check 0.41 x $612,000 of yearly sales = $250,920. New York asking prices seen in November 2026 run 1.6-3.1 times stated cash flow. The engine should price each listing from the sales the address really supports, not from this fallback."
+    },
+    {
+      "id": "key_money",
+      "name": "Key money for a closed, built-out cafe",
+      "kind": "other",
+      "cost": 50000,
+      "required": false,
+      "appliesTo": [
+        "asset_sale"
+      ],
+      "phase": "closing",
+      "includes": [
+        "build-out in place",
+        "equipment and furniture as they stand",
+        "assignment of the lease"
+      ],
+      "excludes": [
+        "customers",
+        "staff",
+        "permits"
+      ],
+      "source": "https://commercialobserver.com/2013/08/weighing-in-on-key-money-deals/",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "Key money is paid to take over a lease with what is bolted to the room; brokers call the figure very negotiable and justified only when the inherited rent is below market with years left. Asking prices seen in New York listings: an Upper East Side coffee shop $30,000; a West Village bar build-out $60,000; a Brooklyn restaurant $150,000; a West Village storefront $225,000 at $10,000 rent. My planning value for a small cafe: half the replacement cost of a light build-out plus equipment (($70,000 + $25,000) x 0.5 = $47,500), rounded to $50,000. No survey of closed deals exists."
+    },
+    {
+      "id": "acquisition_legal_and_accounting",
+      "name": "Lawyer and accountant for buying a business",
+      "kind": "other",
+      "cost": 6000,
+      "required": false,
+      "appliesTo": [
+        "takeover",
+        "asset_sale"
+      ],
+      "phase": "closing",
+      "source": "https://lawyerforbusiness.com/how-much-does-business-sale-lawyer-cost-ny/",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "New York guides: legal fees for a small business purchase about $1,800-$10,000 (one firm: 0.85% of the deal, minimum $1,800; another guide: $3,500-$25,000 for small and mid-sized sales); flat-fee bids for drafting a New York asset sale ran $950-$4,000. $6,000 = $4,000 of legal work (purchase agreement, bulk-sale notice, escrow, lease assignment) + $2,000 of accountant time to match register reports to deposits and tax returns (my estimate). Same amount as the full_review option of the takeover_due_diligence lever: charge once."
+    },
+    {
+      "id": "asbestos_abatement",
+      "name": "Asbestos abatement (only if the report is positive)",
+      "kind": "buildout",
+      "cost": 5000,
+      "required": false,
+      "lifespanMonths": 600,
+      "appliesIf": "asbestos_present",
+      "phase": "design_and_permits",
+      "source": "https://www.nyc.gov/site/dep/environment/asbestos-abatement-forms.page",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "Rule (DEP, seen in extract): disturbing more than 25 linear feet or 10 sq ft of asbestos material is an asbestos project; the owner files an ACP-7 at least one week before work, by a licensed abatement contractor. Price: an NYC expert source quotes about $4-$8 per sq ft for asbestos floor tile, a residential figure; a 2026 cost guide gives $2,500-$40,000 a project. 800 sq ft x $6 = $4,800, rounded with fees to $5,000."
+    },
+    {
+      "id": "mobile_vendor_food_protection_course",
+      "name": "Food Protection Course for Mobile Vendors",
+      "kind": "license",
+      "cost": 53,
+      "required": false,
+      "waitDays": 7,
+      "agency": "NYC Health Academy (DOHMH)",
+      "appliesTo": [
+        "cart"
+      ],
+      "phase": "permits",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/food-protection-course-for-mobile-vendors",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-protection-course-for-mobile-vendors",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Health Department application instructions, seen in extract: the $53 fee for the Mobile Food Vendor Food Protection Course is paid separately from the $50 license. The 7 days are my estimate for the class and exam."
+    },
+    {
+      "id": "restricted_area_vending_permit",
+      "name": "Restricted Area vending permit (cart on private property, no waiting list)",
+      "kind": "permit",
+      "cost": 75,
+      "required": false,
+      "waitDays": 21,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "appliesTo": [
+        "cart"
+      ],
+      "phase": "permits",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit",
+      "withoutItViolation": "unlicensed_mobile_vending",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYC Business and Health Code Article 89, seen in extract: the permit lets a cart vend on private, commercially zoned property or Parks land under a written agreement with the owner; no waiting list and no limit on the number; it does not cover the public sidewalk or street, and the curb in front of a private building counts as public space. Fee $75 for a non-processing unit ($200 processing); the term follows the agreement, up to two years. Vending may start right after the pre-permit inspection: 21 days = two weeks before you may call for the inspection plus my estimate of a week to get it."
+    },
+    {
+      "id": "sba_guaranty_fee",
+      "name": "SBA loan guaranty fee (if you borrow to buy or build)",
+      "kind": "other",
+      "cost": 2550,
+      "required": false,
+      "costBasis": "pct_of_guaranteed_portion",
+      "rate": 0.02,
+      "appliesTo": [
+        "takeover",
+        "scratch",
+        "franchise"
+      ],
+      "phase": "financing",
+      "source": "https://www.naggl.org/wp-content/uploads/2025/08/SBA-Info-5000-872051.7aFees.8.28.25.pdf",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "SBA information notice on fiscal 2026 fees, seen in extract: the upfront guaranty fee on 7(a) loans of $150,000 or less is 2% of the guaranteed portion (3% from $150,001 to $700,000); the only waiver is for manufacturers. Calculation: $150,000 loan x 85% guaranteed (the standard share for loans up to $150,000, from my knowledge of the program, not re-checked) x 2% = $2,550. A complete change of ownership also needs 10% of the project cost from the buyer (SOP 50 10 8)."
     }
   ],
   "officials": [
@@ -453,6 +604,30 @@
       "confidence": "estimate",
       "seenIn": "primary_search_extract",
       "note": "NYS Tax Bulletin TB-ST-70 and Form AU-196.10, seen in extract: the purchaser must file Form AU-196.10 at least 10 days before paying for or taking possession of the assets; within 5 business days the Department answers with a release (AU-197.1) or a Notice of Claim (AU-196.2), and within 90 days states the amount; a purchaser who does not file, or files late, is personally liable for the seller's sales tax up to the higher of the purchase price or fair market value, whether or not money was withheld from the seller. Division of Tax Appeals cases against delis and restaurants show the Department using this (Bernard & Varecha Deli, 1646 Kosher Deli). Game reading: \"saved\" is the seller's hidden sales-tax debt carried by the listing, so pctOfSaved 1 means the buyer pays that debt in full. The debt per listing is a design value, not a statistic."
+    },
+    {
+      "id": "illegal_permit_rental",
+      "name": "Vending on a cart permit rented from its holder",
+      "law": "NYC Admin. Code §17-314.1 (licenses, permits and plates are not assignable or transferable); Health Code §89.17",
+      "official": "vending_enforcement_officer",
+      "foundBy": [
+        "inspection",
+        "complaint",
+        "sting"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 14,
+      "reputationHit": 0.02,
+      "criminal": "The permit holder risks revocation; the renter is treated as operating a unit with no valid permit and can lose the cart.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-215585",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Admin. Code text seen in extract: \"no license, permit or plate issued under this subchapter shall be assignable or transferable\"; the Health Department's renewal form makes the holder attest the permit was not sold, lent, leased or transferred (Health Code §89.17). The fine is my reading: the renter is cited as an unpermitted unit ($1,000 on the Health Department schedule). Black-market rent for a two-year permit is reported at $20,000-$25,000 (secondary). closureDays is my estimate for replacing a seized cart or permit."
     }
   ],
   "shortcuts": [
@@ -557,6 +732,21 @@
       ],
       "savesNote": "the $70 permit fee; the real gain is the weekend's sales",
       "source": "https://www.nyc.gov/site/doh/business/food-operators/temporary-food-service-establishments.page"
+    },
+    {
+      "id": "rent_a_permit",
+      "name": "Rent a cart permit on the black market",
+      "what": "A permit holder will let you use his decal for about $20,000 for two years. Permits cannot be rented: if enforcement checks whose name is on it, you are an unpermitted cart and he loses the permit.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 2000
+      },
+      "violation": "illegal_permit_rental",
+      "appliesTo": [
+        "cart"
+      ],
+      "savesNote": "what the rented decal buys is time: months or years on the waiting list. Valued at one month of a cart's contribution margin, my estimate; the rent itself costs about $833-$1,040 a month",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-215585"
     }
   ],
   "reports": [
@@ -1626,6 +1816,197 @@
           }
         }
       ]
+    },
+    {
+      "id": "entry_mode",
+      "name": "How you enter the business",
+      "phase": "start",
+      "oneTime": true,
+      "note": "Each option is described with money, time to first sale and risks in extra.entryModes. Chosen once, before anything else.",
+      "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+      "options": [
+        {
+          "id": "build_in_former_cafe",
+          "label": "Lease a former cafe and renovate",
+          "monthlyCost": 0,
+          "effects": {
+            "entryMode": "scratch_light"
+          }
+        },
+        {
+          "id": "build_in_raw_space",
+          "label": "Lease a space that never had food service and convert it",
+          "monthlyCost": 0,
+          "effects": {
+            "entryMode": "scratch_heavy"
+          }
+        },
+        {
+          "id": "buy_operating_shop",
+          "label": "Buy an operating coffee shop",
+          "monthlyCost": 0,
+          "effects": {
+            "entryMode": "takeover"
+          }
+        },
+        {
+          "id": "key_money_takeover",
+          "label": "Pay key money for a closed, built-out cafe",
+          "monthlyCost": 0,
+          "effects": {
+            "entryMode": "asset_sale"
+          }
+        },
+        {
+          "id": "franchise",
+          "label": "Open a franchise",
+          "monthlyCost": 0,
+          "effects": {
+            "entryMode": "franchise"
+          }
+        },
+        {
+          "id": "coffee_cart",
+          "label": "Start with a coffee cart",
+          "monthlyCost": 0,
+          "effects": {
+            "entryMode": "cart"
+          }
+        },
+        {
+          "id": "market_or_shared_corner",
+          "label": "Start at a market stand or a corner in someone else's shop",
+          "monthlyCost": 0,
+          "effects": {
+            "entryMode": "popup"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lease_contingencies",
+      "name": "Protections written into the lease",
+      "phase": "lease",
+      "oneTime": true,
+      "note": "Real practice: lawyers tie rent to delivery of possession and make the lease cancellable if permits or a Letter of No Objection are refused; NY Real Property Law §223-a implies delivery of possession at the start of the term unless the lease says otherwise. The $1,500 of extra legal time and the 10 extra days of negotiation are design values.",
+      "source": "https://itkowitz.com/?p=4676",
+      "options": [
+        {
+          "id": "plain_lease",
+          "label": "Sign the landlord's form as written",
+          "monthlyCost": 0,
+          "effects": {
+            "rentStartsAt": "lease_signing",
+            "canCancelIfPermitsDenied": false
+          }
+        },
+        {
+          "id": "delivery_and_permit_clause",
+          "label": "Rent starts at delivery of the space; you may cancel if permits are refused",
+          "monthlyCost": 0,
+          "oneTimeCost": 1500,
+          "effects": {
+            "rentStartsAt": "possession_delivered",
+            "canCancelIfPermitsDenied": true,
+            "leaseSigningDelayDays": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "franchise_brand",
+      "name": "Which franchise",
+      "phase": "start",
+      "oneTime": true,
+      "appliesTo": [
+        "franchise"
+      ],
+      "note": "Figures from franchisor sites and disclosure-document summaries: Gregorys Coffee fee $35,000, royalty 6%, marketing 2.5%, investment $459,150-$946,000, franchising since 2026; Dunkin' fee $40,000-$90,000, royalty 5.9%, advertising 5%, investment $443,000-$1,832,500, $250,000 liquid and $500,000 net worth per shop; Caffe Aronne $98,000-$268,000, royalty 6% (aggregators).",
+      "source": "https://franchise.gregoryscoffee.com/",
+      "options": [
+        {
+          "id": "new_local_brand",
+          "label": "A New York coffee brand that started franchising this year",
+          "monthlyCost": 0,
+          "effects": {
+            "royaltyPct": 0.085,
+            "awareness": 0.5,
+            "minInvestment": 459150
+          }
+        },
+        {
+          "id": "national_brand",
+          "label": "A national coffee-and-donut chain",
+          "monthlyCost": 0,
+          "effects": {
+            "royaltyPct": 0.109,
+            "awareness": 0.8,
+            "minInvestment": 443000,
+            "liquidAssetsRequired": 250000
+          }
+        },
+        {
+          "id": "small_format_brand",
+          "label": "A small-format espresso franchise",
+          "monthlyCost": 0,
+          "effects": {
+            "royaltyPct": 0.06,
+            "awareness": 0.4,
+            "minInvestment": 98000
+          }
+        }
+      ]
+    },
+    {
+      "id": "popup_venue",
+      "name": "Where the pop-up stands",
+      "appliesTo": [
+        "popup"
+      ],
+      "note": "Rules are real: a market stand needs a Temporary Food Service Establishment permit (events of 14 days or less; organizer notifies the city 30 days ahead); a counter inside a permitted shop runs under the host's permit and supervision. The monthly amounts are design values: market stall fees and sublet rents are not published.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about",
+      "options": [
+        {
+          "id": "seasonal_market",
+          "label": "Weekend stand at a seasonal food market (April to October)",
+          "monthlyCost": 1200,
+          "effects": {
+            "seasonMonths": [
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "needsTemporaryPermit": true
+          }
+        },
+        {
+          "id": "shared_corner",
+          "label": "Coffee counter inside someone else's shop, under their permit",
+          "monthlyCost": 1500,
+          "effects": {
+            "seasonMonths": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "needsTemporaryPermit": false,
+            "hostCanEnd": true
+          }
+        }
+      ]
     }
   ],
   "events": [
@@ -1776,5 +2157,2519 @@
       "note": "Parks concessions pay the greater of a guaranteed minimum yearly fee or a percentage of gross receipts (one 2024 agreement: $40,000 against 4% in year one). Market stall fees were not found in this session."
     }
   ],
-  "extra": {}
+  "extra": {
+    "eventCatalog": [
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 2,
+        "confidence": "estimate",
+        "id": "free_rent_runs_out",
+        "name": "The free rent ends before you open",
+        "tier": "core",
+        "text": "Your free months are over and the room is still a construction site. From today the full rent is due, with no sales to pay it.",
+        "realSignal": "Lease free-rent period (typically 3-6 months) against the build-out and permit schedule of this address",
+        "trigger": "decision:free_rent_deal + schedule of the address",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1,
+            "note": "full rent due with zero revenue"
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "free_rent_deal"
+          },
+          {
+            "kind": "lever",
+            "id": "construction_pace"
+          },
+          {
+            "kind": "shortcut",
+            "id": "build_without_permit"
+          }
+        ],
+        "realFrequency": "The norm rather than the exception: free rent is typically 3-6 months while brokers count 8-12 months from signing to opening (law-firm and broker guides, 2025-2026)",
+        "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+        "seenIn": "secondary_search_extract",
+        "note": "Light renovation here: 21 days of drawings + 21 days of permit + 7 days to mobilize + 60 days of construction + 14 days of inspections = 123 days. With three free months (90 days) that leaves 33 days of paid rent before the first sale = $6,600 at $6,000 a month; a standard refit (160 days) leaves 70 days = $14,000; a heavy conversion (280 days) leaves 190 days = $38,000."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 2,
+        "confidence": "estimate",
+        "id": "landlord_late_delivery",
+        "name": "The landlord hands over the space late",
+        "tier": "core",
+        "text": "The previous tenant has not moved out, or the landlord's own work is unfinished. You hold a signed lease and no keys.",
+        "realSignal": "Whether the space is vacant and broom-clean on the day the lease is signed (visible on a walk-through)",
+        "trigger": "attribute:space_occupied_at_signing",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 60
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "lease_contingencies"
+          },
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          }
+        ],
+        "realFrequency": "Litigated regularly: in Duane Reade v. Reade Broadway a five-month delay caused by a holdover tenant was held reasonable; in another case handing over a key did not count as delivery",
+        "source": "https://itkowitz.com/?p=4676",
+        "seenIn": "secondary_search_extract",
+        "note": "NY Real Property Law §223-a implies that the landlord delivers possession at the start of the term unless the lease says otherwise. 60 days is my planning value, below the five months of the Duane Reade case. With the delivery clause the rent does not run during the delay; with the plain lease it does."
+      },
+      {
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "first_timer_turned_away",
+        "name": "Landlords will not rent to a first-timer",
+        "tier": "core",
+        "text": "Brokers on the best blocks stop returning calls once they learn this is your first shop. Prime addresses want a track record, a bigger deposit or a full guaranty.",
+        "realSignal": "Applicant has no operating history; address is in the prime rent tier",
+        "trigger": "attribute:prime_tier_address + decision:guaranty_type",
+        "effects": [
+          {
+            "field": "depositMonths",
+            "add": 3
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "guaranty_type"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "Owner account: the founder of White Noise Coffee wrote that no landlord in a trendy neighborhood would rent her even 200-300 sq ft, so she converted her parents' bodega (Entrepreneur, December 2022)",
+        "source": "https://www.entrepreneur.com/growth-strategies/no-one-would-rent-me-a-cafe-in-trendy-nyc-neighborhoods/438828",
+        "seenIn": "secondary_search_extract",
+        "note": "Brokers: 3-6 months of deposit for tenants with credit, 6-12 months for startups and restaurants. Design reading: a first-time player on a prime block is quoted three more months of deposit unless they sign a full guaranty or enter by buying a shop with an assignable lease."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "letter_of_credit_wait",
+        "name": "The bank needs three weeks for the letter of credit",
+        "tier": "deep",
+        "text": "The landlord wants the deposit as a bank letter of credit. Your bank will issue it only against cash and needs two to three weeks.",
+        "realSignal": "Lease requires the security deposit as a standby letter of credit",
+        "trigger": "decision:guaranty_type=no_guaranty_big_deposit",
+        "effects": [
+          {
+            "field": "leaseSigningDelayDays",
+            "add": 18
+          },
+          {
+            "field": "monthlyFees",
+            "add": 23
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "guaranty_type"
+          }
+        ],
+        "realFrequency": "Common for large deposits: NYC brokers say a letter of credit is often the only form a landlord accepts and takes two to three weeks to issue",
+        "source": "https://www.metro-manhattan.com/security-deposit/",
+        "seenIn": "secondary_search_extract",
+        "note": "18 days = midpoint of two to three weeks. Fee about 1.5% a year of the amount ($23 a month on $18,000); the cash behind it stays frozen at the bank."
+      },
+      {
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 6,
+        "confidence": "estimate",
+        "id": "vacancy_leverage",
+        "name": "Empty storefronts give tenants leverage",
+        "tier": "deep",
+        "text": "One storefront in nine in the city is empty, one in five in some districts. Landlords with a dark window agree to more free rent.",
+        "realSignal": "Citywide storefront vacancy rate (Live XYZ data published quarterly by City Planning and by the Comptroller): 11.0% in April 2026",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "freeRentMonths",
+            "add": 1
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "free_rent_deal"
+          },
+          {
+            "kind": "lever",
+            "id": "lease_contingencies"
+          }
+        ],
+        "realFrequency": "Continuous: 11.0% citywide, 12.9% Manhattan, 12.3% Brooklyn, 9.5% Queens, 21.1% Financial District, 19.5% Ocean Hill (April 2026)",
+        "source": "https://comptroller.nyc.gov/reports/whos-minding-the-storefronts/",
+        "seenIn": "primary_search_extract",
+        "note": "The vacancy figures are from the Comptroller's report. One extra free month in districts above the city average is a design value."
+      },
+      {
+        "scale": "point",
+        "months": [
+          7,
+          1
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "tax_escalation_bill",
+        "name": "The property-tax escalation bill arrives",
+        "tier": "deep",
+        "text": "The city's new tax year starts and the building's bill is higher. Your lease passes your share of the increase to you as additional rent.",
+        "realSignal": "NYC property tax bills for the fiscal year starting July 1 (Department of Finance final assessment roll and Class 4 tax rate)",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "rent",
+            "add": 60
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "lease_contingencies"
+          },
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          }
+        ],
+        "realFrequency": "Every July for any lease with a tax escalation clause, which most NYC store leases have",
+        "source": "https://www.carltonfields.com/leasing-retail-stores-in-new-york-city/",
+        "seenIn": "secondary_search_extract",
+        "note": "$60 a month is the year-one estimate of real_estate_tax_escalation (assumed $18 per sq ft of tax and 5% growth). Brokers report $10-$20 per sq ft a year added over time in older buildings with a low base year."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "annual_rent_step",
+        "name": "Rent goes up 3%",
+        "tier": "core",
+        "text": "The first lease year is over. The yearly increase in your lease takes effect.",
+        "realSignal": "Lease anniversary; fixed yearly escalation clause",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1.03
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "free_rent_deal"
+          }
+        ],
+        "realFrequency": "Every year in most NYC retail leases; about 3% is typical",
+        "source": "https://www.metro-manhattan.com/blog/rentescalations",
+        "seenIn": "secondary_search_extract",
+        "note": "Fires in month 13 of the lease, whatever the calendar month. $6,000 x 1.03 = $6,180."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "mechanics_lien_filed",
+        "name": "A subcontractor files a lien on the building",
+        "tier": "deep",
+        "text": "Your contractor did not pay the electrician. The electrician filed a mechanic's lien against the property, and your landlord's lawyer is calling it a lease default.",
+        "realSignal": "Contractor paid up front without lien waivers; New York Lien Law gives 8 months to file on commercial work",
+        "trigger": "decision:contractor_choice=lowest_bid",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -8800
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "contractor_choice"
+          },
+          {
+            "kind": "lever",
+            "id": "contingency_level"
+          }
+        ],
+        "realFrequency": "No statistic found; construction lawyers describe it as a standard risk of tenant build-outs",
+        "source": "https://www.katalystos.com/blog/restaurant-build-out-contract-and-liens",
+        "seenIn": "secondary_search_extract",
+        "note": "A lien is discharged by a bond of 110% of the claim. Example: an $8,000 unpaid electrical subcontract x 1.10 = $8,800 tied up until the dispute ends. The $8,000 is my example figure."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "plan_examiner_objections",
+        "name": "The plan examiner sends objections",
+        "tier": "core",
+        "text": "The Buildings examiner returned your plans with objections. The architect has to answer each one and resubmit before any work can start.",
+        "realSignal": "Scope of the job: a heavy conversion or a change of use draws a full plan examination; a light renovation can be professionally certified",
+        "trigger": "attribute:space_class=standard_or_heavy",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 21
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          },
+          {
+            "kind": "shortcut",
+            "id": "build_without_permit"
+          }
+        ],
+        "realFrequency": "Routine: the 20.3-day average from application to approval already includes resubmissions; first review alone takes 3.7 business days (2025)",
+        "source": "https://www.osc.ny.gov/press/releases/2026/07/dinapoli-nyc-department-buildings-meets-critical-goals-lags-lower-priority-issues",
+        "seenIn": "primary_search_extract",
+        "note": "One extra review round is taken as one more average approval cycle: about 21 days. Design value built on the measured average."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "asbestos_found",
+        "name": "The asbestos report comes back positive",
+        "tier": "core",
+        "text": "The old floor tile and the pipe wrap contain asbestos. A licensed abatement crew has to remove it, with a week's notice to the city, before your contractor can touch the room.",
+        "realSignal": "Building built before April 1, 1987 and materials that test positive in the ACP-5 investigation",
+        "trigger": "attribute:asbestos_present",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 21
+          },
+          {
+            "field": "buildoutCost",
+            "add": 5000
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "contingency_level"
+          },
+          {
+            "kind": "shortcut",
+            "id": "build_without_permit"
+          }
+        ],
+        "realFrequency": "Depends on the building; no rate found. Most NYC storefront buildings predate 1987, so the investigation itself is nearly universal",
+        "source": "https://www.nyc.gov/site/dep/environment/asbestos-abatement-forms.page",
+        "seenIn": "primary_search_extract",
+        "note": "DEP rules seen in extract: disturbing more than 25 linear feet or 10 square feet of asbestos material is an asbestos project, and the ACP-7 notice must be filed at least one week before work. Cost: one NYC source quotes $4-$8 per sq ft for asbestos floor tile (a residential figure); 800 sq ft x $6 = $4,800, rounded to $5,000 with filing fees. Delay: 7 days of notice plus my estimate of two weeks for containment, removal and air clearance."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "landmark_review",
+        "name": "The block is in a historic district",
+        "tier": "deep",
+        "text": "Your storefront is in a historic district. The sign, the awning and the new door need a Landmarks permit before the Buildings permit can be issued.",
+        "realSignal": "Address inside a designated historic district (public map of the Landmarks Preservation Commission)",
+        "trigger": "attribute:historic_district",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 21
+          },
+          {
+            "field": "setupCost",
+            "add": 320
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          },
+          {
+            "kind": "shortcut",
+            "id": "build_without_permit"
+          }
+        ],
+        "realFrequency": "Applies to every storefront in a historic district; 95% of approvals are issued by staff without a hearing (LPC, April 2025)",
+        "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+        "seenIn": "primary_search_extract",
+        "note": "Staff permit within 10 business days (FasTrack) or 15 business days for a complete application = up to 21 calendar days. Fee $95 for the first $25,000 of work plus $5 per $1,000: $320 on a $70,000 job. A design that needs a Commission hearing takes months."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "no_certificate_of_occupancy",
+        "name": "The building has no Certificate of Occupancy",
+        "tier": "deep",
+        "text": "The building is older than 1938 and has no Certificate of Occupancy on file. Before permits, the Buildings Department must issue a Letter of No Objection for a cafe.",
+        "realSignal": "Building built or altered before 1938 with no Certificate of Occupancy in Buildings Department records",
+        "trigger": "attribute:pre_1938_no_co",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 30
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "lease_contingencies"
+          }
+        ],
+        "realFrequency": "Common in older low-rise buildings; no count found",
+        "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+        "seenIn": "primary_search_extract",
+        "note": "One architecture firm: at least one month for a clear case. If the letter is refused the use is not legal and the lease is worthless without the cancellation clause."
+      },
+      {
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "building_arrears_block_permit",
+        "name": "The landlord's unpaid fines block your permit",
+        "tier": "deep",
+        "text": "The building owes the city more than $25,000 in unpaid penalties. The permit system refuses your application until you prove you are only a tenant.",
+        "realSignal": "Property flagged for arrears or excessive violations in the Buildings Department property profile (Local Law 160 of 2017, Local Law 104 of 2019)",
+        "trigger": "attribute:building_arrears",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 14
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "lease_contingencies"
+          }
+        ],
+        "realFrequency": "No count found; the flag is visible in the public property profile before signing",
+        "source": "https://www.nyc.gov/assets/buildings/pdf/ll160of2017_sn.pdf",
+        "seenIn": "primary_search_extract",
+        "note": "Local Law 160 of 2017: permits are denied where covered arrears on the property or its owners exceed $25,000 (threshold from a compliance-service summary); an exception lets the commissioner issue a permit for a part of the property occupied by a tenant who is not an owner and not responsible for the arrears. 14 days is my estimate for documenting the exception."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 2,
+        "confidence": "estimate",
+        "id": "stop_work_order_served",
+        "name": "An inspector tapes a Stop Work Order to the door",
+        "tier": "core",
+        "text": "Someone called 311 about the dumpster and the noise. The inspector found no permit on the wall. All work stops today.",
+        "realSignal": "A 311 construction complaint on a site with no posted permit",
+        "trigger": "decision:build_without_permit + complaint",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 45
+          },
+          {
+            "field": "cash",
+            "add": -6000
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "build_without_permit"
+          },
+          {
+            "kind": "shortcut",
+            "id": "ignore_stop_work_order"
+          }
+        ],
+        "realFrequency": "DOB publishes enforcement bulletins every month; one listed site drew $188,750 in penalties for unpermitted work against an active Stop Work Order",
+        "source": "https://www.nyc.gov/site/buildings/safety/swo.page",
+        "seenIn": "primary_search_extract",
+        "note": "Penalty for work without a permit: 21 x the permit fee, minimum $6,000, maximum $15,000. Delay: drawings (21 days) + approval (about 21 days) + a few days to rescind the order = 45 days, during which rent runs ($9,000 at $6,000 a month)."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "failed_trade_inspection",
+        "name": "The plumbing fails inspection",
+        "tier": "deep",
+        "text": "The inspector asks which licensed plumber did the work. Nobody did. The lines are opened up and redone.",
+        "realSignal": "Plumbing or electrical work with no licensed firm on the filing",
+        "trigger": "decision:handyman_plumbing_electric",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 14
+          },
+          {
+            "field": "buildoutCost",
+            "add": 12000
+          },
+          {
+            "field": "cash",
+            "add": -5000
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "handyman_plumbing_electric"
+          },
+          {
+            "kind": "lever",
+            "id": "contractor_choice"
+          }
+        ],
+        "realFrequency": "Individual cases reported: a plumber working without a supervising master plumber was fined $5,000 in 2022",
+        "source": "https://citylandnyc.org/unlicensed-plumber-fined",
+        "seenIn": "secondary_search_extract",
+        "note": "Redo by licensed firms at the full price the handyman undercut ($12,000, my estimate of the licensed plumbing and electrical share of a $70,000 job) plus the $5,000 penalty of the reported case; 14 days is my estimate."
+      },
+      {
+        "scale": "city",
+        "months": [
+          7
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "city_cuts_red_tape",
+        "name": "The city cuts small-business red tape",
+        "tier": "deep",
+        "text": "City Hall announces more than 50 reforms for small businesses: a free project manager for anyone opening, one permit instead of two for frozen desserts, lower fines for three food-safety violations.",
+        "realSignal": "Mayoral executive orders and Small Business Services announcements (Executive Order 11 of January 14, 2026; Executive Order 18 and \"OPEN for Small Business\" of July 20, 2026)",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "permitWaitDays",
+            "mult": 0.9
+          },
+          {
+            "field": "fines",
+            "mult": 0.83,
+            "note": "three cross-contamination violations: $600 to $500"
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "opening_mode"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "Two packages in 2026; the NYC Hospitality Alliance called the July one limited",
+        "source": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
+        "seenIn": "primary_search_extract",
+        "note": "Real: 50+ reforms for about 180,000 small businesses, 25 of them for food businesses; frozen dessert permit eliminated; three food-safety fines cut from $600 to $500 (500/600 = 0.83). The 10% shorter permit wait from the project manager is a design value: no measured effect exists yet."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 3,
+        "confidence": "estimate",
+        "id": "gas_turn_on_wait",
+        "name": "Waiting for the gas to be turned on",
+        "tier": "core",
+        "text": "The piping is in and tested, but the utility has not come to set the meter. Without gas the water heater and the oven are dead.",
+        "realSignal": "Utility gas service request pending after the Buildings Department gas authorization",
+        "trigger": "decision:utility_concept=gas_equipment",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 68
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "utility_concept"
+          },
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          }
+        ],
+        "realFrequency": "State Senate survey of city restaurants (2017): only 17% got service on time, 69% waited at least 30 days, the average was about 68 days, some waited up to a year; a Lower East Side restaurant opened with salads after seven months",
+        "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+        "seenIn": "primary_search_extract",
+        "note": "The survey is from 2017; no newer measurement was found. The delay bites only if gas is on the critical path: an all-electric coffee shop skips it entirely."
+      },
+      {
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 2,
+        "confidence": "estimate",
+        "id": "gas_shut_off_in_building",
+        "name": "The gas to the building is shut off",
+        "tier": "exotic",
+        "text": "A routine utility inspection found a leak in the building's piping. Gas is off for every tenant until the landlord's plumber repairs it and the city passes it.",
+        "realSignal": "Utility leak finding on the building's gas piping (periodic inspections under Local Law 152)",
+        "trigger": "attribute:old_gas_piping + decision:utility_concept=gas_equipment",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.9
+          },
+          {
+            "field": "capacity",
+            "mult": 0.85
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "utility_concept"
+          }
+        ],
+        "realFrequency": "Reported every year: a Hell's Kitchen restaurant cooked without gas for about six weeks in spring 2026; Riverdale businesses went months without gas in 2024",
+        "source": "https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/",
+        "seenIn": "secondary_search_extract",
+        "note": "Duration from the 2026 case (six weeks and counting). The quality and capacity effects are design values for a cafe that heats water and food with gas."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "electrical_service_too_small",
+        "name": "The panel cannot carry the equipment",
+        "tier": "core",
+        "text": "The electrician adds up the espresso machine, the ice machine, the fridges and the air conditioning. The old panel is too small, and a bigger service needs Con Edison.",
+        "realSignal": "Existing electrical service of the space against the equipment load (visible on a walk-through with an electrician)",
+        "trigger": "attribute:small_panel",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 28
+          },
+          {
+            "field": "buildoutCost",
+            "add": 9000
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "utility_concept"
+          },
+          {
+            "kind": "lever",
+            "id": "contingency_level"
+          }
+        ],
+        "realFrequency": "Listed by NYC contractors as one of the usual surprises in old buildings, with old plumbing and grease-trap sizing; no rate found",
+        "source": "https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide",
+        "seenIn": "secondary_search_extract",
+        "note": "Two to six weeks of Con Edison coordination (contractor guides): 28 days is the midpoint. If the street side must be upgraded the utility's own 2021 sheet says 6 to 24 months. $9,000 is the weak estimate of electrical_service_upgrade."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "utility_deposit_demand",
+        "name": "Con Edison asks for a deposit",
+        "tier": "deep",
+        "text": "Your business has no payment history. The utility wants a security deposit before it opens the account.",
+        "realSignal": "New non-residential account with no billing history",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -1600
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "Standard for new business accounts",
+        "source": "https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf",
+        "seenIn": "primary_search_extract",
+        "note": "Cap: two times the average monthly bill; $800 of electricity x 2 = $1,600. A buyer of an operating shop cannot keep the seller's account and faces the same deposit."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "hidden_conditions",
+        "name": "The walls are opened and the surprises come out",
+        "tier": "core",
+        "text": "Behind the old counter: rotted subfloor, a drain that goes nowhere, wiring from another century. None of it was in the bid.",
+        "realSignal": "Age and prior use of the space; none of it visible without opening walls",
+        "trigger": "attribute:old_building",
+        "effects": [
+          {
+            "field": "buildoutCost",
+            "mult": 1.12
+          },
+          {
+            "field": "openingDelayDays",
+            "add": 14
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "contingency_level"
+          },
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "contractor_choice"
+          }
+        ],
+        "realFrequency": "NYC contractors list undersized electrical, old plumbing, grease-trap sizing and code-triggered upgrades as the typical surprises; a Brooklyn cafe owner: \"so many unforeseen costs and delays in build-out\" (Barista Magazine)",
+        "source": "https://blueberrybuilders.com/resources/cost-overruns-in-construction/",
+        "seenIn": "secondary_search_extract",
+        "note": "12% is inside the contingency contractors recommend (10-15% of hard costs): with a 15% reserve the event is absorbed; with 5% the difference is paid at the change-order premium of 15-30%. 14 days is my estimate."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 2,
+        "confidence": "estimate",
+        "id": "change_orders_pile_up",
+        "name": "Change orders pile up",
+        "tier": "core",
+        "text": "The low bid left things out. Every missing item comes back as a change order, priced by a contractor who knows you cannot switch now.",
+        "realSignal": "Bid well below the others; scope gaps in the contract",
+        "trigger": "decision:contractor_choice=lowest_bid",
+        "effects": [
+          {
+            "field": "buildoutCost",
+            "mult": 1.2
+          },
+          {
+            "field": "openingDelayDays",
+            "add": 21
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "contractor_choice"
+          },
+          {
+            "kind": "lever",
+            "id": "contingency_level"
+          }
+        ],
+        "realFrequency": "A contractor guide: change orders happen on almost every restaurant build; unplanned ones cost a 15-30% premium",
+        "source": "https://blueberrybuilders.com/resources/cost-overruns-in-construction/",
+        "seenIn": "secondary_search_extract",
+        "note": "Design values: the 12% saved on the low bid is more than returned as 20% of extras. One trade article cites an average restaurant renovation overrun of 34% without naming a study."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 4,
+        "confidence": "estimate",
+        "id": "structural_surprise",
+        "name": "A buckling wall stops the job",
+        "tier": "exotic",
+        "text": "The crew uncovers a wall that is bowing. Work stops until an engineer and the landlord agree who fixes the building.",
+        "realSignal": "Structural condition of an old building, found only during demolition",
+        "trigger": "attribute:structural_defect",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 120
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "lease_contingencies"
+          },
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          }
+        ],
+        "realFrequency": "Rare but real: the owners of the relaunched Le Figaro Cafe sued their landlord in 2022 after permit delays and then a buckling interior wall stopped their contractors, claiming about $2 million in losses",
+        "source": "https://bisnow.com/new-york/news/retail/owners-of-landmarked-beatnik-caf-sue-landlord-for-constructive-eviction-117169",
+        "seenIn": "secondary_search_extract",
+        "note": "120 days is a design value for \"months\" in the reported case. Structure is the landlord's under most leases, but the tenant's rent clock runs unless the lease says otherwise."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "worker_falls_on_site",
+        "name": "A worker falls from a ladder on your job",
+        "tier": "exotic",
+        "text": "A laborer on the cheap crew fell while hanging the ceiling. His lawyer names the building owner, the contractor and you: the tenant who ordered the work.",
+        "realSignal": "Contractor with no liability insurance or no workers' compensation on a job the tenant contracted",
+        "trigger": "decision:contractor_choice=lowest_bid",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -25000
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "contractor_choice"
+          }
+        ],
+        "realFrequency": "No rate found. The legal rule is firm: under Labor Law §240(1) owners are absolutely liable, and courts treat a tenant who contracted for the work as an owner (Sanatass v. Consolidated Investing, Court of Appeals 2008; Otero v. 635 Owner LLC)",
+        "source": "https://www.law.cornell.edu/nyctap/I08_0054.htm",
+        "seenIn": "primary_search_extract",
+        "note": "The $25,000 is a design value standing for a deductible and legal costs; real scaffold-law judgments run far higher and are the reason NYC contractors' insurance is expensive. An insured contractor who names the tenant on the certificate removes the event."
+      },
+      {
+        "scale": "city",
+        "months": [
+          3
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "fit_out_prices_rise",
+        "name": "Contractors raise their prices",
+        "tier": "deep",
+        "text": "This year's cost guides are out: fitting out a store in New York costs 7% more than last year.",
+        "realSignal": "Cushman & Wakefield Retail Fit-Out Cost Guide, published each March: New York in-line retail $181 per sq ft in 2026, up 7.0%",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "buildoutCost",
+            "mult": 1.07
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "contractor_choice"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "Yearly; NYC +7.0% in 2026 against +1.4% nationally",
+        "source": "https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide",
+        "seenIn": "primary_search_extract",
+        "note": "Applies to build-out contracts signed after the announcement. The guide measures plain retail fit-outs, not food service."
+      },
+      {
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "machine_tariff",
+        "name": "The espresso machine costs 15% more",
+        "tier": "deep",
+        "text": "The United States taxes European goods at 15%. Your Italian machine and grinders are on the list.",
+        "realSignal": "US tariff rate on goods from the European Union (15% since late July 2025)",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "equipmentCost",
+            "mult": 1.15
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          },
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          }
+        ],
+        "realFrequency": "In force since mid-2025; makers and dealers split on how much they pass through",
+        "source": "https://freshcup.com/coffee-goods-in-limbo-as-tariffs-impact-gear-manufacturers/",
+        "seenIn": "secondary_search_extract",
+        "note": "Upper bound: full pass-through on the two-group machine ($7,600 x 0.15 = $1,140) and the grinders. Buying a shop with its equipment, or used gear already in the country, avoids it."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "contractor_adds_sales_tax",
+        "name": "The contractor's invoice comes with sales tax",
+        "tier": "deep",
+        "text": "The final invoice adds 8.875% sales tax. Your lease never said the improvements belong to the landlord, so the state treats the job as a taxable installation.",
+        "realSignal": "Lease silent on ownership of improvements; no Form ST-124 given to the contractor",
+        "trigger": "decision:lease_contingencies=plain_lease",
+        "effects": [
+          {
+            "field": "buildoutCost",
+            "mult": 1.053
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "lease_contingencies"
+          }
+        ],
+        "realFrequency": "Depends on the lease; the Tax Department presumes tenant installations are temporary",
+        "source": "https://www.tax.ny.gov/pubs_and_bulls/advisory_opinions/sales/24-54s.htm",
+        "seenIn": "primary_search_extract",
+        "note": "8.875% on the labor-and-markup 60% of the bill = 5.3% of the build-out ($3,728 on $70,000). The 60% share is my assumption."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "pre_permit_inspection_blocked",
+        "name": "The Health inspector cannot inspect a construction site",
+        "tier": "deep",
+        "text": "You asked for the pre-permit inspection to open early. It needs all construction finished and no food on the premises. The punch list is not done.",
+        "realSignal": "Pre-permit inspection requested before construction is complete",
+        "trigger": "decision:construction_pace + schedule",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 7
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "construction_pace"
+          },
+          {
+            "kind": "shortcut",
+            "id": "build_without_permit"
+          }
+        ],
+        "realFrequency": "A standing rule (NYC311): all construction must be complete and no food of any kind may be on site",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02955",
+        "seenIn": "primary_search_extract",
+        "note": "The fallback is the 22-day rule: a new applicant may open on the 22nd day after applying even with no inspection. 7 days is my estimate for rebooking."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "first_graded_inspection",
+        "name": "The first graded inspection, unannounced",
+        "tier": "core",
+        "text": "An inspector walks in during the morning rush. Thirteen points or fewer is an A in the window. Fourteen or more means \"Grade Pending\" and a second visit in about a month.",
+        "realSignal": "Initial inspection of a new permit holder; score computed from the violations actually present",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "reputation",
+            "mult": 0.97,
+            "note": "only if the score is 14 or more"
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "opening_mode"
+          },
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "pest_control"
+          }
+        ],
+        "realFrequency": "Every new restaurant; 0-13 points is an A at once, 14 or more is ungraded with a re-inspection about a month later",
+        "source": "https://a816-health.nyc.gov/ABCEatsRestaurants/App/partials/controllers/faq.html",
+        "seenIn": "primary_search_extract",
+        "note": "No dice: the score is the sum of points for the violations the shop really has (extra.inspectionPoints in the pack). The $100 consultative inspection, available once food service has begun, lets the owner clear them first. The reputation effect is a design value."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 3,
+        "confidence": "estimate",
+        "id": "sellers_tax_claim",
+        "name": "The state claims the seller's unpaid sales tax",
+        "tier": "core",
+        "appliesTo": [
+          "takeover",
+          "asset_sale"
+        ],
+        "text": "Five days after your bulk-sale notice, the Tax Department answers with a Notice of Claim. The seller owes sales tax. The purchase money must sit in escrow until the state names the amount.",
+        "realSignal": "Seller's sales-tax account with the state at the time of the bulk-sale notice (Form AU-196.2 instead of a release)",
+        "trigger": "attribute:seller_sales_tax_debt + decision:takeover_due_diligence=full_review",
+        "effects": [
+          {
+            "field": "closingDelayDays",
+            "add": 90
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_bulk_sale_notice"
+          }
+        ],
+        "realFrequency": "No rate published; the Division of Tax Appeals has a steady docket of deli and restaurant buyers disputing these claims (Bernard & Varecha Deli; 1646 Kosher Deli; St. James Colonial Deli)",
+        "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+        "seenIn": "primary_search_extract",
+        "note": "Bulletin TB-ST-70: answer within 5 business days of the notice; within 90 days of receipt the Department must state the amount; the buyer pays the state from escrow up to the higher of price or fair market value and the rest to the seller. 90 days is the legal outer limit, used as the delay. The buyer loses time, not money."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "sellers_tax_debt_inherited",
+        "name": "A tax bill arrives for the previous owner's sales",
+        "tier": "core",
+        "appliesTo": [
+          "takeover",
+          "asset_sale"
+        ],
+        "text": "A notice from the Tax Department: the shop's previous owner under-reported sales for three years. No bulk-sale notice was filed, so the debt is now yours.",
+        "realSignal": "State sales-tax audit of the seller after a purchase closed with no Form AU-196.10",
+        "trigger": "attribute:seller_sales_tax_debt + decision:skip_bulk_sale_notice",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -30000,
+            "note": "the listing's hidden debt, capped at the purchase price"
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_bulk_sale_notice"
+          },
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          }
+        ],
+        "realFrequency": "Documented in Tax Appeals determinations and trade press (\"Buying a restaurant? Watch out for the seller's sales tax liabilities\", Total Food Service)",
+        "source": "https://totalfood.com/buying-a-restaurant-watch-out-for-the-sellers-sales-tax-liabilities/",
+        "seenIn": "secondary_search_extract",
+        "note": "Liability cap: the higher of the purchase price or the fair market value of the assets (TB-ST-70). The $30,000 is a design example: three years of 5% under-reported sales on $612,000 a year x 8.875% = $8,150 of tax, with penalty and interest and a typical audit mark-up it can reach several times that. Each listing should carry its own hidden figure."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "overstated_cash_sales",
+        "name": "The sales were never what the listing said",
+        "tier": "core",
+        "appliesTo": [
+          "takeover"
+        ],
+        "text": "The seller swore the shop did a third more in cash than the books showed. Your first month matches the books, not the story.",
+        "realSignal": "Gap between the listing's stated sales and the register reports, bank deposits and filed sales-tax returns",
+        "trigger": "attribute:listing_overstates_sales + decision:takeover_due_diligence=trust_the_listing",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.8
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          }
+        ],
+        "realFrequency": "A standing warning from business brokers: unrecorded-cash claims are the first of the \"untruths told to buyers\"; the check is 24 months of register data against bank deposits",
+        "source": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
+        "seenIn": "secondary_search_extract",
+        "note": "The 20% gap is a design value. A price set at 2.0 times overstated earnings overpays by the same proportion: on the reference shop, 20% of $233,000 = $46,600."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "equipment_lien_surprise",
+        "name": "The espresso machine belongs to a lender",
+        "tier": "deep",
+        "appliesTo": [
+          "takeover",
+          "asset_sale"
+        ],
+        "text": "A finance company writes: the machine and the grinders were leased, and the seller stopped paying. Pay off the balance or they collect the equipment.",
+        "realSignal": "UCC financing statement or equipment lease on the seller's assets (public lien search)",
+        "trigger": "attribute:equipment_financed + decision:takeover_due_diligence=trust_the_listing",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -6000
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          }
+        ],
+        "realFrequency": "Listed among the red flags of coffee-shop purchases: \"espresso equipment under financing lien that the seller cannot release at closing\"",
+        "source": "https://acquisitionstars.com/buying-a-business/coffee-shop",
+        "seenIn": "secondary_search_extract",
+        "note": "The $6,000 payoff is a design value: about the remaining half of a financed $9,700 machine-and-grinder set plus fees."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "permit_gap_at_closing",
+        "name": "Closed for 22 days after the handover",
+        "tier": "core",
+        "appliesTo": [
+          "takeover"
+        ],
+        "text": "The seller's Health permit ended with the sale and yours is not issued yet. The law lets you open on the 22nd day after you applied, and you applied today.",
+        "realSignal": "Date of the buyer's own permit application against the closing date",
+        "trigger": "decision:takeover_permit_timing=apply_at_closing",
+        "effects": [
+          {
+            "field": "closureDays",
+            "add": 22
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_permit_timing"
+          },
+          {
+            "kind": "shortcut",
+            "id": "trade_on_sellers_permit"
+          }
+        ],
+        "realFrequency": "Applies to every sale: Health Code §5.11 voids a permit on transfer",
+        "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-44016",
+        "seenIn": "primary_search_extract",
+        "note": "22 days of the reference month: 22/30 x ($51,000 sales - $13,260 cost of goods) = $27,700 of margin lost while rent and wages run."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "sellers_unpaid_health_fines",
+        "name": "The seller left unpaid Health Department fines",
+        "tier": "deep",
+        "appliesTo": [
+          "takeover",
+          "asset_sale"
+        ],
+        "text": "Your permit application is on hold: the records show violations and penalties the previous owner never settled. The city wants proof that you bought the shop at arm's length.",
+        "realSignal": "Outstanding violations or unpaid penalties of the seller in Health Department and hearing-office records",
+        "trigger": "attribute:seller_unpaid_fines",
+        "effects": [
+          {
+            "field": "permitWaitDays",
+            "add": 14
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          },
+          {
+            "kind": "shortcut",
+            "id": "trade_on_sellers_permit"
+          }
+        ],
+        "realFrequency": "No count found; the rule is in Health Code Article 5",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article5.pdf",
+        "seenIn": "primary_search_extract",
+        "note": "Health Code Article 5, seen in extract (sentence cut off): the Commissioner shall not issue a new permit based on a sale or change of ownership where records show outstanding uncorrected violations or unpaid penalties, with an exception when the applicant proves an arm's-length sale; a sale to a relative or a related company is presumed not to be one. 14 days is my estimate for the paperwork. The full text of the subsection was not read."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "inherited_unemployment_rate",
+        "name": "You inherit the seller's unemployment-insurance record",
+        "tier": "deep",
+        "appliesTo": [
+          "takeover"
+        ],
+        "text": "The Labor Department moved the previous owner's account to you. He laid off staff twice; your contribution rate is recalculated from the day you took over.",
+        "realSignal": "Seller's unemployment-insurance experience account balance at transfer (NY Labor Law §581)",
+        "trigger": "attribute:seller_ui_history",
+        "effects": [
+          {
+            "field": "payrollTax",
+            "add": 0.02
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "takeover_transition"
+          }
+        ],
+        "realFrequency": "Automatic on any transfer of all or part of a business; courts have refused to let a buyer escape a poor rating by not reporting the purchase",
+        "source": "https://dol.ny.gov/transfers-business-and-your-contribution-rate",
+        "seenIn": "primary_search_extract",
+        "note": "Rule from the Labor Department page. The size is a design value: +2 percentage points on the first $17,600 of each worker's wages (2026 wage base), about $350 a worker a year. A good record can equally lower the rate below the new-employer 4.1%."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "assignment_consent_price",
+        "name": "The landlord names a price for consent",
+        "tier": "core",
+        "appliesTo": [
+          "takeover",
+          "asset_sale"
+        ],
+        "text": "The lease needs the landlord's consent to an assignment. The landlord will consent: with a new guaranty, a bigger deposit and the rent brought up to market.",
+        "realSignal": "Assignment clause of the seller's lease; inherited rent against market rent",
+        "trigger": "attribute:below_market_lease",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1.1
+          },
+          {
+            "field": "depositMonths",
+            "add": 2
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "guaranty_type"
+          }
+        ],
+        "realFrequency": "Routine. Where consent may not be unreasonably withheld the landlord must show a reasonable ground (F&F Restaurant v. Wells, Goode, Court of Appeals 1984); many leases give the landlord a right to take the space back instead",
+        "source": "https://itkowitz.com/?p=505",
+        "seenIn": "secondary_search_extract",
+        "note": "The 10% rent step and two extra months of deposit are design values. A recapture clause can end the deal outright; the seller stays liable on the lease after assignment unless released."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "short_lease_left",
+        "name": "Three years left on the lease you bought",
+        "tier": "deep",
+        "appliesTo": [
+          "takeover",
+          "asset_sale"
+        ],
+        "text": "The price looked low because the lease was short. It ends in three years, and a commercial tenant in New York has no right to renew.",
+        "realSignal": "Years remaining on the assigned lease (stated in the listing or the lease)",
+        "trigger": "attribute:lease_years_left<=3",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1.25,
+            "note": "at renewal"
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          }
+        ],
+        "realFrequency": "Stated in listings: one Queens diner was offered at $275,000 with four years left at $5,100 a month; a Manhattan store advertised 12 years remaining as a selling point",
+        "source": "https://www.bizbuysell.com/new-york/coffee-shops-and-cafes-for-sale/",
+        "seenIn": "primary_search_extract",
+        "note": "The 25% jump at renewal is a design value. Holdover without a renewal costs 150-200% of rent. Brokers: a coffee shop that loses its lease typically cannot relocate and survive."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 3,
+        "confidence": "estimate",
+        "id": "regulars_test_new_owner",
+        "name": "The regulars notice the new owner",
+        "tier": "core",
+        "appliesTo": [
+          "takeover"
+        ],
+        "text": "New name on the door, new beans, strangers behind the counter. Some regulars try you once and go back to the place around the corner.",
+        "realSignal": "Changes made in the first month after a purchase",
+        "trigger": "decision:takeover_transition=rebrand_now",
+        "effects": [
+          {
+            "field": "awareness",
+            "mult": 0.67
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_transition"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "No statistic; advisers on small-business sales name owner dependence as a main driver of post-sale regret",
+        "source": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
+        "seenIn": "secondary_search_extract",
+        "note": "Design values: 0.6 / 0.9 = 0.67 of the regulars kept by a quiet handover (levers takeover_transition)."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "old_equipment_gives_out",
+        "name": "The machine you bought with the shop dies",
+        "tier": "deep",
+        "appliesTo": [
+          "takeover",
+          "asset_sale"
+        ],
+        "text": "The espresso machine came with the business and with its years. It fails in the morning rush, months after the seller's promises ended.",
+        "realSignal": "Age of the equipment at purchase against its service life (seven years for an espresso machine in the pack)",
+        "trigger": "attribute:equipment_age_months",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -7600
+          },
+          {
+            "field": "closureDays",
+            "add": 2
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "contingency_level"
+          }
+        ],
+        "realFrequency": "Deterministic in the game: the item fails when its remaining life (lifespanMonths minus age) runs out",
+        "source": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+        "seenIn": "secondary_search_extract",
+        "note": "Replacement price $7,600 and 84-month life are the pack's own figures for the two-group machine. The listing states the equipment age; the full review turns it into a price reduction."
+      },
+      {
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "equity_injection_gap",
+        "name": "The bank wants 10% of your own money",
+        "tier": "deep",
+        "appliesTo": [
+          "takeover",
+          "scratch",
+          "franchise"
+        ],
+        "text": "You planned to buy the shop on a loan and a seller note. The SBA rules require a tenth of the whole project from you, and a seller note counts only if the seller waits ten years to be paid.",
+        "realSignal": "SBA Standard Operating Procedure 50 10 8 (June 1, 2025) and 50 10 8.1 (applications from October 1, 2026)",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "minOwnCashShare",
+            "add": 0.1
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          },
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          }
+        ],
+        "realFrequency": "Applies to every SBA 7(a) loan for a startup or a complete change of ownership",
+        "source": "https://www.whitefordlaw.com/news-events/client-alert-sba-issues-sop-50-10-8-key-changes-impacting-sba-7a-lending",
+        "seenIn": "secondary_search_extract",
+        "note": "At least 10% equity injection on total project cost; a seller note may cover at most half of it and only on full standby for the loan term. On a $300,000 purchase project: $30,000 of own cash, at least $15,000 of it unborrowed."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "acquisition_tax_at_closing",
+        "name": "Sales tax is due on the equipment you bought",
+        "tier": "deep",
+        "appliesTo": [
+          "takeover",
+          "asset_sale"
+        ],
+        "text": "Buying a business is also buying its chairs, fridges and machines. The state taxes that part of the price at 8.875%.",
+        "realSignal": "Allocation of the purchase price to tangible personal property in the contract",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -3550
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          }
+        ],
+        "realFrequency": "Every asset purchase",
+        "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+        "seenIn": "primary_search_extract",
+        "note": "8.875% x $40,000 allocated to furniture, fixtures and equipment (my allocation). Inventory for resale, goodwill and the lease are not taxed."
+      },
+      {
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "franchise_cooling_off",
+        "name": "Fourteen days with the disclosure document",
+        "tier": "deep",
+        "appliesTo": [
+          "franchise"
+        ],
+        "text": "The franchisor may not take your signature or your money until you have had its disclosure document for 14 calendar days.",
+        "realSignal": "FTC Franchise Rule, 16 CFR Part 436",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 14
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "franchise_brand"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "Every franchise sale in the United States; New York also requires registration of the offering with the Attorney General",
+        "source": "https://www.ftc.gov/business-guidance/resources/consumers-guide-buying-franchise",
+        "seenIn": "primary_search_extract",
+        "note": "The 14 days begin the day after delivery, so signing is possible on day 15 (FTC compliance guide)."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "franchise_royalty_bite",
+        "name": "The royalty comes off the top",
+        "tier": "core",
+        "appliesTo": [
+          "franchise"
+        ],
+        "text": "Before rent, wages or milk, 8.5% of every sale goes to the franchisor: 6% royalty and 2.5% for marketing.",
+        "realSignal": "Item 6 of the franchise disclosure document",
+        "trigger": "decision:entry_mode=franchise",
+        "effects": [
+          {
+            "field": "revenue",
+            "mult": 0.915
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "franchise_brand"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "Every month for the life of the agreement",
+        "source": "https://franchise.gregoryscoffee.com/",
+        "seenIn": "primary_search_extract",
+        "note": "Gregorys Coffee: 6% + 2.5% = 8.5% ($4,335 a month at $51,000 of sales). Dunkin': 5.9% + 5% = 10.9% ($5,559). The independent reference shop nets $9,719 a month before owner taxes: the royalty takes 45-57% of that."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "franchise_buildout_not_yours",
+        "name": "The franchisor dictates the build-out",
+        "tier": "deep",
+        "appliesTo": [
+          "franchise"
+        ],
+        "text": "The design, the equipment list and the suppliers are in the manual. The lean kit is not an option: you build what the brand specifies.",
+        "realSignal": "Item 7 (initial investment) and Item 8 (required suppliers) of the disclosure document",
+        "trigger": "decision:entry_mode=franchise",
+        "effects": [
+          {
+            "field": "setupCost",
+            "mult": 2.05
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "franchise_brand"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "Standard franchise terms",
+        "source": "https://www.franchising.inspirebrands.com/dunkin",
+        "seenIn": "primary_search_extract",
+        "note": "Lowest disclosed investment against the pack's own lean path: Gregorys from $459,150 / $224,000 starting capital of the independent cafe = 2.05. Dunkin' from $443,000."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "young_franchise_system",
+        "name": "The brand has never had a franchisee",
+        "tier": "exotic",
+        "appliesTo": [
+          "franchise"
+        ],
+        "text": "You would be among the first franchisees. The disclosure document has no track record of franchised shops: nobody to call, no closures to count.",
+        "realSignal": "Item 20 of the disclosure document (franchised outlets opened, transferred and closed)",
+        "trigger": "decision:franchise_brand=new_local_brand",
+        "effects": [
+          {
+            "field": "awareness",
+            "mult": 0.9
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "franchise_brand"
+          }
+        ],
+        "realFrequency": "Gregorys Coffee, with 50+ company shops, launched its franchise program in February 2026",
+        "source": "https://dailycoffeenews.com/2026/02/18/backed-by-craveworthy-gregorys-coffee-launches-franchising",
+        "seenIn": "secondary_search_extract",
+        "note": "The awareness effect is a design value. The real point is informational: the usual check of a franchise, calling existing franchisees, is impossible."
+      },
+      {
+        "scale": "city",
+        "months": [
+          7
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "supervisory_licenses_released",
+        "name": "The city releases 2,200 new cart licenses",
+        "tier": "core",
+        "appliesTo": [
+          "cart"
+        ],
+        "text": "A new fiscal year starts and the Health Department offers 2,200 supervisory licenses to people on the waiting list. Only a current licensed vendor can be on it.",
+        "realSignal": "Health Department waiting-list offers under Local Law 18 of 2021 and Local Laws 54 and 59 of 2026 (2,200 a year, fiscal 2027-2031, from July 1, 2026)",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "cartPermitWaitMonths",
+            "add": -12
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cart_site"
+          },
+          {
+            "kind": "shortcut",
+            "id": "rent_a_permit"
+          },
+          {
+            "kind": "shortcut",
+            "id": "vend_without_permit"
+          }
+        ],
+        "realFrequency": "Yearly through fiscal 2031; advocates count about 5,100 existing permits and more than 20,000 people waiting",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03354",
+        "seenIn": "primary_search_extract",
+        "note": "With 20,000+ waiting and 2,200 a year, a newcomer's place in line is years away (20,000 / 2,200 = about 9 years if nobody drops out): each yearly release moves the player 12 months closer. The city's business page gives a larger total (12,780 by 2031) than the per-year figure implies."
+      },
+      {
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "vending_enforcement_sweep",
+        "name": "Vending enforcement sweeps the corridor",
+        "tier": "core",
+        "appliesTo": [
+          "cart"
+        ],
+        "text": "Sanitation enforcement officers and police work their way down the avenue checking licenses and decals. Vendors without them are ticketed and some carts are taken.",
+        "realSignal": "Complaints from storefront businesses and elected officials about a vending corridor; city enforcement operations",
+        "trigger": "decision:vend_without_permit or rent_a_permit",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -1000
+          },
+          {
+            "field": "closureDays",
+            "add": 7
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "vend_without_permit"
+          },
+          {
+            "kind": "shortcut",
+            "id": "rent_a_permit"
+          },
+          {
+            "kind": "lever",
+            "id": "cart_site"
+          }
+        ],
+        "realFrequency": "Ongoing: \"Ahead of New Law, Street Vendors Still Face NYPD Crackdowns\" (Documented, March 2026); fines start at $1,000 for mobile food vendors",
+        "source": "https://documentedny.com/2026/03/06/street-vendors-criminal-summons-crackdowns-mamdani/",
+        "seenIn": "secondary_search_extract",
+        "note": "$1,000 per summons (Health Department schedule). 7 days closed is my estimate for a seized cart. A licensed vendor with a valid decal is not affected."
+      },
+      {
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "commissary_has_no_room",
+        "name": "No commissary has a space for your cart",
+        "tier": "deep",
+        "appliesTo": [
+          "cart"
+        ],
+        "text": "Without a commissary agreement you cannot pass the pre-permit inspection, and the garages near your corner are full.",
+        "realSignal": "Capacity of Health Department-permitted commissaries",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "permitWaitDays",
+            "add": 30
+          },
+          {
+            "field": "monthlyFees",
+            "add": 300
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cart_site"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "A city report notes that vendors must store units in permitted commissaries \"which have limited capacity\"",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+        "seenIn": "primary_search_extract",
+        "note": "Design values: a month of searching and a dearer commissary further away ($900 instead of $600)."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "milk_drinks_change_the_cart_class",
+        "name": "Lattes change the class of your cart",
+        "tier": "exotic",
+        "appliesTo": [
+          "cart"
+        ],
+        "text": "A cart that serves brewed coffee and tea is the simplest class. Add milk drinks that need refrigeration and the cart needs different equipment, a different class and a new inspection.",
+        "realSignal": "Menu of the cart against Health Code Chapter 6 unit classes",
+        "trigger": "decision:cart_menu",
+        "effects": [
+          {
+            "field": "setupCost",
+            "add": 5000
+          },
+          {
+            "field": "permitWaitDays",
+            "add": 21
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "A rule, not an incident",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter6.pdf",
+        "seenIn": "primary_search_extract",
+        "note": "Health Code Chapter 6, seen in extract: a Class D unit serves foods that need no temperature control, \"such as brewed coffee and tea\", and counts as non-processing ($75 permit). The $5,000 for refrigeration and a hand-wash setup and the 21 days for re-inspection are my estimates; which class a milk-based espresso menu falls in was not confirmed."
+      },
+      {
+        "scale": "city",
+        "months": [
+          11,
+          12,
+          1,
+          2,
+          3
+        ],
+        "durationMonths": 5,
+        "confidence": "estimate",
+        "id": "market_season_ends",
+        "name": "The market season ends",
+        "tier": "core",
+        "appliesTo": [
+          "popup"
+        ],
+        "text": "The open-air food markets close for the winter. A stand that lives on weekend crowds has nowhere to stand until April.",
+        "realSignal": "Operating calendar of the seasonal markets (Smorgasburg's 16th season opened in April 2026 at three sites)",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "popup_venue"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "Every year",
+        "source": "https://www.6sqft.com/smorgasburg-returns-for-16th-year-this-april-with-new-vendors/",
+        "seenIn": "secondary_search_extract",
+        "note": "April-to-October season assumed from the reported April opening; the exact closing date was not seen. The shared-corner option trades all year."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "market_inspector_walks_the_stalls",
+        "name": "A Health inspector walks the market",
+        "tier": "deep",
+        "appliesTo": [
+          "popup"
+        ],
+        "text": "The inspector asks every stand for its temporary permit number. A stand without one is closed on the spot.",
+        "realSignal": "Organizer's vendor list filed with the Health Department 30 days before the event; inspection at the event",
+        "trigger": "decision:popup_without_temp_permit",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -200
+          },
+          {
+            "field": "closureDays",
+            "add": 1
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "popup_without_temp_permit"
+          },
+          {
+            "kind": "lever",
+            "id": "popup_venue"
+          }
+        ],
+        "realFrequency": "Stated by the Health Department: vendors without a valid permit face a summons of $200-$2,000 and immediate closing",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/temporary-food-service-establishments.page",
+        "seenIn": "primary_search_extract",
+        "note": "Base of the fine range used; the lost day is the event day."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "host_ends_the_arrangement",
+        "name": "The host wants the corner back",
+        "tier": "deep",
+        "appliesTo": [
+          "popup"
+        ],
+        "text": "The shop that housed your coffee counter is changing its layout. You worked under its permit and its lease: you have 30 days to leave.",
+        "realSignal": "Terms of the written agreement with the host",
+        "trigger": "decision:popup_venue=shared_corner",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0
+          },
+          {
+            "field": "awareness",
+            "mult": 0.5
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "popup_venue"
+          },
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          }
+        ],
+        "realFrequency": "No statistic; follows from operating under another operator's permit and supervision",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about",
+        "seenIn": "primary_search_extract",
+        "note": "Design values. Fires at the end of the agreed term unless the agreement gives a renewal right."
+      },
+      {
+        "scale": "city",
+        "months": [
+          5,
+          6
+        ],
+        "durationMonths": 12,
+        "confidence": "estimate",
+        "id": "parks_kiosk_rfp",
+        "name": "The Parks Department asks for kiosk proposals",
+        "tier": "exotic",
+        "appliesTo": [
+          "popup",
+          "cart"
+        ],
+        "text": "A request for proposals is out for food kiosks in a park. Proposals are due in five weeks; the winner pays the city a guaranteed minimum or a share of sales, whichever is higher.",
+        "realSignal": "NYC Parks concession solicitations in the City Record (Battery kiosks: issued May 5, 2026, due June 12, 2026)",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "rent",
+            "add": 3333,
+            "note": "example minimum fee of $40,000 a year, or 4% of gross if higher"
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "entry_mode"
+          },
+          {
+            "kind": "lever",
+            "id": "cart_site"
+          }
+        ],
+        "realFrequency": "Several solicitations a year across the park system",
+        "source": "https://prd2.nycgovparks.org/opportunities/concessions/rfps-rfbs-rfeis",
+        "seenIn": "primary_search_extract",
+        "note": "Fee structure from one 2024 concession agreement in the City Record: the greater of a $40,000 guaranteed minimum or 4% of gross receipts in year one; $40,000 / 12 = $3,333. That agreement was not a coffee kiosk, so the amount is only an order of magnitude."
+      }
+    ]
+  }
 }
