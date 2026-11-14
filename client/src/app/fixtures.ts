@@ -378,4 +378,30 @@ export const fixtureCafePack: Pack = {
   sources: [{ url: 'https://dol.ny.gov/minimum-wage-0', title: 'NYS Department of Labor — minimum wage', checked: '2026-11-14' }],
 };
 
-export const fixturePacks: PackSet = { common: fixtureCommon, niches: { cafe: fixtureCafePack } };
+/** Example barbershop pack (placeholder until packs/barbershop.json from agent 15). All numbers are estimates. */
+export const fixtureBarberPack: Pack = {
+  ...fixtureCafePack,
+  id: 'barbershop', name: 'Barbershop', tagline: 'Chairs, regulars and a license on the wall.', startCapital: 60_000,
+  unit: { name: 'haircut', refPrice: 35, priceMin: 15, priceMax: 80, cogsPerUnit: 2.5, confidence: 'estimate' },
+  market: { unitsPerSlotMonth: 520, priceElasticity: -0.9, weights: { price: 0.25, quality: 0.3, reputation: 0.3, location: 0.15 }, confidence: 'estimate' },
+  capacity: { unitsPerStaffMonth: 330, minStaff: 1, maxStaff: 8 },
+  sizing: { unitName: 'chair', min: 1, max: 8, default: 3, sqftPerUnit: 70, unitsServedPerSizeMonth: 330, cleaningCostPerSizeMonth: 40, confidence: 'estimate' },
+  setup: [
+    setup('deposit', 'Security deposit (3 months of rent)', 'deposit', 12_000, true),
+    setup('buildout', 'Build-out: sinks, mirrors, lighting', 'buildout', 18_000, true),
+    setup('chair', 'Barber chair and station, per chair', 'furniture', 2_400, true, { scalesWithSize: true, qualityBonus: 0.02 }),
+    setup('tools', 'Clippers, sterilizer, towels', 'equipment', 1_800, true),
+    setup('pos', 'Point-of-sale terminal', 'equipment', 1_100, true),
+    setup('opening_stock', 'Opening stock: products, capes', 'inventory', 1_200, true),
+  ],
+  kits: [
+    { id: 'lean', name: 'Lean', size: 2, items: [{ id: 'deposit', qty: 1 }, { id: 'buildout', qty: 1 }, { id: 'chair', qty: 2 }, { id: 'tools', qty: 1 }, { id: 'pos', qty: 1 }, { id: 'opening_stock', qty: 1 }], pitch: 'Two chairs, the owner cuts too.' },
+    { id: 'standard', name: 'Standard', size: 3, items: [{ id: 'deposit', qty: 1 }, { id: 'buildout', qty: 1 }, { id: 'chair', qty: 3 }, { id: 'tools', qty: 1 }, { id: 'pos', qty: 1 }, { id: 'opening_stock', qty: 1 }], pitch: 'Three chairs and walk-ins all day.' },
+    { id: 'premium', name: 'Premium', size: 5, items: [{ id: 'deposit', qty: 1 }, { id: 'buildout', qty: 1 }, { id: 'chair', qty: 5 }, { id: 'tools', qty: 1 }, { id: 'pos', qty: 2 }, { id: 'opening_stock', qty: 1 }], pitch: 'A shop that books out on weekends.' },
+  ],
+  staff: [{ id: 'barber', name: 'Barber', hourlyWage: 22, hoursPerMonth: 160, confidence: 'estimate' }],
+  levers: [], shortcuts: [], violations: [], officials: [], reports: [], ruleCards: [], suppliers: [], roadmap: [],
+  manager: { monthlySalary: 4_200, confidence: 'estimate' }, sources: [],
+};
+
+export const fixturePacks: PackSet = { common: fixtureCommon, niches: { cafe: fixtureCafePack, barbershop: fixtureBarberPack } };
