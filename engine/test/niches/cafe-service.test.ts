@@ -11,7 +11,7 @@ import rawFormats from '../../../packs/parts/cafe/D20-formats.json';
 import rawPlaces from '../../../data/places.json';
 import { composeHooks } from '../../src/niches/cafe';
 import {
-  part, serviceCfg, serviceDay, serviceDayNotes, serviceDayWith, serviceKpis, serviceNotes, seatsThatFit, walkAway,
+  part, seatUseDay, serviceCfg, serviceDay, serviceDayNotes, serviceDayWith, serviceKpis, serviceNotes, seatsThatFit, walkAway,
   type Guests, type ServiceCfg, type ServiceInputs,
 } from '../../src/niches/cafe/service';
 import type { CafeDay, StaffPower } from '../../src/niches/cafe/contract';
@@ -222,6 +222,17 @@ describe('cafe service — through the hooks the engine calls', () => {
     const notes = serviceDayNotes(b, report(DAY, 550), pack);
     expect(notes.length).toBeGreaterThan(0);
     expect(notes.join(' ')).toMatch(/Out of hands|Morning rush/);
+  });
+
+  it('seat use at the busiest hour: a takeaway counter is not "packed" just because it sells a lot', () => {
+    const counter = at(cafe({ size: 8 }), 300);
+    const oldUtil = 300 / ((8 * basePack.sizing.unitsServedPerSizeMonth / 30) / (1 - (basePack.sizing.takeawayShare ?? 0)));
+    const use = seatUseDay(counter) as number;
+    expect(oldUtil).toBeGreaterThan(2.5);                     // FORMATS.md, request 5: the old judgement
+    expect(use).toBeLessThan(oldUtil);
+    expect(use > cfg.crowdAbove).toBe(serviceDay(counter)!.seats.crowded);
+    expect(seatUseDay(at(cafe({ size: 0 }), 300))).toBeNull();
+    expect(seatUseDay(at(cafe(), 300, OFFICE, basePack))).toBeNull();
   });
 
   it('walkAway follows the pack points and stays flat outside them', () => {

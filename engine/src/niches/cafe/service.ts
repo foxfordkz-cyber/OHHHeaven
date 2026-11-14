@@ -6,20 +6,14 @@
 import type { BusinessState, DayReport, NicheKpi, Pack, Place } from '@ohh/shared';
 import { dateOf } from '@ohh/shared';
 import type { NicheEnv } from '../index';
-import {
-  defaultGuestMix, defaultStaffPower,
-  type CafeDay, type CafePart, type GuestGroup, type GuestMix, type StaffPower,
-} from './contract';
-import * as segmentsModule from './segments';
+import type { CafeDay, CafePart, GuestGroup, StaffPower } from './contract';
+import { guestMix } from './segments';
 import * as staffingModule from './staffing';
+import { staffPower } from './staffing';
 
-// ───────────── what this part reads from its neighbours ─────────────
-// segments.ts (B02) and staffing.ts (B03) are written at the same time as this file. FORMATS.md fixes the names and
-// signatures below; until a neighbour exports them, the contract's fallbacks answer. The types are checked: if a
-// neighbour exports one of these names with another signature, this file stops compiling instead of guessing.
-interface SegmentsApi { part: CafePart; guestMix?(d: CafeDay): GuestMix }
-interface StaffingApi { part: CafePart; staffPower?(d: CafeDay): StaffPower; coverage?(d: CafeDay): { lostDemandShare: number } }
-const segments: SegmentsApi = segmentsModule;
+// staffing.ts (B03) adds coverage(); until it does, no hours are lost. The type is checked: if coverage arrives with
+// another signature, this file stops compiling instead of guessing.
+interface StaffingApi { part: CafePart; coverage?(d: CafeDay): { lostDemandShare: number } }
 const staffing: StaffingApi = staffingModule;
 
 // ───────────── pack ─────────────
@@ -61,49 +55,46 @@ export function serviceCfg(pack: Pack): ServiceCfg | null {
   return { ...(raw as ServiceCfg), walkAwayByLine: [...pts].sort((a, b) => a.line - b.line) };
 }
 
-/** Hours a seated guest of this group stays, from extra.guestSegments (the data of segments.ts). */
-interface SegmentData { id: string; sitShare: number; morningShare: number; dwellHours: number }
-function segmentData(pack: Pack): { segments: SegmentData[]; residential?: Record<string, number> } {
-  const g = (pack.extra as { guestSegments?: { segments?: SegmentData[]; mixByBlock?: { residential?: Record<string, number> } } } | undefined)?.guestSegments;
-  const segs = Array.isArray(g?.segments) ? g!.segments.filter((s) => s && typeof s.id === 'string' && isNum(s.dwellHours)) : [];
-  return { segments: segs, residential: g?.mixByBlock?.residential };
+/** Hours a seated guest of each group stays, from extra.guestSegments (the data of segments.ts). */
+function dwellById(pack: Pack): Map<string, number> {
+  const g = (pack.extra as { guestSegments?: { segments?: { id?: unknown; dwellHours?: unknown }[] } } | undefined)?.guestSegments;
+  const rows = Array.isArray(g?.segments) ? g!.segments : [];
+  return new Map(rows.filter((r) => typeof r?.id === 'string' && isNum(r.dwellHours)).map((r) => [r.id as string, r.dwellHours as number]));
+}
+
+/**
+ * Hours a guest of a group the pack does not describe (the contract's 'everyone') stays: as long as the pack's own seat
+ * turnover implies. A seat holds seatFill guests at the busiest hour, which carries seatPeakHourShare of the day, and
+ * turns unitsServedPerSizeMonth / 30 seated orders a day: dwell = seatFill / (seatPeakHourShare × turns). With the cafe
+ * pack (170 a month) that is 1.07 hours, and the old seat limit and this part agree for that guest.
+ */
+function packDwell(pack: Pack, cfg: ServiceCfg): number {
+  const turns = pack.sizing.unitsServedPerSizeMonth / 30;
+  return turns > 0 ? cfg.seatFill / (cfg.seatPeakHourShare * turns) : 0;
 }
 
 // ───────────── today's guests and team ─────────────
 
 export interface Guests { groups: (GuestGroup & { dwellHours: number })[] }
 
-/**
- * Who comes today. segments.guestMix when B02's part is in; otherwise the residential mix of extra.guestSegments
- * (FORMATS.md 1.4: the mix to use where the place is unknown); otherwise the contract's one group.
- */
-function guestsOf(d: CafeDay): Guests {
-  const data = segmentData(d.pack);
-  const byId = new Map(data.segments.map((s) => [s.id, s]));
-  let mix: GuestMix;
-  if (segments.guestMix) mix = segments.guestMix(d);
-  else if (data.residential && data.segments.length) {
-    const rows = data.segments.map((s) => ({ s, w: Math.max(0, data.residential![s.id] ?? 0) }));
-    const tot = rows.reduce((a, r) => a + r.w, 0);
-    mix = tot > 0
-      ? { groups: rows.map(({ s, w }) => ({ id: s.id, share: w / tot, sitShare: s.sitShare, morningShare: s.morningShare })) }
-      : defaultGuestMix(d.pack);
-  } else mix = defaultGuestMix(d.pack);
-  // A group the pack does not describe (the contract's 'everyone') stays the average seated time of the known groups.
-  const avgDwell = data.segments.length ? data.segments.reduce((a, s) => a + s.dwellHours, 0) / data.segments.length : 1;
-  return { groups: mix.groups.map((g) => ({ ...g, dwellHours: byId.get(g.id)?.dwellHours ?? avgDwell })) };
+/** Who comes today (segments.guestMix) with how long each group sits. */
+function guestsOf(d: CafeDay, cfg: ServiceCfg): Guests {
+  const dwell = dwellById(d.pack);
+  const fallback = packDwell(d.pack, cfg);
+  return { groups: guestMix(d).groups.map((g) => ({ ...g, dwellHours: dwell.get(g.id) ?? fallback })) };
 }
 
 /**
- * How fast the team works. staffing.staffPower when B03's part is in. The contract's fallback counts the pack's
- * orders per worker, which already mix seated and takeaway orders; this part counts work in takeaway orders, so the
- * fallback is converted with the pack's own takeaway share (the same conversion FORMATS.md 4.2 uses for ordersPerPaidHour).
+ * How fast the team works, in takeaway orders (FORMATS.md 4.3). Without extra.staffing in the pack, staffing.staffPower
+ * can only answer the contract's fallback, which counts the pack's orders per worker: those already mix seated and
+ * takeaway orders. They are converted with the pack's own takeaway share, the same conversion FORMATS.md 4.2 uses
+ * for ordersPerPaidHour; otherwise a team the old engine called enough would lose orders here.
  */
 function powerOf(d: CafeDay, cfg: ServiceCfg): StaffPower {
-  if (staffing.staffPower) return staffing.staffPower(d);
-  const base = defaultStaffPower(d.b, d.pack);
+  const sp = staffPower(d);
+  if ((d.pack.extra as { staffing?: unknown } | undefined)?.staffing) return sp;
   const sitRef = 1 - Math.min(0.95, Math.max(0, d.pack.sizing.takeawayShare ?? 0));
-  return { ...base, ordersPerDay: base.ordersPerDay * (1 + sitRef * (cfg.sitInLaborMult - 1)) };
+  return { ...sp, ordersPerDay: sp.ordersPerDay * (1 + sitRef * (cfg.sitInLaborMult - 1)) };
 }
 
 const lostToHours = (d: CafeDay): number => Math.min(1, Math.max(0, staffing.coverage?.(d).lostDemandShare ?? 0));
@@ -117,7 +108,7 @@ export interface ServiceDay {
   demand: number;
   served: number;
   rush: { orders: number; capPerHour: number; line: number; waitMin: number; walked: number; servedShare: number; peakHour: number };
-  seats: { count: number; fit: number; wanted: number; seated: number; tookAway: number; left: number; turns: number; peakUse: number; crowded: boolean };
+  seats: { count: number; fit: number; wanted: number; seated: number; tookAway: number; left: number; turns: number; present: number; peakUse: number; crowded: boolean };
   lost: { hours: number; queue: number; seats: number; labor: number };
   /** Orders the team could still make today on top of `served`. */
   spare: number;
@@ -163,7 +154,7 @@ export function serviceDay(d: CafeDay): ServiceDay | null {
   const cfg = serviceCfg(d.pack);
   if (!cfg || d.demand == null || !isNum(d.demand)) return null;
   return serviceDayWith(cfg, {
-    demand: d.demand, hoursShare: lostToHours(d), guests: guestsOf(d), power: powerOf(d, cfg), seatsOwned: d.b.size, place: d.place,
+    demand: d.demand, hoursShare: lostToHours(d), guests: guestsOf(d, cfg), power: powerOf(d, cfg), seatsOwned: d.b.size, place: d.place,
   });
 }
 
@@ -233,6 +224,7 @@ export function serviceDayWith(cfg: ServiceCfg, inp: ServiceInputs): ServiceDay 
     seats: {
       count: seats, fit, wanted: seatWanted, seated, tookAway, left,
       turns: seats > 0 ? seated / seats : 0,
+      present,
       peakUse: seats > 0 ? Math.min(present, avail) / seats : 0,
       crowded: seats > 0 && present / seats > cfg.crowdAbove,
     },
@@ -294,6 +286,17 @@ export function serviceKpis(b: BusinessState, pack: Pack): NicheKpi[] {
     );
   }
   return k;
+}
+
+/**
+ * How full the room is at the busiest hour: guests who want a seat then, per seat (above 1 — some find none).
+ * For the engine's crowded / empty-room judgement when this part sets the day's capacity (agents/r3-B01.md, request 4):
+ * today the engine judges it by the old seat limit, which calls every busy counter "packed".
+ */
+export function seatUseDay(d: CafeDay): number | null {
+  const cfg = serviceCfg(d.pack);
+  const s = cfg ? serviceDay(d) : null;
+  return s && s.seats.count > 0 ? s.seats.present / s.seats.count : null;
 }
 
 /** The owner's sentences for one day report: why orders were lost today. */
