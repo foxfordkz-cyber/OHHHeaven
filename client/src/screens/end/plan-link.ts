@@ -1,6 +1,6 @@
 // "Copy link" for the real-world plan: the whole plan travels in the URL fragment, compressed, so the link opens
 // on any device without a login or a server (the fragment never leaves the browser).
-import type { RealWorldPlan } from '../../../../shared/src/types';
+import type { RealWorldPlan } from '@shared/types';
 
 const PREFIX_DEFLATE = 'z.';
 const PREFIX_PLAIN = 'j.';
@@ -20,8 +20,8 @@ function fromBase64Url(s: string): Uint8Array {
 }
 
 async function pipe(bytes: Uint8Array, stream: CompressionStream | DecompressionStream): Promise<Uint8Array> {
-  const out = new Response(new Blob([bytes]).stream().pipeThrough(stream));
-  return new Uint8Array(await out.arrayBuffer());
+  const source = new Response(bytes as BodyInit).body!;
+  return new Uint8Array(await new Response(source.pipeThrough(stream)).arrayBuffer());
 }
 
 export async function encodePlan(plan: RealWorldPlan): Promise<string> {

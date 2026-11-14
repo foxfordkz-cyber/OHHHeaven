@@ -2,7 +2,7 @@
 // number of paying owners, inside a niche by nichePrizeTable among human businesses that are not bankrupt.
 // AI businesses get no prize. OwnerView carries no prize amounts yet, so the table shows the projected prize by
 // these rules; when the season ends, final payouts from the server (if present) win.
-import type { NicheId, OwnerView, Payout, PublicBusiness, Standing } from '../../../../shared/src/types';
+import type { NicheId, OwnerView, Payout, PublicBusiness, Standing } from '@shared/types';
 
 export interface BoardRow {
   businessId: string; rank: number; name: string; owner: string; isAi: boolean; bankrupt: boolean; mine: boolean;

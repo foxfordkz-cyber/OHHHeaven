@@ -6,8 +6,8 @@ import type {
   Ack, AdvisorAnswer, Analytics, BusinessState, DayReport, Debrief, GameEvent, FeedItem, MonthReport,
   OwnerView, PackRuleCard, PackSupplier, PackRoadmapStep, Payout, PnlLine, PublicBusiness, Query,
   RealWorldPlan, Standing, WeatherCondition, WorldConfig, WorldPublic,
-} from '../../../../shared/src/types';
-import { dateOf } from '../../../../shared/src/rules';
+} from '@shared/types';
+import { dateOf } from '@shared/rules';
 
 // ───────────── deterministic noise ─────────────
 function mulberry32(seed: number): () => number {
