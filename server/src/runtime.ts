@@ -23,6 +23,10 @@ export interface RuntimeOptions {
   snapshotDir: string | null;
   now?: () => number;
   log?: (m: string) => void;
+  /** false — не просить у ИИ события раз в неделю (город показа должен повторяться день в день). */
+  aiEvents?: boolean;
+  /** Вызывается после каждого посчитанного дня (город показа ставит себя на паузу, когда пришло уведомление). */
+  onDay?: (rt: WorldRuntime) => void;
 }
 
 export interface Snapshot {
@@ -41,6 +45,7 @@ export class WorldRuntime {
   stepsTaken = 0;
   stepMsTotal = 0;
   stepMsMax = 0;
+  private saveSeq = 0;
   private running = false;
   private timer: ReturnType<typeof setTimeout> | null = null;
   private saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -102,7 +107,7 @@ export class WorldRuntime {
       due = MAX_DEMO_CATCHUP;
     }
     const n = Math.min(due, MAX_CATCHUP_BATCH);
-    for (let i = 0; i < n && this.world.phase === 'running'; i++) {
+    for (let i = 0; i < n && this.world.phase === 'running' && !this.world.config.paused; i++) {
       this.stepOnce();
       this.lastDayAt += dayMs;
     }
@@ -120,7 +125,8 @@ export class WorldRuntime {
     try {
       const deps: HostDeps = { ...this.opts.deps, takeQueuedEvent: (w) => this.takeQueued(w) };
       this.world = step(this.world, this.ctx, deps);
-      if (this.world.day % 7 === 0) this.planInBackground();
+      if (this.world.day % 7 === 0 && this.opts.aiEvents !== false) this.planInBackground();
+      this.opts.onDay?.(this);
       return true;
     } catch (e) {
       this.errors += 1;
@@ -138,8 +144,10 @@ export class WorldRuntime {
   /** Сразу посчитать n дней (тесты, перемотка демо). */
   advance(days: number): number {
     let n = 0;
+    const wasPaused = this.world.config.paused;
     for (let i = 0; i < days && this.world.phase === 'running'; i++) {
       if (this.stepOnce()) n++;
+      if (!wasPaused && this.world.config.paused) break; // день сам поставил паузу (автопауза города показа)
     }
     this.lastDayAt = this.now();
     if (n) this.saveSoon(true);
@@ -174,6 +182,32 @@ export class WorldRuntime {
     this.saveSoon();
     this.schedule();
     return { ok: true };
+  }
+
+  /** Подменить мир целиком (возврат города показа в стартовую копию). Токены остаются: телефоны не входят заново. */
+  replaceWorld(next: WorldState): void {
+    this.world = { ...next, version: Math.max(this.world.version, next.version) + 1 };
+    this.queue = [];
+    this.viewCache.clear();
+    this.pausedRemaining = this.world.config.paused ? this.world.config.dayMs : null;
+    this.lastDayAt = this.now();
+    this.saveSoon(true);
+    this.schedule();
+  }
+
+  /** Поменять мир действием сервера (ветка жюри, жалоба): версия растёт, кэш картины сбрасывается сам. */
+  update(next: WorldState): void {
+    this.world = { ...next, version: Math.max(this.world.version + 1, next.version) };
+    this.saveSoon();
+  }
+
+  /** Токен для заранее созданного игрока (вход по короткому коду). */
+  issueToken(playerId: string): string {
+    for (const [t, p] of this.tokens) if (p === playerId) return t;
+    const token = randomBytes(24).toString('base64url');
+    this.tokens.set(token, playerId);
+    this.saveSoon();
+    return token;
   }
 
   // ───────────── события от ИИ ─────────────
@@ -284,7 +318,7 @@ export class WorldRuntime {
     if (!file) return;
     try {
       mkdirSync(this.opts.snapshotDir!, { recursive: true });
-      const tmp = `${file}.${process.pid}.tmp`;
+      const tmp = `${file}.${process.pid}.${++this.saveSeq}.tmp`; // своё имя у каждой записи: две записи подряд не делят файл
       await writeFile(tmp, JSON.stringify(this.snapshot()));
       await rename(tmp, file);
     } catch (e) {
@@ -297,7 +331,7 @@ export class WorldRuntime {
     if (!file) return;
     try {
       mkdirSync(this.opts.snapshotDir!, { recursive: true });
-      const tmp = `${file}.${process.pid}.tmp`;
+      const tmp = `${file}.${process.pid}.${++this.saveSeq}.tmp`; // своё имя у каждой записи: две записи подряд не делят файл
       writeFileSync(tmp, JSON.stringify(this.snapshot()));
       renameSync(tmp, file);
     } catch (e) {
