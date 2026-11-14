@@ -1,0 +1,544 @@
+{
+  "extra": {
+    "mechanics": [
+      {
+        "id": "hourly_peak",
+        "title": "The day has a shape: sales are lost by the hour, not by the month",
+        "playerDecision": "How many people stand at the bar in each part of the day (peak_schedule lever, staff count), whether to cap order-ahead in the rush, how long to stay open.",
+        "engineMath": "Split the day's demand by extra.hourCurve for the block type. For each hour: bar capacity = baristas on the bar x 25 orders an hour (30 drinks an hour / 1.2 drinks an order), times the menu_size capacity effect. Served = min(demand, capacity); the surplus is not simply lost: it stands in line, and extra.queue.walkAwayByPeopleAhead decides how many leave (mechanic queue_walkaway). Monthly totals are the sums. With this the engine's flat rule (1,700 orders per person a month) stops hiding the 8am problem: at 200 orders a day the 8am hour brings 28-36 orders against 25 from one barista, while 3pm brings 14.",
+        "fieldsNeeded": [
+          "extra.hourCurve.<blockType>: 24 shares",
+          "capacity.ordersPerBarHour: 25",
+          "staff schedule: people on the bar by daypart (open, rush, midday, afternoon, close)",
+          "place.blockType: neighborhood | office | transit | tourist | campus"
+        ],
+        "numbers": [
+          {
+            "what": "Drinks an hour, one barista on a two-group machine",
+            "value": 30,
+            "source": "https://www.ekuep.com/en/two-groups",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Drinks an hour, two baristas on a two-group machine",
+            "value": 60,
+            "source": "https://www.ekuep.com/en/two-groups",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of Dunkin' visits between 6:00 and 9:59am (2024)",
+            "value": 0.399,
+            "source": "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of Starbucks visits between 6:00 and 9:59am (2024)",
+            "value": 0.299,
+            "source": "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Peak-hour share of the day's orders, neighborhood block (my curve)",
+            "value": 0.14,
+            "source": "https://www.nacsmagazine.com/Issues/March-2021/hot-beverage-reboot",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Peak-hour share of the day's orders, office block (my curve)",
+            "value": 0.18,
+            "source": "https://www.nacsmagazine.com/Issues/March-2021/hot-beverage-reboot",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core",
+        "planningValues": "The two hour curves themselves (extra.hourCurve) are fitted by hand to the three measurements listed there. 1.2 drinks an order is a planning value."
+      },
+      {
+        "id": "queue_walkaway",
+        "title": "People count the line, not the minutes",
+        "playerDecision": "Nothing new to click: it is what punishes a thin bar at 8am. The player's moves are the rush schedule, the menu size, order-ahead with capped slots, and a second register.",
+        "engineMath": "In each hour, people ahead in line = max(0, arrivals - capacity) carried from the previous quarter-hour. Each arriving customer leaves with the probability in extra.queue.walkAwayByPeopleAhead (0 up to three people ahead, 5% at four to five, 15% at six to eight, 30% at nine to twelve, 50% beyond). Office commuters use the next step up of the table: they are on a clock. Those who leave follow the engine's existing rule: half try a neighbor with room. Those who stay but wait more than six minutes feed slow_service_reviews. Phone orders do not see the line, but each one adds a drink to the bar's queue: uncapped, they lengthen the visible wait for walk-ins (handoff_pileup).",
+        "fieldsNeeded": [
+          "extra.queue.walkAwayByPeopleAhead",
+          "extra.queue.patienceMinutes",
+          "per-segment patience shift (extra.guestSegments)"
+        ],
+        "numbers": [
+          {
+            "what": "Queue length above which the effect on purchases is significant (deli counter study)",
+            "value": 5,
+            "source": "https://www.pymnts.com/news/2013/study-queue-lengths-more-important-than-wait-times/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Sales effect of a moderately longer queue, as an equivalent price increase",
+            "value": 0.05,
+            "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Average minutes a person waits for a coffee before leaving (UK survey of 5,000, 2014)",
+            "value": 6,
+            "source": "https://www.gs1uk.org/insights/news/technology-and-growing-customer-impatience",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Longest acceptable wait for food and drink, minutes (2023 survey)",
+            "value": 10,
+            "source": "https://whitehutchinson.com/news/lenews/2023/march/article109.shtml",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Starbucks in-cafe service target, minutes (since August 2025)",
+            "value": 4,
+            "source": "https://www.foodrepublic.com/2088407/starbucks-four-minute-rule/",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core",
+        "planningValues": "The walk-away table is a planning curve: only its two anchors are measured (about five people in line, about six minutes). The one-step shift for commuters and the half that try a neighbor (the engine's existing rule) have no source."
+      },
+      {
+        "id": "star_rating",
+        "title": "A visible star rating, earned review by review",
+        "playerDecision": "How to treat the listings (reviews lever), and whether to take the shortcuts: buy reviews, or reward good ones.",
+        "engineMath": "Keep two numbers per shop: reviewCount and ratingAverage (1-5), shown rounded to half stars. Each month about 1 order in 150 leaves a review (my assumption: 40 a month at 6,000 orders). The month's reviews average: 4.4 base, +1.5 x (quality - 0.5), -0.6 if the month had slow_service_reviews, -0.4 if a B or C hangs in the window, -0.3 after a price_step_backlash, +0.12 if the owner replies to reviews. ratingAverage moves toward it by reviewsThisMonth / reviewCount, so a new shop's rating swings and an old shop's barely moves. Demand multiplier for people who do not know the shop yet (newcomer share by segment): 1 + 0.07 x (displayed stars - 4.0), and an extra 0.93 while the displayed rating is under 4.0. Regulars ignore the stars. Bought reviews add 10 five-star reviews a month and open the fake_reviews trail; when found, the platform removes them and shows a warning for 90 days (the 90 days are a game value). In the engine's present model the same thing is carried by reputation with weight 0.09 (see market.note).",
+        "fieldsNeeded": [
+          "business.reviewCount, business.ratingAverage",
+          "extra.ratingModel",
+          "newcomerShare by segment (extra.guestSegments)"
+        ],
+        "numbers": [
+          {
+            "what": "Revenue change per Yelp star, independents, low",
+            "value": 0.05,
+            "source": "https://econpapers.repec.org/RePEc:hbs:wpaper:12-016",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Revenue change per Yelp star, independents, high",
+            "value": 0.09,
+            "source": "https://econpapers.repec.org/RePEc:hbs:wpaper:12-016",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Rise in the share of evenings sold out when the display rounds up half a star, percentage points",
+            "value": 19,
+            "source": "https://are.berkeley.edu/~mlanderson/pdf/Anderson%20and%20Magruder.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Consumers who want at least four stars (2026)",
+            "value": 0.68,
+            "source": "https://www.brightlocal.com/research/local-consumer-review-survey/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Stars gained by businesses that began replying to reviews (hotels)",
+            "value": 0.12,
+            "source": "https://pubsonline.informs.org/doi/10.1287/mksc.2017.1043",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of Yelp reviews that count toward the rating, by Yelp's own figure",
+            "value": 0.75,
+            "source": "https://www.nbclosangeles.com/investigations/Yelp-reviews-not-recommended-hurts-business--509724081.html",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Maximum federal penalty per fake review, USD",
+            "value": 53088,
+            "source": "https://www.venable.com/insights/publications/2025/12/ftc-signals-heightened-enforcement-of-new",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core",
+        "planningValues": "No source: one review per 150 orders; the 4.4 base and the plus and minus terms of a month's review average; the 0.93 threshold factor; ten bought reviews a month; the 90-day warning. They are chosen so that a well-run shop sits near 4.5 stars and a month of long waits costs about a quarter of a star."
+      },
+      {
+        "id": "letter_grade_demand",
+        "title": "The letter in the window sells or repels",
+        "playerDecision": "After a re-inspection that ends in a B or C: post the grade; or post 'Grade Pending' and contest the violations at the city tribunal; or (shortcut) take the card down.",
+        "engineMath": "Compute the letter from the open violation trails with the pack's extra.inspectionPoints (under 14 points A, 14-27 B, 28 or more C). Demand multiplier while the card hangs: A 1.00, Grade Pending 0.98, B 0.95, C 0.88 (extra.ratingModel.letterGrade), applied to newcomers and halved for regulars. Contesting: the shop posts Grade Pending until the hearing (about a month in the game); at the hearing each violation the player has actually fixed is dismissed and the points are recounted; if the score drops under 14 the shop gets its A, otherwise the B or C goes up and the fines stand. Hiding the card: no demand loss, but the next inspection or a neighbor's complaint adds grade_card_not_posted ($500). The grade is redone at the next cycle: 150-210 days after a B, 90-150 after a C.",
+        "fieldsNeeded": [
+          "business.letterGrade: A | B | C | pending",
+          "action: contest_at_tribunal",
+          "extra.ratingModel.letterGrade.demandMult",
+          "extra.inspectionPoints (already in the pack)"
+        ],
+        "numbers": [
+          {
+            "what": "New Yorkers who say they consider the letter grade when choosing where to eat (2012)",
+            "value": 0.88,
+            "source": "https://nacchovoice.naccho.org/uploads/card-images/environmental-health/ajph.2014.302404-NYCscoring-grading.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Rise in the probability of an A-range score three years after grading began",
+            "value": 0.35,
+            "source": "https://nacchovoice.naccho.org/uploads/card-images/environmental-health/ajph.2014.302404-NYCscoring-grading.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Demand multiplier with a B in the window (planning value; the study gives the direction only)",
+            "value": 0.95,
+            "source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Demand multiplier with a C in the window (planning value)",
+            "value": 0.88,
+            "source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Fine for not posting the grade card, USD",
+            "value": 500,
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core",
+        "planningValues": "No source for the sizes: 0.98 for Grade Pending, 0.95 for B, 0.88 for C, and the halving for regulars. The study behind them gives the direction only. The one-month wait for a hearing is a game value."
+      },
+      {
+        "id": "guest_segments",
+        "title": "Five kinds of customer, each with its own week, clock and patience",
+        "playerDecision": "No new control: the player reads the mix on the place card before signing the lease and then tunes hours, schedule, laptops, entry price and listings to the people who are actually there.",
+        "engineMath": "Each place gets a block type from its anchors (office within 250 m: office; college within 400 m: campus; museum, plaza or hotel cluster: tourist; otherwise residential) and with it a segment mix (extra.guestSegments.mixByBlock). Daily demand = sum over segments of share x weekday profile x month profile x event multipliers that name the segment. Each segment carries its own seat use (remote workers 1.0, commuters 0.1), ticket, price sensitivity, patience in line and share of newcomers. Effects: an office block earns its week Tuesday to Thursday and nothing on Sunday; a campus block loses 12% in summer; a tourist block lives on the map rating; a residential block lives on regulars, who forgive a line but notice every price change.",
+        "fieldsNeeded": [
+          "place.blockType",
+          "extra.guestSegments (segments, mixByBlock)",
+          "extra.weekdayProfiles, extra.monthCurve",
+          "event effects that can name a segment"
+        ],
+        "numbers": [
+          {
+            "what": "Share of weekday office visits on Tuesday (US, January-October 2025)",
+            "value": 0.243,
+            "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of weekday office visits on Friday (US, January-October 2025)",
+            "value": 0.124,
+            "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of New York office visits on Friday (first half of 2026)",
+            "value": 0.119,
+            "source": "https://commercialobserver.com/2026/08/return-to-office-momentum-first-half-2026-report/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Cafe and bakery transactions on Saturday against the weekly average (2023)",
+            "value": 1.15,
+            "source": "https://www.businesswire.com/news/home/20231207135338/en",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Cafe and bakery transactions on Monday against the weekly average",
+            "value": 0.9,
+            "source": "https://pos.toasttab.com/news/most-popular-coffee-and-tea-drinks-toast-restaurant-trends-report",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Foot traffic at eight large Manhattan office buildings on Fridays against before the pandemic (2023)",
+            "value": 0.48,
+            "source": "https://www.bloomberg.com/graphics/2023-manhattan-work-from-home/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Weekend subway ridership against 2019 (2025)",
+            "value": 0.89,
+            "source": "https://www.osc.ny.gov/press/releases/2026/04/dinapoli-mta-weekend-ridership-recovery-outpaces-weekdays-across-board",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Weekday subway ridership against 2019 (2025)",
+            "value": 0.74,
+            "source": "https://www.osc.ny.gov/press/releases/2026/04/dinapoli-mta-weekend-ridership-recovery-outpaces-weekdays-across-board",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core",
+        "planningValues": "The segment mixes and the per-segment tickets, seat use and patience are planning values; the anchor distances repeat the place model on the keen-cray branch."
+      },
+      {
+        "id": "channel_margins",
+        "title": "Every channel keeps a different share of the dollar",
+        "playerDecision": "Which channels to open: order-ahead, a basic or promoted delivery listing, catering; whether to charge more on the apps than at the counter.",
+        "engineMath": "Revenue is recorded by channel. For each channel: contribution = sales x (1 - 0.28 cost of goods - channelTakes) - packaging. channelTakes comes from extra.channels: counter 4.1%, own order-ahead 6.8%, app pickup 9%, basic delivery 23%, promoted delivery up to 43%, catering marketplace 18%. Delivery tickets are larger (two drinks, a pastry) and the player may set an app price up to 15% above the counter price, which most restaurants do; a higher app price lowers app orders with the same elasticity. Delivery and order-ahead load the bar in the rush like any other order (hourly_peak) but need no seat. The city's caps bound what an app may take; an 'enhanced' plan is the player's choice, never a default. This replaces the fixed monthly costs used as a stand-in by the delivery_apps, order_ahead and catering levers.",
+        "fieldsNeeded": [
+          "sales by channel in the monthly report",
+          "extra.channels.list[].channelTakes",
+          "lever option field: pctOfChannelSales (a cost basis the format lacks)",
+          "optional price multiplier per channel"
+        ],
+        "numbers": [
+          {
+            "what": "NYC cap on the delivery fee an app charges a restaurant",
+            "value": 0.15,
+            "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
+            "confidence": "estimate"
+          },
+          {
+            "what": "NYC cap on the basic service fee",
+            "value": 0.05,
+            "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
+            "confidence": "estimate"
+          },
+          {
+            "what": "NYC cap on the card processing fee passed through by an app",
+            "value": 0.03,
+            "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
+            "confidence": "estimate"
+          },
+          {
+            "what": "NYC cap on optional enhanced services (Local Law 79 of 2025)",
+            "value": 0.2,
+            "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
+            "confidence": "estimate"
+          },
+          {
+            "what": "DoorDash delivery commission, basic plan",
+            "value": 0.15,
+            "source": "https://merchants.doordash.com/en-us/products/pricing",
+            "confidence": "estimate"
+          },
+          {
+            "what": "DoorDash delivery commission, top plan",
+            "value": 0.3,
+            "source": "https://merchants.doordash.com/en-us/products/pricing",
+            "confidence": "estimate"
+          },
+          {
+            "what": "DoorDash pickup commission, every plan",
+            "value": 0.06,
+            "source": "https://merchants.doordash.com/en-us/products/pricing",
+            "confidence": "estimate"
+          },
+          {
+            "what": "ezCater commission on food and delivery fee",
+            "value": 0.15,
+            "source": "https://catering.ezcater.com/en/help/what-is-the-commission/-payment-breakdown",
+            "confidence": "estimate"
+          },
+          {
+            "what": "ezCater payment fee",
+            "value": 0.0299,
+            "source": "https://catering.ezcater.com/en/help/what-is-the-commission/-payment-breakdown",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Delivery's share of limited-service restaurant traffic (2024)",
+            "value": 0.09,
+            "source": "https://www.ncrla.org/wp-content/uploads/2025/08/Restaurant-OffPremises-Report.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Refunds won by the city for restaurants overcharged by one delivery app (April 2026), USD",
+            "value": 580000,
+            "source": "https://www.nyc.gov/site/dca/news/030-26/mamdani-administration-acts-protect-immigrant-restaurant-owners-delivery-app-junk-fees",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core",
+        "planningValues": "The 15% app price mark-up and the statement that most restaurants use one are planning values without a source in this session."
+      },
+      {
+        "id": "rival_entry_and_exit",
+        "title": "A rival opening or closing is announced, and it is not the end",
+        "playerDecision": "What to change in the month between the announcement and the opening: entry price, loyalty, beans, hours, a seasonal drink.",
+        "engineMath": "Chains and carts are non-playing rivals placed by the city deck on real vacant doors, announced a month ahead. A rival carries a type (chain, discount app chain, small-format chain, cart), a price index (chain 0.9, discount 0.6 during its opening quarter, cart 0.5) and the segments it pulls (commuters and students first, regulars last). In the footfall model it joins the split of passers-by with its own weight: 1.0 for a chain in its first six months (curiosity plus opening offers), 0.5 afterwards (the keen-cray staticWeight). The hit on a player's shop is larger the more its quality and price resemble the rival's: a differentiated shop (quality above 0.6) loses about a third as much. When a rival closes, its share is released over two months and split by attractiveness; a shop at capacity gets nothing. Planning size: -7% for six months when a chain opens within 250 m, +6% when one closes.",
+        "fieldsNeeded": [
+          "place.rivals[]: type, priceIndex, openedDay, closedDay",
+          "extra.competition",
+          "city deck entries that add or remove a rival at a place"
+        ],
+        "numbers": [
+          {
+            "what": "Sales taken by one more same-chain store within a mile (Starbucks, Marketing Science 2018)",
+            "value": 0.012,
+            "source": "https://pubsonline.informs.org/doi/10.1287/mksc.2017.1078",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Afternoon sales one independent lost when a Starbucks opened nearby (owner's account)",
+            "value": 0.1,
+            "source": "https://www.cbsnews.com/news/rex-coffee-shop-owner-faced-down-starbucks",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Dunkin' stores in New York City (2025)",
+            "value": 623,
+            "source": "https://therealdeal.com/new-york/2025/12/23/chain-stores-keep-shrinking-across-nyc/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Starbucks stores closed in New York City in 2025",
+            "value": 42,
+            "source": "https://commercialobserver.com/2025/12/starbucks-nyc-closures-chain-stores-report/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Luckin Coffee stores in New York City about a year after its June 2025 entry",
+            "value": 22,
+            "source": "https://chainstoreage.com/chinese-coffee-giant-luckin-continues-aggressive-nyc-expansion",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Additional mobile food vendor license applications a year, 2026-2031",
+            "value": 2200,
+            "source": "https://intro.nyc/0431-2024",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core",
+        "planningValues": "No source: the price indexes (0.9, 0.6, 0.5), the first-six-months weight of 1.0, the 'a third as much' for differentiated shops, the two-month release, and the -7% and +6% sizes (see extra.competition for the range the accounts support)."
+      },
+      {
+        "id": "regulars_and_newcomers",
+        "title": "Regulars are built slowly and lost one disappointment at a time",
+        "playerDecision": "Whether to spend on getting first visits (opening offer, listings, a seasonal drink) or on second visits (loyalty, the same barista, speed).",
+        "engineMath": "Split each segment's customers into regulars and newcomers. Regulars: a stock that grows each month by newcomers x conversion and shrinks by churn. Conversion from first visit to regular: 30% at average quality (range 20-45% with quality and loyalty); churn of regulars: 4% a month at rest, +10 points in a month with slow_service_reviews, +5 after price_step_backlash, +15 when a shift lead or senior barista leaves (task D05). Regulars buy 2-4 times a week and bring a newcomer now and then (0.05 a month each). Newcomers are driven by footfall, the map rating and the letter grade; regulars by none of those. This is the engine's 'awareness' ramp with a cause: a new shop starts with no regulars, which is why month one sells a third of month six; and a bought shop keeps the regulars only while it keeps what they came for. At steady state regulars should give 55-65% of orders.",
+        "fieldsNeeded": [
+          "business.regulars by segment",
+          "conversion and churn rates in extra",
+          "visit frequency of a regular"
+        ],
+        "numbers": [
+          {
+            "what": "Yearly revenue of a regular against a one-time customer, times (Square)",
+            "value": 6,
+            "source": "https://squareup.com/us/en/the-bottom-line/reaching-customers/turn-customers-into-regulars",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Customers who return at least twice within a working week (Square)",
+            "value": 0.15,
+            "source": "https://squareup.com/townsquare/square-data-repeat-v-one-time-customer-tipping-trends",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of revenue from repeat customers at one downtown roastery (Square case study), midpoint",
+            "value": 0.675,
+            "source": "https://squareup.com/us/en/the-bottom-line/reaching-customers/turn-customers-into-regulars",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Cafe customers who come back within six months (one ordering vendor's data)",
+            "value": 0.382,
+            "source": "https://www.restolabs.com/blog/cafe-industry-statistics",
+            "confidence": "estimate"
+          },
+          {
+            "what": "First-time customers who do not return within 100 days, low end (one cafe's own figure)",
+            "value": 0.2,
+            "source": "https://brotherofmine.com.au/blogs/first-light/the-first-100-days",
+            "confidence": "estimate"
+          },
+          {
+            "what": "First-time customers who do not return within 100 days, high end",
+            "value": 0.7,
+            "source": "https://brotherofmine.com.au/blogs/first-light/the-first-100-days",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Spend of customers enrolled in a loyalty program against others, times (seller's figure)",
+            "value": 1.67,
+            "source": "https://squareup.com/us/en/the-bottom-line/reaching-customers/coffee-shop-loyalty-program",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core",
+        "planningValues": "No source: 30% conversion and its 20-45% range, 4% monthly churn and the +10, +5 and +15 point shocks, 0.05 referrals a month, and the 55-65% steady share (set inside the 40-70% range found). Visits of '2-4 times a week' come from a trade blog with no data behind it."
+      },
+      {
+        "id": "price_memory",
+        "title": "Customers remember last month's price",
+        "playerDecision": "How fast to raise prices: in one jump or in small steps, and whether to keep one cheap item on the board.",
+        "engineMath": "The engine's reference price is fixed at $8.50. Make it move: fairPrice rises 4% a year with the street (menu_prices_drift_up). Each shop also has a remembered price: last month's price for its regulars. A rise of up to 4% within a month costs only the ordinary elasticity; above that, regulars churn faster (price_step_backlash: 3% of demand for two months, a quarter-star less in that month's reviews). A cut is noticed slower than a rise: half the elasticity in the first month. A value item (value_anchor) lowers the price sensitivity of students and commuters by a third because the board shows a number they accept. A card surcharge counts as a price rise of its size for card payers.",
+        "fieldsNeeded": [
+          "world.fairPriceIndex (event target fairPrice)",
+          "business.rememberedPrice",
+          "threshold and penalty values in extra"
+        ],
+        "numbers": [
+          {
+            "what": "Rise of the median drip coffee price in a year (to February 2026)",
+            "value": 0.043,
+            "source": "https://pos.toasttab.com/blog/data/toast-restaurant-trends-report-coffee-prices-2026",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Rise of the median cold brew price in a year (to October 2026)",
+            "value": 0.04,
+            "source": "https://pos.toasttab.com/blog/data/cold-brew-prices",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Starbucks North America: change in transactions in a quarter with about 3% higher prices (second fiscal quarter of 2025)",
+            "value": -0.04,
+            "source": "https://www.restaurantdive.com/news/starbucks-cuts-discounts-menu-boosts-marketing-spend-traffic-declines/738605/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Card users who have switched payment method to avoid a surcharge (J.D. Power)",
+            "value": 0.81,
+            "source": "https://www.digitaltransactions.net/surcharges-come-with-acute-abandonment-risk-j-d-power-research-finds/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Maximum penalty for an undisclosed card surcharge, USD per violation",
+            "value": 500,
+            "source": "https://content.govdelivery.com/accounts/NYSDOS/bulletins/38661fe",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "deep",
+        "planningValues": "No source: the 4% step threshold (set equal to the yearly drift of menu prices), the half elasticity for a price cut, and the one-third drop in price sensitivity from a value item."
+      },
+      {
+        "id": "prepaid_pass",
+        "title": "A monthly pass: cash up front, margin at the mercy of the heaviest users",
+        "playerDecision": "Whether to sell a pass, at what price, and with what cap.",
+        "engineMath": "A pass is sold to regulars: price P a month for up to C drip coffees. Take-up: 5% of regulars at P = $45, C = 30, falling with price. A holder drinks min(C, 22) cups a month on average instead of 12, and buys food on one visit in four. Shop's month per holder: +P cash on day one, -cups x $0.80 ingredients and cup, +extra food margin; the list-price sales they would have made anyway (12 x $3.75 = $45) are gone. So a $45 pass with a 30-cup cap is roughly neutral on coffee and earns on food and on the habit; an uncapped pass loses on the top tenth of users. The cash arrives before the coffee is poured, which helps a thin month and is a liability on the books.",
+        "fieldsNeeded": [
+          "lever with a price and a cap (two numbers), not just options",
+          "deferred revenue line in the monthly report",
+          "regulars stock (regulars_and_newcomers)"
+        ],
+        "numbers": [
+          {
+            "what": "Panera's drink subscription, USD a month (2026)",
+            "value": 14.99,
+            "source": "https://www.nrn.com/fast-casual/panera-s-unlimited-sip-club-will-no-longer-be-unlimited",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Panera's cap on subscription drinks a month from August 19, 2026",
+            "value": 30,
+            "source": "https://qz.com/panera-sip-club-drink-cap-30-per-month-072026",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Paid subscribers of Blank Street's weekly pass about a year after launch",
+            "value": 5000,
+            "source": "https://www.craverapp.com/blog/coffee-shop-subscription-guide",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Median price of a drip coffee, USD (February 2026)",
+            "value": 3.65,
+            "source": "https://pos.toasttab.com/blog/data/toast-restaurant-trends-report-coffee-prices-2026",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "exotic",
+        "planningValues": "No source: 5% take-up at $45, 22 cups a month for a holder against 12 without a pass, food on one visit in four, $0.80 a cup. The Panera cap of 30 is the only measured point of the design."
+      }
+    ]
+  }
+}
