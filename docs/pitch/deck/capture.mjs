@@ -55,10 +55,12 @@ await clock({ paused: true });
 note(`city ${worldId}`);
 
 const browser = await chromium.launch();
+// Wide map screens are photos: JPEG keeps them small. Phone screens are text: PNG keeps them sharp.
 const shot = async (page, name, opts = {}) => {
   await page.waitForTimeout(opts.wait ?? 1500);
-  await page.screenshot({ path: join(out, `${name}.png`), fullPage: false });
-  note(`shot ${name}.png`);
+  const file = `${name}.${opts.jpeg ? 'jpg' : 'png'}`;
+  await page.screenshot({ path: join(out, file), fullPage: Boolean(opts.full), ...(opts.jpeg ? { type: 'jpeg', quality: 82 } : {}) });
+  note(`shot ${file}`);
 };
 const click = (page, text, exact = false) => page.getByText(text, { exact }).first().click({ timeout: 15000 });
 
@@ -67,7 +69,7 @@ try {
   const wide = await browser.newPage({ viewport: WIDE, deviceScaleFactor: 2 });
   await wide.goto(`${BASE}/?world=${worldId}`);
   await wide.getByText('See my plan').first().waitFor({ timeout: 30000 });
-  await shot(wide, 'home', { wait: 3000 });
+  await shot(wide, 'home', { wait: 3000, jpeg: true });
 
   // ── Opening, phone ──
   const ctx = await browser.newContext({ viewport: PHONE, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
@@ -143,6 +145,10 @@ try {
   note(`month report: ${JSON.stringify({ revenue: m.revenue, profit: m.profit, cash: month.business.cash ?? month.me?.cash })}`);
   log.month = m;
 
+  // The player steps away for a week: the page is closed while the city runs, so the return card has news.
+  await page.goto('about:blank');
+  await clock({ paused: true, advanceDays: 7 });
+  await sleep(1000);
   await page.goto(`${BASE}/biz?world=${worldId}`);
   await page.waitForTimeout(3000);
   // "While you were away" — the return card a player sees when the city has moved on.
@@ -163,9 +169,36 @@ try {
   // ── The shared city, projector width ──
   const city = await browser.newPage({ viewport: WIDE, deviceScaleFactor: 2 });
   await city.goto(`${BASE}/city/${worldId}`);
-  await shot(city, 'city', { wait: 4000 });
-  await wide.goto(`${BASE}/?world=${worldId}`);
-  await shot(wide, 'home-after', { wait: 4000 });
+  await shot(city, 'city', { wait: 4000, jpeg: true });
+
+  // ── Season end: the personal plan the player takes home ──
+  // The server moves a demo clock at most 60 days per call; the season is 12 months.
+  for (let i = 0; i < 10; i++) {
+    const v = await view(me.token);
+    if (v.world.phase === 'ended') break;
+    await clock({ paused: true, advanceDays: 60 });
+    await sleep(500);
+  }
+  const vEnd = await view(me.token);
+  note(`season: day ${vEnd.world.day}, phase ${vEnd.world.phase}, business ${vEnd.business?.status}, cash ${Math.round(vEnd.business?.cash ?? 0)}`);
+  log.seasonEnd = { day: vEnd.world.day, phase: vEnd.world.phase, status: vEnd.business?.status, cash: vEnd.business?.cash, months: vEnd.business?.history?.map((h) => ({ month: h.month, revenue: Math.round(h.revenue), profit: Math.round(h.profit) })) };
+  await page.goto(`${BASE}/end?world=${worldId}`);
+  await shot(page, 'end', { wait: 3500 });
+  const openPhone = page.getByText('Open my plan').first();
+  if (await openPhone.count()) {
+    await openPhone.click();
+    await shot(page, 'plan', { wait: 3500 });
+  } else note('no "Open my plan" button on the phone');
+  const plan = await browser.newPage({ viewport: WIDE, deviceScaleFactor: 2 });
+  await plan.addInitScript((s) => localStorage.setItem('ohh.sessions.v1', s), JSON.stringify(session));
+  await plan.goto(`${BASE}/end?world=${worldId}`);
+  await shot(plan, 'end-wide', { wait: 3500 });
+  const open = plan.getByText('Open my plan').first();
+  if (await open.count()) {
+    await open.click();
+    await shot(plan, 'plan-wide', { wait: 3500 });
+    note(`plan: ${(await plan.innerText('body')).replace(/\s+/g, ' ').slice(0, 1500)}`);
+  } else note('no "Open my plan" button');
 } finally {
   writeFileSync(join(out, 'capture.json'), JSON.stringify(log, null, 2));
   await browser.close();
