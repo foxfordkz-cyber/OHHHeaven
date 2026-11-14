@@ -62173,43 +62173,50 @@
         "id": "setup_rent_days",
         "title": "Rent paid before the first sale",
         "tier": "core",
-        "from": "D15"
+        "from": "D15",
+        "cluster": "preopening_rent_clock"
       },
       {
         "id": "work_without_permit_penalty",
         "title": "The real price of starting before the permit",
         "tier": "core",
-        "from": "D15"
+        "from": "D15",
+        "cluster": "preopening_rent_clock"
       },
       {
         "id": "guaranty_exposure_at_closure",
         "title": "What the owner still owes when the cafe closes",
         "tier": "core",
-        "from": "D15"
+        "from": "D15",
+        "cluster": "lease_lifecycle"
       },
       {
         "id": "bulk_sale_escrow",
         "title": "The state's claim in a business purchase",
         "tier": "core",
-        "from": "D15"
+        "from": "D15",
+        "cluster": "buy_operating_business"
       },
       {
         "id": "building_cycles_as_signals",
         "title": "Dated building risks instead of random ones",
         "tier": "deep",
-        "from": "D15"
+        "from": "D15",
+        "cluster": "preopening_rent_clock"
       },
       {
         "id": "lease_clauses_as_flags",
         "title": "Lease clauses are one-time flags, not a monthly lever",
         "tier": "deep",
-        "from": "D15"
+        "from": "D15",
+        "cluster": "lease_lifecycle"
       },
       {
         "id": "crt_gate",
         "title": "Commercial Rent Tax only above $250,000",
         "tier": "exotic",
-        "from": "D15"
+        "from": "D15",
+        "cluster": "tax_structure_and_debt"
       },
       {
         "id": "one_time_cash_effect",
@@ -62301,6 +62308,9 @@
         "title": "Months before opening: rent runs, no sales; the longest permit track sets the date (user example 1)",
         "why": "Touches every player in the first 2-6 months. Without free-rent months the engine charges about $19,700 before the first sale against about $4,000 with the usual three free months (D14). The branch keen-cray already prices the build-out by space and waits for it; this adds free rent, parallel permit tracks, priced delays and a Stop Work Order state.",
         "members": [
+          "setup_rent_days",
+          "work_without_permit_penalty",
+          "building_cycles_as_signals",
           "pre_opening_months",
           "buildout_without_revenue",
           "permit_critical_path",
@@ -62371,6 +62381,7 @@
         "title": "Buying an operating cafe instead of building one: price, what passes to the buyer, what does not (user example 2)",
         "why": "keen-cray already sells built rooms (extra.takeover); D12 corrected the price to 0.4x a year of sales (BizBuySell median 0.41x revenue, 2.2x owner earnings). Missing: bulk-sale notice (the buyer pays the seller's unpaid sales tax), permits that do not transfer, inherited equipment age, seller note, lease assignment.",
         "members": [
+          "bulk_sale_escrow",
           "buy_existing_business",
           "d00_takeover_due_diligence",
           "seller_hidden_liabilities",
@@ -62480,6 +62491,8 @@
         "title": "The lease as a ten-year contract: negotiation, escalations, renewal, guaranty on exit",
         "why": "Rent is the second cost and the lease end is a common cause of death (D10 lease_clock). Personal guaranty decides what follows the owner home.",
         "members": [
+          "guaranty_exposure_at_closure",
+          "lease_clauses_as_flags",
           "lease_negotiation",
           "lease_and_landlord",
           "lease_clock",
@@ -62686,6 +62699,7 @@
         "title": "LLC or S corporation in NYC, the state's steps on unpaid tax, start-up costs, LLC publication by county",
         "why": "Mostly owner-level; small in the cafe's monthly result but large in the closure stories (personal liability for sales tax).",
         "members": [
+          "crt_gate",
           "tax_structure_s_corp",
           "tax_debt_ladder",
           "llc_publication_county"

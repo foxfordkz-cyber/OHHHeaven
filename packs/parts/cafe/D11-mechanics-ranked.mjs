@@ -13,7 +13,7 @@ export const mechanicsRanked = [
     rank: 2, id: 'preopening_rent_clock', effort: 'M',
     title: 'Months before opening: rent runs, no sales; the longest permit track sets the date (user example 1)',
     why: 'Touches every player in the first 2-6 months. Without free-rent months the engine charges about $19,700 before the first sale against about $4,000 with the usual three free months (D14). The branch keen-cray already prices the build-out by space and waits for it; this adds free rent, parallel permit tracks, priced delays and a Stop Work Order state.',
-    members: ['pre_opening_months', 'buildout_without_revenue', 'permit_critical_path', 'd00_opening_dependency_ledger', 'd15_preopening_clock', 'contingency_and_overrun', 'stop_work_state', 'utility_path', 'hidden_address_attributes', 'startup_cost_tax'],
+    members: ['setup_rent_days', 'work_without_permit_penalty', 'building_cycles_as_signals', 'pre_opening_months', 'buildout_without_revenue', 'permit_critical_path', 'd00_opening_dependency_ledger', 'd15_preopening_clock', 'contingency_and_overrun', 'stop_work_state', 'utility_path', 'hidden_address_attributes', 'startup_cost_tax'],
     fieldsNeeded: ['extra.preOpening (D14)', 'extra.preOpeningTimeline (D01)', 'extra.leaseTerms.freeRentMonths (D01)', 'setup[].afterBuildout, waitDays per track', 'extra.preOpeningChoices (lease, guaranty, contractor, pace)'],
   },
   {
@@ -34,7 +34,7 @@ export const mechanicsRanked = [
     rank: 5, id: 'buy_operating_business', effort: 'M',
     title: 'Buying an operating cafe instead of building one: price, what passes to the buyer, what does not (user example 2)',
     why: 'keen-cray already sells built rooms (extra.takeover); D12 corrected the price to 0.4x a year of sales (BizBuySell median 0.41x revenue, 2.2x owner earnings). Missing: bulk-sale notice (the buyer pays the seller\'s unpaid sales tax), permits that do not transfer, inherited equipment age, seller note, lease assignment.',
-    members: ['buy_existing_business', 'd00_takeover_due_diligence', 'seller_hidden_liabilities', 'seller_note', 'inherited_equipment_age'],
+    members: ['bulk_sale_escrow', 'buy_existing_business', 'd00_takeover_due_diligence', 'seller_hidden_liabilities', 'seller_note', 'inherited_equipment_age'],
     fieldsNeeded: ['extra.takeover (engine, corrected by D12)', 'extra.takeoverResearch (D01)', 'extra.takeoverRules (D14)', 'extra.roadmapPaths.takeover'],
   },
   {
@@ -69,7 +69,7 @@ export const mechanicsRanked = [
     rank: 10, id: 'lease_lifecycle', effort: 'M',
     title: 'The lease as a ten-year contract: negotiation, escalations, renewal, guaranty on exit',
     why: 'Rent is the second cost and the lease end is a common cause of death (D10 lease_clock). Personal guaranty decides what follows the owner home.',
-    members: ['lease_negotiation', 'lease_and_landlord', 'lease_clock', 'd15_lease_renewal_model', 'personal_guaranty_at_exit'],
+    members: ['guaranty_exposure_at_closure', 'lease_clauses_as_flags', 'lease_negotiation', 'lease_and_landlord', 'lease_clock', 'd15_lease_renewal_model', 'personal_guaranty_at_exit'],
     fieldsNeeded: ['extra.leaseTerms (D01)', 'extra.leaseLaw (D08)', 'extra.conditionalMonthlyCosts: rent_step_up, real_estate_tax_escalation'],
   },
   {
@@ -153,7 +153,7 @@ export const mechanicsRanked = [
     rank: 22, id: 'tax_structure_and_debt', effort: 'S',
     title: 'LLC or S corporation in NYC, the state\'s steps on unpaid tax, start-up costs, LLC publication by county',
     why: 'Mostly owner-level; small in the cafe\'s monthly result but large in the closure stories (personal liability for sales tax).',
-    members: ['tax_structure_s_corp', 'tax_debt_ladder', 'llc_publication_county'],
+    members: ['crt_gate', 'tax_structure_s_corp', 'tax_debt_ladder', 'llc_publication_county'],
     fieldsNeeded: ['extra.ubtSchedule, extra.taxCredits (D09)'],
   },
   {
