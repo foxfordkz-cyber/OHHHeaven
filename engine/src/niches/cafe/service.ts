@@ -306,11 +306,24 @@ export function serviceDayNotes(b: BusinessState, r: DayReport, pack: Pack, env?
 }
 
 /**
- * The part the cafe glue reads. kpis and notes are not in it yet: today the engine treats the mere presence of a
- * niche's notes hook as "the niche explains its limits" (economy/day.ts, nicheExplainsCapacity) and a kpis hook as
- * "replace the default key numbers" (analytics/analyze.ts), even on days and packs where this part has nothing to say.
- * Once the lead changes those two places (agents/r3-B01.md, requests 1 and 2), add `kpis: serviceKpis,
- * notes: serviceDayNotes` here.
+ * Without extra.service the engine's own limits applied today, and the engine keeps quiet about them because the cafe
+ * has capacity and notes hooks (economy/day.ts, nicheExplainsCapacity). Then someone has to say what it would have
+ * said. staffing.ts says it when it has notes (B03 does, in the same words); otherwise this part does, so the owner
+ * hears it exactly once.
+ */
+function engineLimitNotes(r: DayReport): string[] {
+  if (typeof staffing.part.notes === 'function') return [];
+  const out: string[] = [];
+  const size = Math.round(r.lost.size), staff = Math.round(r.lost.staff);
+  if (size > 0) out.push(`Line out the door: ${size} customers walked away`);
+  if (staff > 0) out.push(`Short-staffed: ${staff} customers left unserved`);
+  return out;
+}
+
+/**
+ * The part the cafe glue reads. kpis are not in it yet: today a niche's kpis hook replaces the default key numbers
+ * (analytics/analyze.ts) instead of adding to them, and the average ticket would disappear. Once the lead changes that
+ * (agents/r3-B01.md, request 2), add `kpis: serviceKpis` here.
  */
 export const part: CafePart = {
   capacityDay(d) {
@@ -324,5 +337,8 @@ export const part: CafePart = {
     const cfg = serviceCfg(d.pack);
     const s = cfg ? serviceDay(d) : null;
     return s && cfg && s.seats.crowded ? -cfg.crowdQualityDrop : 0;
+  },
+  notes(b, r, pack, env?: NicheEnv) {
+    return serviceCfg(pack) ? serviceDayNotes(b, r, pack, env) : engineLimitNotes(r);
   },
 };

@@ -9,7 +9,7 @@ import type { BusinessState, DayReport, Pack, Place, StandingOrders } from '@ohh
 import rawPack from '../../../packs/cafe.json';
 import rawFormats from '../../../packs/parts/cafe/D20-formats.json';
 import rawPlaces from '../../../data/places.json';
-import { composeHooks } from '../../src/niches/cafe';
+import { composeHooks, hooks as cafeHooks } from '../../src/niches/cafe';
 import {
   part, seatUseDay, serviceCfg, serviceDay, serviceDayNotes, serviceDayWith, serviceKpis, serviceNotes, seatsThatFit, walkAway,
   type Guests, type ServiceCfg, type ServiceInputs,
@@ -97,13 +97,13 @@ const report = (dayN: number, demand: number): DayReport => ({
 });
 
 describe('cafe service — the example of FORMATS.md 3.5 (same numbers as packs/parts/cafe/D20-examples.mjs)', () => {
-  const rows: [Place, number, number, number][] = [
+  const rows: ['office' | 'residential', number, number, number][] = [
     // place, orders wanted, seats, served
-    [OFFICE, 250, 6, 246], [OFFICE, 250, 30, 248], [OFFICE, 400, 6, 259], [OFFICE, 400, 30, 248],
-    [OFFICE, 550, 6, 261], [OFFICE, 550, 30, 248], [HOME, 250, 6, 233], [HOME, 250, 30, 216], [HOME, 400, 6, 236],
+    ['office', 250, 6, 246], ['office', 250, 30, 248], ['office', 400, 6, 259], ['office', 400, 30, 248],
+    ['office', 550, 6, 261], ['office', 550, 30, 248], ['residential', 250, 6, 233], ['residential', 250, 30, 216], ['residential', 400, 6, 236],
   ];
-  it.each(rows)('%s, %i orders, %i seats → %i served', (place, demand, seats, served) => {
-    expect(Math.round(day(place, demand, seats).served)).toBe(served);
+  it.each(rows)('%s place, %i orders, %i seats → %i served', (kind, demand, seats, served) => {
+    expect(Math.round(day(kind === 'office' ? OFFICE : HOME, demand, seats).served)).toBe(served);
   });
   it('the rush at 550 orders and 30 seats: a line of about 22, a 21-minute wait, about 60 walked on', () => {
     const s = day(OFFICE, 550, 30);
@@ -185,7 +185,15 @@ describe('cafe service — checks of FORMATS.md 3.6', () => {
     expect(part.qualityDelta!(d)).toBe(0);
     expect(serviceKpis({ ...b, days: [report(DAY, 300)] }, plain)).toEqual([]);
     expect(serviceDayNotes(b, report(DAY, 300), plain)).toEqual([]);
-    expect(Object.keys(part).sort()).toEqual(['capacityDay', 'qualityDelta']);   // kpis and notes wait for the engine (journal)
+    expect(Object.keys(part).sort()).toEqual(['capacityDay', 'notes', 'qualityDelta']);   // kpis wait for the engine (journal)
+  });
+
+  it('9a. without extra.service the cafe says what the engine would have said, exactly once across all its parts', () => {
+    const r = { ...report(DAY, 300), servedUnits: 250, lost: { size: 30, staff: 20, closure: 0 } };
+    const said = cafeHooks.notes!(cafe(), r, basePack);
+    expect(said.filter((n) => n === 'Line out the door: 30 customers walked away')).toHaveLength(1);
+    expect(said.filter((n) => n === 'Short-staffed: 20 customers left unserved')).toHaveLength(1);
+    expect(cafeHooks.notes!(cafe(), report(DAY, 300), basePack).filter((n) => /^(Line out the door|Short-staffed)/.test(n))).toEqual([]);
   });
 });
 
@@ -220,6 +228,7 @@ describe('cafe service — through the hooks the engine calls', () => {
     const k = serviceKpis(b, pack);
     expect(k.map((x) => x.id)).toEqual(['rush_served', 'bar_rush_per_hour', 'seat_turns', 'seats_peak_use']);
     const notes = serviceDayNotes(b, report(DAY, 550), pack);
+    expect(part.notes!(b, report(DAY, 550), pack)).toEqual(notes);
     expect(notes.length).toBeGreaterThan(0);
     expect(notes.join(' ')).toMatch(/Out of hands|Morning rush/);
   });
