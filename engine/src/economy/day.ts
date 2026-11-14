@@ -77,7 +77,7 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
       const mods = dealModifiers(w, ctx, b.id);
       const lev = leverEffects(b, pack);
       const dayMult = wd * weatherMult * eventMult(events, 'demand', niche, place) * eventMult(events, 'footTraffic', niche, place)
-        * mods.demandMult * mods.footTrafficMult * (hooks.demandMult?.(b, date, pack) ?? 1) * lev.demandMult
+        * mods.demandMult * mods.footTrafficMult * (hooks.demandMult?.(b, date, pack, { place, day, date }) ?? 1) * lev.demandMult
         * (useFoot && place ? anchorDayMult(place, date.weekday, date.month) : 1);
       const dem = Math.max(0, Math.round((demand[k] / RULES.DAYS_PER_MONTH) * dayMult));
       const staffN = staffCount(b.orders.staff);
@@ -87,7 +87,7 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
       const sizeCap = (b.size * pack.sizing.unitsServedPerSizeMonth / RULES.DAYS_PER_MONTH) / (1 - takeaway);
       const hardCap = pack.capacity.hardCapUnits ? pack.capacity.hardCapUnits / RULES.DAYS_PER_MONTH : Infinity;
       // a niche hook may return the whole capacity of the day (who can serve and where); it replaces staff and room limits
-      const hookCap = hooks.capacityDay?.(b, pack);
+      const hookCap = hooks.capacityDay?.(b, pack, { place, day, date, demand: dem });
       const useHook = typeof hookCap === 'number' && Number.isFinite(hookCap);
       const capacity = useHook ? Math.min(Math.max(0, hookCap as number), hardCap) : Math.min(staffCap, sizeCap, hardCap);
       const roomBound = useHook ? (hookCap as number) >= sizeCap - 0.5 || hardCap <= (hookCap as number) : sizeCap <= staffCap || hardCap <= staffCap;
@@ -174,7 +174,8 @@ function tradeDay(c: Calc, ctx: EngineCtx, day: number, month: number, eventTitl
   const util = c.sizeCap > 0 && Number.isFinite(c.sizeCap) ? c.served / c.sizeCap : 0;
   const crowded = util > (pack.sizing.crowdPenaltyAbove ?? 0.9);
   const empty = b.status === 'open' && util < (pack.sizing.emptyPenaltyBelow ?? 0);
-  const qTarget = clamp(0.5 + itemsQuality(b, pack) + lev.quality + trainingBoost(econ.training, c.staffN) - (crowded ? 0.08 : 0) - (c.lost.staff > 0 ? 0.04 : 0), 0, 1);
+  const nicheQuality = hooksFor(b.niche).qualityDelta?.(b, pack, { place: c.place, day, date: dateOf(day), demand: c.demand }) ?? 0;
+  const qTarget = clamp(0.5 + itemsQuality(b, pack) + lev.quality + trainingBoost(econ.training, c.staffN) + nicheQuality - (crowded ? 0.08 : 0) - (c.lost.staff > 0 ? 0.04 : 0), 0, 1);
   const quality = clamp(b.quality + QUALITY_INERTIA * (qTarget - b.quality), 0, 1);
   const fair = fairPrice(pack.unit.refPrice, quality);
   const lostN = c.lost.size + c.lost.staff + c.lost.closure;
