@@ -3,7 +3,7 @@
 // then replace the two '__stubs__' imports below and in economy/deps.ts.
 import type { Action, ActionResult, BusinessState, Money, PackSet, Place, WorldConfig, WorldState } from '@ohh/shared';
 import { isMonthEnd, RULES } from '@ohh/shared';
-import { economyActions, economyDay, economyMonthClose, netWorthOf } from './economy/index';
+import { economyActions, economyDay, economyMonthClose, netWorthOf, syncMonthStart } from './economy/index';
 import { lawActions, lawDay, lawMonthClose } from './__stubs__/law';
 import { computeStandings, dealActions, dealsDay, dealsMonthClose, finalizeSeason } from './__stubs__/deals';
 
@@ -41,7 +41,7 @@ export function tickDay(w0: WorldState, ctx: EngineCtx): WorldState {
     w = lawMonthClose(w, ctx);
     w = bankruptcies(w, day);
     const standings = computeStandings(w, ctx);
-    w = { ...w, standings, businesses: w.businesses.map((b) => withRank(b, standings, day)) };
+    w = syncMonthStart({ ...w, standings, businesses: w.businesses.map((b) => withRank(b, standings, day)) });
   }
   if (day >= w.config.seasonMonths * RULES.DAYS_PER_MONTH) w = finalizeSeason(w, ctx);
   return { ...w, version: w0.version + 1 };

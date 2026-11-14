@@ -49,7 +49,7 @@ describe('month close', () => {
     for (const k of ['revenue', 'cogs', 'rent', 'payroll', 'payroll_tax', 'opex', 'tax', 'deal']) expect(kinds.has(k as never)).toBe(true);
     expect(m3.lines.some((l) => l.id === 'payroll_manager')).toBe(true);
     const cheat = w.businesses[1].history[2];
-    expect(cheat.lines.some((l) => l.kind === 'saving' && l.id === 'saving_cash_wages')).toBe(true);
+    expect(cheat.lines.some((l) => l.kind === 'saving' && /cash_wages/.test(l.id))).toBe(true);
   });
 
   it('sales tax collected sits in liabilities until its quarter is due, then it is paid', () => {
@@ -95,5 +95,32 @@ describe('month close', () => {
     expect(m1.lines.find((l) => l.kind === 'rent')!.amount).toBeCloseTo(-6000, 0);
     expect(m1.lines.some((l) => l.kind === 'payroll')).toBe(false);
     expect(b.days.at(-1)!.notes[0]).toMatch(/Not open yet/);
+  });
+});
+
+describe('month boundary with other modules', () => {
+  it('lines added by deals (into the closed report) and by law (into the new month) keep every month balanced', async () => {
+    const { economyDay, economyMonthClose, syncMonthStart } = await import('../../src/economy/index');
+    let { w, ctx } = cafeCity(1);
+    w = run(w, ctx, 59 - w.day);
+    // day 60: economy day and close, then a deals line into the closed report and a law fine into the new month
+    w = economyMonthClose(economyDay({ ...w, day: 60 }, ctx), ctx);
+    const b = w.businesses[0];
+    const report = b.history.at(-1)!;
+    const dealLine = { id: 'deal:loan:x', label: 'Loan payment', kind: 'deal' as const, amount: -250 };
+    const fineLine = { id: 'fine:c1', label: 'Fine: dirty surfaces', kind: 'fine' as const, amount: -300 };
+    const patched = {
+      ...b,
+      cash: b.cash - 250 - 300,
+      history: [...b.history.slice(0, -1), { ...report, lines: [...report.lines, dealLine], cashEnd: report.cashEnd - 250 }],
+      mtd: { ...b.mtd, lines: [...b.mtd.lines, fineLine] },
+    };
+    w = syncMonthStart({ ...w, businesses: [patched] });
+    w = run(w, ctx, 30);
+    const [m2, m3] = w.businesses[0].history.slice(-2);
+    expect(sumLines(m2.lines)).toBeCloseTo(m2.cashEnd - m2.cashStart, 2);
+    expect(sumLines(m3.lines)).toBeCloseTo(m3.cashEnd - m3.cashStart, 2);
+    expect(m3.lines.some((l) => l.id === 'fine:c1')).toBe(true);
+    expect(m3.fines).toBe(300);
   });
 });

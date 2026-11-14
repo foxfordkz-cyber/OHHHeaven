@@ -97,8 +97,9 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
     if (!opt || opt.monthlyCost <= 0 || m.daysOpen === 0) continue;
     add({ id: `lever_${lever.id}`, label: `${lever.name}: ${opt.label}`, kind: 'opex', amount: -opt.monthlyCost * openShare });
   }
-  if (b.orders.blockFund && m.daysOpen > 0) {
-    add({ id: 'block_fund', label: 'Block fund contribution', kind: 'deal', amount: -RULES.BLOCK_FUND_FEE_MONTH });
+  // block fund fee (contract §3 step 5); the id contains "blockfund" so the deals module does not charge it twice
+  if (b.orders.blockFund && m.daysOpen > 0 && cash >= RULES.BLOCK_FUND_FEE_MONTH) {
+    add({ id: 'blockfund', label: 'Block fund fee (cleaning and lights)', kind: 'deal', amount: -RULES.BLOCK_FUND_FEE_MONTH });
   }
   for (const l of hooksFor(b.niche).extraLines?.(b, pack, month) ?? []) add(l);
 
@@ -160,6 +161,21 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
   }, econNext);
   report.netWorth = netWorthOf(closed, ctx);
   return closed;
+}
+
+/**
+ * After the whole month close (deals and law may add lines and move cash), the next month starts from the cash that
+ * is left minus the lines already written into the new month: then the lines of every month add up to its change of cash.
+ */
+export function syncMonthStart(w: WorldState): WorldState {
+  return {
+    ...w,
+    businesses: w.businesses.map((b) => {
+      const econ = econOf(b);
+      const start = round2(b.cash - b.mtd.lines.reduce((a, l) => a + l.amount, 0));
+      return econ.cashStart === start ? b : withEcon(b, { ...econ, cashStart: start });
+    }),
+  };
 }
 
 function mergeTrails(old: readonly ViolationTrail[], updated: readonly ViolationTrail[]): ViolationTrail[] {
