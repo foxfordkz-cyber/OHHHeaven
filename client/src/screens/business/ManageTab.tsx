@@ -245,9 +245,9 @@ function OneOffs({ deps }: { deps: BizDeps }) {
     <Card title="One-off actions" aside="paid today">
       <div className="bz-list">
         {SPEND.map((s) => (
-          <div className="bz-li" key={s.kind}>
+          <div className="bz-li bz-li-col" key={s.kind}>
             <div className="bz-li-main"><span className="bz-li-title">{s.title}</span><span className="bz-li-sub">{s.text}</span></div>
-            <div className="bz-row bz-wrap" style={{ justifyContent: 'flex-end' }}>
+            <div className="bz-row bz-wrap">
               {s.amounts.length
                 ? s.amounts.map((amt) => <Button key={amt} disabled={busy || !deps.online} onClick={() => run({ type: 'spend', kind: s.kind, amount: amt }, `${s.title}: ${usd(amt)} spent.`)}>{usd(amt)}</Button>)
                 : <Button disabled={busy || !deps.online} onClick={() => run({ type: 'spend', kind: s.kind }, `${s.title} booked.`)}>Book</Button>}

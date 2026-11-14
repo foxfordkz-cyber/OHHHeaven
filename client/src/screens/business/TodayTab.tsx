@@ -59,12 +59,12 @@ function Sales({ days, worldDay, unitName, unit }: { days: DayReport[]; worldDay
         {reasons.map((r) => (
           <p key={r.key} className="bz-bad-text"><b>{num(r.units)}</b> walked away: {r.text}</p>
         ))}
-        {main?.notes.map((n, i) => <p key={i} className="bz-small">{n}</p>)}
+        {main?.notes.map((n, i) => <p key={i} className="bz-note">{n}</p>)}
         {today && yesterday && (
           <details className="bz-details">
             <summary className="bz-small bz-muted">Yesterday, {dayLabel(yesterday.day)}: {num(yesterday.servedUnits)} sold · {usd(yesterday.revenue)} · {num(lostTotal(yesterday.lost))} walked away</summary>
             {lostReasons(yesterday.lost, { unitName }).map((r) => <p key={r.key} className="bz-small">{num(r.units)} walked away: {r.text}</p>)}
-            {yesterday.notes.map((n, i) => <p key={i} className="bz-small">{n}</p>)}
+            {yesterday.notes.map((n, i) => <p key={i} className="bz-note">{n}</p>)}
           </details>
         )}
       </Card>

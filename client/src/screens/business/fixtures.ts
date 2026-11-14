@@ -56,7 +56,7 @@ function dayReport(day: number, opts: { closed?: boolean; base?: number } = {}):
   const served = Math.min(demand, SEAT_CAP, STAFF_CAP);
   const lostSize = demand - served;
   const notes: string[] = [];
-  if (lostSize >= 30) notes.push(`${lostSize} customers walked away: every seat was taken at peak hours.`);
+  if (lostSize >= 30) notes.push('Queue out the door from 8 to 10am.');
   if (w.condition === 'rain') notes.push('Rain kept people indoors: fewer walk-ins.');
   return {
     day, demandUnits: demand, servedUnits: served, lost: { size: lostSize, staff: 0, closure: 0 },
