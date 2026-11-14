@@ -307,11 +307,8 @@ export function mountBilling(app: Express, host: BillingHost, opts: BillingOptio
 
   const who = (req: BReq, _res: Response, next: NextFunction) => {
     const rt = host.runtimes.get(String(req.params.id));
-    const token = bearer(req);
-    if (rt && token) {
-      req.billingRt = rt;
-      req.billingPlayer = rt.playerFor(token);
-    }
+    req.billingRt = rt;
+    req.billingPlayer = rt?.playerFor(bearer(req));
     next();
   };
   const needPlayer = (req: BReq, res: Response): req is BReq & { billingRt: WorldRuntime; billingPlayer: string } => {

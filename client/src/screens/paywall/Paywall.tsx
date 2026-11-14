@@ -13,16 +13,22 @@ export interface PaywallProps {
   busy?: boolean;
   /** what happened after the last button press */
   result?: { tone: 'profit' | 'warn'; text: string } | null;
+  /** offline practice in the browser: nothing is sold there */
+  offline?: boolean;
+  /** inside the Pro tab of /biz: no top bar */
+  embedded?: boolean;
   onBuy(interval: Interval): void;
   onBack(): void;
   onManage(): void;
   onPlan(): void;
 }
 
-export function Paywall({ view, status, statusError, busy, result, onBuy, onBack, onManage, onPlan }: PaywallProps) {
+export function Paywall({ view, status, statusError, busy, result, offline, embedded, onBuy, onBack, onManage, onPlan }: PaywallProps) {
   const tr = useT();
   const stage = status?.stage ?? (view.business?.openedDay ? 'free_month' : 'before_opening');
-  const hero = heroFor(stage, status, view, tr);
+  const hero = offline
+    ? { tone: 'info' as const, title: tr('Offline practice: everything is open', 'Практика офлайн: открыто всё'), text: tr('This city runs in your browser and sells nothing. In the online city the first full month is free, then Pro keeps every control for the rest of the year.', 'Этот город работает в браузере и ничего не продаёт. В городе онлайн первый полный месяц бесплатный, дальше Pro сохраняет все рычаги на весь год.') }
+    : heroFor(stage, status, view, tr);
   const st = stakesOf(view);
   const rival = rivalAbove(view);
   const left = monthsLeft(view);
@@ -30,10 +36,11 @@ export function Paywall({ view, status, statusError, busy, result, onBuy, onBack
   const isPro = stage === 'pro' || stage === 'open_world';
   const prices = status?.prices ?? { month: 1900, year: null, currency: 'usd' as const };
   const testUnlock = (status?.checkout ?? 'test-unlock') === 'test-unlock';
+  const Root = embedded ? 'div' : 'main';
 
   return (
-    <main className="screen stack">
-      <TopBar title={PRO_NAME} onBack={onBack} right={<Badge tone={isPro ? 'profit' : 'accent'}>{isPro ? tr('Pro', 'Pro') : tr('Free plan', 'Бесплатно')}</Badge>} />
+    <Root className={embedded ? 'stack bz-pad' : 'screen stack'}>
+      {!embedded && <TopBar title={PRO_NAME} onBack={onBack} right={<Badge tone={isPro ? 'profit' : 'accent'}>{stage === 'open_world' ? tr('Open', 'Открыто') : isPro ? 'Pro' : tr('Free plan', 'Бесплатно')}</Badge>} />}
 
       <Card tone={hero.tone === 'profit' ? 'profit' : hero.tone === 'warn' ? 'warn' : 'accent'} title={hero.title} subtitle={hero.text}>
         {view.business && (
@@ -109,8 +116,8 @@ export function Paywall({ view, status, statusError, busy, result, onBuy, onBack
           {compareRows(tr, status, left).map((r) => (
             <ListRow
               key={r.id}
-              icon={r.free ? 'check' : 'lock'}
-              iconTone={r.free ? 'profit' : 'accent'}
+              icon={r.lockedNow ? 'lock' : 'check'}
+              iconTone={r.lockedNow ? 'accent' : 'profit'}
               title={r.label}
               subtitle={r.free ? tr(`Free: ${r.free}`, `Бесплатно: ${r.free}`) : tr('Pro only', 'Только в Pro')}
               value={r.pro}
@@ -129,6 +136,6 @@ export function Paywall({ view, status, statusError, busy, result, onBuy, onBack
             )}
         </p>
       </Card>
-    </main>
+    </Root>
   );
 }
