@@ -56,10 +56,15 @@
       "id": "lpc_storefront_permit",
       "name": "Landmarks permit for storefront work (historic districts only)",
       "kind": "permit",
-      "cost": 0,
+      "cost": 320,
       "required": false,
       "waitDays": 21,
       "agency": "NYC Landmarks Preservation Commission",
+      "formula": {
+        "flatFee": 95,
+        "coversFirstDollarsOfWork": 25000,
+        "perAdditionalThousand": 5
+      },
       "link": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
       "withoutItViolation": "work_without_permit",
       "appliesIf": "address is in a historic district or the building is a landmark",
@@ -67,7 +72,7 @@
       "source": "https://www.nyc.gov/assets/lpc/downloads/pdf/Storefronts_in_Historic_Districts_Fact_Sheet.pdf",
       "confidence": "estimate",
       "seenIn": "primary_search_extract",
-      "note": "LPC storefront fact sheet (2019) seen in extract: a complete storefront application gets a staff permit within 10 business days through FasTrack, otherwise within 15 business days (about 21 calendar days); incomplete applications are returned. LPC said in April 2025 that 95% of its approvals are issued at staff level. Any exterior storefront change in a historic district (sign, awning, door, window) needs the permit, and DOB will not issue its permit without it. Proposals that go to the full Commission take months (one architect guide: 90 business days or more). Cost shown as 0: the fee LPC charges on jobs that also need a DOB permit was not confirmed in this session."
+      "note": "LPC storefront fact sheet (2019) seen in extract: a complete storefront application gets a staff permit within 10 business days through FasTrack, otherwise within 15 business days (about 21 calendar days); incomplete applications are returned. LPC said in April 2025 that 95% of its approvals are issued at staff level. Any exterior storefront change in a historic district (sign, awning, door, window) needs the permit, and DOB will not issue its permit without it. Proposals that go to the full Commission take months (one architect guide: 90 business days or more). Fee, LPC fees page seen in extract: a flat $95 for the first $25,000 of work plus $5 for each $1,000 above, collected through the DOB NOW filing; for a $70,000 job 95 + 45 x 5 = $320."
     },
     {
       "id": "letter_of_no_objection",
@@ -224,13 +229,13 @@
       "source": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license",
       "confidence": "estimate",
       "seenIn": "primary_search_extract",
-      "note": "NYC Business and NYC311 (KA-01830), seen in extract: the two-year license costs $50; veterans are exempt. It is needed before applying for a unit permit, and only current license holders may join the waiting lists for supervisory licenses. The 30 days are my estimate for the food protection course for mobile vendors, the application and the ID card; no official processing time was seen."
+      "note": "NYC Business and NYC311 (KA-01830), seen in extract: the two-year license costs $50; veterans are exempt. The Mobile Food Vendor Food Protection Course is a separate $53. It is needed before applying for a unit permit, and only current license holders may join the waiting lists for supervisory licenses. The 30 days are my estimate for the food protection course for mobile vendors, the application and the ID card; no official processing time was seen."
     },
     {
       "id": "mobile_food_unit_permit",
       "name": "Mobile Food Vending Unit permit (the cart's decal)",
       "kind": "permit",
-      "cost": 200,
+      "cost": 75,
       "required": false,
       "waitDays": 180,
       "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
@@ -244,7 +249,7 @@
       "source": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
       "confidence": "estimate",
       "seenIn": "primary_search_extract",
-      "note": "NYC Business, seen in extract: the two-year full-term permit costs $200 for a processing unit and $75 for a non-processing unit (seasonal: $35 and $15); veterans pay nothing. Two weeks after applying you call for a pre-permit inspection and must pass it within six months, in person, with a commissary agreement in hand: the 180 days are that outer limit. The real gate is the cap: a year-round permit now requires a supervisory license, and Local Laws 54 and 59 of 2026 add 2,200 of those a year from fiscal 2027 to 2031 (311 KA-03354) against a waiting list that advocates put above 20,000. Whether a coffee cart counts as processing was not confirmed; the higher fee is used."
+      "note": "NYC Business and Health Code Chapter 6, seen in extract: the two-year full-term permit costs $75 for a non-processing unit and $200 for a processing unit (seasonal: $15 and $35); veterans pay nothing. A coffee cart is Class D, a non-processing unit serving foods that need no temperature control \"such as brewed coffee and tea\", so $75 applies; add milk-based drinks that need refrigeration and the class, the cart and the fee change. Two weeks after applying you call for a pre-permit inspection and must pass it within six months, in person, with a commissary agreement in hand: the 180 days are that outer limit. The real gate is the cap: a year-round permit now requires a supervisory license, and Local Laws 54 and 59 of 2026 add 2,200 of those a year from fiscal 2027 to 2031 (311 KA-03354) against a waiting list that advocates put above 20,000."
     },
     {
       "id": "coffee_cart_unit",
@@ -575,6 +580,577 @@
         "unlicensed_mobile_vending",
         "no_temporary_food_permit"
       ]
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "choose_entry_mode",
+      "title": "Choose how you enter: build, buy, franchise, cart or pop-up",
+      "kind": "idea",
+      "path": "all",
+      "order": 1,
+      "text": "Building in a former cafe costs the least cash but takes 5-9 months before the first sale. Buying an operating shop costs about 2 times its yearly owner earnings and sells coffee from week four. A franchise needs $400,000 or more. A cart or a market stand starts under $25,000 but depends on a capped permit.",
+      "link": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    },
+    {
+      "id": "pull_building_record",
+      "title": "Look up the address before you fall in love with it",
+      "kind": "space",
+      "path": "scratch",
+      "order": 2,
+      "text": "Search the building in the Department of Buildings records: Certificate of Occupancy, open violations, Stop Work Orders, landmark status. A building with open violations can hold up your permit, and work on a landmark needs a second approval.",
+      "agency": "NYC Department of Buildings",
+      "link": "https://a810-bisweb.nyc.gov/bisweb/bispi00.jsp"
+    },
+    {
+      "id": "pre_lease_site_survey",
+      "title": "Walk the space with an architect and an electrician",
+      "kind": "space",
+      "path": "scratch",
+      "order": 3,
+      "text": "Check the electrical panel against your equipment load, the water line, the drain and grease interceptor, ventilation, the bathroom and the step at the door. An undersized panel means weeks of Con Edison coordination; a missing drain means a heavy conversion at $400 per sq ft instead of $90.",
+      "link": "https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide"
+    },
+    {
+      "id": "gas_availability_check",
+      "title": "Decide on gas before you sign: check availability or go all-electric",
+      "kind": "space",
+      "path": "scratch",
+      "order": 4,
+      "text": "A 2017 State Senate survey found restaurants waited 68 days on average for gas service, some up to a year. Con Edison answers a gas-availability request for a food business before you sign. A coffee shop with no cooking can run all-electric and skip the wait.",
+      "agency": "Con Edison (Manhattan, Bronx, part of Queens) or National Grid (Brooklyn, Staten Island, part of Queens)",
+      "link": "https://thenycalliance.org/news-item/Con-Edison-Gas-Service"
+    },
+    {
+      "id": "letter_of_intent",
+      "title": "Fix the deal in a letter of intent",
+      "kind": "space",
+      "path": "scratch",
+      "order": 5,
+      "text": "Before lawyers draft 60-100 pages, agree in writing on rent, term, free rent, yearly increases (3% is typical), the deposit, the guaranty, what the landlord delivers, and that rent starts only after permits. The landlord usually pays the broker.",
+      "link": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    },
+    {
+      "id": "free_lease_review",
+      "title": "Get the lease reviewed, free if you qualify",
+      "kind": "legal",
+      "path": "all",
+      "order": 6,
+      "text": "The city's Commercial Lease Assistance Program gives eligible small businesses a free lawyer to review and negotiate a lease before signing; a provider calls back within three business days. It does not go to court for you. Otherwise budget $3,500 for your own lawyer.",
+      "agency": "NYC Department of Small Business Services",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/business-services/legal-assistance/commercial-lease-assistance-program"
+    },
+    {
+      "id": "negotiate_guaranty",
+      "title": "Negotiate the personal guaranty",
+      "kind": "legal",
+      "path": "all",
+      "order": 7,
+      "text": "A full guaranty makes you personally owe every remaining month of a 10-year lease. A good guy guaranty ends your liability once you give written notice (usually 3-6 months), pay rent to the day you leave and hand back the keys broom-clean. Landlords trade it for a larger deposit.",
+      "link": "https://www.commercialcafe.com/blog/good-guy-guarantee-nyc-real-estate/"
+    },
+    {
+      "id": "negotiate_free_rent",
+      "title": "Negotiate free rent and the rent start date",
+      "kind": "space",
+      "path": "scratch",
+      "order": 8,
+      "text": "NYC restaurant leases typically give 3-6 months of free rent for the build-out, up to 12 for a heavy job on a 10-year lease. Tie the rent start to permits, not to a calendar date: if approvals slip, the free months run out while the room is still a construction site.",
+      "link": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/"
+    },
+    {
+      "id": "lease_tax_clause",
+      "title": "Add the clause that saves sales tax on the build-out",
+      "kind": "legal",
+      "path": "scratch",
+      "order": 9,
+      "text": "New York presumes a tenant's installations are temporary and taxes the contractor's bill at 8.875%. If the lease says improvements become the landlord's property when installed, the work can qualify as a capital improvement: give the contractor Form ST-124 and the labor is not taxed.",
+      "agency": "NYS Department of Taxation and Finance",
+      "link": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm"
+    },
+    {
+      "id": "nyc_best_concierge",
+      "title": "Ask the city for a free project manager",
+      "kind": "legal",
+      "path": "all",
+      "order": 10,
+      "text": "Since the July 2026 executive order, the NYC Business Express Service Team assigns each new business a project manager who lists the permits you need, helps file them and coordinates the pre-opening inspections across agencies. It costs nothing.",
+      "agency": "NYC Department of Small Business Services (NYC BEST)",
+      "link": "https://www.nyc.gov/mayors-office/news/2026/07/executive-order-no--18.html"
+    },
+    {
+      "id": "hire_architect_file_dob",
+      "title": "File the alteration with the Department of Buildings",
+      "kind": "permit",
+      "path": "scratch",
+      "order": 11,
+      "text": "A registered architect or engineer files the plans in DOB NOW. The fee is $225 for the first $3,000 of work plus $10.30 per $1,000 after: $915 on a $70,000 job. Approval averaged 20 days in 2025. Painting, flooring and new cabinets alone need no permit.",
+      "setupItemId": "dob_alteration_filing_fee",
+      "fee": 915,
+      "waitDays": 21,
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/do-i-need-a-permit.page"
+    },
+    {
+      "id": "asbestos_investigation",
+      "title": "Order the asbestos investigation",
+      "kind": "permit",
+      "path": "scratch",
+      "order": 12,
+      "text": "In a building from before April 1987 the Buildings permit is not issued until a certified asbestos investigator files an ACP-5 report. If the old floor tile or pipe wrap tests positive, licensed abatement comes first and the schedule slips by weeks.",
+      "setupItemId": "asbestos_survey_acp5",
+      "fee": 900,
+      "waitDays": 7,
+      "agency": "NYC Department of Environmental Protection",
+      "link": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page"
+    },
+    {
+      "id": "landmark_permit",
+      "title": "In a historic district: get the Landmarks permit first",
+      "kind": "permit",
+      "path": "scratch",
+      "order": 13,
+      "text": "Any change to a storefront in a historic district (sign, awning, door, glass) needs a Landmarks permit before the Buildings permit. Complete applications are approved by staff in 10-15 business days; the fee is $95 for the first $25,000 of work plus $5 per $1,000.",
+      "setupItemId": "lpc_storefront_permit",
+      "fee": 320,
+      "waitDays": 21,
+      "agency": "NYC Landmarks Preservation Commission",
+      "link": "https://www.nyc.gov/site/lpc/applications/storefronts.page"
+    },
+    {
+      "id": "letter_of_no_objection_step",
+      "title": "Old building with no Certificate of Occupancy: get a Letter of No Objection",
+      "kind": "permit",
+      "path": "scratch",
+      "order": 14,
+      "text": "Buildings from before 1938 often have no Certificate of Occupancy. The Buildings borough office can issue a Letter of No Objection saying an eating and drinking establishment is a legal use. Allow at least a month, and make the lease conditional on getting it.",
+      "setupItemId": "letter_of_no_objection",
+      "waitDays": 30,
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page"
+    },
+    {
+      "id": "bid_and_contract",
+      "title": "Take three bids and sign a contract with a payment schedule",
+      "kind": "space",
+      "path": "scratch",
+      "order": 15,
+      "text": "Plumbing and wiring must be done by licensed firms. Ask for insurance certificates naming you and the landlord: under New York's scaffold law the tenant who hires the crew can be liable for a worker's fall. Pay by milestones and collect lien waivers; hold 10-15% in reserve.",
+      "setupItemId": "contingency_reserve",
+      "link": "https://blueberrybuilders.com/resources/cost-overruns-in-construction/"
+    },
+    {
+      "id": "order_long_lead_items",
+      "title": "Order long-lead equipment before the walls close",
+      "kind": "supplier",
+      "path": "scratch",
+      "order": 16,
+      "text": "Order the espresso machine, the refrigeration and any custom counter as soon as the plans are approved. Imported machines have carried a 15% US tariff on EU goods since mid-2025, and the plumber and electrician need the exact models to rough in the lines.",
+      "link": "https://freshcup.com/coffee-goods-in-limbo-as-tariffs-impact-gear-manufacturers/"
+    },
+    {
+      "id": "apply_utilities_early",
+      "title": "Open the Con Edison account and file any service request early",
+      "kind": "space",
+      "path": "scratch",
+      "order": 17,
+      "text": "A new business account can require a deposit of up to twice the average monthly bill. If the panel must grow, your licensed electrician files the request and Con Edison issues a service layout: allow two to six weeks, far longer if the street side needs work.",
+      "setupItemId": "con_ed_security_deposit",
+      "agency": "Con Edison",
+      "link": "https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide"
+    },
+    {
+      "id": "inspections_and_signoff",
+      "title": "Pass the trade inspections and close out the permit",
+      "kind": "permit",
+      "path": "scratch",
+      "order": 18,
+      "text": "Plumbing and electrical work is inspected before the walls are closed, then the job is signed off. The Health Department's pre-permit inspection needs all construction finished and no food on site. Open permits left behind become your problem at sale or renewal.",
+      "agency": "NYC Department of Buildings; NYC DOHMH",
+      "link": "https://portal.311.nyc.gov/article/?kanumber=KA-02955"
+    },
+    {
+      "id": "soft_open_and_consult",
+      "title": "Soft-open, then book the $100 consultative inspection",
+      "kind": "launch",
+      "path": "all",
+      "order": 19,
+      "text": "Once you have begun serving food and before your first graded inspection, the Health Department will send an inspector for $100 who points out problems and issues no violations. Fix what they find before the unannounced graded visit decides the letter in your window.",
+      "setupItemId": "consultative_inspection",
+      "fee": 100,
+      "agency": "NYC DOHMH",
+      "link": "https://portal.311.nyc.gov/article/?kanumber=KA-02955"
+    },
+    {
+      "id": "takeover_find_listing",
+      "title": "Buying a shop: read the listing like a lender",
+      "kind": "idea",
+      "path": "takeover",
+      "order": 20,
+      "text": "US coffee shops sold in 2021-2025 went for a median 0.41 times yearly sales and 2.0 times owner earnings. New York asking prices run 1.6 to 3.1 times stated cash flow. \"Key money\" listings sell a built-out room and a lease, not customers.",
+      "link": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    },
+    {
+      "id": "takeover_due_diligence",
+      "title": "Buying a shop: prove the sales and find the liens",
+      "kind": "money",
+      "path": "takeover",
+      "order": 21,
+      "text": "Match 24 months of register reports to bank deposits and to the sales tax returns the seller filed. \"We do more in cash than the books show\" is unprovable and not worth paying for. Check that the espresso machine is owned, not leased or pledged to a lender.",
+      "link": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/"
+    },
+    {
+      "id": "takeover_lease_assignment",
+      "title": "Buying a shop: get the landlord's consent in writing",
+      "kind": "space",
+      "path": "takeover",
+      "order": 22,
+      "text": "The lease decides whether the deal exists. Most leases need the landlord's consent to an assignment; some let the landlord take the space back instead. Expect a new deposit and your own guaranty. Check the years left: a shop that loses its lease rarely survives a move.",
+      "link": "https://itkowitz.com/?p=505"
+    },
+    {
+      "id": "takeover_bulk_sale_notice",
+      "title": "Buying a shop: notify the Tax Department 10 days before you pay",
+      "kind": "legal",
+      "path": "takeover",
+      "order": 23,
+      "text": "File Form AU-196.10 at least 10 days before paying or taking possession. The state answers within 5 business days: a release, or a claim that freezes the money in escrow for up to 90 days. Skip it and the seller's unpaid sales tax is yours, up to the price.",
+      "agency": "NYS Department of Taxation and Finance",
+      "link": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    },
+    {
+      "id": "takeover_new_permits",
+      "title": "Buying a shop: apply for every permit in your own name",
+      "kind": "permit",
+      "path": "takeover",
+      "order": 24,
+      "text": "The Health permit is void the moment the business changes hands. Apply at least 22 days before closing so you can trade from day one, and register for sales tax 20 days ahead. New insurance, a new Con Edison account. The seller's unemployment-insurance rate follows you.",
+      "setupItemId": "fse_permit",
+      "fee": 280,
+      "waitDays": 22,
+      "agency": "NYC DOHMH; NYS Tax Department; NYS Department of Labor",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    },
+    {
+      "id": "takeover_closing_transition",
+      "title": "Buying a shop: close, pay the tax on the equipment, keep the regulars",
+      "kind": "launch",
+      "path": "takeover",
+      "order": 25,
+      "text": "At closing you owe 8.875% sales tax on the furniture and equipment part of the price. Keep the staff the regulars know, keep the recipes for a month, and write a training period and a non-compete for the seller into the contract.",
+      "setupItemId": "acquisition_sales_tax_ffe",
+      "link": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    },
+    {
+      "id": "franchise_read_fdd",
+      "title": "Franchise: read the disclosure document and call franchisees",
+      "kind": "legal",
+      "path": "franchise",
+      "order": 26,
+      "text": "A franchisor must give you its disclosure document at least 14 calendar days before you sign or pay, and must be registered with the New York Attorney General. Item 7 shows the full investment, Item 6 the royalties, Item 20 how many units closed. Call owners on the list.",
+      "setupItemId": "franchise_initial_fee",
+      "fee": 35000,
+      "agency": "Federal Trade Commission; NYS Attorney General",
+      "link": "https://www.ftc.gov/business-guidance/resources/consumers-guide-buying-franchise"
+    },
+    {
+      "id": "franchise_site_and_training",
+      "title": "Franchise: site approval, mandated build-out, training",
+      "kind": "space",
+      "path": "franchise",
+      "order": 27,
+      "text": "The franchisor approves the address and dictates the design, equipment and suppliers, so the build-out is not yours to trim. Dunkin' asks for $250,000 in liquid assets and $500,000 net worth per shop. Royalty and advertising then take 8.5-11% of every sale.",
+      "setupItemId": "franchise_training_fee",
+      "link": "https://inspirebrands.com/wp-content/uploads/2025/03/2023-Dunkin-Brochure-FINAL-Digital.pdf"
+    },
+    {
+      "id": "cart_license_and_course",
+      "title": "Cart: take the vendor course and get your license",
+      "kind": "permit",
+      "path": "cart",
+      "order": 28,
+      "text": "Every person who sells from a cart needs a Mobile Food Vending License: $53 for the food protection course for mobile vendors and $50 for the two-year license. Without it you cannot even join the waiting list for a cart permit.",
+      "setupItemId": "mobile_food_vending_license",
+      "fee": 50,
+      "waitDays": 30,
+      "agency": "NYC DOHMH",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license"
+    },
+    {
+      "id": "cart_supervisory_waitlist",
+      "title": "Cart: get on the waiting list for a supervisory license",
+      "kind": "permit",
+      "path": "cart",
+      "order": 29,
+      "text": "New year-round cart permits go only to holders of a supervisory license, handed out from a waiting list. The city adds 2,200 a year from July 2026 through 2031; advocates count more than 20,000 people waiting. A restricted-area permit for private property or a park is outside that waiting list.",
+      "setupItemId": "mobile_food_unit_permit",
+      "fee": 75,
+      "waitDays": 180,
+      "agency": "NYC DOHMH",
+      "link": "https://portal.311.nyc.gov/article/?kanumber=KA-03354"
+    },
+    {
+      "id": "cart_commissary_and_inspection",
+      "title": "Cart: sign with a commissary and pass the cart inspection",
+      "kind": "permit",
+      "path": "cart",
+      "order": 30,
+      "text": "The cart must sleep in a Health Department-permitted commissary and return there daily for cleaning and supplies; you show the commissary agreement at the pre-permit inspection, in person, within six months of applying. Brewed coffee is the simplest cart class.",
+      "setupItemId": "coffee_cart_unit",
+      "agency": "NYC DOHMH",
+      "link": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page"
+    },
+    {
+      "id": "popup_temporary_permit",
+      "title": "Pop-up or market stand: get the temporary permit",
+      "kind": "permit",
+      "path": "popup",
+      "order": 31,
+      "text": "A Temporary Food Service Establishment permit costs $70 a year and covers events of 14 days or less, one event at a time. The organizer must give the Health Department the vendor list 30 days ahead. No permit: the stand is closed on the spot and fined $200-$2,000.",
+      "setupItemId": "tfse_permit",
+      "fee": 70,
+      "waitDays": 30,
+      "agency": "NYC DOHMH",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishment-permit"
+    },
+    {
+      "id": "popup_shared_space",
+      "title": "Corner in someone else's shop: work under the host's permit",
+      "kind": "space",
+      "path": "popup",
+      "order": 32,
+      "text": "A coffee counter inside a permitted restaurant or shop operates under the host's permit and the host's supervision, so the host carries the inspection risk and can end the arrangement. Put the rent, the hours and who owns the customers in writing.",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about"
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "rent_before_revenue",
+      "title": "Rent starts before sales do",
+      "text": "NYC restaurant leases usually give 3-6 months of free rent. Renovating a former restaurant takes 3-5 months, an empty shell 6-9, and brokers count 8-12 months from signing to opening. Every month past the free period is rent with no income.",
+      "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/"
+    },
+    {
+      "id": "good_guy_guaranty",
+      "title": "Good guy guaranty",
+      "text": "New York's good guy guaranty ends your personal liability on the day you hand back the keys, if you gave written notice (usually 3-6 months), paid rent to that day and left the space broom-clean. Miss the notice and you can owe the rest of the lease.",
+      "source": "https://www.commercialcafe.com/blog/good-guy-guarantee-nyc-real-estate/"
+    },
+    {
+      "id": "security_deposit_range",
+      "title": "How big the deposit gets",
+      "text": "There is no legal cap on a commercial deposit. Brokers see 3-6 months of rent for tenants with credit and 6-12 months for startups and restaurants, often as a bank letter of credit that takes 2-3 weeks to issue and costs about 1-2% a year.",
+      "source": "https://www.metro-manhattan.com/security-deposit/"
+    },
+    {
+      "id": "rent_escalation",
+      "title": "Rent goes up every year",
+      "text": "Most NYC retail leases raise base rent by a fixed percentage each year, typically about 3%, compounding: $100 per square foot in year one is about $130 in year ten. Ask whether the increase is simple or compound before you sign.",
+      "source": "https://www.metro-manhattan.com/blog/rentescalations"
+    },
+    {
+      "id": "real_estate_tax_passthrough",
+      "title": "You pay the landlord's tax increases",
+      "text": "Most NYC store leases make the tenant pay a share of any rise in the building's property tax above a base year. If the base year is low, a reassessment lands on you: brokers see $10-$20 per square foot a year added in older buildings.",
+      "source": "https://www.carltonfields.com/leasing-retail-stores-in-new-york-city/"
+    },
+    {
+      "id": "holdover_rent",
+      "title": "Staying past the lease",
+      "text": "If you stay after the lease ends without a renewal, the holdover clause applies: typically 150% to 200% of the last rent, and New York courts enforce it. A commercial tenant has no legal right to renew.",
+      "source": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers"
+    },
+    {
+      "id": "assignor_liability",
+      "title": "Selling does not free you from the lease",
+      "text": "When you sell and assign your lease, you stay liable for the rent unless the landlord releases you in writing, even if the landlord consented and takes rent from the buyer. Selling a majority of your LLC can count as an assignment too.",
+      "source": "https://itkowitz.com/?p=505"
+    },
+    {
+      "id": "broker_commission",
+      "title": "Who pays the broker",
+      "text": "In New York City retail leasing the landlord normally pays one full brokerage commission, split between its broker and yours, so a tenant's broker costs you nothing directly. It is priced into the rent.",
+      "source": "https://nyrej.com/let-s-talk-money-what-s-the-commission"
+    },
+    {
+      "id": "lease_assistance_free",
+      "title": "Free lease lawyer",
+      "text": "The city's Commercial Lease Assistance Program reviews and negotiates leases for eligible small businesses at no charge and calls back within 3 business days. It served 812 businesses in the year to June 2025. It will not represent you in court.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/business-services/legal-assistance/commercial-lease-assistance-program"
+    },
+    {
+      "id": "storefront_vacancy",
+      "title": "Empty storefronts are leverage",
+      "text": "About 11% of New York City storefronts were vacant in April 2026: 12.9% in Manhattan, 12.3% in Brooklyn, 9.5% in Queens, and 21% in the Financial District. A landlord with a store empty for a year will trade free rent for a signed lease.",
+      "source": "https://comptroller.nyc.gov/reports/whos-minding-the-storefronts/"
+    },
+    {
+      "id": "work_without_permit",
+      "title": "Building without a permit",
+      "text": "Construction without a Buildings permit costs 21 times the permit fee, at least $6,000 and up to $15,000 for a store, plus a Stop Work Order, and you still have to file the plans. Most cases start with a neighbor's 311 call.",
+      "source": "https://www.nyc.gov/assets/buildings/pdf/ll156_sn.pdf"
+    },
+    {
+      "id": "stop_work_order_violation",
+      "title": "Stop Work Order",
+      "text": "Working against a Stop Work Order costs $6,000 the first time and $12,000 each time after. The Department of Buildings does not lift the order until the penalties are paid, and rent keeps running on the idle site.",
+      "source": "https://www.nyc.gov/site/buildings/safety/swo.page"
+    },
+    {
+      "id": "unlicensed_trade_work",
+      "title": "Licensed plumber, licensed electrician",
+      "text": "In New York City only a licensed master plumber may do plumbing and only a licensed electrician may wire. Unlicensed work is a misdemeanor with civil penalties from $2,500, cannot pass inspection, and gets torn out and redone.",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/do-i-need-a-permit.page"
+    },
+    {
+      "id": "permit_free_work",
+      "title": "What needs no permit",
+      "text": "Painting, plastering, new cabinets, resurfacing floors and swapping a plumbing fixture need no Buildings permit. Moving a wall, a drain or a gas line does, with plans filed by a registered architect or engineer.",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/do-i-need-a-permit.page"
+    },
+    {
+      "id": "dob_plan_review_time",
+      "title": "How long a Buildings permit takes",
+      "text": "In 2025 the Department of Buildings finished a first plan review in 3.7 business days on average and took 20.3 days from application to approval; early in fiscal 2026 that rose to 23.6 days. Objections from the examiner restart the clock.",
+      "source": "https://www.osc.ny.gov/press/releases/2026/07/dinapoli-nyc-department-buildings-meets-critical-goals-lags-lower-priority-issues"
+    },
+    {
+      "id": "asbestos_acp5",
+      "title": "Asbestos report before any permit",
+      "text": "For work in a building put up before April 1, 1987, the Buildings permit is not issued until a certified asbestos investigator files an ACP-5 report. Only buildings newer than that can claim the exemption.",
+      "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page"
+    },
+    {
+      "id": "landmark_storefront",
+      "title": "Storefronts in historic districts",
+      "text": "In a historic district every exterior change to a storefront needs a Landmarks permit first. Staff approve complete applications in 10-15 business days, and 95% of approvals never go to a hearing. The fee is $95 for the first $25,000 of work.",
+      "source": "https://www.nyc.gov/site/lpc/applications/fees.page"
+    },
+    {
+      "id": "gas_delay",
+      "title": "Waiting for gas",
+      "text": "A State Senate survey of city restaurants found an average wait of 68 days for gas service; 69% waited at least 30 days and some up to a year. The utility connects only after the Buildings Department passes the piping.",
+      "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf"
+    },
+    {
+      "id": "capital_improvement_st124",
+      "title": "Sales tax on your build-out",
+      "text": "New York presumes work done for a tenant is temporary and taxable at 8.875%. If the lease makes the improvements the landlord's property, give the contractor a Certificate of Capital Improvement (Form ST-124) and the labor is tax-free.",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm"
+    },
+    {
+      "id": "scaffold_law_tenant",
+      "title": "A worker falls on your job",
+      "text": "New York Labor Law §240 makes owners absolutely liable when a construction worker falls. Courts treat the tenant who hired the contractor as an owner. Before work starts, get insurance certificates that name you and the landlord.",
+      "source": "https://www.law.cornell.edu/nyctap/I08_0054.htm"
+    },
+    {
+      "id": "mechanics_lien",
+      "title": "Your contractor's unpaid bills",
+      "text": "A subcontractor your contractor did not pay can file a mechanic's lien on the property for up to 8 months after its last work. Most leases make that your default. Clearing it takes a bond of 110% of the claim. Collect lien waivers with every payment.",
+      "source": "https://www.levelset.com/mechanics-lien/new-york-lien-law-faqs"
+    },
+    {
+      "id": "con_ed_deposit",
+      "title": "Utility deposit",
+      "text": "Con Edison may ask a new business for a security deposit of up to two times its average monthly bill, estimated from a similar business. You have the right to ask for the amount to be reviewed.",
+      "source": "https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf"
+    },
+    {
+      "id": "nyc_best",
+      "title": "A free city project manager",
+      "text": "Executive Order 18 of July 2026 tells Small Business Services to give each client of the NYC Business Express Service Team a project manager who identifies permits, helps apply and coordinates pre-opening inspections. The service is free.",
+      "source": "https://www.nyc.gov/mayors-office/news/2026/07/executive-order-no--18.html"
+    },
+    {
+      "id": "consultative_inspection",
+      "title": "Practice inspection for $100",
+      "text": "A new restaurant that has begun serving food can buy one consultative inspection for $100 before its first graded visit. The inspector scores nothing and fines nothing, but a public health hazard must be fixed before they leave.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02955"
+    },
+    {
+      "id": "permit_not_transferable",
+      "title": "Permits do not come with the shop",
+      "text": "Under NYC Health Code §5.11 a food permit is void the moment it is transferred to anyone not named on it. A buyer applies for a new one and may open on the 22nd day after applying. Liquor and sidewalk-cafe licenses do not transfer either.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-44016"
+    },
+    {
+      "id": "bulk_sale_not_notified",
+      "title": "Bulk sale notice",
+      "text": "A buyer of business assets must file Form AU-196.10 with the Tax Department at least 10 days before paying or taking possession. Miss it and you personally owe the seller's unpaid sales tax, up to the purchase price or the assets' value.",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    },
+    {
+      "id": "bulk_sale_tax_on_equipment",
+      "title": "Sales tax on a bought business",
+      "text": "When you buy a shop you pay 8.875% sales tax on the furniture, fixtures and equipment part of the price, though not on inventory for resale, goodwill or the lease. How the contract splits the price decides the bill.",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    },
+    {
+      "id": "business_price_multiples",
+      "title": "What a coffee shop sells for",
+      "text": "US coffee shops and cafes sold between 2021 and 2025 went for a median 0.41 times yearly revenue and 2.0 times the owner's yearly earnings; the middle half fell between 1.5 and 2.55 times earnings. The median sale price in 2025 was $176,500.",
+      "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    },
+    {
+      "id": "key_money",
+      "title": "Key money",
+      "text": "Key money buys a lease and whatever is bolted to the room, not a customer base. It is worth paying only when the inherited rent is below market and enough years remain. New York listings range from $30,000 for a small cafe to $225,000 for a Village storefront.",
+      "source": "https://commercialobserver.com/2013/08/weighing-in-on-key-money-deals/"
+    },
+    {
+      "id": "ui_rate_transfers",
+      "title": "You inherit the seller's unemployment record",
+      "text": "When you buy all or part of a business in New York, the seller's unemployment-insurance experience account transfers to you and your rate is recalculated from the transfer date. Not reporting the purchase does not prevent it.",
+      "source": "https://dol.ny.gov/transfers-business-and-your-contribution-rate"
+    },
+    {
+      "id": "sba_equity_injection",
+      "title": "Borrowing to buy a business",
+      "text": "An SBA 7(a) loan to start or buy a business requires at least 10% of the project cost from the buyer. A seller note can cover at most half of that, and only if the seller takes no payments for the whole loan term.",
+      "source": "https://www.whitefordlaw.com/news-events/client-alert-sba-issues-sop-50-10-8-key-changes-impacting-sba-7a-lending"
+    },
+    {
+      "id": "franchise_disclosure",
+      "title": "The 14-day rule for franchises",
+      "text": "Federal rules require a franchisor to hand over its disclosure document at least 14 calendar days before you sign or pay anything. In New York the offering must also be registered with the Attorney General before it is sold.",
+      "source": "https://www.ftc.gov/business-guidance/resources/consumers-guide-buying-franchise"
+    },
+    {
+      "id": "franchise_costs",
+      "title": "What a coffee franchise takes",
+      "text": "Gregorys Coffee charges a $35,000 fee, a 6% royalty and 2.5% for marketing on a $459,000-$946,000 investment. Dunkin' takes 5.9% plus 5% for advertising and expects $250,000 in liquid assets and $500,000 net worth per shop.",
+      "source": "https://franchise.gregoryscoffee.com/"
+    },
+    {
+      "id": "unlicensed_mobile_vending",
+      "title": "Vending without a license",
+      "text": "Selling food from a cart with no license or no permit decal starts at $1,000 per summons in New York City, and a cart with no licensed vendor at it can be seized and forfeited.",
+      "source": "https://nyc.gov/VendorEnforcement"
+    },
+    {
+      "id": "cart_permit_cap",
+      "title": "Cart permits are capped",
+      "text": "New year-round food cart permits go only to holders of a supervisory license from a waiting list. Local Laws 54 and 59 of 2026 add 2,200 a year from July 2026 through 2031. The first issue is free; renewal is $438 every two years.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03354"
+    },
+    {
+      "id": "cart_commissary",
+      "title": "A cart needs a commissary",
+      "text": "Every food cart must be stored at a Health Department-permitted commissary and return there at least once a day for cleaning and supplies. No commissary agreement, no permit. Guides quote $300-$1,200 a month.",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page"
+    },
+    {
+      "id": "no_temporary_food_permit",
+      "title": "Pop-ups need a permit too",
+      "text": "A stand at a street fair or market needs a $70 Temporary Food Service Establishment permit, good for events of 14 days or less, one event at a time. Without it the stand is closed on the spot and fined $200 to $2,000.",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/temporary-food-service-establishments.page"
+    },
+    {
+      "id": "parks_concession_fee",
+      "title": "A kiosk in a park",
+      "text": "A park kiosk or cart is a city concession won through a public request for proposals. The operator pays the higher of a guaranteed minimum yearly fee or a share of gross receipts: one 2024 agreement set $40,000 against 4% in year one.",
+      "source": "https://a856-cityrecord.nyc.gov/RequestDetail/20240628149"
     }
   ],
   "extra": {}
