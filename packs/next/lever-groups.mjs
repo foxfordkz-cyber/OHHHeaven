@@ -147,10 +147,12 @@ export const LEVER_GROUPS = [
   },
 ];
 
-// Срезанные углы: тема — по тому, кто находит нарушение (official у violation). Сначала видны шесть, что были в пакете v1.
+// Срезанные углы: тема — по тому, кто находит нарушение (official у violation); id темы совпадает с темой рычагов,
+// чтобы на экране рядом стояли рычаг и угол на ту же статью. У «building» своей темы рычагов нет: это шаги до открытия.
+// Сначала видны шесть углов, что были в пакете v1.
 export const SHORTCUT_GROUPS = [
   {
-    id: 'food', label: 'Food safety', officials: ['health_inspector', 'ag_markets_inspector'],
+    id: 'upkeep', label: 'Food safety', officials: ['health_inspector', 'ag_markets_inspector'],
     show: {
       skip_food_protection_cert: 'first',
       keep_old_food: 'first',
@@ -164,7 +166,7 @@ export const SHORTCUT_GROUPS = [
     },
   },
   {
-    id: 'pay', label: 'Staff and pay',
+    id: 'team', label: 'Staff and pay',
     officials: ['labor_investigator', 'wage_hour_investigator', 'nlrb_agent', 'benefits_coverage_investigator', 'wcb_investigator', 'irs_tip_examiner'],
     show: {
       keep_tips: 'first',
@@ -203,7 +205,7 @@ export const SHORTCUT_GROUPS = [
     },
   },
   {
-    id: 'tax', label: 'Taxes', officials: ['tax_auditor', 'irs_revenue_officer'],
+    id: 'money', label: 'Taxes', officials: ['tax_auditor', 'irs_revenue_officer'],
     show: {
       skip_bulk_sale_notice: { entry: 'takeover' },
       spend_payroll_withholding: { lowCash: true },
@@ -211,7 +213,7 @@ export const SHORTCUT_GROUPS = [
     },
   },
   {
-    id: 'customers', label: 'Customers and prices', officials: ['dcwp_inspector', 'civil_court'],
+    id: 'sales', label: 'Customers and prices', officials: ['dcwp_inspector', 'civil_court'],
     show: {
       ac_with_open_door: { months: [6, 7, 8, 9] },
       hidden_card_fee: { afterDays: 30 },
