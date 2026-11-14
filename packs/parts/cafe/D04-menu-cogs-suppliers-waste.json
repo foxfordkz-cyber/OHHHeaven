@@ -1477,7 +1477,1688 @@
     },
     "taxableShare": 0.965,
     "taxableShareNote": "Correction, estimate. With the menu mix of extra.menuMix, 96.5% of sales are taxable: bags of beans and bottled water sold to go are not. The pack treats every order as taxable (1.0). The difference is $160 of sales tax a month on $51,000 of sales that the shop should not collect.",
-    "leverNotes": "A negative monthlyCost is a saving. Options carry extra keys the engine does not read yet: requiresSetup (ids of setup items the option needs), locksIngredient and lockMonths (the option freezes an ingredient price), shieldsFrom (tag of events the option cancels). Effects on demand, quality, reputation and capacity are design values."
+    "leverNotes": "A negative monthlyCost is a saving. Options carry extra keys the engine does not read yet: requiresSetup (ids of setup items the option needs), locksIngredient and lockMonths (the option freezes an ingredient price), shieldsFrom (tag of events the option cancels). Effects on demand, quality, reputation and capacity are design values.",
+    "eventCatalog": [
+      {
+        "id": "coffee_c_rally",
+        "name": "Coffee exchange up 40% in half a year",
+        "text": "Arabica futures have climbed for months. Your roaster warns that the next price list will be about 20% higher and will stay there until the market comes back.",
+        "scale": "world",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "ICE Coffee C front-month futures 25% or more above their level six months earlier; the roaster's list follows one to two quarters later",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.079,
+            "ingredient": "coffee_all",
+            "ingredientMult": 1.2
+          }
+        ],
+        "durationMonths": 9,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bean_contract"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "price"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cheap_swap_premium_label"
+          }
+        ],
+        "realFrequency": "The 1977 record ($3.39 per lb) stood for 47 years and was then broken three times in eleven months: $3.4835 on December 10, 2024, $4.2995 in February 2025, and higher again in October 2025 (Barchart, Bloomberg).",
+        "tier": "core",
+        "source": "https://www.barchart.com/story/news/30692797/is-coffee-moving-to-even-higher-highs",
+        "confidence": "estimate",
+        "note": "A 20% list rise on coffee and retail bags, which are 39.7% of cost of goods: +7.9%. Roasters were advised in 2025 to raise prices $2-$4 per lb to cover green coffee (Daily Coffee News): 12%-25% of a $16 lb. One roaster's rule: $1 per lb is 5 cents a cup."
+      },
+      {
+        "id": "coffee_c_slump",
+        "name": "Coffee exchange down 30% in a year",
+        "text": "A record Brazil crop pulls futures down. Roasters cut their lists slowly and only for customers who ask. Shops locked into last year's price keep paying it.",
+        "scale": "world",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "ICE Coffee C front-month futures 25% or more below their level a year earlier (early November 2025: about $3.93 per lb; November 6, 2026: about $2.80)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 0.968,
+            "ingredient": "coffee_all",
+            "ingredientMult": 0.92
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bean_contract"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "2026: futures fell 20% in three weeks in January-February and stood 29% below the year-earlier level in November, while the supermarket price of ground coffee was still 1-2% higher than a year before ($9.249 against $9.139).",
+        "tier": "core",
+        "source": "https://tradingeconomics.com/commodity/coffee/news/599144",
+        "confidence": "estimate",
+        "note": "($2.80 - $3.93) / $3.93 = -29% on the exchange. Shelf and wholesale prices lag and fall less: I take -8% on the list for a shop that asks or switches roaster, nothing for a shop under a fixed contract. -8% x 39.7% = -3.2% of cost of goods."
+      },
+      {
+        "id": "coffee_import_tariff",
+        "name": "Tariff on Brazilian coffee",
+        "text": "Washington puts a duty on goods from the world's largest coffee grower. Importers pass it on within weeks; nobody knows how long it lasts.",
+        "scale": "country",
+        "months": [
+          8,
+          9,
+          10,
+          11
+        ],
+        "realSignal": "An executive order or Federal Register notice putting a duty on green coffee from a major origin; the reverse signal is an exemption notice or a court ruling",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.04,
+            "ingredient": "coffee_all",
+            "ingredientMult": 1.1
+          }
+        ],
+        "durationMonths": 4,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bean_contract"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "Once so far: 50% on many Brazilian goods from August 6, 2025; most green coffee exempted on November 13, 2025; the Supreme Court struck down the emergency tariffs on February 20, 2026; the 25% Section 301 tariff on Brazil of July 22, 2026 exempts coffee.",
+        "tier": "deep",
+        "source": "https://www.cafeimports.com/north-america/blog/?p=60459",
+        "confidence": "estimate",
+        "note": "Dates read through search summaries of importers' notices and press, not from the Federal Register itself. Brazil is the base of most espresso blends, and roasters absorbed part of the duty: I take +10% on the list for the four months the duty lasted. 10% x 39.7% = +4%."
+      },
+      {
+        "id": "roaster_new_price_list",
+        "name": "Your roaster's yearly price list",
+        "text": "A letter arrives: new wholesale prices in 30 days. Freight, wages and green coffee are all in it.",
+        "scale": "point",
+        "months": [
+          1,
+          4
+        ],
+        "realSignal": "The roaster's written notice of a new price list, usually effective January 1 or April 1",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.024,
+            "ingredient": "coffee_all",
+            "ingredientMult": 1.06
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bean_contract"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "Yearly at most roasters; in 2025 some re-priced twice. A letter seen by Modern Retail in early 2025: 'we can no longer hold prices', increase effective April 1. Nine of 13 roasters surveyed lost no accounts over it.",
+        "tier": "core",
+        "source": "https://www.modernretail.co/operations/from-starbucks-to-indie-brands-soaring-bean-prices-are-squeezing-the-coffee-industry/",
+        "confidence": "estimate",
+        "note": "6% is my figure for an ordinary year: $1 on a $16 lb. 6% x 39.7% = +2.4%. The move is to ask for the letter early, sign a lock before it takes effect, or take the blend one tier down."
+      },
+      {
+        "id": "milk_class_i_jump",
+        "name": "Federal milk price jumps",
+        "text": "The government announces next month's fluid milk price around the 20th. This time it is up more than a dollar per hundred pounds; your dairy's list follows on the 1st.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "USDA Announcement of Advanced Prices: base Class I price up $1.00 per cwt or more from the month before (November 2026: $20.27, up $1.39 from October)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.007,
+            "ingredient": "dairy_milk",
+            "ingredientMult": 1.07
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "lever",
+            "id": "condiment_milk"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "Announced every month. In 2026 the base price moved from $21.33 in July to $18.88 in October and back to $20.27 in November.",
+        "tier": "core",
+        "source": "https://www.agproud.com/articles/64305-november-class-i-base-price-up-to-2027-per-cwt",
+        "confidence": "estimate",
+        "note": "$1.39 on $18.88 is +7.4% at the farm-to-plant level, about 12 cents a gallon; on a $5.28 delivered gallon that is +2.3%, but dairies round up, so I pass 7% through for two months. 7% x 9.9% = +0.7%: a shop that panics over milk is watching the wrong bill."
+      },
+      {
+        "id": "oat_milk_price_rise",
+        "name": "Oat milk maker raises prices",
+        "text": "The biggest oat milk brand announces higher US prices from next year to cover freight. Unopened cartons keep for months.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3
+        ],
+        "realSignal": "A manufacturer's announced list-price increase (Oatly, November 2, 2026: US prices up in 2027 to offset diesel costs)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.004,
+            "ingredient": "oat_milk",
+            "ingredientMult": 1.08
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          },
+          {
+            "kind": "lever",
+            "id": "alt_milk_pricing"
+          },
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cheap_swap_premium_label"
+          }
+        ],
+        "realFrequency": "Oatly raised US prices by double digits in 2022 and announced another increase for 2027.",
+        "tier": "deep",
+        "source": "https://www.beveragedaily.com/Article/2026/11/02/oatly-to-raise-us-prices-in-2027-weighs-europe-hikes/",
+        "confidence": "estimate",
+        "note": "The size of the 2027 increase was not published; 8% is my placeholder. 8% x 5.2% = +0.4%. Buying six weeks ahead before the date is the legal move; pouring a cheaper carton into drinks sold as the named brand is the shortcut."
+      },
+      {
+        "id": "egg_price_spike",
+        "name": "Bird flu sends eggs to a record",
+        "text": "Egg prices double in a few months. Bakeries pass it on, and anything with an egg in it costs more to make.",
+        "scale": "country",
+        "months": [
+          12,
+          1,
+          2,
+          3,
+          4
+        ],
+        "realSignal": "BLS average price of Grade A large eggs above $4.50 a dozen (record $6.227 in March 2025; $2.32 in October 2026)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.015,
+            "ingredient": "bakery",
+            "ingredientMult": 1.05
+          }
+        ],
+        "durationMonths": 4,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "pastry_program"
+          },
+          {
+            "kind": "lever",
+            "id": "ordering_par"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "The record is March 2025, in the winter of bird flu; by June 2026 the price was down by two thirds.",
+        "tier": "deep",
+        "source": "https://fred.stlouisfed.org/series/APU0000708111",
+        "confidence": "estimate",
+        "note": "Eggs are a small part of a croissant and a large part of a muffin or an egg sandwich; I take +5% on the bakery bill. 5% x 29.6% = +1.5%. For a shop selling egg sandwiches the two eggs alone go from 39 cents to $1.04."
+      },
+      {
+        "id": "butter_price_spike",
+        "name": "Butter at a record",
+        "text": "Butter is a quarter of a croissant by weight. Your bakery adds 15 cents a piece.",
+        "scale": "country",
+        "months": [
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "CME spot Grade AA butter above $3.00 per lb (2024 annual average, a record: $2.88; 2025 average $2.22; July 21, 2026: $1.575)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.018,
+            "ingredient": "bakery",
+            "ingredientMult": 1.06
+          }
+        ],
+        "durationMonths": 4,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "pastry_program"
+          },
+          {
+            "kind": "lever",
+            "id": "ordering_par"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "The record year was 2024 (annual average $2.88 per lb); 2025 averaged $2.22.",
+        "tier": "deep",
+        "source": "https://www.barchart.com/futures/quotes/BDX26/overview",
+        "confidence": "estimate",
+        "note": "15 cents on a $2.10 croissant is +7%; across the whole bakery order I take +6%. 6% x 29.6% = +1.8%. In November 2026 butter is 45% below the 2024 average: this event runs in reverse this year."
+      },
+      {
+        "id": "cocoa_record",
+        "name": "Cocoa at a record",
+        "text": "Chocolate sauce goes up 30%. It is in two drinks on your menu.",
+        "scale": "world",
+        "months": [
+          11,
+          12,
+          1,
+          2
+        ],
+        "realSignal": "ICE New York cocoa futures above $8,000 a tonne (record $12,931 on December 18, 2024; about $5,100-$5,400 in early November 2026)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.003,
+            "ingredient": "chocolate_sauce",
+            "ingredientMult": 1.3
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "Before 2024 the record was $5,104, set in 1977.",
+        "tier": "exotic",
+        "source": "https://www.barchart.com/story/news/30649477/is-the-rally-in-cocoa-running-out-of-upside-steam",
+        "confidence": "estimate",
+        "note": "Mocha (3 of 100 orders, 1 fl oz) and hot chocolate (2 of 100, 1.5 fl oz) use $1.85 of sauce per 100 orders: 0.9% of cost of goods. 30% x 0.9% = +0.3%. The headline is loud and the bill is small: worth a 25-cent rise on two drinks, not a new supplier."
+      },
+      {
+        "id": "matcha_shortage",
+        "name": "Matcha shortage",
+        "text": "Japan cannot grow enough. Your importer doubles the price, caps each order and quotes months of waiting.",
+        "scale": "world",
+        "months": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Kyoto spring tencha auction average 1.5 times the year before or more (8,235 yen per kg in May 2025, a 170% rise; 13,972 yen on May 13, 2026), followed by importers' purchase limits",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.016,
+            "ingredient": "matcha",
+            "ingredientMult": 1.7
+          },
+          {
+            "field": "demand",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "price"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cheap_swap_premium_label"
+          }
+        ],
+        "realFrequency": "Two record auctions in a row, 2025 and 2026. US importers re-priced in June 2025 and March 2026; a San Francisco cafe raised its matcha latte 50 cents after its cost more than doubled (AP, September 2025).",
+        "tier": "core",
+        "source": "https://gjtea.org/japanese-tea-report-may-2026/",
+        "confidence": "estimate",
+        "note": "Auction +70% in 2026; I pass all of it to the powder. 70% x 2.3% = +1.6%. The 1% demand loss stands for days with no matcha at all. The shortcut is selling culinary grade ($76 per lb) under a ceremonial name ($140 per lb)."
+      },
+      {
+        "id": "cup_tariff",
+        "name": "Tariffs reach your cups",
+        "text": "Most paper cups and plastic lids are made in China. A new duty shows up in the case price within weeks.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "A USTR or Federal Register tariff action covering paper cups (HTS 4819.50) or plastic lids from China",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.01,
+            "ingredient": "packaging",
+            "ingredientMult": 1.15
+          },
+          {
+            "field": "supplies",
+            "mult": 1.15
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cup_program"
+          },
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          },
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "shortcut",
+            "id": "foam_cups"
+          }
+        ],
+        "realFrequency": "Rates on Chinese goods changed several times in 2025 (125% and 145% for a few weeks in April) and again in 2026; a cup importer lists 35% on Chinese paper cups in 2026 (25% Section 301 plus a 10% surcharge).",
+        "tier": "core",
+        "source": "https://www.uschamber.com/small-business/how-tariffs-impact-coffee-prices",
+        "confidence": "estimate",
+        "note": "The 35% is a vendor's figure, not checked against the tariff schedule. Importers absorb part and domestic cups rise in sympathy: I take +15% on packaging. 15% x 6.6% = +1% of cost of goods, or 2.5 cents an order."
+      },
+      {
+        "id": "cup_shortage",
+        "name": "Cup and lid shortage",
+        "text": "Your cup is out of stock everywhere. The substitute is dearer and your lids do not fit it.",
+        "scale": "country",
+        "months": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "realSignal": "Distributor backorder notices on hot cups and lids",
+        "tags": [
+          "shortage"
+        ],
+        "effects": [
+          {
+            "field": "supplies",
+            "mult": 1.25
+          },
+          {
+            "field": "capacity",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          },
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "lever",
+            "id": "cup_program"
+          },
+          {
+            "kind": "shortcut",
+            "id": "foam_cups"
+          }
+        ],
+        "realFrequency": "Once in the last decade at this scale: 2021, after a Texas freeze shut the plants that make cup coating, with Chinese supply and US paper mills short at the same time.",
+        "tier": "deep",
+        "source": "https://www.foxbusiness.com/lifestyle/shortage-disposable-coffee-cups",
+        "confidence": "estimate",
+        "note": "+25% for whatever cup can be found is my estimate; the 2% capacity loss is baristas fighting lids that do not seal. A shop with six weeks on the shelf sits it out."
+      },
+      {
+        "id": "diesel_surcharge",
+        "name": "Diesel above $5: fuel surcharges",
+        "text": "Every supplier adds a fuel line to the invoice: a few dollars per drop. You get 45 drops a month.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "US average retail diesel above $5.00 a gallon (AAA, November 5, 2026: $6.256; EIA forecast $5.55 for the fourth quarter of 2026 and $5.03 for 2027)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.015
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "November 2026: diesel costs $2.16 a gallon more than gasoline; a year earlier the gap was 63 cents.",
+        "tier": "core",
+        "source": "https://www.ttnews.com/articles/us-forecasts-2027-diesel",
+        "confidence": "estimate",
+        "note": "No published tariff of food distributors' fuel surcharges was found. My arithmetic: milk 26 drops, bakery 30, everything else 8 = about 64 drops a month, of which the bakery charges per order already; 45 drops x $4 = $180 on $12,060 of goods = +1.5%. Fewer, larger drops are the move, which is what a six-week shelf allows."
+      },
+      {
+        "id": "congestion_delivery_fee",
+        "name": "Congestion toll on your deliveries",
+        "text": "Trucks pay to enter Manhattan below 60th Street, and suppliers split the toll among the shops on the route.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The MTA's congestion toll schedule for trucks; applies only to addresses inside the zone",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.01,
+            "appliesIf": "address in the Manhattan congestion zone"
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          }
+        ],
+        "realFrequency": "In force since January 2025; the peak toll for cars is $9. Restaurants reported $1 to $10 added per delivery; one owner saw 90 cents to $1.",
+        "tier": "deep",
+        "source": "https://www.restaurantbusinessonline.com/financing/nyc-restaurants-brace-impact-congestion-pricing",
+        "confidence": "estimate",
+        "note": "45 drops x about $2.50 = $112 a month on $12,060 of goods = +0.9%, rounded to 1%. An owner who drives to the warehouse pays the $9 car toll on the way back in."
+      },
+      {
+        "id": "oat_milk_shortage",
+        "name": "Oat milk out of stock",
+        "text": "The distributor has none and cannot say when. One order in ten is an oat drink.",
+        "scale": "country",
+        "months": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "tags": [
+          "shortage"
+        ],
+        "realSignal": "Distributor out-of-stock notice on barista oat milk",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          },
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "lever",
+            "id": "alt_milk_pricing"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cheap_swap_premium_label"
+          }
+        ],
+        "realFrequency": "Spring 2021: Starbucks ran out a month after its national oat milk launch; the brand's new factory was delayed and it cut its sales forecast that November. 2022: 53 products of one co-packer, including a barista oat milk sold to foodservice, were recalled.",
+        "tier": "core",
+        "source": "https://www.bloomberg.com/news/articles/2021-03-25/oat-milk-shortages-reported-following-delay-in-new-oatly-plant",
+        "confidence": "estimate",
+        "note": "Of 10 oat orders in 100 I assume 7 accept another milk and 3 leave: -3% demand for the two months. Cartons are shelf-stable, so a shop with six weeks on hand covers most of it."
+      },
+      {
+        "id": "bakery_delivery_missed",
+        "name": "The pastry truck does not come",
+        "text": "A storm, a breakdown, a driver who quit: the case is empty at 7 am. Customers who came for a croissant buy only coffee, or go next door.",
+        "scale": "point",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "tags": [
+          "supplier_failure"
+        ],
+        "realSignal": "A National Weather Service winter storm warning or a city travel advisory for the delivery night; applies to shops with one bakery and no frozen stock",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.99
+          },
+          {
+            "field": "reputation",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "pastry_program"
+          },
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "lever",
+            "id": "ordering_par"
+          },
+          {
+            "kind": "shortcut",
+            "id": "keep_old_food"
+          }
+        ],
+        "realFrequency": "A handful of mornings a winter; one buyer who ordered next-day delivery and received nothing had to close for two days (supplier review).",
+        "tier": "core",
+        "source": "https://www.balthazarbakery.com/wholesale/faq",
+        "confidence": "estimate",
+        "note": "Three empty mornings in a month: bakery is 16% of sales, so 3/30 x 16% = 1.6% of sales, some of it recovered in drinks: -1%. Frozen bake-off stock or a second bakery cancels the event; yesterday's pastries in the case are the shortcut."
+      },
+      {
+        "id": "bakery_holiday_gap",
+        "name": "Bakeries close for the holiday",
+        "text": "Your wholesale bakery does not bake on the holiday and the day after. Order double the day before, bake your own, or run an empty case.",
+        "scale": "city",
+        "months": [
+          11,
+          12,
+          1,
+          4
+        ],
+        "realSignal": "The supplier's holiday schedule, sent two to three weeks ahead (Thanksgiving, Christmas, New Year; Passover week for a bakery that is kosher but not kosher for Passover)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "pastry_program"
+          },
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "lever",
+            "id": "ordering_par"
+          },
+          {
+            "kind": "shortcut",
+            "id": "keep_old_food"
+          }
+        ],
+        "realFrequency": "Every year on the same dates. A bakery owner who closes for Passover: 'we start reducing deliveries a few days ahead so nothing is left over'.",
+        "tier": "core",
+        "source": "https://jweekly.com/2012/04/06/passover-passover-shuts-restaurants-down-for-a-week/",
+        "confidence": "estimate",
+        "note": "Two to four mornings without fresh pastry, on days when half the neighborhood is home: -1% of the month. The Passover source describes a California bakery; that New York route bakeries do the same is trade knowledge, not checked."
+      },
+      {
+        "id": "supplier_minimum_raised",
+        "name": "Your distributor raises its minimum",
+        "text": "From next month the minimum order for your street is $350, up from $200. You fill the gap with things you do not need yet, or you leave.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Account notice from the distributor; minimums are set by distance from the warehouse ($200, $350 or $500 at one New York specialty distributor)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.01
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          }
+        ],
+        "realFrequency": "When fuel or tolls rise, or when a distributor redraws routes; in a shortage one distributor told customers it could fully serve only its top 31% of accounts.",
+        "tier": "deep",
+        "source": "https://help.baldorfood.com/hc/en-us/articles/360022183633-What-is-the-order-minimum-for-Foodservice-Retail-and-Wholesale-accounts-",
+        "confidence": "estimate",
+        "note": "Overbuying perishables to reach a minimum turns into waste: I take +1% of cost of goods. A cafe that buys only milk and a few dry goods from a broadliner is the first account to be squeezed."
+      },
+      {
+        "id": "supplier_credit_hold",
+        "name": "Cash on delivery only",
+        "text": "Two invoices went past 30 days. The supplier stops your terms: pay the driver, plus 1.5% a month on what you owe.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Follows the player's own state: supplier invoices unpaid for more than 30 days",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.015
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          }
+        ],
+        "realFrequency": "Standard wording of wholesale credit terms: net 30 after a few paid orders, 1.5% a month on late balances.",
+        "tier": "deep",
+        "source": "https://www.cafeimports.com/north-america/blog/?p=29619",
+        "confidence": "estimate",
+        "note": "Not chance: the engine raises this event for a shop whose cash went negative or which chose to delay suppliers. The 1.5% is the finance charge on a month of purchases; the real cost is that someone with cash must be at the door at 5 am."
+      },
+      {
+        "id": "product_recall",
+        "name": "A product on your shelf is recalled",
+        "text": "An email from the distributor lists brands and lot codes. Three cases in your back room match.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "An FDA recall notice or a distributor's recall email naming lots",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.01
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "inventory_control"
+          },
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "shortcut",
+            "id": "ignore_recall"
+          }
+        ],
+        "realFrequency": "2022: 53 drinks from one co-packer, including a barista oat milk sold to foodservice. 2025: fully baked frozen croissants sold in foodservice cases of 24, for undeclared wheat. March 2026: a cream cheese recall upgraded for listeria.",
+        "tier": "core",
+        "source": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/element-112-llc-dba-madelines-patisserie-issues-allergy-alert-undeclared-wheat-croissants-and",
+        "confidence": "estimate",
+        "note": "Three cases written off, usually credited later by the supplier: about $120-$150, 1% of a month's goods. A shop that counts weekly finds the lots in minutes; a shop that never counts cannot say what it sold."
+      },
+      {
+        "id": "port_strike",
+        "name": "Dockworkers strike on the East Coast",
+        "text": "Thirty-six ports stop. Green coffee, cups and syrups sit on ships. If it lasts weeks, importers ration.",
+        "scale": "country",
+        "months": [
+          10,
+          1
+        ],
+        "tags": [
+          "shortage"
+        ],
+        "realSignal": "The expiry date of the longshoremen's contract and the union's strike notice",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.012,
+            "ingredient": "coffee_all",
+            "ingredientMult": 1.03
+          },
+          {
+            "field": "cogs",
+            "mult": 1.007,
+            "ingredient": "packaging",
+            "ingredientMult": 1.1
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          },
+          {
+            "kind": "lever",
+            "id": "bean_contract"
+          }
+        ],
+        "realFrequency": "October 1-3, 2024: three days, the deal that ended it ran only to January 15, 2025. East Coast ports handle 30-40% of US food and drink imports.",
+        "tier": "exotic",
+        "source": "https://www.project44.com/supply-chain-insights/labor-resumes-at-striking-ports/",
+        "confidence": "estimate",
+        "note": "Three days changed nothing (EY: no visible effect on the economy). The event models the strike that did not happen: a month of closed ports, +3% on coffee and +10% on packaging for two months: 1.2% + 0.7% of cost of goods."
+      },
+      {
+        "id": "cream_cheese_shortage",
+        "name": "No cream cheese in New York",
+        "text": "Distributors ration cream cheese. Bagel shops drive to New Jersey for it.",
+        "scale": "city",
+        "months": [
+          12
+        ],
+        "tags": [
+          "shortage",
+          "supplier_failure"
+        ],
+        "realSignal": "Distributor allocation notices on cream cheese",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "December 2021: a cyberattack on the largest US cheese maker, short labor and short trucking at once.",
+        "tier": "exotic",
+        "source": "https://ny1.com/nyc/all-boroughs/news/2021/12/05/cream-cheese-shortage-hits-nyc-bagel-shops-amid-supply-chain-issues",
+        "confidence": "estimate",
+        "note": "Bagels with cream cheese are 6 of 100 orders; losing a third of them for a month is -1% of demand for a shop with one supplier."
+      },
+      {
+        "id": "waste_zone_goes_live",
+        "name": "Your commercial waste zone goes live",
+        "text": "From the deadline only three carters may serve your block. Sign with one, or be assigned one at the maximum rate.",
+        "scale": "city",
+        "months": [
+          10,
+          11,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "realSignal": "DSNY rollout schedule: Brooklyn North and Upper Manhattan sign-up October 1 - November 30, 2026; Brooklyn East and Manhattan Northeast January 1 - March 1, 2027; Manhattan West and Queens West April 1 - June 1, 2027; all zones by the end of 2027",
+        "effects": [
+          {
+            "field": "waste",
+            "mult": 1.28,
+            "appliesIf": "the player has not signed by the deadline"
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "waste_service"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_the_carter"
+          },
+          {
+            "kind": "shortcut",
+            "id": "trash_in_street_basket"
+          }
+        ],
+        "realFrequency": "Once per address. Zones already live: Queens Central, Bronx East and West, Queens Northeast, Brooklyn South, Lower Manhattan, Staten Island, Midtown South.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/dsny/businesses/cwz/rollout-schedule.page",
+        "confidence": "estimate",
+        "note": "Dates seen on DSNY pages through search; two of them are in proposed, not yet adopted, rules. $322 at the caps against the pack's $250 = x1.28 for a shop that lets the deadline pass (my arithmetic, see suppliers.waste_carter)."
+      },
+      {
+        "id": "packaging_enforcement_sweep",
+        "name": "Sanitation sweep on packaging rules",
+        "text": "Agents work the avenue shop by shop: foam, plastic stirrers, cutlery in takeout bags, recycling.",
+        "scale": "city",
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "realSignal": "The end of a warning period or an announced enforcement week (Skip the Stuff: warnings until June 30, 2024, fines from July 1, 2024)",
+        "effects": [
+          {
+            "field": "inspectionCampaign",
+            "mult": 1,
+            "violations": [
+              "foam_packaging",
+              "plastic_stirrers_straws",
+              "unrequested_takeout_extras",
+              "recycling_not_separated",
+              "trash_in_litter_basket"
+            ]
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeout_packing"
+          },
+          {
+            "kind": "lever",
+            "id": "cup_program"
+          },
+          {
+            "kind": "shortcut",
+            "id": "foam_cups"
+          },
+          {
+            "kind": "shortcut",
+            "id": "plastic_stirrers"
+          },
+          {
+            "kind": "shortcut",
+            "id": "one_bag_for_everything"
+          }
+        ],
+        "realFrequency": "Each new packaging law has had one: foam (warnings to June 30, 2019), straws (to October 31, 2022), Skip the Stuff (to June 30, 2024).",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
+        "confidence": "verified",
+        "note": "The three warning-period dates are from DSNY pages. No money effect by itself: every shop on the block is inspected that month, and each violation that exists is found. Announced a month ahead, so a player can stop a shortcut in time."
+      },
+      {
+        "id": "reusable_cup_bill",
+        "name": "Bring-your-own-cup bill in the City Council",
+        "text": "A bill would make every shop that sells drinks accept a customer's clean cup and post a sign saying so. Fines up to $400.",
+        "scale": "city",
+        "months": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "realSignal": "NYC Council Int. 781 of 2026 (introduced March 26, 2026): committee vote, passage, then the effective date in the text",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 0.998,
+            "ingredient": "packaging",
+            "ingredientMult": 0.97
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cup_program"
+          }
+        ],
+        "realFrequency": "Pending. A state bill with the same aim, S7408, passed the Senate on June 4, 2025 and not the Assembly.",
+        "tier": "exotic",
+        "source": "https://intro.nyc/0781-2026",
+        "confidence": "estimate",
+        "note": "If enacted and 3% of drinks go into customers' cups, packaging falls 3%: 0.2% of cost of goods. The real cost is a sign and a rule for baristas on cups that are dirty or the wrong size."
+      },
+      {
+        "id": "packaging_epr_bill",
+        "name": "State packaging bill comes back",
+        "text": "Albany's packaging reduction bill passed the Senate and died in the Assembly for the third time. Its sponsors will try again; cup makers would pay fees and pass them on.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "realSignal": "NY Packaging Reduction and Recycling Infrastructure Act (S1464 / A1749): passage by both houses and the governor's signature",
+        "scaleNote": "New York State",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.003,
+            "ingredient": "packaging",
+            "ingredientMult": 1.05
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cup_program"
+          },
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          }
+        ],
+        "realFrequency": "2024, 2025 and 2026: passed the Senate (33-25 in 2026), no Assembly vote. Advocates target 2027.",
+        "tier": "exotic",
+        "source": "https://resource-recycling.com/policy-now/2026/06/08/ny-epr-bill-fails-to-advance-after-third-try/",
+        "confidence": "estimate",
+        "note": "Not law. If it passes, producer fees would reach case prices years later; +5% on packaging is a placeholder (0.3% of cost of goods)."
+      },
+      {
+        "id": "bag_exemption_repeal_bill",
+        "name": "Bill to end the restaurant bag exemption",
+        "text": "Stores lost plastic bags in 2020; restaurants and cafes kept them for takeout. A bill would end that.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "scaleNote": "New York State",
+        "realSignal": "NY Assembly A6003 / Senate S1492 of 2025: removal of the exemption for bags from restaurants, taverns and similar food service establishments",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.003,
+            "ingredient": "packaging",
+            "ingredientMult": 1.04
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "takeout_packing"
+          },
+          {
+            "kind": "lever",
+            "id": "cup_program"
+          }
+        ],
+        "realFrequency": "Reintroduced in the 2019, 2021, 2023 and 2025 sessions; not enacted.",
+        "tier": "exotic",
+        "source": "https://www.nysenate.gov/legislation/bills/2025/A6003",
+        "confidence": "estimate",
+        "note": "Seen at DEC: bags from a restaurant for carry-out or delivery of prepared food are exempt from the plastic bag ban. A paper handle bag costs several times a plastic one; +4% on packaging is a placeholder for a cafe that bags a fifth of its orders."
+      },
+      {
+        "id": "iced_season",
+        "name": "Iced season",
+        "text": "From the first warm week half the line orders cold. Cold drinks cost a little less to make and sell for more, if you have the cold brew and the ice.",
+        "scale": "city",
+        "months": [
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "realSignal": "Daily high in Central Park above about 70°F (National Weather Service); nationally cold coffee is 21% of cups in summer and 17% in winter (NCA, 2026), far more among young city customers",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 0.985
+          },
+          {
+            "field": "demand",
+            "mult": 0.995,
+            "appliesIf": "cold_brew_prep = daily_batch"
+          }
+        ],
+        "durationMonths": 5,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cold_brew_prep"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "cup_program"
+          }
+        ],
+        "realFrequency": "Every year. Starbucks reports 75% of its US beverage sales cold over the year (2023-2024).",
+        "tier": "core",
+        "source": "https://freshcup.com/cold-coffees-rise-shows-no-signs-of-slowing-nca-report-finds/",
+        "confidence": "estimate",
+        "note": "If cold drinks go from 24 to 45 of 111 drinks per 100 orders, replacing hot lattes and drip: an iced latte costs $1.15 against $1.23 and sells for 50 cents more, cold brew costs $0.81 against $0.90 for drip and sells for $2 more. Cost of goods as a share of sales falls about 1.5%. The 70°F threshold and the 45 are my estimates; no public series of hot against iced orders by temperature was found."
+      },
+      {
+        "id": "pumpkin_season",
+        "name": "Pumpkin spice season",
+        "text": "The chains launch their fall menus in the last week of August and advertise them everywhere. Shops with a fall drink ride the wave; shops without watch regulars detour.",
+        "scale": "country",
+        "months": [
+          9,
+          10,
+          11
+        ],
+        "realSignal": "The chains' fall menu launch date (Starbucks: August 25, 2026; visits that day 25.7% above its daily average for the year and 6.7% above the 2025 launch, Placer.ai)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.03,
+            "appliesIf": "seasonal_menu = seasonal"
+          },
+          {
+            "field": "demand",
+            "mult": 0.99,
+            "appliesIf": "seasonal_menu = core_only"
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "Every year; the launch has crept from September into late August.",
+        "tier": "core",
+        "source": "https://www.placer.ai/anchor/articles/psl-day-2026-gives-starbucks-its-biggest-tuesday-of-the-year",
+        "confidence": "estimate",
+        "note": "The measured number is a chain's launch day. +3% and -1% for an independent are design values."
+      },
+      {
+        "id": "holiday_drinks_season",
+        "name": "Holiday drinks and gift bags",
+        "text": "Peppermint, gingerbread and red cups from early November. Bags of beans sell as gifts in December.",
+        "scale": "country",
+        "months": [
+          11,
+          12
+        ],
+        "realSignal": "The chains' holiday menu launch (Starbucks: first week of November; in 2024 it dropped its plant-milk charge the same day, November 7)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.02,
+            "appliesIf": "seasonal_menu = seasonal"
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          }
+        ],
+        "realFrequency": "Every year.",
+        "tier": "deep",
+        "source": "https://www.axios.com/2024/10/30/starbucks-holiday-drinks-2024-nondairy-charge-removal",
+        "confidence": "estimate",
+        "note": "+2% is a design value. Retail bags carry a 36% margin and are not taxed: doubling them in December adds about $100 of margin at the reference volume."
+      },
+      {
+        "id": "seasonal_stock_writeoff",
+        "name": "The season ends, the sauces stay",
+        "text": "Four jugs of pumpkin sauce and a case of peppermint syrup that nobody will order until next autumn.",
+        "scale": "point",
+        "months": [
+          1
+        ],
+        "realSignal": "Follows the player's choice: seasonal_menu = seasonal in the autumn, on January 1",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.012
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          },
+          {
+            "kind": "lever",
+            "id": "inventory_control"
+          }
+        ],
+        "realFrequency": "Every January for shops that order seasonal stock by the case.",
+        "tier": "deep",
+        "source": "https://www.webstaurantstore.com/ghirardelli-black-label-chocolate-flavoring-sauce-64-fl-oz-case/40862057CS.html",
+        "confidence": "estimate",
+        "note": "Four 64 oz jugs at about $22 and twelve bottles of syrup at $7 = $172, minus what the staff drink: $150, 1.2% of a month's goods. A weekly count in December shows it coming."
+      },
+      {
+        "id": "january_resolutions",
+        "name": "January: resolutions month",
+        "text": "Fewer pastries, more oat and black coffee. The same line, a smaller ticket.",
+        "scale": "country",
+        "months": [
+          1
+        ],
+        "realSignal": "Calendar: the first three weeks of January",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 0.99
+          },
+          {
+            "field": "demand",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "ordering_par"
+          },
+          {
+            "kind": "lever",
+            "id": "alt_milk_pricing"
+          },
+          {
+            "kind": "lever",
+            "id": "day_end_surplus"
+          }
+        ],
+        "realFrequency": "Every year.",
+        "tier": "deep",
+        "source": "https://squareup.com/us/en/press/national-coffee-day-2024",
+        "confidence": "estimate",
+        "note": "No measurement found: both numbers are design values. The point for the player is the standing pastry order: a shop that keeps December's quantity throws away a fifth of it."
+      },
+      {
+        "id": "chain_drops_plant_milk_charge",
+        "name": "The big chain stops charging for oat milk",
+        "text": "From now on plant milk is free at the chain down the block. Your menu still says $1.",
+        "scale": "country",
+        "months": [
+          11
+        ],
+        "realSignal": "A national chain's press release (Starbucks, effective November 7, 2024; it said nearly half of its US customers order plant milk)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.99,
+            "appliesIf": "alt_milk_pricing = upcharge"
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "alt_milk_pricing"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "Once; Dunkin', Peet's and others still charged at the time.",
+        "tier": "core",
+        "source": "https://about.starbucks.com/press/2024/starbucks-announces-removal-of-extra-charge-for-non-dairy-milk-starting-nov-7/",
+        "confidence": "estimate",
+        "note": "The -1% is a design value. Dropping the charge costs about $1,050 a month (see lever alt_milk_pricing); folding 25 cents into every milk drink instead raises the same money without the line on the menu."
+      },
+      {
+        "id": "coffee_inflation_headlines",
+        "name": "\"Coffee up 18%\" in the news",
+        "text": "Customers have read that coffee is the fastest-rising item in the grocery basket. Some trade the latte for a drip, some bring a thermos.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3
+        ],
+        "realSignal": "BLS consumer price index for coffee 15% or more above a year earlier (January 2026: +18.3%; +47% over five years)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.01
+          },
+          {
+            "field": "demand",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "January 2026: +18.3% in a year, the fastest-rising item in the grocery basket at the time.",
+        "tier": "deep",
+        "source": "https://wtop.com/lifestyle/2026/02/soaring-coffee-prices-rewrite-some-americans-daily-routines/",
+        "confidence": "estimate",
+        "note": "A New York analyst: customers may choose drip over lattes and blended drinks, which hurts profit. Drip costs 25.8% of its price against 20.5% for a latte, so a shift of five orders in a hundred raises the cost share by about 1%. Both numbers are design values."
+      },
+      {
+        "id": "viral_drink",
+        "name": "A drink goes viral",
+        "text": "One green, purple or pistachio drink is suddenly all anyone films. Shops that have it sell out; the ingredient doubles in price by summer.",
+        "scale": "world",
+        "months": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "realSignal": "Search and social volume for a drink doubling in a quarter; importers start limiting orders",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.02,
+            "appliesIf": "seasonal_menu = seasonal"
+          }
+        ],
+        "durationMonths": 4,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "safety_stock"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "Matcha in 2025: 'social media's latest obsession', with waits for the powder growing from one or two months to six.",
+        "tier": "deep",
+        "source": "https://supplychaindive.com/news/matcha-shortage-social-medias-latest-obsession/761258",
+        "confidence": "estimate",
+        "note": "+2% is a design value. The trend and the shortage are the same event seen from two sides: see matcha_shortage."
+      },
+      {
+        "id": "count_does_not_match",
+        "name": "The count does not match the register",
+        "text": "You bought milk and beans for 6,600 drinks and rang up 6,000. Nobody knows where the rest went.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Follows the player's choice: inventory_control = none for three months in a row; in life, the gap between what the recipes say was used and what was bought passes 3% of sales",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.07
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "inventory_control"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "The trade's own estimate: theft and giveaways around 4% of sales, employees behind three quarters of shortages (attributed to the National Restaurant Association in vendor material).",
+        "tier": "core",
+        "source": "https://www.restroworks.com/blog/restaurant-employee-theft-statistics/",
+        "confidence": "estimate",
+        "note": "Shrink going from 2% to 4% of sales is $1,020 a month on $51,000: +7% of a $14,280 cost of goods. The lever already charges this; the event is how the player learns about it, in the third month, not the first."
+      },
+      {
+        "id": "stale_beans",
+        "name": "The bulk order went stale",
+        "text": "Two months of beans at a discount looked clever. By week six the espresso is flat and the regulars notice.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Follows the player's choice: a warehouse-supplied or bulk-bought coffee with a roast date more than four weeks old",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "lever",
+            "id": "bean_contract"
+          }
+        ],
+        "realFrequency": "A roaster's case study of a cafe that bought through a warehouse distributor: beans one month old one week and three months old the next.",
+        "tier": "deep",
+        "source": "https://drivencoffee.com/blog/wholesale-case-study-briscos-coffee-house",
+        "confidence": "estimate",
+        "note": "The -3% quality is a design value. Coffee is the one ingredient where buying more to save money makes the product worse."
+      },
+      {
+        "id": "heat_on_the_doorstep",
+        "name": "Heat advisory: milk on the doorstep",
+        "text": "The dairy drops at 4 am; by 7 the crates have stood three hours in 80-degree air.",
+        "scale": "city",
+        "months": [
+          6,
+          7,
+          8
+        ],
+        "realSignal": "A National Weather Service heat advisory for New York City (heat index 95°F or more for two days)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.012,
+            "appliesIf": "early_deliveries = left_outside"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "early_deliveries"
+          },
+          {
+            "kind": "shortcut",
+            "id": "keep_old_food"
+          }
+        ],
+        "realFrequency": "Several advisories every summer.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/article81-factsheet.pdf",
+        "confidence": "estimate",
+        "note": "NYC Health: cold food above 41°F for more than four hours without a time label is discarded. Four ruined deliveries of 7.5 gallons at $5.28 = $158, 1.2% of a month's goods; using the milk anyway is the existing shortcut."
+      },
+      {
+        "id": "surplus_app_wave",
+        "name": "The neighborhood discovers your end-of-day bags",
+        "text": "Your surplus bags sell out in minutes and people ask for more. Staff start ordering extra pastry \"for the bags\".",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Follows the player's choice: day_end_surplus = surprise_bags for two months",
+        "effects": [
+          {
+            "field": "reputation",
+            "mult": 1.01
+          },
+          {
+            "field": "cogs",
+            "mult": 1.005
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "day_end_surplus"
+          },
+          {
+            "kind": "lever",
+            "id": "ordering_par"
+          },
+          {
+            "kind": "lever",
+            "id": "inventory_control"
+          }
+        ],
+        "realFrequency": "The app's own guidance: price the bag at a third of the food's value; partners set the number of bags daily.",
+        "tier": "exotic",
+        "source": "https://www.nycfoodpolicy.org/community-spotlight-too-good-to-go/",
+        "confidence": "estimate",
+        "note": "A bag sold at a third of the shelf price returns about 50 cents on each dollar of pastry cost after the fee: ordering extra to fill bags loses money on every one. +0.5% of cost of goods is my figure for a shop that lets it drift."
+      }
+    ]
   },
   "sources": [
     {
@@ -2008,6 +3689,28 @@
       "source": "https://www.nyc.gov/site/dca/about/consumer-protection-and-licensing-laws.page",
       "confidence": "estimate",
       "note": "DCWP: Local Law 98 of 2021 raised the top fine for unfair trade practices seven-fold, from $500 to $3,500 per violation; each false statement is its own violation, and a knowing violation is $3,500. The department's penalty schedule for §20-700 lists $525, $1,050 and $3,500 (search summary of the rule text; I could not read which column is the first offense). Serving dairy to a customer who paid for oat is also an allergy hazard. Game formula: $525 in the first month, $1,050 in the second, capped at $3,500."
+    },
+    {
+      "id": "recalled_product_sold",
+      "name": "Recalled product kept on sale",
+      "law": "NYC Health Code §71.05 (adulterated or misbranded food), §81.07; 21 U.S.C. §331",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 600,
+        "perMonth": 300,
+        "pctOfSaved": 0,
+        "max": 1200
+      },
+      "closureDays": 0,
+      "reputationHit": 0.15,
+      "criminal": "Knowingly selling adulterated food that injures someone can be prosecuted under the federal Food, Drug, and Cosmetic Act.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/adulterated-foods.pdf",
+      "confidence": "estimate",
+      "note": "NYC Health's guidance on adulterated food: the inspector has the product discarded and writes a summons with points toward the letter grade; the department's workshop slide gives a penalty of up to $1,200, and repeated violations can close the shop. A recall-specific line of the penalty schedule was not found; the $600 start is my game formula. The reputation hit stands for the news story, not the fine."
     }
   ],
   "shortcuts": [
@@ -2090,6 +3793,16 @@
         "amount": 0.03
       },
       "violation": "deceptive_menu_claims"
+    },
+    {
+      "id": "ignore_recall",
+      "name": "Keep selling a recalled product",
+      "what": "The recall notice names lots that are on your shelf. Pulling them means a write-off of about $150 and a day without the item. Selling recalled food is selling adulterated food: a summons of up to $1,200, and a lawsuit if anyone gets sick.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 150
+      },
+      "violation": "recalled_product_sold"
     }
   ],
   "reports": [
@@ -2202,6 +3915,12 @@
       "title": "Bottling for other shops",
       "text": "Your city permit covers what you sell at your own counter. Bottling cold brew or roasting coffee to sell to other stores needs a state Article 20-C food processing license: $175 a year for a small independent, $400 otherwise.",
       "source": "https://agriculture.ny.gov/food-business-licensing"
+    },
+    {
+      "id": "recalled_product_sold",
+      "title": "When a product is recalled",
+      "text": "A recall names brands, sizes and lot codes. Check your shelves the same day, pull what matches, keep the supplier's credit note. Food under recall is adulterated food: a summons of up to $1,200 and points toward your grade.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/adulterated-foods.pdf"
     }
   ],
   "levers": [
@@ -2540,6 +4259,105 @@
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/article81-factsheet.pdf",
       "confidence": "estimate",
       "note": "NYC Health: cold food may be held without temperature control for 4 hours if labelled with the time it came out and the time to discard it, and must then be thrown away. Three swaps a day waste about a pint of milk and half-and-half each: 36 cents a pint x 3 x 30 = $32, plus labels: $45 (my arithmetic). Carafes left out all day are the existing violation spoiled_food ($250-$600)."
+    },
+    {
+      "id": "safety_stock",
+      "name": "Shelf-stable stock on hand",
+      "options": [
+        {
+          "id": "one_week",
+          "label": "One week of cups, plant milk, syrups and matcha",
+          "monthlyCost": 0
+        },
+        {
+          "id": "six_weeks",
+          "label": "Six weeks on the shelf",
+          "monthlyCost": 60,
+          "shieldsFrom": "shortage",
+          "cashTiedUp": 2800
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.webstaurantstore.com/oatly-barista-edition-oat-milk-32-fl-oz-case/110OTBAROAT.html",
+      "confidence": "estimate",
+      "note": "Dry goods, plant milk and disposables run about $2,200 a month at the reference volume, so five extra weeks is about $2,800 of cash sitting in boxes: 24 cases of oat milk, 8 cases of cups, lids and sleeves. $60 a month covers shelving and the odd case that goes out of date (my estimate). The catch is space: in 800 sq ft the boxes take the place of two seats or a staff corner. Events tagged shortage do not empty the shelves of a shop that holds six weeks."
+    },
+    {
+      "id": "early_deliveries",
+      "name": "Deliveries before opening",
+      "options": [
+        {
+          "id": "staff_receives",
+          "label": "Someone comes in an hour early to receive and check",
+          "monthlyCost": 580
+        },
+        {
+          "id": "key_drop",
+          "label": "Drivers have a key and a code and stock the fridge",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.01
+          }
+        },
+        {
+          "id": "left_outside",
+          "label": "Crates are left at the door",
+          "monthlyCost": 0,
+          "causes": "spoiled_food"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/article81-factsheet.pdf",
+      "confidence": "estimate",
+      "note": "Milk and pastry arrive between 3 am and 7 am. An extra paid hour a day at $17 plus payroll taxes is $580 a month. A key drop costs nothing but nobody checks temperatures, counts or dates at the door (the small quality loss is a design value). Crates on the sidewalk warm above 41°F on any mild morning and are sometimes gone by opening: that is the existing violation spoiled_food."
+    },
+    {
+      "id": "waste_service",
+      "name": "Trash pickup",
+      "options": [
+        {
+          "id": "three_quotes",
+          "label": "Ask all three zone carters and sign the cheapest",
+          "monthlyCost": 0
+        },
+        {
+          "id": "assigned",
+          "label": "Miss the deadline and take the assigned carter at the maximum rate",
+          "monthlyCost": 70
+        },
+        {
+          "id": "fewer_pickups",
+          "label": "Three pickups a week instead of six",
+          "monthlyCost": -60,
+          "effects": {
+            "quality": -0.01
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://comptroller.nyc.gov/reports/review-of-the-department-of-sanitations-commercial-waste-zone-request-for-proposals-and-carter-selection-process/",
+      "confidence": "estimate",
+      "note": "The pack budgets $250 a month. At the caps a shop putting out 40 lb a day pays about $322 in a $110-a-month zone (see suppliers.waste_carter), so 'assigned at the maximum' is about $70 above a negotiated contract. Fewer pickups save part of the frequency charge (my estimate $60) and leave food waste in the shop for two days: smell and pest pressure, written as a small quality loss."
+    },
+    {
+      "id": "cold_brew_prep",
+      "name": "Cold brew",
+      "options": [
+        {
+          "id": "daily_batch",
+          "label": "A measured batch every evening for tomorrow",
+          "monthlyCost": 0
+        },
+        {
+          "id": "big_batch",
+          "label": "Big batches twice a week, always in stock",
+          "monthlyCost": 45
+        }
+      ],
+      "tier": "deep",
+      "source": "https://cdn.shopify.com/s/files/1/0566/9385/0289/files/Cold_Brew_Recipe_-_Full_Sheet.pdf",
+      "confidence": "estimate",
+      "note": "Cold brew steeps 12 to 24 hours, so tomorrow's supply is decided today. A measured daily batch runs out on the first hot afternoon; big batches never run out but about one batch in ten is poured away when it passes its week (12 servings x 81 cents x 4.5 = $45 a month, my arithmetic). In the iced season the event iced_season penalises the daily batch."
     }
   ],
   "setup": [
@@ -2591,7 +4409,7 @@
       "months": 6,
       "source": "https://fred.stlouisfed.org/series/APU0000717311",
       "confidence": "estimate",
-      "note": "Correction of the existing event. Share: in the costed menu (extra.menu) coffee is 34% of cost of goods, not 25%: 20% x 34% = +6.8%. Size: the BLS shelf price of ground coffee was $9.139 per lb in September 2025 and $9.332 in September 2026 after peaking at $9.72 in April 2026; the exchange price doubled between late 2023 and February 2025 ($4.2995 per lb). Roasters surveyed by Fresh Cup raised wholesale lists by roughly $1-$4 per lb in 2025: on a $16 lb that is 6%-25%. Duration: roasters buy months ahead, so a new list stays for two quarters, not one."
+      "note": "Correction of the existing event. Share: in the costed menu (extra.menu) coffee is 34% of cost of goods, not 25%: 20% x 34% = +6.8%. Size: the BLS shelf price of ground coffee was $9.139 per lb in September 2025 and $9.332 in September 2026 after peaking at $9.72 in April 2026; the exchange price doubled between late 2023 and February 2025 ($4.2995 per lb). A 2025 trade advisory told roasters that $2-$4 more per lb would cover the rise in green coffee: on a $16 lb that is 12%-25%. Duration: roasters buy months ahead, so a new list stays for two quarters, not one."
     },
     {
       "id": "milk_price_up",
