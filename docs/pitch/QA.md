@@ -2,7 +2,7 @@
 
 B17, третий заход. Ответ — два предложения, по-английски, вслух. Порядок — по критериям жюри: работает ли (40%), что продаём (20%), кому (15%), почему деньги (15%), новое ли (10%), затем неудобные.
 
-**Правила ответа.** Не обещаем того, чего нет в продукте. Оценку называем оценкой. Чисел рынка и денег, которых нет в `docs/pitch/USER.md` и `docs/pitch/MONEY.md`, не называем: в ответах они стоят в `[квадратных скобках]` и заменяются, когда эти файлы придут. Чего не знаем — так и говорим.
+**Правила ответа.** Не обещаем того, чего нет в продукте. Оценку называем оценкой. Числа рынка — из `docs/pitch/USER.md` (B15), денег — из `docs/pitch/MONEY.md` и `node docs/pitch/model.mjs` (B16, коммит 29f39ee); если модель поменялась, числа в ответах 9, 12, 13, 14 сверить с её выводом. Чего не знаем — так и говорим.
 
 Подтверждено в коде и данных на 14 ноября, 22:20 UTC: 73 из 138 ключевых чисел в пакетах помечены `verified` (`node scripts/validate-all.mjs`); один игровой месяц — одни настоящие сутки (`context/08-game-v5.md`); насыщение рынка — `npx tsx sim/audit/saturation.ts`; снимки экранов и месяц торговли — `docs/pitch/deck/img/capture.json`.
 
@@ -37,7 +37,7 @@ For nineteen dollars a month: the whole first year of play, the advisor, every b
 The city keeps its own clock: one game month passes every real day, so tomorrow there is a new month report, a neighbour's move and a decision waiting. That is a daily reason to return during the months someone is actually preparing to open.
 
 **9. Opening a café is a one-time event. Why would they keep paying?**
-The paid period is the preparation itself — months of choosing a place, a budget and a setup — not a lifetime. [Retention and lifetime from MONEY.md], and we treat churn after opening day as expected, not as failure.
+The paid period is the preparation itself — months of choosing a place, a budget and a setup — not a lifetime. Our model already assumes heavy churn: on RevenueCat benchmarks only 8% of monthly payers remain at month twelve, and a payer is still worth $120.
 
 ## Кому продаём (15%)
 
@@ -48,15 +48,15 @@ One person: an American, twenty-one to forty-five, who wants to open a place of 
 That would be B2B, and our user is the person whose savings are at risk, not the institution. We sell to that person directly, by subscription.
 
 **12. How will you reach them?**
-Ads that show one real moment of the year — rent running before the first customer, a neighbour's offer — then one question, "what would you open?", and their own storefront with its cost; the first month is free. We have not run these ads yet, so the cost per payer is an assumption [CAC from MONEY.md], and measuring it is our first test.
+Ads that show one real moment of the year — rent running before the first customer, a neighbour's offer — then one question, "what would you open?", and their own storefront with its cost; the first month is free. We have not run these ads yet: the model's $47 blended cost per payer ($265 through ads alone) is built from public benchmarks, and measuring it is our first test.
 
 ## Почему это деньги (15%)
 
 **13. Show us LTV greater than CAC.**
-[LTV $N against CAC $N, from MONEY.md, every input marked as an assumption.] `docs/pitch/model.mjs` prints the calculation, and changing any assumption recalculates every number in the deck.
+LTV $120 against a blended CAC of $47 is 2.5×, paid back in 3.6 months, built on public benchmarks for retention, ad clicks and landing conversion — our own conversion is not measured yet. Paid ads alone give 0.44×, so `docs/pitch/model.mjs` assumes 90% of payers arrive organically, and changing any assumption recalculates every number in the deck.
 
 **14. How do you get to $100M ARR?**
-Coffee shops first, then other small businesses on the same engine, then other cities — [N paying members at $N a year, from MONEY.md]. The engine already runs two businesses, a coffee shop and a barbershop, on the same code.
+Coffee and food in New York first (about 900 payers), then every small business in New York (about 16,000), then every US metro: 557,000 payers at an average $14.95 a month make $100M. That is 4.1% of the 13.7 million Americans aged 21–45 in cities who consider starting a business (NORC, Census), and the engine already runs a barbershop on the same code.
 
 **15. Each city needs new data. Doesn't that kill scaling?**
 A city is a data pack — rents, wages, permits, taxes — checked by the same validator, while the engine stays the same. The research per city is real work, and it is the main cost of adding a city.

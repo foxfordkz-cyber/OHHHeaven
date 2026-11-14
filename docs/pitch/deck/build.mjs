@@ -10,10 +10,12 @@
 //
 // Money numbers are not typed into the deck. Every element with data-model="outputs.<key>" or
 // data-model="inputs.<key>" is filled from docs/pitch/model.mjs (B16): change an assumption there and rebuild.
-// data-format: usd | usd0 | x | pct | months | count. If the model or a key is missing, the element keeps its
+// data-format: usd | usd0 | usdM | x | pct | months | count. The path may go deeper: "outputs.steps.2.payers". If the model or a key is missing, the element keeps its
 // dashed TBD look and the report names the key.
 import { createRequire } from 'node:module';
-import { existsSync, mkdirSync, rmSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -26,8 +28,20 @@ const pdf = join(here, 'deck.pdf');
 const pagesDir = join(here, 'pages');
 const wantPng = !process.argv.includes('--no-png');
 const MAX_PAGES = 10;
-const modelArg = process.argv.indexOf('--model');
-const modelPath = modelArg > 0 ? resolve(process.argv[modelArg + 1]) : join(here, '..', 'model.mjs');
+const argAfter = (flag) => {
+  const i = process.argv.indexOf(flag);
+  return i > 0 ? process.argv[i + 1] : undefined;
+};
+let modelPath = argAfter('--model') ? resolve(argAfter('--model')) : join(here, '..', 'model.mjs');
+// --model-ref <git ref>: take B16's model from another branch without merging it (e.g. origin/claude/nifty-davinci-j7t4c3).
+const modelRef = argAfter('--model-ref');
+if (modelRef) {
+  const dir = mkdtempSync(join(tmpdir(), 'deck-model-'));
+  modelPath = join(dir, 'model.mjs');
+  writeFileSync(modelPath, execFileSync('git', ['show', `${modelRef}:docs/pitch/model.mjs`], { cwd: here }));
+  const commit = execFileSync('git', ['rev-parse', '--short', modelRef], { cwd: here }).toString().trim();
+  console.log(`model taken from ${modelRef} (${commit})`);
+}
 
 /** { inputs, outputs, kinds } from B16's model, or null while it is not in this branch. */
 async function loadModel() {
@@ -54,17 +68,20 @@ try {
     const fmt = (v, f) => {
       if (f === 'usd') return Math.abs(v) >= 1e6 ? `$${(v / 1e6).toFixed(v >= 1e8 ? 0 : 1)}M` : `$${v.toLocaleString('en-US', { maximumFractionDigits: Math.abs(v) < 100 ? 2 : 0 })}`;
       if (f === 'usd0') return `$${Math.round(v).toLocaleString('en-US')}`;
-      if (f === 'x') return `${v.toFixed(1)}×`;
+      if (f === 'x') return `${v.toFixed(v < 1 ? 2 : 1)}×`;
       if (f === 'pct') return `${(v * 100).toFixed(v < 0.1 ? 1 : 0)}%`;
+      if (f === 'usdM') return `$${(v / 1e6).toFixed(v < 1e6 ? 2 : v < 1e7 ? 1 : 0)}M`;
       if (f === 'months') return v.toFixed(1);
+      // count
       if (Math.abs(v) >= 1e6) return `${(v / 1e6).toFixed(1)}M`;
-      if (Math.abs(v) >= 1e4) return `${Math.round(v / 1e3).toLocaleString('en-US')}K`;
+      if (Math.abs(v) >= 1e5) return `${Math.round(v / 1e3)}K`;
+      if (Math.abs(v) >= 1e4) return `${(v / 1e3).toFixed(1)}K`;
       return Math.round(v).toLocaleString('en-US');
     };
     const missing = [];
     for (const el of document.querySelectorAll('[data-model]')) {
-      const [group, key] = el.dataset.model.split('.');
-      const v = m?.[group]?.[key];
+      // a dotted path into { inputs, outputs }: "outputs.ltv", "outputs.steps.2.payers"
+      const v = el.dataset.model.split('.').reduce((o, k) => (o == null ? undefined : o[k]), m);
       if (typeof v !== 'number' || !Number.isFinite(v)) {
         missing.push(el.dataset.model);
         continue;
