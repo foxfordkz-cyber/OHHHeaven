@@ -228,8 +228,19 @@ export function engineQualityTake(d: CafeDay, s: ServiceDay, capacity: number): 
 }
 
 /** What quality this part says the day deserves: the packed room by the busiest hour, short hands by the day's work. */
-function deservedTake(cfg: ServiceCfg, s: ServiceDay): { crowd: number; staff: number } {
-  return { crowd: s.seats.crowded ? cfg.crowdQualityDrop : 0, staff: s.lost.labor >= 0.5 ? 0.04 : 0 };
+function deservedTake(cfg: ServiceCfg, s: ServiceDay, pack: Pack): { crowd: number; staff: number } {
+  return { crowd: s.seats.crowded ? crowdDrop(cfg, s, pack) : 0, staff: s.lost.labor >= 0.5 ? 0.04 : 0 };
+}
+
+/**
+ * A packed room spoils the visit of those who sit, not of those who take the cup away. The full drop is for the
+ * pack's reference cafe, where 1 − takeawayShare of the guests sit (40%); a to-go counter where 15% sit loses
+ * 15 / 40 of it. FORMATS section 7 counts the counter with no drop at all; this keeps a share of it for the seats.
+ */
+export function crowdDrop(cfg: ServiceCfg, s: ServiceDay, pack: Pack): number {
+  const refSit = 1 - Math.min(0.95, Math.max(0, pack.sizing.takeawayShare ?? 0));
+  const sitShare = s.served > 0 ? s.seats.seated / s.served : 0;
+  return refSit > 0 ? cfg.crowdQualityDrop * Math.min(1, sitShare / refSit) : cfg.crowdQualityDrop;
 }
 
 function capacityOf(s: ServiceDay): number {
@@ -362,7 +373,7 @@ export const part: CafePart = {
     const s = serviceDay(d);
     if (!cfg || !s) return 0;
     const took = engineQualityTake(d, s, capacityOf(s));
-    const due = deservedTake(cfg, s);
+    const due = deservedTake(cfg, s, d.pack);
     // with the offset on, the day ends with exactly what this part says it deserves; off, the part never doubles a drop
     if (cfg.offsetEngineRoomTests) return took.crowd + took.staff - due.crowd - due.staff;
     return took.crowd > 0 || due.crowd === 0 ? 0 : -due.crowd;

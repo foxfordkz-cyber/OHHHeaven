@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import type { BusinessState, DayReport, GameDate, Pack, Place } from '@ohh/shared';
 import type { CafeDay, StaffPower } from '../../src/niches/cafe/contract';
 import {
-  engineQualityTake, part, seatsThatFit, serviceCfg, serviceDay, serviceDayWith, serviceKpis, serviceNotes, walkAway,
+  crowdDrop, engineQualityTake, part, seatsThatFit, serviceCfg, serviceDay, serviceDayWith, serviceKpis, serviceNotes, walkAway,
   type Group, type ServiceCfg, type ServiceInputs,
 } from '../../src/niches/cafe/service';
 import { hooks as cafeHooks } from '../../src/niches/cafe';
@@ -197,11 +197,22 @@ describe('cafe service: the line and what the player is told', () => {
           const x = serviceDay(d)!;
           const cap = part.capacityDay!(d)!;
           const took = engineQualityTake(d, x, cap);
-          const due = (x.seats.crowded ? B01.crowdQualityDrop : 0) + (x.lost.labor >= 0.5 ? 0.04 : 0);
+          const due = (x.seats.crowded ? crowdDrop(B01, x, solo) : 0) + (x.lost.labor >= 0.5 ? 0.04 : 0);
           expect(-(took.crowd + took.staff) + part.qualityDelta!(d)).toBeCloseTo(-due, 10);
         }
       }
     }
+  });
+
+  it('a packed room costs by who sits in it: full drop for a room where 40% sit, a share of it at a to-go counter', () => {
+    const counter = sd(8, 300, 'office');          // on an office block about 28% of guests sit
+    const room = sd(18, 400, 'residential');        // more than half of the residents sit
+    expect(counter.seats.crowded).toBe(true);
+    expect(room.seats.crowded).toBe(true);
+    const share = counter.seats.seated / counter.served;
+    expect(crowdDrop(B01, counter, solo)).toBeCloseTo(B01.crowdQualityDrop * share / 0.4, 10);
+    expect(crowdDrop(B01, counter, solo)).toBeLessThan(crowdDrop(B01, room, solo));
+    expect(crowdDrop(B01, room, solo)).toBe(B01.crowdQualityDrop);
   });
 
   it('with the offset off, the part only adds a packed room the engine did not see, and never doubles it', () => {
