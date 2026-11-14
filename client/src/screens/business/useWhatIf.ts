@@ -12,6 +12,8 @@ export function useWhatIf(
   orders: Partial<StandingOrders>,
   enabled = true,
   delayMs = WHAT_IF_DELAY_MS,
+  /** Ask again when this changes (the game day): a forecast made yesterday is stale today. */
+  epoch: number | string = 0,
 ): WhatIfState {
   const key = JSON.stringify(orders);
   const [state, setState] = useState<WhatIfState>({ status: 'idle', data: null, forKey: null });
@@ -36,7 +38,7 @@ export function useWhatIf(
     return () => clearTimeout(t);
     // query is stable for a mounted screen; the key carries the orders
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, enabled, delayMs]);
+  }, [key, enabled, delayMs, epoch]);
 
   return state;
 }
