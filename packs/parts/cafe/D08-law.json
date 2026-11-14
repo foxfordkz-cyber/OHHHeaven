@@ -1887,6 +1887,30 @@
       "title": "Your grade follows you online",
       "text": "Under a rule in force since November 15, 2025, delivery apps must link to the city's inspection lookup. A B or C is now one tap away from your menu, not only in the window.",
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/notice/2025/noa-ch23-food-service-inspections.pdf"
+    },
+    {
+      "id": "inspection_advance_notice",
+      "title": "The city emails before it inspects",
+      "text": "Since 2025 restaurants get two emails before a health inspection, the first 1 to 5 months ahead, with the checklist the inspector uses. The exact day stays unknown. Keep the email address on your permit current.",
+      "source": "https://www.thenycalliance.org/news-item/advance-doh-inspection-notices"
+    },
+    {
+      "id": "cure_does_not_change_grade",
+      "title": "A cure erases the fine, not the points",
+      "text": "Fixing a curable violation within days can bring its fine to $0, but the points stay in your inspection score and the grade does not change.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/faq-cure-violations-restaurants-sp.pdf"
+    },
+    {
+      "id": "free_interpreter_at_hearings",
+      "title": "Hearings in your language",
+      "text": "Every OATH hearing offers a free interpreter, and the city's Business Owner Bill of Rights promises information in languages other than English. A 2026 audit still found gaps in interpretation during restaurant inspections.",
+      "source": "https://www.nyc.gov/assets/oath/downloads/pdf/small-business-dohmh-es-ada.pdf"
+    },
+    {
+      "id": "red_tape_reforms_2026",
+      "title": "Rules change every year",
+      "text": "In July 2026 the city announced more than 50 red-tape reforms, 25 of them for food businesses: one food-safety fine fell from $600 to $500 and a permit was abolished. Check fines and permits again before every season.",
+      "source": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html"
     }
   ],
   "roadmap": [
@@ -3476,6 +3500,89 @@
         "source": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
         "confidence": "estimate",
         "note": "The engine clamps multipliers at 1.5; leases reported in court decisions set 150%, 200%, or 150% rising to 200% after 30 days."
+      },
+      {
+        "id": "inspection_notice_email",
+        "name": "Email: a health inspection is coming",
+        "text": "The Health Department writes that your shop will be inspected in the coming months and attaches the inspector's checklist. The day itself stays secret.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Advance inspection notices announced in May 2025 (Small Business Forward 2.0): two emails, the first 1 to 5 months before the inspection; a 2026 Council bill (Intro 183) describes the second as 3 to 6 weeks before",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "mock_inspection"
+          },
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "pest_control"
+          },
+          {
+            "kind": "lever",
+            "id": "food_handling"
+          }
+        ],
+        "realFrequency": "Before each yearly inspection cycle, for every restaurant with a working email on file",
+        "tier": "core",
+        "source": "https://www.thenycalliance.org/news-item/advance-doh-inspection-notices",
+        "confidence": "estimate",
+        "note": "This is the real-life version of the game's rule that events are announced a month ahead. Sources are the restaurant trade association and local press, and they differ on whether the second notice is already in force, so it is marked as an estimate. The event itself changes nothing; it opens a window in which the player can clean up before first_graded_inspection."
+      },
+      {
+        "id": "city_red_tape_package",
+        "name": "City Hall cuts fines and permits",
+        "text": "The mayor announces a package of reforms for small businesses: some fines are lowered, a permit disappears, inspectors must hand you a Bill of Rights, and the small business office helps you settle summonses before a hearing.",
+        "scale": "city",
+        "months": [
+          7
+        ],
+        "realSignal": "'OPEN for Small Business', announced July 20, 2026: more than 50 reforms, 25 for food service and food retail; an executive order of January 15, 2026 on reducing city fees",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          },
+          {
+            "kind": "lever",
+            "id": "mock_inspection"
+          }
+        ],
+        "realFrequency": "A package like this arrives with most administrations: fines cut by about a quarter in 2014, cure periods in 2021, advance notices in 2025, this one in 2026",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
+        "confidence": "estimate",
+        "note": "Seen in the city's announcement and local press: one food-safety penalty for three cross-contamination violations falls from $600 to $500, the frozen dessert permit is abolished, and free compliance help comes before certain inspections. Small-business groups called the package underwhelming, and no total saving was published. The 0.9 multiplier is a design value: slightly fewer tickets for a year."
       }
     ],
     "d08HowNumbersWereChecked": "D08 (law, inspections, fines, lawsuits), November 14, 2026. This session could not open web pages directly: the environment's network policy allows only package registries. Every number was read in web-search excerpts. verified = the excerpt came from the primary source itself (nyc.gov, the city rules library, sla.ny.gov, the statute text) and showed the number. estimate = the number came from press, law-firm or vendor pages, from memory, or from my own arithmetic; the note says which. Section numbers marked 'cited from memory' were not seen. Game-balance values (reputation hits, closure days, demand effects, event multipliers) are design choices.",
@@ -5221,6 +5328,56 @@
     {
       "url": "https://multisite.nycnewsnetwork.com/clintonhill/?p=1349",
       "title": "NYC News Network: bakery cafe in Clinton Hill to close after 22 years (rent up $4,000 a month)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.thenycalliance.org/news-item/advance-doh-inspection-notices",
+      "title": "NYC Hospitality Alliance: advance Health Department inspection notices",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://secretnyc.co/nyc-restaurants-advance-notice-health-inspections/",
+      "title": "Secret NYC: NYC restaurants to get advance notice of health inspections",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://intro.nyc/0183-2026",
+      "title": "NYC Council Introduction 183 of 2026 (inspection notices)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
+      "title": "NYC Mayor's Office: 'OPEN for Small Business', over 50 reforms (July 20, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://politicsny.com/2026/07/20/mamdani-rolls-out-50-plus-fixes-for-nycs-small-business-bureaucracy/",
+      "title": "PoliticsNY: 50-plus fixes for NYC's small-business bureaucracy (July 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.brownstoner.com/brooklyn-life/nyc-small-business-regulation-reform-2026",
+      "title": "Brownstoner: city's red tape reform could go farther, small-business groups say (2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/oath/downloads/pdf/small-business-dohmh-es-ada.pdf",
+      "title": "OATH: Information for restaurant owners (Spanish edition)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/faq-cure-violations-restaurants-sp.pdf",
+      "title": "NYC Health: FAQ on curing violations, restaurants (Spanish edition)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/insp-fines-chngs-sp.pdf",
+      "title": "NYC Health: changes to inspection fines (Spanish edition)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/operations/downloads/pdf/BusinessOwner/BOBOR%202026_ENG_2_SPA.pdf",
+      "title": "NYC Business Owner Bill of Rights, 2026",
       "checked": "2026-11-14"
     }
   ]
