@@ -1,12 +1,12 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { ClientView, IdeaMatch, NicheId, OfficialRole, OwnerView, RoadmapItem, RoadmapKind } from '@ohh/shared/types';
+import type { ClientView, IdeaMatch, NicheId, OfficialRole, RoadmapItem, RoadmapKind } from '@ohh/shared/types';
 import { NICHE_META, NICHE_ORDER, type Catalog } from '../../app/catalog';
 import { CityMapSlot } from '../../app/slots';
 import { useGame } from '../../app/store';
 import { AiBadge, Badge, Button, Card, Field, Icon, List, ListRow, MoneyText, NICHE_ICON, SegmentedControl, Skeleton, Stat, formatMoney, formatPct, type IconName } from '../../ui';
 import { visibleBusinesses } from '../home/Home';
-import { competitorsNear, freePlaces, maxSizeFor, rentPerMonth, trafficLabel } from './kit';
+import { cheapestOpening, competitorsNear, freePlaces, maxSizeFor, rentPerMonth, trafficLabel } from './kit';
 import type { Draft } from './Start';
 
 type StepProps = { draft: Draft; update: (p: Partial<Draft>) => void; catalog: Catalog };
@@ -35,11 +35,11 @@ export function JoinStep({ view, asOfficial }: { view: ClientView; asOfficial: b
   return (
     <form className="stack-lg" onSubmit={submit}>
       <div className="stack-sm">
-        <h1 className="h2">{asOfficial ? 'Inspect the city, earn your share' : `Join ${view.world.config.name}`}</h1>
+        <h1 className="h2">{asOfficial ? 'Inspect the city, earn your share' : 'Last step before you buy: your name'}</h1>
         <p className="muted">
           {asOfficial
             ? 'City officials play free. Take cases, find real violations and split 5% of the bank by points at the end of the season.'
-            : 'You will live the first year of your business here: rent, permits, wages and taxes, at real New York prices.'}
+            : `You join ${view.world.config.name} and get the starting money for your business. Next you pick what to buy.`}
         </p>
       </div>
       <Field label="Your name" hint="Other players see it next to your business.">
@@ -146,11 +146,17 @@ export function IdeaStep({ draft, update, catalog }: StepProps) {
 
 // ───────────────────────── 3. place ─────────────────────────
 
-export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: OwnerView }) {
+export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: ClientView }) {
   const niche = draft.niche as NicheId;
   const pack = catalog.packs.niches[niche]!;
   const businesses = visibleBusinesses(view);
-  const free = freePlaces(catalog.places, niche, businesses);
+  // places the starting money can open come first: a newcomer should not learn at the last step that the room is out of reach
+  const budget = pack.startCapital;
+  const priced = freePlaces(catalog.places, niche, businesses).map((p) => ({ p, cost: cheapestOpening(pack, p) }));
+  const costOf = new Map(priced.map((x) => [x.p.id, x.cost]));
+  const within = priced.filter((x) => x.cost <= budget).length;
+  // within the budget: the cheapest to open first — it leaves the most money to live through the first months
+  const free = [...priced].sort((a, b) => Number(a.cost > budget) - Number(b.cost > budget) || (a.cost <= budget ? a.cost - b.cost : 0)).map((x) => x.p);
   const [showAll, setShowAll] = useState(false);
   const selected = catalog.places.find((p) => p.id === draft.placeId) ?? null;
   const list = showAll ? free : free.slice(0, 8);
@@ -159,7 +165,7 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
     <div className="stack-lg">
       <div className="stack-sm">
         <h1 className="h2">Where will it be?</h1>
-        <p className="muted">{free.length} free storefronts in the East Village fit a {pack.name.toLowerCase()}. Busier streets cost more.</p>
+        <p className="muted">{within} of {free.length} free storefronts in the East Village fit your {formatMoney(budget)} to start. The cheapest to open come first: the money left over is what you live on until the regulars come.</p>
       </div>
       <CityMapSlot mode="pick" niche={niche} places={catalog.places} businesses={businesses} weather={view.weather[0]} onPick={(placeId) => update({ placeId })} selectedPlaceId={draft.placeId ?? undefined} height={220} />
 
@@ -171,8 +177,13 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
             <Stat small label="Foot traffic" value={trafficLabel(selected.footTraffic)} hint={`${formatPct(selected.footTraffic)} of the busiest corner`} />
             <Stat small label="Competitors" value={`${competitorsNear(selected, niche, businesses, catalog.places)} nearby`} hint="same niche within 400 m" />
           </div>
+          <p className={`small ${(costOf.get(selected.id) ?? 0) > budget ? 'loss' : 'muted'}`}>
+            {(costOf.get(selected.id) ?? 0) > budget
+              ? `Opening here costs at least ${formatMoney(costOf.get(selected.id) ?? 0)}. You start with ${formatMoney(budget)}: pick a smaller or cheaper place.`
+              : `Opening here costs from ${formatMoney(costOf.get(selected.id) ?? 0)} of your ${formatMoney(budget)}.`}
+          </p>
           {selected.note && <p className="xsmall faint">Data: {selected.note === 'unverified' ? 'estimate, not yet checked against city records' : selected.note}</p>}
-          <Button block size="lg" iconRight="arrowRight" onClick={() => update({ step: 'plan' })}>Open here</Button>
+          <Button block size="lg" iconRight="arrowRight" disabled={(costOf.get(selected.id) ?? 0) > budget} onClick={() => update({ step: 'plan' })}>Open here</Button>
         </Card>
       )}
 
@@ -183,8 +194,10 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
             icon="pin"
             iconTone={p.id === draft.placeId ? 'accent' : undefined}
             title={p.address}
-            subtitle={`${p.sqft.toLocaleString('en-US')} sq ft · ${trafficLabel(p.footTraffic)} · ${competitorsNear(p, niche, businesses, catalog.places)} rivals`}
-            value={<span className="num">{formatMoney(rentPerMonth(p))}<span className="xsmall faint">/mo</span></span>}
+            subtitle={`${p.sqft.toLocaleString('en-US')} sq ft · ${trafficLabel(p.footTraffic)} · ${competitorsNear(p, niche, businesses, catalog.places)} rivals · rent ${formatMoney(rentPerMonth(p))}/mo`}
+            value={(costOf.get(p.id) ?? 0) > budget
+              ? <Badge tone="loss">Over budget</Badge>
+              : <span className="num"><span className="xsmall faint">opens from </span>{formatMoney(costOf.get(p.id) ?? 0)}</span>}
             onClick={() => update({ placeId: p.id })}
           />
         ))}
