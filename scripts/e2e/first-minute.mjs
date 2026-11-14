@@ -117,6 +117,7 @@ const { call } = api(base);
   }
 
   await page.screenshot({ path: join(OUT, 'last.png'), fullPage: true }).catch(() => {});
+  await call('POST', `/api/worlds/${W}/clock`, { paused: true }); // a deployed server keeps the city: leave it paused (BUGS.md, №15)
   await browser.close();
   server?.stop();
 

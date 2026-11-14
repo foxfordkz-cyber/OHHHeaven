@@ -6,6 +6,7 @@
 node scripts/e2e/journey.mjs                    # starts its own server on a free port
 node scripts/e2e/journey.mjs --url https://…    # the same walk against a deployed game
 scripts/e2e/cycle.sh <branch>                   # a fresh worktree of a branch: install, build, walk
+scripts/e2e/prod.sh https://… [CLOCK_KEY]      # everything against a deployed game: walk, first minute, speed, stage show
 ```
 
 Options: `--scheme dark` (dark system theme and the app's own dark theme), `--widths 375,1440`, `--out <dir>`, `--shots <dir>` (retina screenshots of what the player sees, for the deck), `--no-end` (stop before the season ends), `--root <checkout>` (serve the game from another checkout).
@@ -42,3 +43,5 @@ On every step: a full-page screenshot, horizontal overflow, page errors, console
 - `perf.mjs` — the first screen on a desktop and on a phone throttled like Lighthouse mobile (Slow 4G, CPU ×4): bytes over the wire, which files are large and whether they are compressed, time until the idea field is ready, LCP, long tasks.
 
 Output: `RUN.md` (one line per step) and `results.json` in `docs/qa/runs/<time>/` (not committed). Findings live in `docs/qa/BUGS.md`; whether each screen gives the player a decision, a visible consequence and a reason to come back is in `docs/qa/HOOK.md`.
+
+Only Chromium is installed here: Safari (WebKit) and Firefox are not covered.
