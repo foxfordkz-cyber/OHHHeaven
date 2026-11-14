@@ -218,26 +218,65 @@ export function offerByGroup(b: BusinessState, pack: Pack): Omit<GroupFit, 'shar
   return cfg.segments.map((s) => groupFit(cfg, s, b, pack, undefined, walked));
 }
 
-/** Why a group buys less than the average customer: the largest negative piece, as a sentence. */
-function reasonFor(g: Omit<GroupFit, 'share'>, b: BusinessState, pack: Pack): string | null {
+type Piece = 'price' | 'quality' | 'seats' | 'line';
+
+/**
+ * Why a group stays away, as a sentence, or null when nothing costs it 10% or more. The price and quality pieces are
+ * against an average coffee buyer at the same offer (the engine already charges everyone for price and pays for
+ * quality), so they are said that way; the seats and line pieces are against the reference room and a calm week.
+ * A price below the reference is never a reason: every group still buys more than at the reference price.
+ * `share` is the group's part of the guests at this door, when the door is known.
+ */
+function reasonFor(g: Omit<GroupFit, 'share'>, b: BusinessState, pack: Pack, cfg: GuestSegmentsCfg, share?: number): string | null {
   const who = shortName(g.id, g.name);
   const Who = who.charAt(0).toUpperCase() + who.slice(1);
-  const worst = (['price', 'quality', 'seats', 'line'] as const).reduce((w, k) => (g[k] < g[w] ? k : w), 'price' as 'price' | 'quality' | 'seats' | 'line');
+  const above = b.orders.price > pack.unit.refPrice;
+  const pieces: Piece[] = (['price', 'quality', 'seats', 'line'] as const).filter((k) => k !== 'price' || above);
+  if (!pieces.length) return null;
+  const worst = pieces.reduce((w: Piece, k) => (g[k] < g[w] ? k : w), pieces[0]);
   const loss = 1 - Math.exp(g[worst]);
   if (g[worst] >= 0 || loss < 0.1) return null;
-  if (worst === 'price') {
-    return b.orders.price > pack.unit.refPrice
-      ? `${Who} find ${money(b.orders.price)} too much: ${pct(loss)} fewer of them buy than at ${money(pack.unit.refPrice)}.`
-      : `${Who} read ${money(b.orders.price)} as a cheap cup: ${pct(loss)} fewer of them come.`;
-  }
+  const they = share === undefined ? 'They' : `They are ${pct(share)} of your guests and`;
+  if (worst === 'price') return `${Who} find ${money(b.orders.price)} too much. ${they} buy ${pct(loss)} less than an average coffee buyer at that price.`;
   if (worst === 'quality') {
     return b.quality > 0.5
-      ? `${Who} do not pay for the extra quality: ${pct(loss)} fewer of them than a plain cup would bring.`
-      : `${Who} notice the drop in quality: ${pct(loss)} fewer of them come.`;
+      ? `${Who} do not pay for the extra quality. ${they} buy ${pct(loss)} less of it than an average coffee buyer.`
+      : `${Who} notice the drop in quality. ${they} buy ${pct(loss)} less than an average coffee buyer.`;
   }
-  if (worst === 'seats') return `${Who} want a seat: ${b.size} seats is a counter to them, ${pct(loss)} fewer come.`;
-  return `${Who} walked away from the line last week: ${pct(loss)} fewer of them come back this week.`;
+  if (worst === 'seats') return `${Who} want a seat: ${b.size} seats is a counter to them. ${they} come ${pct(loss)} less than to ${cfg.refSeats} seats.`;
+  return `${Who} walked away from the line last week. ${they} come ${pct(loss)} less this week.`;
 }
+
+/** Guests of an average day of one month at this door, per group (the week averaged out). */
+function monthGuests(cfg: GuestSegmentsCfg, place: Place | undefined, pack: Pack, month: number): number[] {
+  const base = baseShares(cfg, place, pack);
+  const m = (((month - 1) % 12) + 12) % 12;
+  return cfg.segments.map((s, i) => base[i] * (s.week.length ? sum(s.week) / s.week.length : 1) * at(s.months, m));
+}
+
+/**
+ * The calendar ahead, said a week before it comes: next month's guests at this door against this month's. Declared
+ * from the groups' months, not drawn: students leave in June and come back in September, commuters thin out in August.
+ */
+export function nextMonthChange(pack: Pack, place: Place | undefined, month: number): { change: number; groupId: string; groupName: string; groupChange: number } | null {
+  const cfg = segmentsCfg(pack);
+  if (!cfg) return null;
+  const now = monthGuests(cfg, place, pack, month);
+  const next = monthGuests(cfg, place, pack, (month % 12) + 1);
+  const total = sum(now);
+  if (!(total > 0)) return null;
+  // the group that moves the door most (in guests, not in its own percent)
+  let k = 0;
+  for (let i = 1; i < now.length; i++) if (Math.abs(next[i] - now[i]) > Math.abs(next[k] - now[k])) k = i;
+  return {
+    change: sum(next) / total - 1,
+    groupId: cfg.segments[k].id, groupName: cfg.segments[k].name,
+    groupChange: now[k] > 0 ? next[k] / now[k] - 1 : 0,
+  };
+}
+
+/** How big a change of next month is worth a line in the report. */
+const HEADS_UP = 0.05;
 
 /**
  * One number per group: how much of this offer the group buys against an average coffee buyer (100%).
@@ -252,19 +291,47 @@ export function segmentKpis(b: BusinessState, pack: Pack): NicheKpi[] {
   });
 }
 
-function notes(b: BusinessState, r: DayReport, pack: Pack): string[] {
+/**
+ * Lines for the owner's report, on Mondays only so the report does not repeat itself every day.
+ * `env` is optional: the engine does not pass the place to notes yet (build/FORMATS.md, request 1). Without it the
+ * lines say only what does not depend on the door; once the engine passes it, they name the shares at this door and
+ * warn a week ahead about next month's guests.
+ */
+export function notes(b: BusinessState, r: DayReport, pack: Pack, env?: { place?: Place }): string[] {
   const cfg = segmentsCfg(pack);
   if (!cfg) return [];
   const date = dateOf(r.day);
-  // speak once a week, on Mondays, so the report is not the same line every day
   if (date.weekday !== 0) return [];
   const out: string[] = [];
-  const groups = offerByGroup(b, pack).sort((x, y) => x.fit - y.fit);
-  for (const g of groups) {
-    if (g.fit >= 0.9) break;
-    const line = reasonFor(g, b, pack);
+  const place = env?.place;
+
+  // the last Monday of the month: what next month brings to this door
+  if (place && date.dayOfMonth > 23) {
+    const ahead = nextMonthChange(pack, place, date.month);
+    if (ahead && Math.abs(ahead.change) >= HEADS_UP) {
+      const who = shortName(ahead.groupId, ahead.groupName);
+      out.push(ahead.change < 0
+        ? `Next month about ${pct(-ahead.change)} fewer guests at this door: ${who} ${ahead.groupChange < 0 ? `drop by ${pct(-ahead.groupChange)}` : 'move'}. Plan staff and stock for it.`
+        : `Next month about ${pct(ahead.change)} more guests at this door: ${who} ${ahead.groupChange > 0 ? `grow by ${pct(ahead.groupChange)}` : 'move'}. Check the team can serve them.`);
+    }
+  }
+
+  // who stays away and why: with the door known, the groups that cost most guests come first
+  if (place) {
+    const fit = segmentFit({ b, pack, place, date, day: r.day });
+    const ranked = [...fit.byGroup].filter((g) => g.fit < 0.9).sort((x, y) => (1 - y.fit) * y.share - (1 - x.fit) * x.share);
+    for (const g of ranked) {
+      if (g.share < 0.1) continue;
+      const line = reasonFor(g, b, pack, cfg, g.share);
+      if (line) out.push(line);
+      if (out.length >= 2) break;
+    }
+    return out;
+  }
+  for (const g of offerByGroup(b, pack).sort((x, y) => x.fit - y.fit)) {
+    if (g.fit >= 0.9 || out.length >= 2) break;
+    const line = reasonFor(g, b, pack, cfg);
     if (line) out.push(line);
-    if (out.length >= 2) break;
   }
   return out;
 }

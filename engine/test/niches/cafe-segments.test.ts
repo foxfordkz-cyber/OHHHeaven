@@ -5,8 +5,12 @@ import { dateOf, type BusinessState, type DayReport, type Pack, type Place } fro
 import { weekdayMult } from '../../src/economy/effects';
 import { defaultGuestMix, type CafeDay } from '../../src/niches/cafe/contract';
 import {
-  blockTypeOf, blockWeights, guestMix, guestMixAt, part, placeGuests, segmentFit, segmentKpis, segmentsCfg, segmentsDemandMult, type BlockType,
+  blockTypeOf, blockWeights, guestMix, guestMixAt, nextMonthChange, notes, part, placeGuests, segmentFit, segmentKpis, segmentsCfg, segmentsDemandMult, type BlockType,
 } from '../../src/niches/cafe/segments';
+import { applyAction, createWorld, tickDay } from '../../src/index';
+import { recommendOpening } from '../../src/analytics/opening';
+import type { CommonPack, PackSet, Player, WorldState } from '@ohh/shared';
+import { config } from '../fixtures/world';
 
 const read = <T>(p: string): T => JSON.parse(readFileSync(new URL(`../../../${p}`, import.meta.url), 'utf8')) as T;
 const base = read<Pack>('packs/cafe.json');
@@ -154,7 +158,7 @@ describe('cafe segments (B02)', () => {
     expect(dateOf(92).weekday).toBe(0);
     const said = part.notes!(specialty(), monday, pack);
     expect(said.length).toBeGreaterThan(0);
-    expect(said[0]).toMatch(/\$11 too much/);
+    expect(said[0]).toMatch(/\$11 too much\. They buy \d+% less than an average coffee buyer/);
     expect(part.notes!(specialty(), { day: 93 } as DayReport, pack)).toEqual([]);
     expect(part.notes!(cafe(), monday, pack)).toEqual([]);
     expect(part.notes!(cafe({ size: 6 }), monday, pack).join(' ')).toMatch(/want a seat/);
@@ -165,5 +169,43 @@ describe('cafe segments (B02)', () => {
     const k = segmentKpis(specialty(), pack);
     expect(k.find((x) => x.id === 'guest_fit_office')!.value).toBeLessThan(60);
     expect(k.find((x) => x.id === 'guest_fit_tourists')!.value).toBeGreaterThan(100);
+  });
+
+  it('with the door known: shares at this door, and a warning a week before the term ends', () => {
+    const p = byId('ev-078');
+    const may = nextMonthChange(pack, p, 5)!;
+    expect(may.change).toBeLessThan(-0.05);
+    expect(may.groupId).toBe('students');
+    expect(nextMonthChange(pack, p, 8)!.change).toBeGreaterThan(0.05);
+    const lastMondayOfMay = 148;
+    expect(dateOf(lastMondayOfMay)).toMatchObject({ weekday: 0, month: 5, dayOfMonth: 28 });
+    const said = notes(specialty(), { day: lastMondayOfMay } as DayReport, pack, { place: p });
+    expect(said[0]).toMatch(/^Next month about \d+% fewer guests at this door: students drop by \d+%/);
+    expect(said.some((x) => /of your guests/.test(x))).toBe(true);
+    // the first Monday of the month says nothing about next month
+    expect(notes(specialty(), { day: 120 + 1 } as DayReport, pack, { place: p }).some((x) => /Next month/.test(x))).toBe(false);
+  });
+
+  it('a season through the real engine: an honest standard cafe at a median door stays in the black with guest groups', () => {
+    const json = <T>(f: string): T => read<T>(f);
+    const ctx = { packs: { common: json<CommonPack>('packs/_common.json'), niches: { cafe: pack } } as PackSet, places: read<Place[]>('data/places.json') };
+    const empty = createWorld(config());
+    const doors = ctx.places.filter((x) => x.suitableFor.includes('cafe') && (x.pedestriansPerDay ?? 0) > 0
+      && (recommendOpening('cafe', x.id, empty, ctx).find((r) => r.kitId === 'standard')?.cashLeft ?? -1) >= 0);
+    const door = [...doors].sort((a, b) => (a.pedestriansPerDay ?? 0) - (b.pedestriansPerDay ?? 0))[Math.floor(doors.length / 2)];
+    const players: Player[] = [{ id: 'pl1', name: 'Owner', kind: 'owner', isAi: false, paid: true, joinedDay: 0, lastSeenDay: 0, inbox: [] }];
+    let w: WorldState = { ...createWorld(config()), players };
+    const rec = recommendOpening('cafe', door.id, w, ctx).find((r) => r.kitId === 'standard')!;
+    const must = (r: { world: WorldState; error?: string }) => { expect(r.error).toBeUndefined(); return r.world; };
+    w = must(applyAction(w, ctx, 'pl1', { type: 'open_business', niche: 'cafe', placeId: door.id, name: 'Cafe', kitId: rec.kitId, size: rec.size, items: rec.items }));
+    w = must(applyAction(w, ctx, 'pl1', { type: 'set_orders', orders: rec.orders }));
+    while (w.day < 360) {
+      w = tickDay(w, ctx);
+      if (w.businesses[0].status === 'setup') { const r = applyAction(w, ctx, 'pl1', { type: 'launch' }); if (!r.error) w = r.world; }
+    }
+    const b = w.businesses[0];
+    expect(b.status).toBe('open');
+    const last = b.history.slice(-6);
+    expect(last.reduce((a, m) => a + m.profit, 0) / last.length).toBeGreaterThan(0);
   });
 });
