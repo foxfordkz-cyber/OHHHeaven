@@ -3392,17 +3392,17 @@
       "name": "Deliveries before opening",
       "options": [
         {
-          "id": "staff_receives",
-          "label": "Someone comes in an hour early to receive and check",
-          "monthlyCost": 580
-        },
-        {
           "id": "key_drop",
           "label": "Drivers have a key and a code and stock the fridge",
           "monthlyCost": 0,
           "effects": {
             "quality": -0.01
           }
+        },
+        {
+          "id": "staff_receives",
+          "label": "Someone comes in an hour early to receive and check",
+          "monthlyCost": 580
         },
         {
           "id": "left_outside",
@@ -3414,7 +3414,8 @@
       "tier": "core",
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/article81-factsheet.pdf",
       "confidence": "estimate",
-      "note": "Milk and pastry arrive between 3 am and 7 am. An extra paid hour a day at $17 plus payroll taxes is $580 a month. A key drop costs nothing but nobody checks temperatures, counts or dates at the door (the small quality loss is a design value). Crates on the sidewalk warm above 41°F on any mild morning and are sometimes gone by opening: that is the existing violation spoiled_food."
+      "note": "Milk and pastry arrive between 3 am and 7 am. An extra paid hour a day at $17 plus payroll taxes is $580 a month. A key drop costs nothing but nobody checks temperatures, counts or dates at the door (the small quality loss is a design value). Crates on the sidewalk warm above 41°F on any mild morning and are sometimes gone by opening: that is the existing violation spoiled_food.",
+      "d11": "Most small cafes time deliveries to the opener or use a key drop; an extra paid hour every day ($580) is a choice, not the norm."
     },
     {
       "id": "waste_service",
@@ -3504,6 +3505,11 @@
       "name": "Scheduling",
       "options": [
         {
+          "id": "week_by_week",
+          "label": "Schedule sent out week by week",
+          "monthlyCost": 0
+        },
+        {
           "id": "two_weeks_fixed",
           "label": "Schedule posted two weeks ahead, steady shifts",
           "monthlyCost": 400,
@@ -3511,11 +3517,6 @@
             "capacity": 0.02,
             "quality": 0.01
           }
-        },
-        {
-          "id": "week_by_week",
-          "label": "Schedule sent out week by week",
-          "monthlyCost": 0
         },
         {
           "id": "night_before",
@@ -3526,17 +3527,13 @@
             "quality": -0.03
           }
         }
-      ]
+      ],
+      "d11": "NYC Fair Workweek (14-day schedules, premiums) covers fast food chains with 30 or more locations nationally, not an independent cafe (search-seen: DCWP Fair Workweek FAQ). For one shop a fixed two-week schedule is a retention choice."
     },
     {
       "id": "training",
       "name": "Training new hires",
       "options": [
-        {
-          "id": "structured",
-          "label": "30 paid training hours with a checklist and sign-off",
-          "monthlyCost": 110
-        },
         {
           "id": "shadow_only",
           "label": "Shadow a coworker for two shifts",
@@ -3547,6 +3544,11 @@
           }
         },
         {
+          "id": "structured",
+          "label": "30 paid training hours with a checklist and sign-off",
+          "monthlyCost": 110
+        },
+        {
           "id": "barista_school",
           "label": "Roaster lab day and monthly tastings on top",
           "monthlyCost": 330,
@@ -3555,7 +3557,8 @@
             "capacity": 0.02
           }
         }
-      ]
+      ],
+      "d11": "Opening training is already in setup.hiring_training; ongoing structured training is a quality choice."
     },
     {
       "id": "tipping_setup",
@@ -3770,11 +3773,6 @@
       "name": "How you hire",
       "options": [
         {
-          "id": "paid_posts_with_range",
-          "label": "Paid job-board posts that state the pay range",
-          "monthlyCost": 60
-        },
-        {
           "id": "word_of_mouth",
           "label": "Sign in the window and word of mouth",
           "monthlyCost": 0,
@@ -3783,12 +3781,18 @@
           }
         },
         {
+          "id": "paid_posts_with_range",
+          "label": "Paid job-board posts that state the pay range",
+          "monthlyCost": 60
+        },
+        {
           "id": "vague_ads",
           "label": "Paid posts with \"competitive pay\" and no range",
           "monthlyCost": 60,
           "causes": "job_ad_no_pay_range"
         }
-      ]
+      ],
+      "d11": "Hiring by word of mouth is legal and free; a paid post is a choice."
     },
     {
       "id": "interview_screening",
@@ -4199,16 +4203,18 @@
         {
           "id": "staff_shovel",
           "label": "Staff shovel and salt on the clock, within the legal window",
-          "monthlyCost": 90,
-          "effects": {}
+          "monthlyCost": 30,
+          "effects": {},
+          "note": "D11: was $90. D07 prices are per winter month (December-March). The engine charges levers every month, so the cost is spread over 12 months: 90 x 4 / 12 = 30, 400 x 4 / 12 = 133. Back to 90 and 400 once levers can have active months (D07 activeMonths)."
         },
         {
           "id": "contractor",
           "label": "Seasonal contract: a crew clears and salts after every snowfall",
-          "monthlyCost": 400,
+          "monthlyCost": 133,
           "effects": {
             "capacity": 0.01
-          }
+          },
+          "note": "D11: was $400. D07 prices are per winter month (December-March). The engine charges levers every month, so the cost is spread over 12 months: 90 x 4 / 12 = 30, 400 x 4 / 12 = 133. Back to 90 and 400 once levers can have active months (D07 activeMonths)."
         },
         {
           "id": "none",
@@ -4225,7 +4231,8 @@
       "confidence": "estimate",
       "evidence": "calc",
       "note": "Charged only in December-March (activeMonths is a new field). Staff option: Central Park averages about 11 days a season with measurable snow (1991-2020 normals in ai/src/data/nyc-climate.json: Dec 2.1, Jan 3.7, Feb 3.2, Mar 2.0), about 2.75 a month; one hour of a $17.00 worker each time plus a second pass for refreeze = 2.75 x 1.5 h x $17 = $70, plus about $20 of ice melt. Contractor: no New York storefront price was found; vendor guides quote $350-$1,500 per visit for commercial lots in Brooklyn and $2,000-$10,000 a season nationally, which is plowing, not a 20-foot sidewalk. $400 a month ($1,600 a season) is my planning value for a shovel-only sidewalk contract: get three local quotes. The summons is $100 per snowfall and $350 if ignored (OATH data). The -3% demand of 'none' applies only on days with snow or ice on the ground (see extra.mechanics.sidewalk_clock).",
-      "tier": "core"
+      "tier": "core",
+      "d11": "D07 prices are per winter month (December-March). The engine charges levers every month, so the cost is spread over 12 months: 90 x 4 / 12 = 30, 400 x 4 / 12 = 133. Back to 90 and 400 once levers can have active months (D07 activeMonths)."
     },
     {
       "id": "entrance_floor_safety",
@@ -4234,10 +4241,11 @@
         {
           "id": "mats_and_signs",
           "label": "Rented entrance mats swapped weekly, wet-floor signs, mop every hour in bad weather",
-          "monthlyCost": 80,
+          "monthlyCost": 43,
           "effects": {
             "quality": 0.01
-          }
+          },
+          "note": "D11: was $80. D07 had $80 without a price list; D14 found about $5 a mat a week (2 mats x 5 x 52 / 12 = $43, chainstoreage.com vendor estimate)."
         },
         {
           "id": "nothing",
@@ -4251,7 +4259,8 @@
       "confidence": "estimate",
       "evidence": "calc",
       "note": "No price list for mat rental in New York was found; $80 a month (two mats, weekly swap) is my planning value from uniform-service quotes I could not open. The reason the lever exists is the insurer's number: The Hartford's 2025 ten-year review puts the average slip, fall or customer injury claim of a small business at $45,000, up from $20,000 in 2015, and one in five small-business liability claims is now a fall.",
-      "tier": "core"
+      "tier": "core",
+      "d11": "D07 had $80 without a price list; D14 found about $5 a mat a week (2 mats x 5 x 52 / 12 = $43, chainstoreage.com vendor estimate)."
     },
     {
       "id": "storm_day_policy",
@@ -4293,16 +4302,18 @@
         {
           "id": "sweep_open_close",
           "label": "Sweep at opening and before closing, out to 18 inches into the street",
-          "monthlyCost": 85,
-          "effects": {}
+          "monthlyCost": 0,
+          "effects": {},
+          "note": "D11: was $85. D07 valued 10 minutes a day of a barista ($85). Staff hours are already paid in staff.hoursPerMonth, so charging it again counts the same hour twice. Power washing stays a real extra ($150 a visit, D07)."
         },
         {
           "id": "sweep_and_power_wash",
           "label": "Sweep twice a day and power-wash once a month",
-          "monthlyCost": 235,
+          "monthlyCost": 150,
           "effects": {
             "quality": 0.01
-          }
+          },
+          "note": "D11: was $235. D07 valued 10 minutes a day of a barista ($85). Staff hours are already paid in staff.hoursPerMonth, so charging it again counts the same hour twice. Power washing stays a real extra ($150 a visit, D07)."
         },
         {
           "id": "ignore",
@@ -4318,7 +4329,8 @@
       "confidence": "estimate",
       "evidence": "calc",
       "note": "Sweeping: 10 minutes a day of a $17.00 worker x 30 days = $85. Power wash: $150 a visit is my planning value for a 20-foot storefront; no New York price list was found. The duty is real: DSNY makes owners and tenants clean the sidewalk and the gutter 18 inches into the street, even when someone else dropped the litter.",
-      "tier": "core"
+      "tier": "core",
+      "d11": "D07 valued 10 minutes a day of a barista ($85). Staff hours are already paid in staff.hoursPerMonth, so charging it again counts the same hour twice. Power washing stays a real extra ($150 a visit, D07)."
     },
     {
       "id": "shed_response",
@@ -4566,10 +4578,11 @@
         {
           "id": "spotter_and_cones",
           "label": "Cones out and one person stays at the open hatch",
-          "monthlyCost": 45,
+          "monthlyCost": 0,
           "effects": {
             "capacity": -0.01
-          }
+          },
+          "note": "D11: was $45. The spotter is a barista already on shift (D07 valued 10 minutes x 16 days = $45); charging it again counts the same paid hours twice."
         },
         {
           "id": "open_and_go",
@@ -4583,7 +4596,8 @@
       "confidence": "estimate",
       "evidence": "calc",
       "note": "Only for places with a sidewalk hatch. $45 = 10 minutes of a second worker on 16 delivery days. Practitioner summaries of the Administrative Code: when cellar doors are open someone must stay there to steer people around the opening; doors must sit flush and bear weight. A fall is a claim under §7-210, the same route as the icy sidewalk.",
-      "tier": "exotic"
+      "tier": "exotic",
+      "d11": "The spotter is a barista already on shift (D07 valued 10 minutes x 16 days = $45); charging it again counts the same paid hours twice."
     },
     {
       "id": "night_security",
@@ -6282,16 +6296,16 @@
         "inspection"
       ],
       "fine": {
-        "base": 1250,
+        "base": 0,
         "perMonth": 0,
-        "pctOfSaved": 0,
-        "max": 6250
+        "pctOfSaved": 1,
+        "max": null
       },
       "closureDays": 0,
       "reputationHit": 0.01,
-      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf",
-      "confidence": "verified",
-      "note": "Read in the Buildings penalty schedule (1 RCNY 102-01, city PDF dated July 2026): work without a permit under 28-105.1, Class 2: standard penalty $1,250, $6,250 on default, curable within 60 days; an outdoor sign on a display structure without a permit is also $1,250. Read on the Buildings sign page: no permit is needed for a sign painted directly on the wall or for a wall sign of 6 sq ft or less; anything else needs a permit, and only a licensed sign hanger may hang a sign over 75 sq ft or 25 pounds. History: in 2018 anonymous 311 complaints tripled (1,046 against 310 in 2017) and owners faced fines reported at $6,000; Local Law 28 of 2019 froze violations for signs that existed on February 9, 2019 and ended the Buildings Department's own extra civil penalty for business signs under 150 sq ft.",
+      "source": "https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page",
+      "confidence": "estimate",
+      "note": "D11 correction. D02 read the Buildings penalty schedule (28-105.1, Class 2: $1,250, $6,250 on default) and D08 the work-without-permit fee rule (21x the permit fee, at least $6,000). Neither applies to a typical cafe sign today: since Local Law 28 of 2019, extended by Local Law 43 of 2023 and expanded by Local Law 15 of 2026, the Department of Buildings charges no civil penalty for work without a permit on an accessory business sign up to 150 sq ft and 1,200 lb, and waives penalties written since December 28, 2017 (search-seen: DOB sign page and the Local Law 15 of 2026 outreach page; the new end date was not found). The sign still has to be legalized: the game charges back what the shortcut saved (permit and licensed sign hanger). A sign over 150 sq ft or an unsafe sign gets the full Class 2 penalty.",
       "checkedVia": "page_opened"
     },
     {
@@ -6809,15 +6823,15 @@
     {
       "id": "pay_frequency_violation",
       "name": "Manual workers not paid weekly",
-      "law": "NY Labor Law §191(1)(a), §198(1-a) as amended May 9, 2025; §218",
+      "law": "NY Labor Law §191(1)(a); §198(1-a) as amended May 9, 2025",
       "official": "labor_investigator",
       "foundBy": [
         "complaint",
         "audit"
       ],
       "fine": {
-        "base": 1000,
-        "perMonth": 21,
+        "base": 0,
+        "perMonth": 20,
         "pctOfSaved": 0,
         "max": null
       },
@@ -6825,7 +6839,7 @@
       "reputationHit": 0.02,
       "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
       "confidence": "estimate",
-      "note": "Search-seen (secondary, law firms): Labor Law 191(1)(a) requires manual workers to be paid weekly, not later than seven days after the week ends; the Labor Department treats anyone doing physical tasks more than 25% of the time as a manual worker, which covers baristas. Since May 9, 2025 a first violation by an employer who paid in full at least twice a month costs lost interest only (16% a year); after a prior finding, liquidated damages of 100% of the late wages. Arithmetic: half of a $13,440 monthly payroll is paid a week late: $6,720 x 16% x 7/365 = $21 a month. Base $1,000 is the top civil penalty for a first non-wage violation under Labor Law 218 (from the user's research report). A second finding would cost about $6,720 for each month: the engine needs a repeat multiplier (extra.mechanics.repeat_offense_ladder). Opened: NY DOL Frequency of Pay page: manual workers must be paid weekly, other workers at least twice a month. The 2025 damages rule and the penalty were not opened."
+      "note": "First violation by an employer who paid at least twice a month: interest only (16% a year, about 0.3% of the late wages). Half of a $13,456 monthly payroll is paid a week late: about $20 a month. A repeat violation owes 100% of the late-paid wages as liquidated damages - the engine should switch to perMonth = half the monthly payroll on the second finding."
     },
     {
       "id": "no_wage_notice_statements",
@@ -7382,16 +7396,16 @@
         "complaint"
       ],
       "fine": {
-        "base": 100,
+        "base": 50,
         "perMonth": 50,
         "pctOfSaved": 0,
         "max": 300
       },
       "closureDays": 0,
       "reputationHit": 0.01,
-      "source": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf",
-      "confidence": "verified",
-      "note": "DSNY guide for businesses, Avoiding Common Sanitation Violations: failure to clean the sidewalk $100 to $300; failure to clean 18 inches from the curb into the street $100 to $300 (two separate tickets). Sanitation agents may ticket a commercial property only during two one-hour periods a day, printed on the DSNY notice for the block. Game formula: $100 the first month, up to $300."
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-32876",
+      "confidence": "estimate",
+      "note": "D11 correction between D07 (50/250/500) and D08 (100/50/300). Search-seen in the Sanitation penalty schedule as amended effective November 14, 2021: Administrative Code 16-118(2)(a) failure to clean the sidewalk and 18 inches into the gutter: $50 first offense, $100 second and third, $300 on default. perMonth 50 stands for the step from the first to the repeat offense. DSNY announced higher repeat-offender penalties from December 19, 2024; the new amounts were not found, so this may be low."
     },
     {
       "id": "trash_setout_violation",
@@ -8951,16 +8965,16 @@
     },
     {
       "id": "minimum_wage_march_2027",
-      "name": "January 1: the minimum wage may step up",
-      "text": "The minimum wage is indexed to inflation and announced by October 1. For 2027 the step was cancelled by an off-ramp: $17.00 stays. In a year when it applies, every worker at or near the floor moves with it.",
+      "name": "Minimum wage may rise to $17.60 on March 1",
+      "text": "The wage floor stayed at $17.00 on January 1. The Governor has proposed $17.60 from March 1, 2027; it needs a vote in Albany.",
       "effect": {
         "field": "wages",
-        "mult": 1.03
+        "mult": 1.035
       },
-      "months": 12,
-      "source": "https://dol.ny.gov/minimum-wage-0",
-      "confidence": "verified",
-      "note": "Seen on the NY Department of Labor page on November 14, 2026: \"On January 1, 2027, New York’s minimum wage will stay the same... $17.00 per hour in New York City\"; an off-ramp condition was met. The event therefore does NOT fire in January 2027. The x1.03 multiplier is for a later year in which indexing applies (3% is a projection, my estimate). The last real step was $16.50 to $17.00 on January 1, 2026."
+      "months": 10,
+      "source": "https://www.governor.ny.gov/new-york-state-minimum-wage-2027",
+      "confidence": "estimate",
+      "note": "NYS Governor's page: on January 1, 2027 the minimum wage stays at $17.00 in New York City because one of the law's off-ramp conditions was met; the Governor proposed inflation-based increases from March 1, 2027: $17.60 downstate, subject to legislation. 17.60 / 17.00 = 1.035. The pack pays $21, so the direct effect is on new hires and on the wage ladder; apply only if the bill passes."
     },
     {
       "id": "office_days_up",
@@ -17158,6 +17172,16 @@
     {
       "url": "https://cdn.shopify.com/s/files/1/0566/9385/0289/files/Cold_Brew_Recipe_-_Full_Sheet.pdf",
       "title": "https://cdn.shopify.com/s/files/1/0566/9385/0289/files/Cold_Brew_Recipe_-_Full_Sheet.pdf",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page",
+      "title": "https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-32876",
+      "title": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-32876",
       "checked": "2026-11-14"
     },
     {

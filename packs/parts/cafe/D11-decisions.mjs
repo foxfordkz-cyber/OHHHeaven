@@ -198,10 +198,10 @@ export const alias = {
 
 // Чья запись — основа, если в группе несколько версий (id -> тег фрагмента).
 export const prefer = {
-  violations: { accessibility_barrier: 'D08', card_surcharge_undisclosed: 'D08', loud_music_noise: 'D08', occupancy_contrary_to_co: 'D01', single_use_handouts: 'D08', snow_ice_not_cleared: 'D07', overcrowding: 'D08', retaliation: 'D05', illegal_deductions: 'D05', commercial_waste_in_litter_basket: 'D07', hand_wash_station_down: 'D08', banned_additive_cbd: 'D08', foam_containers: 'D08' },
+  violations: { accessibility_barrier: 'D08', card_surcharge_undisclosed: 'D08', loud_music_noise: 'D08', occupancy_contrary_to_co: 'D01', single_use_handouts: 'D08', snow_ice_not_cleared: 'D07', overcrowding: 'D08', retaliation: 'D05', illegal_deductions: 'D05', pay_frequency_violation: 'D10', commercial_waste_in_litter_basket: 'D07', hand_wash_station_down: 'D08', banned_additive_cbd: 'D08', foam_containers: 'D08' },
   levers: { hvac_service: 'D03', insurance_package: 'D09', entrance_floor_safety: 'D07', winter_proofing: 'D07', laptop_policy: 'D02', owner_schedule: 'D10', snow_ice_plan: 'D07', waste_service: 'D04', delivery_apps: 'D06', harassment_prevention: 'D05', job_ads: 'D05', card_pricing: 'D06', catering: 'D06', day_end_surplus: 'D04', seasonal_menu: 'D04', restroom_access: 'D02', seating_layout: 'D02', takeout_packaging: 'D08', utility_concept: 'D01', music: 'D08' },
   setup: { ac_replacement: 'D03', dob_alteration_filing_fee: 'D01', takeover_due_diligence: 'D14', sba_guaranty_fee: 'D09', con_ed_security_deposit: 'D01', convection_oven: 'D03', snow_kit: 'D07' },
-  events: { january_slump: 'D06', chain_opens_nearby: 'D06', street_dig_long: 'D07', sidewalk_shed: 'D07' },
+  events: { january_slump: 'D06', chain_opens_nearby: 'D06', street_dig_long: 'D07', sidewalk_shed: 'D07', minimum_wage_march_2027: 'D09' },
   monthlyCosts: { turnover_replacement: 'D05', backflow_test: 'D03' },
   shortcuts: {},
 };
@@ -288,5 +288,34 @@ export const drop = {
   monthlyCosts: {},
 };
 
-// Правки после проверки первоисточника сборщиком. section -> id -> поля.
-export const override = {};
+// Правки после проверки первоисточника сборщиком (веб-поиск D11, 14.11.2026). section -> id -> поля.
+export const override = {
+  violations: {
+    sign_without_permit: {
+      fine: { base: 0, perMonth: 0, pctOfSaved: 1, max: null },
+      confidence: 'estimate',
+      source: 'https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page',
+      note: 'D11 correction. D02 read the Buildings penalty schedule (28-105.1, Class 2: $1,250, $6,250 on default) and D08 the work-without-permit fee rule (21x the permit fee, at least $6,000). Neither applies to a typical cafe sign today: since Local Law 28 of 2019, extended by Local Law 43 of 2023 and expanded by Local Law 15 of 2026, the Department of Buildings charges no civil penalty for work without a permit on an accessory business sign up to 150 sq ft and 1,200 lb, and waives penalties written since December 28, 2017 (search-seen: DOB sign page and the Local Law 15 of 2026 outreach page; the new end date was not found). The sign still has to be legalized: the game charges back what the shortcut saved (permit and licensed sign hanger). A sign over 150 sq ft or an unsafe sign gets the full Class 2 penalty.',
+    },
+    dirty_sidewalk: {
+      fine: { base: 50, perMonth: 50, pctOfSaved: 0, max: 300 },
+      source: 'https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-32876',
+      confidence: 'estimate',
+      note: 'D11 correction between D07 (50/250/500) and D08 (100/50/300). Search-seen in the Sanitation penalty schedule as amended effective November 14, 2021: Administrative Code 16-118(2)(a) failure to clean the sidewalk and 18 inches into the gutter: $50 first offense, $100 second and third, $300 on default. perMonth 50 stands for the step from the first to the repeat offense. DSNY announced higher repeat-offender penalties from December 19, 2024; the new amounts were not found, so this may be low.',
+    },
+  },
+};
+
+// Порядок и цена вариантов рычагов. Движок берёт вариантом по умолчанию первый без нарушения и списывает его цену каждый месяц,
+// поэтому по умолчанию стоит то, что делает обычное маленькое кафе законно и без лишних денег сверх уже посчитанных зарплат.
+export const leverOptions = {
+  early_deliveries: { order: ['key_drop', 'staff_receives', 'left_outside'], why: 'Most small cafes time deliveries to the opener or use a key drop; an extra paid hour every day ($580) is a choice, not the norm.' },
+  scheduling: { order: ['week_by_week', 'two_weeks_fixed', 'night_before'], why: 'NYC Fair Workweek (14-day schedules, premiums) covers fast food chains with 30 or more locations nationally, not an independent cafe (search-seen: DCWP Fair Workweek FAQ). For one shop a fixed two-week schedule is a retention choice.' },
+  training: { order: ['shadow_only', 'structured', 'barista_school'], why: 'Opening training is already in setup.hiring_training; ongoing structured training is a quality choice.' },
+  job_ads: { order: ['word_of_mouth', 'paid_posts_with_range', 'vague_ads'], why: 'Hiring by word of mouth is legal and free; a paid post is a choice.' },
+  snow_ice_plan: { cost: { staff_shovel: 30, contractor: 133 }, why: 'D07 prices are per winter month (December-March). The engine charges levers every month, so the cost is spread over 12 months: 90 x 4 / 12 = 30, 400 x 4 / 12 = 133. Back to 90 and 400 once levers can have active months (D07 activeMonths).' },
+  sidewalk_care: { cost: { sweep_open_close: 0, sweep_and_power_wash: 150 }, why: 'D07 valued 10 minutes a day of a barista ($85). Staff hours are already paid in staff.hoursPerMonth, so charging it again counts the same hour twice. Power washing stays a real extra ($150 a visit, D07).' },
+  delivery_hatch_rule: { cost: { spotter_and_cones: 0 }, why: 'The spotter is a barista already on shift (D07 valued 10 minutes x 16 days = $45); charging it again counts the same paid hours twice.' },
+  entrance_floor_safety: { cost: { mats_and_signs: 43 }, why: 'D07 had $80 without a price list; D14 found about $5 a mat a week (2 mats x 5 x 52 / 12 = $43, chainstoreage.com vendor estimate).' },
+};
+

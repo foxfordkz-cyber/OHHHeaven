@@ -140,7 +140,14 @@ for (const sec of SECTIONS) {
       log.moved.push({ section: sec, id: r.id, to: 'extra.preOpeningChoices', why: 'decided once before opening, not a monthly lever' });
       continue;
     }
-    if (D.override[sec] && D.override[sec][r.id]) Object.assign(r, structuredClone(D.override[sec][r.id]));
+    if (D.override[sec] && D.override[sec][r.id]) { Object.assign(r, structuredClone(D.override[sec][r.id])); log.overrides = [...(log.overrides || []), `${sec}.${r.id}`]; }
+    if (sec === 'levers' && D.leverOptions && D.leverOptions[r.id]) {
+      const lo = D.leverOptions[r.id];
+      if (lo.order) r.options = [...lo.order.map((id) => r.options.find((o) => o.id === id)).filter(Boolean), ...r.options.filter((o) => !lo.order.includes(o.id))];
+      if (lo.cost) for (const o of r.options) if (lo.cost[o.id] !== undefined) { o.note = `D11: was $${o.monthlyCost}. ${lo.why}`; o.monthlyCost = lo.cost[o.id]; }
+      r.d11 = lo.why;
+      log.overrides = [...(log.overrides || []), `levers.${r.id}`];
+    }
     keep.push(r);
     (provenance[sec] ||= {})[r.id] = { from: x.from, chosen: x.winner, ...(x.ids.length > 1 ? { mergedIds: x.ids } : {}) };
   }

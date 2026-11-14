@@ -1978,7 +1978,7 @@
    "section": "violations",
    "id": "pay_frequency_violation",
    "field": "fine.base",
-   "chosen": 1000,
+   "chosen": 0,
    "values": [
     {
      "tag": "D05",
@@ -2007,7 +2007,7 @@
    "section": "violations",
    "id": "pay_frequency_violation",
    "field": "fine.perMonth",
-   "chosen": 21,
+   "chosen": 20,
    "values": [
     {
      "tag": "D05",
@@ -2651,7 +2651,7 @@
    "section": "events",
    "id": "minimum_wage_march_2027",
    "field": "effect.mult",
-   "chosen": 1.03,
+   "chosen": 1.035,
    "values": [
     {
      "tag": "D09",
@@ -2673,7 +2673,7 @@
    "section": "events",
    "id": "minimum_wage_march_2027",
    "field": "months",
-   "chosen": 12,
+   "chosen": 10,
    "values": [
     {
      "tag": "D09",
@@ -4567,11 +4567,6 @@
    "to": "dsny_agent"
   },
   {
-   "at": "violations.pay_frequency_violation.official",
-   "from": "hospitality_wage_investigator",
-   "to": "labor_investigator"
-  },
-  {
    "at": "violations.no_wage_notice_statements.official",
    "from": "hospitality_wage_investigator",
    "to": "labor_investigator"
@@ -4753,6 +4748,18 @@
    "at": "kits.premium",
    "added": "asbestos_survey_acp5"
   }
+ ],
+ "overrides": [
+  "levers.early_deliveries",
+  "levers.scheduling",
+  "levers.training",
+  "levers.job_ads",
+  "levers.snow_ice_plan",
+  "levers.entrance_floor_safety",
+  "levers.sidewalk_care",
+  "levers.delivery_hatch_rule",
+  "violations.sign_without_permit",
+  "violations.dirty_sidewalk"
  ],
  "calibration": {
   "applied": 0,
@@ -7474,7 +7481,7 @@
      "D09",
      "D10"
     ],
-    "chosen": "D05"
+    "chosen": "D10"
    },
    "no_wage_notice_statements": {
     "from": [
@@ -8484,7 +8491,7 @@
      "D09",
      "D10"
     ],
-    "chosen": "D10",
+    "chosen": "D09",
     "mergedIds": [
      "minimum_wage_march_2027",
      "wage_step_january"
