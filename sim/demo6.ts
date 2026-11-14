@@ -80,6 +80,7 @@ open(bella, 'barbershop', pBella, 'Bella Cuts', 'standard');
 log.setup.roadmapYou = (answer(w, ctx, you, { type: 'roadmap', niche: 'cafe' }) as RoadmapItem[]).map((s) => ({ title: s.title, kind: s.kind, fee: s.fee, waitDays: s.waitDays, agency: s.agency, status: s.status }));
 
 // ───────────── characters ─────────────
+const RESTROOM = 'customer_restroom';
 const launched = new Set<string>();
 function launchWhenReady(pid: string, early = false) {
   const b = biz(pid);
@@ -102,8 +103,10 @@ function applyAdvice(pid: string) {
 }
 
 function answerNotices(pid: string, how: 'pay' | 'contest' | 'bribe', bribe = 0) {
-  for (const n of ov(pid).notices ?? []) {
-    if (n.status !== 'notice') continue;
+  const mine = biz(pid)?.id;
+  for (const c of w.cases) {
+    if (c.businessId !== mine || c.status !== 'notice') continue;
+    const n = { caseId: c.id, fine: c.fine };
     const resp: Action = how === 'bribe' ? { type: 'answer_notice', caseId: n.caseId, response: 'bribe', bribeAmount: bribe } : { type: 'answer_notice', caseId: n.caseId, response: how };
     if (A(pid, resp, 'notice')) T(names[pid], how === 'bribe' ? `answers the notice (fine $${r0(n.fine)}) with a bribe offer of $${bribe}` : `answers the notice: ${how} (fine $${r0(n.fine)})`, { caseId: n.caseId });
   }
@@ -112,7 +115,7 @@ function answerNotices(pid: string, how: 'pay' | 'contest' | 'bribe', bribe = 0)
 function answerDeals(pid: string, accept: (kind: string, fromHuman: boolean) => boolean) {
   const b = biz(pid);
   if (!b) return;
-  for (const d of ov(pid).deals ?? []) {
+  for (const d of w.deals) {
     if (d.status !== 'proposed' || d.toBusinessId !== b.id) continue;
     const from = w.businesses.find((x) => x.id === d.fromBusinessId);
     const yes = accept(d.terms.type, !from?.isAi);
@@ -121,7 +124,9 @@ function answerDeals(pid: string, accept: (kind: string, fromHuman: boolean) => 
 }
 
 function officialDay(pid: string, takesBribes: boolean) {
-  const v = fv(pid);
+  const me = w.officials.find((o) => o.playerId === pid)!;
+  const card = (c: Case) => ({ caseId: c.id, status: c.status, bribeAmount: c.bribeAmount, origin: c.origin, hints: c.hints, business: { name: bizName(c.businessId) } });
+  const v = { mine: w.cases.filter((c) => c.officialId === me.id).map(card), queue: w.cases.filter((c) => c.status === 'open' && c.role === me.role).map(card) };
   for (const c of v.mine ?? []) {
     if (c.status !== 'bribe_offered') continue;
     const yes = takesBribes && (c.bribeAmount ?? 0) >= 1000;
@@ -154,15 +159,17 @@ function humansAct() {
   // Leo: saves on cleaning and pest control from the first day.
   if (d === 1 && A(leo, { type: 'set_orders', orders: { levers: { ...biz(leo)!.orders.levers, cleaning: 'minimal', pest_control: 'none' } } }, 'levers')) T('Leo', 'sets cleaning to "minimal" and cancels pest control to save money');
   // You: log in twice a week, follow the system's advice, pay what you owe.
-  if (d % 3 === 0) { w = markSeen(w, you); applyAdvice(you); }
+  if (d === 23 && A(you, { type: 'buy_item', itemId: RESTROOM, qty: 1 }, 'restroom')) T('You', 'buys the customer restroom upgrade: the law requires it for 20 or more seats');
+  if (d % 3 === 0 && !(d >= 200 && d <= 230)) { w = markSeen(w, you); applyAdvice(you); }
+  if (d === 231) log.awayYou = ov(you).away;
   answerNotices(you, 'pay');
   answerNotices(bella, 'contest');
   answerNotices(viktor, 'bribe', 5000);
   answerNotices(leo, 'bribe', 1500);
-  answerDeals(you, (k, human) => k === 'joint_purchase' || k === 'cross_promo' || human);
-  answerDeals(bella, () => true);
-  answerDeals(leo, (k) => k !== 'partnership');
-  answerDeals(viktor, (k) => k === 'loan');
+  answerDeals(you, (_k, human) => human);
+  answerDeals(bella, (_k, human) => human);
+  answerDeals(leo, (k, human) => human && k !== 'partnership');
+  answerDeals(viktor, (k, human) => human && k === 'loan');
   // Cooperation.
   if (d === 35) propose(you, bella, { type: 'cross_promo', months: 3 });
   if (d === 36) propose(you, leo, { type: 'joint_purchase', months: 3 });
@@ -223,7 +230,9 @@ function afterStep() {
 }
 
 const seenEvents = new Set<string>(); const seenFeed = new Set<string>();
-while (w.phase === 'running' && w.day < 400) {
+const MAXDAY = Number(process.env.DAYS) || 400; let t0 = Date.now();
+while (w.phase === 'running' && w.day < MAXDAY) {
+  if (w.day % 10 === 0) { console.error('day', w.day, Date.now() - t0, 'ms', 'biz', w.businesses.length, 'cases', w.cases.length, 'feed', w.feed.length); t0 = Date.now(); }
   humansAct();
   w = step(w, ctx, deps);
   for (const e of w.events) if (!seenEvents.has(e.id)) { seenEvents.add(e.id); log.events.push({ announcedDay: e.announcedDay, startDay: e.startDay, endDay: e.endDay, start: dateOf(e.startDay).label, title: e.title, text: e.text, kind: e.kind, effects: e.effects, origin: e.origin }); }
