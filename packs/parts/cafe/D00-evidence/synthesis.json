@@ -143,17 +143,89 @@
       "access": "opened_primary",
       "evidence": "Allergy menu statement or information alternatives and online communication requirements; stated summons enforcement begins January 2027.",
       "tier": "core"
+    },
+    {
+      "id": "d00_root_source_gusto",
+      "url": "https://gusto.com/product/pricing",
+      "title": "Gusto: Pricing",
+      "publisher": "Gusto",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Simple plan displayed at $49 monthly plus $6 monthly per person.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_root_source_square",
+      "url": "https://squareup.com/us/en/pricing",
+      "title": "Square: Pricing",
+      "publisher": "Square",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Plus displayed at $49 per location monthly; in-person card rate 2.5% plus 15 cents.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_root_source_penalty",
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "title": "NYC Health: Chapter 23 inspection rules",
+      "publisher": "NYC Health",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Condition level is severity/pervasiveness, not elapsed months; code 04A shows $400.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_root_source_school26",
+      "url": "https://www.schools.nyc.gov/calendar/2025-2026-school-year-calendar",
+      "title": "NYC Public Schools: Calendar 2025–2026",
+      "publisher": "NYC Public Schools",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Actual 2026 midwinter and spring closures; different school-year page needed for the first part of calendar 2026.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_root_source_transfers",
+      "url": "https://squareup.com/help/us/en/article/8328-troubleshoot-missing-transfers",
+      "title": "Square: Missing transfers",
+      "publisher": "Square",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Pending transfers, bank verification, cutoff times, holidays and payment matching explain settlement timing.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_root_source_menus",
+      "url": "https://help.doordash.com/en-us/merchants/article/integration-manage-menu",
+      "title": "DoorDash: POS menu integration",
+      "publisher": "DoorDash",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "POS is the main menu update source; portal changes may be overwritten and availability depends on integration.",
+      "tier": "core"
     }
   ],
   "ownerDay": [
     {
       "id": "d00_day_00",
       "hour": "00:00–04:00",
-      "title": "Rest and on-call boundary",
-      "text": "Review an actual alarm only if one arrives; the business still holds refrigerated stock while closed.",
-      "whatGoesWrong": "Unbounded on-call work consumes the owner’s recovery time.",
-      "playerDecision": "Keep delegated escalation contacts or cover personally.",
-      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "title": "Closed premises and food storage",
+      "text": "The walkthrough pauses public service; refrigerated stock still requires safe holding.",
+      "whatGoesWrong": "Closing the doors does not make unsafe stored food safe.",
+      "playerDecision": "Maintain compliant holding or discard affected stock.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46103",
       "tier": "core",
       "confidence": "estimate",
       "note": "Illustrative walkthrough hour, not an observed average workday or a mandated shift. Several people can cover these tasks; no person is assumed to work every hour."
@@ -213,7 +285,7 @@
       "text": "Check that yesterday’s receipts reconcile with actual settlement.",
       "whatGoesWrong": "Sales reports are not the same as cleared cash.",
       "playerDecision": "Investigate unmatched entries or reserve liquidity pending settlement.",
-      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm",
+      "source": "https://squareup.com/help/us/en/article/8328-troubleshoot-missing-transfers",
       "tier": "core",
       "confidence": "estimate",
       "note": "Illustrative walkthrough hour, not an observed average workday or a mandated shift. Several people can cover these tasks; no person is assumed to work every hour."
@@ -240,7 +312,10 @@
       "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
       "tier": "core",
       "confidence": "estimate",
-      "note": "Illustrative walkthrough hour, not an observed average workday or a mandated shift. Several people can cover these tasks; no person is assumed to work every hour."
+      "note": "Illustrative walkthrough hour, not an observed average workday or a mandated shift. Several people can cover these tasks; no person is assumed to work every hour.",
+      "supportingSources": [
+        "https://help.doordash.com/en-us/merchants/article/integration-manage-menu"
+      ]
     },
     {
       "id": "d00_day_08",
@@ -377,10 +452,10 @@
     {
       "id": "d00_day_19",
       "hour": "23:00",
-      "title": "Off-site coverage",
-      "text": "Leave an escalation plan and a practical rest window.",
-      "whatGoesWrong": "Equipment care continues across the close/open boundary.",
-      "playerDecision": "Delegate monitored exceptions or plan owner coverage explicitly.",
+      "title": "Next service preparation",
+      "text": "Review unresolved equipment service needs before the next operating day.",
+      "whatGoesWrong": "An unresolved maintenance task can carry into the next opening.",
+      "playerDecision": "Schedule qualified service or plan a supported alternative menu.",
       "source": "https://www.lamarzoccousa.com/news/blog/summer-espresso-machine-service/",
       "tier": "core",
       "confidence": "estimate",
@@ -405,7 +480,7 @@
       "name": "February",
       "text": "Check school closures and complete outstanding winter maintenance.",
       "whatGoesWrong": "A school-led catchment can change while rent remains due.",
-      "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "source": "https://www.schools.nyc.gov/calendar/2025-2026-school-year-calendar",
       "tier": "core",
       "confidence": "estimate",
       "note": "Monthly review plan, not a claim that an adverse event must occur. Apply the actual operating year, filing classification, address and opening stage."
@@ -485,7 +560,10 @@
       "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
       "tier": "core",
       "confidence": "estimate",
-      "note": "Monthly review plan, not a claim that an adverse event must occur. Apply the actual operating year, filing classification, address and opening stage."
+      "note": "Monthly review plan, not a claim that an adverse event must occur. Apply the actual operating year, filing classification, address and opening stage.",
+      "supportingSources": [
+        "https://www.tax.ny.gov/help/calendar/2026.htm"
+      ]
     },
     {
       "id": "d00_calendar_october",
@@ -710,6 +788,44 @@
         "confidence": "estimate",
         "note": "The inherited one-percent saving is a legacy game allowance, not a measured waste reduction or a recommendation. Recalibrate from actual discarded inventory cost; this patch corrects the trigger and player text only."
       }
+    ],
+    "violations": [
+      {
+        "id": "dirty_surfaces",
+        "fine": {
+          "perMonth": 0
+        },
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+        "confidence": "estimate",
+        "note": "D00 removes the unsupported automatic elapsed-month increase: condition levels in Chapter 23 describe severity/pervasiveness, not months. Other inherited fine parameters and reputation effects still require case-specific calibration; they are not blanket verified numbers. Repeated citations, separate violations and closure are separate state transitions."
+      },
+      {
+        "id": "pest_activity",
+        "fine": {
+          "perMonth": 0
+        },
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+        "confidence": "estimate",
+        "note": "D00 removes the unsupported automatic elapsed-month increase: condition levels in Chapter 23 describe severity/pervasiveness, not months. Other inherited fine parameters and reputation effects still require case-specific calibration; they are not blanket verified numbers. Repeated citations, separate violations and closure are separate state transitions."
+      },
+      {
+        "id": "spoiled_food",
+        "fine": {
+          "perMonth": 0
+        },
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+        "confidence": "estimate",
+        "note": "D00 removes the unsupported automatic elapsed-month increase: condition levels in Chapter 23 describe severity/pervasiveness, not months. Other inherited fine parameters and reputation effects still require case-specific calibration; they are not blanket verified numbers. Repeated citations, separate violations and closure are separate state transitions."
+      },
+      {
+        "id": "unapproved_food_source",
+        "fine": {
+          "perMonth": 0
+        },
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+        "confidence": "estimate",
+        "note": "D00 removes the unsupported automatic elapsed-month increase: condition levels in Chapter 23 describe severity/pervasiveness, not months. Other inherited fine parameters and reputation effects still require case-specific calibration; they are not blanket verified numbers. Repeated citations, separate violations and closure are separate state transitions."
+      }
     ]
   },
   "searchLog": [
@@ -731,6 +847,18 @@
       "language": "en",
       "purpose": "Baseline correction, day/year walkthrough and integration checks",
       "tier": "core"
+    },
+    {
+      "id": "d00_root_quality_queries",
+      "queries": [
+        "site.nyc.gov cafe restaurant opening minimum staff two food protection",
+        "site.reddit.com/r/smallbusiness coffee shop owner regret equipment maintenance",
+        "владелец кофейни ошибки открытие закрытие личный опыт",
+        "dueño cafetería errores cierre experiencia alquiler"
+      ],
+      "language": "en/ru/es",
+      "purpose": "Independent multilingual cross-check during integration; pricing and penalty pages subsequently opened directly.",
+      "tier": "core"
     }
   ],
   "gaps": [
@@ -742,6 +870,110 @@
     {
       "id": "d00_root_pricing",
       "text": "No source establishes universal NYC renovation duration, conversion rate, customer retention after sale or maintenance-failure date. Obtain address-specific quotes and observations.",
+      "tier": "core"
+    }
+  ],
+  "verifiedFacts": [
+    {
+      "id": "d00_fact_gusto_base",
+      "what": "Gusto Simple monthly base",
+      "value": 49,
+      "unit": "USD/month",
+      "source": "https://gusto.com/product/pricing",
+      "confidence": "verified",
+      "note": "Current published plan price; excludes per-person charges and optional products.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_fact_gusto_person",
+      "what": "Gusto Simple per-person monthly charge",
+      "value": 6,
+      "unit": "USD/person/month",
+      "source": "https://gusto.com/product/pricing",
+      "confidence": "verified",
+      "note": "Apply to actual billed people, not an assumed owner payroll classification.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_fact_square_plus",
+      "what": "Square Plus monthly subscription",
+      "value": 49,
+      "unit": "USD/location/month",
+      "source": "https://squareup.com/us/en/pricing",
+      "confidence": "verified",
+      "note": "Plan selection, add-ons and negotiated terms can differ.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_fact_square_rate",
+      "what": "Square Plus standard in-person percentage",
+      "value": 0.025,
+      "unit": "fraction of processed payment",
+      "source": "https://squareup.com/us/en/pricing",
+      "confidence": "verified",
+      "note": "Includes only the advertised percentage; fixed fee is separate.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_fact_square_fixed",
+      "what": "Square Plus standard in-person fixed fee",
+      "value": 0.15,
+      "unit": "USD/transaction",
+      "source": "https://squareup.com/us/en/pricing",
+      "confidence": "verified",
+      "note": "Not a percentage of net cafe sales.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_fact_fpc_fine",
+      "what": "Code 04A scheduled fine",
+      "value": 400,
+      "unit": "USD/cited violation",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "note": "Scheduled amount for specified code; does not establish a universal closure duration or reputation effect.",
+      "tier": "core"
+    }
+  ],
+  "calendarAnchors": [
+    {
+      "id": "d00_calendar_anchor_midwinter",
+      "name": "NYCPS midwinter recess",
+      "startDate": "2026-02-16",
+      "endDate": "2026-02-20",
+      "source": "https://www.schools.nyc.gov/calendar/2025-2026-school-year-calendar",
+      "confidence": "verified",
+      "note": "Opened official school calendar; dates are schedule facts, no cafe demand effect is inferred.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_calendar_anchor_spring",
+      "name": "NYCPS spring recess",
+      "startDate": "2026-04-02",
+      "endDate": "2026-04-10",
+      "source": "https://www.schools.nyc.gov/calendar/2025-2026-school-year-calendar",
+      "confidence": "verified",
+      "note": "Opened official school calendar; dates are schedule facts, no cafe demand effect is inferred.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_calendar_anchor_school_end",
+      "name": "NYCPS last student day",
+      "startDate": "2026-06-26",
+      "endDate": "2026-06-26",
+      "source": "https://www.schools.nyc.gov/calendar/2025-2026-school-year-calendar",
+      "confidence": "verified",
+      "note": "Opened official school calendar; dates are schedule facts, no cafe demand effect is inferred.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_calendar_anchor_school_start",
+      "name": "NYCPS first day",
+      "startDate": "2026-09-10",
+      "endDate": "2026-09-10",
+      "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "confidence": "verified",
+      "note": "Opened official school calendar; dates are schedule facts, no cafe demand effect is inferred.",
       "tier": "core"
     }
   ]

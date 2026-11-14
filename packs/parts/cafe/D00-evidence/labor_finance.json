@@ -1507,7 +1507,7 @@
         }
       ],
       "tier": "core",
-      "source": "https://dol.ny.gov/unemployment-insurance-rate-information",
+      "source": "https://dol.ny.gov/bizserve/ui/prg/rate",
       "confidence": "estimate",
       "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
       "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
@@ -1704,6 +1704,258 @@
       ],
       "tier": "core",
       "source": "https://perfectdailygrind.com/2026/10/why-running-a-coffee-shop-is-harder/",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
+      "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
+    },
+    {
+      "id": "d00_labor_finance_contractor_barista",
+      "name": "A contractor label conflicts with the actual job",
+      "text": "A barista following the cafe schedule with its equipment may be an employee under applicable tests.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Player pays a controlled regular barista as a contractor solely to avoid employer obligations.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_contractor_barista_response",
+          "optionId": "option_a",
+          "label": "Review and correct classification with payroll adjustments"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_contractor_barista_response",
+          "optionId": "option_b",
+          "label": "Use a genuine independent supplier only for a suitably independent service"
+        }
+      ],
+      "tier": "core",
+      "source": "https://dol.ny.gov/worker-misclassification-employee-vs-independent-contractor-fare-grant",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
+      "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
+    },
+    {
+      "id": "d00_labor_finance_salary_ad",
+      "name": "A recruitment ad omits the required pay range",
+      "text": "A small employer can cross the city coverage threshold.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Player covered job advertisement omits a good-faith salary or hourly range.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_salary_ad_response",
+          "optionId": "option_a",
+          "label": "Correct the ad using the genuine offered range"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_salary_ad_response",
+          "optionId": "option_b",
+          "label": "Review all current postings and train the hiring lead"
+        }
+      ],
+      "tier": "core",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03530",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
+      "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
+    },
+    {
+      "id": "d00_labor_finance_after_close_meeting",
+      "name": "The staff meeting continues after clock-out",
+      "text": "Required job-related meetings can create additional compensable time.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Player requires staff to stay for training after stopping the time clock.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_after_close_meeting_response",
+          "optionId": "option_a",
+          "label": "Record and pay the meeting time and applicable overtime"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_after_close_meeting_response",
+          "optionId": "option_b",
+          "label": "Schedule future training within properly paid shifts"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.dol.gov/agencies/whd/fact-sheets/22-flsa-hours-worked",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
+      "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
+    },
+    {
+      "id": "d00_labor_finance_owner_estimates",
+      "name": "Owner income has no wage withholding",
+      "text": "Self-employed profit can require estimated tax payments during the year.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Player draws the available cash without funding applicable estimated-tax obligations.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_owner_estimates_response",
+          "optionId": "option_a",
+          "label": "Calculate and reserve the applicable estimated payments"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_owner_estimates_response",
+          "optionId": "option_b",
+          "label": "Revise draws and have the tax adviser update the annual forecast"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
+      "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
+    },
+    {
+      "id": "d00_labor_finance_salary_history_question",
+      "name": "An interview asks for prior pay",
+      "text": "Prior salary is not an allowed hiring shortcut in NYC.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Player hiring script asks applicants for salary history.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_salary_history_question_response",
+          "optionId": "option_a",
+          "label": "Ask about pay expectations and job qualifications instead"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_salary_history_question_response",
+          "optionId": "option_b",
+          "label": "Replace the interview script and review affected applications"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/cchr/law/salary-history-law.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
+      "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
+    },
+    {
+      "id": "d00_labor_finance_complaint_retaliation",
+      "name": "A wage complaint is followed by punitive scheduling",
+      "text": "Protected complaints cannot lawfully be answered by punishment.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Player reduces a complainant schedule to punish the labor complaint.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_complaint_retaliation_response",
+          "optionId": "option_a",
+          "label": "Stop retaliation and resolve the underlying wage issue"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_complaint_retaliation_response",
+          "optionId": "option_b",
+          "label": "Obtain independent review and restore any required lost pay or work"
+        }
+      ],
+      "tier": "core",
+      "source": "https://dol.ny.gov/retaliation",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
+      "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
+    },
+    {
+      "id": "d00_labor_finance_franchise_coverage",
+      "name": "A franchise conversion changes scheduling-law coverage",
+      "text": "A single owned shop can become part of a qualifying chain.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Player changes from independent cafe to a franchise meeting fast-food chain coverage tests.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_franchise_coverage_response",
+          "optionId": "option_a",
+          "label": "Budget and implement the applicable scheduling protections"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_franchise_coverage_response",
+          "optionId": "option_b",
+          "label": "Remain independent after comparing the full franchise obligations"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/FAQs-FairWorkweek-FastFood.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
+      "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
+    },
+    {
+      "id": "d00_labor_finance_personal_guarantee",
+      "name": "The loan documents reach beyond the cafe assets",
+      "text": "A qualifying SBA borrower may have to give a personal guarantee.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Player reaches loan signing and the documents require an owner guarantee.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_personal_guarantee_response",
+          "optionId": "option_a",
+          "label": "Assess the personal exposure with independent advice before signing"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_personal_guarantee_response",
+          "optionId": "option_b",
+          "label": "Reduce or change the funding plan if the guarantee is unacceptable"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.law.cornell.edu/cfr/text/13/120.160",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
+      "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
+    },
+    {
+      "id": "d00_labor_finance_ambiguous_charge",
+      "name": "An added fee looks like a tip to customers",
+      "text": "NY tip rules and federal tax classification answer different questions. A purported gratuity cannot simply be retained as owner income.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Player adds a customer-service charge without the disclosure needed to distinguish it from a gratuity.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_ambiguous_charge_response",
+          "optionId": "option_a",
+          "label": "Distribute any amount legally owed to staff and correct notices"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_labor_finance_ambiguous_charge_response",
+          "optionId": "option_b",
+          "label": "Obtain advice and clearly disclose a lawful future fee structure"
+        }
+      ],
+      "tier": "core",
+      "source": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
       "confidence": "estimate",
       "note": "Qualitative deterministic scenario derived from the cited evidence. No probability, loss multiplier or duration is assigned. Costs and staffing effects require actual records or a quote before numerical activation.",
       "evidenceStatus": "Source supports the underlying duty or experience; scenario implementation is an inference."
@@ -2006,6 +2258,78 @@
       "tier": "deep",
       "confidence": "estimate",
       "note": "Practical lesson inferred from the cited evidence; no universal frequency or financial effect asserted."
+    },
+    {
+      "id": "d00_labor_finance_non_contractor",
+      "text": "A signed contractor agreement does not settle worker status.",
+      "why": "Control over daily cafe work can outweigh the contract label.",
+      "source": "https://dol.ny.gov/worker-misclassification-employee-vs-independent-contractor-fare-grant",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical lesson inferred from the cited evidence; no universal frequency or financial effect asserted."
+    },
+    {
+      "id": "d00_labor_finance_non_hiring_threshold",
+      "text": "A small cafe may be large enough for pay-range rules.",
+      "why": "Count the applicable workforce before assuming recruitment-law exemptions.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03530",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical lesson inferred from the cited evidence; no universal frequency or financial effect asserted."
+    },
+    {
+      "id": "d00_labor_finance_non_meeting",
+      "text": "An unpaid after-close team meeting can be payable work.",
+      "why": "Required job-related attendance is not made voluntary by calling it a discussion.",
+      "source": "https://www.dol.gov/agencies/whd/fact-sheets/22-flsa-hours-worked",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical lesson inferred from the cited evidence; no universal frequency or financial effect asserted."
+    },
+    {
+      "id": "d00_labor_finance_non_estimated_refund",
+      "text": "A year-end refund does not automatically eliminate an estimated-tax penalty.",
+      "why": "The timing of payment periods matters, not only the annual total.",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical lesson inferred from the cited evidence; no universal frequency or financial effect asserted."
+    },
+    {
+      "id": "d00_labor_finance_non_salary_history",
+      "text": "Salary-history restrictions cover NYC employers of any size.",
+      "why": "A small-team exemption from some other employment rule does not apply across all rules.",
+      "source": "https://www.nyc.gov/site/cchr/law/salary-history-law.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical lesson inferred from the cited evidence; no universal frequency or financial effect asserted."
+    },
+    {
+      "id": "d00_labor_finance_non_chain",
+      "text": "Owning only one cafe does not necessarily mean independent-shop scheduling rules.",
+      "why": "A franchise can be part of a qualifying national chain.",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/FAQs-FairWorkweek-FastFood.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical lesson inferred from the cited evidence; no universal frequency or financial effect asserted."
+    },
+    {
+      "id": "d00_labor_finance_non_guarantee",
+      "text": "Limited liability and a personal loan guarantee can coexist.",
+      "why": "The owner can voluntarily accept an obligation beyond company assets.",
+      "source": "https://www.law.cornell.edu/cfr/text/13/120.160",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical lesson inferred from the cited evidence; no universal frequency or financial effect asserted."
+    },
+    {
+      "id": "d00_labor_finance_non_charge_two_laws",
+      "text": "Federal service-charge tax treatment does not decide who may keep the money under NY labor law.",
+      "why": "A charge presented as a tip can create employee rights even though mandatory charges have different federal tax coding.",
+      "source": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical lesson inferred from the cited evidence; no universal frequency or financial effect asserted."
     }
   ],
   "failureStories": [],
@@ -2020,7 +2344,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Written pay conditions and available primary-language forms accompany hiring.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_wageorder",
@@ -2032,7 +2357,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Deductions for shortages, breakage and no-notice departures prohibited; excessive non-tipped duties can eliminate daily tip credit.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_tipped",
@@ -2044,7 +2370,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Tip-credit limits and overtime calculated from full applicable minimum wage, then credit deducted.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_rest",
@@ -2056,7 +2383,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Meal periods and applicable rest requirements have a variance process; customer demand does not itself provide a variance.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_pto",
@@ -2068,7 +2396,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Current FAQ includes immediately available unpaid leave, childcare and housing reasons, and a distinct paid prenatal bank.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_ptopolicy",
@@ -2078,9 +2407,10 @@
       "language": "en",
       "jurisdiction": "NYC/NY",
       "type": "government",
-      "access": "search_excerpt",
+      "access": "opened_primary",
       "evidence": "Written policies cannot demand medical details and must permit covered uses.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_frequency",
@@ -2092,7 +2422,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Payment frequency depends on worker classification; authorization process for less frequent manual-worker pay.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_termination",
@@ -2104,7 +2435,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Pay stubs, pay-rate notices, fringe-benefit notices and written termination notices are separate requirements.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_managertips",
@@ -2116,7 +2448,8 @@
       "type": "government",
       "access": "search_excerpt",
       "evidence": "Manager duties rather than job title determine tip restrictions; a manager cannot receive pooled employee tips.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_wcbproof",
@@ -2128,7 +2461,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Payroll registration without carrier electronic proof can produce a coverage penalty requiring record correction.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_dbpenalty",
@@ -2140,7 +2474,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "An uncovered employer can owe penalties and claim costs; worker leave premiums are not the only exposure.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_youthpapers",
@@ -2152,7 +2487,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Minors require employment certificates; the announced digital process is future-dated, not a current exemption.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_dbinsurance",
@@ -2164,7 +2500,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "DB/PFL coverage is a separate insurance obligation; state fund is an available insurer.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_wcviolations",
@@ -2176,7 +2513,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Underreported payroll and missing coverage have distinct penalties; missing records can cause imputed payroll.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_lactation",
@@ -2188,7 +2526,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "City coverage threshold differs from state protections; space, policy and cooperative dialogue matter.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_p15",
@@ -2200,7 +2539,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Employment-tax deposits, return filing, tips and responsible-person liability remain employer responsibilities.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_tipreport",
@@ -2212,7 +2552,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Employers report payroll taxes on tips; mandatory service charges are not voluntary tips.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_closeirs",
@@ -2224,7 +2565,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Final payroll, returns, record retention and closing the IRS business account are separate exit steps.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_youthhours",
@@ -2236,7 +2578,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "School status and age restrict working hours; late work can require permission.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_tipsfaq",
@@ -2246,9 +2589,10 @@
       "language": "en",
       "jurisdiction": "NYC/NY",
       "type": "government",
-      "access": "search_excerpt",
+      "access": "opened_primary",
       "evidence": "Employer must prove actual tips received to claim a tip credit.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_hospitalityfaq",
@@ -2258,9 +2602,10 @@
       "language": "en",
       "jurisdiction": "NYC/NY",
       "type": "government",
-      "access": "search_excerpt",
+      "access": "opened_primary",
       "evidence": "Call-in pay and spread-of-hours are distinct from compensation for productive time.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_uniform",
@@ -2272,7 +2617,8 @@
       "type": "legal_reproduction",
       "access": "search_excerpt",
       "evidence": "Required uniforms may trigger maintenance pay subject to rule conditions.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_salesinfo",
@@ -2284,7 +2630,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Sales tax is trust money; responsible people can remain liable despite LLC status or an accountant handling filings.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_finalsales",
@@ -2296,7 +2643,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Final-return requirements apply to closure, sale and entity changes; asset sales can create tax.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_restaurantsales",
@@ -2308,7 +2656,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Gift certificates are taxed on taxable redemption, employee meals have conditions, and old POS records must remain auditable.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_amendcertificate",
@@ -2320,7 +2669,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Zero sales do not excuse returns; entity changes can require a new certificate.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_sbaloan",
@@ -2332,7 +2682,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "SBA guarantees loans to lenders; borrower eligibility and repayment remain part of lending.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_sbaliens",
@@ -2344,7 +2695,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Lenders must secure collateral and perfect required liens.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_ubt",
@@ -2356,7 +2708,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Unincorporated business tax has exemptions and credits; entity taxation is not interchangeable.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_crt",
@@ -2368,7 +2721,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Geographic, rent and income rules plus small-business credit determine actual CRT obligations.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_financecalendar",
@@ -2380,7 +2734,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "City tax calendars use different quarter and annual schedules; consult the applicable current form.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_offline",
@@ -2392,7 +2747,8 @@
       "type": "provider",
       "access": "opened_primary",
       "evidence": "Unuploaded offline transactions expire; app deletion, sign-out and reset can permanently lose them.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_reserve",
@@ -2404,7 +2760,8 @@
       "type": "provider",
       "access": "opened_primary",
       "evidence": "Prepayment and account-risk factors can trigger reserve holds with an account-specific release schedule.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_paymentterms",
@@ -2416,7 +2773,8 @@
       "type": "provider",
       "access": "opened_primary",
       "evidence": "Merchant bears offline decline risk; refunds can debit linked bank funds if balance is insufficient.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_disputes",
@@ -2428,7 +2786,8 @@
       "type": "provider",
       "access": "opened_primary",
       "evidence": "Unrecognizable descriptors and unclear receipts can cause disputes; clear accepted terms support evidence.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_disputedocs",
@@ -2440,7 +2799,8 @@
       "type": "provider",
       "access": "opened_primary",
       "evidence": "Evidence depends on dispute reason; bank decides the outcome; CVV storage is prohibited.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_missingtransfer",
@@ -2452,7 +2812,8 @@
       "type": "provider",
       "access": "opened_primary",
       "evidence": "Cutoffs, bank holidays and payment status affect cash availability; recording other tender is not processing money.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_transfers",
@@ -2464,7 +2825,8 @@
       "type": "provider",
       "access": "opened_primary",
       "evidence": "Instant transfers have separate fees and limits; linked bank changes require updated settings.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_dfsinsurance",
@@ -2476,7 +2838,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Small firms must understand policy limits and exclusions; property, crime, liability and interruption exposures differ.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_naic",
@@ -2488,7 +2851,8 @@
       "type": "regulator_association",
       "access": "opened_primary",
       "evidence": "Typical business interruption depends on covered property damage; ordinary lost revenue is not blanket-covered.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_mcafraud",
@@ -2500,7 +2864,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "Settlement addressed allegations of continued debits after repayment and misleading guarantee/funding terms.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_mca",
@@ -2512,7 +2877,8 @@
       "type": "government",
       "access": "opened_primary",
       "evidence": "MCA structures may use a revenue holdback or fixed daily withdrawals; lender-reporting rules are separate from borrower duties.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_1099k",
@@ -2522,9 +2888,10 @@
       "language": "en",
       "jurisdiction": "US",
       "type": "government",
-      "access": "search_excerpt",
+      "access": "opened_primary",
       "evidence": "Gross payments require reconciliation; changing entity while using old terminal may mismatch reported income.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_uireport",
@@ -2536,19 +2903,21 @@
       "type": "government",
       "access": "search_excerpt",
       "evidence": "Responding to former employee claim information and accurate payroll protects the experience-rating account.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_uirate",
-      "url": "https://dol.ny.gov/unemployment-insurance-rate-information",
-      "title": "Unemployment Insurance Rate Information",
+      "url": "https://dol.ny.gov/bizserve/ui/prg/rate",
+      "title": "Calculating an Employer Unemployment Insurance Contribution Rate",
       "publisher": "NY DOL",
       "language": "en",
       "jurisdiction": "NYC/NY",
       "type": "government",
-      "access": "search_excerpt",
-      "evidence": "Employer contribution rates and claim-response resources are updated for the applicable year.",
-      "tier": "core"
+      "access": "opened_primary",
+      "evidence": "Annual rate combines employer experience and fund conditions; DOL sends annual rate notices.",
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_training",
@@ -2558,9 +2927,10 @@
       "language": "en",
       "jurisdiction": "NYC/NY",
       "type": "government",
-      "access": "search_excerpt",
+      "access": "opened_primary",
       "evidence": "Every NY employer must provide the policy and annual employee training.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_ownercover",
@@ -2572,7 +2942,8 @@
       "type": "forum_self_report",
       "access": "opened_secondary",
       "evidence": "Self-described former owner reports callouts, owner dependence, inconsistent ordering and neglected marketing.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_owneradmin",
@@ -2584,7 +2955,8 @@
       "type": "forum_self_report",
       "access": "opened_secondary",
       "evidence": "Commenter describes admin on the closed day; discussion describes unclear responsibilities and staff tension.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_ownerfriends",
@@ -2596,7 +2968,8 @@
       "type": "forum_self_report",
       "access": "opened_secondary",
       "evidence": "Owner describes difficult boss/friend dynamics; slowdown has an acknowledged possible college-season confounder.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_ownerseller",
@@ -2608,7 +2981,8 @@
       "type": "forum_self_report",
       "access": "opened_secondary",
       "evidence": "Anonymous operator attributes cash crisis to old-year valuation, daily ACH debt and delayed expected tax refund; unaudited account.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_owneruk",
@@ -2620,7 +2994,8 @@
       "type": "forum_self_report",
       "access": "opened_secondary",
       "evidence": "Self-reported owner cut staffing while retaining hours and depended heavily on delivery platforms; UK comparison only.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     },
     {
       "id": "d00_labor_finance_source_industrypress",
@@ -2632,7 +3007,112 @@
       "type": "trade_media",
       "access": "opened_secondary",
       "evidence": "Interviews discuss rising input costs, staffing pressures and relationships with suppliers/customers; international context.",
-      "tier": "core"
+      "tier": "core",
+      "checkedOn": "2026-11-14"
+    },
+    {
+      "id": "d00_labor_finance_source_misclass",
+      "url": "https://dol.ny.gov/worker-misclassification-employee-vs-independent-contractor-fare-grant",
+      "title": "Worker Misclassification",
+      "publisher": "NY DOL",
+      "language": "en",
+      "jurisdiction": "NYC/NY",
+      "type": "government",
+      "access": "opened_primary",
+      "evidence": "Control of schedule, methods and tools can indicate employment; issuing a contractor label does not decide status.",
+      "tier": "core",
+      "checkedOn": "2026-11-14"
+    },
+    {
+      "id": "d00_labor_finance_source_salaryrange",
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03530",
+      "title": "Salary Transparency Law",
+      "publisher": "NYC311",
+      "language": "en",
+      "jurisdiction": "NYC/NY",
+      "type": "government",
+      "access": "opened_primary",
+      "evidence": "Covered employers must include a good-faith pay range in advertisements for jobs, transfers and promotions.",
+      "tier": "core",
+      "checkedOn": "2026-11-14"
+    },
+    {
+      "id": "d00_labor_finance_source_paidmeetings",
+      "url": "https://www.dol.gov/agencies/whd/fact-sheets/22-flsa-hours-worked",
+      "title": "Hours Worked Under the FLSA",
+      "publisher": "US DOL",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "government",
+      "access": "search_excerpt",
+      "evidence": "Training is excluded only when all applicable criteria are met; required job-related meetings ordinarily count.",
+      "tier": "core",
+      "checkedOn": "2026-11-14"
+    },
+    {
+      "id": "d00_labor_finance_source_estimated",
+      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes",
+      "title": "Estimated Taxes",
+      "publisher": "IRS",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "government",
+      "access": "opened_primary",
+      "evidence": "Estimated-tax obligations have payment-period deadlines; a later refund does not automatically prevent an underpayment penalty.",
+      "tier": "core",
+      "checkedOn": "2026-11-14"
+    },
+    {
+      "id": "d00_labor_finance_source_salaryhistory",
+      "url": "https://www.nyc.gov/site/cchr/law/salary-history-law.page",
+      "title": "Salary History Questions",
+      "publisher": "NYC CCHR",
+      "language": "en",
+      "jurisdiction": "NYC/NY",
+      "type": "government",
+      "access": "opened_primary",
+      "evidence": "Employers of any size cannot ask applicants their prior salary during hiring.",
+      "tier": "core",
+      "checkedOn": "2026-11-14"
+    },
+    {
+      "id": "d00_labor_finance_source_retaliation",
+      "url": "https://dol.ny.gov/retaliation",
+      "title": "Retaliation",
+      "publisher": "NY DOL",
+      "language": "en",
+      "jurisdiction": "NYC/NY",
+      "type": "government",
+      "access": "opened_primary",
+      "evidence": "Punishing protected labor complaints or participation is prohibited.",
+      "tier": "core",
+      "checkedOn": "2026-11-14"
+    },
+    {
+      "id": "d00_labor_finance_source_fairworkweek",
+      "url": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/FAQs-FairWorkweek-FastFood.pdf",
+      "title": "Fair Workweek Fast Food FAQ",
+      "publisher": "NYC DCWP",
+      "language": "en",
+      "jurisdiction": "NYC/NY",
+      "type": "government",
+      "access": "opened_primary",
+      "evidence": "Fast-food coverage depends on chain definition and nationwide establishment threshold; an independent cafe is not automatically covered.",
+      "tier": "core",
+      "checkedOn": "2026-11-14"
+    },
+    {
+      "id": "d00_labor_finance_source_guarantee",
+      "url": "https://www.law.cornell.edu/cfr/text/13/120.160",
+      "title": "Loan Conditions: Personal Guarantees",
+      "publisher": "Cornell LII reproduction of federal regulation",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "legal_reproduction",
+      "access": "opened_secondary",
+      "evidence": "Qualifying ownership interests generally require personal guarantees on covered SBA loans.",
+      "tier": "core",
+      "checkedOn": "2026-11-14"
     }
   ],
   "researchLevers": [
@@ -3550,7 +4030,7 @@
           "label": "Review the notice and challenge documented errors through the proper process"
         }
       ],
-      "source": "https://dol.ny.gov/unemployment-insurance-rate-information",
+      "source": "https://dol.ny.gov/bizserve/ui/prg/rate",
       "tier": "core",
       "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
     },
@@ -3672,8 +4152,288 @@
       "source": "https://perfectdailygrind.com/2026/10/why-running-a-coffee-shop-is-harder/",
       "tier": "core",
       "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
+    },
+    {
+      "id": "d00_labor_finance_contractor_barista_response",
+      "name": "A contractor label conflicts with the actual job response",
+      "options": [
+        {
+          "id": "option_a",
+          "label": "Review and correct classification with payroll adjustments"
+        },
+        {
+          "id": "option_b",
+          "label": "Use a genuine independent supplier only for a suitably independent service"
+        }
+      ],
+      "source": "https://dol.ny.gov/worker-misclassification-employee-vs-independent-contractor-fare-grant",
+      "tier": "core",
+      "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
+    },
+    {
+      "id": "d00_labor_finance_salary_ad_response",
+      "name": "A recruitment ad omits the required pay range response",
+      "options": [
+        {
+          "id": "option_a",
+          "label": "Correct the ad using the genuine offered range"
+        },
+        {
+          "id": "option_b",
+          "label": "Review all current postings and train the hiring lead"
+        }
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03530",
+      "tier": "core",
+      "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
+    },
+    {
+      "id": "d00_labor_finance_after_close_meeting_response",
+      "name": "The staff meeting continues after clock-out response",
+      "options": [
+        {
+          "id": "option_a",
+          "label": "Record and pay the meeting time and applicable overtime"
+        },
+        {
+          "id": "option_b",
+          "label": "Schedule future training within properly paid shifts"
+        }
+      ],
+      "source": "https://www.dol.gov/agencies/whd/fact-sheets/22-flsa-hours-worked",
+      "tier": "core",
+      "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
+    },
+    {
+      "id": "d00_labor_finance_owner_estimates_response",
+      "name": "Owner income has no wage withholding response",
+      "options": [
+        {
+          "id": "option_a",
+          "label": "Calculate and reserve the applicable estimated payments"
+        },
+        {
+          "id": "option_b",
+          "label": "Revise draws and have the tax adviser update the annual forecast"
+        }
+      ],
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes",
+      "tier": "core",
+      "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
+    },
+    {
+      "id": "d00_labor_finance_salary_history_question_response",
+      "name": "An interview asks for prior pay response",
+      "options": [
+        {
+          "id": "option_a",
+          "label": "Ask about pay expectations and job qualifications instead"
+        },
+        {
+          "id": "option_b",
+          "label": "Replace the interview script and review affected applications"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/cchr/law/salary-history-law.page",
+      "tier": "core",
+      "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
+    },
+    {
+      "id": "d00_labor_finance_complaint_retaliation_response",
+      "name": "A wage complaint is followed by punitive scheduling response",
+      "options": [
+        {
+          "id": "option_a",
+          "label": "Stop retaliation and resolve the underlying wage issue"
+        },
+        {
+          "id": "option_b",
+          "label": "Obtain independent review and restore any required lost pay or work"
+        }
+      ],
+      "source": "https://dol.ny.gov/retaliation",
+      "tier": "core",
+      "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
+    },
+    {
+      "id": "d00_labor_finance_franchise_coverage_response",
+      "name": "A franchise conversion changes scheduling-law coverage response",
+      "options": [
+        {
+          "id": "option_a",
+          "label": "Budget and implement the applicable scheduling protections"
+        },
+        {
+          "id": "option_b",
+          "label": "Remain independent after comparing the full franchise obligations"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/FAQs-FairWorkweek-FastFood.pdf",
+      "tier": "deep",
+      "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
+    },
+    {
+      "id": "d00_labor_finance_personal_guarantee_response",
+      "name": "The loan documents reach beyond the cafe assets response",
+      "options": [
+        {
+          "id": "option_a",
+          "label": "Assess the personal exposure with independent advice before signing"
+        },
+        {
+          "id": "option_b",
+          "label": "Reduce or change the funding plan if the guarantee is unacceptable"
+        }
+      ],
+      "source": "https://www.law.cornell.edu/cfr/text/13/120.160",
+      "tier": "core",
+      "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
+    },
+    {
+      "id": "d00_labor_finance_ambiguous_charge_response",
+      "name": "An added fee looks like a tip to customers response",
+      "options": [
+        {
+          "id": "option_a",
+          "label": "Distribute any amount legally owed to staff and correct notices"
+        },
+        {
+          "id": "option_b",
+          "label": "Obtain advice and clearly disclose a lawful future fee structure"
+        }
+      ],
+      "source": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
+      "tier": "core",
+      "note": "Unpriced research choices; not executable until the host supplies applicable amounts and implementation."
     }
   ],
-  "searchLog": [],
-  "gaps": []
+  "searchLog": [
+    {
+      "id": "d00_labor_finance_search_a",
+      "queries": [
+        "site.dol.ny.gov hospitality tip credit spread hours uniform maintenance call in pay",
+        "site.nyc.gov paid safe sick leave prenatal leave employer lactation accommodation",
+        "site.dol.ny.gov frequency pay wage notices deductions meal periods hospitality",
+        "site.dol.gov restaurants tips managers owners overtime youth employment"
+      ],
+      "language": "en",
+      "purpose": "Find and verify labor, tax, payment, insurance and owner-experience evidence; followed by direct-URL opening and targeted finding.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_labor_finance_search_b",
+      "queries": [
+        "site.nyc.gov lactation accommodations employer sexual harassment training fast food fair workweek independent cafe",
+        "site.dol.ny.gov youth employment working papers food slicer 16 17 nursing mothers paid breaks",
+        "site.wcb.ny.gov employers workers compensation penalties disability paid family leave coverage payroll audit",
+        "site.irs.gov restaurant tips employment taxes trust fund recovery closing business final return"
+      ],
+      "language": "en",
+      "purpose": "Find and verify labor, tax, payment, insurance and owner-experience evidence; followed by direct-URL opening and targeted finding.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_labor_finance_search_c",
+      "queries": [
+        "site.tax.ny.gov sales tax responsible person business ceases returns zero sales restaurant gift certificates",
+        "site.nyc.gov business unincorporated business tax commercial rent tax cafe quarterly",
+        "site.sba.gov 7a loans personal guarantees collateral closing business debt",
+        "site.squareup.com us en payments reserves disputes refunds offline payments"
+      ],
+      "language": "en",
+      "purpose": "Find and verify labor, tax, payment, insurance and owner-experience evidence; followed by direct-URL opening and targeted finding.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_labor_finance_search_d",
+      "queries": [
+        "site.reddit.com/r/Coffee_Shop owners burnout staff no show cash flow",
+        "site.reddit.com/r/smallbusiness coffee shop owner payroll chargeback",
+        "site.dfs.ny.gov small business insurance business interruption exclusions flood",
+        "site.ftc.gov merchant cash advance small business deceptive financing personal guarantees"
+      ],
+      "language": "en",
+      "purpose": "Find and verify labor, tax, payment, insurance and owner-experience evidence; followed by direct-URL opening and targeted finding.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_labor_finance_search_e",
+      "queries": [
+        "site.ny.gov sexual harassment prevention training employers all employees annual",
+        "site.dol.ny.gov unemployment insurance experience rating employer rates claim notification",
+        "site.irs.gov form 1099-k gross amount includes fees refunds tips estimated taxes self employed",
+        "site.squareup.com help us transfer delays bank holidays instant refunds processing fee"
+      ],
+      "language": "en",
+      "purpose": "Find and verify labor, tax, payment, insurance and owner-experience evidence; followed by direct-URL opening and targeted finding.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_labor_finance_search_f",
+      "queries": [
+        "site.dol.ny.gov independent contractors employee employer supervision control hospitality",
+        "site.nyc.gov salary transparency employers four employees job advertisements",
+        "site.dol.gov hours worked training meetings restaurants compensable time",
+        "site.irs.gov estimated taxes self employed owner draws business expenses"
+      ],
+      "language": "en",
+      "purpose": "Find and verify labor, tax, payment, insurance and owner-experience evidence; followed by direct-URL opening and targeted finding.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_labor_finance_search_g",
+      "queries": [
+        "site.ecfr.gov 13 CFR 120.160 personal guarantees 20 percent",
+        "site.dol.ny.gov retaliation labor law complaint reduced hours",
+        "site.nyc.gov fair workweek fast food 30 establishments chain covered"
+      ],
+      "language": "en",
+      "purpose": "Find and verify labor, tax, payment, insurance and owner-experience evidence; followed by direct-URL opening and targeted finding.",
+      "tier": "deep"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "d00_labor_finance_gap_prices",
+      "text": "Не найден универсальный тариф страхования, стоимость замены бариста, длительность выгорания или финансовый эффект жалобы; нужны предложения по конкретной точке и измеренные часы.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_labor_finance_gap_law_version",
+      "text": "Страницы ведомств изменяются. Перед включением порогов в движок сохранить редакцию на игровую дату. Старые PDF использованы для качественных правил, без переноса старых ставок.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_labor_finance_gap_chain",
+      "text": "Fair Workweek нельзя автоматически назначать независимой кофейне; отдельно проверять цепочку/франшизу. Городской порог harassment training не отменяет общештатную обязанность.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_labor_finance_gap_pto",
+      "text": "Текущий открытый FAQ NYC DCWP включает немедленно доступный неоплачиваемый банк и расширенные причины protected time off, а также отдельный prenatal bank. Базовый пакет требует версионной сверки; множитель sick_leave_cover не заменяет реальный график и правовые условия.",
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "tier": "core"
+    },
+    {
+      "id": "d00_labor_finance_gap_forums",
+      "text": "Рассказы Reddit и Mumsnet не аудированы и не доказывают частоту, причинность или применимость зарубежного права к NYC. В события перенесены решения и наблюдаемые состояния, без чисел из историй.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_labor_finance_gap_open_fail",
+      "text": "US DOL manager-tips и hours-worked вернули 403 при прямом открытии; использован видимый поисковый фрагмент, без статуса verified. Все access=search_excerpt требуют открытия при юридической численной интеграции.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_labor_finance_gap_refs",
+      "text": "Один пакет open по внутренним поисковым ref вернул другие URL. Повторные обращения сделаны по явным URL; статусы источников определены по фактически возвращённым страницам.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_labor_finance_gap_fee_rights",
+      "text": "Федеральная налоговая классификация service charge не отменяет права работников по NY Labor Law на сбор, представленный клиенту как чаевые. Проверять формулировку меню/счёта и правила распределения отдельно.",
+      "source": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
+      "tier": "core"
+    }
+  ]
 }
