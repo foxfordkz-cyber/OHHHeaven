@@ -1,4 +1,468 @@
 {
+  "levers": [
+    {
+      "id": "music",
+      "name": "Music",
+      "options": [
+        {
+          "id": "licensed_service",
+          "label": "Licensed background music service for businesses",
+          "monthlyCost": 35
+        },
+        {
+          "id": "direct_licenses",
+          "label": "Your own playlists with ASCAP, BMI and SESAC licenses",
+          "monthlyCost": 110,
+          "effects": {
+            "quality": 0.01
+          }
+        },
+        {
+          "id": "silence",
+          "label": "No music",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.02
+          }
+        },
+        {
+          "id": "personal_account",
+          "label": "Your personal streaming account on the shop speakers",
+          "monthlyCost": 0,
+          "causes": "unlicensed_music"
+        }
+      ],
+      "source": "https://musicforbusinessfinder.com/ascap-music-license-costs-guide/",
+      "confidence": "estimate",
+      "note": "Vendor guides for 2026: ASCAP from $324-$502 a year, BMI from about $312-$415, SESAC from $580: $636 to $1,600 a year for a small cafe, here $110 a month for all three. Business music services that include the licenses advertise roughly $17 to $50 a month; $35 is my midpoint. Quality effects are design values."
+    },
+    {
+      "id": "mock_inspection",
+      "name": "Practice inspections",
+      "options": [
+        {
+          "id": "none",
+          "label": "None: the first inspector you meet is the real one",
+          "monthlyCost": 0
+        },
+        {
+          "id": "city_consult",
+          "label": "One city consultative inspection a year",
+          "monthlyCost": 35,
+          "effects": {
+            "quality": 0.01
+          }
+        },
+        {
+          "id": "consultant_quarterly",
+          "label": "Private food safety consultant every quarter",
+          "monthlyCost": 120,
+          "effects": {
+            "quality": 0.02
+          }
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf",
+      "confidence": "estimate",
+      "note": "Seen at NYC Health: a consultative inspection costs $400 for a restaurant that has already been graded ($100 once for a new one before its first graded inspection); it produces no violations unless a public health hazard cannot be fixed on the spot. $400 / 12 = $33, rounded to $35. The private consultant at about $350 a visit, four visits a year, is my estimate. In the proposed inspection model (extra.mechanics.inspection_score_and_grade) a practice inspection removes the general violations a new owner does not know about."
+    },
+    {
+      "id": "food_handling",
+      "name": "Handling pastries and garnishes",
+      "options": [
+        {
+          "id": "tongs_and_gloves",
+          "label": "Tongs, tissue and gloves for anything ready to eat",
+          "monthlyCost": 40
+        },
+        {
+          "id": "bare_hands",
+          "label": "Bare hands, faster line",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.01
+          },
+          "causes": "bare_hand_contact"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/notice/2021/noa-chapter23-penalties.pdf",
+      "confidence": "estimate",
+      "note": "$40 a month of deli tissue and gloves is my estimate from restaurant-supply prices. The violation and its fine are in violations.bare_hand_contact."
+    },
+    {
+      "id": "takeout_packaging",
+      "name": "What goes in the takeout bag",
+      "options": [
+        {
+          "id": "ask_first",
+          "label": "Straws, forks and napkins only when the customer asks",
+          "monthlyCost": 0
+        },
+        {
+          "id": "everything_in_every_bag",
+          "label": "Everything in every bag, no questions",
+          "monthlyCost": 25,
+          "effects": {
+            "capacity": 0.01
+          },
+          "causes": "single_use_handouts"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
+      "confidence": "estimate",
+      "note": "$25 a month of extra straws, forks and napkins is my estimate. The legal option is also the cheaper one; the illegal one only saves a few seconds per order."
+    },
+    {
+      "id": "inspector_door_policy",
+      "name": "When someone says they are an inspector",
+      "options": [
+        {
+          "id": "check_id_let_in",
+          "label": "Staff check the photo ID and badge, call you, and let the inspector work",
+          "monthlyCost": 0
+        },
+        {
+          "id": "stall_at_the_door",
+          "label": "Staff say the owner is out and keep them waiting",
+          "monthlyCost": 0,
+          "causes": "obstructing_inspector"
+        },
+        {
+          "id": "pay_whoever_asks",
+          "label": "Staff do whatever anyone with a clipboard says, cash included",
+          "monthlyCost": 0
+        }
+      ],
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "confidence": "estimate",
+      "note": "A standing instruction, free either way. The first option also defeats impostors (extra.eventCatalog.fake_inspector_visit): real inspectors never take payment on the spot; fines are paid to the city after a hearing. The third option has no violation; it loses money to scams."
+    },
+    {
+      "id": "worker_complaints",
+      "name": "When a worker complains about pay or safety",
+      "options": [
+        {
+          "id": "hear_and_fix",
+          "label": "Hear it, check the records, fix what is wrong",
+          "monthlyCost": 0
+        },
+        {
+          "id": "cut_their_shifts",
+          "label": "Cut their shifts until they quit",
+          "monthlyCost": 0,
+          "causes": "retaliation_firing"
+        }
+      ],
+      "source": "https://newyork.public.law/laws/n.y._labor_law_section_215",
+      "confidence": "estimate",
+      "note": "A standing instruction. Punishing a complaint turns one wage question into a second, bigger case (violations.retaliation_firing)."
+    },
+    {
+      "id": "hiring_ads",
+      "name": "Help-wanted ads",
+      "options": [
+        {
+          "id": "by_the_book",
+          "label": "Pay range in every ad; no questions about convictions before an offer",
+          "monthlyCost": 0
+        },
+        {
+          "id": "quick_ad",
+          "label": "\"Barista wanted, DM us\" with no pay range",
+          "monthlyCost": 0,
+          "causes": "job_ad_no_pay_range"
+        }
+      ],
+      "source": "https://www.dol.ny.gov/pay-transparency",
+      "confidence": "estimate",
+      "note": "A standing instruction, free either way. The Fair Chance Act also bars any question about criminal history before a conditional job offer (NYC Commission on Human Rights)."
+    },
+    {
+      "id": "floor_safety",
+      "name": "Floors and entrance",
+      "options": [
+        {
+          "id": "mats_signs_log",
+          "label": "Entrance mats, wet-floor signs and a mopping log",
+          "monthlyCost": 45
+        },
+        {
+          "id": "nothing",
+          "label": "Mop when someone notices",
+          "monthlyCost": 0
+        }
+      ],
+      "exposure": "customer_slip_claim",
+      "source": "https://www.insurancejournal.com/news/national/2004/11/29/48053.htm",
+      "confidence": "estimate",
+      "note": "$45 a month for a rented entrance mat service and signs is my estimate. No violation attaches to the second option; it feeds the slip-and-fall exposure in extra.mechanics.private_lawsuits. A dated mopping log is what an insurer's lawyer asks for first."
+    },
+    {
+      "id": "legal_help",
+      "name": "Legal help",
+      "options": [
+        {
+          "id": "none",
+          "label": "Handle summonses and letters yourself",
+          "monthlyCost": 0
+        },
+        {
+          "id": "lawyer_on_call",
+          "label": "Hospitality lawyer on call and a representative for city hearings",
+          "monthlyCost": 150
+        }
+      ],
+      "source": "https://www.nyc.gov/site/oath/hearings/what-happens-if-i-do-not-pay.page",
+      "confidence": "estimate",
+      "note": "$150 a month is my estimate of a small retainer; no public price list exists. In the proposed hearing model (extra.mechanics.oath_hearing_choices) representation means no missed hearings and the mitigated penalty wherever the schedule offers one. OATH's own Help Center is free."
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "hide_bad_grade",
+      "name": "Take down the B",
+      "what": "A B or C card in the window scares off walk-ins. Leave the old A up, or 'lose' the new card, and keep about 3% of sales. The card has a serial number and inspectors and neighbors check: $500-$1,000 for no card, $1,000-$2,000 for removing or faking it.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.03
+      },
+      "violation": "grade_card_hidden",
+      "note": "The 3% is my estimate of the walk-in sales a B costs a counter-service shop; no NYC figure for cafes was found."
+    },
+    {
+      "id": "skip_backflow_test",
+      "name": "Skip the yearly backflow test",
+      "what": "The valve on your water line must be tested every year by a certified tester, about $240 a visit. Skip it and save $20 a month. The city knows from its own records which reports are missing: $500, or $50 if you file before the hearing.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 20
+      },
+      "violation": "backflow_not_tested",
+      "note": "The $240 price of a test is my estimate from plumbers' advertised ranges ($150-$350); no official price exists."
+    },
+    {
+      "id": "skip_extinguisher_service",
+      "name": "Let the extinguisher tags expire",
+      "what": "Two extinguishers need a certified company once a year, about $120, and a signed check every month. Skipping saves $10 a month. A fire inspector reads the tag first: $600, or $300 if fixed before the hearing.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 10
+      },
+      "violation": "fire_extinguisher_untagged",
+      "note": "The $120 a year for two units is my estimate from service companies' advertised prices; no official price exists."
+    },
+    {
+      "id": "stock_in_exit_path",
+      "name": "Stack deliveries in the back exit",
+      "what": "No storage room, so milk crates and cup cases live in the rear corridor. Saves about $150 a month of off-site storage or lost seats. A blocked exit is $950, or $475 if cleared before the hearing, and the first thing a fire officer looks at.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 150
+      },
+      "violation": "blocked_exit",
+      "note": "The $150 is my estimate of a small self-storage unit in the outer boroughs."
+    },
+    {
+      "id": "overpack_event_nights",
+      "name": "Pack the room on event nights",
+      "what": "Open mic, launch party, 90 people in a room approved for far fewer: about 2% more sales a month. Overcrowding is $950 the first time and $2,375 the second, and the fire officer can empty the room mid-event.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.02
+      },
+      "violation": "overcrowding",
+      "note": "The 2% is my estimate: two packed evenings a month at double the usual evening sales."
+    },
+    {
+      "id": "candles_no_permit",
+      "name": "Candles on the tables, no permit",
+      "what": "Candles make the evening. The FDNY open flame permit costs $210 a year; skipping it saves $18 a month. Open flame without the permit: $700, or $350 if you get the permit before the hearing.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 18
+      },
+      "violation": "candles_without_permit"
+    },
+    {
+      "id": "build_without_permit",
+      "name": "Renovate without a Buildings permit",
+      "what": "A handyman moves the sink, adds outlets and a wall over a weekend: no architect, no filing, no waiting. One neighbor's 311 call brings a Stop Work Order and a penalty of 21 times the permit fee, $6,000 at the least, and you file the plans anyway.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 600
+      },
+      "violation": "work_without_permit",
+      "oneTime": true,
+      "oneTimeAmount": 7000,
+      "note": "A one-time decision during build-out: it saves the architect, expediter and filing fees (the pack's $7,000 line) and the weeks of waiting. Shown here as $600 a month for 12 months until the engine supports one-time shortcuts."
+    },
+    {
+      "id": "work_through_stop_order",
+      "name": "Keep building under a Stop Work Order",
+      "what": "Every month the order hangs on the door is a month of rent with no sales, so the crew works at night. Saves a month of rent each month. Working through the order is $6,000 each time it is caught, and a crime.",
+      "saves": {
+        "basis": "pct_rent",
+        "amount": 1
+      },
+      "violation": "stop_work_order_ignored"
+    },
+    {
+      "id": "big_sign_no_permit",
+      "name": "Hang the big sign without a permit",
+      "what": "A sign over 6 square feet needs a permit and a licensed sign hanger: about $1,500 and a month of waiting. A friend with a ladder does it Saturday. If someone reports the block's signs to 311, the fine starts at $6,000.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 125
+      },
+      "violation": "sign_without_permit",
+      "oneTime": true,
+      "oneTimeAmount": 1500,
+      "note": "A one-time decision: the $1,500 for the filing and the licensed sign hanger is my estimate; shown as $125 a month for 12 months until the engine supports one-time shortcuts."
+    },
+    {
+      "id": "skip_sidewalk_sweeping",
+      "name": "Stop sweeping the sidewalk",
+      "what": "Nobody sweeps the sidewalk and the 18 inches of gutter in front of the shop: about 15 minutes a day, $85 a month. Sanitation agents ticket during two posted hours a day: $100 to $300 each, sidewalk and gutter separately.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 85
+      },
+      "violation": "dirty_sidewalk",
+      "note": "15 minutes a day x 30 days x $17.00 an hour = $127; I count two thirds of it because some sweeping happens anyway."
+    },
+    {
+      "id": "bags_on_the_curb",
+      "name": "Trash bags on the curb, no bins",
+      "what": "Bags go out at closing with no lidded bin, or the bins stay out all morning. Saves the bins and a few minutes a day, about $20 a month. $50 the first time, $100 the second, $200 every time after, and bags on the curb feed the rats that cost you points.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 20
+      },
+      "violation": "trash_setout_violation",
+      "note": "My estimate: two 44-gallon lidded bins at about $120 each, replaced every year."
+    },
+    {
+      "id": "dump_trash_in_baskets",
+      "name": "No carter: use the corner baskets",
+      "what": "Cancel the private carter and drop the shop's bags in public litter baskets or the building's residential pile: saves about $250 a month. Agents open the bags and find your receipts: $100 to $300 each time.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 250
+      },
+      "violation": "business_trash_dumped"
+    },
+    {
+      "id": "a_frame_on_sidewalk",
+      "name": "A-frame sign in the middle of the sidewalk",
+      "what": "A chalkboard out by the curb catches people from both directions: about 1% more sales. A sign may not stand more than 3 feet from your wall; farther out it is an obstruction: $100, then up to $300.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "sidewalk_sign_obstruction",
+      "note": "The 1% is my estimate; no measurement of A-frame signs on sales was found."
+    },
+    {
+      "id": "foam_cups",
+      "name": "Buy foam cups",
+      "what": "Foam hot cups cost about a cent and a half less than paper and need no sleeve: about 0.2% of sales. Foam cups and containers have been banned in New York City since 2019: $150, then $250, then $500.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.002
+      },
+      "violation": "foam_containers",
+      "note": "1.5 cents saved per $8.50 order = 0.18% of sales; cup prices from the pack's supplies line."
+    },
+    {
+      "id": "speaker_at_the_door",
+      "name": "Speaker at the open door",
+      "what": "Music out onto the sidewalk pulls people in: about 1% more sales. The people upstairs call 311; a reading over 42 decibels inside their apartment costs $2,000, then $4,000, then $6,000.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "loud_music_noise",
+      "note": "The 1% is my estimate."
+    },
+    {
+      "id": "hidden_card_fee",
+      "name": "Add a card fee at the register",
+      "what": "A 3.5% fee appears on the card reader, not on the menu: it wipes out your card costs, about 3% of sales. The law allows a credit card surcharge only if the full card price is posted and it is no more than your real cost: up to $500 per violation.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.03
+      },
+      "violation": "card_surcharge_undisclosed",
+      "note": "3.5% on the 90% of sales paid by card (the pack's card model) = 3.15% of sales."
+    },
+    {
+      "id": "dogs_welcome_inside",
+      "name": "Dogs welcome inside",
+      "what": "Dog owners become regulars: about 1% more sales. A pet inside a food shop is a critical violation: $200 to $350 and 5 or more points toward your grade. Only service animals may come in; pets may sit at outdoor tables if you post the sign.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "pet_inside_shop",
+      "note": "The 1% is my estimate."
+    },
+    {
+      "id": "cbd_lattes",
+      "name": "Sell CBD lattes",
+      "what": "A CBD shot adds $3 to a drink and a line on the chalkboard: about 1% more sales. The Health Department treats CBD in food and drinks as an unapproved additive: the product is embargoed and the fine runs $200 to $650.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.01
+      },
+      "violation": "banned_additive_cbd",
+      "note": "The 1% is my estimate: a $3 add-on in one of every 35 orders."
+    },
+    {
+      "id": "delay_hot_water_repair",
+      "name": "Put off the water heater repair",
+      "what": "The heater is dying and the hand sink runs lukewarm. A plumber costs money today; waiting saves about $120 a month. No hot water at the hand sink is 10 points, 28 if the whole shop is without it, and the inspector can close you until it is fixed.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 120
+      },
+      "violation": "hand_wash_station_down",
+      "note": "My estimate: a $1,400 repair or replacement put off for a year."
+    },
+    {
+      "id": "skip_accessibility_fixes",
+      "name": "Leave the step at the door",
+      "what": "A portable ramp, a bell, a lower counter section and a website a screen reader can use cost about $2,400. Skipping them saves $100 a month. Lawyers file thousands of these suits a year in New York, and settling one costs about $10,000 plus the fixes.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 100
+      },
+      "violation": "accessibility_barrier",
+      "note": "My estimate: $2,400 of readily achievable fixes spread over 24 months. A small business gets half of such spending back as a federal tax credit of up to $5,000 a year (IRS Form 8826)."
+    },
+    {
+      "id": "skip_harassment_training",
+      "name": "Skip the harassment policy and training",
+      "what": "No written policy, no yearly training: saves an hour of paid time per worker a year and some paperwork, about $5 per worker a month. The state requires both from every employer; without them you have no defense when a claim comes.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 5
+      },
+      "violation": "no_harassment_policy_training",
+      "note": "One paid hour at $17-$21 a year per worker plus the owner's time, rounded up to $5 a month; the state's model policy and training are free."
+    },
+    {
+      "id": "skip_id_checks",
+      "name": "Stop carding at the bar",
+      "what": "Only if you sell beer and wine. Carding every customer slows the evening line; skipping it adds about 0.5% to sales. The Liquor Authority sends underage decoys: $2,500 to $4,000 for a first sale, up to $10,000, then the license.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.005
+      },
+      "violation": "alcohol_to_minor",
+      "requires": "beer_wine_license",
+      "note": "The 0.5% is my estimate. Makes sense only once the beer and wine module exists (extra.mechanics.beer_wine_module)."
+    }
+  ],
   "violations": [
     {
       "id": "grade_card_hidden",
@@ -789,6 +1253,142 @@
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/restaurant-grading-faq.pdf"
     }
   ],
+  "reports": [
+    {
+      "id": "report_fire_hazard",
+      "name": "Report a fire hazard (311)",
+      "text": "In real life: a 311 complaint routed to the Fire Department. Fire inspectors check extinguisher tags, exits, crowding and open-flame permits. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "fire_extinguisher_untagged",
+        "blocked_exit",
+        "overcrowding",
+        "candles_without_permit"
+      ]
+    },
+    {
+      "id": "report_illegal_construction",
+      "name": "Report construction or a sign without a permit (311)",
+      "text": "In real life: a 311 complaint to the Department of Buildings. An inspector looks for the permit in the window and can post a Stop Work Order the same day. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "work_without_permit",
+        "stop_work_order_ignored",
+        "sign_without_permit"
+      ]
+    },
+    {
+      "id": "report_dirty_sidewalk_trash",
+      "name": "Report a dirty sidewalk or trash set out wrong (311)",
+      "text": "In real life: a 311 complaint to the Sanitation Department. An agent checks the sidewalk and gutter, the bins and lids, the carter's decal, foam cups and anything blocking the sidewalk. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "dirty_sidewalk",
+        "trash_setout_violation",
+        "business_trash_dumped",
+        "sidewalk_sign_obstruction",
+        "foam_containers",
+        "single_use_handouts"
+      ]
+    },
+    {
+      "id": "report_noise",
+      "name": "Report loud music (311)",
+      "text": "In real life: a 311 noise complaint. An inspector from Environmental Protection takes a decibel reading inside the neighbor's home; over 42 decibels is a violation. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "loud_music_noise"
+      ]
+    },
+    {
+      "id": "report_hidden_grade",
+      "name": "Report a missing grade card, a pet inside or bare-hand food handling (311)",
+      "text": "In real life: a 311 complaint about a food establishment. A health inspector checks the grade card in the window, the required signs, the hand sinks and how food is handled. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "grade_card_hidden",
+        "required_signs_missing",
+        "allergen_notice_missing",
+        "pet_inside_shop",
+        "bare_hand_contact",
+        "hand_wash_station_down",
+        "banned_additive_cbd",
+        "smoking_vaping_allowed"
+      ]
+    },
+    {
+      "id": "report_food_poisoning",
+      "name": "Report getting sick after eating there (311)",
+      "text": "In real life: a 311 foodborne illness complaint. The Health Department interviews the person who got sick and sends an inspector to check temperatures, hand washing and where the food came from. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "spoiled_food",
+        "dirty_surfaces",
+        "unapproved_food_source",
+        "bare_hand_contact",
+        "hand_wash_station_down"
+      ]
+    },
+    {
+      "id": "report_hidden_fees",
+      "name": "Report a hidden card fee or refused cash (311)",
+      "text": "In real life: a 311 consumer complaint to the Department of Consumer and Worker Protection. An inspector compares the posted prices with the receipt and tries to pay in cash. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "card_surcharge_undisclosed",
+        "refusing_cash"
+      ]
+    },
+    {
+      "id": "report_water_and_sewer",
+      "name": "Report a missing backflow test or grease in the sewer (311)",
+      "text": "In real life: a 311 complaint to Environmental Protection. The department checks its records for the yearly backflow test report and sends an inspector to open the grease interceptor. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "backflow_not_tested",
+        "grease_interceptor_neglect"
+      ]
+    },
+    {
+      "id": "report_access_or_job_ad",
+      "name": "Report a barrier for disabled customers or an illegal job ad (Human Rights Commission)",
+      "text": "In real life: a complaint to the NYC Commission on Human Rights, which can also send testers. It checks the entrance, the service and the wording of help-wanted ads. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "accessibility_barrier",
+        "job_ad_no_pay_range"
+      ]
+    },
+    {
+      "id": "report_retaliation",
+      "name": "Report retaliation or missing workplace notices (NYS Department of Labor)",
+      "text": "In real life: a labor standards complaint, often filed by a former worker. An investigator asks who complained, what happened to their shifts, and for the harassment policy, training records and required posters. If you are wrong, you get a warning.",
+      "role": "tax_auditor",
+      "checks": [
+        "retaliation_firing",
+        "no_harassment_policy_training",
+        "workers_rights_poster_missing"
+      ]
+    },
+    {
+      "id": "report_unlicensed_music",
+      "name": "Tip off a music licensing society",
+      "text": "In real life: ASCAP, BMI and SESAC take tips and send field agents who sit in the shop and write down the songs. No license means letters, then a federal lawsuit. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "unlicensed_music"
+      ]
+    },
+    {
+      "id": "report_underage_sale",
+      "name": "Report alcohol sold to minors (State Liquor Authority)",
+      "text": "In real life: a complaint to the State Liquor Authority, which sends an underage decoy with an investigator. Works only against a shop that holds a beer and wine license. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "alcohol_to_minor"
+      ]
+    }
+  ],
   "sources": [
     {
       "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
@@ -983,6 +1583,36 @@
     {
       "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/restaurant-grading-faq.pdf",
       "title": "NYC Health: How We Score and Grade (FAQ)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://musicforbusinessfinder.com/ascap-music-license-costs-guide/",
+      "title": "Music for Business Finder: ASCAP license costs 2026 (vendor guide)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.mycorporateradio.com/en/music-in-store/music-license-cost-business/",
+      "title": "My Corporate Radio: music license cost for a business, $1,000-$1,600 a year (vendor guide)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf",
+      "title": "NYC Health: Consultative inspections for restaurants",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/forms-pubs/about-form-8826",
+      "title": "IRS: About Form 8826, Disabled Access Credit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/oath/hearings/what-happens-if-i-do-not-pay.page",
+      "title": "OATH: What happens if I do not pay",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.insurancejournal.com/news/national/2004/11/29/48053.htm",
+      "title": "Insurance Journal: Restaurants 'slipping and tripping' into financial disaster",
       "checked": "2026-11-14"
     }
   ]
