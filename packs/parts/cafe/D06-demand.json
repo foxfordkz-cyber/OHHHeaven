@@ -15,7 +15,7 @@
     "source": "https://www.restaurantdive.com/news/starbucks-cuts-discounts-menu-boosts-marketing-spend-traffic-declines/738605/",
     "confidence": "estimate",
     "evidence": "industry_via_search",
-    "note": "D06 revision. (1) unitsPerSlotMonth stays 6,000 (200 orders a day): still a planning point, not a statistic. Cross-checks found: Joe Coffee reports an average ticket of $8.47 at independent shops (was $7.82 a year earlier), which matches the pack's $8.50; BizBuySell's median coffee shop sold in the US takes $375,000 a year = $1,027 a day = about 121 orders a day at that ticket, so 200 a day is a good New York block, not the national middle. (2) priceElasticity stays -1.3 and now has an anchor: Starbucks North America, second quarter of fiscal 2025, transactions fell 4% while prices rose about 3% (-4 / 3 = -1.3). Range: -1.0 (USDA ERS report ERR-139, Okrent and Alston: own-price elasticity of all food away from home -1.02, limited service less elastic than full service) to -2.5 (Starbucks US, fourth quarter of fiscal 2024: ticket +4%, transactions -10%, a quarter with other troubles mixed in). (3) weights: reputation cut from 0.20 to 0.09, the other three keep their old ratios to each other (35 : 25 : 20). Reason: Luca (Harvard Business School working paper 12-016) measured +5-9% revenue per Yelp star for independent restaurants. In the engine one star = 0.25 of the 0-1 reputation scale, and the demand change is |elasticity| x (reputation weight / price weight) x 0.25 x (1 - own share). Old weights: 1.3 x (0.20 / 0.35) x 0.25 x 0.9 = 16.7% per star, twice the top of the measured range. New weights: 1.3 x (0.09 / 0.40) x 0.25 x 0.9 = 6.6% per star. The letter grade and word of mouth act on top of this through events and mechanics (extra.mechanics: star_rating, letter_grade_demand). Toast's 2025 survey of 650 US coffee drinkers supports keeping quality close to price: taste 53%, price 20%, convenience 17%, atmosphere 8% as the main reason to pick one shop over another (stated, not measured). All numbers were read in search results; the pages themselves could not be opened from this session."
+    "note": "D06 revision. (1) unitsPerSlotMonth stays 6,000 (200 orders a day): still a planning point, not a statistic. Cross-checks found: Joe Coffee, an ordering app for independent shops, reports an average ticket of $8.47 across its shops (was $7.82 a year earlier; its method is not stated), which matches the pack's $8.50; BizBuySell's median coffee shop sold in the US takes $375,000 a year = $1,027 a day = about 121 orders a day at that ticket, so 200 a day is a good New York block, not the national middle. (2) priceElasticity stays -1.3 and now has an anchor: Starbucks North America, second quarter of fiscal 2025, transactions fell 4% while prices rose about 3% (-4 / 3 = -1.3). Range: -1.0 (USDA ERS report ERR-139, Okrent and Alston: own-price elasticity of all food away from home -1.02, limited service less elastic than full service) to -2.5 (Starbucks US, fourth quarter of fiscal 2024: ticket +4%, transactions -10%, a quarter with other troubles mixed in). (3) weights: reputation cut from 0.20 to 0.09, the other three keep their old ratios to each other (35 : 25 : 20). Reason: Luca (Harvard Business School working paper 12-016) measured +5-9% revenue per Yelp star for independent restaurants. In the engine one star = 0.25 of the 0-1 reputation scale, and the demand change is |elasticity| x (reputation weight / price weight) x 0.25 x (1 - own share). Old weights: 1.3 x (0.20 / 0.35) x 0.25 x 0.9 = 16.7% per star, twice the top of the measured range. New weights: 1.3 x (0.09 / 0.40) x 0.25 x 0.9 = 6.6% per star. The letter grade and word of mouth act on top of this through events and mechanics (extra.mechanics: star_rating, letter_grade_demand). Toast's 2025 survey of 650 US coffee drinkers supports keeping quality close to price: taste 53%, price 20%, convenience 17%, atmosphere 8% as the main reason to pick one shop over another (stated, not measured). All numbers were read in search results; the pages themselves could not be opened from this session."
   },
   "extra": {
     "d06HowNumbersWereChecked": "This session could run web searches but could not open pages: the environment's network policy blocked direct requests to every site tried (www.nyc.gov, square.com, www.placer.ai). So nothing in this fragment is marked verified. Every number carries the page it was reported from and an 'evidence' tag: primary_via_search (the search tool quoted it from the primary page: a city or state agency, a company's own filing or price page, a statute), study_via_search (a published study, quoted from its abstract or the authors' pages), industry_via_search (a company's report on its own customers, a trade publication or a news report), anecdote (owners' words), assumption (my arithmetic or a planning value; the note shows it). A reader with network access should open the 'source' and upgrade primary_via_search items to verified.",
@@ -88,7 +88,7 @@
       "evidence": "industry_via_search"
     },
     "hourCurve": {
-      "note": "Share of a day's orders by clock hour, 24 numbers each summing to 1 (index 0 = midnight to 1am). The engine has no hours yet; this is the input for extra.mechanics hourly_peak. Shapes are my estimates fitted to three measurements: Placer.ai 2024, share of visits between 6:00 and 9:59am: Dunkin' 39.9%, Starbucks 29.9%; a convenience-store operator in NACS Magazine: 6-10am is more than half of coffee sales; cafe consultants put the 7-9am rush at 35-45% of the day (one Square merchant: 42% in two hours). The neighborhood curve puts 36% of orders in 7-10am, the office curve 44%.",
+      "note": "Share of a day's orders by clock hour, 24 numbers each summing to 1 (index 0 = midnight to 1am). The engine has no hours yet; this is the input for extra.mechanics hourly_peak. The shapes are drawn by hand and checked against four measurements. Placer.ai 2024, share of visits between 6:00 and 9:59am: Dunkin' 39.9%, Starbucks 29.9%; between 3:00 and 6:59pm: Starbucks 23.7%, Dunkin' 16.4%. Starbucks (Wall Street Journal, February 2026): more than half of US company-store sales happen before 11am. A convenience-store operator in NACS Magazine: 6-10am is more than half of coffee sales. Cafe consultants put the 7-9am rush at 35-45% of the day (one Square merchant: 42% in two hours). The neighborhood curve (a Starbucks-like, lingering shop) has 46% of orders before 11am and 23% from 3 to 7pm; the office curve (a Dunkin'-like commuter shop) has 53% before 11am and 16% from 3 to 7pm.",
       "neighborhood": [
         0,
         0,
@@ -159,7 +159,22 @@
       },
       "source": "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
       "confidence": "estimate",
-      "evidence": "industry_via_search"
+      "evidence": "industry_via_search",
+      "checks": {
+        "neighborhoodBefore11am": 0.46,
+        "neighborhood3to7pm": 0.23,
+        "officeBefore11am": 0.53,
+        "office3to7pm": 0.16,
+        "starbucksBefore11amAtLeast": 0.5,
+        "starbucks3to7pm": 0.237,
+        "dunkin3to7pm": 0.164,
+        "dunkin6to10am": 0.399,
+        "starbucks6to10am": 0.299,
+        "sources": [
+          "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
+          "https://www.convenience.org/stay-current/news/2026/february/24/6-starbucks-makes-a-play-for-the-afternoon_fs"
+        ]
+      }
     },
     "monthCurve": {
       "note": "Demand by calendar month for a New York neighborhood cafe, Jan..Dec, per day (game months have 30 days), averaging 1 and summing to 12. My estimate; no monthly sales series for New York cafes was found. What it leans on: (a) Census Monthly Retail Trade, food services and drinking places, not seasonally adjusted, 2025, $ million: August 104,429; September 97,102; October 100,802; November 96,332; December 99,612 (read on FRED, series MRTSSM722USN; January-July 2025 were not shown in the search results); (b) Placer.ai office index: visits slump from late July to Labor Day and again, harder, from Thanksgiving through the first weeks of January (July 2025: 21.8% under 2019; December 2025: 33.1% under 2019); (c) trade press: cafe customers 'disappear at the beginning of every year' (Fresh Cup); (d) autumn drink launches lift coffee visits (Placer.ai: Starbucks +3.4% in October and +14.7% in November 2021 month over month). New York differs from the national series in August: residents leave and offices thin out, so August is below average here although it is the national peak.",
@@ -316,10 +331,10 @@
           "evidence": "industry_via_search"
         },
         {
-          "what": "Manhattan office attendance on an average weekday, March 2025",
-          "value": 0.57,
-          "unit": "share of office workers",
-          "note": "Partnership for New York City survey of more than 125 employers: 76% of the pre-pandemic level",
+          "what": "Manhattan office attendance against the pre-pandemic level, March 2025",
+          "value": 0.76,
+          "unit": "share of pre-pandemic attendance",
+          "note": "Partnership for New York City survey of more than 125 employers, March 5-20, 2025 (72% in May 2024). By industry: real estate 85%, finance 62%, law 62% average daily attendance. In September 2023 the same survey counted 58% of employees at their desks on an average weekday",
           "source": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
           "confidence": "estimate",
           "evidence": "industry_via_search"
@@ -567,7 +582,7 @@
       "evidence": "assumption"
     },
     "ratingModel": {
-      "note": "How reviews and the window grade move sales. Effects are from published studies; the mapping to the engine's 0-1 reputation is mine: 4.0 stars = 0.5, one star = 0.25.",
+      "note": "How reviews and the window grade move sales. Effects are from published studies; the mapping to the engine's 0-1 reputation is mine: 4.25 stars = 0.5 (the average US cafe profile is rated 4.26), one star = 0.25.",
       "revenuePerStar": {
         "low": 0.05,
         "typical": 0.07,
@@ -612,7 +627,16 @@
         "source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091",
         "evidence": "study_via_search"
       },
-      "confidence": "estimate"
+      "confidence": "estimate",
+      "typicalRatings": {
+        "cafeAverageUs": 4.26,
+        "restaurantAverage": 4.27,
+        "restaurantsAt4Point5OrMore": 0.337,
+        "restaurantsBelow4": 0.149,
+        "what": "A 2026 benchmark of 500 cafe and 570 restaurant profiles by a review-software company; it describes its sample, not the industry. An older BrightLocal study put all local businesses at 4.42 on average",
+        "source": "https://recensio-ai.lovable.app/benchmark/cafes",
+        "evidence": "industry_via_search"
+      }
     },
     "competition": {
       "note": "What is around the door in New York and what it does. Counts are from news reports of the Center for an Urban Future's yearly chain census; the size of the hit from a new rival is not measured anywhere I could find, so the ranges are planning values.",
@@ -633,7 +657,7 @@
           "chain": "Luckin Coffee",
           "stores": 22,
           "year": 2026,
-          "note": "First two US stores opened in June 2025 in Greenwich Village and Chelsea with $1.99 opening drinks; app and kiosk ordering; has taken former Starbucks sites"
+          "note": "First two US stores opened in June 2025 in Greenwich Village and Chelsea with $1.99 opening drinks; app and kiosk ordering; has taken former Starbucks sites; the date of the 22-store count was not confirmed"
         },
         {
           "chain": "Blank Street",
@@ -687,7 +711,7 @@
           "high": 12,
           "unit": "USD an order",
           "evidence": "industry_via_search",
-          "basis": "Joe Coffee: $8.47 at independent shops, $7.82 a year earlier. Toast medians: drip coffee $3.65 (February 2026, +4.3% in a year), cold brew $5.75 (October 2026, +4.0%), latte $5.46 (early 2024); New York lattes are quoted at $6.00-$7.50",
+          "basis": "Joe Coffee (an ordering app for independents; method not stated): $8.47 across its shops, $7.82 a year earlier. Toast medians: drip coffee $3.65 (February 2026, +4.3% in a year), cold brew $5.75 (October 2026, +4.0%), latte $5.46 (early 2024); New York lattes are quoted at $6.00-$7.50",
           "source": "https://joe.coffee/coffee-industry-trends/"
         },
         {
@@ -1090,7 +1114,7 @@
             "id": "reward_good_reviews"
           }
         ],
-        "realFrequency": "BrightLocal 2026: 68% of consumers want at least four stars before using a local business; 31% want four and a half, up from 17% a year earlier",
+        "realFrequency": "BrightLocal 2026: 68% of consumers want at least four stars before using a local business; 31% want four and a half, up from 17% a year earlier. In a 2026 sample of 570 restaurant profiles 14.9% were rated under 4.0 and the average was 4.27; 500 US cafe profiles averaged 4.26",
         "tier": "core",
         "source": "https://www.brightlocal.com/research/local-consumer-review-survey/",
         "confidence": "estimate",
@@ -1188,6 +1212,10 @@
           {
             "kind": "lever",
             "id": "reviews"
+          },
+          {
+            "kind": "lever",
+            "id": "ordering_kiosk"
           }
         ],
         "realFrequency": "Starbucks' own count before its 2025 turnaround: only about half of orders were ready within four minutes",
@@ -1240,6 +1268,10 @@
           {
             "kind": "staff",
             "id": "barista"
+          },
+          {
+            "kind": "lever",
+            "id": "ordering_kiosk"
           }
         ],
         "realFrequency": "Starbucks, early 2017: 1,200 stores took 20% or more of rush orders by phone, up from 13 stores a year before",
@@ -1540,6 +1572,10 @@
           {
             "kind": "lever",
             "id": "order_ahead"
+          },
+          {
+            "kind": "lever",
+            "id": "ordering_kiosk"
           }
         ],
         "realFrequency": "Chains in New York City shrank 1.3% in 2025 (112 stores), the sixth decline in eight years; 18 chains left the city entirely",
@@ -2900,6 +2936,57 @@
         "source": "https://www.nrn.com/fast-casual/panera-s-unlimited-sip-club-will-no-longer-be-unlimited",
         "confidence": "estimate",
         "note": "A lesson more than a shock: a pass must have a cap. 1% is my estimate of displaced pass holders looking for another routine."
+      },
+      {
+        "id": "chains_chase_the_afternoon",
+        "name": "The chains go after the afternoon",
+        "text": "More than half of a big chain's sales happen before 11am, so it now pushes iced, low-caffeine and energy drinks after lunch. The quiet hours are where the next fight is.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Chain menu launches for the afternoon; share of chain visits between 3 and 7pm (Starbucks 23.7%, Dunkin' 16.4% in 2024)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "menu_size"
+          },
+          {
+            "kind": "lever",
+            "id": "limited_time_drink"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "laptop_tables"
+          }
+        ],
+        "realFrequency": "Starbucks, 2026: digital menu boards that switch to afternoon items; iced fruit drinks grew at double-digit rates; record food sales with the largest gains in the afternoon",
+        "tier": "deep",
+        "source": "https://www.emarketer.com/content/starbucks-afternoon-daypart-protein-turnaround-strategy",
+        "confidence": "estimate",
+        "note": "1% of the day is my estimate of what an independent with no afternoon offer gives up; a shop with the wide menu or a seasonal drink should gain the same amount instead. The afternoon hours are where a neighborhood cafe has spare bar capacity."
       }
     ],
     "mechanics": [
@@ -2950,10 +3037,22 @@
             "value": 0.18,
             "source": "https://www.nacsmagazine.com/Issues/March-2021/hot-beverage-reboot",
             "confidence": "estimate"
+          },
+          {
+            "what": "Share of Starbucks US company-store sales made before 11am, at least",
+            "value": 0.5,
+            "source": "https://www.convenience.org/stay-current/news/2026/february/24/6-starbucks-makes-a-play-for-the-afternoon_fs",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of Starbucks visits between 3:00 and 6:59pm (2024)",
+            "value": 0.237,
+            "source": "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
+            "confidence": "estimate"
           }
         ],
         "tier": "core",
-        "planningValues": "The two hour curves themselves (extra.hourCurve) are fitted by hand to the three measurements listed there. 1.2 drinks an order is a planning value."
+        "planningValues": "The two hour curves (extra.hourCurve) are drawn by hand and agree with the four measurements listed there. 1.2 drinks an order is a planning value."
       },
       {
         "id": "queue_walkaway",
@@ -3004,7 +3103,7 @@
         "id": "star_rating",
         "title": "A visible star rating, earned review by review",
         "playerDecision": "How to treat the listings (reviews lever), and whether to take the shortcuts: buy reviews, or reward good ones.",
-        "engineMath": "Keep two numbers per shop: reviewCount and ratingAverage (1-5), shown rounded to half stars. Each month about 1 order in 150 leaves a review (my assumption: 40 a month at 6,000 orders). The month's reviews average: 4.4 base, +1.5 x (quality - 0.5), -0.6 if the month had slow_service_reviews, -0.4 if a B or C hangs in the window, -0.3 after a price_step_backlash, +0.12 if the owner replies to reviews. ratingAverage moves toward it by reviewsThisMonth / reviewCount, so a new shop's rating swings and an old shop's barely moves. Demand multiplier for people who do not know the shop yet (newcomer share by segment): 1 + 0.07 x (displayed stars - 4.0), and an extra 0.93 while the displayed rating is under 4.0. Regulars ignore the stars. Bought reviews add 10 five-star reviews a month and open the fake_reviews trail; when found, the platform removes them and shows a warning for 90 days (the 90 days are a game value). In the engine's present model the same thing is carried by reputation with weight 0.09 (see market.note).",
+        "engineMath": "Keep two numbers per shop: reviewCount and ratingAverage (1-5), shown rounded to half stars. Each month about 1 order in 150 leaves a review (my assumption: 40 a month at 6,000 orders). The month's reviews average: 4.3 base (US cafe profiles average 4.26), +1.5 x (quality - 0.5), -0.6 if the month had slow_service_reviews, -0.4 if a B or C hangs in the window, -0.3 after a price_step_backlash, +0.12 if the owner replies to reviews. ratingAverage moves toward it by reviewsThisMonth / reviewCount, so a new shop's rating swings and an old shop's barely moves. Demand multiplier for people who do not know the shop yet (newcomer share by segment): 1 + 0.07 x (displayed stars - 4.25), and an extra 0.93 while the displayed rating is under 4.0. Regulars ignore the stars. Bought reviews add 10 five-star reviews a month and open the fake_reviews trail; when found, the platform removes them and shows a warning for 90 days (the 90 days are a game value). In the engine's present model the same thing is carried by reputation with weight 0.09 (see market.note).",
         "fieldsNeeded": [
           "business.reviewCount, business.ratingAverage",
           "extra.ratingModel",
@@ -3052,10 +3151,22 @@
             "value": 53088,
             "source": "https://www.venable.com/insights/publications/2025/12/ftc-signals-heightened-enforcement-of-new",
             "confidence": "estimate"
+          },
+          {
+            "what": "Average rating of 500 US cafe profiles (2026 benchmark by a review-software company)",
+            "value": 4.26,
+            "source": "https://recensio-ai.lovable.app/benchmark/cafes",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of 570 restaurant profiles rated under 4.0 (same benchmark)",
+            "value": 0.149,
+            "source": "https://recensio-ai.lovable.app/benchmark/restaurants",
+            "confidence": "estimate"
           }
         ],
         "tier": "core",
-        "planningValues": "No source: one review per 150 orders; the 4.4 base and the plus and minus terms of a month's review average; the 0.93 threshold factor; ten bought reviews a month; the 90-day warning. They are chosen so that a well-run shop sits near 4.5 stars and a month of long waits costs about a quarter of a star."
+        "planningValues": "No source: one review per 150 orders; the 4.3 base (set just above the 4.26 average found) and the plus and minus terms of a month's review average; the 0.93 threshold factor; ten bought reviews a month; the 90-day warning. They are chosen so that a well-run shop sits near 4.5 stars and a month of long waits costs about a quarter of a star."
       },
       {
         "id": "letter_grade_demand",
@@ -3450,6 +3561,12 @@
         "tier": "core"
       },
       {
+        "text": "More than half of a coffee chain's day is over by 11am.",
+        "why": "Starbucks makes over half its US store sales before 11am; a commuter shop is nearer 53% and a neighborhood shop about 46%. The afternoon crew costs the same per hour and sells half as much.",
+        "source": "https://www.convenience.org/stay-current/news/2026/february/24/6-starbucks-makes-a-play-for-the-afternoon_fs",
+        "tier": "core"
+      },
+      {
         "text": "People judge a line by how long it looks, not by how fast it moves.",
         "why": "A fast bar with eight people in the doorway loses more walk-ins than a slow one with three. Where the line stands and how it is seen from the street matter as much as speed.",
         "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
@@ -3646,6 +3763,12 @@
         "why": "Late-night coffee is growing where coffee, not alcohol, is the social drink: Yemeni-style cafes stay open late across North America, and some New York shops turn into wine or sake bars after dark. An ordinary espresso bar that simply stays open later rarely covers the payroll.",
         "source": "https://perfectdailygrind.com/2026/06/should-coffee-shops-stay-open-later/",
         "tier": "exotic"
+      },
+      {
+        "text": "The average cafe is rated about 4.3, so 4.0 is below average.",
+        "why": "A sample of 500 US cafe profiles averaged 4.26 stars and 15% of restaurants sat under 4.0. Two in three customers filter at four stars, so 'four stars' is the floor, not a good score.",
+        "source": "https://recensio-ai.lovable.app/benchmark/cafes",
+        "tier": "core"
       }
     ],
     "cityFacts": {
@@ -3939,6 +4062,30 @@
       "confidence": "estimate",
       "evidence": "assumption",
       "note": "The engine counts capacity by the month; a cafe loses its sales by the hour. At 200 orders a day the 8am hour brings 28 orders (36 in an office district) against about 25 an hour from one barista on the bar, so a flat crew turns people away at 8am while standing idle at 3pm. Overlap moves hours, not money. Split shifts stretch a worker's day past ten hours from start to finish, and New York's hospitality wage order then adds one hour at the minimum wage for that day: $17 x 2 workers x 30 days = $1,020. Capacity gains are my estimates of the rush orders saved, as a share of the day."
+    },
+    {
+      "id": "ordering_kiosk",
+      "name": "Ordering kiosk",
+      "options": [
+        {
+          "id": "none",
+          "label": "Orders at the register only",
+          "monthlyCost": 0
+        },
+        {
+          "id": "kiosk",
+          "label": "One self-order kiosk by the door",
+          "monthlyCost": 155,
+          "effects": {
+            "capacity": 0.05
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://squareup.com/us/en/press/square-kiosk-self-service-reimagined",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "Square's kiosk, launched October 14, 2026: $1,999 for the device with a counter stand plus $99 a month of software per device, and it needs the Plus plan ($49 a month, already in the pack as pos_software). $1,999 over 36 months = $56, plus $99 = $155 a month. The gain is at the rush: the person who took orders can move to the bar. 5% of the day's capacity is my estimate; no measurement of kiosk ticket size or share of orders was found (Square does not publish one). App-first chains in New York already order this way."
     },
     {
       "id": "menu_size",
@@ -4242,7 +4389,7 @@
       "source": "https://www.venable.com/insights/publications/2025/12/ftc-signals-heightened-enforcement-of-new",
       "confidence": "estimate",
       "evidence": "industry_via_search",
-      "note": "The FTC's rule took effect on October 21, 2024: no buying, selling or writing of fake reviews, no reviews by insiders without disclosure, no rewards that depend on the review being positive. Maximum civil penalty $53,088 per violation (2025 amount); in December 2025 the FTC sent warning letters to ten companies. The $2,500 base is the smallest penalty in New York's 'Operation Clean Turf' (September 2013): the Attorney General ran a sting with a fake Brooklyn yogurt shop and settled with 19 companies for more than $350,000 in all. The reputation hit is my estimate of a public warning on the listing; the game's 'sting' route mirrors that operation. Read in law-firm and news summaries, not in the rule's text."
+      "note": "The FTC's rule took effect on October 21, 2024 (date cited from memory): no buying, selling or writing of fake reviews, no reviews by insiders without disclosure, no rewards that depend on the review being positive. Maximum civil penalty $53,088 per violation (2025 amount); in December 2025 the FTC sent warning letters to ten companies. The $2,500 base is the smallest penalty in New York's 'Operation Clean Turf' (September 2013): the Attorney General ran a sting with a fake Brooklyn yogurt shop and settled with 19 companies for more than $350,000 in all. The reputation hit is my estimate of a public warning on the listing; the game's 'sting' route mirrors that operation. Read in law-firm and news summaries, not in the rule's text."
     },
     {
       "id": "grade_card_not_posted",
@@ -4925,6 +5072,16 @@
       "how": "search result, page not opened"
     },
     {
+      "url": "https://recensio-ai.lovable.app/benchmark/cafes",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://recensio-ai.lovable.app/benchmark/restaurants",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
       "url": "https://reviewtrackers.com/reports/customer-reviews-stats",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
@@ -4941,6 +5098,11 @@
     },
     {
       "url": "https://squareup.com/townsquare/square-data-repeat-v-one-time-customer-tipping-trends",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://squareup.com/us/en/press/square-kiosk-self-service-reimagined",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
     },
@@ -5030,6 +5192,11 @@
       "how": "search result, page not opened"
     },
     {
+      "url": "https://www.convenience.org/stay-current/news/2026/february/24/6-starbucks-makes-a-play-for-the-afternoon_fs",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
       "url": "https://www.costar.com/products/benchmark/resources/press-releases/us-hotel-performance-october-2025",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
@@ -5046,6 +5213,11 @@
     },
     {
       "url": "https://www.ekuep.com/en/two-groups",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.emarketer.com/content/starbucks-afternoon-daypart-protein-turnaround-strategy",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
     },

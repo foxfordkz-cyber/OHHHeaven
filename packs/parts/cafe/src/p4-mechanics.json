@@ -48,10 +48,22 @@
             "value": 0.18,
             "source": "https://www.nacsmagazine.com/Issues/March-2021/hot-beverage-reboot",
             "confidence": "estimate"
+          },
+          {
+            "what": "Share of Starbucks US company-store sales made before 11am, at least",
+            "value": 0.5,
+            "source": "https://www.convenience.org/stay-current/news/2026/february/24/6-starbucks-makes-a-play-for-the-afternoon_fs",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of Starbucks visits between 3:00 and 6:59pm (2024)",
+            "value": 0.237,
+            "source": "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
+            "confidence": "estimate"
           }
         ],
         "tier": "core",
-        "planningValues": "The two hour curves themselves (extra.hourCurve) are fitted by hand to the three measurements listed there. 1.2 drinks an order is a planning value."
+        "planningValues": "The two hour curves (extra.hourCurve) are drawn by hand and agree with the four measurements listed there. 1.2 drinks an order is a planning value."
       },
       {
         "id": "queue_walkaway",
@@ -102,7 +114,7 @@
         "id": "star_rating",
         "title": "A visible star rating, earned review by review",
         "playerDecision": "How to treat the listings (reviews lever), and whether to take the shortcuts: buy reviews, or reward good ones.",
-        "engineMath": "Keep two numbers per shop: reviewCount and ratingAverage (1-5), shown rounded to half stars. Each month about 1 order in 150 leaves a review (my assumption: 40 a month at 6,000 orders). The month's reviews average: 4.4 base, +1.5 x (quality - 0.5), -0.6 if the month had slow_service_reviews, -0.4 if a B or C hangs in the window, -0.3 after a price_step_backlash, +0.12 if the owner replies to reviews. ratingAverage moves toward it by reviewsThisMonth / reviewCount, so a new shop's rating swings and an old shop's barely moves. Demand multiplier for people who do not know the shop yet (newcomer share by segment): 1 + 0.07 x (displayed stars - 4.0), and an extra 0.93 while the displayed rating is under 4.0. Regulars ignore the stars. Bought reviews add 10 five-star reviews a month and open the fake_reviews trail; when found, the platform removes them and shows a warning for 90 days (the 90 days are a game value). In the engine's present model the same thing is carried by reputation with weight 0.09 (see market.note).",
+        "engineMath": "Keep two numbers per shop: reviewCount and ratingAverage (1-5), shown rounded to half stars. Each month about 1 order in 150 leaves a review (my assumption: 40 a month at 6,000 orders). The month's reviews average: 4.3 base (US cafe profiles average 4.26), +1.5 x (quality - 0.5), -0.6 if the month had slow_service_reviews, -0.4 if a B or C hangs in the window, -0.3 after a price_step_backlash, +0.12 if the owner replies to reviews. ratingAverage moves toward it by reviewsThisMonth / reviewCount, so a new shop's rating swings and an old shop's barely moves. Demand multiplier for people who do not know the shop yet (newcomer share by segment): 1 + 0.07 x (displayed stars - 4.25), and an extra 0.93 while the displayed rating is under 4.0. Regulars ignore the stars. Bought reviews add 10 five-star reviews a month and open the fake_reviews trail; when found, the platform removes them and shows a warning for 90 days (the 90 days are a game value). In the engine's present model the same thing is carried by reputation with weight 0.09 (see market.note).",
         "fieldsNeeded": [
           "business.reviewCount, business.ratingAverage",
           "extra.ratingModel",
@@ -150,10 +162,22 @@
             "value": 53088,
             "source": "https://www.venable.com/insights/publications/2025/12/ftc-signals-heightened-enforcement-of-new",
             "confidence": "estimate"
+          },
+          {
+            "what": "Average rating of 500 US cafe profiles (2026 benchmark by a review-software company)",
+            "value": 4.26,
+            "source": "https://recensio-ai.lovable.app/benchmark/cafes",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Share of 570 restaurant profiles rated under 4.0 (same benchmark)",
+            "value": 0.149,
+            "source": "https://recensio-ai.lovable.app/benchmark/restaurants",
+            "confidence": "estimate"
           }
         ],
         "tier": "core",
-        "planningValues": "No source: one review per 150 orders; the 4.4 base and the plus and minus terms of a month's review average; the 0.93 threshold factor; ten bought reviews a month; the 90-day warning. They are chosen so that a well-run shop sits near 4.5 stars and a month of long waits costs about a quarter of a star."
+        "planningValues": "No source: one review per 150 orders; the 4.3 base (set just above the 4.26 average found) and the plus and minus terms of a month's review average; the 0.93 threshold factor; ten bought reviews a month; the 90-day warning. They are chosen so that a well-run shop sits near 4.5 stars and a month of long waits costs about a quarter of a star."
       },
       {
         "id": "letter_grade_demand",

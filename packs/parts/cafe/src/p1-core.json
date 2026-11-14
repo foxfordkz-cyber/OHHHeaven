@@ -11,7 +11,7 @@
     "source": "https://www.restaurantdive.com/news/starbucks-cuts-discounts-menu-boosts-marketing-spend-traffic-declines/738605/",
     "confidence": "estimate",
     "evidence": "industry_via_search",
-    "note": "D06 revision. (1) unitsPerSlotMonth stays 6,000 (200 orders a day): still a planning point, not a statistic. Cross-checks found: Joe Coffee reports an average ticket of $8.47 at independent shops (was $7.82 a year earlier), which matches the pack's $8.50; BizBuySell's median coffee shop sold in the US takes $375,000 a year = $1,027 a day = about 121 orders a day at that ticket, so 200 a day is a good New York block, not the national middle. (2) priceElasticity stays -1.3 and now has an anchor: Starbucks North America, second quarter of fiscal 2025, transactions fell 4% while prices rose about 3% (-4 / 3 = -1.3). Range: -1.0 (USDA ERS report ERR-139, Okrent and Alston: own-price elasticity of all food away from home -1.02, limited service less elastic than full service) to -2.5 (Starbucks US, fourth quarter of fiscal 2024: ticket +4%, transactions -10%, a quarter with other troubles mixed in). (3) weights: reputation cut from 0.20 to 0.09, the other three keep their old ratios to each other (35 : 25 : 20). Reason: Luca (Harvard Business School working paper 12-016) measured +5-9% revenue per Yelp star for independent restaurants. In the engine one star = 0.25 of the 0-1 reputation scale, and the demand change is |elasticity| x (reputation weight / price weight) x 0.25 x (1 - own share). Old weights: 1.3 x (0.20 / 0.35) x 0.25 x 0.9 = 16.7% per star, twice the top of the measured range. New weights: 1.3 x (0.09 / 0.40) x 0.25 x 0.9 = 6.6% per star. The letter grade and word of mouth act on top of this through events and mechanics (extra.mechanics: star_rating, letter_grade_demand). Toast's 2025 survey of 650 US coffee drinkers supports keeping quality close to price: taste 53%, price 20%, convenience 17%, atmosphere 8% as the main reason to pick one shop over another (stated, not measured). All numbers were read in search results; the pages themselves could not be opened from this session."
+    "note": "D06 revision. (1) unitsPerSlotMonth stays 6,000 (200 orders a day): still a planning point, not a statistic. Cross-checks found: Joe Coffee, an ordering app for independent shops, reports an average ticket of $8.47 across its shops (was $7.82 a year earlier; its method is not stated), which matches the pack's $8.50; BizBuySell's median coffee shop sold in the US takes $375,000 a year = $1,027 a day = about 121 orders a day at that ticket, so 200 a day is a good New York block, not the national middle. (2) priceElasticity stays -1.3 and now has an anchor: Starbucks North America, second quarter of fiscal 2025, transactions fell 4% while prices rose about 3% (-4 / 3 = -1.3). Range: -1.0 (USDA ERS report ERR-139, Okrent and Alston: own-price elasticity of all food away from home -1.02, limited service less elastic than full service) to -2.5 (Starbucks US, fourth quarter of fiscal 2024: ticket +4%, transactions -10%, a quarter with other troubles mixed in). (3) weights: reputation cut from 0.20 to 0.09, the other three keep their old ratios to each other (35 : 25 : 20). Reason: Luca (Harvard Business School working paper 12-016) measured +5-9% revenue per Yelp star for independent restaurants. In the engine one star = 0.25 of the 0-1 reputation scale, and the demand change is |elasticity| x (reputation weight / price weight) x 0.25 x (1 - own share). Old weights: 1.3 x (0.20 / 0.35) x 0.25 x 0.9 = 16.7% per star, twice the top of the measured range. New weights: 1.3 x (0.09 / 0.40) x 0.25 x 0.9 = 6.6% per star. The letter grade and word of mouth act on top of this through events and mechanics (extra.mechanics: star_rating, letter_grade_demand). Toast's 2025 survey of 650 US coffee drinkers supports keeping quality close to price: taste 53%, price 20%, convenience 17%, atmosphere 8% as the main reason to pick one shop over another (stated, not measured). All numbers were read in search results; the pages themselves could not be opened from this session."
   },
   "extra": {
     "d06HowNumbersWereChecked": "This session could run web searches but could not open pages: the environment's network policy blocked direct requests to every site tried (www.nyc.gov, square.com, www.placer.ai). So nothing in this fragment is marked verified. Every number carries the page it was reported from and an 'evidence' tag: primary_via_search (the search tool quoted it from the primary page: a city or state agency, a company's own filing or price page, a statute), study_via_search (a published study, quoted from its abstract or the authors' pages), industry_via_search (a company's report on its own customers, a trade publication or a news report), anecdote (owners' words), assumption (my arithmetic or a planning value; the note shows it). A reader with network access should open the 'source' and upgrade primary_via_search items to verified.",
@@ -84,7 +84,7 @@
       "evidence": "industry_via_search"
     },
     "hourCurve": {
-      "note": "Share of a day's orders by clock hour, 24 numbers each summing to 1 (index 0 = midnight to 1am). The engine has no hours yet; this is the input for extra.mechanics hourly_peak. Shapes are my estimates fitted to three measurements: Placer.ai 2024, share of visits between 6:00 and 9:59am: Dunkin' 39.9%, Starbucks 29.9%; a convenience-store operator in NACS Magazine: 6-10am is more than half of coffee sales; cafe consultants put the 7-9am rush at 35-45% of the day (one Square merchant: 42% in two hours). The neighborhood curve puts 36% of orders in 7-10am, the office curve 44%.",
+      "note": "Share of a day's orders by clock hour, 24 numbers each summing to 1 (index 0 = midnight to 1am). The engine has no hours yet; this is the input for extra.mechanics hourly_peak. The shapes are drawn by hand and checked against four measurements. Placer.ai 2024, share of visits between 6:00 and 9:59am: Dunkin' 39.9%, Starbucks 29.9%; between 3:00 and 6:59pm: Starbucks 23.7%, Dunkin' 16.4%. Starbucks (Wall Street Journal, February 2026): more than half of US company-store sales happen before 11am. A convenience-store operator in NACS Magazine: 6-10am is more than half of coffee sales. Cafe consultants put the 7-9am rush at 35-45% of the day (one Square merchant: 42% in two hours). The neighborhood curve (a Starbucks-like, lingering shop) has 46% of orders before 11am and 23% from 3 to 7pm; the office curve (a Dunkin'-like commuter shop) has 53% before 11am and 16% from 3 to 7pm.",
       "neighborhood": [
         0,
         0,
@@ -155,7 +155,22 @@
       },
       "source": "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
       "confidence": "estimate",
-      "evidence": "industry_via_search"
+      "evidence": "industry_via_search",
+      "checks": {
+        "neighborhoodBefore11am": 0.46,
+        "neighborhood3to7pm": 0.23,
+        "officeBefore11am": 0.53,
+        "office3to7pm": 0.16,
+        "starbucksBefore11amAtLeast": 0.5,
+        "starbucks3to7pm": 0.237,
+        "dunkin3to7pm": 0.164,
+        "dunkin6to10am": 0.399,
+        "starbucks6to10am": 0.299,
+        "sources": [
+          "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
+          "https://www.convenience.org/stay-current/news/2026/february/24/6-starbucks-makes-a-play-for-the-afternoon_fs"
+        ]
+      }
     },
     "monthCurve": {
       "note": "Demand by calendar month for a New York neighborhood cafe, Jan..Dec, per day (game months have 30 days), averaging 1 and summing to 12. My estimate; no monthly sales series for New York cafes was found. What it leans on: (a) Census Monthly Retail Trade, food services and drinking places, not seasonally adjusted, 2025, $ million: August 104,429; September 97,102; October 100,802; November 96,332; December 99,612 (read on FRED, series MRTSSM722USN; January-July 2025 were not shown in the search results); (b) Placer.ai office index: visits slump from late July to Labor Day and again, harder, from Thanksgiving through the first weeks of January (July 2025: 21.8% under 2019; December 2025: 33.1% under 2019); (c) trade press: cafe customers 'disappear at the beginning of every year' (Fresh Cup); (d) autumn drink launches lift coffee visits (Placer.ai: Starbucks +3.4% in October and +14.7% in November 2021 month over month). New York differs from the national series in August: residents leave and offices thin out, so August is below average here although it is the national peak.",
@@ -312,10 +327,10 @@
           "evidence": "industry_via_search"
         },
         {
-          "what": "Manhattan office attendance on an average weekday, March 2025",
-          "value": 0.57,
-          "unit": "share of office workers",
-          "note": "Partnership for New York City survey of more than 125 employers: 76% of the pre-pandemic level",
+          "what": "Manhattan office attendance against the pre-pandemic level, March 2025",
+          "value": 0.76,
+          "unit": "share of pre-pandemic attendance",
+          "note": "Partnership for New York City survey of more than 125 employers, March 5-20, 2025 (72% in May 2024). By industry: real estate 85%, finance 62%, law 62% average daily attendance. In September 2023 the same survey counted 58% of employees at their desks on an average weekday",
           "source": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
           "confidence": "estimate",
           "evidence": "industry_via_search"
@@ -563,7 +578,7 @@
       "evidence": "assumption"
     },
     "ratingModel": {
-      "note": "How reviews and the window grade move sales. Effects are from published studies; the mapping to the engine's 0-1 reputation is mine: 4.0 stars = 0.5, one star = 0.25.",
+      "note": "How reviews and the window grade move sales. Effects are from published studies; the mapping to the engine's 0-1 reputation is mine: 4.25 stars = 0.5 (the average US cafe profile is rated 4.26), one star = 0.25.",
       "revenuePerStar": {
         "low": 0.05,
         "typical": 0.07,
@@ -608,7 +623,16 @@
         "source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091",
         "evidence": "study_via_search"
       },
-      "confidence": "estimate"
+      "confidence": "estimate",
+      "typicalRatings": {
+        "cafeAverageUs": 4.26,
+        "restaurantAverage": 4.27,
+        "restaurantsAt4Point5OrMore": 0.337,
+        "restaurantsBelow4": 0.149,
+        "what": "A 2026 benchmark of 500 cafe and 570 restaurant profiles by a review-software company; it describes its sample, not the industry. An older BrightLocal study put all local businesses at 4.42 on average",
+        "source": "https://recensio-ai.lovable.app/benchmark/cafes",
+        "evidence": "industry_via_search"
+      }
     },
     "competition": {
       "note": "What is around the door in New York and what it does. Counts are from news reports of the Center for an Urban Future's yearly chain census; the size of the hit from a new rival is not measured anywhere I could find, so the ranges are planning values.",
@@ -629,7 +653,7 @@
           "chain": "Luckin Coffee",
           "stores": 22,
           "year": 2026,
-          "note": "First two US stores opened in June 2025 in Greenwich Village and Chelsea with $1.99 opening drinks; app and kiosk ordering; has taken former Starbucks sites"
+          "note": "First two US stores opened in June 2025 in Greenwich Village and Chelsea with $1.99 opening drinks; app and kiosk ordering; has taken former Starbucks sites; the date of the 22-store count was not confirmed"
         },
         {
           "chain": "Blank Street",
@@ -683,7 +707,7 @@
           "high": 12,
           "unit": "USD an order",
           "evidence": "industry_via_search",
-          "basis": "Joe Coffee: $8.47 at independent shops, $7.82 a year earlier. Toast medians: drip coffee $3.65 (February 2026, +4.3% in a year), cold brew $5.75 (October 2026, +4.0%), latte $5.46 (early 2024); New York lattes are quoted at $6.00-$7.50",
+          "basis": "Joe Coffee (an ordering app for independents; method not stated): $8.47 across its shops, $7.82 a year earlier. Toast medians: drip coffee $3.65 (February 2026, +4.3% in a year), cold brew $5.75 (October 2026, +4.0%), latte $5.46 (early 2024); New York lattes are quoted at $6.00-$7.50",
           "source": "https://joe.coffee/coffee-industry-trends/"
         },
         {

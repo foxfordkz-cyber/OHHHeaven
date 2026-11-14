@@ -4,9 +4,27 @@
       "id": "hours",
       "name": "Opening hours",
       "options": [
-        { "id": "standard", "label": "7am - 7pm", "monthlyCost": 0 },
-        { "id": "short", "label": "7am - 3pm: close after lunch", "monthlyCost": 0, "effects": { "demand": -0.23 } },
-        { "id": "long", "label": "6am - 9pm", "monthlyCost": 2300, "effects": { "demand": 0.08 } }
+        {
+          "id": "standard",
+          "label": "7am - 7pm",
+          "monthlyCost": 0
+        },
+        {
+          "id": "short",
+          "label": "7am - 3pm: close after lunch",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.23
+          }
+        },
+        {
+          "id": "long",
+          "label": "6am - 9pm",
+          "monthlyCost": 2300,
+          "effects": {
+            "demand": 0.08
+          }
+        }
       ],
       "tier": "core",
       "source": "https://freshcup.com/five-places-five-operating-hours/",
@@ -18,9 +36,28 @@
       "id": "order_ahead",
       "name": "Order-ahead",
       "options": [
-        { "id": "off", "label": "Counter orders only", "monthlyCost": 0 },
-        { "id": "throttled", "label": "Order-ahead on your own page, pickup slots capped in the rush", "monthlyCost": 140, "effects": { "demand": 0.03 } },
-        { "id": "open", "label": "Order-ahead with no cap", "monthlyCost": 190, "effects": { "demand": 0.04, "capacity": -0.04 } }
+        {
+          "id": "off",
+          "label": "Counter orders only",
+          "monthlyCost": 0
+        },
+        {
+          "id": "throttled",
+          "label": "Order-ahead on your own page, pickup slots capped in the rush",
+          "monthlyCost": 140,
+          "effects": {
+            "demand": 0.03
+          }
+        },
+        {
+          "id": "open",
+          "label": "Order-ahead with no cap",
+          "monthlyCost": 190,
+          "effects": {
+            "demand": 0.04,
+            "capacity": -0.04
+          }
+        }
       ],
       "tier": "core",
       "source": "https://www.nrn.com/sales-trends/starbucks-says-mobile-ordering-slowed-service-1q",
@@ -32,9 +69,29 @@
       "id": "delivery_apps",
       "name": "Delivery apps",
       "options": [
-        { "id": "off", "label": "No delivery", "monthlyCost": 0 },
-        { "id": "basic", "label": "One app, basic listing: 15% delivery fee plus processing", "monthlyCost": 530, "effects": { "demand": 0.05, "capacity": -0.01 } },
-        { "id": "promoted", "label": "Two apps with paid placement: 25-30% and more", "monthlyCost": 1420, "effects": { "demand": 0.09, "capacity": -0.03 } }
+        {
+          "id": "off",
+          "label": "No delivery",
+          "monthlyCost": 0
+        },
+        {
+          "id": "basic",
+          "label": "One app, basic listing: 15% delivery fee plus processing",
+          "monthlyCost": 530,
+          "effects": {
+            "demand": 0.05,
+            "capacity": -0.01
+          }
+        },
+        {
+          "id": "promoted",
+          "label": "Two apps with paid placement: 25-30% and more",
+          "monthlyCost": 1420,
+          "effects": {
+            "demand": 0.09,
+            "capacity": -0.03
+          }
+        }
       ],
       "tier": "core",
       "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
@@ -46,9 +103,27 @@
       "id": "loyalty",
       "name": "Loyalty program",
       "options": [
-        { "id": "none", "label": "None", "monthlyCost": 0 },
-        { "id": "punch_card", "label": "Paper punch card: the tenth drink is free", "monthlyCost": 220, "effects": { "demand": 0.02 } },
-        { "id": "digital", "label": "Digital loyalty on the register, points by phone number", "monthlyCost": 500, "effects": { "demand": 0.04 } }
+        {
+          "id": "none",
+          "label": "None",
+          "monthlyCost": 0
+        },
+        {
+          "id": "punch_card",
+          "label": "Paper punch card: the tenth drink is free",
+          "monthlyCost": 220,
+          "effects": {
+            "demand": 0.02
+          }
+        },
+        {
+          "id": "digital",
+          "label": "Digital loyalty on the register, points by phone number",
+          "monthlyCost": 500,
+          "effects": {
+            "demand": 0.04
+          }
+        }
       ],
       "tier": "core",
       "source": "https://squareup.com/us/en/the-bottom-line/reaching-customers/coffee-shop-loyalty-program",
@@ -60,9 +135,27 @@
       "id": "reviews",
       "name": "Online reviews",
       "options": [
-        { "id": "ignore", "label": "Leave the listings alone", "monthlyCost": 0 },
-        { "id": "reply", "label": "Answer every review within two days, keep hours and photos current", "monthlyCost": 0, "effects": { "reputation": 0.03 } },
-        { "id": "reply_and_ask", "label": "Answer every review and put a review QR card on the counter", "monthlyCost": 20, "effects": { "reputation": 0.04 } }
+        {
+          "id": "ignore",
+          "label": "Leave the listings alone",
+          "monthlyCost": 0
+        },
+        {
+          "id": "reply",
+          "label": "Answer every review within two days, keep hours and photos current",
+          "monthlyCost": 0,
+          "effects": {
+            "reputation": 0.03
+          }
+        },
+        {
+          "id": "reply_and_ask",
+          "label": "Answer every review and put a review QR card on the counter",
+          "monthlyCost": 20,
+          "effects": {
+            "reputation": 0.04
+          }
+        }
       ],
       "tier": "core",
       "source": "https://pubsonline.informs.org/doi/10.1287/mksc.2017.1043",
@@ -74,9 +167,27 @@
       "id": "peak_schedule",
       "name": "Rush-hour schedule",
       "options": [
-        { "id": "flat", "label": "The same crew all day", "monthlyCost": 0 },
-        { "id": "overlap", "label": "Stagger shifts so two people work the bar from 7 to 10", "monthlyCost": 0, "effects": { "capacity": 0.08 } },
-        { "id": "split_shifts", "label": "Split shifts around the morning and afternoon rush", "monthlyCost": 1020, "effects": { "capacity": 0.12 } }
+        {
+          "id": "flat",
+          "label": "The same crew all day",
+          "monthlyCost": 0
+        },
+        {
+          "id": "overlap",
+          "label": "Stagger shifts so two people work the bar from 7 to 10",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.08
+          }
+        },
+        {
+          "id": "split_shifts",
+          "label": "Split shifts around the morning and afternoon rush",
+          "monthlyCost": 1020,
+          "effects": {
+            "capacity": 0.12
+          }
+        }
       ],
       "tier": "core",
       "source": "https://www.ekuep.com/en/two-groups",
@@ -85,12 +196,56 @@
       "note": "The engine counts capacity by the month; a cafe loses its sales by the hour. At 200 orders a day the 8am hour brings 28 orders (36 in an office district) against about 25 an hour from one barista on the bar, so a flat crew turns people away at 8am while standing idle at 3pm. Overlap moves hours, not money. Split shifts stretch a worker's day past ten hours from start to finish, and New York's hospitality wage order then adds one hour at the minimum wage for that day: $17 x 2 workers x 30 days = $1,020. Capacity gains are my estimates of the rush orders saved, as a share of the day."
     },
     {
+      "id": "ordering_kiosk",
+      "name": "Ordering kiosk",
+      "options": [
+        {
+          "id": "none",
+          "label": "Orders at the register only",
+          "monthlyCost": 0
+        },
+        {
+          "id": "kiosk",
+          "label": "One self-order kiosk by the door",
+          "monthlyCost": 155,
+          "effects": {
+            "capacity": 0.05
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://squareup.com/us/en/press/square-kiosk-self-service-reimagined",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "Square's kiosk, launched October 14, 2026: $1,999 for the device with a counter stand plus $99 a month of software per device, and it needs the Plus plan ($49 a month, already in the pack as pos_software). $1,999 over 36 months = $56, plus $99 = $155 a month. The gain is at the rush: the person who took orders can move to the bar. 5% of the day's capacity is my estimate; no measurement of kiosk ticket size or share of orders was found (Square does not publish one). App-first chains in New York already order this way."
+    },
+    {
       "id": "menu_size",
       "name": "Menu size",
       "options": [
-        { "id": "standard", "label": "Espresso drinks, drip, tea, a pastry case", "monthlyCost": 0 },
-        { "id": "focused", "label": "Short menu: no blended drinks, nothing made to order", "monthlyCost": 0, "effects": { "capacity": 0.06, "demand": -0.03 } },
-        { "id": "wide", "label": "Everything: blended drinks, matcha, toasts", "monthlyCost": 350, "effects": { "demand": 0.05, "capacity": -0.08 } }
+        {
+          "id": "standard",
+          "label": "Espresso drinks, drip, tea, a pastry case",
+          "monthlyCost": 0
+        },
+        {
+          "id": "focused",
+          "label": "Short menu: no blended drinks, nothing made to order",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.06,
+            "demand": -0.03
+          }
+        },
+        {
+          "id": "wide",
+          "label": "Everything: blended drinks, matcha, toasts",
+          "monthlyCost": 350,
+          "effects": {
+            "demand": 0.05,
+            "capacity": -0.08
+          }
+        }
       ],
       "tier": "deep",
       "source": "https://www.fox5ny.com/news/starbucks-menu-reduction-2025",
@@ -102,8 +257,19 @@
       "id": "catering",
       "name": "Office catering",
       "options": [
-        { "id": "off", "label": "None", "monthlyCost": 0 },
-        { "id": "coffee_boxes", "label": "Coffee boxes for offices: your own orders plus a catering marketplace", "monthlyCost": 320, "effects": { "demand": 0.03 } }
+        {
+          "id": "off",
+          "label": "None",
+          "monthlyCost": 0
+        },
+        {
+          "id": "coffee_boxes",
+          "label": "Coffee boxes for offices: your own orders plus a catering marketplace",
+          "monthlyCost": 320,
+          "effects": {
+            "demand": 0.03
+          }
+        }
       ],
       "tier": "deep",
       "source": "https://catering.ezcater.com/en/help/what-is-the-commission/-payment-breakdown",
@@ -115,8 +281,20 @@
       "id": "card_pricing",
       "name": "Card fees at the counter",
       "options": [
-        { "id": "absorb", "label": "One price; you pay the card fees", "monthlyCost": 0 },
-        { "id": "two_prices", "label": "Post a cash price and a card price side by side", "monthlyCost": -700, "effects": { "demand": -0.03, "reputation": -0.01 } }
+        {
+          "id": "absorb",
+          "label": "One price; you pay the card fees",
+          "monthlyCost": 0
+        },
+        {
+          "id": "two_prices",
+          "label": "Post a cash price and a card price side by side",
+          "monthlyCost": -700,
+          "effects": {
+            "demand": -0.03,
+            "reputation": -0.01
+          }
+        }
       ],
       "tier": "deep",
       "source": "https://newyork.public.law/laws/n.y._general_business_law_section_518",
@@ -128,8 +306,20 @@
       "id": "limited_time_drink",
       "name": "Seasonal drink",
       "options": [
-        { "id": "none", "label": "The same menu all year", "monthlyCost": 0 },
-        { "id": "seasonal", "label": "A new limited-time drink every season", "monthlyCost": 150, "effects": { "demand": 0.02, "quality": 0.01 } }
+        {
+          "id": "none",
+          "label": "The same menu all year",
+          "monthlyCost": 0
+        },
+        {
+          "id": "seasonal",
+          "label": "A new limited-time drink every season",
+          "monthlyCost": 150,
+          "effects": {
+            "demand": 0.02,
+            "quality": 0.01
+          }
+        }
       ],
       "tier": "deep",
       "source": "https://www.placer.ai/anchor/articles/starbucks-and-dunkins-ltos-boost-traffic",
@@ -141,8 +331,19 @@
       "id": "value_anchor",
       "name": "Entry price",
       "options": [
-        { "id": "none", "label": "Drip coffee priced like everything else", "monthlyCost": 0 },
-        { "id": "three_dollar_drip", "label": "Keep a $3 drip coffee on the board", "monthlyCost": 1350, "effects": { "demand": 0.05 } }
+        {
+          "id": "none",
+          "label": "Drip coffee priced like everything else",
+          "monthlyCost": 0
+        },
+        {
+          "id": "three_dollar_drip",
+          "label": "Keep a $3 drip coffee on the board",
+          "monthlyCost": 1350,
+          "effects": {
+            "demand": 0.05
+          }
+        }
       ],
       "tier": "deep",
       "source": "https://pos.toasttab.com/blog/data/toast-restaurant-trends-report-coffee-prices-2026",
@@ -154,8 +355,21 @@
       "id": "laptop_tables",
       "name": "Laptops",
       "options": [
-        { "id": "welcome", "label": "Laptops welcome at every table", "monthlyCost": 0 },
-        { "id": "limited", "label": "No laptops at the window tables at lunch and on weekends", "monthlyCost": 0, "effects": { "capacity": 0.05, "demand": -0.02, "reputation": -0.01 } }
+        {
+          "id": "welcome",
+          "label": "Laptops welcome at every table",
+          "monthlyCost": 0
+        },
+        {
+          "id": "limited",
+          "label": "No laptops at the window tables at lunch and on weekends",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.05,
+            "demand": -0.02,
+            "reputation": -0.01
+          }
+        }
       ],
       "tier": "deep",
       "source": "https://www.axios.com/2025/05/09/coffee-shops-no-wifi-laptops-remote-work",
@@ -167,8 +381,19 @@
       "id": "restroom_policy",
       "name": "Restroom",
       "options": [
-        { "id": "customers_only", "label": "For customers: the door code is on the receipt", "monthlyCost": 0 },
-        { "id": "open", "label": "Open to anyone who asks", "monthlyCost": 150, "effects": { "reputation": 0.01 } }
+        {
+          "id": "customers_only",
+          "label": "For customers: the door code is on the receipt",
+          "monthlyCost": 0
+        },
+        {
+          "id": "open",
+          "label": "Open to anyone who asks",
+          "monthlyCost": 150,
+          "effects": {
+            "reputation": 0.01
+          }
+        }
       ],
       "tier": "exotic",
       "source": "https://news.wttw.com/2025/01/22/starbucks-policy-change-flushes-out-debate-over-public-restroom-access",
@@ -180,8 +405,20 @@
       "id": "community_nights",
       "name": "Evenings",
       "options": [
-        { "id": "none", "label": "Nothing after closing", "monthlyCost": 0 },
-        { "id": "weekly", "label": "One event a week: run club, open mic or a tasting", "monthlyCost": 250, "effects": { "demand": 0.02, "reputation": 0.02 } }
+        {
+          "id": "none",
+          "label": "Nothing after closing",
+          "monthlyCost": 0
+        },
+        {
+          "id": "weekly",
+          "label": "One event a week: run club, open mic or a tasting",
+          "monthlyCost": 250,
+          "effects": {
+            "demand": 0.02,
+            "reputation": 0.02
+          }
+        }
       ],
       "tier": "exotic",
       "source": "https://freshcup.com/five-places-five-operating-hours/",
@@ -195,49 +432,70 @@
       "id": "buy_fake_reviews",
       "name": "Buy a batch of five-star reviews",
       "what": "A 'reputation' seller posts glowing reviews for less than honest marketing costs. Platforms flag it publicly and the FTC's review rule allows up to $53,088 per fake review.",
-      "saves": { "basis": "fixed", "amount": 300 },
+      "saves": {
+        "basis": "fixed",
+        "amount": 300
+      },
       "violation": "fake_reviews"
     },
     {
       "id": "reward_good_reviews",
       "name": "Free cookie for a five-star review",
       "what": "Trading a freebie for a positive review looks harmless. The FTC rule bans rewards that depend on what the review says, and Yelp demotes businesses caught asking.",
-      "saves": { "basis": "fixed", "amount": 100 },
+      "saves": {
+        "basis": "fixed",
+        "amount": 100
+      },
       "violation": "fake_reviews"
     },
     {
       "id": "hide_grade_card",
       "name": "Take the B out of the window",
       "what": "A B or C in the window costs customers every day it hangs there. The card must be posted where passersby can see it; hiding it is a fine at the next visit, and neighbors do report it.",
-      "saves": { "basis": "pct_revenue", "amount": 0.04 },
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.04
+      },
       "violation": "grade_card_not_posted"
     },
     {
       "id": "hidden_card_surcharge",
       "name": "Add 3% at the register for cards without posting it",
       "what": "A card fee keyed in at checkout recovers your processing cost. New York requires the full card price to be posted in advance: up to $500 for each violation.",
-      "saves": { "basis": "pct_revenue", "amount": 0.025 },
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.025
+      },
       "violation": "card_surcharge_not_disclosed"
     },
     {
       "id": "flyers_on_poles",
       "name": "Tape flyers to lamp posts and parked cars",
       "what": "Cheaper than ads. Every flyer on a pole, street furniture or a car is its own violation: $75 to $150 the first time, $150 to $250 after, plus the cost of removal.",
-      "saves": { "basis": "fixed", "amount": 150 },
+      "saves": {
+        "basis": "fixed",
+        "amount": 150
+      },
       "violation": "illegal_posting"
     },
     {
       "id": "allow_dogs_inside",
       "name": "Let customers bring dogs inside",
       "what": "Dog owners are loyal regulars. Only service dogs may enter a food establishment in New York City; pets inside are a Health Department violation that adds points toward a B.",
-      "saves": { "basis": "pct_revenue", "amount": 0.02 },
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.02
+      },
       "violation": "live_animals_inside"
     },
     {
       "id": "fake_specialty_claims",
       "name": "Print 'single-origin, organic' and pour the house blend",
       "what": "The menu promises specialty beans; the hopper holds the cheap ones. Each false statement is a separate deceptive trade practice under the city's Consumer Protection Law.",
-      "saves": { "basis": "fixed", "amount": 750 },
+      "saves": {
+        "basis": "fixed",
+        "amount": 750
+      },
       "violation": "deceptive_menu_claims"
     }
   ],
@@ -247,23 +505,39 @@
       "name": "Fake or paid-for reviews",
       "law": "16 CFR Part 465 (FTC Rule on the Use of Consumer Reviews and Testimonials); NY General Business Law §§ 349, 350; NYC Administrative Code § 20-700",
       "official": "dcwp_inspector",
-      "foundBy": ["complaint", "sting"],
-      "fine": { "base": 2500, "perMonth": 0, "pctOfSaved": 0, "max": 53088 },
+      "foundBy": [
+        "complaint",
+        "sting"
+      ],
+      "fine": {
+        "base": 2500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 53088
+      },
       "closureDays": 0,
       "reputationHit": 0.12,
       "criminal": "No; civil penalties. Fraud charges are possible only as part of a larger scheme.",
       "source": "https://www.venable.com/insights/publications/2025/12/ftc-signals-heightened-enforcement-of-new",
       "confidence": "estimate",
       "evidence": "industry_via_search",
-      "note": "The FTC's rule took effect on October 21, 2024: no buying, selling or writing of fake reviews, no reviews by insiders without disclosure, no rewards that depend on the review being positive. Maximum civil penalty $53,088 per violation (2025 amount); in December 2025 the FTC sent warning letters to ten companies. The $2,500 base is the smallest penalty in New York's 'Operation Clean Turf' (September 2013): the Attorney General ran a sting with a fake Brooklyn yogurt shop and settled with 19 companies for more than $350,000 in all. The reputation hit is my estimate of a public warning on the listing; the game's 'sting' route mirrors that operation. Read in law-firm and news summaries, not in the rule's text."
+      "note": "The FTC's rule took effect on October 21, 2024 (date cited from memory): no buying, selling or writing of fake reviews, no reviews by insiders without disclosure, no rewards that depend on the review being positive. Maximum civil penalty $53,088 per violation (2025 amount); in December 2025 the FTC sent warning letters to ten companies. The $2,500 base is the smallest penalty in New York's 'Operation Clean Turf' (September 2013): the Attorney General ran a sting with a fake Brooklyn yogurt shop and settled with 19 companies for more than $350,000 in all. The reputation hit is my estimate of a public warning on the listing; the game's 'sting' route mirrors that operation. Read in law-firm and news summaries, not in the rule's text."
     },
     {
       "id": "grade_card_not_posted",
       "name": "Letter grade card hidden or not posted",
       "law": "NYC Health Code § 81.51; 24 RCNY Chapter 23",
       "official": "health_inspector",
-      "foundBy": ["inspection", "complaint"],
-      "fine": { "base": 500, "perMonth": 0, "pctOfSaved": 0, "max": 1000 },
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 1000
+      },
       "closureDays": 0,
       "reputationHit": 0.05,
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/rii-grade-posting-faq.pdf",
@@ -276,8 +550,16 @@
       "name": "Card surcharge not included in the posted price",
       "law": "NY General Business Law § 518; 6 RCNY § 5-59",
       "official": "dcwp_inspector",
-      "foundBy": ["complaint", "inspection"],
-      "fine": { "base": 500, "perMonth": 0, "pctOfSaved": 0, "max": 500 },
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 500
+      },
       "closureDays": 0,
       "reputationHit": 0.03,
       "source": "https://content.govdelivery.com/accounts/NYSDOS/bulletins/38661fe",
@@ -290,8 +572,16 @@
       "name": "Flyers posted on public property or parked cars",
       "law": "NYC Administrative Code §§ 10-119, 10-121",
       "official": "sanitation_enforcement_agent",
-      "foundBy": ["inspection", "complaint"],
-      "fine": { "base": 1500, "perMonth": 0, "pctOfSaved": 0, "max": 5000 },
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 1500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 5000
+      },
       "closureDays": 0,
       "reputationHit": 0.01,
       "source": "https://intro.nyc/0302-2024",
@@ -304,8 +594,16 @@
       "name": "Pet dogs inside the shop",
       "law": "NYC Health Code § 81.25; inspection item 04O",
       "official": "health_inspector",
-      "foundBy": ["inspection", "complaint"],
-      "fine": { "base": 200, "perMonth": 0, "pctOfSaved": 0, "max": 350 },
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 200,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 350
+      },
       "closureDays": 0,
       "reputationHit": 0.02,
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/pet-cafes.pdf",
@@ -318,8 +616,16 @@
       "name": "False claims on the menu",
       "law": "NYC Administrative Code § 20-700 (Consumer Protection Law); 6 RCNY § 6-47; NY General Business Law § 350",
       "official": "dcwp_inspector",
-      "foundBy": ["complaint", "inspection"],
-      "fine": { "base": 525, "perMonth": 0, "pctOfSaved": 0.5, "max": 3500 },
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 525,
+        "perMonth": 0,
+        "pctOfSaved": 0.5,
+        "max": 3500
+      },
       "closureDays": 0,
       "reputationHit": 0.06,
       "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-98103",
@@ -334,7 +640,9 @@
       "name": "Sanitation enforcement agent",
       "agency": "NYC Department of Sanitation (DSNY)",
       "role": "inspector",
-      "checks": ["illegal_posting"],
+      "checks": [
+        "illegal_posting"
+      ],
       "realProcess": "Agents walk their districts every day and write summonses on the spot for dirty sidewalks, blocked sidewalks and illegal postings. The summons goes to the business named on the flyer and is heard at the city's administrative tribunal (OATH).",
       "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/street-sidewalk-rules-businesses.page",
       "confidence": "estimate",
@@ -347,28 +655,38 @@
       "name": "Report fake reviews or false menu claims",
       "text": "In real life: a complaint to the city's consumer protection department or the state Attorney General. Investigators check who wrote the reviews and whether the menu says what is in the cup. If you are wrong, you get a warning.",
       "role": "inspector",
-      "checks": ["fake_reviews", "deceptive_menu_claims"]
+      "checks": [
+        "fake_reviews",
+        "deceptive_menu_claims"
+      ]
     },
     {
       "id": "report_hidden_grade",
       "name": "Report a missing grade card or dogs inside (311)",
       "text": "In real life: a 311 complaint to the Health Department. An inspector checks that the letter grade hangs where passersby can see it and that only service animals are inside. If you are wrong, you get a warning.",
       "role": "inspector",
-      "checks": ["grade_card_not_posted", "live_animals_inside"]
+      "checks": [
+        "grade_card_not_posted",
+        "live_animals_inside"
+      ]
     },
     {
       "id": "report_hidden_fees",
       "name": "Report an unposted card surcharge",
       "text": "In real life: a complaint to consumer protection with the receipt. The posted price must already include any card fee. If you are wrong, you get a warning.",
       "role": "inspector",
-      "checks": ["card_surcharge_not_disclosed"]
+      "checks": [
+        "card_surcharge_not_disclosed"
+      ]
     },
     {
       "id": "report_illegal_flyers",
       "name": "Report flyers on poles and cars (311)",
       "text": "In real life: a 311 complaint to the Sanitation Department with a photo. Each flyer on public property is a separate fine for the business it advertises. If you are wrong, you get a warning.",
       "role": "inspector",
-      "checks": ["illegal_posting"]
+      "checks": [
+        "illegal_posting"
+      ]
     }
   ],
   "ruleCards": [
