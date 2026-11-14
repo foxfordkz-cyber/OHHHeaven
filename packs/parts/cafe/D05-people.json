@@ -579,6 +579,26 @@
           "monthlyCost": 150
         }
       ]
+    },
+    {
+      "id": "hiring_programs",
+      "name": "Public hiring programs",
+      "options": [
+        {
+          "id": "none",
+          "label": "Hire on your own",
+          "monthlyCost": 0
+        },
+        {
+          "id": "city_programs",
+          "label": "Use the city's free recruiting, summer youth and apprentice programs",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.02,
+            "quality": -0.01
+          }
+        }
+      ]
     }
   ],
   "shortcuts": [
@@ -1639,6 +1659,24 @@
       "title": "Expiring work permits",
       "source": "https://www.morganlewis.com/pubs/2026/06/after-mullin-a-practical-guide-for-employers-with-tps-workers",
       "text": "When a work permit expires, re-check documents on Form I-9 Supplement B on that date, not before, and let the worker choose which valid document to show. Checking early is discrimination; missing it risks $288 to $2,861 per form."
+    },
+    {
+      "id": "city_hiring_help",
+      "title": "Free hiring help from the city",
+      "source": "https://www.nyc.gov/employment/employers/services/workforce1",
+      "text": "NYC Workforce1 recruits and screens candidates for businesses at no cost. First Course NYC refunds restaurants half of an apprentice's training wages for the first 6 weeks (up to 210 hours). Few small owners know either exists."
+    },
+    {
+      "id": "summer_youth_program",
+      "title": "Summer Youth Employment Program",
+      "source": "https://www.nyc.gov/assets/dycd/downloads/pdf/SYEP_Employer_Partnerships_2026.pdf",
+      "text": "For six weeks in July and August the city pays young New Yorkers (16 to 24) $17.00 an hour for up to 25 hours a week at host businesses. The host pays nothing but must supervise. Employers sign up between late January and early May."
+    },
+    {
+      "id": "youth_jobs_credit",
+      "title": "New York Youth Jobs tax credit",
+      "source": "https://dol.ny.gov/hiring-incentives-tax-credits-and-funding-opportunities",
+      "text": "New York State gives a tax credit of up to $7,500 for hiring an unemployed, at-risk worker aged 16 to 24 full time, or $3,750 part time. The business must be certified by the Labor Department and apply by November 30 of the year."
     }
   ],
   "roadmap": [
@@ -1824,6 +1862,17 @@
       "source": "https://insureon.com/small-business-insurance/employment-practices-liability/cost",
       "confidence": "estimate",
       "note": "Search-seen (secondary): small restaurants pay $800 to $3,000 a year; one broker average is $1,824 a year, another $2,655. Most policies exclude wage-and-hour claims, which are the common ones in restaurants."
+    },
+    {
+      "id": "city_hiring_programs",
+      "category": "Public hiring programs",
+      "what": "Free recruiting and screening, wage refunds for apprentices, city-paid summer youth workers, state hiring credits",
+      "whereToFind": "NYC Small Business Services Workforce1 centers; NYC Department of Youth and Community Development; NYS Department of Labor",
+      "examples": "Workforce1, First Course NYC, Summer Youth Employment Program, New York Youth Jobs Program",
+      "link": "https://www.nyc.gov/employment/employers/services/workforce1",
+      "source": "https://www.nyc.gov/employment/employers/services/workforce1",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, nyc.gov and dol.ny.gov): Workforce1 is free to businesses; First Course NYC reimburses 50% of training wages for six weeks, up to 210 hours; SYEP participants are paid by the city; the state Youth Jobs credit is up to $7,500 (full time) or $3,750 (part time) per hire. The federal Work Opportunity Tax Credit lapsed on December 31, 2025 and had not been renewed in the latest sources (about September 2026)."
     }
   ],
   "extra": {
@@ -4684,6 +4733,122 @@
         "source": "https://www.littler.com/news-analysis/asap/new-york-city-proposes-bill-sets-higher-minimum-wages-and-eliminates-tip-credits",
         "confidence": "estimate",
         "note": "Arithmetic for a small employer, my straight-line reading: $17 to $27 over four years is $2.50 a year, so about $19.50 in 2027; a $21 barista would expect about $1.70 more to keep the gap, +8%. The bill's own 2027 step was not in the results. Use only as a labelled scenario."
+      },
+      {
+        "id": "summer_youth_signup_window",
+        "name": "Sign-up window for city-paid summer workers",
+        "text": "The city is enrolling host businesses for the Summer Youth Employment Program. Sign up now or do without in July.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "realSignal": "NYC Department of Youth and Community Development employer sign-up, open from late January to early May.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": 0
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hiring_programs"
+          }
+        ],
+        "realFrequency": "Every year; more than 100,000 participants in 2026.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/dycd/services/jobs-internships/summer-youth-employment-program-faq-for-employers.page",
+        "confidence": "estimate",
+        "note": "No money moves at sign-up; the choice decides whether the July event applies to this shop."
+      },
+      {
+        "id": "summer_youth_placements",
+        "name": "Two city-paid summer workers arrive",
+        "text": "For six weeks two young people work up to 25 hours a week at your shop. The city pays them; you train and supervise them.",
+        "scale": "city",
+        "months": [
+          7,
+          8
+        ],
+        "realSignal": "Program dates: six weeks in July and August.",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 1.03
+          },
+          {
+            "field": "quality",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hiring_programs"
+          },
+          {
+            "kind": "lever",
+            "id": "training"
+          },
+          {
+            "kind": "lever",
+            "id": "scheduling"
+          }
+        ],
+        "realFrequency": "Only for shops that signed up in the window.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/dycd/downloads/pdf/SYEP_Employer_Partnerships_2026.pdf",
+        "confidence": "estimate",
+        "note": "Arithmetic: 2 x 25 h x 4.33 = 217 hours a month at 0.4 productivity (first skill stage) = 87 effective hours, less the trainer's lost time, about +3% of team hours in the weakest staffing months of the year. Worth $2,550 of wages per participant."
+      },
+      {
+        "id": "federal_hiring_credit_lapsed",
+        "name": "The federal hiring tax credit has lapsed",
+        "text": "The Work Opportunity Tax Credit ended on December 31, 2025. Congress may renew it backwards, as it has before, or not.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Status of the reauthorization bill in Congress.",
+        "effects": [
+          {
+            "field": "cash",
+            "add": 0
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hiring_programs"
+          },
+          {
+            "kind": "staff",
+            "id": "trainee_barista"
+          }
+        ],
+        "realFrequency": "Renewed 13 times since 1996, often retroactively.",
+        "tier": "exotic",
+        "source": "https://www.shrm.org/topics-tools/news/employers-advised-stay-the-course-wotc-expires",
+        "confidence": "estimate",
+        "note": "Was worth $2,400 to $9,600 per qualifying hire. The only move is paperwork: keep filing the screening form for each hire so that a retroactive renewal can be claimed."
       }
     ],
     "mechanics": [
@@ -5220,6 +5385,58 @@
           }
         ]
       }
+    ],
+    "hiringIncentives": [
+      {
+        "id": "workforce1",
+        "name": "NYC Workforce1 recruiting",
+        "value": 0,
+        "unit": "free service",
+        "when": "all year",
+        "source": "https://www.nyc.gov/employment/employers/services/workforce1",
+        "confidence": "estimate",
+        "note": "Search-seen (primary): sourcing, screening and interview scheduling at no cost to the business."
+      },
+      {
+        "id": "first_course_nyc",
+        "name": "First Course NYC apprentice wage refund",
+        "value": 1785,
+        "unit": "dollars per apprentice",
+        "when": "cohort dates set by the city",
+        "source": "https://www.nyc.gov/employment/employers/services/first-course-nyc",
+        "confidence": "estimate",
+        "note": "Arithmetic: 50% x 210 hours x $17.00 = $1,785. Search-seen (primary): restaurant partners are reimbursed 50% of training wages for the first six weeks, up to 210 hours."
+      },
+      {
+        "id": "summer_youth_employment",
+        "name": "Summer Youth Employment Program host",
+        "value": 2550,
+        "unit": "dollars of wages per participant paid by the city",
+        "when": "six weeks in July and August; employer sign-up late January to early May",
+        "source": "https://www.nyc.gov/assets/dycd/downloads/pdf/SYEP_Employer_Partnerships_2026.pdf",
+        "confidence": "estimate",
+        "note": "Arithmetic: 150 hours x $17.00 = $2,550. Search-seen (primary, nyc.gov): six weeks, up to 25 hours a week, ages 16 to 24 paid the minimum wage by the city, no cost to the host; more than 100,000 participants in 2026. The search extract of the wage figure was garbled and needs a direct look. Participants under 18 fall under the child labor hours rules."
+      },
+      {
+        "id": "ny_youth_jobs_credit",
+        "name": "New York Youth Jobs Program tax credit",
+        "value": 7500,
+        "unit": "dollars per full-time hire (3,750 part time)",
+        "when": "apply by November 30 of the program year",
+        "source": "https://dol.ny.gov/hiring-incentives-tax-credits-and-funding-opportunities",
+        "confidence": "estimate",
+        "note": "Search-seen (primary, NY DOL). The hire must be 16 to 24, unemployed, living in New York and meet an at-risk condition; the employer must be certified first."
+      },
+      {
+        "id": "wotc",
+        "name": "Federal Work Opportunity Tax Credit",
+        "value": 0,
+        "unit": "lapsed",
+        "when": "expired December 31, 2025",
+        "source": "https://www.shrm.org/topics-tools/news/employers-advised-stay-the-course-wotc-expires",
+        "confidence": "estimate",
+        "note": "Search-seen (secondary): worth $2,400 to $9,600 per qualifying hire until it lapsed; state agencies hold 2026 applications in \"hiatus\"; Congress has renewed it 13 times since 1996, often retroactively, so advisers tell employers to keep filing the screening form within 28 days of each hire."
+      }
     ]
   },
   "sources": [
@@ -5256,6 +5473,12 @@
     {
       "url": "https://documentedny.com/2026/06/22/nyc-mayor-signs-heat-safety-order/",
       "title": "Documented: mayor announces workplace heat safety guidelines (June 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/hiring-incentives-tax-credits-and-funding-opportunities",
+      "title": "NYS Department of Labor: hiring incentives, tax credits and funding opportunities",
       "checked": "2026-11-14",
       "seen": "search result only; page not opened (host blocked in this session)"
     },
@@ -5668,6 +5891,24 @@
       "seen": "search result only; page not opened (host blocked in this session)"
     },
     {
+      "url": "https://www.nyc.gov/assets/dycd/downloads/pdf/SYEP_Employer_Partnerships_2026.pdf",
+      "title": "NYC DYCD: Become an SYEP employer (2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nyc.gov/employment/employers/services/first-course-nyc",
+      "title": "NYC Jobs: First Course NYC (restaurant apprenticeships)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nyc.gov/employment/employers/services/workforce1",
+      "title": "NYC Jobs: Workforce1 services for employers",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
       "url": "https://www.nyc.gov/mayors-office/news/2026/02/mayor-mamdani-announces-major-expansion-of-protected-time-off-fo",
       "title": "NYC Mayor's Office: expansion of protected time off and data-driven enforcement (February 2026)",
       "checked": "2026-11-14",
@@ -5682,6 +5923,12 @@
     {
       "url": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
       "title": "NYC Health: Food Protection Course (online, free)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dycd/services/jobs-internships/summer-youth-employment-program-faq-for-employers.page",
+      "title": "NYC DYCD: Summer Youth Employment Program FAQ for employers",
       "checked": "2026-11-14",
       "seen": "search result only; page not opened (host blocked in this session)"
     },
@@ -5718,6 +5965,12 @@
     {
       "url": "https://www.restaurantdive.com/news/nra-restaurants-summer-hiring-surge-low-labor-supply-wage-growth/823673/",
       "title": "Restaurant Dive: summer restaurant hiring forecast (2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.shrm.org/topics-tools/news/employers-advised-stay-the-course-wotc-expires",
+      "title": "SHRM: employers advised to stay the course as WOTC expires",
       "checked": "2026-11-14",
       "seen": "search result only; page not opened (host blocked in this session)"
     },
