@@ -8,6 +8,7 @@
 //   node docs/pitch/model.mjs                        # full printout
 //   node docs/pitch/model.mjs freeToPaid=0.06        # override any input by key
 //   node docs/pitch/model.mjs --json                 # inputs and outputs as JSON
+//   node docs/pitch/model.mjs --scenario=favourable  # a whole other set of benchmarks
 //   node docs/pitch/model.mjs --check                # exit 1 if LTV <= CAC
 //
 // Each input is one of
@@ -90,6 +91,11 @@ export const INPUTS = {
     source: 'https://www.wordstream.com/blog/facebook-ads-benchmarks-2025',
     note: 'WordStream/LocaliQ 2025, all industries.',
   },
+  searchCpc: {
+    value: 5.26, kind: 'fact', label: 'Google search ads, cost per click, $ (check only)',
+    source: 'https://www.wordstream.com/blog/2025-google-ads-benchmarks',
+    note: 'WordStream 2025, 16,446 US search campaigns. Shown as a check: it does not pay back.',
+  },
   landingToStart: {
     value: 0.066, kind: 'fact', label: 'Landing visitors who start a free game',
     source: 'https://unbounce.com/conversion-benchmark-report/',
@@ -121,8 +127,9 @@ export const INPUTS = {
     source: 'https://investors.duolingo.com/static-files/99006c40-d8cf-41ca-b5b1-c5cb1fa5ba88',
   },
   duolingoPaidNow: {
-    value: 11.5e6, kind: 'fact', label: 'Duolingo paid subscribers, Sept 30 2025',
-    source: 'https://www.sec.gov/Archives/edgar/data/1562088/000162828025049514/q3fy25duolingo9-30x25share.htm',
+    value: 13.1e6, kind: 'fact', label: 'Duolingo paid subscribers, Sept 30 2026',
+    source: 'https://www.sec.gov/Archives/edgar/data/0001562088/000162828026069692/duol-20260930.htm',
+    note: 'Form 10-Q for Q3 2026: about 13.1M, up 14% from 11.5M a year earlier.',
   },
 
   // ---- 5. Market -------------------------------------------------------------
@@ -143,6 +150,11 @@ export const INPUTS = {
     value: 0.14, kind: 'fact', label: 'Adults considering starting a business',
     source: 'https://www.norc.org/research/library/nationwide-entrepreneurship-survey-data-publicly-released-finds-steady-decline-interest-new-business-ventures.html',
     note: 'NORC Entrepreneurship in the Population (EPOP) 2025, probability sample: ~14% (17% in 2022). Applied to 21-45 as is; no age split published.',
+  },
+  gustoWorkingToward: {
+    value: 48.3e6, kind: 'fact', label: 'US adults working toward a business now (cross-check)',
+    source: 'https://gusto.com/resources/gusto-insights/building-a-business-survey',
+    note: 'Gusto / Morning Consult, 1-8 Sept 2026, 6,105 adults: 54% (145M) have seriously considered it, a third of them are working toward it now. Online panel, so we size the market on the stricter NORC figure and print this only as a cross-check.',
   },
   businessApplications: {
     value: 5_246_630, kind: 'fact', label: 'US new-business applications, 2024',
@@ -232,6 +244,8 @@ export function compute(inp) {
   const cac = v('paidShare') * cacPaidAds + (1 - v('paidShare')) * v('organicCostPerPayer') + freeTierPerPayer;
   const ltvToCac = ltv / cac;
   const ltvToCacPaidOnly = ltv / (cacPaidAds + freeTierPerPayer);
+  const cacSearch = v('searchCpc') / v('landingToStart') / v('freeToPaid') + freeTierPerPayer;
+  const ltvToCacSearch = ltv / cacSearch;
   const paybackMonths = cac / contributionPerMonth;
   // Largest share of payers that can come from paid ads and keep LTV/CAC at 3 or more.
   const maxPaidShareFor3x = (ltv / 3 - freeTierPerPayer - v('organicCostPerPayer')) / (cacPaidAds - v('organicCostPerPayer'));
@@ -257,6 +271,8 @@ export function compute(inp) {
   const payersForTarget = v('targetArr') / (12 * arpu);
   const last = steps[steps.length - 1];
   const penetrationForTarget = payersForTarget / last.pool;
+  // The same last step at lower penetration: what is left to find outside the US.
+  const lastStepAt = [0.01, 0.02, 0.04].map((p) => ({ penetration: p, arr: last.pool * p * arpu * 12 }));
 
   // -- Bottom up: what the funnel must do every month to hold the target base.
   const newPayersPerMonth = payersForTarget / lifeNew;
@@ -274,9 +290,9 @@ export function compute(inp) {
     ltvMonthly, ltvAnnual, ltv,
     baseAnnualShare, arpu, contributionPerMonth, grossMargin,
     costPerFreeStart, cacPaidAds, freeTierPerPayer, cac, ltvToCac, ltvToCacPaidOnly, paybackMonths,
-    maxPaidShareFor3x, duolingoMarketingPerNetPayer,
+    cacSearch, ltvToCacSearch, maxPaidShareFor3x, duolingoMarketingPerNetPayer,
     usAdults, consideringAdults, considering21to45, share21to45, foodShare,
-    steps, payersForTarget, penetrationForTarget,
+    steps, payersForTarget, penetrationForTarget, lastStepAt,
     newPayersPerMonth, freeStartsPerMonth, marketingPerYear, marketingShareOfArr,
   };
 }
@@ -285,11 +301,35 @@ export function compute(inp) {
 export const SENSITIVITY = {
   freeToPaid: [0.02, 0.04, 0.06, 0.08],
   paidShare: [0, 0.1, 0.2, 0.3],
-  monthlyRetention12: [0.05, 0.08, 0.12],
-  annualRenewal: [0.2, 0.28, 0.36],
-  priceAnnual: [129, 149, 179],
   organicCostPerPayer: [0, 15, 31],
+  landingToStart: [0.066, 0.1, 0.2],
+  monthlyRetention12: [0.05, 0.08, 0.12, 0.175],
+  annualRenewal: [0.2, 0.28, 0.36, 0.441],
+  priceAnnual: [129, 149, 179],
 };
+
+/**
+ * Whole alternative sets of benchmarks, applied together on top of INPUTS.
+ * 'favourable' is the set the second B16 pass chose (agents/r3-B16.md):
+ * Airbridge 2026 retention, guest entry converting 1 in 5 clicks, 5% paying.
+ */
+export const SCENARIOS = {
+  favourable: {
+    monthlyRetention12: { value: 0.175, source: 'https://www.airbridge.io/en/blog/subscription-app-pricing-by-category-2026-benchmark', note: 'Airbridge 2026: monthly plans retain 17.5% after 12 months.' },
+    annualRenewal: { value: 0.441, source: 'https://www.airbridge.io/en/blog/subscription-app-pricing-by-category-2026-benchmark', note: 'Airbridge 2026: annual plans retain 44.1% after 12 months.' },
+    landingToStart: { value: 0.2, note: 'Assumption: guest entry, no card, no form.' },
+    freeToPaid: { value: 0.05, note: 'Assumption: top of the 3-5% "good" band.' },
+  },
+};
+
+/** Apply a named scenario to `inp`; every changed input becomes an assumption. */
+export function withScenario(inp, name) {
+  const s = SCENARIOS[name];
+  if (!s) throw new Error(`Unknown scenario "${name}". Known: ${Object.keys(SCENARIOS).join(', ')}`);
+  const out = structuredClone(inp);
+  for (const [key, patch] of Object.entries(s)) out[key] = { ...out[key], ...patch, kind: 'assumption' };
+  return out;
+}
 
 /** LTV, CAC and LTV/CAC for each value in SENSITIVITY, others held at `inp`. */
 export function sensitivity(inp, grid = SENSITIVITY) {
@@ -310,6 +350,7 @@ const money = (n) => {
   if (abs >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
   if (abs >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
   if (abs >= 1e4) return `$${(n / 1e3).toFixed(0)}k`;
+  if (abs >= 1e3) return `$${Math.round(n).toLocaleString('en-US')}`;
   return abs > 0 && abs < 0.1 ? `$${n.toFixed(4)}` : `$${n.toFixed(2)}`;
 };
 const count = (n) => (n >= 1e6 ? `${(n / 1e6).toFixed(2)}M` : Math.round(n).toLocaleString('en-US'));
@@ -348,6 +389,7 @@ export function report(inp, o) {
   L.push(row(`Blended CAC (${pct(inp.paidShare.value)} of payers from ads)`, money(o.cac)));
   L.push(row('LTV / CAC, blended', `${o.ltvToCac.toFixed(1)}x`));
   L.push(row('LTV / CAC, paid ads only', `${o.ltvToCacPaidOnly.toFixed(2)}x`));
+  L.push(row('Check: search ads only, cost per payer', `${money(o.cacSearch)}  (${o.ltvToCacSearch.toFixed(2)}x)`));
   L.push(row('CAC payback', `${o.paybackMonths.toFixed(1)} months`));
   L.push(row('Max share of payers from ads for LTV/CAC >= 3', pct(Math.max(0, o.maxPaidShareFor3x))));
   L.push(row('Duolingo 2024 marketing per net new paying sub', money(o.duolingoMarketingPerNetPayer)));
@@ -356,6 +398,7 @@ export function report(inp, o) {
   L.push(row('US adults (18+)', count(o.usAdults)));
   L.push(row('US adults considering starting a business', count(o.consideringAdults)));
   L.push(row('US 21-45 (our user) considering a business', count(o.considering21to45)));
+  L.push(row('Cross-check: adults working toward a business (Gusto)', count(inp.gustoWorkingToward.value)));
   L.push(row('Food share of new-business applications', pct(o.foodShare)));
 
   L.push('', `PATH TO ${money(inp.targetArr.value)} ARR  (penetration ${pct(inp.penetration.value)} of each pool)`);
@@ -368,6 +411,7 @@ export function report(inp, o) {
   L.push(row('Paying subscribers needed for the target', count(o.payersForTarget)));
   L.push(row('  as a share of the step-3 pool', pct(o.penetrationForTarget)));
   L.push(row('  as a share of Duolingo paid subscribers today', pct(o.payersForTarget / inp.duolingoPaidNow.value)));
+  L.push(row('Step 3 ARR at 1% / 2% / 4% penetration', o.lastStepAt.map((s) => money(s.arr)).join(' / ')));
 
   L.push('', 'BOTTOM UP, AT THE TARGET');
   L.push(row('New payers needed per month', count(o.newPayersPerMonth)));
@@ -384,6 +428,14 @@ export function report(inp, o) {
       L.push(`      ${String(c.value).padEnd(8)} LTV ${money(c.ltv).padEnd(9)} CAC ${money(c.cac).padEnd(9)} ${c.ltvToCac.toFixed(1)}x${mark}`);
     }
   }
+
+  L.push('', 'SCENARIOS  (several inputs at once)');
+  for (const name of Object.keys(SCENARIOS)) {
+    const o2 = compute(withScenario(inp, name));
+    const keys = Object.keys(SCENARIOS[name]).join(', ');
+    L.push(`  ${name}: ${keys}`);
+    L.push(`      LTV ${money(o2.ltv)}  CAC ${money(o2.cac)}  ${o2.ltvToCac.toFixed(1)}x blended, ${o2.ltvToCacPaidOnly.toFixed(2)}x ads only, payback ${o2.paybackMonths.toFixed(1)} months`);
+  }
   return L.join('\n');
 }
 
@@ -392,7 +444,8 @@ if (isMain) {
   const args = process.argv.slice(2);
   let inp;
   try {
-    inp = withOverrides(INPUTS, args);
+    const scenario = args.find((a) => a.startsWith('--scenario='))?.slice('--scenario='.length);
+    inp = withOverrides(scenario ? withScenario(INPUTS, scenario) : INPUTS, args);
   } catch (err) {
     console.error(err.message);
     process.exit(2);
