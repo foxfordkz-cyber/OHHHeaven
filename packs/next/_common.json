@@ -1,0 +1,1254 @@
+{
+  "id": "_common",
+  "version": 1,
+  "name": "Laws, taxes and first steps for every small business in New York City (2026)",
+  "taxes": [
+    {
+      "id": "employer_fica",
+      "name": "Social Security and Medicare (employer share)",
+      "base": "payroll",
+      "rate": 0.0765,
+      "due": "monthly",
+      "appliesIf": "every employer, on all wages and reported tips",
+      "source": "https://www.irs.gov/publications/p15",
+      "confidence": "verified",
+      "note": "IRS Publication 15 (2026): Social Security 6.2% on wages up to $184,500 per worker plus Medicare 1.45% with no cap = 7.65% paid by the employer on top of wages. The worker pays the same again out of the paycheck: that half is withheld, not an extra cost. Reported tips are taxed too."
+    },
+    {
+      "id": "ny_unemployment",
+      "name": "NY unemployment insurance (new employer)",
+      "base": "payroll",
+      "rate": 0.0179,
+      "due": "quarterly",
+      "appliesIf": "every employer; 4.1% on the first $17,600 of each worker's wages",
+      "source": "https://dol.ny.gov/bizserve/ui/prg/rate",
+      "confidence": "estimate",
+      "note": "Seen at NY DOL: new employer rate 4.1% for 2026 (range 1.7%-9.5%) and a 2026 wage base of $17,600, so at most $721.60 per worker a year. The engine multiplies one rate by the whole payroll, so the game rate is the effective share for a full-time worker: $721.60 / $40,320 ($21 x 160 h x 12) = 1.79%; at the D12 cafe barista wage of $18 ($34,560 a year) it is 2.09%. The shared file serves every niche, so the rate is left at 1.79%; a per-worker cap in the engine would remove the guess. For a $17 x 140 h worker ($28,560 a year) the true share is 2.53%. Filed quarterly on Form NYS-45."
+    },
+    {
+      "id": "futa",
+      "name": "Federal unemployment tax (FUTA)",
+      "base": "payroll",
+      "rate": 0.001,
+      "due": "annual",
+      "appliesIf": "every employer; 0.6% on the first $7,000 of each worker's wages",
+      "source": "https://www.irs.gov/taxtopics/tc759",
+      "confidence": "estimate",
+      "note": "Seen at IRS Topic 759: 6.0% on the first $7,000 paid to each employee, less a credit of up to 5.4% for state unemployment tax = 0.6%, at most $42 per worker a year. Game rate is the effective share: $42 / $40,320 = 0.10% of payroll (with the D12 barista wage of $18: $42 / $34,560 = 0.12%). US DOL final 2026 credit reductions (updated November 12, 2026, seen): only California (1.5%) and the Virgin Islands; New York is not on the list, so 0.6% holds for 2026."
+    },
+    {
+      "id": "workers_comp",
+      "name": "Workers' compensation insurance",
+      "base": "payroll",
+      "rate": 0.02,
+      "due": "monthly",
+      "appliesIf": "most employers with one or more employees",
+      "source": "https://www.wcb.ny.gov/content/main/Employers/workers-compensation-insurance.jsp",
+      "confidence": "estimate",
+      "note": "Seen at the Workers' Compensation Board: coverage is mandatory for most employers of one or more employees, and deducting its cost from wages is a misdemeanor. The premium is quoted per $100 of payroll by job class and claims history, so there is no single rate: you need a quote. Game planning rate, my estimate: 2% of payroll. Anchors: Insureon reports coffee shops pay $88 a month ($1,059 a year) on average across the US (seen); New York's overall loss cost level fell 21.9% from October 1, 2026 (NYCIRB filing approved by DFS, seen through search). New York uses its own class codes (restaurants 9071-9074 per brokers); the restaurant loss cost per $100 was not found."
+    },
+    {
+      "id": "disability_pfl",
+      "name": "Disability benefits insurance (employer part)",
+      "base": "payroll",
+      "rate": 0.0004,
+      "due": "annual",
+      "appliesIf": "every employer with one or more employees",
+      "source": "https://ww3.nysif.com/-/media/Files/DISABILITY_BENEFITS/PDF/UDB-SOC_2026.pdf",
+      "confidence": "estimate",
+      "note": "NYSIF disability benefits standard rates effective January 1, 2026 (seen): statutory premium $0.10 per $100 of payroll capped at $340 a week = $17.68 per person a year, minimum annual premium $60 (so a shop with three or fewer workers pays $60); the employer may withhold up to 0.5% of wages, at most $0.60 a week, from each worker. $17.68 / $40,320 = 0.04% of a full-time wage. Paid Family Leave is paid by the worker through payroll deduction: 0.432% of wages, at most $411.91 in 2026 (seen at paidfamilyleave.ny.gov)."
+    },
+    {
+      "id": "mctmt",
+      "name": "Metropolitan commuter transportation mobility tax (MCTMT)",
+      "base": "payroll",
+      "rate": 0,
+      "due": "quarterly",
+      "appliesIf": "only when payroll in the MTA district is more than $312,500 in a calendar quarter",
+      "source": "https://www.tax.ny.gov/forms/current-forms/mta/mta305i.htm",
+      "confidence": "verified",
+      "note": "Form MTA-305 instructions: no tax when quarterly payroll is $312,500 or less. Above that, Zone 1 (New York City) pays 0.055% to 0.895% of the whole payroll (0.60% between $437,500 and $2.5 million). A shop with eight workers pays about $85,000 of wages a quarter, so the game rate is 0."
+    },
+    {
+      "id": "commercial_rent_tax",
+      "name": "NYC Commercial Rent Tax",
+      "base": "rent",
+      "rate": 0,
+      "due": "quarterly",
+      "appliesIf": "only in Manhattan south of 96th Street when annual rent is $250,000 or more",
+      "source": "https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page",
+      "confidence": "verified",
+      "note": "NYC Department of Finance: 6% of base rent after a 35% reduction = 3.9% effective, only for premises in Manhattan south of the center line of 96th Street with annual gross rent of at least $250,000. A small business credit effectively exempts tenants with total income of $5 million or less and base rent under $500,000. A return is still required once annual rent passes $200,000. Brooklyn, Queens, the Bronx and Staten Island are never taxed. Game rate for a small shop: 0."
+    },
+    {
+      "id": "self_employment_tax",
+      "name": "Self-employment tax (owner of a single-member LLC)",
+      "base": "profit",
+      "rate": 0.1413,
+      "due": "quarterly",
+      "appliesIf": "owners of sole proprietorships and single-member LLCs with net earnings of $400 or more",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/self-employment-tax-social-security-and-medicare-taxes",
+      "confidence": "estimate",
+      "note": "Seen at the IRS: 15.3% (12.4% Social Security on the first $184,500 in 2026 plus 2.9% Medicare) on net earnings of $400 or more. Schedule SE applies the rate to 92.35% of net profit (not on the page opened; standard form arithmetic): 15.3% x 0.9235 = 14.13%. Paid with quarterly estimated taxes."
+    },
+    {
+      "id": "income_tax",
+      "name": "Owner's income tax on business profit (federal, state and city)",
+      "base": "profit",
+      "rate": 0.17,
+      "due": "quarterly",
+      "appliesIf": "profit of a single-member LLC is taxed on the owner's personal return",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/self-employment-tax-social-security-and-medicare-taxes",
+      "confidence": "estimate",
+      "note": "A single-member LLC pays no income tax itself: profit lands on the owner's personal return. The game uses one blended rate, my estimate: 17% of profit for federal, New York State and New York City income tax together, for a single owner earning $50,000-$120,000 of profit in 2026 (federal about 5-10% of profit after the standard deduction and the 20% business income deduction, state about 4-5%, city about 3%). The research notes warn that no universal rate exists: real tax depends on the household. Not tax advice."
+    },
+    {
+      "id": "nyc_ubt",
+      "name": "NYC Unincorporated Business Tax (UBT)",
+      "base": "profit",
+      "rate": 0,
+      "due": "annual",
+      "appliesIf": "only when the tax comes out above $3,400 a year (profit over roughly $100,000)",
+      "source": "https://www.nyc.gov/site/finance/business/business-unincorporated-business-tax-ubt.page",
+      "confidence": "estimate",
+      "note": "Seen at NYC Finance: 4% of taxable income allocated to the city; a liability of $3,400 or less gets a credit for the full amount, and $3,401-$5,400 a partial credit. With the owner's services allowance (up to $10,000) and the $5,000 exemption (from research notes, NYC-202 instructions for 2025) profit under about $100,000 a year owes nothing; my arithmetic for $116,000 of profit gives about $1,300. A return is required once gross income passes $95,000 (from research notes). Game rate: 0."
+    },
+    {
+      "id": "nys_llc_filing_fee",
+      "name": "NYS annual LLC filing fee (Form IT-204-LL)",
+      "base": "fixed",
+      "rate": 25,
+      "due": "annual",
+      "appliesIf": "every LLC with New York source income",
+      "source": "https://www.tax.ny.gov/pit/efile/annual_filing_fee.htm",
+      "confidence": "verified",
+      "note": "NYS Tax Department: an LLC treated as a disregarded entity (one owner) pays $25 a year. An LLC taxed as a partnership pays by New York gross income: $25 up to $100,000, $50 up to $250,000, $175 up to $500,000, $500 up to $1 million, and up to $4,500 above that."
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "cash_wages",
+      "name": "Pay staff in cash, off the books",
+      "what": "No payroll taxes, no workers' comp, no pay stubs: you keep about 11.6% of payroll each month. A tax audit or one unhappy worker brings back the taxes for both halves, plus penalties.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.116
+      },
+      "violation": "off_books_payroll",
+      "note": "My arithmetic from rates seen: employer FICA 7.65% (IRS Pub. 15, 2026) + NY UI 1.79% effective (4.1% on the first $17,600, NY DOL) + FUTA 0.10% effective (IRS Topic 759) + workers' comp 2% planning rate + disability 0.04% (NYSIF 2026) = 11.58% of payroll.",
+      "source": "https://www.irs.gov/publications/p15",
+      "confidence": "estimate"
+    },
+    {
+      "id": "contractor_1099",
+      "name": "Book employees as 1099 contractors",
+      "what": "You skip employer payroll taxes and insurance, about 10% of payroll. People who work your schedule on your equipment are employees: the state bills the taxes back with interest.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.1
+      },
+      "violation": "misclassification",
+      "note": "My arithmetic: the same employer taxes without the workers' comp planning rate, 7.65% + 1.79% + 0.10% + 0.04% = 9.58%, rounded to 10%.",
+      "source": "https://www.irs.gov/publications/p15",
+      "confidence": "estimate"
+    },
+    {
+      "id": "underreport_sales",
+      "name": "Ring cash sales off the register",
+      "what": "About a tenth of sales never reaches the books: you keep the sales tax on it and pay no income tax on it, about 3% of sales in all. Auditors compare card sales, supplier invoices and supplies used.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.03
+      },
+      "violation": "sales_tax_fraud",
+      "note": "My arithmetic: a tenth of sales off the books keeps 10% x 8.875% = 0.89% of sales in sales tax (NYC rate, Pub. 718) plus income and self-employment tax on the profit of those sales, 10% x 72% gross margin x 31.1% = 2.24%: about 3.1% of sales.",
+      "source": "https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf",
+      "confidence": "estimate"
+    },
+    {
+      "id": "keep_sales_tax",
+      "name": "Spend the sales tax you collected",
+      "what": "You file the return but hold back collected sales tax worth 4.5% of sales. It works like a loan from the state at 10% for the first month and 1% for each month after, and you are personally liable for it.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.045
+      },
+      "violation": "sales_tax_not_remitted",
+      "note": "Game cap, see extra.shortcutNotes: 4.5% of sales, about half of the 8.875% a cafe collects (Pub. 718) and all of the 4.5% a barbershop collects. Late remittance: 10% for the first month and 1% a month after, up to 30% (Tax Law §1145, seen).",
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+      "confidence": "estimate"
+    },
+    {
+      "id": "no_workers_comp",
+      "name": "Skip workers' compensation insurance",
+      "what": "Saves the premium, about 2% of payroll. The state can fine up to $2,000 for every 10 days without coverage and post a stop-work order; if someone is hurt, you pay the claim yourself.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.02
+      },
+      "violation": "no_wc_insurance",
+      "note": "The game's planning premium of 2% of payroll (taxes.workers_comp). Insureon reports coffee shops pay about $88 a month on average across the US (seen); a New York quote depends on class code and payroll.",
+      "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "confidence": "estimate"
+    },
+    {
+      "id": "skip_overtime_pay",
+      "name": "Pay straight time for overtime",
+      "what": "Hours over 40 a week are paid at the normal rate instead of time and a half, about 4% of payroll. A wage claim reaches back six years and doubles what you owe.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.04
+      },
+      "violation": "unpaid_overtime",
+      "note": "My arithmetic: if 8% of paid hours are over 40 a week, skipping the half-time premium saves 8% x 0.5 = 4% of payroll.",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "confidence": "estimate"
+    },
+    {
+      "id": "off_the_clock",
+      "name": "Unpaid opening and closing time",
+      "what": "Staff set up before clocking in and clean after clocking out: about 8% of hours go unpaid, which pushes real pay below the legal wage. Owed back double, plus penalties.",
+      "saves": {
+        "basis": "pct_payroll",
+        "amount": 0.08
+      },
+      "violation": "below_minimum_wage",
+      "note": "My arithmetic: 15 minutes before and 20 minutes after an 8-hour shift = 35 / 480 = 7.3% of hours, rounded to 8%.",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "confidence": "estimate"
+    },
+    {
+      "id": "personal_on_business",
+      "name": "Run personal bills through the business",
+      "what": "Groceries, the family phone plan and the car go on the business card as expenses, cutting taxable profit: worth about $450 a month in tax. An audit disallows them and adds 20%, or 75% for fraud.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 450
+      },
+      "violation": "personal_expenses",
+      "note": "My arithmetic: about $1,450 a month of personal spending booked as expenses x the game's 31.1% profit tax (17% income + 14.13% self-employment) = $450.",
+      "source": "https://www.irs.gov/payments/accuracy-related-penalty",
+      "confidence": "estimate"
+    },
+    {
+      "id": "skip_i9",
+      "name": "Hire without Form I-9",
+      "what": "No ID check, no form, start tomorrow. Saves a little paperwork for each hire. A federal audit fines every missing form, whether or not the worker is allowed to work.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 15
+      },
+      "violation": "no_i9",
+      "note": "My estimate: about half an hour of the owner's time per hire at $30 an hour = $15. The fine is $288-$2,861 per form (28 CFR 85.5, seen).",
+      "source": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+      "confidence": "estimate"
+    },
+    {
+      "id": "skip_tax_filings",
+      "name": "Skip the bookkeeper and file nothing",
+      "what": "No bookkeeper and no quarterly returns: saves about $400 a month. Late-filing penalties grow every month, and with no return the state estimates what you owe for you.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 400
+      },
+      "violation": "returns_not_filed",
+      "note": "Equals the cafe pack's bookkeeping line ($400 a month, research notes estimate). The IRS minimum failure-to-file penalty is $525 for returns due after 2025 (seen).",
+      "source": "https://www.irs.gov/payments/failure-to-file-penalty",
+      "confidence": "estimate"
+    },
+    {
+      "id": "no_paid_sick_leave",
+      "name": "Deny paid sick leave",
+      "what": "Sick workers stay home unpaid or come in anyway: saves about $70 per worker a month. The city awards three times the unpaid wages or $250, whichever is more, plus $500 for each denial.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 70
+      },
+      "violation": "sick_leave_denied",
+      "note": "My arithmetic: 40 paid hours a year x $21 / 12 = $70 per worker a month (cafe pack after D12: 40 x $18 / 12 = $60). DCWP penalty: three times the unpaid wages or $250, plus $500 per denial (first pass; nyc.gov not reachable from this session).",
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "confidence": "estimate"
+    },
+    {
+      "id": "card_only",
+      "name": "Refuse cash",
+      "what": "Card only: no cash counting, no bank runs, about $150 a month saved. Stores in New York City must accept cash: $750 for the first violation, $1,350 for the second, $1,500 after that.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 150
+      },
+      "violation": "refusing_cash",
+      "note": "My estimate: about $150 a month of counting, bank runs and change orders. Refusing cash costs $750, $1,350, then $1,500 per violation (NYC Business restaurant page, 6 RCNY §6-72, seen).",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "estimate"
+    }
+  ],
+  "violations": [
+    {
+      "id": "off_books_payroll",
+      "name": "Off-the-books wages",
+      "law": "26 U.S.C. §§3102, 3111, 3509, 6656, 6672; NY Labor Law §§195, 198(1-d), 570; NY Workers' Compensation Law §52",
+      "official": "tax_auditor",
+      "foundBy": [
+        "audit",
+        "complaint"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 500,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.08,
+      "criminal": "Willfully keeping payroll tax off the books is tax evasion: up to 5 years in federal prison (26 U.S.C. §7201). In New York, more than $10,000 of tax evaded within a year is a class D felony (Tax Law §1804).",
+      "source": "https://www.irs.gov/individuals/international-taxpayers/trust-fund-recovery-penalty",
+      "confidence": "estimate",
+      "note": "Seen at the sources: the Trust Fund Recovery Penalty equals the full unpaid trust fund tax and is charged to the owner personally (IRS); failure-to-deposit penalty 2%-15% (IRS); damages of $250 per work day up to $5,000 per worker for missing pay stubs (Labor Law §198(1-d)); workers' comp penalties (WCB). The game formula is my estimate: back taxes for the employer's half and the worker's half come to about twice what was kept (2.0 x saved), plus $500 a month for deposit penalties, interest and pay-stub damages. Found in real life through unemployment or injury claims by workers who are in no payroll filing, or through a sales tax audit."
+    },
+    {
+      "id": "misclassification",
+      "name": "Employees booked as independent contractors",
+      "law": "NY Labor Law §§511, 560, 570 (unemployment insurance); 26 U.S.C. §3509; NY Workers' Compensation Law §52",
+      "official": "labor_investigator",
+      "foundBy": [
+        "audit",
+        "complaint"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 1.5,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.05,
+      "source": "https://www.irs.gov/publications/p15",
+      "confidence": "estimate",
+      "note": "There is no single penalty. The state bills unpaid unemployment contributions with interest, the IRS bills employment taxes under §3509 (IRS Publication 15), and the Workers' Compensation Board can add up to $2,000 per 10 days for the missing coverage (seen at WCB). Game formula is my estimate: 1.5 x the taxes skipped. Labor Law section numbers are cited from memory. It usually surfaces when a \"contractor\" files for unemployment benefits or gets hurt."
+    },
+    {
+      "id": "sales_tax_fraud",
+      "name": "Unreported sales (sales tax fraud)",
+      "law": "NY Tax Law §1145(a)(1)(vi), §1145(a)(2), §1145(i); 26 U.S.C. §6663",
+      "official": "tax_auditor",
+      "foundBy": [
+        "audit",
+        "complaint"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.06,
+      "criminal": "More than $3,000 of tax evaded within a year is criminal tax fraud in the fourth degree, a class E felony (Tax Law §1803); more than $10,000 is a class D felony (§1804).",
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+      "confidence": "verified",
+      "note": "Tax Law §1145(a)(2): fraud penalty of two times the tax due, plus interest at 14.5% a year or the underpayment rate if higher; §1145(a)(1)(vi): 10% of the omitted tax when more than 25% is left off a return; §1145(i): up to $1,000 for the first quarter without proper records and up to $5,000 for each later quarter. Game formula: $1,000 for records plus 2.0 x what was kept. That blend also stands for the income tax side, where the federal civil fraud penalty is 75% (26 U.S.C. §6663, from research notes). §1804 seen; §1803 from research notes."
+    },
+    {
+      "id": "sales_tax_not_remitted",
+      "name": "Collected sales tax not paid over",
+      "law": "NY Tax Law §1133, §1145(a)(1)(i)",
+      "official": "tax_auditor",
+      "foundBy": [
+        "audit"
+      ],
+      "fine": {
+        "base": 50,
+        "perMonth": 0,
+        "pctOfSaved": 1.3,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+      "confidence": "verified",
+      "note": "Tax Law §1145(a)(1)(i): 10% of the tax due for the first month late plus 1% for each additional month, not more than 30% in all, and never less than $50 for a late return. Game formula: the tax itself plus the 30% maximum; interest runs on top. Sales tax is held in trust for the state, and owners are personally liable for it (§1133, not opened this session)."
+    },
+    {
+      "id": "no_wc_insurance",
+      "name": "No workers' compensation coverage",
+      "law": "NY Workers' Compensation Law §52(1)(a), §52(5), §141-a",
+      "official": "wcb_investigator",
+      "foundBy": [
+        "audit",
+        "complaint"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 6000,
+        "pctOfSaved": 1,
+        "max": null
+      },
+      "closureDays": 3,
+      "reputationHit": 0.05,
+      "criminal": "A misdemeanor with a $1,000-$5,000 fine for an employer of five or fewer people; a class E felony with a $5,000-$50,000 fine for more than five (WCL §52(1)(a)).",
+      "source": "https://www.wcb.ny.gov/content/main/Employers/violations-wclaw.jsp",
+      "confidence": "verified",
+      "note": "Workers' Compensation Board, seen November 14, 2026: up to $2,000 for each 10-day period without coverage (up to $6,000 a month), or no more than two times the cost of compensation for the payroll of that period; by the time the first penalty notice arrives it may exceed $12,000. On top: the unpaid premium (1.0 x saved). Failing to cover five or fewer employees within 12 months is a misdemeanor with a $1,000-$5,000 fine; more than five is a class E felony with $5,000-$50,000. A stop-work order under §141-a halts all business until coverage is in place. The 3 closure days are my estimate of how fast a policy can be bought."
+    },
+    {
+      "id": "unpaid_overtime",
+      "name": "Unpaid overtime",
+      "law": "12 NYCRR §146-1.4; 29 U.S.C. §207; NY Labor Law §§198(1-a), 218",
+      "official": "labor_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.05,
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "confidence": "verified",
+      "note": "Labor Law §198(1-a): the unpaid wages plus liquidated damages equal to 100% of them, with interest and attorney's fees; claims reach back six years (§198(3)). §218 lets the Commissioner add a civil penalty of up to double the wages for willful or repeat cases. Game formula: 2.0 x what was withheld."
+    },
+    {
+      "id": "below_minimum_wage",
+      "name": "Unpaid hours and pay below the minimum wage",
+      "law": "NY Labor Law §652; 12 NYCRR §146-1.2; NY Labor Law §§198(1-a), 218",
+      "official": "labor_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.06,
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "confidence": "verified",
+      "note": "New York City minimum wage is $17.00 an hour in 2026 (NY DOL, 12 NYCRR 146). Every hour worked must be paid. Labor Law §198(1-a): the unpaid wages plus 100% liquidated damages, interest and attorney's fees; §218: a civil penalty of up to double the wages for willful or repeat cases. Game formula: 2.0 x what was withheld."
+    },
+    {
+      "id": "personal_expenses",
+      "name": "Personal expenses deducted as business costs",
+      "law": "26 U.S.C. §§162, 262, 6662, 6663",
+      "official": "tax_auditor",
+      "foundBy": [
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 1.2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://www.irs.gov/payments/accuracy-related-penalty",
+      "confidence": "verified",
+      "note": "IRS: the accuracy-related penalty is 20% of the underpaid tax caused by negligence or disregard of the rules. Game formula: the tax back plus 20% (1.2 x saved); interest runs on top. If the IRS proves fraud the penalty is 75% (26 U.S.C. §6663, from research notes)."
+    },
+    {
+      "id": "no_i9",
+      "name": "Missing Form I-9",
+      "law": "8 U.S.C. §1324a; 8 CFR §274a.2, §274a.10",
+      "official": "federal_auditor",
+      "foundBy": [
+        "audit"
+      ],
+      "fine": {
+        "base": 1152,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 11444
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "criminal": "A pattern or practice of knowingly hiring unauthorized workers is a federal crime (8 U.S.C. §1324a(f)).",
+      "source": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+      "confidence": "verified",
+      "note": "28 CFR §85.5, table 1, seen on eCFR November 14, 2026: an I-9 paperwork violation (8 U.S.C. 1324a(e)(5)) costs $288 to $2,861 per form for penalties assessed after July 3, 2025 (90 FR 29447). Knowingly employing a worker without authorization is $716 to $5,724 per worker on a first order. Every employer must complete Form I-9 for every person hired and keep it three years after hire or one year after employment ends, whichever is later. Game formula: four forms at the low end ($1,152), capped at four forms at the high end ($11,444)."
+    },
+    {
+      "id": "returns_not_filed",
+      "name": "Tax returns not filed",
+      "law": "26 U.S.C. §6651; NY Tax Law §1145(a)(1)(i)",
+      "official": "tax_auditor",
+      "foundBy": [
+        "audit"
+      ],
+      "fine": {
+        "base": 525,
+        "perMonth": 450,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.irs.gov/payments/failure-to-file-penalty",
+      "confidence": "estimate",
+      "note": "IRS failure-to-file page, seen November 14, 2026: 5% of the unpaid tax for each month or part of a month late, up to 25%; for a return more than 60 days late the minimum is $525 (returns due after December 31, 2025) or 100% of the tax, whichever is less. New York adds 10% of the sales tax due for the first month and 1% for each month after, up to 30%, minimum $50 (Tax Law §1145(a)(1)(i), seen). Game formula is my estimate for a shop that collects about $4,500 of sales tax a month: the $525 minimum plus $450 for every month without returns."
+    },
+    {
+      "id": "sick_leave_denied",
+      "name": "Paid sick leave denied",
+      "law": "NYC Administrative Code §§20-912, 20-913, 20-924 (Earned Safe and Sick Time Act); 6 RCNY Chapter 7 (protected time off rules, effective July 23, 2026)",
+      "official": "dcwp_inspector",
+      "foundBy": [
+        "complaint"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 0,
+        "pctOfSaved": 3,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.04,
+      "source": "https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DCWP-NOA-Rules-Relating-to-Earned-Safe-and-Sick-Time-Act.pdf",
+      "confidence": "verified",
+      "note": "DCWP notice of adoption, rules effective July 23, 2026 (seen on rules.cityofnewyork.us): \"protected time off\" replaces \"safe/sick time\"; since the 2025 amendment employers also give 32 hours of unpaid protected time off on the first day of work and on the first day of each calendar year; where an employer has an official or unofficial policy or practice of not providing protected time off, each employee is entitled to $500 per calendar year the policy remains in effect (§20-924(d)(v)), on top of the hours owed and other relief. First pass (DCWP FAQ, nyc.gov, not reopened): three times the wages that should have been paid or $250, whichever is greater, per instance, and $500 for each unlawful denial. Game formula: $500 + 3 x what was kept; with more than one worker the real per-employee $500 is higher: needs fine.perStaff."
+    },
+    {
+      "id": "refusing_cash",
+      "name": "Refusing cash payments",
+      "law": "NYC Administrative Code §20-840",
+      "official": "dcwp_inspector",
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 750,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 1500
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "verified",
+      "note": "NYC Business restaurant guide: a store cannot refuse cash or charge more for paying in cash; $750 for the first violation, $1,350 for the second, $1,500 for the third and each one after. The game charges the first-violation amount each time. The section number of the Administrative Code is cited from memory."
+    },
+    {
+      "id": "bribery",
+      "name": "Bribing a public servant",
+      "law": "NY Penal Law §200.00 (bribery in the third degree), §80.00",
+      "official": "doi_investigator",
+      "foundBy": [
+        "sting"
+      ],
+      "fine": {
+        "base": 5000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.15,
+      "criminal": "Always criminal: offering any benefit to a public servant to influence an official decision is a class D felony, even if the official says no.",
+      "source": "https://www.nysenate.gov/legislation/laws/PEN/200.00",
+      "confidence": "verified",
+      "note": "Penal Law §200.00: a person is guilty of bribery in the third degree when he confers, or offers or agrees to confer, any benefit upon a public servant on the understanding that the official's decision will be influenced; class D felony. §80.00: a felony fine of up to $5,000 or double the gain from the crime, whichever is higher. The game charges the fixed $5,000 to every owner whose bribe was taken by an official exposed that month. A benefit worth more than $5,000 is second-degree bribery, a class C felony (§200.03, not opened this session)."
+    }
+  ],
+  "officials": [
+    {
+      "id": "tax_auditor",
+      "name": "State tax auditor",
+      "agency": "NYS Department of Taxation and Finance",
+      "role": "tax_auditor",
+      "checks": [
+        "off_books_payroll",
+        "sales_tax_fraud",
+        "sales_tax_not_remitted",
+        "personal_expenses",
+        "returns_not_filed"
+      ],
+      "realProcess": "A sales tax audit usually covers three years. The auditor asks for register records, bank statements and supplier invoices; when records are poor, the state estimates sales from purchases or from watching the shop. Payroll is matched against quarterly wage filings and unemployment claims.",
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1145"
+    },
+    {
+      "id": "labor_investigator",
+      "name": "Labor standards investigator",
+      "agency": "NYS Department of Labor",
+      "role": "tax_auditor",
+      "checks": [
+        "misclassification",
+        "unpaid_overtime",
+        "below_minimum_wage"
+      ],
+      "realProcess": "Most cases start with a worker's complaint or an unemployment claim. The investigator asks for up to six years of time and pay records; where none exist, the worker's own account of hours is used. Orders include back wages, 100% liquidated damages, interest and civil penalties.",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/218"
+    },
+    {
+      "id": "wcb_investigator",
+      "name": "Workers' compensation investigator",
+      "agency": "NYS Workers' Compensation Board",
+      "role": "tax_auditor",
+      "checks": [
+        "no_wc_insurance"
+      ],
+      "realProcess": "The Board matches employer filings against active insurance policies and writes to businesses with no coverage on record. Without proof of a policy it assesses a penalty for every 10 days and can post a stop-work order on the door.",
+      "source": "https://www.wcb.ny.gov/content/main/Employers/violations-wclaw.jsp"
+    },
+    {
+      "id": "federal_auditor",
+      "name": "Federal auditor",
+      "agency": "IRS; U.S. Immigration and Customs Enforcement",
+      "role": "tax_auditor",
+      "checks": [
+        "no_i9"
+      ],
+      "realProcess": "Immigration and Customs Enforcement serves a notice of inspection and reviews every Form I-9 on file. The IRS compares employment and income tax returns with 1099 forms and bank deposits.",
+      "source": "https://www.uscis.gov/i-9"
+    },
+    {
+      "id": "dcwp_inspector",
+      "name": "Consumer and worker protection inspector",
+      "agency": "NYC Department of Consumer and Worker Protection (DCWP)",
+      "role": "inspector",
+      "checks": [
+        "sick_leave_denied",
+        "refusing_cash"
+      ],
+      "realProcess": "DCWP acts on complaints filed online or through 311 and on its own patrols. It asks for records, tries to settle, and otherwise brings the case before the city's administrative tribunal (OATH).",
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page"
+    },
+    {
+      "id": "doi_investigator",
+      "name": "Integrity investigator",
+      "agency": "NYC Department of Investigation (DOI)",
+      "role": "inspector",
+      "checks": [
+        "bribery"
+      ],
+      "realProcess": "City inspectors must report every offer of money or gifts. Investigators run undercover integrity tests and arrest both the person who pays and the person who takes.",
+      "source": "https://www.nysenate.gov/legislation/laws/PEN/200.00"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_cash_wages",
+      "name": "Report unpaid taxes or off-the-books wages",
+      "text": "In real life: the NYS Tax Department's online tax evasion form, or a wage complaint to the NYS Department of Labor. An auditor compares payroll, sales and filings. If you are wrong, you get a warning.",
+      "role": "tax_auditor",
+      "checks": [
+        "off_books_payroll",
+        "misclassification",
+        "sales_tax_fraud",
+        "sales_tax_not_remitted",
+        "no_wc_insurance",
+        "unpaid_overtime",
+        "below_minimum_wage",
+        "no_i9",
+        "returns_not_filed",
+        "personal_expenses"
+      ]
+    },
+    {
+      "id": "report_consumer_problem",
+      "name": "Report a consumer or licensing problem (311)",
+      "text": "In real life: a 311 complaint routed to the Department of Consumer and Worker Protection. An inspector visits and checks what the business owes its customers and staff. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "sick_leave_denied",
+        "refusing_cash"
+      ]
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "payroll_taxes",
+      "title": "Payroll taxes",
+      "text": "On top of every $100 of wages a New York City employer pays about $11.60: Social Security and Medicare 7.65%, state unemployment 4.1% on the first $17,600 per worker, federal unemployment up to $42 a year, plus workers' comp and disability insurance.",
+      "source": "https://www.irs.gov/publications/p15"
+    },
+    {
+      "id": "workers_comp",
+      "title": "Workers' compensation",
+      "text": "Workers' compensation insurance is mandatory in New York from the first employee, and you may not charge staff for it. No coverage: up to $2,000 for every 10 days, a stop-work order, and a felony charge if you employ more than five people.",
+      "source": "https://www.wcb.ny.gov/content/main/Employers/violations-wclaw.jsp"
+    },
+    {
+      "id": "sales_tax",
+      "title": "Sales tax is not your money",
+      "text": "New York City sales tax is 8.875%: 4% state + 4.5% city + 0.375% transit district. You collect it on top of your price and hold it for the state until the quarterly return. Keep it in a separate account: owners are personally liable for it.",
+      "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page"
+    },
+    {
+      "id": "bribery",
+      "title": "Bribing an inspector",
+      "text": "Offering an inspector anything to change a decision is bribery in the third degree, a class D felony in New York (Penal Law §200.00), even if the offer is refused. The fine alone can reach $5,000 or double your gain.",
+      "source": "https://www.nysenate.gov/legislation/laws/PEN/200.00"
+    },
+    {
+      "id": "off_books_payroll",
+      "title": "Off-the-books wages",
+      "text": "Paying in cash is legal; hiding it is not. When off-the-books wages are found you owe the payroll taxes for both yourself and the worker, deposit penalties of 2%-15%, and up to $5,000 per worker for missing pay stubs. The owner is personally liable.",
+      "source": "https://www.irs.gov/individuals/international-taxpayers/trust-fund-recovery-penalty"
+    },
+    {
+      "id": "misclassification",
+      "title": "Employee or contractor",
+      "text": "A person who works your schedule, on your equipment, under your rules is an employee, not a 1099 contractor. When a \"contractor\" files for unemployment, the state bills the unpaid contributions with interest and looks at everyone else on your team.",
+      "source": "https://www.irs.gov/publications/p15"
+    },
+    {
+      "id": "sales_tax_fraud",
+      "title": "Hiding sales",
+      "text": "Hiding sales to keep the sales tax is fraud: you owe the tax, a penalty of twice the tax, and 14.5% yearly interest (NY Tax Law §1145). More than $10,000 of tax evaded in a year is a class D felony.",
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1145"
+    },
+    {
+      "id": "sales_tax_not_remitted",
+      "title": "Late sales tax",
+      "text": "Paying sales tax late costs 10% of the tax for the first month and 1% for each month after, up to 30%, and never less than $50. Set the tax aside every day so the quarterly bill never comes as a surprise.",
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1145"
+    },
+    {
+      "id": "no_wc_insurance",
+      "title": "No workers' comp policy",
+      "text": "Without a workers' comp policy the state fines up to $2,000 per 10 days, can close the shop with a stop-work order, and you personally pay an injured worker's medical bills and lost wages. It is a crime, not a paperwork slip.",
+      "source": "https://www.wcb.ny.gov/content/main/Employers/violations-wclaw.jsp"
+    },
+    {
+      "id": "unpaid_overtime",
+      "title": "Overtime",
+      "text": "Hours over 40 in a week are paid at 1.5 times the regular rate: at the $17.00 minimum that is $25.50. Unpaid overtime is owed back double (the wages plus 100% damages) with interest, and claims reach back six years.",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198"
+    },
+    {
+      "id": "below_minimum_wage",
+      "title": "Minimum wage",
+      "text": "New York City's minimum wage is $17.00 an hour in 2026 and stays there in 2027. Every hour worked must be paid: setup, cleanup, training, trial shifts. Underpaid wages are owed back double, and the state can add a penalty of up to 200%.",
+      "source": "https://dol.ny.gov/minimum-wage-0"
+    },
+    {
+      "id": "personal_expenses",
+      "title": "Personal bills in the business",
+      "text": "Business money and personal money must stay apart. Personal bills deducted as business costs are thrown out in an audit: you repay the tax plus a 20% accuracy penalty, or 75% if the IRS proves fraud.",
+      "source": "https://www.irs.gov/payments/accuracy-related-penalty"
+    },
+    {
+      "id": "no_i9",
+      "title": "Form I-9",
+      "text": "Every hire, citizen or not, needs a Form I-9: the worker fills in section 1 and you check original identity documents. Keep each form 3 years after hire or 1 year after the job ends, whichever is later. Fines are charged per missing form.",
+      "source": "https://www.uscis.gov/i-9"
+    },
+    {
+      "id": "returns_not_filed",
+      "title": "Unfiled returns",
+      "text": "Not filing does not make a tax go away. The IRS adds 5% of the unpaid tax per month, up to 25%; New York adds 10% plus 1% a month on sales tax, at least $50. With no return on file, the state estimates your sales for you.",
+      "source": "https://www.irs.gov/payments/failure-to-file-penalty"
+    },
+    {
+      "id": "sick_leave_denied",
+      "title": "Paid sick leave",
+      "text": "NYC employers with 5-99 workers owe up to 40 hours of paid sick leave a year, earned at 1 hour per 30 worked; smaller ones owe it unpaid. Denying it costs three times the wages or $250 per instance, plus $500 for each denial.",
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page"
+    },
+    {
+      "id": "refusing_cash",
+      "title": "Cash must be accepted",
+      "text": "Stores and restaurants in New York City must accept cash and may not charge cash payers more. Fines: $750 for the first violation, $1,350 for the second, $1,500 for each one after.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+      "id": "llc_publication",
+      "title": "LLC publication",
+      "text": "A New York LLC must publish a notice in two newspapers for six weeks within 120 days of forming, then file a $50 certificate. In New York City the whole package costs about $1,200-$1,800. Skip it and the LLC's authority to do business is suspended.",
+      "source": "https://dos.ny.gov/node/35506"
+    },
+    {
+      "id": "lease_deposit",
+      "title": "Lease deposit and guaranty",
+      "text": "Commercial leases have no legal cap on the security deposit. Two months of rent is common; a new business with no history may be asked for more, or for a personal guaranty that puts your own savings behind the lease.",
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    },
+    {
+      "id": "self_employment_tax",
+      "title": "How an LLC owner is taxed",
+      "text": "A single-member LLC pays no income tax itself. Its profit is your income: 15.3% self-employment tax for Social Security and Medicare, plus federal, state and city income tax, paid in four estimated payments a year.",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/self-employment-tax-social-security-and-medicare-taxes"
+    },
+    {
+      "id": "commercial_rent_tax",
+      "title": "Commercial Rent Tax",
+      "text": "Commercial Rent Tax applies only in Manhattan south of 96th Street when annual rent is $250,000 or more: 3.9% of rent, with a credit that cancels it for most small businesses. Brooklyn, Queens and the Bronx never pay it.",
+      "source": "https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page"
+    },
+    {
+      "id": "ein",
+      "title": "EIN is free",
+      "text": "An Employer Identification Number is free and issued online by the IRS in minutes. Sites that charge for it are middlemen. You need it to open a business bank account, run payroll and register for sales tax.",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/get-an-employer-identification-number"
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "write_plan",
+      "title": "Write a one-page plan and a first-year budget",
+      "kind": "idea",
+      "text": "List what you will sell, to whom, and every cost before and after opening day. Plan cash for at least three months of fixed costs after you open. NYC Small Business Services offers free courses, lease review and one-on-one help.",
+      "agency": "NYC Department of Small Business Services"
+    },
+    {
+      "id": "choose_structure",
+      "title": "Choose a legal form",
+      "kind": "legal",
+      "text": "An LLC keeps business debts apart from your home and savings; a sole proprietorship costs nothing to form but leaves you personally liable. Most small shops in New York start as a single-member LLC taxed on the owner's personal return.",
+      "agency": "NYS Department of State",
+      "link": "https://dos.ny.gov/node/35506"
+    },
+    {
+      "id": "form_llc",
+      "title": "Form the LLC: file Articles of Organization",
+      "kind": "legal",
+      "text": "File online for $200; the filing receipt usually arrives the same day. Adopt an operating agreement within 90 days. If the shop name differs from the LLC name, also file an assumed name certificate ($25).",
+      "fee": 200,
+      "waitDays": 1,
+      "agency": "NYS Department of State, Division of Corporations",
+      "link": "https://dos.ny.gov/node/35506"
+    },
+    {
+      "id": "llc_publication",
+      "title": "Publish the LLC notice",
+      "kind": "legal",
+      "text": "Within 120 days, publish a notice in two newspapers for six weeks, then file a Certificate of Publication ($50). All-in packages cost about $1,795 in Manhattan, $1,475 in Brooklyn and $1,195 in Queens. Skip it and the LLC's authority to do business is suspended.",
+      "fee": 1475,
+      "waitDays": 42,
+      "agency": "NYS Department of State",
+      "link": "https://dos.ny.gov/node/35506"
+    },
+    {
+      "id": "get_ein",
+      "title": "Get an EIN",
+      "kind": "legal",
+      "text": "Apply on IRS.gov: free, issued in minutes. You need it for the bank, payroll and the sales tax registration. Never pay a website for an EIN.",
+      "fee": 0,
+      "agency": "IRS",
+      "link": "https://www.irs.gov/businesses/small-businesses-self-employed/get-an-employer-identification-number"
+    },
+    {
+      "id": "open_bank_account",
+      "title": "Open a business bank account",
+      "kind": "legal",
+      "text": "Bring the EIN letter, the LLC filing receipt and the operating agreement. Run every business dollar through this account, and open a second one only for the sales tax you collect.",
+      "agency": "Any bank or credit union",
+      "link": "https://www.sba.gov/business-guide/launch-your-business/open-business-bank-account"
+    },
+    {
+      "id": "sales_tax_certificate",
+      "title": "Register for sales tax: Certificate of Authority",
+      "kind": "legal",
+      "text": "Apply online at least 20 days before your first taxable sale; there is no fee. Selling without the certificate can cost up to $500 for the first day and $200 for each day after, up to $10,000. Display it in the shop.",
+      "fee": 0,
+      "waitDays": 20,
+      "agency": "NYS Department of Taxation and Finance",
+      "link": "https://www.tax.ny.gov/pdf/current_forms/st/dtf17i.pdf"
+    },
+    {
+      "id": "sign_lease",
+      "title": "Negotiate and sign the lease",
+      "kind": "space",
+      "text": "Before you sign, check the permitted use, who pays property tax increases and repairs, free rent during build-out, the right to assign the lease, and the personal guaranty. A deposit of two months is common; new businesses are often asked for three or more.",
+      "agency": "NYC Department of Small Business Services (free lease review)",
+      "link": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    },
+    {
+      "id": "buy_insurance",
+      "title": "Buy the required insurance",
+      "kind": "permit",
+      "text": "Workers' compensation and disability coverage are mandatory once you have one employee, and permit applications ask for proof. Landlords also require general liability; a business owner's policy for a small shop averages about $126 a month nationally.",
+      "agency": "NYS Workers' Compensation Board",
+      "link": "https://www.wcb.ny.gov/content/main/Employers/workers-compensation-insurance.jsp"
+    },
+    {
+      "id": "set_up_bookkeeping",
+      "title": "Set up bookkeeping and a tax calendar",
+      "kind": "money",
+      "text": "Pick accounting software or a bookkeeper before the first sale. Put the dates in a calendar: payroll tax deposits every month, sales tax and unemployment returns every quarter, estimated income tax four times a year, the $25 LLC fee once a year.",
+      "agency": "IRS; NYS Department of Taxation and Finance",
+      "link": "https://www.irs.gov/publications/p15"
+    },
+    {
+      "id": "hire_legally",
+      "title": "Hire legally: Form I-9, pay notice, payroll",
+      "kind": "people",
+      "text": "For every hire: complete Form I-9 with original identity documents, give a written notice of the pay rate and payday, withhold taxes and hand over a pay stub every payday. Register with New York State as an employer for unemployment insurance.",
+      "agency": "USCIS; NYS Department of Labor",
+      "link": "https://www.uscis.gov/i-9"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.irs.gov/publications/p15",
+      "title": "IRS Publication 15 (2026), Employer's Tax Guide: Social Security 6.2% to $184,500, Medicare 1.45%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/taxtopics/tc759",
+      "title": "IRS Topic 759: FUTA 6.0% on first $7,000, credit up to 5.4%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/bizserve/ui/prg/rate",
+      "title": "NY DOL: unemployment insurance rates, new employer 4.1%, RSF 0.075%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/bizserve/ui/prg/rate/wbarchive",
+      "title": "NY DOL: unemployment insurance wage base, 2026 = $17,600",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/forms/current-forms/mta/mta305i.htm",
+      "title": "NYS Tax Department: Form MTA-305 instructions, $312,500 threshold and Zone 1 rates",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.wcb.ny.gov/content/main/Employers/workers-compensation-insurance.jsp",
+      "title": "NYS Workers' Compensation Board: who must carry workers' compensation insurance",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.wcb.ny.gov/content/main/Employers/violations-wclaw.jsp",
+      "title": "NYS Workers' Compensation Board: penalties for no coverage, stop-work orders",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/employer-disability-benefits.jsp",
+      "title": "NYS Workers' Compensation Board: employer disability benefits, employee contribution cap",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://ww3.nysif.com/-/media/Files/DISABILITY_BENEFITS/PDF/UDB-SOC_2026.pdf",
+      "title": "NYSIF 2026 statutory disability rate sheet (from research notes; site refused my connection)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://docs.paidfamilyleave.ny.gov/content/main/PressRe/paid-family-leave-2026.jsp",
+      "title": "NYS Paid Family Leave 2026 announcement (from research notes; certificate error in this session)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "title": "Insureon: average insurance costs for coffee shops and cafes (BOP $126, workers' comp $88 a month)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+      "title": "NYC Department of Finance: sales tax 4.5% city + 4% state + 0.375% MCTD = 8.875%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+      "title": "NY Tax Law §1145: sales tax penalties, fraud, records, selling without a Certificate of Authority",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/TAX/1803",
+      "title": "NY Tax Law §1803: criminal tax fraud in the fourth degree (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/TAX/1804",
+      "title": "NY Tax Law §1804: criminal tax fraud in the third degree, over $10,000, class D felony",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pdf/current_forms/st/dtf17i.pdf",
+      "title": "NYS Tax Department: Form DTF-17 instructions, apply 20 days before starting",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page",
+      "title": "NYC Department of Finance: Commercial Rent Tax",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/finance/business/business-unincorporated-business-tax-ubt.page",
+      "title": "NYC Department of Finance: Unincorporated Business Tax",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pit/efile/annual_filing_fee.htm",
+      "title": "NYS Tax Department: annual LLC filing fee",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/self-employment-tax-social-security-and-medicare-taxes",
+      "title": "IRS: self-employment tax 15.3%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/individuals/international-taxpayers/trust-fund-recovery-penalty",
+      "title": "IRS: Trust Fund Recovery Penalty",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/payments/failure-to-deposit-penalty",
+      "title": "IRS: failure to deposit penalty 2%-15%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/payments/failure-to-file-penalty",
+      "title": "IRS: failure to file penalty 5% a month, up to 25%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/payments/accuracy-related-penalty",
+      "title": "IRS: accuracy-related penalty 20%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://uscode.house.gov/us/usc/t26/s7201/",
+      "title": "26 U.S.C. §7201: attempt to evade or defeat tax (from research notes)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "title": "NY Labor Law §198: liquidated damages, wage notice and pay stub damages, six-year limit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/LAB/218",
+      "title": "NY Labor Law §218: civil penalties",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/minimum-wage-0",
+      "title": "NY DOL: minimum wage, $17.00 in New York City, unchanged for 2027",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://forms.labor.ny.gov/WP/CR146.pdf",
+      "title": "12 NYCRR Part 146, Hospitality Industry Wage Order",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "title": "NYC DCWP: paid safe and sick leave FAQ",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.uscis.gov/i-9",
+      "title": "USCIS: Form I-9, Employment Eligibility Verification",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.uscis.gov/i-9-central/legal-requirements-and-enforcement/penalties",
+      "title": "USCIS: Form I-9 penalties",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "title": "NYC Business: restaurant resources and fines (cash refusal $750 / $1,350 / $1,500)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/PEN/200.00",
+      "title": "NY Penal Law §200.00: bribery in the third degree",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/PEN/80.00",
+      "title": "NY Penal Law §80.00: fine for felony",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dos.ny.gov/node/35506",
+      "title": "NYS Department of State: forming a domestic LLC, $200, publication, $50 certificate",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.llcpublishers.com/pricing",
+      "title": "LLC Publishers: publication package prices by county (one provider's price list)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/get-an-employer-identification-number",
+      "title": "IRS: get an Employer Identification Number, free",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.sba.gov/business-guide/launch-your-business/open-business-bank-account",
+      "title": "SBA: open a business bank account",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "title": "NYC Small Business Services: Commercial Lease Guide",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+      "title": "D12 number check: www.ecfr.gov",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DCWP-NOA-Rules-Relating-to-Earned-Safe-and-Sick-Time-Act.pdf",
+      "title": "D12 number check: rules.cityofnewyork.us",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf",
+      "title": "D12 number check: www.tax.ny.gov",
+      "checked": "2026-11-14"
+    }
+  ],
+  "extra": {
+    "howNumbersWereChecked": "verified = I opened the primary source in this session (November 14, 2026) and saw the number. estimate = taken from the research notes without opening the source, or my own arithmetic or planning rate; the note says which. A game rate that is the effective share of a capped tax (unemployment insurance, FUTA) is marked estimate even though the statutory rate and base were seen.",
+    "simplifiedScheme": {
+      "summary": "One scheme for every niche. Every tax listed in taxes applies as written, so there is no taxIds filter: a list here would silently switch off the sales taxes that niche packs define under their own ids. Rates of taxes that a small shop does not owe (MCTMT, Commercial Rent Tax, UBT) are set to 0 and the real thresholds are in their notes.",
+      "everyDay": [
+        {
+          "what": "Sales tax collected from customers on top of the price",
+          "formula": "revenue x taxable share x the niche pack sales tax rate; added to cash and to a liability",
+          "taxIds": "defined in each niche pack (cafe: sales_tax 8.875%)"
+        }
+      ],
+      "everyMonth": [
+        {
+          "taxId": "employer_fica",
+          "formula": "0.0765 x wages paid (staff and hired manager)"
+        },
+        {
+          "taxId": "workers_comp",
+          "formula": "0.02 x wages paid"
+        },
+        {
+          "taxId": "ny_unemployment",
+          "formula": "0.0179 x wages paid, accrued monthly, paid quarterly"
+        },
+        {
+          "taxId": "futa",
+          "formula": "0.001 x wages paid, accrued monthly, paid after year end"
+        },
+        {
+          "taxId": "disability_pfl",
+          "formula": "0.0004 x wages paid, accrued monthly, paid after year end"
+        },
+        {
+          "taxId": "self_employment_tax",
+          "formula": "0.1413 x month profit after losses carried forward, accrued monthly, paid quarterly"
+        },
+        {
+          "taxId": "income_tax",
+          "formula": "0.17 x month profit after losses carried forward, accrued monthly, paid quarterly"
+        },
+        {
+          "taxId": "nys_llc_filing_fee",
+          "formula": "$25 / 12 accrued monthly, paid after year end"
+        }
+      ],
+      "everyQuarter": [
+        {
+          "what": "Sales tax collected during the quarter",
+          "when": "day 20 of the month after the quarter"
+        },
+        {
+          "what": "NY unemployment insurance, self-employment tax and income tax accrued during the quarter",
+          "when": "day 20 of the month after the quarter"
+        }
+      ],
+      "zeroForSmallShops": [
+        {
+          "taxId": "mctmt",
+          "realRule": "0.055%-0.895% of payroll only when quarterly payroll exceeds $312,500"
+        },
+        {
+          "taxId": "commercial_rent_tax",
+          "realRule": "3.9% of rent only in Manhattan south of 96th Street with annual rent of $250,000 or more; small business credit cancels it under $500,000 of rent and $5 million of income"
+        },
+        {
+          "taxId": "nyc_ubt",
+          "realRule": "4% of taxable income, fully credited when the tax is $3,400 or less"
+        }
+      ],
+      "employerPayrollRateTotal": 0.1158,
+      "profitTaxRateTotal": 0.3113,
+      "appliedTaxIds": [
+        "employer_fica",
+        "ny_unemployment",
+        "futa",
+        "workers_comp",
+        "disability_pfl",
+        "self_employment_tax",
+        "income_tax",
+        "nys_llc_filing_fee"
+      ]
+    },
+    "taxDueDayOfMonth": 20,
+    "taxDueDayNote": "New York quarterly sales tax returns are due on the 20th of the month after the quarter. From memory, not opened this session; it equals the engine default.",
+    "salesTaxRates": {
+      "state": 0.04,
+      "city": 0.045,
+      "mctd": 0.00375,
+      "total": 0.08875,
+      "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+      "confidence": "verified",
+      "note": "General rate in New York City. Niche packs carry their own sales tax rows because what is taxed differs: prepared food and drinks 8.875%, barbering services 4.5% (city tax only), residential rent 0."
+    },
+    "statutory": {
+      "year": 2026,
+      "socialSecurityRate": 0.062,
+      "socialSecurityWageBase": 184500,
+      "medicareRate": 0.0145,
+      "futaRate": 0.06,
+      "futaMaxCredit": 0.054,
+      "futaWageBase": 7000,
+      "nySuiNewEmployerRate": 0.041,
+      "nySuiWageBase": 17600,
+      "nySuiMaxPerWorker": 721.6,
+      "nycMinimumWage": 17,
+      "nycMinimumWage2027": 17,
+      "tippedFoodServiceCashWage": 11.35,
+      "tippedFoodServiceTipCredit": 5.65,
+      "selfEmploymentRate": 0.153,
+      "mctmtQuarterlyPayrollThreshold": 312500,
+      "crtAnnualRentThreshold": 250000,
+      "crtEffectiveRate": 0.039,
+      "ubtRate": 0.04,
+      "ubtFullCreditBelow": 3400,
+      "llcFilingFee": 200,
+      "llcCertificateOfPublicationFee": 50,
+      "llcAnnualFeeSingleMember": 25,
+      "note": "Seen November 14, 2026: Social Security 6.2% on wages up to $184,500 and Medicare 1.45% (IRS Publication 15, 2026); FUTA 6.0% on $7,000 less up to 5.4% credit (IRS Topic 759); NY UI new employer rate 4.1% and wage base $17,600 for 2026 (NY DOL); NYC minimum wage $17.00 in 2026 and still $17.00 on January 1, 2027 because one of the law's off-ramp conditions was met (the Governor proposes $17.60 from March 1, 2027 if the Legislature agrees: governor.ny.gov, seen); tipped food service cash wage $11.35 + $5.65 credit for 2026 and 2027 (NY DOL); MCTMT threshold $312,500 a quarter (Form MTA-305 instructions); LLC $200 and Certificate of Publication $50 (NYS DOS); single-member LLC fee $25 (NYS Tax). CRT and UBT values were not reopened: nyc.gov refuses automated requests from this session.",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "confidence": "verified"
+    },
+    "employerCostExample": {
+      "title": "What one worker at $17.00 an hour for 140 hours a month costs",
+      "wages": 2380,
+      "onTheBooks": {
+        "employerFica": 182.07,
+        "nyUnemployment": 60.13,
+        "futa": 3.5,
+        "workersComp": 47.6,
+        "disability": 1.47,
+        "total": 2674.77,
+        "perHour": 19.11
+      },
+      "offTheBooks": {
+        "total": 2380,
+        "keptPerMonth": 294.77
+      },
+      "caughtAfter6Months": {
+        "keptReal": 1768.62,
+        "keptGameRate": 1656.48,
+        "gameFine": 6312.96,
+        "formula": "$500 x 6 months + 2.0 x $1,656.48 kept at the game rate of 11.6% of payroll"
+      },
+      "note": "Unemployment insurance here uses the true annual share for this wage: $721.60 / ($2,380 x 12) = 2.53%; FUTA $42 / 12; workers' comp at the 2% planning rate; disability $17.68 / 12. My arithmetic from rates seen at the sources.",
+      "confidence": "estimate"
+    },
+    "shortcutNotes": "cash_wages and contractor_1099 skip the same payroll taxes: a business should not be allowed to switch on both. keep_sales_tax is set to 4.5% of sales so that it never exceeds the sales tax a niche collects (barbering is taxed at 4.5%; for a cafe it is about half of the 8.875% collected). bribery has no shortcut: it is reached through the \"make an offer\" answer to a notice."
+  }
+}
