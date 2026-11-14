@@ -128,7 +128,7 @@ const P = (s = '') => out.push(s);
   }
   // work without a permit
   const wwp = po.dobPermitDays;
-  P(`\nShortcut "start_work_before_permit": construction starts ${wwp} days earlier -> doors open day ${open - wwp}. If found: fine ${usd(frag.violations.find((v) => v.id === 'work_without_permit').fine.base)}, work stops until the permit is issued (+${frag.violations.find((v) => v.id === 'work_without_permit').closureDays} days).`);
+  P(`\nShortcut "start_work_before_permit": construction starts ${wwp} days earlier -> doors open day ${open - wwp}. If found: fine ${usd(frag.violations.find((v) => v.id === 'work_without_permit').fine.base)} and the ${frag.violations.find((v) => v.id === 'work_without_permit').closureDays} days come back: doors open day ${open} again.`);
   // start-up costs, IRC 195
   const s195 = po.startupCostDeduction;
   for (const startup of [9000, 30000, 60000]) {
@@ -242,7 +242,11 @@ const P = (s = '') => out.push(s);
     for (const [m, sh] of tol) { if (w <= m) return ps + (sh - ps) * (w - pm) / (m - pm); pm = m; ps = sh; }
     return 1;
   };
-  function day(orders, baristasOnPeak, seats, queueSlots, outsideBalk, dwellH) {
+  function day(ordersIn, baristasOnPeak, seats, queueSlots, outsideBalk, dwellH, staff = 99) {
+    // the engine's daily cap on paid hours stays: staff x 1,700 / 30 orders a day
+    const hoursCap = staff * pack.capacity.unitsPerStaffMonth / D;
+    const orders = Math.min(ordersIn, hoursCap);
+    const lostHours = ordersIn - orders;
     let lostQueue = 0, lostSeat = 0, worstLine = 0, worstWait = 0, peakUtil = 0;
     const cap = Math.min(machineCap, baristasOnPeak * perBarista);           // orders an hour the bar can make
     for (const [, share] of prof) {
@@ -261,7 +265,7 @@ const P = (s = '') => out.push(s);
       lostSeat += noSeat * (1 - z.noSeatTakesAway);
       peakUtil = Math.max(peakUtil, (Math.min(occupied, seats) + Math.min(line, queueSlots)) / (seats + queueSlots));
     }
-    return { lostQueue: r0(lostQueue), lostSeat: r0(lostSeat), line: r0(worstLine), wait: r0(worstWait), peakUtil: Math.round(peakUtil * 100) };
+    return { lostHours: r0(lostHours), total: r0(lostHours + lostQueue + lostSeat), lq: lostQueue, lostQueue: r0(lostQueue), lostSeat: r0(lostSeat), line: r0(worstLine), wait: r0(worstWait), peakUtil: Math.round(peakUtil * 100) };
   }
   const engineLost = (orders, seats, staff) => {
     const sizeCapDay = seats * pack.sizing.unitsServedPerSizeMonth / D / (1 - pack.sizing.takeawayShare);
@@ -271,20 +275,20 @@ const P = (s = '') => out.push(s);
   };
   P('\nMorning rush 7-10 am, busiest quarter-hour of each hour, 18 seats, 6 people of queue room, dwell 0.5 h.');
   P('Demand levels: the pack reference (200 a day) and keen-cray footfall demand at two real map blocks (ev-003: 341, ev-028: 442 a day).');
-  P('| Orders a day | Staff (on the rush) | Longest line | Longest wait, min | Lost in the line | Lost for want of a seat | Peak use of room | Current engine loses (daily caps) |');
-  P('|---|---|---|---|---|---|---|---|');
-  for (const [orders, staff, bar] of [[200, 4, 1], [200, 4, 2], [341, 4, 2], [341, 6, 3], [442, 6, 2], [442, 7, 3], [442, 7, 4]]) {
-    const r = day(orders, bar, 18, 6, z.outsideBalk.normal, z.dwellHours.standard);
-    P(`| ${orders} | ${staff} (${bar}) | ${r.line} | ${r.wait} | ${r.lostQueue} | ${r.lostSeat} | ${r.peakUtil}% | ${engineLost(orders, 18, staff)} |`);
+  P('| Orders a day | Staff (on the rush) | Lost to paid hours (both models) | Longest line | Longest wait, min | Lost in the line | Lost for want of a seat | New total lost | Peak use of room | Current engine loses |');
+  P('|---|---|---|---|---|---|---|---|---|---|');
+  for (const [orders, staff, bar] of [[200, 4, 1], [200, 4, 2], [341, 4, 2], [341, 6, 2], [341, 6, 3], [442, 8, 2], [442, 8, 3], [442, 8, 4]]) {
+    const r = day(orders, bar, 18, 6, z.outsideBalk.normal, z.dwellHours.standard, staff);
+    P(`| ${orders} | ${staff} (${bar}) | ${r.lostHours} | ${r.line} | ${r.wait} | ${r.lostQueue} | ${r.lostSeat} | ${r.total} | ${r.peakUtil}% | ${engineLost(orders, 18, staff)} |`);
   }
-  const kiosk = day(200, 2, 6, 4, z.outsideBalk.normal, z.dwellHours.standard);
-  const kiosk1 = day(200, 1, 6, 4, z.outsideBalk.normal, z.dwellHours.standard);
-  P(`\nCounter shop, 6 seats, 3 staff (2 on the rush), 200 orders a day: longest line ${kiosk.line}, lost in line ${kiosk.lostQueue}, for want of a seat ${kiosk.lostSeat}; with 1 on the rush: line ${kiosk1.line}, wait ${kiosk1.wait} min, lost ${kiosk1.lostQueue}. Current engine caps it at ${r0(6 * pack.sizing.unitsServedPerSizeMonth / D / (1 - pack.sizing.takeawayShare))} orders a day and loses ${engineLost(200, 6, 3)}.`);
-  const mild = day(442, 3, 24, 1, z.outsideBalk.normal, z.dwellHours.standard);
-  const cold = day(442, 3, 24, 1, z.outsideBalk.freezing, z.dwellHours.standard);
-  P(`442 orders, 3 on the rush, tight layout that gave the queue room to seats (room for 1 in line): lost in line ${mild.lostQueue} on a mild day, ${cold.lostQueue} on a freezing day (the rest of the line stands on the sidewalk).`);
-  const lap = day(341, 3, 18, 6, z.outsideBalk.normal, z.dwellHours.laptops);
-  const lapTight = day(341, 3, 24, 6, z.outsideBalk.normal, z.dwellHours.laptops);
+  const kiosk = day(200, 2, 6, 4, z.outsideBalk.normal, z.dwellHours.standard, 4);
+  const kiosk1 = day(200, 1, 6, 4, z.outsideBalk.normal, z.dwellHours.standard, 4);
+  P(`\nCounter shop, 6 seats, 4 staff (2 on the rush), 200 orders a day: longest line ${kiosk.line}, lost in line ${kiosk.lostQueue}, for want of a seat ${kiosk.lostSeat}; with 1 on the rush: line ${kiosk1.line}, wait ${kiosk1.wait} min, lost ${kiosk1.lostQueue}. Current engine caps it at ${r0(6 * pack.sizing.unitsServedPerSizeMonth / D / (1 - pack.sizing.takeawayShare))} orders a day and loses ${engineLost(200, 6, 4)}.`);
+  const mild = day(442, 3, 24, 1, z.outsideBalk.normal, z.dwellHours.standard, 8);
+  const cold = day(442, 3, 24, 1, z.outsideBalk.freezing, z.dwellHours.standard, 8);
+  P(`442 orders, 3 on the rush, tight layout that gave the queue room to seats (room for 1 in line): lost in line ${mild.lq.toFixed(1)} on a mild day, ${cold.lq.toFixed(1)} on a freezing day (the rest of the line stands on the sidewalk).`);
+  const lap = day(341, 3, 18, 6, z.outsideBalk.normal, z.dwellHours.laptops, 7);
+  const lapTight = day(341, 3, 24, 6, z.outsideBalk.normal, z.dwellHours.laptops, 7);
   P(`341 orders, laptops welcome (dwell ${z.dwellHours.laptops} h): lost for want of a seat ${lap.lostSeat} with 18 seats, ${lapTight.lostSeat} with 24 tight seats; peak use ${lap.peakUtil}% / ${lapTight.peakUtil}%.`);
 }
 
