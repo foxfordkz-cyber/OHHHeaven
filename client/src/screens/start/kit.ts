@@ -2,6 +2,7 @@
 // the real money is decided by the engine when `open_business` arrives.
 import type { BusinessState, CommonPack, NicheId, Pack, PackSetupItem, PackViolation, Place, PublicBusiness, SetupKind } from '@ohh/shared/types';
 import { RULES } from '@ohh/shared/rules';
+import { buildoutOf, daysToOpenOf, isTakeover, setupItemCost } from '@ohh/shared/place';
 import type { IconName } from '../../ui';
 
 export type KitItems = { id: string; qty: number }[];
@@ -18,18 +19,29 @@ export const KIT_GROUPS: KitGroup[] = [
   { id: 'stock', label: 'Opening stock and other', icon: 'truck', kinds: ['inventory', 'other'] },
 ];
 
-/** Lines of a setup: price × quantity, or × size for items that scale with size (seats, chairs). */
-export function kitLines(pack: Pack, items: KitItems, size: number): KitLine[] {
-  return items.flatMap(({ id, qty }) => {
+/**
+ * Lines of a setup: price × quantity, or × size for items that scale with size (seats, chairs).
+ * With the place, the prices are the ones the engine charges there (shared/src/place.ts): the build-out by what the
+ * space was before, the deposit from its real rent, and for an operating shop its asking price as the first line.
+ */
+export function kitLines(pack: Pack, items: KitItems, size: number, place?: Place): KitLine[] {
+  const lines = items.flatMap(({ id, qty }) => {
     const item = pack.setup.find((s) => s.id === id);
     if (!item || qty <= 0) return [];
     const units = item.scalesWithSize ? size : qty;
-    return [{ item, qty, units, cost: item.cost * units }];
+    const build = item.kind === 'buildout' && item.costBasis === 'per_sqft' ? buildoutOf(pack, place) : null;
+    const shown = build ? { ...item, name: build.label } : item;
+    return [{ item: shown, qty, units, cost: setupItemCost(pack, item, place) * units }];
   });
+  if (place && isTakeover(pack, place)) {
+    const asking = place.forSale!.askingPrice;
+    lines.unshift({ item: { id: '__takeover', name: 'Operating shop: finished room, equipment, furniture and its regulars', kind: 'buildout', cost: asking, required: true }, qty: 1, units: 1, cost: asking });
+  }
+  return lines;
 }
 
-export function kitTotal(pack: Pack, items: KitItems, size: number): number {
-  return kitLines(pack, items, size).reduce((s, l) => s + l.cost, 0);
+export function kitTotal(pack: Pack, items: KitItems, size: number, place?: Place): number {
+  return kitLines(pack, items, size, place).reduce((s, l) => s + l.cost, 0);
 }
 
 export function groupLines(lines: KitLine[]): { group: KitGroup; lines: KitLine[]; subtotal: number }[] {
@@ -79,7 +91,9 @@ export function trafficLabel(f: number): string {
 }
 
 /** Longest wait among chosen items: you cannot legally open before the slowest permit. */
-export function daysToOpen(pack: Pack, items: KitItems): number {
+export function daysToOpen(pack: Pack, items: KitItems, place?: Place): number {
+  // at a known place: construction first, then the permits that need the finished room
+  if (place && buildoutOf(pack, place)) return daysToOpenOf(pack, items, place);
   return items.reduce((m, { id }) => Math.max(m, pack.setup.find((s) => s.id === id)?.waitDays ?? 0), 0);
 }
 

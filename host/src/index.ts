@@ -91,11 +91,19 @@ function addPlayer(w: WorldState, p: { name: string; kind: 'owner' | 'official';
 /** Заселение: житель открывает бизнес теми же Action. Заселённые при создании мира — давно работающие заведения, разрешения у них уже есть. */
 function openResident(w: WorldState, ctx: EngineCtx, playerId: string, r: BotResident & { businessName?: string }): WorldState {
   if (!r.niche || !r.placeId) return w;
-  const rec = engine.recommendOpening(r.niche, r.placeId, w, ctx)[0];
+  const rec = engine.recommendOpening(r.niche, r.placeId, w, ctx, { established: true })[0];
   const pack = ctx.packs.niches[r.niche];
   if (!rec || !pack) return w;
   const name = r.businessName ?? `${r.name.split(' ')[0]}'s ${pack.name.toLowerCase()}`;
-  let x = engine.applyAction(w, ctx, playerId, { type: 'open_business', niche: r.niche, placeId: r.placeId, name, kitId: rec.kitId, size: rec.size, items: rec.items });
+  const open = { type: 'open_business' as const, niche: r.niche, placeId: r.placeId, name, kitId: rec.kitId, size: rec.size, items: rec.items };
+  if (engine.openEstablished) {
+    // настоящий движок: заведение открыто давно — ремонт позади, постоянные клиенты на месте
+    const est = engine.openEstablished(w, ctx, playerId, open);
+    if (est.error) return w;
+    const withOrders = engine.applyAction(est.world, ctx, playerId, { type: 'set_orders', orders: rec.orders });
+    return withOrders.error ? est.world : withOrders.world;
+  }
+  let x = engine.applyAction(w, ctx, playerId, open);
   if (x.error) return w;
   const ordered = engine.applyAction(x.world, ctx, playerId, { type: 'set_orders', orders: rec.orders });
   const opened = ordered.error ? x.world : ordered.world;

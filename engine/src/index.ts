@@ -47,6 +47,25 @@ export function tickDay(w0: WorldState, ctx: EngineCtx): WorldState {
   return { ...w, version: w0.version + 1 };
 }
 
+/**
+ * Marks a business as long established: permits and construction are behind it and its regular crowd is complete.
+ * The host uses it for the residents who populate the city when the world is created.
+ */
+export function establish(w: WorldState, businessId: string): WorldState {
+  return {
+    ...w,
+    businesses: w.businesses.map((b) => {
+      if (b.id !== businessId) return b;
+      const extra = (b.extra ?? {}) as Record<string, unknown> & { econ?: Record<string, unknown> };
+      return {
+        ...b,
+        permits: b.permits.map((p) => ({ ...p, readyDay: Math.min(p.readyDay, w.day) })),
+        extra: { ...extra, econ: { ...(extra.econ ?? {}), awareness0: 1 } },
+      };
+    }),
+  };
+}
+
 export function netWorth(b: BusinessState, ctx: EngineCtx): Money {
   return netWorthOf(b, ctx);
 }

@@ -8,6 +8,7 @@ import type {
   Payout, PnlKind, PnlLine, Place, Player, Standing, StandingOrders, WorldConfig, WorldState,
 } from '../../../shared/src/types';
 import { RULES, dateOf, isMonthEnd } from '../../../shared/src/rules';
+import { footfallParams } from '../../../shared/src/place';
 
 /** Simulator-only knobs of the stub engine: what-if values for numbers that live in shared/src/rules.ts. */
 export interface Tuning { routineEveryMonths?: number; routineAuditEveryMonths?: number; taxFlags?: boolean; jointCogsMult?: number; crossDemandMult?: number; crossPriceMult?: number; blockThreshold?: number; blockFee?: number; blockTrafficMult?: number }
@@ -197,10 +198,16 @@ export function managerOrders(b: BusinessState, w: WorldState, ctx: EngineCtx): 
 export function recommendedPrice(b: BusinessState, w: WorldState, ctx: EngineCtx): number {
   const pack = packOf(ctx, b.niche);
   const open = w.businesses.filter((x) => x.niche === b.niche && x.status === 'open').length || 1;
-  const e = Math.abs(pack.market.priceElasticity) * (1 - 1 / (open + 0.4286 * open));
   const pctRev = pack.monthlyCosts.filter((c) => c.basis === 'pct_revenue').reduce((s, c) => s + c.amount, 0);
   const perUnit = pack.monthlyCosts.filter((c) => c.basis === 'per_unit').reduce((s, c) => s + c.amount, 0);
-  const c = pack.unit.cogsPerUnit + perUnit;
+  // Demand from passers-by (pack.extra.footfall): a shop holds about a fifth of the people it competes for, and an
+  // owner who staffs to the queue pays a barista for every extra order — labour is part of the cost of one more cup.
+  const foot = footfallParams(pack);
+  const role = pack.staff[0];
+  const per = pack.capacity.unitsPerStaffMonth;
+  const labourPerUnit = foot && role && per ? (role.hourlyWage * role.hoursPerMonth) / per : 0;
+  const e = foot ? foot.priceSensitivity * 0.8 : Math.abs(pack.market.priceElasticity) * (1 - 1 / (open + 0.4286 * open));
+  const c = pack.unit.cogsPerUnit + perUnit + labourPerUnit;
   if (e <= 1.05) return pack.unit.priceMax;
   const p = c / Math.max(0.05, 1 - 1 / e - pctRev);
   return r2(clamp(p, pack.unit.priceMin, pack.unit.priceMax));

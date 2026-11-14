@@ -24,11 +24,13 @@ export interface HostDeps {
 export interface EngineApi {
   createWorld(config: WorldConfig): WorldState;
   applyAction(w: WorldState, ctx: EngineCtx, playerId: string, a: Action): ActionResult;
+  /** Давно работающее заведение: без ремонта и ожидания, двери открыты, постоянные клиенты на месте. */
+  openEstablished?(w: WorldState, ctx: EngineCtx, playerId: string, a: Extract<Action, { type: 'open_business' }>): ActionResult;
   tickDay(w: WorldState, ctx: EngineCtx): WorldState;
   netWorth(b: BusinessState, ctx: EngineCtx): Money;
   analyze(b: BusinessState, w: WorldState, ctx: EngineCtx): Analytics;
   recommend(b: BusinessState, w: WorldState, ctx: EngineCtx): Recommendation[];
-  recommendOpening(niche: NicheId, placeId: string, w: WorldState, ctx: EngineCtx): OpenRecommendation[];
+  recommendOpening(niche: NicheId, placeId: string, w: WorldState, ctx: EngineCtx, opts?: { established?: boolean }): OpenRecommendation[];
   whatIf(w: WorldState, ctx: EngineCtx, businessId: string, orders: Partial<StandingOrders>): { projected: MonthReport; analytics: Analytics };
   roadmapFor(niche: NicheId, b: BusinessState | null, w: WorldState, ctx: EngineCtx): RoadmapItem[];
   realWorldPlan(b: BusinessState, w: WorldState, ctx: EngineCtx): RealWorldPlan;

@@ -140,17 +140,41 @@ const run = {
     const taken = new Set((city.businesses ?? []).map((b) => b.placeId));
     const free = places.filter((p) => p.suitableFor?.includes('cafe') && !taken.has(p.id));
     must(free.length >= 2, `need 2 free cafe places, have ${free.length}`);
-    const [pa, pb] = [free[0], free.find((p) => p.block === free[0].block && p.id !== free[0].id) ?? free[1]];
-    for (const [who, place, name] of [[ctx.a, pa, 'Smoke Cafe A'], [ctx.b, pb, 'Smoke Cafe B']]) {
-      const rec = ack(await query(who.token, { type: 'recommend_opening', niche: 'cafe', placeId: place.id }), 'recommend_opening');
+    // A newcomer cannot afford every door: the build-out is priced by what the space was before. Take the two
+    // affordable doors that open soonest (an operating shop for sale needs no months of construction).
+    const options = [];
+    for (const place of [...free.filter((p) => p.forSale), ...free.filter((p) => !p.forSale)]) {
+      const rec = ack(await query(ctx.a.token, { type: 'recommend_opening', niche: 'cafe', placeId: place.id }), 'recommend_opening');
       must(Array.isArray(rec) && rec.length, 'no recommended kits');
       const kit = rec.find((k) => k.kitId === 'standard') ?? rec[0];
+      if (kit.cashLeft >= 0) options.push({ place, kit });
+      if (options.length >= 12) break;
+    }
+    must(options.length >= 2, `need 2 affordable cafe doors, have ${options.length}`);
+    // soonest to open first; among those, the door that leaves the most cash for the months before the regulars come
+    options.sort((x, y) => x.kit.daysToOpen - y.kit.daysToOpen || y.kit.cashLeft - x.kit.cashLeft);
+    const first = options[0];
+    const second = options.slice(1).find((o) => o.place.block === first.place.block) ?? options[1];
+    const [pa, pb] = [first.place, second.place];
+    for (const [who, opt, name] of [[ctx.a, first, 'Smoke Cafe A'], [ctx.b, second, 'Smoke Cafe B']]) {
+      const { place, kit } = opt;
       ack(await action(who.token, { type: 'open_business', niche: 'cafe', placeId: place.id, name, kitId: kit.kitId, size: kit.size, items: kit.items }), `open ${name}`);
-      ack(await action(who.token, { type: 'launch' }), `launch ${name}`);
       const v = await view(who.token);
       must(v.business?.id, `${name}: no business in the owner view`);
       who.businessId = v.business.id;
     }
+    // construction and permits: the doors stay shut, rent is due. Then both launch legally.
+    const wait = Math.max(first.kit.daysToOpen, second.kit.daysToOpen);
+    if (wait > 0) {
+      const early = await action(ctx.a.token, { type: 'launch' });
+      must(first.kit.daysToOpen === 0 || early?.ok === false, 'launch during the build-out must be refused');
+      const day0 = (await view()).world.day;
+      if (ctx.clock) await clock({ paused: true, advanceDays: wait });
+      const waited = await waitFor(async () => (await view()).world.day >= day0 + wait, ctx.clock ? 20_000 : wait * 2_000 + 20_000, 250);
+      must(waited, `the city did not reach day ${day0 + wait}`);
+    }
+    for (const [who, name] of [[ctx.a, 'Smoke Cafe A'], [ctx.b, 'Smoke Cafe B']]) ack(await action(who.token, { type: 'launch' }), `launch ${name}`);
+    ctx.daysToOpen = wait;
     // Owner B cuts a corner that an inspector can find, so the complaint has something to find.
     const packs = await get('/api/packs');
     const pack = packs.niches?.cafe;
@@ -161,7 +185,7 @@ const run = {
     if (pick) { ctx.report = pick.rep; ctx.shortcut = pick.sc; }
     ctx.report ??= all('reports')[0];
     if (ctx.shortcut) ack(await action(ctx.b.token, { type: 'set_orders', orders: { shortcuts: [ctx.shortcut.id] } }), 'set_orders shortcut');
-    return `A at ${pa.address}, B at ${pb.address}${ctx.shortcut ? `; B uses '${ctx.shortcut.id}'` : ''}`;
+    return `A at ${pa.address}, B at ${pb.address}; opened after ${ctx.daysToOpen} days${ctx.shortcut ? `; B uses '${ctx.shortcut.id}'` : ''}`;
   },
   async month() {
     const start = (await view()).world.day;

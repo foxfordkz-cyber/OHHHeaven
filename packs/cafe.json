@@ -1,6 +1,6 @@
 {
   "id": "cafe",
-  "version": 1,
+  "version": 2,
   "name": "Coffee shop",
   "tagline": "Espresso, pastries and 18 seats on a real New York block: real rent, real permits, real inspectors.",
   "startCapital": 224000,
@@ -58,18 +58,21 @@
       "required": true,
       "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
       "confidence": "estimate",
-      "note": "3 x $6,000 of monthly rent: the reserve chosen in the research notes. Seen in the NYC Commercial Lease Guide: the deposit is commonly two months of rent but depends on the tenant's finances, and a new business may be asked for much more or for a personal guaranty. Refundable at the end of the lease."
+      "note": "Three months of this address's rent: the reserve chosen in the research notes (the fallback $18,000 is 3 x $6,000). Seen in the NYC Commercial Lease Guide: the deposit is commonly two months of rent but depends on the tenant's finances, and a new business may be asked for much more or for a personal guaranty. Refundable at the end of the lease.",
+      "costBasis": "months_rent",
+      "rate": 3
     },
     {
       "id": "buildout",
-      "name": "Build-out: light renovation of a former cafe",
+      "name": "Build-out: what it takes to turn this space into a cafe",
       "kind": "buildout",
       "cost": 70000,
       "required": true,
       "lifespanMonths": 120,
       "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
       "confidence": "estimate",
-      "note": "Research notes, \"almost ready former cafe\" column: $87.50 per sq ft x 800 sq ft, keeping the existing plumbing, ventilation and bathroom. Covers the counter, finishes, electrical and plumbing hookups. Seen at the contractor's 2026 guide: a full counter-service cafe build-out in a former food space runs $200-$300 per sq ft ($160,000-$240,000 for 800 sq ft), and a space that never had food service can run $400-$600 or more per sq ft."
+      "note": "Priced by what the space was before, per square foot of this address (extra.buildout). Research notes, 2026: a former cafe that keeps its plumbing, ventilation and bathroom $87.50 per sq ft; a former restaurant or food shop $225 per sq ft (the contractor's 2026 guide gives $200-$300 for a counter-service cafe in a former food space); a space that never had food service $400 per sq ft (the guide gives $400-$600 or more). The fallback $70,000 is the former cafe at 800 sq ft. Covers the counter, finishes, electrical and plumbing hookups; movable equipment is bought separately.",
+      "costBasis": "per_sqft"
     },
     {
       "id": "architect_expediter",
@@ -79,7 +82,10 @@
       "required": true,
       "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
       "confidence": "estimate",
-      "note": "Research notes: 10% of the build-out cost, the notes' own planning rate. Drawings and Department of Buildings filings must go through licensed professionals. Seen at the contractor's guide: the permit path takes 6-14 weeks and construction 8-24 weeks."
+      "note": "10% of the build-out: the share chosen in the research notes for filed plans, engineering and a permit expediter (the percentage is the notes' own, not a published tariff). The fallback $7,000 is 10% of a $70,000 light renovation.",
+      "costBasis": "pct_of_buildout",
+      "rate": 0.1,
+      "includedInTakeover": true
     },
     {
       "id": "lease_lawyer",
@@ -219,7 +225,8 @@
       "required": true,
       "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
       "confidence": "estimate",
-      "note": "Research notes, \"almost ready\" column: 8.875% sales tax on about $25,000 of equipment ($2,200) plus freight, unloading and commissioning. Equipment is not bought tax-free: a resale certificate covers only goods you resell."
+      "note": "Research notes, \"almost ready\" column: 8.875% sales tax on about $25,000 of equipment ($2,200) plus freight, unloading and commissioning. Equipment is not bought tax-free: a resale certificate covers only goods you resell.",
+      "includedInTakeover": true
     },
     {
       "id": "chair",
@@ -287,7 +294,8 @@
       "withoutItViolation": "no_fse_permit",
       "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
       "confidence": "verified",
-      "note": "NYC Business: the permit fee is $280.00 a year; you can open 22 days after you submit the application even if no pre-permit inspection has taken place. The application asks for proof of workers' compensation and disability insurance, a Food Protection Certificate or course registration, and the sales tax Certificate of Authority."
+      "note": "NYC Business: the permit fee is $280.00 a year; you can open 22 days after you submit the application even if no pre-permit inspection has taken place. The application asks for proof of workers' compensation and disability insurance, a Food Protection Certificate or course registration, and the sales tax Certificate of Authority. The clock starts when the build-out is finished: the Health Department checks the finished room. The permit does not pass to a buyer of an operating business: the new owner applies again.",
+      "afterBuildout": true
     },
     {
       "id": "food_protection_cert",
@@ -373,7 +381,8 @@
       "qualityBonus": 0.01,
       "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
       "confidence": "estimate",
-      "note": "Research notes, \"almost ready\" column: design, fabrication and installation, quote-only. Seen at the Department of Buildings: a wall sign of six square feet or less needs no sign permit; bigger signs need a permit obtained by a licensed sign hanger."
+      "note": "Research notes, \"almost ready\" column: design, fabrication and installation, quote-only. Seen at the Department of Buildings: a wall sign of six square feet or less needs no sign permit; bigger signs need a permit obtained by a licensed sign hanger.",
+      "includedInTakeover": true
     },
     {
       "id": "premium_espresso_machine",
@@ -2561,6 +2570,56 @@
       },
       "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
       "confidence": "estimate"
+    },
+    "footfall": {
+      "captureRate": 0.088,
+      "outside": 1.5,
+      "priceSensitivity": 2.7,
+      "radiusM": 250,
+      "staticWeight": 0.5,
+      "rampDays": 75,
+      "awarenessStart": 0.35,
+      "source": "https://data.cityofnewyork.us/d/cqsj-cfgu",
+      "confidence": "estimate",
+      "note": "Demand = people walking the block a day (data/places.json, modelled from MTA station entries and DOHMH food places and scaled to DOT sidewalk counts: data/open/fit.json) x the share who buy here. captureRate is that share for a known, average shop with no rival in sight at the reference price; real coffee shops within 250 m (DOHMH) and playing shops split the same people, and 'outside' is everyone who buys coffee somewhere else or not at all. No public statistic of cafe conversion exists. The rate, the price sensitivity and the ramp were set on the bench (sim/calibrate.ts) against three targets: an established shop on a sound block clears a few thousand dollars a month at about $9 an order, the best price sits within 10% of the reference price, and a careful newcomer ends the first year alive but far below the starting capital. A new shop starts at 35% of its regular crowd and closes about two thirds of the gap every 75 days. Every one of these is an estimate waiting for evidence: research/prompts/80-codex-real-factors.md, part A."
+    },
+    "buildout": {
+      "itemId": "buildout",
+      "classes": {
+        "light": {
+          "label": "Former cafe: light renovation, keeps the plumbing and ventilation",
+          "perSqft": 87.5,
+          "days": 60
+        },
+        "standard": {
+          "label": "Former restaurant or food shop: standard conversion",
+          "perSqft": 225,
+          "days": 90
+        },
+        "heavy": {
+          "label": "Never had food service: heavy conversion (new plumbing, ventilation, grease trap)",
+          "perSqft": 400,
+          "days": 180
+        }
+      },
+      "byFormerUse": {
+        "cafe": "light",
+        "food": "standard",
+        "retail": "heavy",
+        "salon": "heavy"
+      },
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate",
+      "note": "Cost per sq ft: research notes (economics.md), three columns of the 2026 opening budget. Days: the notes count 3, 3 and 6 months of paid rent before the first sale; the contractor's 2026 guide gives 8-24 weeks of construction after 6-14 weeks of permits, overlapping (contractor estimates, not official deadlines). Here the light job takes 60 days, the standard one 90 and the heavy one 180, and the Health Department permit adds its wait after the room is finished. Rent is due from the day the lease is signed."
+    },
+    "takeover": {
+      "multipleOfAnnualSales": 0.2,
+      "min": 80000,
+      "max": 200000,
+      "awareness": 0.9,
+      "refreshDays": 10,
+      "confidence": "estimate",
+      "note": "Buying an operating coffee shop: the price covers the finished room, the equipment and the furniture, and nine in ten regulars stay. The research notes list key money as quote-only with no public figure; the asking price here is 20% of a year of sales the address supports at the reference price, between $80,000 and $200,000 - a planning rule of thumb, not a listing. The buyer still signs a lease (new deposit), applies for a new Health Department permit (it does not transfer), restocks and hires. Estimate waiting for evidence: research/prompts/80-codex-real-factors.md, part A."
     }
   }
 }

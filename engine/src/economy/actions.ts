@@ -1,6 +1,6 @@
 // Owner actions handled by the economy: build/CONTRACT.md, section 3 (economyActions).
-import type { Action, ActionResult, BusinessState, Money, Pack, PermitState, Player, PnlLine, StandingOrders, WorldState } from '@ohh/shared';
-import { RULES } from '@ohh/shared';
+import type { Action, ActionResult, BusinessState, Money, Pack, PermitState, Place, Player, PnlLine, StandingOrders, WorldState } from '@ohh/shared';
+import { asEstablishedPlace, buildoutOf, buildoutRules, isTakeover, openingCost, RULES, takeoverRules } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { defaultLeverOption, standardKitBonus } from './effects';
 import { activeBusinessOf, addLine, clamp, econOf, emptyMtd, itemDef, maxSizeFor, placeOf, replaceBusiness, round2, staffCount, withEcon, type EconExtra } from './util';
@@ -49,15 +49,13 @@ export function defaultOrders(pack: Pack): StandingOrders {
   return { price: pack.unit.refPrice, staff, levers, shortcuts: [], blockFund: false, autopilot: 'hold' };
 }
 
-/** Setup cost of a list of items at a given size (items that scale with size cost per unit of size). */
-export function itemsCost(pack: Pack, items: readonly { id: string; qty: number }[], size: number): number {
-  let total = 0;
-  for (const it of items) {
-    const def = itemDef(pack, it.id);
-    if (!def) continue;
-    total += def.cost * (def.scalesWithSize ? size : it.qty);
-  }
-  return round2(total);
+/**
+ * Setup cost of a list of items at a given size (items that scale with size cost per unit of size).
+ * With a place: the build-out is priced by what the space was before, the deposit by its real rent, and an
+ * operating business adds its asking price (shared/src/place.ts).
+ */
+export function itemsCost(pack: Pack, items: readonly { id: string; qty: number }[], size: number, place?: Place): number {
+  return openingCost(pack, items, size, place);
 }
 
 /**
@@ -110,49 +108,71 @@ function normalizeItems(pack: Pack, items: readonly { id: string; qty: number }[
   return [...out].map(([id, qty]) => ({ id, qty }));
 }
 
-function openBusiness(w: WorldState, ctx: EngineCtx, player: Player, a: Extract<Action, { type: 'open_business' }>): ActionResult {
+/**
+ * A business that has been on its block for years (the residents who populate the city when the world is created):
+ * the build-out is long paid for, the doors are open and the regular crowd is complete. It keeps the working
+ * capital a light renovation would have left, so it is neither richer nor poorer than a careful newcomer.
+ */
+export function openEstablished(w: WorldState, ctx: EngineCtx, playerId: string, a: Extract<Action, { type: 'open_business' }>): ActionResult {
+  const player = w.players.find((p) => p.id === playerId);
+  if (!player || player.kind !== 'owner') return fail(w, 'Unknown owner');
+  return openBusiness(w, ctx, player, a, true);
+}
+
+function openBusiness(w: WorldState, ctx: EngineCtx, player: Player, a: Extract<Action, { type: 'open_business' }>, established = false): ActionResult {
   if (activeBusinessOf(w, player.id)) return fail(w, 'You already run a business');
   const pack = ctx.packs.niches[a.niche];
   if (!pack) return fail(w, `This niche is not playable yet: ${a.niche}`);
-  const place = placeOf(ctx, a.placeId);
-  if (!place) return fail(w, 'Unknown place');
+  const real = placeOf(ctx, a.placeId);
+  if (!real) return fail(w, 'Unknown place');
+  // an established business paid for its room long ago: price it as the lightest renovation and never as a purchase
+  const place: Place = established ? asEstablishedPlace(pack, real) : real;
   if (place.suitableFor.length > 0 && !place.suitableFor.includes(a.niche)) return fail(w, `This space is not suitable for a ${pack.name.toLowerCase()}`);
   if (w.businesses.some((x) => x.placeId === place.id && x.status !== 'bankrupt')) return fail(w, 'This space is already taken');
   const kit = pack.kits.find((k) => k.id === a.kitId);
   if (!kit) return fail(w, 'Unknown kit');
-  const size = Math.floor(a.size || kit.size);
+  // an operating business is bought as it stands: its room, its seats
+  const takeover = isTakeover(pack, place);
+  const size = takeover ? place.forSale!.size : Math.floor(a.size || kit.size);
   const maxSize = maxSizeFor(pack, place, RULES.USABLE_FLOOR_SHARE);
   if (size < pack.sizing.min || size > pack.sizing.max) return fail(w, `Size must be between ${pack.sizing.min} and ${pack.sizing.max} ${pack.sizing.unitName}s`);
   if (size > maxSize) return fail(w, `Only ${maxSize} ${pack.sizing.unitName}s fit in ${place.sqft} sq ft`);
-  const items = normalizeItems(pack, a.items ?? kit.items, size);
+  const stock = takeover ? (pack.kits.find((k) => k.id === 'standard') ?? kit).items : a.items ?? kit.items;   // an operating shop comes with what stands in it
+  const items = normalizeItems(pack, stock, size);
   if (typeof items === 'string') return fail(w, items);
   const seatRule = seatRuleBroken(pack, size, items);
   if (seatRule) return fail(w, seatRule);
-  const cost = itemsCost(pack, items, size);
+  const cost = itemsCost(pack, items, size, place);
   const cash = round2(pack.startCapital - cost);
   if (cash < 0) return fail(w, `Not enough money: this setup costs $${Math.round(cost).toLocaleString('en-US')}, you have $${pack.startCapital.toLocaleString('en-US')}`);
   const name = a.name.trim().slice(0, 40);
   if (!name) return fail(w, 'Give your business a name');
 
+  // construction first: nothing can be sold in a room that is not built; the permits that need the finished room wait for it
   const permits: PermitState[] = [];
+  const build = established ? null : buildoutOf(pack, place);
+  const buildReady = w.day + (build?.days ?? 0);
+  if (build && build.days > 0) permits.push({ itemId: buildoutRules(pack)!.itemId, appliedDay: w.day, readyDay: buildReady });
   let quality = 0.5 - standardKitBonus(pack);   // the standard kit is average quality (see effects.ts)
   for (const it of items) {
     const def = itemDef(pack, it.id)!;
     if ((def.kind === 'permit' || def.kind === 'license') && def.waitDays && def.waitDays > 0) {
-      permits.push({ itemId: def.id, appliedDay: w.day, readyDay: w.day + def.waitDays });
+      permits.push({ itemId: def.id, appliedDay: w.day, readyDay: established ? w.day : (def.afterBuildout ? buildReady : w.day) + def.waitDays });
     }
     if (it.qty > 0) quality += def.qualityBonus ?? 0;
   }
   const id = `biz_${w.businesses.length + 1}`;
   const econ: EconExtra = { marketing: 0, training: 0, lossCarry: 0, cashStart: pack.startCapital, mtd: emptyMtd() };
+  if (takeover) econ.awareness0 = takeoverRules(pack)!.awareness;   // most regulars stay with the new owner
+  if (established) econ.awareness0 = 1;
   const b: BusinessState = withEcon({
     id, name, niche: a.niche, placeId: place.id, isAi: player.isAi,
     owners: [{ playerId: player.id, share: 1 }], managerPlayerId: player.id,
-    status: 'setup', createdDay: w.day,
+    status: established ? 'open' : 'setup', createdDay: w.day, ...(established ? { openedDay: w.day } : {}),
     cash, size, items, setupSpent: cost, permits,
     quality: clamp(quality, 0, 1), reputation: 0.5, trust: { kept: 0, broken: 0 },
     orders: defaultOrders(pack), trails: [], liabilities: [],
-    mtd: { lines: [{ id: 'setup_open', label: `Setup: ${kit.name}`, kind: 'setup', amount: -cost }], demandUnits: 0, servedUnits: 0, lost: { size: 0, staff: 0, closure: 0 } },
+    mtd: { lines: [{ id: 'setup_open', label: takeover ? `Bought an operating ${pack.name.toLowerCase()} and reopened it` : `Setup: ${kit.name}`, kind: 'setup', amount: -cost }], demandUnits: 0, servedUnits: 0, lost: { size: 0, staff: 0, closure: 0 } },
     days: [], history: [],
   }, econ);
   return { world: { ...w, businesses: [...w.businesses, b] } };
@@ -160,6 +180,12 @@ function openBusiness(w: WorldState, ctx: EngineCtx, player: Player, a: Extract<
 
 function launch(w: WorldState, ctx: EngineCtx, b: BusinessState, pack: Pack, player: Player): ActionResult {
   if (b.status !== 'setup') return fail(w, 'Your doors are already open');
+  const buildId = buildoutRules(pack)?.itemId;
+  const building = buildId ? b.permits.find((p) => p.itemId === buildId && p.readyDay > w.day) : undefined;
+  if (building) {
+    const left = building.readyDay - w.day;
+    return fail(w, `The build-out is not finished: ${left} more day${left === 1 ? '' : 's'} of construction. Rent is due meanwhile.`);
+  }
   const missing = b.permits.filter((p) => p.readyDay > w.day).map((p) => itemDef(pack, p.itemId)).filter((d) => !!d && !!d.withoutItViolation);
   const opened: BusinessState = { ...b, status: 'open', openedDay: w.day };
   const place = placeOf(ctx, b.placeId);
@@ -238,7 +264,9 @@ function buyItem(w: WorldState, b: BusinessState, pack: Pack, itemId: string, qt
   const items = has ? b.items.map((i) => (i.id === itemId ? { ...i, qty: i.qty + n } : i)) : [...b.items, { id: itemId, qty: n }];
   let permits = b.permits;
   if ((def.kind === 'permit' || def.kind === 'license') && def.waitDays && !b.permits.some((p) => p.itemId === itemId)) {
-    permits = [...b.permits, { itemId, appliedDay: w.day, readyDay: w.day + def.waitDays }];
+    const buildId = buildoutRules(pack)?.itemId;
+    const buildReady = def.afterBuildout && buildId ? b.permits.find((p) => p.itemId === buildId)?.readyDay ?? w.day : w.day;
+    permits = [...b.permits, { itemId, appliedDay: w.day, readyDay: Math.max(w.day, buildReady) + def.waitDays }];
   }
   return { world: replaceBusiness(w, {
     ...b, cash: round2(b.cash - cost), items, permits, setupSpent: round2(b.setupSpent + cost),

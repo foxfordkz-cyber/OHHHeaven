@@ -5,6 +5,7 @@ import type {
   PackTax, PackViolation, Place, PnlKind, StandingOrders,
 } from '../../../shared/src/types';
 import { RULES } from '../../../shared/src/rules';
+import { openingCost } from '../../../shared/src/place';
 
 export interface Ctx { packs: PackSet; places: Place[] }
 
@@ -77,14 +78,9 @@ export function leverEffects(pack: Pack, orders: StandingOrders): { quality: num
 }
 
 /** Цена набора предметов: предметы со `scalesWithSize` стоят цену × размер. */
-export function itemsCost(pack: Pack, items: { id: string; qty: number }[], size: number): Money {
-  let total = 0;
-  for (const it of items) {
-    const def = pack.setup.find((s) => s.id === it.id);
-    if (!def) continue;
-    total += def.cost * (def.scalesWithSize ? size : it.qty);
-  }
-  return r2(total);
+export function itemsCost(pack: Pack, items: { id: string; qty: number }[], size: number, place?: Place): Money {
+  // с местом: ремонт по состоянию помещения, депозит от настоящей аренды, цена готового бизнеса (shared/src/place.ts)
+  return openingCost(pack, items, size, place);
 }
 
 /** Расстояние между двумя местами в метрах (гаверсинус). */

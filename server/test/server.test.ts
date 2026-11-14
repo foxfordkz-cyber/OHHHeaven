@@ -20,10 +20,23 @@ async function joinOwner(app: ReturnType<typeof createApp>, world = 'demo', name
 
 async function openCafe(app: ReturnType<typeof createApp>, game: GameServer, token: string, world = 'demo') {
   const rt = game.runtimes.get(world)!;
-  const place = (game.data.places as Place[]).find((p) => !rt.world.businesses.some((b) => b.placeId === p.id))!;
-  const q = await request(app).post(`/api/worlds/${world}/query`).set('Authorization', `Bearer ${token}`).send({ type: 'recommend_opening', niche: 'cafe', placeId: place.id });
-  expect(q.body.ok).toBe(true);
-  const rec = (q.body.data as OpenRecommendation[])[0];
+  // the first free door a newcomer can afford: an operating shop for sale first (no months of construction)
+  const free = (game.data.places as Place[]).filter((p) => p.suitableFor.includes('cafe') && !rt.world.businesses.some((b) => b.placeId === p.id));
+  const ordered = [...free.filter((p) => p.forSale), ...free.filter((p) => !p.forSale)];
+  // among the first affordable ones, the door that leaves the most cash: a shop bought with the last dollar is
+  // bankrupt at the first month close, before its doors open
+  let place: Place | undefined;
+  let rec: OpenRecommendation | undefined;
+  let seen = 0;
+  for (const p of ordered) {
+    const q = await request(app).post(`/api/worlds/${world}/query`).set('Authorization', `Bearer ${token}`).send({ type: 'recommend_opening', niche: 'cafe', placeId: p.id });
+    expect(q.body.ok).toBe(true);
+    const r = (q.body.data as OpenRecommendation[])[0];
+    if (r.cashLeft < 0) continue;
+    if (!rec || r.cashLeft > rec.cashLeft) { place = p; rec = r; }
+    if (++seen >= 5) break;
+  }
+  if (!place || !rec) throw new Error('no affordable door in the test data');
   const auth = { Authorization: `Bearer ${token}` };
   const o = await request(app).post(`/api/worlds/${world}/action`).set(auth).send({ type: 'open_business', niche: 'cafe', placeId: place.id, name: 'Test Cafe', kitId: rec.kitId, size: rec.size, items: rec.items });
   expect(o.body).toMatchObject({ ok: true });
@@ -68,7 +81,7 @@ describe('http api', () => {
 
   it('action, view and unchanged', async () => {
     const { playerId, token } = await joinOwner(app, 'demo', 'Bob');
-    await openCafe(app, game, token);
+    const opening = await openCafe(app, game, token);
     const auth = { Authorization: `Bearer ${token}` };
     const v1 = (await request(app).get('/api/worlds/demo/view').set(auth).expect(200)).body as OwnerView;
     expect(v1.kind).toBe('owner');
@@ -77,6 +90,10 @@ describe('http api', () => {
     expect(v1.world.msToNextDay).toBeGreaterThanOrEqual(0);
     const same = await request(app).get(`/api/worlds/demo/view?v=${v1.world.version}`).set(auth).expect(200);
     expect(same.body).toEqual({ unchanged: true });
+    // the doors cannot open while the room is being built: the city runs on, rent is due, then the launch goes through
+    const early = await request(app).post('/api/worlds/demo/action').set(auth).send({ type: 'launch' });
+    if (opening.daysToOpen > 0) expect(early.body.ok).toBe(false);
+    game.runtimes.get('demo')!.advance(opening.daysToOpen);
     await request(app).post('/api/worlds/demo/action').set(auth).send({ type: 'launch' }).expect(200);
     const v2 = (await request(app).get(`/api/worlds/demo/view?v=${v1.world.version}`).set(auth).expect(200)).body as OwnerView;
     expect(v2.world.version).toBeGreaterThan(v1.world.version);
