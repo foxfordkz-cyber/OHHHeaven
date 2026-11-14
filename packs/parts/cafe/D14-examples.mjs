@@ -128,7 +128,7 @@ const P = (s = '') => out.push(s);
   }
   // work without a permit
   const wwp = po.dobPermitDays;
-  P(`\nShortcut "start_work_before_permit": construction starts ${wwp} days earlier -> doors open day ${open - wwp}. If found: fine ${usd(frag.violations.find((v) => v.id === 'work_without_permit').fine.base)} and the ${frag.violations.find((v) => v.id === 'work_without_permit').closureDays} days come back: doors open day ${open} again.`);
+  P(`\nShortcut "start_work_before_permit": construction starts ${wwp} days earlier -> doors open day ${open - wwp}. If found: fine at least ${usd(frag.violations.find((v) => v.id === 'work_without_permit').fine.base)} (14 x permit fee for the whole job: ${usd(frag.violations.find((v) => v.id === 'work_without_permit').fine.max)}) and the ${frag.violations.find((v) => v.id === 'work_without_permit').closureDays} days come back: doors open day ${open} again.`);
   // start-up costs, IRC 195
   const s195 = po.startupCostDeduction;
   for (const startup of [9000, 30000, 60000]) {

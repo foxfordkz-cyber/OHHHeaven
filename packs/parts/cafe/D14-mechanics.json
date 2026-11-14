@@ -557,6 +557,17 @@
       },
       "violation": "work_without_permit",
       "note": "One-time, during setup only: it saves extra.preOpening.dobPermitDays (20) days of rent with no sales. 20 / 30 = 0.67 of a month's rent. The engine should apply it as days, not as a monthly saving (request in the report)."
+    },
+    {
+      "id": "pack_the_line_inside",
+      "name": "Let the morning line pack inside past capacity",
+      "what": "On cold mornings you let everyone squeeze in instead of lining up outside. Fewer people walk on, but the room holds more than the code allows.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.003
+      },
+      "violation": "overcrowding",
+      "note": "The real gain comes from the queue model (extra.floorZones): queue room is counted at the 5 sq ft code floor instead of 8.5, so fewer people stand outside. 0.3% of sales is the placeholder the format needs; in the D14 examples the winter outside-line loss is 0.1-0.3% of daily orders. tier: deep."
     }
   ],
   "violations": [
@@ -570,17 +581,17 @@
         "complaint"
       ],
       "fine": {
-        "base": 6000,
+        "base": 5000,
         "perMonth": 0,
         "pctOfSaved": 0,
-        "max": 12000
+        "max": 13580
       },
       "closureDays": 20,
       "reputationHit": 0,
       "criminal": "Continuing work after a stop work order is a misdemeanor under the Administrative Code; the game stops at the civil penalty.",
-      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
       "confidence": "estimate",
-      "note": "Quoted in a search excerpt of the DOB stop work order page: violating a stop work order costs $6,000 on a first offense, and DOB will not rescind the order until civil penalties are paid. The penalty for the unpermitted work itself depends on its class (DOB rule table, 2022) and was not found as one number: $6,000 is used for the whole notice. closureDays = the 20-day permit wait starts again; it delays the opening, it does not close an open shop. max = a second offense doubled (Patch, quoted in a search excerpt, unofficial)."
+      "note": "Quoted in search excerpts of the DOB rule 1 RCNY §102-04: for buildings other than one- and two-family homes, work done entirely without a permit costs 14 times the permit fee or $5,000, whichever is greater, less when only part of the work was unpermitted; a later violation on the same building doubles. Starting 20 of 60 days early is about a third of the work: 14 x $970 x 1/3 = $4,527, so the $5,000 minimum applies; the whole job unpermitted would be 14 x $970 = $13,580 (max). Continuing after a stop work order is a separate $6,000 first offense (DOB stop work order page). closureDays = the 20 saved days come back: work stays stopped until the permit is issued. A forum post claims 21x with a $6,000 minimum (unofficial, conflicts with the rule)."
     },
     {
       "id": "sidewalk_snow_not_cleared",
@@ -603,6 +614,28 @@
       "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
       "confidence": "estimate",
       "note": "Quoted in search excerpts: DSNY lists $100 for the first offense, $150 for the second and $250 for the third and later; the Sanitation penalty schedule (16 RCNY §19-103) allows $100-$350, $150-$350 and $250-$350. One notice per uncleared snow day (extra.winterDoor). Section 16-123 binds every owner, lessee, tenant or occupant of the abutting building, so a cafe tenant can be ticketed. perMonth 50 approximates the step from $100 to $150; the engine should use extra.winterDoor.dsnyFines per ticket."
+    },
+    {
+      "id": "overcrowding",
+      "name": "More people inside than the room may hold",
+      "law": "NYC Fire Code §1004 (occupant load); penalty schedule 3 RCNY §109-03, violation category 10",
+      "official": "fdny_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 950,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 5000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "criminal": "None for a cafe; repeated overcrowding of a place of assembly can lead to a vacate order.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214",
+      "confidence": "estimate",
+      "note": "Quoted in search excerpts of 3 RCNY §109-03 Appendix A: VC 10 Overcrowding — $950 standard, $475 mitigated, $1,000 default on a first violation; $2,375, $1,185 and $5,000 on a second. Column order read from the schedule's structure (three first-violation amounts, then three for later ones); recheck against the official table. tier: deep."
     }
   ],
   "officials": [
@@ -627,6 +660,17 @@
       ],
       "realProcess": "A 311 complaint about construction without a posted permit sends an inspector, who can issue a stop work order and a violation on the spot. Work resumes only after the permit is issued and the penalties are paid.",
       "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    },
+    {
+      "id": "fdny_inspector",
+      "name": "Fire inspector",
+      "agency": "FDNY Bureau of Fire Prevention",
+      "role": "inspector",
+      "checks": [
+        "overcrowding"
+      ],
+      "realProcess": "Fire inspectors check eating and drinking places on complaint and on routine visits; more people inside than the room's occupant load is an overcrowding summons heard at OATH, cheaper if corrected and the respondent appears.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
     }
   ],
   "reports": [
@@ -646,6 +690,15 @@
       "role": "inspector",
       "checks": [
         "work_without_permit"
+      ]
+    },
+    {
+      "id": "report_overcrowding",
+      "name": "Report an overcrowded cafe (311)",
+      "text": "The Fire Department sends an inspector at the busy hour. If the room is within its occupant load, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "overcrowding"
       ]
     }
   ],
@@ -704,8 +757,8 @@
     {
       "id": "work_without_permit",
       "title": "Build only with a permit",
-      "text": "Construction in a storefront needs a Buildings Department permit. Working without one gets a stop work order; violating it costs $6,000 the first time, and work stays stopped until you pay.",
-      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+      "text": "Construction in a storefront needs a Buildings Department permit. Work done without one costs 14 times the permit fee, at least $5,000, and stops until the permit is issued.",
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf"
     },
     {
       "id": "bulk_sale_notice",
@@ -736,6 +789,12 @@
       "title": "Room for the line",
       "text": "A comfortable line needs about 8.5 sq ft a person. When the line spills out the door, people walk past, and more of them in the cold.",
       "source": "https://wsdot.wa.gov/publications/manuals/fulltext/M3082/410.pdf"
+    },
+    {
+      "id": "overcrowding",
+      "title": "Too many people inside",
+      "text": "Every room has an occupant load. More people inside than that is an FDNY overcrowding summons: $950 the first time, up to $5,000 after.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
     }
   ],
   "roadmap": [
@@ -915,10 +974,10 @@
       "fsePermitDays": 22,
       "landlordConsentDays": 30,
       "dueDiligenceCost": 7500,
-      "awarenessKeepName": 0.9,
+      "awarenessKeepName": 0.7,
       "awarenessRebrand": 0.35,
       "rebrandCost": 5000,
-      "awarenessNote": "Keep the name: keen-cray's 0.9 of the regular crowd (estimate, no public figure). Rebrand: the crowd of a new shop (0.35, keen-cray footfall.awarenessStart); sign and menus $5,000, my estimate.",
+      "awarenessNote": "Keep the name: 0.7 of the regular crowd. A Missouri SBDC advisor: typically about 30% of a small business's customers do not return after a change of ownership (Startland News 2024, quoted in a search excerpt: https://www.startlandnews.com/2024/03/kc-small-biz-new-owners); a vendor rule of thumb discounts an inherited customer base by 20-50%. Replaces keen-cray's 0.9 (no source). Rebrand: the crowd of a new shop (0.35, keen-cray footfall.awarenessStart); sign and menus $5,000, my estimate.",
       "sellerNote": {
         "maxShare": 0.5,
         "annualRate": 0.08,
@@ -981,7 +1040,7 @@
         "secondExitAbove": 49,
         "source": "https://www.nyc.gov/assets/buildings/pdf/code_notes_eatinge_drinking_establishment.pdf",
         "confidence": "estimate",
-        "note": "15 and 5 net sq ft per person: IBC Table 1004.5, which the NYC Building Code numbers 1004.1.3 (quoted in search excerpts; NYC table text not opened). 75: Place of Assembly (pack extra.seatThresholds). Second exit above 49 people: IBC 1006 single-exit limit for assembly, not checked against the NYC text."
+        "note": "15 and 5 net sq ft per person: IBC Table 1004.5, which the NYC Building Code numbers 1004.1.3 (quoted in search excerpts; NYC table text not opened). 75: Place of Assembly (pack extra.seatThresholds). Second exit above 49 people: IBC 1006 single-exit limit for assembly, not checked against the NYC text. Building code forum citing the 2020 Building Code of New York State: one exit is allowed for a Group A space of at most 49 occupants with no more than 75 ft of travel to the exit."
       },
       "hourProfile": [
         [
@@ -997,7 +1056,7 @@
           0.12
         ]
       ],
-      "hourProfileNote": "Share of the day's orders in each hour of the morning rush. One Square coffee shop did 42% of sales 7-9 am (vendor blog); a KPI library claims 50-60% 6-10 am for specialty coffee; neither is a sample. 0.12 + 0.15 + 0.12 = 39% over 7-10 am, my estimate. With keen-cray's anchors the profile should shift: subway stops weigh the rush more.",
+      "hourProfileNote": "Share of the day's orders in each hour of the morning rush. One Square coffee shop did 42% of sales 7-9 am (vendor blog); a KPI library claims 50-60% 6-10 am for specialty coffee; neither is a sample. 0.12 + 0.15 + 0.12 = 39% over 7-10 am, my estimate. With keen-cray's anchors the profile should shift: subway stops weigh the rush more. Check: Placer.ai counts 43.1% of US coffee-chain visits between 5 and 11 am (visits, not sales; 7.2% an hour on average over six hours: https://www.placer.ai/anchor/articles/dutch-bros-sets-its-sights-on-the-breakfast-rush). A city commuter cafe peaks harder than that national average and softer than the single Square shop's 42% in two hours; 0.12/0.15/0.12 sits between.",
       "peak15Factor": 0.75,
       "peak15Note": "Peak hour factor: the hour's arrivals divided by four times the busiest 15 minutes. Commuter waves off the trains bunch customers; 0.75 means the busiest quarter-hour carries a third of the hour. Traffic engineering uses 0.85-0.95 for cars; for a cafe by a subway exit no number was found: my estimate.",
       "ordersPerBaristaHourPeak": 25,
@@ -1121,7 +1180,8 @@
       "insideExposure": {
         "note": "Wet floors inside on snow days: served orders on snow and ice days without entrance mats count toward the same claim threshold at 1 pass per order. Design value."
       },
-      "outsideLine": "On snow and ice days the share of people who walk past a line that spills onto the sidewalk is floorZones.outsideBalk.freezing."
+      "outsideLine": "On snow and ice days the share of people who walk past a line that spills onto the sidewalk is floorZones.outsideBalk.freezing.",
+      "snowIntoStreet": "DSNY: do not shovel, blow or push snow into the street, a crosswalk or a bike lane; the summons follows the same sanitation schedule ($100-$350). Not modelled as a separate choice: the 'staff' and 'contractor' options are assumed to pile snow on the curb side of the sidewalk."
     },
     "eventCatalog": [
       {
@@ -1180,7 +1240,7 @@
         "text": "A Buildings inspector found work without a permit and stopped your construction. Pay the penalty and wait for the permit.",
         "scale": "point",
         "months": [],
-        "realSignal": "DOB complaint or inspection; SWO penalties start at $6,000",
+        "realSignal": "DOB complaint or inspection; penalty 14 x the permit fee or $5,000, whichever is greater (1 RCNY 102-04)",
         "effects": [],
         "durationMonths": 0,
         "playerMoves": [
@@ -1245,7 +1305,7 @@
       {
         "id": "takeover_listing",
         "name": "A cafe on your map is for sale",
-        "text": "An established cafe is for sale: the room, the machines and most regulars. Asking price is about twice its yearly earnings.",
+        "text": "An established cafe is for sale: the room, the machines and most regulars (about 7 in 10 stay with a new owner). Asking price is about twice its yearly earnings.",
         "scale": "block",
         "months": [],
         "realSignal": "a resident business with 3 months of losses lists itself, or a forSale place in data/places.json",
@@ -1309,14 +1369,14 @@
       {
         "id": "rebrand_loses_regulars",
         "name": "Regulars do not know the new name",
-        "text": "You renamed the cafe. Many regulars think the old place closed: the crowd starts again from a third.",
+        "text": "You renamed the cafe. Many regulars think the old place closed: the crowd starts again from a third, not from 70%.",
         "scale": "point",
         "months": [],
         "realSignal": "player chose rebrand on purchase",
         "effects": [
           {
             "field": "demand",
-            "mult": 0.39
+            "mult": 0.5
           }
         ],
         "durationMonths": 3,
@@ -1330,7 +1390,7 @@
         "tier": "deep",
         "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
         "confidence": "estimate",
-        "note": "0.35 / 0.9 = 0.39 of the demand on the first day; the ramp of keen-cray closes the gap over months."
+        "note": "0.35 / 0.7 = 0.5 of the demand a kept name would have on the first day; the ramp of keen-cray closes the gap over months."
       },
       {
         "id": "line_out_the_door",
@@ -1638,9 +1698,9 @@
             "confidence": "estimate"
           },
           {
-            "what": "stop work order violation, first offense",
-            "value": 6000,
-            "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+            "what": "work without a permit (1 RCNY 102-04): 14 x permit fee, at least",
+            "value": 5000,
+            "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
             "confidence": "estimate"
           },
           {
@@ -1656,7 +1716,7 @@
         "id": "buy_existing_business",
         "title": "Buy an operating cafe or build your own",
         "playerDecision": "Buy a listed cafe (price, seller note share, due diligence or not, bulk-sale notice or not, keep the name or rebrand, keep the staff or not) or lease an empty space and build.",
-        "engineMath": "Price = clamp(2.0 x seller's yearly earnings, 0.5 x replacement cost of room and equipment, 0.57 x a year of sales); asking = price / 0.9. Closing on the later of: bulk-sale notice + 10 days, own Health permit application + 22 days, landlord consent 30 days. The seller trades and pays rent until closing. Buyer gets items with their age, the build-out, awareness 0.9 if the name is kept (0.35 if rebranded) and the seller's reputation if kept; physical trails transfer, conduct trails do not; the seller's unpaid sales tax transfers only without the notice.",
+        "engineMath": "Price = clamp(2.0 x seller's yearly earnings, 0.5 x replacement cost of room and equipment, 0.57 x a year of sales); asking = price / 0.9. Closing on the later of: bulk-sale notice + 10 days, own Health permit application + 22 days, landlord consent 30 days. The seller trades and pays rent until closing. Buyer gets items with their age, the build-out, awareness 0.7 if the name is kept (0.35 if rebranded) and the seller's reputation if kept; physical trails transfer, conduct trails do not; the seller's unpaid sales tax transfers only without the notice.",
         "fieldsNeeded": [
           "extra.takeoverRules",
           "Action buy_business {sellerBusinessId|placeId, offer, noteShare, dueDiligence, bulkSaleNotice, keepName, keepStaff}",
