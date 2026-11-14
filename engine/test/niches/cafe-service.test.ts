@@ -234,10 +234,11 @@ describe('cafe service — through the hooks the engine calls', () => {
   });
 
   it('notes never name more or fewer lost guests than the day report', () => {
-    const b = cafe({ size: 30, orders: orders({ staff: { barista: 2 } }) });
+    // a team that covers every open hour: hours nobody covers are staffing's to explain
+    const b = cafe({ size: 30, orders: orders({ staff: { barista: 3, shift_lead: 1 } }) });
     const lostIn = (notes: string[]): number => notes.reduce((a, n) => {
       const m = n.match(/^Morning rush: .*, (\d+) walked on$/) ?? n.match(/^Out of hands: (\d+) order/) ?? n.match(/^No free seat: (\d+) guest/)
-        ?? n.match(/^Nobody on the floor .*: (\d+) order/) ?? n.match(/^(?:Line out the door|Short-staffed): (\d+) /);
+        ?? n.match(/^(?:Line out the door|Short-staffed): (\d+) /);
       return a + (m ? Number(m[1]) : 0);
     }, 0);
     for (const lost of [0, 7, 150, 300]) {
@@ -247,6 +248,27 @@ describe('cafe service — through the hooks the engine calls', () => {
     // a quiet day by the model, but the report lost guests: the engine's words, not an invented cause
     const quiet = { ...report(DAY, 40), servedUnits: 30, lost: { size: 4, staff: 6, closure: 0 } };
     expect(serviceDayNotes(cafe(), quiet, pack)).toEqual(['Line out the door: 4 customers walked away', 'Short-staffed: 6 customers left unserved']);
+  });
+
+  it('the notes offer the next step with its price: one more barista, or the seats the floor still has room for', () => {
+    const b = cafe({ size: 30, orders: orders({ staff: { barista: 2 } }) });
+    const r = { ...report(DAY, 550), servedUnits: 400, lost: { size: 0, staff: 150, closure: 0 } };
+    const hire = serviceDayNotes(b, r, pack).find((n) => n.startsWith('One more barista'));
+    expect(hire).toMatch(/^One more barista: about \d+ more orders a day — \$[\d,]+ a month in sales for \$3,360 in wages$/);
+    const won = Number(hire!.match(/about (\d+) more/)![1]);
+    expect(won).toBeGreaterThan(0);
+    expect(won).toBeLessThanOrEqual(150);
+    expect(hire).toContain(`$${(won * 8.5 * 30).toLocaleString('en-US')}`);
+
+    // a small room at a residential door loses guests to seats only: the floor has room, and no hire is offered
+    const room = cafe({ size: 6, orders: orders({ staff: { barista: 5, shift_lead: 1 } }) });
+    const day6 = serviceDay(at(room, 250, HOME))!;
+    expect(day6.lost.seats).toBeGreaterThan(0);
+    expect(day6.lost.labor + day6.lost.queue).toBe(0);
+    const lost = Math.round(day6.lost.seats);
+    const notes = serviceDayNotes(room, { ...report(DAY, 250), lost: { size: lost, staff: 0, closure: 0 } }, pack, { place: HOME, day: DAY, date: DATE });
+    expect(notes.find((n) => n.startsWith('No free seat'))).toMatch(/ — the floor has room for 48 more seats$/);
+    expect(notes.some((n) => n.startsWith('One more'))).toBe(false);
   });
 
   it('seat use at the busiest hour: a takeaway counter is not "packed" just because it sells a lot', () => {
