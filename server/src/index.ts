@@ -8,6 +8,7 @@ import { checkActionShape, defaultConfig, newWorld, type AiApi, type HostDeps } 
 import { loadData, REPO_ROOT, SERVER_DIR, type GameData } from './data';
 import { ai as defaultAi, serverDeps, usingStubs } from './deps';
 import { RateLimiter } from './rate';
+import { mountBilling } from './billing';
 import { WorldRuntime } from './runtime';
 
 export const CLIENT_DIST = resolve(REPO_ROOT, 'client/dist');
@@ -147,6 +148,7 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
     if (!limiter.take(key)) { res.status(429).set('Retry-After', '1').json({ ok: false, error: 'Too many requests' }); return; }
     next();
   });
+  mountBilling(app, game); // тариф Pro: проверки перед /action и /query, маршруты /billing (server/src/billing.ts)
 
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true, name: 'First Year', stubs: usingStubs, uptimeS: Math.round((Date.now() - game.startedAt) / 1000), worlds: [...game.runtimes.values()].map((x) => x.stats()), data: game.data.sources });
