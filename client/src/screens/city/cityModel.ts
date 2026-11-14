@@ -24,6 +24,35 @@ export function leaderBoards(view: CityView, top = 3): NicheBoard[] {
   return out;
 }
 
+export interface Race { niche: NicheId; label: string; leader: string; chaser: string; gap: number; prize?: number }
+
+/**
+ * The tightest fights for first place, for the projector: in each niche, how much net worth separates #1 from #2,
+ * and the prize forecast for #1 when the server sends it. Closest (smallest share of the leader's worth) first.
+ */
+export function closestRaces(view: CityView, n = 2): Race[] {
+  const byId = new Map(view.businesses.map((b) => [b.id, b]));
+  const out: (Race & { rel: number })[] = [];
+  for (const niche of NICHE_ORDER) {
+    const live = [...(view.leaderboards[niche] ?? [])].filter((s) => !s.bankrupt).sort((a, b) => a.rank - b.rank);
+    if (live.length < 2) continue;
+    const [a, b] = live;
+    const gap = Math.max(0, a.netWorth - b.netWorth);
+    out.push({
+      niche, label: NICHE_LABEL[niche], leader: byId.get(a.businessId)?.name ?? a.name ?? a.businessId,
+      chaser: byId.get(b.businessId)?.name ?? b.name ?? b.businessId, gap, prize: a.prize,
+      rel: gap / Math.max(1, Math.abs(a.netWorth)),
+    });
+  }
+  return out.sort((x, y) => x.rel - y.rel).slice(0, n).map(({ rel: _rel, ...r }) => r);
+}
+
+/** Game days until the next month's reports land (the books close on the last day of every month). */
+export function daysToReports(day: number): number {
+  const into = ((Math.max(1, day) - 1) % RULES.DAYS_PER_MONTH) + 1;
+  return RULES.DAYS_PER_MONTH - into;
+}
+
 /** Newest first; items of the same day keep the server's order (later item = newer). */
 export function feedRows(feed: FeedItem[], n = 8): FeedItem[] {
   return feed.map((f, i) => ({ f, i })).sort((a, b) => b.f.day - a.f.day || b.i - a.i).slice(0, n).map((x) => x.f);

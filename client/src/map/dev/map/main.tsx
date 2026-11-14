@@ -2,9 +2,17 @@ import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CityMap } from '../../CityMap';
 import * as fx from '../../fixtures';
-import type { NicheId, WeatherCondition } from '@ohh/shared/types';
+import type { NicheId, Pack, PackSet, WeatherCondition, CommonPack } from '@ohh/shared/types';
+import cafeJson from '../../../../../packs/cafe.json';
+import barberJson from '../../../../../packs/barbershop.json';
+import commonJson from '../../../../../packs/_common.json';
+
+// the real packs: the place card shows the same numbers the engine charges
+const packs = { common: commonJson as unknown as CommonPack, niches: { cafe: cafeJson as unknown as Pack, barbershop: barberJson as unknown as Pack } } as PackSet;
+// ?h=220 puts the map in a short frame, like the Place step of the opening path
 
 const params = new URLSearchParams(location.search);
+const frameH = params.get('h') ? Number(params.get('h')) : null;
 
 function DevMap() {
   const [mode, setMode] = useState<'pick' | 'live'>((params.get('mode') as 'pick' | 'live') ?? 'live');
@@ -14,11 +22,11 @@ function DevMap() {
   const [opened, setOpened] = useState<string | null>(null);
   const weather = [{ ...fx.weather[0], condition: cond }];
   return (
-    <div style={{ position: 'fixed', inset: 0 }}>
+    <div style={frameH ? { position: 'relative', height: frameH, margin: 16 } : { position: 'fixed', inset: 0 }}>
       <CityMap
         places={fx.places} businesses={fx.businesses} myBusinessId={fx.myBusinessId}
-        weather={weather} events={fx.events} day={fx.day} blockFunds={fx.blockFunds} realBusinesses={fx.realBusinesses}
-        mode={mode} niche={niche} offline={params.has('offline')} intro={!params.has('nointro')}
+        packs={packs} weather={weather} events={fx.events} day={fx.day} blockFunds={fx.blockFunds} realBusinesses={fx.realBusinesses}
+        mode={mode} niche={niche} initialPlaceId={params.get('place') ?? undefined} offline={params.has('offline')} intro={!params.has('nointro')}
         onPick={(id) => setPicked(id)} onOpenBusiness={(id) => setOpened(id)}
       />
       <div className="dev-panel" style={panel}>

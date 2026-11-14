@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CityView, WorldPublic } from '@ohh/shared/types';
-import { clockState, dayProgress, feedRows, formatCountdown, leaderBoards, msLeft, seasonDays } from './cityModel';
+import { closestRaces, clockState, dayProgress, daysToReports, feedRows, formatCountdown, leaderBoards, msLeft, seasonDays } from './cityModel';
 import { cityView } from './fixtures';
 
 const world = (patch: Partial<WorldPublic['config']> = {}, msToNextDay = 1000): WorldPublic => ({
@@ -47,5 +47,36 @@ describe('clock', () => {
   });
   it('knows the season length', () => {
     expect(seasonDays(world())).toBe(360);
+  });
+});
+
+describe('races to watch', () => {
+  it('names #1 and #2 of a niche and the net worth between them, closest race first', () => {
+    const races = closestRaces(cityView);
+    expect(races.length).toBeGreaterThan(0);
+    for (const r of races) {
+      const live = (cityView.leaderboards[r.niche] ?? []).filter((s) => !s.bankrupt).sort((a, b) => a.rank - b.rank);
+      expect(r.gap).toBe(live[0].netWorth - live[1].netWorth);
+    }
+    const rel = races.map((r) => r.gap);
+    expect(rel.length).toBeLessThanOrEqual(2);
+  });
+  it('skips a niche with one standing business and never counts the bankrupt', () => {
+    const view: CityView = {
+      ...cityView,
+      leaderboards: {
+        cafe: [
+          { businessId: 'x', niche: 'cafe', rank: 1, netWorth: 0, isAi: false, bankrupt: true },
+          { businessId: 'y', niche: 'cafe', rank: 2, netWorth: 1000, isAi: false, bankrupt: false, name: 'Y' },
+        ],
+      },
+    };
+    expect(closestRaces(view)).toEqual([]);
+  });
+  it('counts down to the month-end reports', () => {
+    expect(daysToReports(1)).toBe(29);
+    expect(daysToReports(29)).toBe(1);
+    expect(daysToReports(30)).toBe(0);
+    expect(daysToReports(31)).toBe(29);
   });
 });

@@ -1,12 +1,16 @@
 // Card for one business in "live" mode: what anyone in the city can see about it.
 import type { Place, PublicBusiness } from '@ohh/shared/types';
+import { useT } from '../ui/i18n';
 import { NICHE_META, money } from './geo';
+import { versusMe } from './placeFacts';
 
 export interface BusinessCta { label: string; onClick: (businessId: string) => void }
 
 export interface BusinessCardProps {
   business: PublicBusiness; place?: Place; mine?: boolean;
   cta?: BusinessCta; onClose: () => void;
+  /** My own business and every place: the card then says what this business means for mine. */
+  me?: PublicBusiness; places?: Place[];
 }
 
 const STATUS_LABEL: Record<PublicBusiness['status'], string> = {
@@ -16,9 +20,11 @@ const STATUS_LABEL: Record<PublicBusiness['status'], string> = {
   bankrupt: 'Out of business',
 };
 
-export function BusinessCard({ business: b, place, mine, cta, onClose }: BusinessCardProps) {
+export function BusinessCard({ business: b, place, mine, cta, onClose, me, places }: BusinessCardProps) {
+  const tr = useT();
   const meta = NICHE_META[b.niche];
   const deals = b.trust.kept + b.trust.broken;
+  const vs = me && places && !mine && me.id !== b.id ? versusMe(b, me, places, undefined, tr) : null;
   return (
     <section className="cm-card cm-card--biz" role="dialog" aria-label={b.name}>
       <header className="cm-card__head">
@@ -47,6 +53,7 @@ export function BusinessCard({ business: b, place, mine, cta, onClose }: Busines
           <dd>{deals === 0 ? '—' : b.trust.kept}<small>{deals === 0 ? ' none yet' : ` kept · ${b.trust.broken} broken`}</small></dd>
         </div>
       </dl>
+      {vs && <p className={`cm-place__stake${vs.overlap > 0 ? ' cm-place__stake--rival' : ''}`} role="note">{vs.line}</p>}
       <p className="cm-card__note">Run by {b.ownerName}{b.partners.length > 0 ? ` · ${b.partners.length} active deal${b.partners.length === 1 ? '' : 's'}` : ''}</p>
       {cta && (
         <button type="button" className="cm-btn cm-btn--primary" onClick={() => cta.onClick(b.id)}>{cta.label}</button>

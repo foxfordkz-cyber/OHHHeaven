@@ -1,7 +1,7 @@
 // /dev/desk pages: the official's desk on example data, no server. Taking a case and answering an offer move the
 // example to its next state. A stand-in for the engine, only for trying the screen by hand.
 import type { Action, ClientView, OfficialView } from '../../../../shared/src/types';
-import { DevStore } from '../network/deps';
+import { DevStore } from '../../app/dev';
 import { DeskScreen } from './DeskScreen';
 import { officialView, officialViewEmpty, officialViewExposed, packs } from './fixtures';
 import { bribeFacts, type CaseCardMaybe } from './logic';

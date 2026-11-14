@@ -1,4 +1,8 @@
-/* The official's desk (/desk). Only tokens from client/src/ui/tokens.css (agent 08). */
+/* The official's desk (/desk). Only tokens from client/src/ui/tokens.css (agent 08). Phone: one column.
+   Computer: the whole screen — my desk and today's decision on top, then queue | my cases | ranking and feed. */
+.dk-root { width: 100%; max-width: 1440px; margin: 0 auto; }
+.dk-top, .dk-grid { display: grid; gap: var(--s-4); }
+.dk-side { display: grid; gap: var(--s-4); align-content: start; }
 .dk-head { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3); }
 .dk-pay { margin: 0; }
 .dk-name { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
@@ -19,3 +23,26 @@
 .dk-rank { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: var(--s-2); align-items: center; padding: 8px 0; border-top: 1px solid var(--border); font-size: var(--fs-sm); }
 .dk-rank:first-child { border-top: 0; }
 .dk-rank.is-me { color: var(--accent); font-weight: 650; }
+
+/* today at the desk: one decision, the race, tomorrow */
+.dk-today { gap: var(--s-4); }
+.dk-today__k { font-size: var(--fs-xs, 11px); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); margin-bottom: 4px; }
+.dk-today__title { font-weight: 700; font-size: var(--fs-lg, 18px); line-height: 1.3; }
+.dk-today__detail { margin: 4px 0 var(--s-3); }
+.dk-today__decision { display: grid; }
+.dk-today__race p { margin: 0 0 var(--s-2); }
+.dk-outcome { margin: 0; padding: var(--s-2) var(--s-3); border-radius: var(--r-2); background: var(--profit-soft); color: var(--text); }
+.dk-outcome--err { background: var(--loss-soft); }
+.dk-err { margin: 0; }
+.dk-link { border: 0; background: none; padding: 0; color: inherit; font: inherit; font-weight: 650; text-decoration: underline; cursor: pointer; }
+
+@media (min-width: 900px) {
+  .dk-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: start; }
+  .dk-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .dk-side { grid-column: 1 / -1; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+}
+@media (min-width: 1200px) {
+  .dk-root { padding-left: var(--s-6, 24px); padding-right: var(--s-6, 24px); }
+  .dk-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr) minmax(300px, 0.8fr); }
+  .dk-side { grid-column: auto; grid-template-columns: 1fr; }
+}

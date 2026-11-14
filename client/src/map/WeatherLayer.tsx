@@ -23,7 +23,9 @@ export function WeatherLayer({ condition }: { condition?: WeatherCondition }) {
       w = canvas.clientWidth; h = canvas.clientHeight;
       canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.min(particles === 'rain' ? 220 : 140, Math.round((w * h) / (particles === 'rain' ? 5200 : 7000)));
+      // phones: half the particles; the map under them is the expensive part
+      const cap = (particles === 'rain' ? 220 : 140) / (w < 700 ? 2 : 1);
+      const count = Math.min(cap, Math.round((w * h) / (particles === 'rain' ? 5200 : 7000)));
       drops = Array.from({ length: count }, (_, i) => ({
         x: seed(i) * w, y: seed(i + 99) * h,
         v: particles === 'rain' ? 650 + seed(i + 7) * 450 : 28 + seed(i + 7) * 40,
@@ -33,7 +35,9 @@ export function WeatherLayer({ condition }: { condition?: WeatherCondition }) {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
     resize();
+    const minStep = window.innerWidth < 700 ? 1000 / 30 : 0; // 30 frames a second is plenty for rain on a phone
     const frame = (now: number) => {
+      if (minStep && now - last < minStep) { raf = document.hidden ? 0 : requestAnimationFrame(frame); return; }
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       ctx.clearRect(0, 0, w, h);

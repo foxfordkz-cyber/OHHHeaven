@@ -160,3 +160,41 @@
 .cm-root .maplibregl-ctrl-attrib { background: var(--cm-panel); color: var(--cm-muted); font-size: 10px; }
 .cm-root .maplibregl-ctrl-attrib a { color: var(--cm-text); }
 :root:not([data-theme='light']) .cm-root .maplibregl-ctrl-attrib-button { filter: invert(1); }
+
+/* place card: what the room promises and who splits its passers-by */
+.cm-card--compact { max-height: none; }
+.cm-place { display: grid; gap: 10px; margin-bottom: 12px; }
+.cm-place__summary { margin: 8px 0 10px; font-size: 13px; color: var(--cm-muted); line-height: 1.45; }
+.cm-place__summary strong { color: var(--cm-text); font-size: 15px; font-variant-numeric: tabular-nums; }
+.cm-place__lead { display: grid; gap: 2px; }
+.cm-place__big { font-size: 14px; color: var(--cm-muted); }
+.cm-place__big strong { font-size: 26px; font-weight: 800; color: var(--cm-text); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.cm-place .cm-card__grid { margin: 0; }
+.cm-place__line { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--cm-text); }
+.cm-place__k { display: inline-block; margin-right: 6px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cm-muted); }
+.cm-place__rivals, .cm-place__near { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 12px; line-height: 1.4; color: var(--cm-muted); }
+.cm-place__rivals strong, .cm-place__near strong { color: var(--cm-text); font-weight: 650; }
+.cm-place__real { opacity: 0.85; }
+.cm-place__ai { margin-left: 4px; padding: 0 5px; border-radius: 6px; font-size: 10px; font-style: normal; background: var(--surface-2); color: var(--cm-muted); }
+.cm-place__stake { margin: 0; padding: 8px 10px; border-radius: 10px; font-size: 12.5px; line-height: 1.4; background: var(--accent-soft, rgba(246, 198, 46, 0.12)); color: var(--cm-text); }
+.cm-split { display: grid; gap: 5px; }
+.cm-split__bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--track); }
+.cm-split__bar span { display: block; min-width: 3px; }
+.cm-split__legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11.5px; color: var(--cm-muted); }
+.cm-split__legend li { display: inline-flex; align-items: center; gap: 5px; font-variant-numeric: tabular-nums; }
+.cm-split__legend i { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+.cm-split__you { background: var(--accent-fill, var(--cm-accent)); }
+.cm-split__real { background: var(--info, #7cb2ff); }
+.cm-split__players { background: var(--loss, #f87171); }
+.cm-split__out { background: var(--surface-3, rgba(255, 255, 255, 0.14)); }
+@media (min-width: 760px) { .cm-card:not(.cm-card--biz) { width: 372px; max-height: calc(100% - 78px); } }
+
+/* phones: blur over a map that redraws every frame costs more than it gives; a thicker panel reads the same */
+@media (max-width: 640px), (pointer: coarse) {
+  .cm-root .cm-chip, .cm-root .cm-legend, .cm-root .cm-card, .cm-root .cm-ctl__btn {
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    background: var(--surface, rgba(24, 24, 22, 0.96));
+  }
+}
+.cm-card--biz .cm-place__stake { margin: 0 0 10px; }
+.cm-place__stake--rival { background: var(--loss-soft, rgba(248, 113, 113, 0.14)); }
