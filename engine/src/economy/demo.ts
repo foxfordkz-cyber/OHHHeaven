@@ -1,11 +1,18 @@
 // Demo: six cafes on one block for 60 game days, with both month closes.
 // Run from the repository root: npx tsx engine/src/economy/demo.ts
-// Uses the test fixtures until packs/cafe.json and data/places.json land in the main branch.
-import type { Action, DayWeather, GameEvent, Place, WorldState } from '@ohh/shared';
+// Reads packs/_common.json and packs/cafe.json when they are in the repository, otherwise the test fixtures.
+import { existsSync, readFileSync } from 'node:fs';
+import type { Action, CommonPack, DayWeather, GameEvent, Pack, PackSet, Place, WorldState } from '@ohh/shared';
 import { dateOf } from '@ohh/shared';
 import { applyAction, createWorld, tickDay, type EngineCtx } from '../index';
-import { packs } from '../../test/fixtures/common';
+import { packs as fixturePacks } from '../../test/fixtures/common';
 import { config, owner, place } from '../../test/fixtures/world';
+
+const real = existsSync('packs/_common.json') && existsSync('packs/cafe.json');
+const packs: PackSet = real
+  ? { common: JSON.parse(readFileSync('packs/_common.json', 'utf8')) as CommonPack, niches: { cafe: JSON.parse(readFileSync('packs/cafe.json', 'utf8')) as Pack } }
+  : fixturePacks;
+console.log(`Packs: ${real ? 'packs/_common.json and packs/cafe.json' : 'test fixtures (no packs/*.json yet)'}`);
 
 const placesList: Place[] = [
   place(1, { footTraffic: 0.8, rentPerSqftYear: 120, address: '31-01 Steinway St (corner)' }),
@@ -33,22 +40,27 @@ const act = (playerId: string, a: Action): void => {
 };
 
 const cafes: { who: string; name: string; kit: 'lean' | 'standard' | 'premium'; size: number }[] = [
-  { who: 'pl1', name: 'Luna Cafe', kit: 'standard', size: 18 },
+  { who: 'pl1', name: 'Luna Cafe', kit: 'standard', size: 0 },
   { who: 'pl2', name: 'Brew & Co', kit: 'lean', size: 12 },
-  { who: 'pl3', name: 'Cafe Blue', kit: 'premium', size: 24 },
-  { who: 'pl4', name: 'Morning Owl', kit: 'standard', size: 18 },
-  { who: 'pl5', name: 'Corner Cup', kit: 'standard', size: 18 },
-  { who: 'pl6', name: 'Daily Grind', kit: 'standard', size: 18 },
-];
-cafes.forEach((c, i) => act(c.who, { type: 'open_business', niche: 'cafe', placeId: placesList[i].id, name: c.name, kitId: c.kit, size: c.size }));
-act('pl2', { type: 'set_orders', orders: { price: 5.25 } });
-act('pl3', { type: 'set_orders', orders: { price: 7.75, levers: { beans: 'specialty' } } });
+  { who: 'pl3', name: 'Cafe Blue', kit: 'premium', size: 0 },
+  { who: 'pl4', name: 'Morning Owl', kit: 'standard', size: 0 },
+  { who: 'pl5', name: 'Corner Cup', kit: 'standard', size: 0 },
+  { who: 'pl6', name: 'Daily Grind', kit: 'standard', size: 0 },
+];   // size 0: the kit's own size
+const kitSize = (id: string) => packs.niches.cafe!.kits.find((k) => k.id === id)!.size;
+cafes.forEach((c, i) => act(c.who, { type: 'open_business', niche: 'cafe', placeId: placesList[i].id, name: c.name, kitId: c.kit, size: c.size || kitSize(c.kit) }));
+const ref = packs.niches.cafe!.unit.refPrice;
+const cheap = Math.round(ref * 0.85 * 4) / 4;
+const premium = Math.round(ref * 1.15 * 4) / 4;
+act('pl2', { type: 'set_orders', orders: { price: cheap } });
+const specialty = packs.niches.cafe!.levers.find((l) => l.options.some((o) => o.id === 'specialty'));
+act('pl3', { type: 'set_orders', orders: { price: premium, levers: specialty ? { [specialty.id]: 'specialty' } : {} } });
 act('pl4', { type: 'set_orders', orders: { staff: { barista: 2 } } });
 act('pl5', { type: 'set_orders', orders: { shortcuts: ['cash_wages'], levers: { cleaning: 'minimal' } } });
 
 const short = (s: string) => s.slice(0, 11).padEnd(11);
 console.log('Six cafes on one block. Columns: served/lost customers that day; cash at the close of each month.');
-console.log('Plan: Luna standard; Brew & Co cheap ($5.25, 12 seats); Cafe Blue premium ($7.75, specialty beans);');
+console.log(`Plan: Luna standard at $${ref.toFixed(2)}; Brew & Co cheap ($${cheap.toFixed(2)}, 12 seats); Cafe Blue premium ($${premium.toFixed(2)}, specialty beans);`);
 console.log('Morning Owl only 2 baristas; Corner Cup pays cash wages and skimps on cleaning; Daily Grind opens on day 5, before its permits.\n');
 console.log('day  date          weather | ' + cafes.map((c) => short(c.name)).join(' '));
 

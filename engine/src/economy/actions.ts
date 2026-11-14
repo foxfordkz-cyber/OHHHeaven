@@ -1,8 +1,8 @@
 // Owner actions handled by the economy: build/CONTRACT.md, section 3 (economyActions).
-import type { Action, ActionResult, BusinessState, Pack, PermitState, Player, StandingOrders, WorldState } from '@ohh/shared';
+import type { Action, ActionResult, BusinessState, Money, Pack, PermitState, Player, PnlLine, StandingOrders, WorldState } from '@ohh/shared';
 import { RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
-import { defaultLeverOption } from './effects';
+import { defaultLeverOption, standardKitBonus } from './effects';
 import { activeBusinessOf, addLine, clamp, econOf, emptyMtd, itemDef, maxSizeFor, placeOf, replaceBusiness, round2, staffCount, withEcon, type EconExtra } from './util';
 
 const ECONOMY_ACTIONS = new Set(['open_business', 'launch', 'set_orders', 'buy_item', 'sell_item', 'resize', 'read_inbox']);
@@ -26,7 +26,7 @@ export function economyActions(w: WorldState, ctx: EngineCtx, playerId: string, 
     case 'set_orders': return setOrders(w, ctx, b, pack, a.orders);
     case 'buy_item': return buyItem(w, b, pack, a.itemId, a.qty);
     case 'sell_item': return sellItem(w, b, pack, a.itemId, a.qty);
-    case 'resize': return resize(w, ctx, b, pack, a.size);
+    case 'resize': return resize(w, ctx, b, a.size);
     case 'spend': return spend(w, b, a.kind as 'marketing' | 'training', a.amount);
     default: return null;
   }
@@ -38,10 +38,14 @@ export function defaultOrders(pack: Pack): StandingOrders {
     const o = defaultLeverOption(l.options);
     if (o) levers[l.id] = o.id;
   }
+  // staff like the opening advisor (engine/src/analytics/opening.ts): enough people for the average demand with 10% to spare;
+  // from three people up, one of them is the second role (a shift lead in a cafe)
   const staff: Record<string, number> = {};
   const per = pack.capacity.unitsPerStaffMonth;
-  const need = per ? Math.ceil(pack.market.unitsPerSlotMonth / per) : pack.capacity.minStaff;
-  if (pack.staff[0]) staff[pack.staff[0].id] = clamp(need, pack.capacity.minStaff, pack.capacity.maxStaff);
+  const need = clamp(per ? Math.ceil(pack.market.unitsPerSlotMonth / (per * 0.9)) : pack.capacity.minStaff, pack.capacity.minStaff, pack.capacity.maxStaff);
+  const [main, second] = pack.staff;
+  if (main && second && need >= 3) { staff[main.id] = need - 1; staff[second.id] = 1; }
+  else if (main) staff[main.id] = need;
   return { price: pack.unit.refPrice, staff, levers, shortcuts: [], blockFund: false, autopilot: 'hold' };
 }
 
@@ -54,6 +58,41 @@ export function itemsCost(pack: Pack, items: readonly { id: string; qty: number 
     total += def.cost * (def.scalesWithSize ? size : it.qty);
   }
   return round2(total);
+}
+
+/**
+ * Shortcuts that save the same money cannot be on together (pairs or groups of ids in `extra.exclusiveShortcuts` of
+ * _common or the niche pack, e.g. cash wages and calling workers contractors both skip payroll taxes).
+ */
+function exclusiveClash(ctx: EngineCtx, pack: Pack, chosen: readonly string[]): string | null {
+  const groups = [ctx.packs.common.extra, pack.extra]
+    .map((x) => (x as { exclusiveShortcuts?: unknown } | undefined)?.exclusiveShortcuts)
+    .flatMap((g) => (Array.isArray(g) ? g : []))
+    .filter((g): g is string[] => Array.isArray(g) && g.every((id) => typeof id === 'string'));
+  const nameOf = (id: string) => [...pack.shortcuts, ...ctx.packs.common.shortcuts].find((s) => s.id === id)?.name ?? id;
+  for (const g of groups) {
+    const on = g.filter((id) => chosen.includes(id));
+    if (on.length > 1) return `"${nameOf(on[0])}" and "${nameOf(on[1])}" skip the same costs: choose one`;
+  }
+  return null;
+}
+
+interface SeatRule { seats: number; rule?: string; law?: string; setupItemId?: string }
+
+/**
+ * Rules that start at a number of seats and need an item (pack.extra.seatThresholds, e.g. a customer restroom from 20 seats,
+ * NYC Health Code §81.22): the message for the first one this room breaks without that item, or null.
+ */
+export function seatRuleBroken(pack: Pack, size: number, items: readonly { id: string; qty: number }[]): string | null {
+  const raw = (pack.extra as { seatThresholds?: unknown } | undefined)?.seatThresholds;
+  if (!Array.isArray(raw)) return null;
+  for (const t of raw as SeatRule[]) {
+    if (!t || typeof t.seats !== 'number' || !t.setupItemId || size < t.seats) continue;
+    if (items.some((i) => i.id === t.setupItemId && i.qty > 0)) continue;
+    const name = itemDef(pack, t.setupItemId)?.name ?? t.setupItemId;
+    return `${t.seats} or more ${pack.sizing.unitName}s need: ${name}${t.law ? ` (${t.law})` : ''}. Add it or keep under ${t.seats} ${pack.sizing.unitName}s`;
+  }
+  return null;
 }
 
 function normalizeItems(pack: Pack, items: readonly { id: string; qty: number }[], size: number): { id: string; qty: number }[] | string {
@@ -87,6 +126,8 @@ function openBusiness(w: WorldState, ctx: EngineCtx, player: Player, a: Extract<
   if (size > maxSize) return fail(w, `Only ${maxSize} ${pack.sizing.unitName}s fit in ${place.sqft} sq ft`);
   const items = normalizeItems(pack, a.items ?? kit.items, size);
   if (typeof items === 'string') return fail(w, items);
+  const seatRule = seatRuleBroken(pack, size, items);
+  if (seatRule) return fail(w, seatRule);
   const cost = itemsCost(pack, items, size);
   const cash = round2(pack.startCapital - cost);
   if (cash < 0) return fail(w, `Not enough money: this setup costs $${Math.round(cost).toLocaleString('en-US')}, you have $${pack.startCapital.toLocaleString('en-US')}`);
@@ -94,13 +135,13 @@ function openBusiness(w: WorldState, ctx: EngineCtx, player: Player, a: Extract<
   if (!name) return fail(w, 'Give your business a name');
 
   const permits: PermitState[] = [];
-  let quality = 0.5;
+  let quality = 0.5 - standardKitBonus(pack);   // the standard kit is average quality (see effects.ts)
   for (const it of items) {
     const def = itemDef(pack, it.id)!;
     if ((def.kind === 'permit' || def.kind === 'license') && def.waitDays && def.waitDays > 0) {
       permits.push({ itemId: def.id, appliedDay: w.day, readyDay: w.day + def.waitDays });
     }
-    quality += def.qualityBonus ?? 0;
+    if (it.qty > 0) quality += def.qualityBonus ?? 0;
   }
   const id = `biz_${w.businesses.length + 1}`;
   const econ: EconExtra = { marketing: 0, training: 0, lossCarry: 0, cashStart: pack.startCapital, mtd: emptyMtd() };
@@ -172,7 +213,10 @@ function setOrders(w: WorldState, ctx: EngineCtx, b: BusinessState, pack: Pack, 
     const known = new Set([...pack.shortcuts, ...ctx.packs.common.shortcuts].map((s) => s.id));
     const bad = patch.shortcuts.find((s) => !known.has(s));
     if (bad) return fail(w, `Unknown shortcut: ${bad}`);
-    o.shortcuts = [...new Set(patch.shortcuts)];
+    const chosen = [...new Set(patch.shortcuts)];
+    const clash = exclusiveClash(ctx, pack, chosen);
+    if (clash) return fail(w, clash);
+    o.shortcuts = chosen;
   }
   if (patch.blockFund !== undefined) o.blockFund = !!patch.blockFund;
   if (patch.autopilot !== undefined) {
@@ -213,32 +257,57 @@ function sellItem(w: WorldState, b: BusinessState, pack: Pack, itemId: string, q
   if (def.kind === 'permit' || def.kind === 'license' || def.kind === 'deposit' || def.kind === 'buildout') return fail(w, `${def.name} cannot be sold`);
   const refund = round2(def.cost * n * RULES.RESALE_SHARE);
   const items = b.items.map((i) => (i.id === itemId ? { ...i, qty: i.qty - n } : i)).filter((i) => i.qty > 0);
+  const seatRule = seatRuleBroken(pack, b.size, items);
+  if (seatRule) return fail(w, seatRule);
   return { world: replaceBusiness(w, {
     ...b, cash: round2(b.cash + refund), items,
     mtd: { ...b.mtd, lines: addLine(b.mtd.lines, { id: `sell_${itemId}`, label: `Sold: ${def.name}`, kind: 'setup', amount: refund }) },
   }) };
 }
 
-function resize(w: WorldState, ctx: EngineCtx, b: BusinessState, pack: Pack, sizeIn: number): ActionResult {
+export type ResizePlan =
+  | { ok: false; error: string }
+  | { ok: true; size: number; items: BusinessState['items']; cashDelta: Money; setupSpent: Money; line: PnlLine | null };
+
+/**
+ * What resizing the room to `size` would do, without doing it: the error the owner would see, or the new size and items,
+ * the cash change (new furniture at its price, sold furniture at RESALE_SHARE) and the P&L line. The `resize` action applies
+ * exactly this; the advisor's what_if with a size can use it too. Pure.
+ */
+export function resizePlan(b: BusinessState, ctx: EngineCtx, sizeIn: number): ResizePlan {
+  const pack = ctx.packs.niches[b.niche];
+  if (!pack) return { ok: false, error: `No data for niche ${b.niche}` };
   const place = placeOf(ctx, b.placeId);
-  if (!place) return fail(w, 'Unknown place');
+  if (!place) return { ok: false, error: 'Unknown place' };
   const size = Math.floor(sizeIn);
   const max = maxSizeFor(pack, place, RULES.USABLE_FLOOR_SHARE);
-  if (!(size >= pack.sizing.min)) return fail(w, `At least ${pack.sizing.min} ${pack.sizing.unitName}s`);
-  if (size > max) return fail(w, `Only ${max} ${pack.sizing.unitName}s fit in ${place.sqft} sq ft`);
-  if (size === b.size) return { world: w };
+  if (!(size >= pack.sizing.min)) return { ok: false, error: `At least ${pack.sizing.min} ${pack.sizing.unitName}s` };
+  if (size > max) return { ok: false, error: `Only ${max} ${pack.sizing.unitName}s fit in ${place.sqft} sq ft` };
+  if (size === b.size) return { ok: true, size, items: b.items, cashDelta: 0, setupSpent: b.setupSpent, line: null };
   const scaled = pack.setup.filter((s) => s.scalesWithSize);
   const perUnit = scaled.reduce((a, s) => a + s.cost, 0);
   const delta = size - b.size;
   const amount = delta > 0 ? -round2(perUnit * delta) : round2(perUnit * -delta * RULES.RESALE_SHARE);
-  if (-amount > b.cash) return fail(w, `Not enough cash: ${delta} more ${pack.sizing.unitName}s cost $${Math.round(-amount).toLocaleString('en-US')}`);
+  if (-amount > b.cash) return { ok: false, error: `Not enough cash: ${delta} more ${pack.sizing.unitName}s cost $${Math.round(-amount).toLocaleString('en-US')}` };
   const ids = new Set(scaled.map((s) => s.id));
   const items = b.items.map((i) => (ids.has(i.id) ? { ...i, qty: size } : i));
   for (const s of scaled) if (!items.some((i) => i.id === s.id) && s.required) items.push({ id: s.id, qty: size });
+  const seatRule = seatRuleBroken(pack, size, items);
+  if (seatRule) return { ok: false, error: seatRule };
   const label = delta > 0 ? `Bought ${delta} ${pack.sizing.unitName}s` : `Sold ${-delta} ${pack.sizing.unitName}s`;
+  return {
+    ok: true, size, items, cashDelta: amount, setupSpent: delta > 0 ? round2(b.setupSpent - amount) : b.setupSpent,
+    line: { id: `resize_${delta > 0 ? 'buy' : 'sell'}`, label, kind: 'setup', amount },
+  };
+}
+
+function resize(w: WorldState, ctx: EngineCtx, b: BusinessState, sizeIn: number): ActionResult {
+  const plan = resizePlan(b, ctx, sizeIn);
+  if (!plan.ok) return fail(w, plan.error);
+  if (!plan.line) return { world: w };
   return { world: replaceBusiness(w, {
-    ...b, size, items, cash: round2(b.cash + amount), setupSpent: delta > 0 ? round2(b.setupSpent - amount) : b.setupSpent,
-    mtd: { ...b.mtd, lines: addLine(b.mtd.lines, { id: `resize_${delta > 0 ? 'buy' : 'sell'}`, label, kind: 'setup', amount }) },
+    ...b, size: plan.size, items: plan.items, cash: round2(b.cash + plan.cashDelta), setupSpent: plan.setupSpent,
+    mtd: { ...b.mtd, lines: addLine(b.mtd.lines, plan.line) },
   }) };
 }
 

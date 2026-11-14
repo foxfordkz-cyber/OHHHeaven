@@ -2,7 +2,7 @@
 import type { BusinessState, DayReport, FeedItem, InboxItem, NicheId, Pack, Place, PnlLine, TaxLiability, WorldState } from '@ohh/shared';
 import { dateOf, RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
-import { monthlyDemand, marketParams, type DemandInput } from './demand';
+import { monthlyDemand, marketParams, type DemandInput, fairPrice } from './demand';
 import { activeEvents, eventMult, itemsQuality, leverEffects, MARKETING_DECAY_DAY, TRAINING_DECAY_DAY, trainingBoost, weekdayMult } from './effects';
 import { dealModifiers } from './deps';
 import { hooksFor } from './hooks';
@@ -14,7 +14,7 @@ interface Calc {
   demand: number; served: number; lost: { size: number; staff: number; closure: number };
   capacity: number; sizeCap: number; pull: number; spillIn: number;
   priceMult: number; cogsMult: number; staffN: number;
-  rentMult: number; utilitiesMult: number; notes: string[];
+  rentMult: number; utilitiesMult: number; wagesMult: number; notes: string[];
 }
 
 const QUALITY_INERTIA = 0.1;      // share of the gap to target closed per day
@@ -55,11 +55,12 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
       return { id: b.id, price: b.orders.price, quality: b.quality, reputation: b.reputation, footTraffic: placeOf(ctx, b.placeId)?.footTraffic ?? 0.5, marketing: econOf(b).marketing };
     });
     const { demand, pull } = monthlyDemand(params, inputs);
-    const wd = weekdayMult(pack, date.weekday);
+    const nicheHooks = hooksFor(niche);
+    const wd = weekdayMult(pack, date.weekday, typeof nicheHooks.demandMult === 'function');
     idx.forEach((i, k) => {
       const b = start[i];
       const place = placeOf(ctx, b.placeId);
-      const hooks = hooksFor(b.niche);
+      const hooks = nicheHooks;
       const mods = dealModifiers(w, ctx, b.id);
       const lev = leverEffects(b, pack);
       const dayMult = wd * weatherMult * eventMult(events, 'demand', niche, place) * eventMult(events, 'footTraffic', niche, place)
@@ -69,11 +70,13 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
       const perStaff = pack.capacity.unitsPerStaffMonth;
       const staffCap = perStaff == null ? Infinity : (staffN * perStaff / RULES.DAYS_PER_MONTH) * eventMult(events, 'staffAvailability', niche, place) * lev.capacityMult;
       const takeaway = clamp((pack.sizing.takeawayShare ?? 0) * eventMult(events, 'deliveryShare', niche, place), 0, 0.95);
-      const hookCap = hooks.capacityDay?.(b, pack);
-      const sizeCap = typeof hookCap === 'number' ? Math.max(0, hookCap)
-        : (b.size * pack.sizing.unitsServedPerSizeMonth / RULES.DAYS_PER_MONTH) / (1 - takeaway);
+      const sizeCap = (b.size * pack.sizing.unitsServedPerSizeMonth / RULES.DAYS_PER_MONTH) / (1 - takeaway);
       const hardCap = pack.capacity.hardCapUnits ? pack.capacity.hardCapUnits / RULES.DAYS_PER_MONTH : Infinity;
-      const capacity = Math.min(staffCap, sizeCap, hardCap);
+      // a niche hook may return the whole capacity of the day (who can serve and where); it replaces staff and room limits
+      const hookCap = hooks.capacityDay?.(b, pack);
+      const useHook = typeof hookCap === 'number' && Number.isFinite(hookCap);
+      const capacity = useHook ? Math.min(Math.max(0, hookCap as number), hardCap) : Math.min(staffCap, sizeCap, hardCap);
+      const roomBound = useHook ? (hookCap as number) >= sizeCap - 0.5 || hardCap <= (hookCap as number) : sizeCap <= staffCap || hardCap <= staffCap;
       const lost = { size: 0, staff: 0, closure: 0 };
       let served = 0;
       if (b.status === 'closed') {
@@ -82,13 +85,14 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
         served = Math.floor(Math.min(dem, capacity));
         const gone = dem - served;
         if (gone > 0) {
-          if (sizeCap <= staffCap || hardCap <= staffCap) lost.size = gone; else lost.staff = gone;
+          if (roomBound) lost.size = gone; else lost.staff = gone;
         }
       }
       calcs.set(i, {
         b, pack, place, demand: dem, served, lost, capacity, sizeCap, pull: pull[k], spillIn: 0,
         priceMult: mods.priceMult, cogsMult: eventMult(events, 'cogs', niche, place) * mods.cogsMult, staffN,
-        rentMult: eventMult(events, 'rent', niche, place), utilitiesMult: eventMult(events, 'utilities', niche, place), notes: [],
+        rentMult: eventMult(events, 'rent', niche, place), utilitiesMult: eventMult(events, 'utilities', niche, place),
+        wagesMult: eventMult(events, 'wages', niche, place), notes: [],
       });
     });
 
@@ -113,7 +117,7 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
     const pack = ctx.packs.niches[b.niche];
     if (!pack) return b;
     const c = calcs.get(i);
-    const next = c ? tradeDay(c, w, ctx, day, date.month, events.map((e) => e.title), weather) : setupDay(b, pack, ctx, day, events, w);
+    const next = c ? tradeDay(c, ctx, day, date.month, events.map((e) => e.title), weather) : setupDay(b, pack, ctx, day, events, w);
     return payDue(next, ctx, pack, day, feed, inbox, w);
   });
 
@@ -124,7 +128,7 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
   return { ...w, businesses, players, feed: feed.length ? [...w.feed, ...feed] : w.feed };
 }
 
-function tradeDay(c: Calc, w: WorldState, ctx: EngineCtx, day: number, month: number, eventTitles: string[], weather: WorldState['weather'][number] | undefined): BusinessState {
+function tradeDay(c: Calc, ctx: EngineCtx, day: number, month: number, eventTitles: string[], weather: WorldState['weather'][number] | undefined): BusinessState {
   const { b, pack } = c;
   const econ = econOf(b);
   const price = b.orders.price;
@@ -158,21 +162,24 @@ function tradeDay(c: Calc, w: WorldState, ctx: EngineCtx, day: number, month: nu
   const empty = b.status === 'open' && util < (pack.sizing.emptyPenaltyBelow ?? 0);
   const qTarget = clamp(0.5 + itemsQuality(b, pack) + lev.quality + trainingBoost(econ.training, c.staffN) - (crowded ? 0.08 : 0) - (c.lost.staff > 0 ? 0.04 : 0), 0, 1);
   const quality = clamp(b.quality + QUALITY_INERTIA * (qTarget - b.quality), 0, 1);
-  const fair = pack.unit.refPrice * (1 + 0.6 * (quality - 0.5));
+  const fair = fairPrice(pack.unit.refPrice, quality);
   const lostN = c.lost.size + c.lost.staff + c.lost.closure;
   const lostShare = c.demand > 0 ? lostN / c.demand : 0;
   const rTarget = clamp(quality + lev.reputation - 0.6 * lostShare - 0.5 * Math.max(0, price / fair - 1.15) - (empty ? 0.1 : 0), 0, 1);
   const reputation = clamp(b.reputation + REPUTATION_INERTIA * (rTarget - b.reputation), 0, 1);
 
   const unit = pack.sizing.unitName;
+  const hooks = hooksFor(b.niche);
+  // a niche that sets its own capacity and writes its own notes explains its own limits (who was busy, what was full)
+  const nicheExplainsCapacity = typeof hooks.capacityDay === 'function' && typeof hooks.notes === 'function';
   const notes: string[] = [];
   if (weather && Math.abs(weather.footTrafficMult - 1) >= 0.05) {
     const pct = Math.round((weather.footTrafficMult - 1) * 100);
     notes.push(`${weather.label}: foot traffic ${pct > 0 ? '+' : ''}${pct}%`);
   }
   for (const t of eventTitles) notes.push(`Event: ${t}`);
-  if (c.lost.size > 0) notes.push(`Line out the door: ${c.lost.size} customers walked away`);
-  if (c.lost.staff > 0) notes.push(`Short-staffed: ${c.lost.staff} customers left unserved`);
+  if (c.lost.size > 0 && !nicheExplainsCapacity) notes.push(`Line out the door: ${c.lost.size} customers walked away`);
+  if (c.lost.staff > 0 && !nicheExplainsCapacity) notes.push(`Short-staffed: ${c.lost.staff} customers left unserved`);
   if (c.lost.closure > 0) notes.push(`Closed by the city: ${c.lost.closure} customers turned away`);
   if (crowded && c.lost.size === 0) notes.push(`Packed: ${Math.round(util * 100)}% of ${unit}s in use, service slows down`);
   if (empty) notes.push(`Empty room: only ${Math.round(util * 100)}% of ${unit}s in use`);
@@ -182,12 +189,14 @@ function tradeDay(c: Calc, w: WorldState, ctx: EngineCtx, day: number, month: nu
     day, demandUnits: c.demand, servedUnits: c.served, lost: c.lost, revenue, variableCosts: cogs,
     sizeUtilization: Math.round(util * 1000) / 1000, weather: weather?.condition ?? 'clear', notes,
   };
-  const extraNotes = hooksFor(b.niche).notes?.(b, report, pack) ?? [];
+  const extraNotes = hooks.notes?.(b, report, pack) ?? [];
   if (extraNotes.length) report.notes = [...notes, ...extraNotes];
 
   const m = econ.mtd;
   const staffDays = { ...m.staffDays };
-  for (const [role, n] of Object.entries(b.orders.staff)) if (n > 0) staffDays[role] = (staffDays[role] ?? 0) + n;
+  let workers = 0;
+  for (const [role, n] of Object.entries(b.orders.staff)) if (n > 0) { staffDays[role] = (staffDays[role] ?? 0) + n; workers += n; }
+  const wagesExtra = (m.wagesExtra ?? 0) + workers * (c.wagesMult - 1);
   const capUnits = Number.isFinite(c.capacity) ? c.capacity : c.demand;
   const econNext: EconExtra = {
     ...econ,
@@ -198,6 +207,7 @@ function tradeDay(c: Calc, w: WorldState, ctx: EngineCtx, day: number, month: nu
       capacityUnits: m.capacityUnits + capUnits, utilSum: m.utilSum + util, utilDays: m.utilDays + 1,
       daysAlive: m.daysAlive + 1, daysOpen: m.daysOpen + 1, managerDays: m.managerDays + (b.orders.autopilot === 'manager' ? 1 : 0),
       rentMultSum: m.rentMultSum + c.rentMult, utilitiesMultSum: m.utilitiesMultSum + c.utilitiesMult, staffDays,
+      ...(wagesExtra !== 0 ? { wagesExtra } : {}),
     },
   };
   return withEcon({
@@ -239,7 +249,9 @@ export function payDue(b: BusinessState, ctx: EngineCtx, pack: Pack, day: number
     const name = taxName(ctx, pack, l.taxId);
     cash = round2(cash - l.amount);
     paid = round2(paid + l.amount);
-    lines = addLine(lines, { id: `tax_paid_${l.taxId}_d${l.dueDay}`, label: `${name} paid`, kind: def?.base === 'payroll' ? 'payroll_tax' : 'tax', amount: -l.amount });
+    // sales tax lines always carry "sales_tax" in the id: screens leave them out of costs (the money only passes through)
+    const prefix = def && isSalesTax(def) ? 'sales_tax_paid' : 'tax_paid';
+    lines = addLine(lines, { id: `${prefix}_${l.taxId}_d${l.dueDay}`, label: `${name} paid`, kind: def?.base === 'payroll' ? 'payroll_tax' : 'tax', amount: -l.amount });
     unpaid.push(`${name} (${'$' + Math.round(l.amount).toLocaleString('en-US')})`);
     return { ...l, paid: true };
   });

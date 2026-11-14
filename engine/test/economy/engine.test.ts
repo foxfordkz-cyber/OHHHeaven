@@ -3,7 +3,7 @@ import type { GameEvent, WorldState } from '@ohh/shared';
 import { applyAction, createWorld, netWorth, tickDay } from '../../src/index';
 import { NICHE_HOOKS } from '../../src/niches/index';
 import { cafePack } from '../fixtures/cafe';
-import { act, cafeCity, config, ctxWith, deepFreeze, owner, places, run } from '../fixtures/world';
+import { cafeCity, config, deepFreeze, run } from '../fixtures/world';
 
 describe('createWorld, applyAction, tickDay, netWorth', () => {
   it('creates an empty running world on day 1 (the opening day; tickDay computes day 2 next)', () => {
@@ -150,5 +150,33 @@ describe('opening and permits', () => {
     let { w, ctx } = cafeCity(1, { launchDay: 22 });
     w = run(w, ctx, 30 - w.day);
     expect(w.businesses[0].trails).toEqual([]);
+  });
+});
+
+describe('niche hooks: who owns the week and the capacity', () => {
+  it('a hook with demandMult and no pack.extra.weekdayMult turns the default week off; capacityDay replaces staff and room limits', () => {
+    const plainPack = { ...cafePack, extra: { taxableShare: 0.9 } };
+    const { w, ctx } = cafeCity(2, { pack: plainPack });
+    let x = w;
+    while (x.day % 7 !== 5) x = tickDay(x, ctx);   // day d has weekday (d − 1) mod 7, so the next day is a Saturday
+    const satDefault = tickDay(x, ctx).businesses[1].days.at(-1)!.demandUnits;
+    NICHE_HOOKS.cafe = { demandMult: () => 1, capacityDay: () => 100 };
+    try {
+      const sat = tickDay(x, ctx).businesses[1].days.at(-1)!;
+      expect(satDefault / sat.demandUnits).toBeCloseTo(1.15, 1);
+      expect(sat.servedUnits).toBe(100);
+      expect(sat.lost.staff).toBe(sat.demandUnits - 100);   // the hook limit is below the room: not a seat problem
+      expect(sat.notes.some((n) => n.startsWith('Short-staffed'))).toBe(true);
+      // a niche with its own capacity and its own notes explains the limit itself: the engine does not say it twice
+      NICHE_HOOKS.cafe = { capacityDay: () => 100, notes: (_b, r) => (r.lost.staff > 0 ? [`${r.lost.staff} guests left: every barista was busy`] : []) };
+      const told = tickDay(x, ctx).businesses[1].days.at(-1)!;
+      expect(told.notes.some((n) => n.startsWith('Short-staffed'))).toBe(false);
+      expect(told.notes).toContain(`${told.lost.staff} guests left: every barista was busy`);
+      NICHE_HOOKS.cafe = { capacityDay: () => 10_000 };
+      const roomy = tickDay(x, ctx).businesses[1].days.at(-1)!;
+      expect(roomy.lost.size + roomy.lost.staff).toBe(0);
+    } finally {
+      delete NICHE_HOOKS.cafe;
+    }
   });
 });
