@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { PLAN } from '../insights/fixtures';
+import type { RealWorldPlan } from '@ohh/shared/types';
 import { decodePlan, encodePlan, planLink, planTokenFromHash, slimPlan } from './plan-link';
+import { personalOf } from './personal';
+import sample from './plan.sample.json';
 
 describe('plan link', () => {
   it('round-trips the plan through a compressed URL fragment', async () => {
@@ -15,6 +18,12 @@ describe('plan link', () => {
     expect(link.startsWith('https://firstyear.example/end/plan#plan=z.')).toBe(true);
     expect(await decodePlan(planTokenFromHash(hash)!)).toEqual(PLAN);
     expect(link.length).toBeLessThan(8000);
+  });
+  it('a real plan keeps the player’s own part on the way through the link (B09)', async () => {
+    const real = sample as unknown as RealWorldPlan;
+    const back = await decodePlan(await encodePlan(real));
+    expect(personalOf(back!)).toEqual(personalOf(real));
+    expect((await planLink(real, 'https://firstyear.example')).length).toBeLessThan(16000);
   });
   it('returns null for a broken token', async () => {
     expect(await decodePlan('z.not-really')).toBeNull();
