@@ -326,3 +326,8 @@ EXTRA_MECHANICS = [
                  {'what': 'Albany County package', 'value': 395, 'source': 'https://www.llcpublishers.com/pricing', 'confidence': 'verified'}],
      'tier': 'exotic'},
 ]
+
+# the consolidated Chapter 23 PDF on nyc.gov refuses this session; these two were read in the adopted rule text
+for _p in CAFE_PATCHES:
+    if _p.get('id') in ('pest_activity', 'spoiled_food'):
+        _p['set']['source'] = RULES21
