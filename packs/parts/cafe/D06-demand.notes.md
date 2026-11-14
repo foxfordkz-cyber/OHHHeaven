@@ -149,3 +149,12 @@
 - Surcharge reaction: J.D. Power 2025/2026: 81% have used alternate payment to avoid surcharge; "surcharges come with acute abandonment risk"; PYMNTS 2022: 56% of surcharged card users very/extremely likely to switch merchant; NRA: 1 in 5 restaurants add extra fees (16% in 2022). https://www.digitaltransactions.net/surcharges-come-with-acute-abandonment-risk-j-d-power-research-finds/ ; https://www.digitaltransactions.net/customer-satisfaction-and-card-usage-drop-when-sellers-levy-credit-card-surcharges-says-j-d-power/
 - NYC CPL: Admin Code 20-700; penalties 6 RCNY 6-47: $525 / $1,050 / $3,500 (columns unclear); each statement a separate violation (20-703(b)); first-time cure (LL153/2013). https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-98103 ; https://nyc-business.nyc.gov/nycbusiness/description/consumer-protection-law
 - Operation Clean Turf (NY AG, Sept 2013): 19 companies, >$350,000 total, penalties from $2,500. https://martech.org/ny-attorney-general-settles-with-19-companies-in-fake-review-crackdown/ ; https://www.cbsnews.com/newyork/news/new-york-attorney-general-cracks-down-on-fake-online-reviews/
+
+## Late batch
+- NYC coffee shops: 1,744 coffee shops + 956 cafes (OysterLink 2025); directory 3,629; 9.1 per 10,000 people. DOHMH grades ~27-29k restaurants.
+- Carts: most charge $2+ since 2023 (FOX 5 via Fox News). Dunkin large hot coffee $2.89+, large latte $4.49+ (Northeast). Specialty flat white $6-8 (2026).
+- Reviews: 28% likely to review after positive, 34% after negative (ReviewTrackers); 69% leave when asked (GatherUp).
+- Late night: PDG June 2026 "Should coffee shops stay open later": Yemeni-style cafes open late; Abraco (NY) wine at night; Coffee Project East Village sake bar by night.
+- QSR visits -1.3% Jan-Jul 2026 yoy, -4.5% May 2026 (Placer "Dining in 2026: all roads lead to value").
+- Rex coffee owner: lost 10% of afternoon sales when Starbucks opened; added breakfast sandwiches, recouped (CBS).
+- National Coffee Day 2026 (Tue Sep 29): Dunkin free medium with purchase for Rewards; Tim Hortons free; Circle K free; Peet's 25c drip.
