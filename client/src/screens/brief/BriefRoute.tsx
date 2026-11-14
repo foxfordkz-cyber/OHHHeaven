@@ -1,9 +1,12 @@
 // /brief wired to the app store: the live view, actions and navigation.
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { footfallParams } from '@ohh/shared/place';
 import { Button, Card, Skeleton, TopBar, useT } from '../../ui';
+import { useCatalog } from '../../app/catalog';
 import { useGame, useStoreState, useView } from '../../app/store';
 import { BriefScreen } from './BriefScreen';
+import { NEAR_RADIUS_FALLBACK_M, nearbyIds } from './model';
 
 export function BriefRoute() {
   const tr = useT();
@@ -11,6 +14,16 @@ export function BriefRoute() {
   const game = useGame();
   const { mode, worldId, status } = useStoreState();
   const navigate = useNavigate();
+  const catalog = useCatalog();
+
+  // Who shares my passers-by: the same radius the engine uses to split foot traffic.
+  const owner = view?.kind === 'owner' ? view : null;
+  const near = useMemo(() => {
+    if (!owner?.business || !catalog) return null;
+    const pack = catalog.packs.niches[owner.business.niche];
+    const radius = (pack && footfallParams(pack)?.radiusM) || NEAR_RADIUS_FALLBACK_M;
+    return nearbyIds(owner, catalog.places, radius);
+  }, [owner, catalog]);
 
   useEffect(() => {
     if (view?.kind === 'official') navigate('/desk', { replace: true });
@@ -37,5 +50,5 @@ export function BriefRoute() {
     );
   }
 
-  return <BriefScreen deps={{ view, memoryKey: `${mode}:${worldId}:${view.me.id}`, act: game.act, navigate: (to) => navigate(to) }} />;
+  return <BriefScreen deps={{ view, memoryKey: `${mode}:${worldId}:${view.me.id}`, act: game.act, navigate: (to) => navigate(to), near }} />;
 }

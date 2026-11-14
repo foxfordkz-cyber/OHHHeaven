@@ -25,8 +25,11 @@ function monthState(): OwnerView {
   const feb = b.history[0];
   const jan: MonthReport = { ...feb, month: 1, revenue: 31_900, profit: -2_150, servedUnits: 4_980, cashStart: 41_000, cashEnd: 35_180 };
   const mar: MonthReport = { ...feb, month: 2 };
+  const shift = 74 - 61;
   return {
     ...ownerView, world: worldPublic(61, 1_100, liveConfig), away: { days: 6, profit: 3_240, items: [] },
+    me: { ...ownerView.me, inbox: ownerView.me.inbox.map((i) => ({ ...i, day: i.day - shift })) },
+    feed: ownerView.feed.map((f) => ({ ...f, day: f.day - shift })),
     business: { ...b, history: [jan, mar] },
     events: ownerView.events.map((e) => ({ ...e, announcedDay: 58, startDay: 62, endDay: 70 })),
   };

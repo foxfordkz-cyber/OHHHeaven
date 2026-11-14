@@ -19,6 +19,8 @@ export interface BriefDeps {
   memoryKey: string;
   act(a: Action): Promise<Ack>;
   navigate(to: string): void;
+  /** businesses that share my passers-by (from the map); null when the map data is not loaded */
+  near?: Set<string> | null;
   /** now, for tests */
   now?: () => number;
 }
@@ -58,7 +60,7 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
 
   const today = view.world.day;
   const days = Math.max(0, today - since.day);
-  const items = happenings(view, since);
+  const items = happenings(view, since, deps.near ?? null, 12);
   const news = monthNews(view, since);
   const standing = myStanding(view);
   const board = view.leaderboards[b.niche] ?? [];
@@ -85,8 +87,8 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
 
   return (
     <main className="screen stack" aria-label={tr('Your brief', 'Твоя сводка')}>
-      <TopBar title={tr('While you were away', 'Пока тебя не было')} onBack={() => deps.navigate('/')} right={<Badge tone={b.status === 'open' ? 'profit' : 'warn'}>{b.name}</Badge>} />
-      <p className="small muted" style={{ margin: 0 }}>{sinceLine}</p>
+      <TopBar title={tr('While you were away', 'Пока тебя не было')} onBack={() => deps.navigate('/')} />
+      <p className="small muted" style={{ margin: 0 }}><strong>{b.name}</strong> · {sinceLine}</p>
 
       <CashCard cashThen={since.cash} cashNow={b.cash} rankThen={since.rank} rankNow={standing?.rank ?? null} boardSize={board.length} />
 
@@ -94,15 +96,7 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
 
       {news && <MonthCard news={news} />}
 
-      <Card title={tr('What happened', 'Что случилось')} subtitle={items.length ? undefined : tr('A quiet stretch: no letters, offers or inspections.', 'Тихо: ни писем, ни предложений, ни проверок.')}>
-        {items.length > 0 && (
-          <List>
-            {items.map((h) => (
-              <ListRow key={h.id} icon={KIND_ICON[h.kind]} iconTone={h.tone} title={h.title} subtitle={`${dateOf(h.day).label}${h.text ? ` · ${h.text}` : ''}`} />
-            ))}
-          </List>
-        )}
-      </Card>
+      <HappenedCard items={items} />
 
       {rv && standing && (
         <Card title={tr('Your rival', 'Твой соперник')} subtitle={rv.above
@@ -110,7 +104,7 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
           : tr(`You lead. ${rv.name} (#${rv.rank}) is ${formatMoney(-rv.gap)} behind.`, `Ты впереди. ${rv.name} (№${rv.rank}) отстаёт на ${formatMoney(-rv.gap)}.`)}>
           <div className="grid-2">
             <Stat label={tr('Your place', 'Твоё место')} value={`#${standing.rank} / ${formatNumber(board.length)}`} />
-            <Stat label={tr('Prize forecast', 'Прогноз приза')} value={standing.prize ? <MoneyText value={standing.prize} /> : tr('Not in the prizes yet', 'Пока вне призов')} />
+            <Stat label={tr('Prize forecast', 'Прогноз приза')} value={standing.prize ? <MoneyText value={standing.prize} /> : prizeLine(standing.rank, view.world.config.nichePrizeTable.length, tr)} />
           </div>
           <Button variant="secondary" icon="users" onClick={() => deps.navigate('/biz/network')}>{tr('See the neighbors', 'К соседям')}</Button>
         </Card>
@@ -119,6 +113,35 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
       <NextCard next={next} ahead={ahead} now={now} onDone={finish} done={since.source === 'look' && days === 0} />
     </main>
   );
+}
+
+const SHOW_FIRST = 4;
+
+function HappenedCard({ items }: { items: Happening[] }) {
+  const tr = useT();
+  const [all, setAll] = useState(false);
+  const shown = all ? items : items.slice(0, SHOW_FIRST);
+  return (
+    <Card title={tr('What happened', 'Что случилось')} subtitle={items.length ? undefined : tr('A quiet stretch: no letters, offers or inspections.', 'Тихо: ни писем, ни предложений, ни проверок.')}>
+      {items.length > 0 && (
+        <List>
+          {shown.map((h) => (
+            <ListRow key={h.id} icon={KIND_ICON[h.kind]} iconTone={h.tone} title={h.title} subtitle={`${dateOf(h.day).label}${h.text ? ` · ${h.text}` : ''}`} />
+          ))}
+        </List>
+      )}
+      {items.length > SHOW_FIRST && (
+        <Button variant="ghost" onClick={() => setAll(!all)}>{all ? tr('Show less', 'Свернуть') : tr(`Show all ${items.length}`, `Показать все (${items.length})`)}</Button>
+      )}
+    </Card>
+  );
+}
+
+/** No prize forecast for this place: say how far the prize places are. */
+function prizeLine(rank: number, prizePlaces: number, tr: (en: string, ru: string) => string): string {
+  if (rank <= prizePlaces) return tr('In the prizes', 'В призах');
+  const gap = rank - prizePlaces;
+  return tr(`${gap} ${gap === 1 ? 'place' : 'places'} to a prize`, `До приза мест: ${gap}`);
 }
 
 function CashCard({ cashThen, cashNow, rankThen, rankNow, boardSize }: { cashThen: number | null; cashNow: number; rankThen: number | null; rankNow: number | null; boardSize: number }) {
