@@ -17,7 +17,7 @@ The starting city is prepared; every action and every result you saw was compute
 Every number in the data packs carries a source and is marked verified or estimate; seventy-three of the one hundred thirty-eight key numbers are verified at the primary source today. The pack validator refuses data without a source, and the estimates are labelled on screen.
 
 **3. Is the value real, or is it hard-coded?**
-The first-year result on the setup screen is computed from the storefront's rent, size, foot traffic and rivals, and it changes when you pick another door or another setup. Two cafés on the same block split one foot-traffic stream, so a crowded street really pays less — `sim/audit/saturation.ts` checks that.
+The bet on the setup screen — how many orders a day pay your bills against what an average shop on that corner sells — is computed from the storefront's rent, size, foot traffic and rivals, and it changes with every decision you make. Two cafés on the same block split one foot-traffic stream, so a crowded street really pays less — `sim/audit/saturation.ts` checks that.
 
 **4. Does it work end to end, or only the parts you showed?**
 `node scripts/smoke.mjs` walks the whole loop over HTTP on every push: two owners join, open, trade a month, one reports the other, a case ends in a notice, a deal is signed. The deck's screenshots were taken by a script that opened a café through the phone interface and ran it for a month.
@@ -48,7 +48,7 @@ One person: an American, twenty-one to forty-five, who wants to open a place of 
 That would be B2B, and our user is the person whose savings are at risk, not the institution. We sell to that person directly, by subscription.
 
 **12. How will you reach them?**
-Ads that show one real moment of the year — rent running before the first customer, a neighbour's offer — then one question, "what would you open?", and their own storefront with its cost; the first month is free. We have not run these ads yet: the model's $47 blended cost per payer ($265 through ads alone) is built from public benchmarks, and measuring it is our first test.
+Ads that show one real moment of the year — the orders a café needs against what its corner sells, a neighbour's offer — then one question, "what would you open?", and their own storefront with its cost; the first month is free. We have not run these ads yet: the model's $47 blended cost per payer ($265 through ads alone) is built from public benchmarks, and measuring it is our first test.
 
 ## Почему это деньги (15%)
 
