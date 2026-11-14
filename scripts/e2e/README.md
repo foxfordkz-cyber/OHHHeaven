@@ -8,7 +8,7 @@ node scripts/e2e/journey.mjs --url https://…    # the same walk against a depl
 scripts/e2e/cycle.sh <branch>                   # a fresh worktree of a branch: install, build, walk
 ```
 
-Options: `--widths 375,1440`, `--out <dir>`, `--shots <dir>` (retina screenshots of what the player sees, for the deck), `--no-end` (stop before the season ends), `--root <checkout>` (serve the game from another checkout).
+Options: `--scheme dark` (dark system theme and the app's own dark theme), `--widths 375,1440`, `--out <dir>`, `--shots <dir>` (retina screenshots of what the player sees, for the deck), `--no-end` (stop before the season ends), `--root <checkout>` (serve the game from another checkout).
 
 ## What it does
 
