@@ -374,6 +374,14 @@ export function CityMap(props: CityMapProps) {
     return () => cancelAnimationFrame(raf);
   }, [markers, mode]);
 
+  // the opened business keeps a ring and its name, so it is clear which pin the card is about
+  useEffect(() => {
+    pinsRef.current.forEach((marker, id) => {
+      const el = marker.getElement();
+      if (id === openBiz) el.dataset.sel = '1'; else delete el.dataset.sel;
+    });
+  }, [openBiz, markers, mode]);
+
   // "Road closed" tags in the middle of closed streets
   useEffect(() => {
     const map = mapRef.current;

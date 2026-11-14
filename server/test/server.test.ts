@@ -216,3 +216,21 @@ describe('reliability', () => {
     expect(good.stepOnce()).toBe(true);
   });
 });
+
+describe('a finished demo city', () => {
+  it('starts a new season once its end screen has been up long enough; the live city is never restarted', () => {
+    let t = 1_000_000;
+    const game = newGame({ now: () => t });
+    game.runtimes.get('demo')!.advance(400);
+    expect(game.runtimes.get('demo')!.world.phase).not.toBe('running');
+    expect(game.recycleDemos()).toEqual([]);          // first sight of the ended season: the timer starts
+    t += 9 * 60_000;
+    expect(game.recycleDemos()).toEqual([]);          // the end screen is still up
+    t += 2 * 60_000;
+    expect(game.recycleDemos()).toEqual(['demo']);
+    const fresh = game.runtimes.get('demo')!.world;
+    expect(fresh.phase).toBe('running');
+    expect(fresh.day).toBeLessThan(5);
+    expect(game.runtimes.get('nyc')!.world.phase).toBe('running');
+  });
+});
