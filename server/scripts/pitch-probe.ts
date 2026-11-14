@@ -9,5 +9,5 @@ const setup = buildPitch(data.ctx, serverDeps());
 const ms = Math.round(performance.now() - t0);
 console.log(setup.log.join('\n'));
 console.log(JSON.stringify({ places: setup.places, shortcut: setup.shortcut, complaint: setup.complaint, branches: setup.branches, summary: pitchSummary(setup.start, setup) }, null, 1));
-for (const c of setup.checks) console.log(`${c.ok ? 'PASS' : 'FAIL'} ${c.id}: ${c.text}`);
+for (const c of setup.checks) console.log(`${c.ok ? 'PASS' : c.level === 'must' ? 'FAIL' : 'WARN'} ${c.id}: ${c.text}`);
 console.log(`built in ${ms} ms`);

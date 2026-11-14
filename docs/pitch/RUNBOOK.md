@@ -57,10 +57,10 @@ HOST=0.0.0.0 PORT=8787 PITCH=1 CLOCK_KEY=stage-key PUBLIC_URL=http://192.168.1.5
 5. Ссылки и коды для этого запуска (адрес — сеть ноутбука, не `localhost`):
 
 ```bash
-curl -s -H 'x-clock-key: stage-key' http://127.0.0.1:8787/api/worlds/pitch/pitch | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const d=JSON.parse(s).data;console.log(d.join);for(const c of d.checks)console.log(c.ok?"PASS":c.level==="must"?"FAIL":"WARN",c.id,"—",c.text)})'
+PITCH_URL=http://127.0.0.1:8787 CLOCK_KEY=stage-key node scripts/pitch-ctl.mjs codes
 ```
 
-Выводит `guest` (код из четырёх букв и QR), `maya` и `viktor` (коды из шести букв). Коды владельцев видны только с ключом часов.
+Выводит гостевой код (четыре буквы, ссылка на QR), коды Maya и Viktor (шесть букв) и адрес пульта ведущего `/pitch`. Коды владельцев видны только с ключом часов.
 
 6. Тот же прогон на живом сервере показа — проверка сети и кодов на настоящем оборудовании:
 
@@ -81,29 +81,32 @@ PITCH_URL=http://127.0.0.1:8787 CLOCK_KEY=stage-key node scripts/pitch.mjs
 
 Код можно набрать руками: `http://<адрес>/p` — поле для кода. Буквы без похожих (нет I, O, 0, 1), регистр не важен. Частные экраны — в разных профилях браузера: сессии лежат в `localStorage` по городу, одна вкладка с Maya и одна с Viktor в одном профиле перепишут друг друга.
 
-## Команды ведущего
+## Пульт ведущего и команды
 
-Все команды — `POST /api/worlds/pitch/pitch` с заголовком `x-clock-key`. Ответ — полное состояние показа (`day`, `paused`, `checks`, `complaint`, `join`).
+**Пульт в браузере** — `http://<адрес>/pitch` на ноутбуке Б (не на проекторе). Большие кнопки: Pause, Resume · 1 s/day, +1 day, +7 days, Back to start, две ветки жюри, «Maya reports Viktor · run to notice». Рядом — состояние Maya, Viktor и дела, гостевой QR, коды телефонов и проверки города. Ключ часов вводится один раз за сеанс браузера. Консоль на сцене не нужна.
 
-Для краткости в терминале показа:
+**Те же команды из терминала** (одна команда — одно действие; сервер — `PITCH_URL`, ключ — `CLOCK_KEY`):
 
 ```bash
-pitch() { curl -s -X POST -H 'content-type: application/json' -H 'x-clock-key: stage-key' http://127.0.0.1:8787/api/worlds/pitch/pitch -d "$1" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const r=JSON.parse(s);if(!r.ok)return console.log("ERROR",r.error);const d=r.data;console.log(`day ${d.day} ${d.date} ${d.paused?"PAUSED":"RUNNING"}`,d.complaint?`case ${d.complaint.status} ${d.complaint.found.join(",")} fine ${d.complaint.fine??""}`:"")})'; }
+export PITCH_URL=http://127.0.0.1:8787 CLOCK_KEY=stage-key
 ```
 
 | Что | Команда |
 |---|---|
-| Вернуть город в исходное состояние | `pitch '{"command":"reset"}'` |
-| Пауза | `pitch '{"command":"pause"}'` |
-| Снять паузу (день за секунду) | `pitch '{"command":"resume","dayMs":1000}'` |
-| Перемотать на N игровых дней (до 60) | `pitch '{"command":"advance","days":7}'` |
-| Скорость без снятия паузы | `pitch '{"command":"speed","dayMs":2000}'` |
-| Ветка жюри «выше цены» за Maya | `pitch '{"command":"branch","branch":"price"}'` |
-| Ветка жюри «больше мест» за Maya | `pitch '{"command":"branch","branch":"seats"}'` |
-| Жалоба Maya на Viktor, город идёт до уведомления и сам встаёт на паузу | `pitch '{"command":"complaint","run":true}'` |
-| Только состояние | `pitch '{"command":"status"}'` |
+| Вернуть город в исходное состояние | `node scripts/pitch-ctl.mjs reset` |
+| Пауза | `node scripts/pitch-ctl.mjs pause` |
+| Снять паузу (день за секунду) | `node scripts/pitch-ctl.mjs resume 1000` |
+| Перемотать на N игровых дней (до 60) | `node scripts/pitch-ctl.mjs advance 7` |
+| Скорость без снятия паузы | `node scripts/pitch-ctl.mjs speed 2000` |
+| Ветка жюри «выше цены» за Maya | `node scripts/pitch-ctl.mjs branch price` |
+| Ветка жюри «больше мест» за Maya | `node scripts/pitch-ctl.mjs branch seats` |
+| Жалоба Maya на Viktor; город идёт до уведомления и сам встаёт на паузу | `node scripts/pitch-ctl.mjs complaint` |
+| Состояние / коды | `node scripts/pitch-ctl.mjs status` / `codes` |
+| Собрать город / собрать заново с новыми кодами | `node scripts/pitch-ctl.mjs build` / `rebuild` |
 
-Ветки и жалоба — запасной путь, если телефон не отвечает: те же обычные действия игры, что А делает на телефоне. Основной путь — руками на телефоне.
+Под капотом — `POST /api/worlds/pitch/pitch {"command": ...}` с заголовком `x-clock-key`.
+
+Ветки и жалоба с пульта — запасной путь, если телефон не отвечает: те же обычные действия игры, что А делает на телефоне. Основной путь — руками на телефоне.
 
 ## По ходу пяти минут
 
@@ -111,16 +114,16 @@ pitch() { curl -s -X POST -H 'content-type: application/json' -H 'x-clock-key: s
 
 | Время | Кто | Что нажать | Что проверить глазами |
 |---|---|---|---|
-| до выхода | Б | `reset`; телефоны и проектор открыты, город на паузе | На проекторе дата подготовленного момента и режим Demo |
-| 1:20–1:40 | А | Телефон Maya: вкладка Today, затем Manage | Очередь и потерянные гости — **только если проверка `customers_lost` PASS** (см. ниже) |
+| до выхода | Б | Пульт: Back to start; телефоны и проектор открыты, город на паузе | На проекторе дата подготовленного момента и режим Demo; телефон Maya открывается сразу на Today, без окна «While you were away» |
+| 1:20–1:40 | А | Телефон Maya: вкладка Today, затем Manage | На Today заметка «Packed: …% of seats in use» (проверка `room_full`). Потерянных гостей сегодня 0 — см. реплику ниже |
 | 1:40–2:00 | А | Manage: цена +10% **или** зал +6 мест; прогноз; сохранить | Прогноз месяца обновился; «This is a model, not a promise» |
 | 2:00–2:40 | А / Б | Ничего не трогать в городе; Б показывает срезанный угол Viktor в Manage | У Viktor включено «Pay staff in cash, off the books» |
 | 2:40 | А | Телефон Maya: Network → Viktor's Coffee → Report → «Report unpaid taxes or off-the-books wages» | Во входящих Maya: «Report filed» |
-| 2:40–3:00 | Б | `pitch '{"command":"resume","dayMs":1000}'`; после уведомления — `pause` | Дело Sam (AI): уведомление о штрафе по `off_books_payroll`. Сегодня это 1 игровой день ≈ 1 секунда |
+| 2:40–3:00 | Б | Пульт: Resume · 1 s/day; после уведомления — Pause | Дело Sam (AI): уведомление о штрафе по `off_books_payroll`. Сегодня это 1 игровой день ≈ 1 секунда |
 | 3:00–3:20 | Б | Телефон Viktor: уведомление → Pay | Касса Viktor уменьшилась на штраф с экрана |
-| после | Б | `reset` | День подготовленного момента, пауза, жалобы нет |
+| после | Б | Пульт: Back to start | День подготовленного момента, пауза, жалобы нет |
 
-Если А на сцене не успевает отправить жалобу с телефона, Б делает это одной командой: `pitch '{"command":"complaint","run":true}'` — жалоба, ход времени и автопауза на уведомлении.
+Если А на сцене не успевает отправить жалобу с телефона, Б нажимает на пульте «Maya reports Viktor · run to notice»: жалоба, ход времени и автопауза на уведомлении.
 
 ## Проверки города и как читать WARN
 
@@ -128,12 +131,13 @@ pitch() { curl -s -X POST -H 'content-type: application/json' -H 'x-clock-key: s
 
 | Проверка | Уровень | Если не прошла |
 |---|---|---|
-| `open`, `permits` | must | Пересобрать: `POST /api/worlds {"scenario":"pitch","fresh":true}` |
+| `open`, `permits` | must | Пересобрать: `node scripts/pitch-ctl.mjs rebuild` |
 | `neighbors` | must | Пересобрать; если повторяется — в данных мест нет двух свободных соседних дверей |
 | `branch_price`, `branch_seats` | must | Ветку на сцене не предлагать; реплика LIVE-SHOW: “Let’s try the price first.” |
 | `violation`, `can_pay` | must | Пересобрать |
 | `complaint` | must | Не обещать живую проверку: «Here is the audit from our earlier completed run.» |
-| `customers_lost` | should | **Сегодня WARN:** на текущем движке Maya не теряет гостей ни из-за мест, ни из-за штата. Реплику “Customers arrive, but some leave without buying.” не говорить. Вместо неё: “Sales are below what she needs. Raise the price, or add seats?” |
+| `room_full` | should | Зал Maya в среднем занят на 80% и больше за неделю — вопрос «больше мест?» честный. Сегодня PASS (85%). Если WARN — не предлагать ветку мест: “Let’s try the price first.” |
+| `customers_lost` | should | **Сегодня WARN:** на текущем движке Maya не теряет гостей ни из-за мест, ни из-за штата. Реплику “Customers arrive, but some leave without buying.” не говорить. Вместо неё — то, что видно на Today: “Her room is packed. Raise the price, or add seats?” |
 
 Сценарий не зависит от точных сумм: проверки — условия, а суммы на сцене — то, что посчитал движок в момент показа. Если движок поменялся, `node scripts/pitch.mjs` покажет новые числа и новый итог проверок.
 
@@ -141,11 +145,11 @@ pitch() { curl -s -X POST -H 'content-type: application/json' -H 'x-clock-key: s
 
 | Сбой | Действие |
 |---|---|
-| Город убежал вперёд | `pitch '{"command":"reset"}'` — та же стартовая копия, телефоны остаются в своих кофейнях |
+| Город убежал вперёд | Пульт: Back to start (или `node scripts/pitch-ctl.mjs reset`) — та же стартовая копия, телефоны остаются в своих кофейнях |
 | Сервер перезапустился | Город показа поднимается из снимка `server/.snapshots/pitch.json` и `pitch.setup.json` с теми же кодами |
 | Телефон показывает чужую кофейню или «Join» | Ещё раз открыть `/p/<код владельца>`; гостевой код сессию владельца стирает |
 | QR не открывается с телефона | Проверить, что телефон в той же сети; адрес в QR — `join.base` из состояния показа; при нескольких сетях задать `PUBLIC_URL` |
-| Нужен совсем новый город (новые коды) | `curl -s -X POST -H 'content-type: application/json' -H 'x-clock-key: stage-key' http://127.0.0.1:8787/api/worlds -d '{"scenario":"pitch","fresh":true}'` — 20–25 секунд, коды меняются: перепечатать QR |
+| Нужен совсем новый город (новые коды) | `node scripts/pitch-ctl.mjs rebuild` — 20–25 секунд, коды меняются: перепечатать QR |
 
 ## Что это не делает
 

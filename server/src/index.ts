@@ -11,6 +11,7 @@ import { RateLimiter } from './rate';
 import { WorldRuntime } from './runtime';
 import { PitchDirector, enterPage, joinPage, lanBase, type PitchCommand, type PitchHost } from './pitch';
 import { qrSvg } from './qr';
+import { deskPage } from './desk';
 
 export const CLIENT_DIST = resolve(REPO_ROOT, 'client/dist');
 export const DEFAULT_SNAPSHOT_DIR = join(SERVER_DIR, '.snapshots');
@@ -305,6 +306,8 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
 
   // вход по короткому коду: /p — поле для кода, /p/<код> — вход, /p/<код>/qr.svg — QR с адресом в локальной сети
   app.get('/p', (_req, res) => { res.type('html').send(enterPage()); });
+  // пульт ведущего: кнопки паузы, перемотки, возврата, веток жюри и жалобы; команды всё равно требуют ключ часов
+  app.get('/pitch', (_req, res) => { res.set('Cache-Control', 'no-store').type('html').send(deskPage()); });
   app.get('/p/:code/qr.svg', (req, res) => {
     const r = game.pitch?.resolve(String(req.params.code));
     if (!r) { res.status(404).type('text').send('Unknown code'); return; }

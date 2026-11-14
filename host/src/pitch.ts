@@ -6,7 +6,7 @@ import type { Action, BusinessState, NicheId, OpenRecommendation, Place, Standin
 import { RULES, dateOf, distanceM } from '@ohh/shared';
 import { createBotBrain, type OfficialStrategy, type OwnerStrategy } from '@ohh/bots';
 import { engine } from './deps';
-import { act, defaultConfig, join, newWorld, step } from './index';
+import { act, defaultConfig, join, markSeen, newWorld, step } from './index';
 import type { BotBrain, BotResident, EngineCtx, HostDeps, PlayerExtra } from './types';
 
 export const PITCH_WORLD_ID = 'pitch';
@@ -42,6 +42,8 @@ export const OPEN_GUARD_DAYS = 240;
 /** Двери, которые открываются дольше (полный ремонт под кафе), для показа не берём: сезон не ждёт. */
 export const MAX_OPEN_DAYS = 120;
 export const SEATS_STEP = 6;
+/** С какой средней загрузки зала вопрос «больше мест?» честный: зал почти полон, рядом с порогом тесноты пакета кафе (crowdPenaltyAbove 0.9). Это порог сцены, не число модели. */
+export const ROOM_FULL = 0.8;
 
 export type PitchRole = 'maya' | 'viktor';
 export type PitchBranchId = 'price' | 'seats';
@@ -300,6 +302,8 @@ export function buildPitch(ctx: EngineCtx, baseDeps: HostDeps, opts: BuildPitchO
   if (w.day < target) w = runDays(w, ctx, deps, target - w.day);
   log.push(`Day ${w.day} (${dateOf(w.day).label}): the city is paused. This is the prepared moment.`);
 
+  // владельцы смотрели на свои телефоны в подготовленный день: без окна «While you were away» на сцене (то же делает обычный view)
+  for (const role of ['maya', 'viktor'] as const) w = markSeen(w, players[role]);
   w = { ...w, config: { ...w.config, paused: true }, version: w.version + 1 };
   const businesses = { maya: bizOf(w, players.maya)?.id ?? '', viktor: bizOf(w, players.viktor)?.id ?? '' };
   const places = { maya: pair.maya.id, viktor: pair.viktor.id, distanceM: pair.distanceM };
@@ -431,6 +435,8 @@ export function pitchChecks(setup: PitchSetup, ctx: EngineCtx): PitchCheck[] {
   const lostSize = Math.round(week.reduce((a, d) => a + d.lost.size, 0));
   const lostStaff = Math.round(week.reduce((a, d) => a + d.lost.staff, 0));
   add('customers_lost', lostSize + lostStaff > 0, `Maya turned away customers in the last 7 days: ${lostSize} for lack of seats, ${lostStaff} for lack of staff`, 'should');
+  const busy = week.length ? week.reduce((a, d) => a + d.sizeUtilization, 0) / week.length : 0;
+  add('room_full', busy >= ROOM_FULL, `Maya's seats are ${Math.round(busy * 100)}% busy on average over the last 7 days (the "more seats" question needs ${Math.round(ROOM_FULL * 100)}%+)`, 'should');
   add('branch_price', setup.branches.price.ok, `Jury branch "${BRANCH_LABEL.price}": ${setup.branches.price.ok ? 'accepted' : setup.branches.price.error}`);
   add('branch_seats', setup.branches.seats.ok, `Jury branch "${BRANCH_LABEL.seats}": ${setup.branches.seats.ok ? 'accepted' : setup.branches.seats.error}`);
   const on = viktor?.orders.shortcuts.includes(setup.shortcut.id) ?? false;

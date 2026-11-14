@@ -94,6 +94,11 @@ describe('pitch scenario', () => {
     expect(token).toBeTruthy();
     const view = await request(app).get('/api/worlds/pitch/view').set('Authorization', `Bearer ${token}`);
     expect((view.body as OwnerView).me.name).toBe('Maya');
+    // на сцене телефон открывает кофейню, а не окно «While you were away»
+    expect((view.body as OwnerView).away).toBeNull();
+    const desk = await request(app).get('/pitch');
+    expect(desk.status).toBe(200);
+    expect(desk.text).toContain('pitch desk');
     expect((await request(app).get('/p/ZZZZ')).status).toBe(404);
     const qr = await request(app).get(`/p/${status.join.guest.code}/qr.svg`);
     expect(qr.headers['content-type']).toContain('image/svg+xml');

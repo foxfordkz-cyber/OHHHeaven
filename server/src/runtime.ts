@@ -45,6 +45,7 @@ export class WorldRuntime {
   stepsTaken = 0;
   stepMsTotal = 0;
   stepMsMax = 0;
+  private saveSeq = 0;
   private running = false;
   private timer: ReturnType<typeof setTimeout> | null = null;
   private saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -317,7 +318,7 @@ export class WorldRuntime {
     if (!file) return;
     try {
       mkdirSync(this.opts.snapshotDir!, { recursive: true });
-      const tmp = `${file}.${process.pid}.tmp`;
+      const tmp = `${file}.${process.pid}.${++this.saveSeq}.tmp`; // своё имя у каждой записи: две записи подряд не делят файл
       await writeFile(tmp, JSON.stringify(this.snapshot()));
       await rename(tmp, file);
     } catch (e) {
@@ -330,7 +331,7 @@ export class WorldRuntime {
     if (!file) return;
     try {
       mkdirSync(this.opts.snapshotDir!, { recursive: true });
-      const tmp = `${file}.${process.pid}.tmp`;
+      const tmp = `${file}.${process.pid}.${++this.saveSeq}.tmp`; // своё имя у каждой записи: две записи подряд не делят файл
       writeFileSync(tmp, JSON.stringify(this.snapshot()));
       renameSync(tmp, file);
     } catch (e) {
