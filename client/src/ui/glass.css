@@ -563,6 +563,15 @@ button.list-row:active { background: var(--press); }
 .cm-legend { border-radius: var(--r-2); font-size: var(--fs-xs); box-shadow: var(--glass-shadow); }
 .cm-pin { border-radius: 10px; padding: 3px 9px 3px 3px; font-weight: 500; font-size: 12.5px; border-color: var(--glass-stroke); box-shadow: 0 4px 12px rgba(16, 24, 20, 0.18); }
 .cm-pin__rank { border-radius: 7px; font-weight: 700; }
+/* the offline map is a night picture in both themes: its pins and background follow */
+.cm-root--offline { --cm-bg: #161614; --pin-bg: rgba(22, 22, 20, 0.92); --pin-text: #f1f1ee; }
+
+/* map logic: at the usual zoom only the three leaders of each niche and you carry a name; the rest are dots.
+   Zoom in and everyone is named. */
+.cm-root:not(.cm-root--near) .cm-pin:not(.cm-pin--top):not(.cm-pin--mine) { display: none; }
+.cm-pin--top .cm-pin__rank { min-width: 26px; }
+.cm-legend .cm-legend__hint { color: var(--text-3); }
+@media (max-width: 640px) { .cm-legend .cm-legend__hint { display: none; } }
 /* a closed or bankrupt business keeps its dot and a small mark; its name does not crowd the map */
 .cm-pin--dim { padding: 3px; opacity: 0.7; }
 .cm-pin--dim .cm-pin__name, .cm-pin--dim .cm-pin__ai { display: none; }

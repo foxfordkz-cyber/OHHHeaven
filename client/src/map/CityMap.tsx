@@ -16,7 +16,7 @@ import {
   closedBlocks, liveEvents, partnerLines, placeFeatures, realFeatures, todayWeather, type BizMarker, type LngLat,
   type RealBusinessLabel,
 } from './geo';
-import { cityStyle, isTileFailure, mapPalette, offlineStyle, type MapTheme, type StyleSpecification } from './mapStyle';
+import { cityStyle, isTileFailure, mapPalette, offlineStyle, OFFLINE_STYLE_NAME, type MapTheme, type StyleSpecification } from './mapStyle';
 import { getTheme, useTheme } from '../ui/theme';
 import { PlaceCard } from './PlaceCard';
 import { WeatherLayer } from './WeatherLayer';
@@ -152,7 +152,7 @@ function pinElement(m: BizMarker, onOpen?: (id: string) => void): HTMLElement {
 
 function updatePin(el: HTMLElement, m: BizMarker) {
   el.dataset.id = m.id;
-  el.className = `cm-pin${m.mine ? ' cm-pin--mine' : ''}${m.dim ? ' cm-pin--dim' : ''}${m.isAi ? ' cm-pin--ai' : ''}`;
+  el.className = `cm-pin${m.mine ? ' cm-pin--mine' : ''}${m.dim ? ' cm-pin--dim' : ''}${m.isAi ? ' cm-pin--ai' : ''}${!m.dim && m.rank > 0 && m.rank <= 3 ? ' cm-pin--top' : ''}`;
   el.style.setProperty('--pin', m.color);
   (el.children[0] as HTMLElement).textContent = m.status === 'bankrupt' ? '✕' : m.status === 'closed' ? '⛔' : `#${m.rank}`;
   (el.children[1] as HTMLElement).textContent = m.name;
@@ -204,6 +204,7 @@ export function CityMap(props: CityMapProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const [openBiz, setOpenBiz] = useState<string | null>(initialBusinessId ?? null);
   const [zoomedOut, setZoomedOut] = useState(true);
+  const [near, setNear] = useState(false);
 
   const segments = useMemo(() => blockSegments(places), [places]);
   const realFC = useMemo(() => realFeatures(realBusinesses), [realBusinesses]);
@@ -257,7 +258,7 @@ export function CityMap(props: CityMapProps) {
       try { ok = map.isSourceLoaded('openmaptiles'); } catch { ok = false; }
       if (!ok) goOffline();
     }, TILE_TIMEOUT_MS);
-    map.on('style.load', () => { installOverlays(map, themeRef.current); setStyleEpoch((n) => n + 1); });
+    map.on('style.load', () => { installOverlays(map, map.getStyle().name === OFFLINE_STYLE_NAME ? 'dark' : themeRef.current); setStyleEpoch((n) => n + 1); });
 
     // interaction: pick a place, open a business
     map.on('click', 'ohh-places-hit', (e: MapLayerMouseEvent) => {
@@ -274,7 +275,7 @@ export function CityMap(props: CityMapProps) {
       map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
       map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
     }
-    const onZoom = () => setZoomedOut(map.getZoom() < 15.2);
+    const onZoom = () => { setZoomedOut(map.getZoom() < 14.6); setNear(map.getZoom() >= 16.3); };
     map.on('zoomend', onZoom);
     onZoom();
     map.on('moveend', () => declutter(map, pinsRef.current, markersRef.current));
@@ -394,7 +395,7 @@ export function CityMap(props: CityMapProps) {
     : [...new Set(markers.map((m) => m.niche))].map((n) => ({ color: NICHE_META[n].color, label: NICHE_META[n].label }));
 
   return (
-    <div className={`cm-root${zoomedOut ? ' cm-root--far' : ''}${className ? ` ${className}` : ''}`} style={style}>
+    <div className={`cm-root${zoomedOut ? ' cm-root--far' : ''}${near ? ' cm-root--near' : ''}${offline ? ' cm-root--offline' : ''}${className ? ` ${className}` : ''}`} style={style}>
       <div ref={containerRef} className="cm-map" />
       <div className="cm-vignette" aria-hidden="true" />
       <WeatherLayer condition={wx?.condition} />
@@ -419,6 +420,7 @@ export function CityMap(props: CityMapProps) {
       {legend.length > 0 && (
         <ul className="cm-legend" aria-label="Legend">
           {legend.map((l) => <li key={l.label}><i style={{ background: l.color }} />{l.label}</li>)}
+          {mode === 'live' && <li className="cm-legend__hint">#1–3 lead their niche · zoom in to see everyone</li>}
         </ul>
       )}
       <div className="cm-ctl" role="group" aria-label="Map controls">

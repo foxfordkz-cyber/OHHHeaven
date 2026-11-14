@@ -161,7 +161,7 @@
   background: linear-gradient(to bottom, transparent, var(--bg));
 }
 .home-hero .cm-top { top: 78px; left: var(--pad); right: var(--pad); }
-.home-hero .cm-legend { left: var(--pad); bottom: 100px; }
+.home-hero .cm-legend { left: var(--pad); bottom: 128px; }
 .home-hero .maplibregl-ctrl-bottom-right { bottom: 60px; }
 .home-hero__strip, .home-hero__lead { width: auto; padding: 0 var(--pad); margin-top: var(--gap); }
 
@@ -189,4 +189,39 @@
   .home-hero .cm-legend { left: calc(var(--inset) + min(440px, 38%) + 16px); bottom: 104px; }
   .home-hero .maplibregl-ctrl-bottom-right { bottom: 92px; right: calc(var(--inset) - 10px); }
   .home-hero .cm-ctl { right: var(--inset); }
+}
+
+/* ───────── logo ───────── */
+.logo { display: inline-flex; align-items: center; gap: 10px; }
+.logo-mark { display: block; flex: none; }
+.logo__name { font-weight: 650; font-size: 18px; letter-spacing: -0.03em; line-height: 1; }
+
+/* ───────── city board: leaders and the latest events. Phones: a block of the page. Wide: glass on the map. ───────── */
+.home-hero__side { display: flex; flex-direction: column; gap: 12px; padding: 0 var(--pad); margin-top: var(--gap); }
+.city-board { padding: 16px 18px; border-radius: var(--r-3); background: var(--card); border: 1px solid var(--border); }
+.city-board__title { font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); margin: 0; }
+.city-board__all { border: 0; background: none; padding: 0; color: var(--text-2); font-size: var(--fs-xs); font-weight: 500; cursor: pointer; }
+.city-board__all:hover { color: var(--text); }
+.city-board__list { list-style: none; margin: 8px 0 0; padding: 0; }
+.city-board__list li + li { border-top: 1px solid var(--hairline); }
+.city-board__row { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: center; gap: 12px; width: 100%; padding: 9px 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.city-board__row:hover b { text-decoration: underline; }
+.city-board__rank { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; font-weight: 700; font-size: 13px; color: #14140f; }
+.city-board__name { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.city-board__name b { font-weight: 600; font-size: var(--fs-md); }
+.city-board__name small { font-size: var(--fs-xs); color: var(--text-2); }
+.city-board__worth { font-weight: 600; font-size: var(--fs-md); }
+.city-board__news { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: var(--fs-sm); line-height: 1.35; }
+.city-board__news span { display: block; font-size: var(--fs-xs); color: var(--text-3); }
+
+@media (min-width: 1000px) and (max-width: 1239px) { .home-hero__side { display: none; } }
+@media (min-width: 1240px) {
+  .home-hero__side { position: absolute; z-index: 6; top: 92px; right: var(--inset); width: 320px; margin: 0; padding: 0; }
+  .home-hero__side .city-board {
+    background: var(--glass-thick); -webkit-backdrop-filter: var(--blur-thick); backdrop-filter: var(--blur-thick);
+    border-color: var(--glass-stroke); box-shadow: var(--glass-edge), var(--glass-shadow-float);
+  }
+  .home-hero .cm-top { right: calc(var(--inset) + 400px); }
+  .home-hero .cm-ctl { right: calc(var(--inset) + 336px); }
+  .home-hero .maplibregl-ctrl-bottom-right { right: calc(var(--inset) + 326px); }
 }

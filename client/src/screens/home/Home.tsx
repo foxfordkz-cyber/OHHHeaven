@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import type { BusinessState, ClientView, IdeaMatch, NicheId, OwnerView, PublicBusiness, Standing } from '@ohh/shared/types';
 import { useCatalog, NICHE_META, NICHE_ORDER, type Catalog } from '../../app/catalog';
 import { CityMapSlot } from '../../app/slots';
+import { NICHE_META as MAP_NICHE } from '../../map/geo';
 import { switchMode, useGame, useStoreState, useView } from '../../app/store';
 import {
   AiBadge, Badge, Banner, Button, Card, Clock, Feed, Icon, List, ListRow, MoneyText, NICHE_ICON, Skeleton, Stat, formatMoney, formatNumber,
-  type IconName, ThemeToggle } from '../../ui';
+  type IconName, ThemeToggle, Logo } from '../../ui';
 import './home.css';
 
 const IDEA_EXAMPLES = ['A coffee shop near the subway', 'A barbershop with three chairs', 'A corner store with long hours'];
@@ -64,6 +65,7 @@ export function Home() {
           <CityMapSlot mode="live" places={catalog?.places ?? []} businesses={businesses} myBusinessId={ownerWithBusiness?.business?.id} weather={view.weather[0]} events={view.events} height={300} embedded onExpand={() => navigate('/map')} onOpenBusiness={(id) => navigate('/map?b=' + encodeURIComponent(id))} />
         </div>
         <div className="home-hero__lead">{lead}</div>
+        {view.kind !== 'official' && <CityBoard view={view} businesses={businesses} onOpen={(id) => navigate('/map?b=' + encodeURIComponent(id))} onAll={() => navigate('/leaderboards')} />}
       </section>
       <NicheCards view={view} businesses={businesses} catalog={catalog} />
       <section className="home-band">
@@ -80,6 +82,54 @@ export function Home() {
   );
 }
 
+// ───────────────────────── city board: who leads right now, what just happened ─────────────────────────
+
+function CityBoard({ view, businesses, onOpen, onAll }: { view: Exclude<ClientView, { kind: 'official' }>; businesses: PublicBusiness[]; onOpen: (id: string) => void; onAll: () => void }) {
+  const nameOf = new Map(businesses.map((b) => [b.id, b] as const));
+  const leaders: Standing[] = Object.values(view.leaderboards)
+    .flatMap((list) => (list ?? []).filter((x) => !x.bankrupt).slice(0, 3))
+    .sort((a, b) => b.netWorth - a.netWorth)
+    .slice(0, 5);
+  const news = view.feed.slice(0, 3);
+  if (leaders.length === 0 && news.length === 0) return null;
+  return (
+    <aside className="home-hero__side" aria-label="The city right now">
+      {leaders.length > 0 && (
+        <div className="city-board">
+          <div className="row-between">
+            <h2 className="city-board__title">Leading the city</h2>
+            <button type="button" className="city-board__all" onClick={onAll}>All</button>
+          </div>
+          <ol className="city-board__list">
+            {leaders.map((x) => (
+              <li key={x.businessId}>
+                <button type="button" className="city-board__row" onClick={() => onOpen(x.businessId)}>
+                  <span className="city-board__rank" style={{ background: MAP_NICHE[x.niche]?.color }}>{x.rank}</span>
+                  <span className="city-board__name">
+                    <b className="truncate">{x.name ?? nameOf.get(x.businessId)?.name ?? 'Business'}</b>
+                    <small>{`${NICHE_META[x.niche]?.name ?? x.niche} · ${x.isAi ? 'AI' : 'player'}`}</small>
+                  </span>
+                  <span className="city-board__worth num">{formatMoney(x.netWorth, { compact: true })}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+      {news.length > 0 && (
+        <div className="city-board city-board--news">
+          <h2 className="city-board__title">Just happened</h2>
+          <ul className="city-board__news">
+            {news.map((n) => (
+              <li key={n.id}><span className="num">Day {n.day}</span>{n.text}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </aside>
+  );
+}
+
 // ───────────────────────── 0. top bar ─────────────────────────
 
 function HomeNav({ demo }: { demo: boolean }) {
@@ -87,8 +137,7 @@ function HomeNav({ demo }: { demo: boolean }) {
   return (
     <nav className="home-nav" aria-label="Main">
       <button type="button" className="home-nav__brand" onClick={() => navigate('/')}>
-        <span className="home-nav__mark" aria-hidden="true">1</span>
-        <span>First Year</span>
+        <Logo size={32} />
         {demo && <Badge tone="accent" icon="play">Demo city</Badge>}
       </button>
       <div className="home-nav__links">
