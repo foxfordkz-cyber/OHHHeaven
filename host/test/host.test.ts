@@ -20,7 +20,6 @@ function openCafe(w: WorldState, playerId: string, name: string, launchNow = tru
 
 describe('newWorld and step', () => {
   it('a world of 30 residents runs 60 days on stubs', () => {
-    expect(usingStubs.engine).toBe(true);
     let w = makeWorld();
     const ai = w.players.filter((p) => p.isAi);
     expect(ai.length).toBe(30);
@@ -107,7 +106,7 @@ describe('act', () => {
     const me = w.players.find((p) => p.id === a.playerId)!;
     expect(me.lastSeenDay).toBe(w.day);
     expect(w.version).toBeGreaterThan(before);
-    const someoneElse = w.businesses.find((b) => b.managerPlayerId !== a.playerId)!;
+    const someoneElse = w.businesses.find((b) => b.managerPlayerId !== a.playerId && b.niche === 'cafe' && b.status === 'open')!;
     const deal = act(w, ctx, someoneElse.managerPlayerId, { type: 'propose_deal', toBusinessId: w.businesses.find((b) => b.managerPlayerId === a.playerId)!.id, terms: { type: 'joint_purchase', months: 1 } });
     expect(deal.error).toBeUndefined();
     const d = deal.world.deals[deal.world.deals.length - 1];

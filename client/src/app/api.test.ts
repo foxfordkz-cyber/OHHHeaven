@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { OpenRecommendation, OwnerView, RoadmapItem } from '@ohh/shared/types';
 import { createLocalClient, createRemoteClient, localWorldConfigs } from './api';
 import { getSession } from './session';
+import { localRuntime } from './local-host';
 import { interpretIdeaByRules } from './idea-rules';
 
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -67,12 +68,16 @@ describe('local client (the city in the browser)', () => {
     expect(idea.data).toMatchObject({ niche: 'cafe' });
     const roadmap = await client.query<RoadmapItem[]>('demo', { type: 'roadmap', niche: 'cafe' });
     expect(roadmap.data?.length).toBeGreaterThan(3);
-    const recs = await client.query<OpenRecommendation[]>('demo', { type: 'recommend_opening', niche: 'cafe', placeId: 'p12' });
+    const seen = (await client.view('demo')) as { businesses?: { placeId: string }[]; neighbors?: { placeId: string }[] };
+    const taken = new Set((seen.businesses ?? seen.neighbors ?? []).map((b) => b.placeId));
+    const placeId = localRuntime.ctx.places.find((p) => p.suitableFor.includes('cafe') && !taken.has(p.id))!.id;
+    const recs = await client.query<OpenRecommendation[]>('demo', { type: 'recommend_opening', niche: 'cafe', placeId });
     const rec = recs.data![0];
     expect(rec.total).toBeGreaterThan(0);
 
-    const opened = await client.act('demo', { type: 'open_business', niche: 'cafe', placeId: 'p12', name: 'Jordan’s Coffee', kitId: rec.kitId, size: rec.size, items: rec.items });
-    expect(opened).toEqual({ ok: true });
+    const opened = await client.act('demo', { type: 'open_business', niche: 'cafe', placeId, name: 'Jordan’s Coffee', kitId: rec.kitId, size: rec.size, items: rec.items });
+    expect(opened.error).toBeUndefined();
+    expect(opened.ok).toBe(true);
     let view = (await client.view('demo')) as OwnerView;
     expect(view.business?.status).toBe('setup');
     expect(view.business?.permits.length).toBeGreaterThan(0);

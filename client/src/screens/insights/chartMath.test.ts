@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { breakEvenGeometry, dayBars, DEFAULT_BOX, linear, niceCeil, stackBar, ticks, trendGeometry } from './charts';
+import { breakEvenGeometry, dayBars, DEFAULT_BOX, linear, niceCeil, stackBar, ticks, trendGeometry } from './chartMath';
 
 describe('scales', () => {
   it('maps domain ends to range ends and is linear in between', () => {

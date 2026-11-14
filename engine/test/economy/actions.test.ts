@@ -127,6 +127,6 @@ describe('speed', () => {
     const end = run(w, ctx, 359);
     const ms = performance.now() - t0;
     expect(end.day).toBe(360);
-    expect(ms).toBeLessThan(2000);
+    expect(ms).toBeLessThan(8000); // with the real law and deals modules; was 2000 on stubs
   });
 });

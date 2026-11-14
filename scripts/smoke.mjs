@@ -84,8 +84,9 @@ async function startServer() {
   });
   BASE = `http://127.0.0.1:${port}`;
   const dataDir = mkdtempSync(join(tmpdir(), 'ohh-smoke-'));
-  child = spawn('npm', ['start', '--silent'], {
-    cwd: ROOT, detached: true, stdio: ['ignore', 'pipe', 'pipe'],
+  // Start the server with node + tsx directly: `spawn('npm')` does not exist on Windows (npm is npm.cmd there).
+  child = spawn(process.execPath, [join(ROOT, 'node_modules', 'tsx', 'dist', 'cli.mjs'), join('server', 'src', 'main.ts')], {
+    cwd: ROOT, detached: process.platform !== 'win32', stdio: ['ignore', 'pipe', 'pipe'],
     env: { ...process.env, PORT: String(port), HOST: '127.0.0.1', DATA_DIR: dataDir, NODE_ENV: 'test' },
   });
   let log = '';
@@ -96,6 +97,7 @@ async function startServer() {
 }
 function stopServer() {
   if (!child) return;
+  if (process.platform === 'win32') { try { child.kill(); } catch { /* gone */ } return; }
   try { process.kill(-child.pid, 'SIGTERM'); } catch { try { child.kill('SIGTERM'); } catch { /* gone */ } }
 }
 

@@ -267,7 +267,7 @@ function summaries(w: WorldState): WorldState {
 export function step(w: WorldState, ctx: EngineCtx, deps: HostDeps): WorldState {
   if (w.phase !== 'running') return w;
   let x = withForecast(w, deps, w.day + 1);
-  if (w.day % 7 === 0) {
+  if ((Math.max(1, w.day) - 1) % 7 === 0) { // game Mondays: the event deck only answers on weekday 0
     const ev = deps.takeQueuedEvent?.(x) ?? deps.deckEvent(x, ctx);
     if (ev) x = addEvent(x, ev);
   }
