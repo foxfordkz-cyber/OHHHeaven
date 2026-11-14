@@ -44,10 +44,10 @@
     "takeawayShare": 0.6,
     "cleaningCostPerSizeMonth": 15,
     "crowdPenaltyAbove": 0.9,
-    "emptyPenaltyBelow": 0.35,
+    "emptyPenaltyBelow": 0.4,
     "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
     "confidence": "estimate",
-    "note": "My estimates, sized to the research notes' shop (about 800 sq ft, 15-25 seats, 20 chairs at 10 small tables). 18 sq ft per seat with aisles: 800 sq ft x 60% usable / 18 = 26 seats at most. 60% of orders leave with the cup. One seat turns about 5.7 sit-down orders a day (170 a month), so 18 seats carry 255 orders a day in all and 12 seats only 170: at 200 orders a day the small room turns people away, while 40 seats sit two-thirds empty. $15 per seat a month covers sanitizer, paper goods, table and floor care. Real rule seen at NYC Health: 20 or more seats, indoor plus outdoor, require a customer bathroom."
+    "note": "My estimates, sized to the research notes' shop (about 800 sq ft, 15-25 seats, 20 chairs at 10 small tables). 18 sq ft per seat with aisles: 800 sq ft x 60% usable / 18 = 26 seats at most. 60% of orders leave with the cup. One seat turns about 5.7 sit-down orders a day (170 a month), so 18 seats carry 255 orders a day in all and 12 seats only 170: at 200 orders a day the small room turns people away, while 40 seats sit two-thirds empty: a room less than 40% used reads as dead and costs reputation. $15 per seat a month covers sanitizer, paper goods, table and floor care. Real rule seen at NYC Health: 20 or more seats, indoor plus outdoor, require a customer bathroom."
   },
   "setup": [
     {
@@ -962,7 +962,7 @@
       "licenseRequired": "NYC Food Protection Certificate (free online course, $24 exam)",
       "source": "https://dol.ny.gov/minimum-wage-0",
       "confidence": "estimate",
-      "note": "My estimate: a $3 premium over the barista wage for opening, closing and cash-out. A shift lead with a Food Protection Certificate covers the rule that a certified supervisor is on site every open hour. Tips shared with the bar are legal only if the lead has no power to hire or fire."
+      "note": "My estimate: a $3 premium over the barista wage for opening, closing and cash-out. A shift lead with a Food Protection Certificate covers the rule that a certified supervisor is on site every open hour."
     }
   ],
   "taxes": [
@@ -1227,7 +1227,7 @@
       "reputationHit": 0.06,
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
       "confidence": "verified",
-      "note": "Penalty schedule: code 06D $200 to $300 by condition level (a critical violation); dirty floors, walls and ceilings (code 10F) $100, or $0 the first time if you prove you fixed it. Game formula climbs from $225 to the $300 top as months pass. Fines are small; the points that cost you the A grade are the real price."
+      "note": "Penalty schedule: code 06D $200 to $300 by condition level (a critical violation, 5 to 8 points); dirty floors, walls and ceilings (code 10F) $100, or $0 the first time if you prove you fixed it. Game formula climbs from $225 to the $300 top as months pass. Fines are small; the points that cost you the A grade are the real price."
     },
     {
       "id": "pest_activity",
@@ -1269,7 +1269,7 @@
       "reputationHit": 0.12,
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
       "confidence": "verified",
-      "note": "Penalty schedule: \"Cold TCS food not held at 41°F or below\" $250 to $500; \"Food not protected from adulteration or contamination\" $250 to $600. Both are public health hazards that must be corrected immediately. Game formula: $300 in the first month, up to $600."
+      "note": "Penalty schedule: \"Cold TCS food not held at 41°F or below\" $250 to $500; \"Food not protected from adulteration or contamination\" $250 to $600. Both are public health hazards that must be corrected immediately. Scoring worksheet: 7 to 10 points, 28 at the worst level. Game formula: $300 in the first month, up to $600."
     },
     {
       "id": "unapproved_food_source",
@@ -1290,7 +1290,7 @@
       "reputationHit": 0.06,
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
       "confidence": "verified",
-      "note": "Penalty schedule: \"Food from unapproved or unknown source, or home cooked\" $400 to $600, a public health hazard. Game formula: $450 in the first month, up to $600."
+      "note": "Penalty schedule: \"Food from unapproved or unknown source, or home cooked\" $400 to $600, a public health hazard worth 10 points, 28 at the worst level. Game formula: $450 in the first month, up to $600."
     },
     {
       "id": "tip_theft",
@@ -1591,7 +1591,7 @@
     {
       "id": "dirty_surfaces",
       "title": "Clean, rinse, sanitize",
-      "text": "Surfaces that touch food must be washed, rinsed and sanitized. A dirty steam wand, grinder or cutting board is a critical violation: $200-$300 each time. Dirty floors and walls add $100 more.",
+      "text": "Surfaces that touch food must be washed, rinsed and sanitized. A dirty steam wand, grinder or cutting board is a critical violation: $200-$300 and 5 to 8 points each time. Dirty floors and walls add $100 and 2 to 5 points.",
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
     },
     {
@@ -1853,15 +1853,15 @@
     },
     {
       "id": "find_space",
-      "title": "Find a storefront that was already a cafe",
-      "kind": "space",
+      "title": "Scout storefronts: look for a former cafe",
+      "kind": "idea",
       "text": "About 800 sq ft holds 18-24 seats. A former cafe keeps its plumbing, ventilation and bathroom: a light renovation runs near $90 per sq ft instead of $200-$300. Typical asking rents for 800 sq ft: about $3,000 a month in outer Queens, $6,000 on a Brooklyn side street, $22,000 in prime Manhattan.",
       "link": "https://www.rebny.com/reports/brooklyn-retail-report-2025/"
     },
     {
       "id": "check_certificate_of_occupancy",
       "title": "Check the Certificate of Occupancy before you sign",
-      "kind": "space",
+      "kind": "idea",
       "text": "The building's Certificate of Occupancy must allow an eating and drinking place; buildings from before 1938 may need a Letter of No Objection instead. Also check electrical capacity, the grease interceptor, an accessible restroom and whether the block is landmarked. Make the lease depend on getting your permits.",
       "agency": "NYC Department of Buildings",
       "link": "https://portal.311.nyc.gov/article/?kanumber=KA-02023"
@@ -1872,7 +1872,6 @@
       "kind": "space",
       "text": "An architect files plans, licensed plumbers and electricians pull the permits. Budget $70,000 for a light renovation of a former cafe plus about 10% for drawings and filings. Expect 6-14 weeks for permits and 8-24 weeks of construction, with rent due once any free-rent period ends.",
       "setupItemId": "buildout",
-      "fee": 70000,
       "agency": "NYC Department of Buildings",
       "link": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc"
     },
@@ -1907,14 +1906,22 @@
       "link": "https://www.nyc.gov/site/dsny/businesses/commercial-waste-zones.page"
     },
     {
-      "id": "sign_and_outdoor_seating",
-      "title": "Sign permit and outdoor seating",
+      "id": "check_sign_rules",
+      "title": "Check the sign rules before you order a sign",
       "kind": "permit",
-      "text": "A wall sign of 6 sq ft or less needs no permit; a bigger one must be filed by a licensed sign hanger. Sidewalk seating needs a Dining Out NYC license ($1,050 for four years plus a $1,500 deposit): apply early, but plan year one without it, because approvals have taken over 19 months.",
+      "text": "A wall sign of 6 sq ft or less needs no sign permit. A bigger or illuminated sign must be filed with the Department of Buildings and hung by a licensed sign hanger, and the landlord usually has to approve it.",
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page"
+    },
+    {
+      "id": "apply_outdoor_seating",
+      "title": "Optional: apply for sidewalk seating",
+      "kind": "permit",
+      "text": "Sidewalk tables need a Dining Out NYC license: $1,050 for four years plus a $1,500 refundable deposit and a yearly fee per square foot. Apply early, but plan year one without outdoor seats: more than half of approved restaurants waited over 19 months.",
       "setupItemId": "sidewalk_cafe_license",
       "fee": 2550,
       "waitDays": 240,
-      "agency": "NYC Department of Buildings; NYC Department of Transportation",
+      "agency": "NYC Department of Transportation (Dining Out NYC)",
       "link": "https://www.diningoutnyc.info/apply/fees"
     },
     {
@@ -1923,7 +1930,6 @@
       "kind": "money",
       "text": "A new basic set costs about $36,500 before tax and delivery: espresso machine $7,600, two grinders $4,200, fridges and pastry case $3,800, sinks, ice machine, dishwasher, register, 20 chairs and 10 tables. Order the machine first: delivery takes 2-4 weeks. Used gear from a closing cafe cuts the bill.",
       "setupItemId": "espresso_machine",
-      "fee": 36523,
       "link": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html"
     },
     {
@@ -1932,7 +1938,6 @@
       "kind": "supplier",
       "text": "Pick a wholesale roaster (many train your staff and service the machine), a dairy distributor, a wholesale bakery that delivers before 7am, and a source for cups and lids. Open accounts two to three weeks ahead; the first order runs $3,000-$5,000.",
       "setupItemId": "opening_inventory",
-      "fee": 3000,
       "link": "https://www.partnerscoffee.com/pages/wholesale"
     },
     {
@@ -1941,7 +1946,6 @@
       "kind": "supplier",
       "text": "A Square register costs about $900; processing is 2.5%-2.6% plus 15 cents per tap. Program each menu item as taxable or not, switch on tip reporting, and connect payroll so tips and hours flow into pay stubs.",
       "setupItemId": "pos",
-      "fee": 1299,
       "link": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees"
     },
     {
@@ -2285,6 +2289,16 @@
       "url": "https://www.irs.gov/publications/p15",
       "title": "IRS Publication 15 (2026): tips are wages for payroll tax",
       "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dos.ny.gov/node/35506",
+      "title": "NYS Department of State: forming a domestic LLC, $200",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.llcpublishers.com/pricing",
+      "title": "LLC Publishers: publication package prices by county (one provider's price list)",
+      "checked": "2026-11-14"
     }
   ],
   "extra": {
@@ -2446,6 +2460,97 @@
       },
       "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
       "confidence": "estimate"
+    },
+    "referenceMonth": {
+      "note": "One month at the reference point, computed from this pack and _common the way the engine closes a month (script and full table in research/reports/14-cafe.md). Standard kit, 18 seats, 200 orders a day at $8.50, four baristas, default levers, $6,000 rent, no shortcuts.",
+      "orders": 6000,
+      "sales": 51000,
+      "costOfGoods": 13260,
+      "rent": 6000,
+      "wages": 13440,
+      "employerPayrollTaxes": 1556,
+      "otherCosts": 7022,
+      "llcFee": 2,
+      "profitBeforeOwnerTaxes": 9719,
+      "ownerTaxes": 3026,
+      "profitAfterOwnerTaxes": 6694,
+      "salesTaxCollectedForTheState": 4526,
+      "withHiredManager": {
+        "managerSalary": 4800,
+        "managerPayrollTaxes": 556,
+        "profitBeforeOwnerTaxes": 4363,
+        "ownerTaxes": 1358,
+        "profitAfterOwnerTaxes": 3005
+      },
+      "researchNotesModel": {
+        "cashOperatingSurplus": 4152,
+        "note": "The notes price the owner's 160 hours at $4,800 and load 15.1% on wages; the pack gives $4,363 with a hired manager."
+      },
+      "leanKit": {
+        "seats": 12,
+        "ordersServed": 5100,
+        "ordersLost": 900,
+        "profitBeforeOwnerTaxes": 4641
+      },
+      "confidence": "estimate"
+    },
+    "inspectionPoints": {
+      "note": "Seen in the Health Department scoring worksheet (24 RCNY Chapter 23, Appendix 23-A): points by condition level for the violations this pack uses. Under 14 points is an A, 14-27 a B, 28 or more a C. Not used by the engine yet; enough to compute a letter grade from the open trails of a business.",
+      "grades": {
+        "A": [
+          0,
+          13
+        ],
+        "B": [
+          14,
+          27
+        ],
+        "C": [
+          28,
+          null
+        ]
+      },
+      "points": {
+        "no_food_protection_cert": {
+          "code": "04A",
+          "min": 10,
+          "max": 10
+        },
+        "dirty_surfaces": {
+          "code": "06D",
+          "min": 5,
+          "max": 8
+        },
+        "pest_activity": {
+          "code": "04K/04L/04M",
+          "min": 5,
+          "max": 8,
+          "worst": 28
+        },
+        "spoiled_food": {
+          "code": "02G",
+          "min": 7,
+          "max": 10,
+          "worst": 28
+        },
+        "unapproved_food_source": {
+          "code": "03A",
+          "min": 10,
+          "max": 10,
+          "worst": 28
+        }
+      },
+      "reinspectionAfterDays": 7,
+      "nextCycleDaysAfterB": [
+        150,
+        210
+      ],
+      "nextCycleDaysAfterC": [
+        90,
+        150
+      ],
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified"
     },
     "realTimeline": {
       "note": "The game waits only for the two Health Department items (21 days). In real life the build-out sets the date: permit path 6-14 weeks, long-lead equipment 8-20 weeks, construction 8-24 weeks, inspections 1-3 weeks (contractor's 2026 estimates, steps overlap). The research notes budget three paid months of rent before opening for a former cafe and six for a heavy conversion.",
