@@ -13,7 +13,7 @@ git fetch -q origin '+refs/heads/*:refs/remotes/origin/*'
 
 for ref in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin | grep -v -e "/${MAIN}\$" -e '/HEAD$'); do
   base=$(git merge-base HEAD "$ref" 2>/dev/null) || continue
-  for f in $(git diff --name-only --diff-filter=AM "$base" "$ref" -- research/reports research/WINNER.md docs); do
+  for f in $(git diff --name-only --diff-filter=AM "$base" "$ref" -- research/reports research/full research/WINNER.md docs packs data proto sim build/RULES.md agents); do
     if ! git cat-file -e "HEAD:$f" 2>/dev/null; then
       git checkout -q "$ref" -- "$f"
       echo "NEW      $f  <- $ref"
