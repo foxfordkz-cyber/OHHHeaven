@@ -65,6 +65,7 @@
 Сверх разделов: `extra.eventCatalog` — 698 событий с числами (в main 0), из них 533 откалиброваны в D15–D19 (применено калибровок: 767, файлы: D15-calibration-premises.sharp.json, D15-calibration-premises.json, D16-calibration-equipment-food.json, D17-calibration-people-money.json); `extra.mechanics` — 145 предложенных механик; `extra.mechanicsRanked` — 23 механик по важности; `extra.effectFields` — словарь 108 полей эффектов. Справочник `D11-reference.json`: 640 неочевидных фактов, 177 историй закрытий, 152 событий без чисел, полные записи всех событий и механик, 110 записей других форматов.
 
 Наборы (с новыми обязательными предметами): lean — <!-- D11:auto:extraSummary -->36 496 (main <!-- D11:auto:extraSummary -->33 882); standard — <!-- D11:auto:extraSummary -->43 780 (main <!-- D11:auto:extraSummary -->41 166); premium — <!-- D11:auto:extraSummary -->73 831 (main <!-- D11:auto:extraSummary -->70 217); стартовый капитал <!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 008 КБ, в gzip 586 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 673.
+<!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 008 КБ, в gzip 586 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 673.
 <!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 007 КБ, в gzip 586 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 673.
 <!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 006 КБ, в gzip 585 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 672.
 <!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 005 КБ, в gzip 585 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 672.
@@ -116,6 +117,8 @@
 
 <!-- D11:auto:moved -->
 Вынесено из разделов: в `D11-reference.json → formatRecords` — 110, в `extra.conditionalMonthlyCosts` — 22, в `extra.preOpeningChoices` — 20, в `extra.roadmapPaths` — takeover 6, franchise 2, cart 5, popup 2. Варианты, добавленные к рычагам записями `addsOptionsTo`: free_rent_deal +1 (D15), site_due_diligence +2 (D15), contractor_choice +1 (D15), takeover_transition +1 (D15), lease_contingencies +2 (D15), laptop_policy +2 (D15), seating_layout +3 (D15). Расчёт подставлен из каталога для оценок без `note`: events.holdover_after_expiry, events.d00_street_hidden_sign, events.peak_kw_bill_jump.
+
+События без чисел в справочнике (152): ждут D18 (улица, погода, спрос) — 75; D19 (закон, проверки, закрытия) — 35; события других форматов D13 — 34; прочие — 8.
 
 Ходы игрока в событиях: 1 286; из них 207 ссылаются на рычаг или срезанный угол, которого нет в пакете (помечены `inPack: false`). Это займы и выход из бизнеса (механики 11 и 12), рычаги других форматов и ответы, которые калибровщики D15–D17 придумали для одного события (`*_response`). Движку нужен «ход события» — вариант, который живёт только внутри события (раздел 8).
 <!-- /D11:auto:moved -->
