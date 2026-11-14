@@ -9,6 +9,8 @@ import { loadData, REPO_ROOT, SERVER_DIR, type GameData } from './data';
 import { ai as defaultAi, serverDeps, usingStubs } from './deps';
 import { RateLimiter } from './rate';
 import { WorldRuntime } from './runtime';
+import { PitchDirector, enterPage, joinPage, lanBase, type PitchCommand, type PitchHost } from './pitch';
+import { qrSvg } from './qr';
 
 export const CLIENT_DIST = resolve(REPO_ROOT, 'client/dist');
 export const DEFAULT_SNAPSHOT_DIR = join(SERVER_DIR, '.snapshots');
@@ -41,6 +43,40 @@ export class GameServer {
 
   readonly log = (m: string): void => { (this.opts.log ?? ((x: string) => console.log(`[server] ${x}`)))(m); };
 
+  /** Город показа жюри (scenario: "pitch"), если он поднят. */
+  pitch: PitchDirector | null = null;
+
+  private runtimeOpts(deps?: HostDeps) {
+    const dir = this.opts.snapshotDir === undefined ? null : this.opts.snapshotDir;
+    return { ctx: this.data.ctx, deps: deps ?? this.opts.deps ?? serverDeps(), ai: this.opts.ai ?? defaultAi, snapshotDir: dir, now: this.opts.now, log: this.log };
+  }
+
+  private pitchHost(): PitchHost {
+    return {
+      snapshotDir: this.opts.snapshotDir ?? null, log: this.log, ctx: this.data.ctx,
+      baseDeps: () => this.opts.deps ?? serverDeps(),
+      openPitch: (id, world, deps, onDay) => {
+        const old = this.runtimes.get(id);
+        if (old) { old.stop(); this.runtimes.delete(id); }
+        const ro = { ...this.runtimeOpts(deps), aiEvents: false, onDay };
+        const snap = world ? null : WorldRuntime.readSnapshot(ro.snapshotDir, id, this.log);
+        if (!world && !snap) throw new Error(`${id}: no snapshot to restore the pitch city from`);
+        const rt = snap ? new WorldRuntime(snap.world, ro, snap) : new WorldRuntime(world!, ro);
+        this.runtimes.set(id, rt);
+        if (this.opts.autoStart) rt.start();
+        rt.saveSoon(true);
+        return rt;
+      },
+    };
+  }
+
+  /** Собрать город показа (или вернуть уже собранный). Расчёт синхронный, около 20 секунд. */
+  createPitch(fresh = false): PitchDirector {
+    if (this.pitch && !fresh) return this.pitch;
+    this.pitch = PitchDirector.create(this.pitchHost());
+    return this.pitch;
+  }
+
   /** Поднимает мир: из снимка, если он есть, иначе новый. */
   open(p: { id: string; name: string; demo: boolean; seed: number }): WorldRuntime {
     const existing = this.runtimes.get(p.id);
@@ -72,6 +108,13 @@ export class GameServer {
       if (this.runtimes.has(id) || !/^demo-\d+$/.test(id)) continue;
       const n = Number(id.slice(5));
       this.open({ id, name: `Demo City ${n}`, demo: true, seed: 7 + n });
+    }
+    // город показа: из снимка, если он есть; PITCH=1 собирает его при старте
+    try {
+      this.pitch = PitchDirector.restore(this.pitchHost());
+      if (!this.pitch && process.env.PITCH === '1') this.createPitch();
+    } catch (e) {
+      this.log(`pitch: ${(e as Error).message}`);
     }
     return this;
   }
@@ -129,7 +172,24 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
       owners: x.world.players.filter((p) => p.kind === 'owner' && !p.isAi).length, day: x.world.day,
     })));
   });
+  const clockOk = (req: Request): boolean => {
+    const key = game.clockKey;
+    return !key || req.headers['x-clock-key'] === key || req.query.key === key;
+  };
+  const portOf = (req: Request) => req.socket.localPort ?? Number(process.env.PORT ?? 8787);
+
   app.post('/api/worlds', (req, res) => {
+    if (req.body?.scenario === 'pitch') {
+      if (!clockOk(req)) { res.status(403).json({ ok: false, error: 'Wrong clock key' }); return; }
+      try {
+        const d = game.createPitch(req.body?.fresh === true);
+        res.status(201).json({ ok: true, data: { id: d.id, pitch: d.status({ base: lanBase(portOf(req)), secrets: true }) } });
+      } catch (e) {
+        game.log(`pitch: ${(e as Error).stack ?? e}`);
+        res.status(500).json({ ok: false, error: `The pitch city could not be built: ${(e as Error).message}` });
+      }
+      return;
+    }
     const name = typeof req.body?.name === 'string' ? req.body.name.trim().slice(0, 40) : '';
     const rt = game.createDemo(name);
     if (!rt) { res.status(429).json({ ok: false, error: 'Too many demo cities' }); return; }
@@ -191,7 +251,39 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
     res.json({ ok: true, data: req.rt!.stats() });
   });
 
+  // город показа: состояние и команды ведущего (тот же ключ, что у часов)
+  const pitchOf = (req: Request, res: Response): PitchDirector | null => {
+    const d = game.pitch;
+    if (!d || d.id !== String(req.params.id)) { res.status(404).json({ ok: false, error: 'This world has no pitch scenario. POST /api/worlds { "scenario": "pitch" }' }); return null; }
+    return d;
+  };
+  app.get('/api/worlds/:id/pitch', (req, res) => {
+    const d = pitchOf(req, res);
+    if (d) res.json({ ok: true, data: d.status({ base: lanBase(portOf(req)), secrets: clockOk(req) }) });
+  });
+  app.post('/api/worlds/:id/pitch', (req, res) => {
+    const d = pitchOf(req, res);
+    if (!d) return;
+    if (!clockOk(req)) { res.status(403).json({ ok: false, error: 'Wrong clock key' }); return; }
+    const r = d.run((req.body ?? {}) as PitchCommand);
+    if (!r.ok) { res.status(400).json(r); return; }
+    res.json({ ok: true, data: d.status({ base: lanBase(portOf(req)), secrets: true }) });
+  });
+
   app.use('/api', (_req, res) => { res.status(404).json({ ok: false, error: 'Not found' }); });
+
+  // вход по короткому коду: /p — поле для кода, /p/<код> — вход, /p/<код>/qr.svg — QR с адресом в локальной сети
+  app.get('/p', (_req, res) => { res.type('html').send(enterPage()); });
+  app.get('/p/:code/qr.svg', (req, res) => {
+    const r = game.pitch?.resolve(String(req.params.code));
+    if (!r) { res.status(404).type('text').send('Unknown code'); return; }
+    res.type('image/svg+xml').set('Cache-Control', 'no-store').send(qrSvg(`${lanBase(portOf(req))}/p/${String(req.params.code).toUpperCase()}`));
+  });
+  app.get('/p/:code', (req, res) => {
+    const r = game.pitch?.resolve(String(req.params.code));
+    if (!r) { res.status(404).type('html').send(enterPage('Code not found. Check the letters on the screen.')); return; }
+    res.set('Cache-Control', 'no-store').type('html').send(joinPage(r));
+  });
 
   if (existsSync(CLIENT_DIST)) {
     app.use(express.static(CLIENT_DIST));
@@ -220,5 +312,6 @@ export function startServer(port = Number(process.env.PORT ?? 8787), host = proc
 }
 
 export { WorldRuntime } from './runtime';
+export { PitchDirector, lanBase } from './pitch';
 export { loadData } from './data';
 export { RateLimiter } from './rate';
