@@ -1918,13 +1918,14 @@
       "appliesTo": [
         "takeover"
       ],
-      "note": "Page opened (NYC Business): \"You may start to operate 22 days after you submit your permit application, even if you have not been issued a permit. The NYC Health Department will conduct an unannounced pre-permit inspection after you open.\" Health Code §5.11 voids the seller's permit on transfer (search extract; the code library refused the request). Applying before closing costs nothing and removes the gap.",
+      "note": "Page opened (NYC Business): \"You may start to operate 22 days after you submit your permit application, even if you have not been issued a permit. The NYC Health Department will conduct an unannounced pre-permit inspection after you open.\" Health Code §5.11 voids the seller's permit on transfer (search extract; the code library refused the request). Applying before closing costs nothing and removes the gap. Price of applying early: the $280 permit fee and a first month of insurance ($250 in the pack) are paid three weeks before you own the shop and are lost if the deal falls through: $530 at risk.",
       "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
       "options": [
         {
           "id": "apply_before_closing",
           "label": "Apply 22 days before closing; the seller trades until the handover",
           "monthlyCost": 0,
+          "oneTimeCost": 530,
           "effects": {
             "closureDaysAtTakeover": 0
           }
@@ -1947,7 +1948,7 @@
       "appliesTo": [
         "takeover"
       ],
-      "note": "Design values. The research branch keeps 90% of regulars at a takeover; the split between a quiet handover and an immediate rebrand is mine. Seller training of 2-4 weeks is usual in business sales but no figure was sourced.",
+      "note": "Design values. The research branch keeps 90% of regulars at a takeover; the split between a quiet handover and an immediate rebrand is mine. Seller training of 2-4 weeks is usual in business sales but no figure was sourced. The rebrand keeps 0.63 of the crowd so that the loss against a quiet handover is 0.7, the floor the lead set for unsourced multipliers.",
       "source": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
       "options": [
         {
@@ -1964,7 +1965,7 @@
           "monthlyCost": 0,
           "oneTimeCost": 5000,
           "effects": {
-            "awareness": 0.6,
+            "awareness": 0.63,
             "quality": 0.02
           }
         }
@@ -2569,7 +2570,7 @@
         "realFrequency": "Continuous: 11.0% citywide, 12.9% Manhattan, 12.3% Brooklyn, 9.5% Queens, 21.1% Financial District, 19.5% Ocean Hill (April 2026)",
         "source": "https://comptroller.nyc.gov/reports/whos-minding-the-storefronts/",
         "seenIn": "page_opened",
-        "note": "The vacancy figures are from the Comptroller's report. One extra free month in districts above the city average is a design value."
+        "note": "The vacancy figures are from the Comptroller's report. One extra free month in districts above the city average is a design value. The price is in the address: districts with many empty stores have fewer people on the sidewalk, which the location score already carries."
       },
       {
         "scale": "point",
@@ -3057,7 +3058,7 @@
         "realFrequency": "Two packages in 2026; the NYC Hospitality Alliance called the July one limited",
         "source": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
         "seenIn": "primary_search_extract",
-        "note": "Real: 50+ reforms for about 180,000 small businesses, 25 of them for food businesses; frozen dessert permit eliminated; three food-safety fines cut from $600 to $500 (500/600 = 0.83). The 10% shorter permit wait from the project manager is a design value: no measured effect exists yet."
+        "note": "Real: 50+ reforms for about 180,000 small businesses, 25 of them for food businesses; frozen dessert permit eliminated; three food-safety fines cut from $600 to $500 (500/600 = 0.83). The 10% shorter permit wait from the project manager is a design value: no measured effect exists yet. An announced citywide change: it applies to every player alike, so it shifts no advantage between them."
       },
       {
         "scale": "point",
@@ -4112,7 +4113,7 @@
         "effects": [
           {
             "field": "awareness",
-            "mult": 0.67
+            "mult": 0.7
           }
         ],
         "playerMoves": [
@@ -4128,7 +4129,7 @@
         "realFrequency": "No statistic; advisers on small-business sales name owner dependence as a main driver of post-sale regret",
         "source": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
         "seenIn": "secondary_search_extract",
-        "note": "Design values: 0.6 / 0.9 = 0.67 of the regulars kept by a quiet handover (levers takeover_transition)."
+        "note": "Design values: 0.63 / 0.9 = 0.7 of the regulars kept by a quiet handover (lever takeover_transition); 0.7 is the floor for multipliers with no source."
       },
       {
         "scale": "point",
@@ -4978,6 +4979,10 @@
           {
             "field": "permitWaitDays",
             "mult": 0.9
+          },
+          {
+            "field": "openingDelayDays",
+            "add": 5
           }
         ],
         "playerMoves": [
@@ -4993,7 +4998,7 @@
         "realFrequency": "Standing services; the July 2026 executive order expands them",
         "source": "https://www.nyc.gov/mayors-office/news/2026/07/executive-order-no--18.html",
         "seenIn": "primary_search_extract",
-        "note": "The 10% is a design value; the city has published no measured effect."
+        "note": "Applies only to a player who takes the free plan review step, which costs about five days before filing (my estimate). The 10% shorter permit wait is a design value; the city has published no measured effect."
       },
       {
         "scale": "point",
