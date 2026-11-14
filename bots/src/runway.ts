@@ -2,7 +2,7 @@
 // from public data only: the map (people walking by, real rivals, rent), the pack (costs, wages, the ramp of the
 // regular crowd) and the opening plan the analytics screen recommends. No engine internals, no randomness.
 //
-//   cash on the day the lease is signed  = start capital − the setup bill            (rec.cashLeft)
+//   cash on the day the lease is signed  = start capital − the setup bill            (rec.total)
 //   − rent while the room is built and permits wait                                  (rec.daysToOpen days)
 //   − the losses of the first months, while the regulars are still finding the shop (awareness ramp)
 //   = the lowest the bank account gets. A careful owner wants it to stay above one month of fixed costs.
@@ -67,7 +67,8 @@ export function runwayOf(ctx: EngineCtx, niche: NicheId, place: Place, rec: Open
   const a0 = isTakeover(pack, place) ? takeoverRules(pack)?.awareness ?? f.awarenessStart : f.awarenessStart;
   // profit taxes (self-employment and income tax) take their share of a good day; a losing day pays none
   const keep = 1 - taxRate(ctx, 'profit');
-  let cash = rec.cashLeft - waitRent, lowest = cash, loss = 0, breakEven: number | null = null;
+  // from the bill, not from rec.cashLeft: the cash left must not count the rent of the wait twice if the plan starts to include it
+  let cash = pack.startCapital - rec.total - waitRent, lowest = cash, loss = 0, breakEven: number | null = null;
   for (let t = 0; t < RULES.DAYS_PER_MONTH * 12 - rec.daysToOpen; t++) {
     const day = Math.min(cap, demandDay * awarenessAt(t, a0, f.rampDays)) * margin - fixed / D;
     if (day < 0) loss -= day; else if (breakEven == null) breakEven = t;
