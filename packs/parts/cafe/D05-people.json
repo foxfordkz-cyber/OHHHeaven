@@ -1825,5 +1825,352 @@
       "confidence": "estimate",
       "note": "Search-seen (secondary): small restaurants pay $800 to $3,000 a year; one broker average is $1,824 a year, another $2,655. Most policies exclude wage-and-hour claims, which are the common ones in restaurants."
     }
-  ]
+  ],
+  "extra": {
+    "d05Method": {
+      "howNumbersWereChecked": "No page could be opened in this session: the cloud environment blocks every outbound host (the proxy answered 403 for dol.ny.gov, nyc.gov, nysenate.gov, bls.gov, irs.gov and the rest). Only web search worked. So nothing in this fragment is marked verified. Each note says how the number was seen: \"Search-seen (primary)\" = the figure appeared in a search result taken from the primary source's own site; \"Search-seen (secondary)\" = from a law firm, trade press or vendor page; \"From memory\" = I know the rule but no result showed it; \"Arithmetic\" = my calculation from the figures above; \"My estimate\" or \"game-balance value\" = a design choice. Every \"Search-seen (primary)\" figure is a candidate for promotion to verified once someone opens the page.",
+      "playerMoveKinds": "In extra.eventCatalog a playerMove has kind \"lever\" or \"shortcut\" (ids from this fragment, the existing cafe pack or _common), \"staff\" (hire or let go a role from staff), or \"manager\" (hire the manager).",
+      "effectFields": "Event effects use the engine targets where one exists (staffAvailability, wages, demand, inspections, cogs). Other fields are requests to the lead: capacity, quality, reputation, closureDays, and one-off money as { field: \"cash\", add: -amount }."
+    },
+    "tips": {
+      "cardTipsPerMonth": 2000,
+      "cardTipsShareOfSales": 0.039,
+      "quickServiceTipRate": 0.158,
+      "shareOfSalesTippedImplied": 0.25,
+      "cashTipsPerMonthAssumed": 1000,
+      "tipsPerBaristaHourCardOnly": 3.13,
+      "tipsPerBaristaHourWithCash": 4.69,
+      "jarOnlyTipsPerBaristaHour": 1.56,
+      "employerTaxOnTips": 0.0765,
+      "cardFeeOnTips": 0.025,
+      "source": "https://pos.toasttab.com/blog/data/restaurant-tipping-trends",
+      "confidence": "estimate",
+      "note": "Card tips of $2,000 a month on $51,000 of sales are the existing pack's assumption (research notes) = 3.9% of sales. Search-seen (secondary, Toast): quick-service customers who tip left 15.8% on average in Q2 2026, flat for seven quarters; takeout 13.8%; full service 19.1%. Arithmetic: 3.9% / 15.8% means about a quarter of sales dollars carry a tip. $2,000 / 640 barista hours = $3.13 an hour; with an assumed $1,000 of cash tips, $4.69. Other estimates seen (secondary): $2 to $5 an hour nationally, $2.50 to $4.50 for New York City. With a cash jar only I assume card tips disappear and the jar stays: $1,000 / 640 = $1.56. Employer tax on tips 7.65% (IRS Publication 15, in _common); the 2.5% card fee is the pack's card rate, and New York lets the employer take that pro-rated fee off the tip (12 NYCRR 146-2.20)."
+    },
+    "staffModel": {
+      "skillRamp": [
+        {
+          "stage": "weeks 1-2",
+          "productivity": 0.4,
+          "quality": -0.03,
+          "where": "register and bar-back only"
+        },
+        {
+          "stage": "weeks 3-6",
+          "productivity": 0.7,
+          "quality": -0.02,
+          "where": "bar off-peak, supervised"
+        },
+        {
+          "stage": "months 2-3",
+          "productivity": 0.85,
+          "quality": 0,
+          "where": "bar at rush with a trained partner"
+        },
+        {
+          "stage": "month 4 on",
+          "productivity": 1,
+          "quality": 0,
+          "where": "any station"
+        },
+        {
+          "stage": "after 12 months",
+          "productivity": 1.1,
+          "quality": 0.02,
+          "where": "can train others and open alone"
+        }
+      ],
+      "skillRampSource": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+      "stations": {
+        "drinksPerHourTwoBaristaBar": [
+          35,
+          45
+        ],
+        "drinksPerHourWithFloater": [
+          55,
+          70
+        ],
+        "failingBelow": 25,
+        "source": "https://pulserevops.com/industry-kpis/ik0402"
+      },
+      "turnover": {
+        "monthlyQuitRateLow": 0.036,
+        "monthlyQuitRateHigh": 0.05,
+        "annualTurnoverLimitedServiceHourly": 1.1,
+        "medianTenureYears": 2.2,
+        "smallShopAnnualAssumed": 0.5,
+        "source": "https://www.bls.gov/news.release/jolts.t04.htm"
+      },
+      "replacement": {
+        "hardCost": 2706,
+        "fullCostWithLostOutput": 5864,
+        "trainingPart": 821,
+        "vacancyDaysAssumed": 14,
+        "source": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/"
+      },
+      "absenceRate": 0.04,
+      "tempCoverPerHour": [
+        29,
+        40
+      ],
+      "confidence": "estimate",
+      "note": "Ramp: search-seen (secondary): operators keep a new barista on register and bar-back for two to six weeks; competency comes after about three months and full proficiency after a year (Perfect Daily Grind); a large chain says a new hire is \"full-bar capable within 90 days\". The productivity fractions are my reading of those time marks, not measurements. Stations: the drinks-per-hour bands come from a low-quality KPI page and are a rough check only; the existing pack's capacity (10.6 orders per paid hour averaged over the month) stays the engine value. Turnover: search-seen (primary, bls.gov): monthly quits in accommodation and food services 3.6% to 5.0% in June to September 2026; median tenure in food preparation and serving 2.2 years in January 2026; search-seen (secondary): 110% yearly turnover of limited-service hourly staff and $2,706 hard replacement cost (Black Box Intelligence 2025); $5,864 with lost output, of which $821 training (Cornell, older). Absence: 4.0% for food preparation and serving in 2025 (BLS via Deputy). Temp cover: a staffing app's New York barista rate, $24.54 pay plus a 20% to 65% markup. Vacancy of 14 days is my assumption."
+    },
+    "thresholds": [
+      {
+        "employees": 1,
+        "counts": "employees",
+        "rule": "Workers' compensation, disability and Paid Family Leave insurance, unemployment insurance, Form I-9, written pay notice, weekly pay for manual workers, harassment policy and yearly training, 40 hours of safe and sick leave (unpaid under 5 employees), 32 unpaid protected hours",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "employees": 4,
+        "counts": "employees plus the owner and contractors",
+        "rule": "NYC Human Rights Law hiring rules: pay range in job ads, no criminal history questions before an offer, no credit checks, no salary history questions",
+        "source": "https://www.nyc.gov/site/cchr/media/fair-chance-faqs.page",
+        "confidence": "estimate"
+      },
+      {
+        "employees": 5,
+        "counts": "employees",
+        "rule": "The 40 hours of safe and sick leave become paid for every worker",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "employees": 10,
+        "counts": "employees in New York for the whole prior year, business at least two years old",
+        "rule": "New York Secure Choice: enroll staff in the state IRA unless you offer a retirement plan",
+        "source": "https://www.mercer.com/en-us/insights/law-and-policy/most-new-york-employers-have-secure-choice-deadlines-approaching/",
+        "confidence": "estimate"
+      },
+      {
+        "employees": 11,
+        "counts": "employees",
+        "rule": "Jury duty: the employer pays the first three days, up to $72 a day",
+        "source": "https://www.nycourts.gov/media/24781",
+        "confidence": "estimate"
+      },
+      {
+        "employees": 15,
+        "counts": "employees",
+        "rule": "Federal anti-discrimination law (Title VII, ADA) starts to apply; state and city law already applied",
+        "source": "https://www.ny.gov/sites/default/files/2023-04/Worker_Toolkit.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "employees": 100,
+        "counts": "employees",
+        "rule": "Safe and sick leave rises to 56 paid hours",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+        "confidence": "estimate"
+      }
+    ],
+    "thresholdsNote": "Search-seen for each row at the source given (primary for the nyc.gov and nycourts.gov rows, secondary for the rest). The 56 hours at 100 employees is from memory of the same city law. A coffee shop moves through the first four rows in its first year: the fifth person on payroll is the expensive step (paid sick leave for all).",
+    "leverNotes": [
+      {
+        "leverId": "scheduling",
+        "optionId": "two_weeks_fixed",
+        "calc": "3% of a $13,440 payroll = $403: hours you can no longer trim on slow days once the schedule is fixed. The 3% is my estimate. Effects are game-balance values.",
+        "source": "https://www.7shifts.com/blog/restaurant-sales-per-labor-hour-splh/",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "scheduling",
+        "optionId": "night_before",
+        "calc": "No cash cost. Unstable schedules are a leading reason hourly staff quit; the capacity and quality penalties are game-balance values standing in for no-shows and quits.",
+        "source": "https://www.bls.gov/news.release/jolts.t04.htm",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "training",
+        "optionId": "structured",
+        "calc": "2.5 hires a year (50% turnover of five) x 30 paid hours x $18 = $1,350 a year = $113 a month.",
+        "source": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "training",
+        "optionId": "barista_school",
+        "calc": "$113 plus a monthly two-hour paid tasting for five people (10 h x $21 = $210) = $323, rounded to $330. A roaster's lab day is assumed free with a wholesale account.",
+        "source": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "tipping_setup",
+        "optionId": "jar_only",
+        "calc": "Staff lose about $1.57 an hour of card tips ($3.13 to $1.56, extra.tips); modelled as a 3% capacity loss through quits. Reputation +0.01 for customers tired of tip screens. Game-balance values.",
+        "source": "https://pos.toasttab.com/blog/data/restaurant-tipping-trends",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "tipping_setup",
+        "optionId": "no_tipping",
+        "calc": "$3 x 640 barista hours = $1,920, plus 11.58% employer payroll taxes = $2,142. Tips of $3.13 an hour are replaced by a certain wage.",
+        "source": "https://pos.toasttab.com/blog/data/restaurant-tipping-trends",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "tip_pool_rules",
+        "optionId": "whole_team",
+        "calc": "No cash cost; the violation arises because New York limits required tip pools to customer-service staff and bars managers outright.",
+        "source": "https://www.dol.gov/agencies/whd/flsa/tipsFAQ",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "staff_benefits",
+        "optionId": "health_stipend",
+        "calc": "4 full-timers x $250 = $1,000. A QSEHRA may reimburse up to $6,450 a year ($537.50 a month) for one person in 2026 and needs no group plan; available to employers with fewer than 50 full-time staff.",
+        "source": "https://www.peoplekeep.com/blog/qsehra-contribution-limits",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "staff_benefits",
+        "optionId": "stipend_and_vacation",
+        "calc": "$1,000 + 5 people x 40 h x $21 / 12 = $350; total $1,350.",
+        "source": "https://www.peoplekeep.com/blog/qsehra-contribution-limits",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "bench_depth",
+        "optionId": "one_extra",
+        "calc": "8 hours a week of shifts kept for a trained extra part-timer x $19 x 4.33 = $658.",
+        "source": "https://www.deputy.com/blog/restaurant-no-shows-what-they-cost-and-how-to-cover",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "owner_hours",
+        "optionId": "sixty",
+        "calc": "60 h a week = 260 h a month, 100 h more than the 160 the pack assumes: 100 / 1,280 team and owner-equivalent hours = +8% capacity. Fatigue is handled in extra.mechanics.owner_hours_and_burnout.",
+        "source": "https://www.thehartford.com/insights-center/business-management/restaurant-owner-stress-management-tips",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "cash_controls",
+        "optionId": "trust",
+        "calc": "Demand -2% stands in for 2% of sales lost to skimming and free drinks; vendor figures put employee theft near 4% of restaurant sales, which I halve for a small owner-present shop.",
+        "source": "https://www.katalystos.com/blog/employee-theft-and-pos-fraud-in-restaurants",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "cash_controls",
+        "optionId": "pins_and_counts",
+        "calc": "My estimate of a team-management add-on to the register, $35 to $60 a month. Not a quote.",
+        "source": "https://squareup.com/us/en/pricing",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "cash_controls",
+        "optionId": "cameras_and_stock",
+        "calc": "$60 plus about $100 for cloud camera storage and the paid half-hour weekly count. My estimate.",
+        "source": "https://www.katalystos.com/blog/employee-theft-and-pos-fraud-in-restaurants",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "harassment_prevention",
+        "optionId": "policy_and_training",
+        "calc": "5 people x 1 paid hour x $21 / 12 = $8.75, rounded to $10.",
+        "source": "https://newyork.public.law/laws/n.y._labor_law_section_201-g",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "job_ads",
+        "optionId": "paid_posts_with_range",
+        "calc": "2.5 hires a year x $300 of sponsored posts / 12 = $62.",
+        "source": "https://100hires.com/indeed-job-posting-cost.html",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "interview_screening",
+        "optionId": "paid_trial_and_references",
+        "calc": "2.5 hires a year x 4 finalists x 3 h x $17 / 12 = $42.50, rounded to $50.",
+        "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+        "confidence": "estimate"
+      },
+      {
+        "leverId": "epli_cover",
+        "optionId": "policy",
+        "calc": "$1,824 a year / 12 = $152 (one broker's small-business average); small restaurants are quoted $800 to $3,000 a year. Wage-and-hour claims are usually excluded.",
+        "source": "https://insureon.com/small-business-insurance/employment-practices-liability/cost",
+        "confidence": "estimate"
+      }
+    ],
+    "taxCredits": [
+      {
+        "id": "fica_tip_credit_45b",
+        "name": "Credit for employer Social Security and Medicare taxes paid on tips",
+        "form": "IRS Form 8846",
+        "rate": 0.0765,
+        "base": "reported tips above what is needed to reach $5.15 an hour",
+        "monthlyValueAtReference": 153,
+        "note": "Arithmetic: 7.65% x $2,000 of reported card tips = $153 a month, $1,836 a year, which cancels the pack's monthly cost \"Employer payroll tax on reported tips\". It is a credit against the owner's income tax, so it helps only a profitable shop, and the same tax cannot also be deducted. The $5.15 floor is from memory of Internal Revenue Code section 45B; search-seen (primary, irs.gov): the credit is claimed on Form 8846.",
+        "source": "https://www.irs.gov/irm/part4/irm_04-023-007",
+        "confidence": "estimate"
+      }
+    ],
+    "laborBenchmarks": {
+      "laborPctOfSalesCoffeeShops": [
+        0.3,
+        0.35
+      ],
+      "salesPerLaborHourLimitedService": 45.33,
+      "referenceSalesPerPaidStaffHour": 79.69,
+      "referenceLaborPct": 0.294,
+      "source": "https://lavu.com/labor-cost-for-coffee-shop/",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, vendor guides): coffee shops run labor at 30% to 35% of sales; the National Restaurant Association median for limited service is $45.33 of sales per labor hour (quoted by a vendor). Arithmetic for the pack's reference month: $51,000 / 640 paid staff hours = $79.69; wages plus employer taxes ($13,440 + $1,556) / $51,000 = 29.4% before the owner's own hours, which the pack values at $4,800 more. The existing benchmark of 35% therefore holds only if the owner's work is counted."
+    },
+    "peopleCalendar": [
+      {
+        "month": 1,
+        "what": "Slowest sales of the year: cut hours and part-timers leave, keep hours and labor runs over 40% of sales. W-2 forms are due by January 31 and now carry a tipped-occupation code. The 32 unpaid protected hours reset for everyone on January 1."
+      },
+      {
+        "month": 2,
+        "what": "Flu and stomach bugs: expect several sick calls in the same fortnight. No doctor's note may be asked for three days or less."
+      },
+      {
+        "month": 3,
+        "what": "Spring hiring starts. Post jobs before the patios open and the summer squeeze begins."
+      },
+      {
+        "month": 4,
+        "what": "First-quarter payroll returns (Form 941, NYS-45) are due April 30. Check that tips ran through payroll all quarter."
+      },
+      {
+        "month": 5,
+        "what": "Finals and graduation: student baristas cut hours, then leave. The summer hiring squeeze begins."
+      },
+      {
+        "month": 6,
+        "what": "School is out: workers of 16 and 17 may work longer days, up to 48 hours a week. Heat behind the bar."
+      },
+      {
+        "month": 7,
+        "what": "Vacation requests peak. Second-quarter payroll returns are due July 31."
+      },
+      {
+        "month": 8,
+        "what": "Thinnest roster of the year: vacations and departures before the fall term."
+      },
+      {
+        "month": 9,
+        "what": "Students are back and looking for shifts: the easiest hiring month. Workers under 18 return to school-night limits (4 hours, done by 10 pm)."
+      },
+      {
+        "month": 10,
+        "what": "Third-quarter payroll returns due October 31. Holiday time-off requests arrive. Health plan open enrollment begins. The state publishes next year's minimum wage by October 1."
+      },
+      {
+        "month": 11,
+        "what": "Thanksgiving week: everyone wants the same days. Decide the holiday schedule in writing early."
+      },
+      {
+        "month": 12,
+        "what": "Holiday rush with a short roster: overtime and long days. Yearly harassment prevention training must be done for anyone hired a year ago. Workers' compensation policy audit follows the policy year."
+      }
+    ],
+    "peopleCalendarNote": "A planning calendar built from the rules and patterns in this fragment; due dates for Forms 941 and NYS-45 (the last day of the month after each quarter) and W-2 (January 31) are from memory, not opened this session."
+  }
 }
