@@ -1,0 +1,5619 @@
+{
+ "id": "cafe",
+ "fragment": "D15-calibration-premises",
+ "theme": "Premises, build-out, entry into the business, lease: numbers for the events",
+ "checked": "2026-11-14",
+ "basedOn": "packs/parts/cafe/ from all branches: D00 (research/d00-cafe-total-search), D01, D02, D08, D09, D10, D13, D14; packs/cafe.json of claude/keen-cray-yytcbp",
+ "extra": {
+  "calibrationReference": {
+   "note": "Money effects in notes are computed for the pack reference shop: 800 sq ft, $6,000 rent, $51,000 sales and $9,719 profit a month (packs/cafe.json extra.referenceMonth); build-out classes of keen-cray extra.buildout. A day closed loses about $1,700 of sales and $1,200 of contribution; a day of rent is $200.",
+   "sqft": 800,
+   "rentMonth": 6000,
+   "rentDay": 200,
+   "salesMonth": 51000,
+   "salesDay": 1700,
+   "contributionDay": 1200,
+   "profitMonth": 9719,
+   "depositMonths": 3,
+   "utilitiesMonth": 1100,
+   "buildout": {
+    "light": {
+     "perSqft": 87.5,
+     "cost": 70000,
+     "days": 60
+    },
+    "standard": {
+     "perSqft": 225,
+     "cost": 180000,
+     "days": 90
+    },
+    "heavy": {
+     "perSqft": 400,
+     "cost": 320000,
+     "days": 180
+    }
+   }
+  },
+  "eventCatalog": [
+   {
+    "id": "free_rent_runs_out",
+    "sourceFragment": "D01",
+    "group": "lease",
+    "name": "The free rent ends before you open",
+    "text": "Your free months are over and the room is still a construction site. From today the full rent is due, with no sales to pay it.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": null,
+    "durationNote": "from the end of the free months to opening day: 0.6, 1.6 or 4.6 months by build-out class",
+    "trigger": "schedule: free-rent end day < opening day (lease signed + build-out days + 25 days DOB approval + 22 days Health permit)",
+    "realSignal": "Lease free-rent period (typically 3-6 months) against the build-out and permit schedule of this address",
+    "effects": [
+     {
+      "field": "setupRentDays",
+      "add": 17,
+      "unit": "days of full base rent before the first sale, light build-out",
+      "byBuildoutClass": {
+       "light": 17,
+       "standard": 47,
+       "heavy": 137
+      }
+     },
+     {
+      "field": "rent",
+      "mult": 1.0,
+      "note": "full base rent from the first day after the free months; additional rent (taxes, water) was never free"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "free_rent_deal",
+      "optionId": "long_free",
+      "label": "Ask for 6 free months",
+      "cost": {
+       "faceRentMult": 1.026
+      },
+      "result": "17/47/137 paid days become 0/0/47; the landlord recovers it through a 2.6% higher face rent for 114 months"
+     },
+     {
+      "kind": "lever",
+      "id": "free_rent_deal",
+      "optionId": "no_free",
+      "label": "Take a 2.5% lower rent and no free months",
+      "cost": {
+       "faceRentMult": 0.975
+      },
+      "result": "all 107/137/227 days before opening are paid: $20,865 / $26,715 / $44,265 at $5,850"
+     },
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "optionId": "rent_from_permits",
+      "label": "Rent starts at DOB approval + 90 days, not at signing",
+      "cost": {
+       "cash": 0,
+       "faceRentMult": 1.01
+      },
+      "result": "a permit delay no longer eats free months; estimate: the landlord prices the risk at about 1% of face rent"
+     },
+     {
+      "kind": "lever",
+      "id": "construction_pace",
+      "optionId": "rush",
+      "label": "Night and weekend shifts",
+      "cost": {
+       "buildoutCostMult": 1.25,
+       "afterHoursVariance": true
+      },
+      "result": "build-out days x 0.75: light 60 -> 45 days, saves 15 days = $3,000 of rent for +$17,500 of work"
+     }
+    ],
+    "realFrequency": "Every new lease of an empty store: the SBS lease guide calls rent abatement for alterations common; law firms give 3-6 months, up to 12 for a heavy build-out",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+     "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    ],
+    "confidence": "estimate",
+    "note": "Opening day in the engine's terms: build-out days (60/90/180, keen-cray) + 25 days of DOB approval (MMR FY2026: 25.4 days from filing to approval in DOB NOW, not modelled yet) + 22 days of the Health permit wait (NYC Business: open 22 days after applying) = 107/137/227 days. Three free months = 90 days. Paid days 17/47/137 x $200 a day = $3,400 / $9,400 / $27,400 of rent with no sales. Face-rent formula from D14: market x (120-3)/(120-free)."
+   },
+   {
+    "id": "free_rent_ends",
+    "sourceFragment": "D14",
+    "group": "lease",
+    "name": "Free rent ends",
+    "text": "Your rent-free months are over: full rent is due from today, open or not.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "schedule: 7 days before freeUntilDay, any status",
+    "realSignal": "rent commencement date in the lease",
+    "mergedWith": "free_rent_runs_out",
+    "effects": [
+     {
+      "field": "inbox",
+      "add": 1,
+      "note": "warning only; the money is in free_rent_runs_out"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "construction_pace",
+      "optionId": "rush",
+      "label": "Speed up the last weeks",
+      "cost": {
+       "buildoutCostMult": 1.25
+      },
+      "result": "see free_rent_runs_out"
+     }
+    ],
+    "realFrequency": "Once per lease with free months",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/"
+    ],
+    "confidence": "estimate",
+    "note": "Notice event: same numbers as free_rent_runs_out. Kept so the player sees the date a week ahead (D14 spec)."
+   },
+   {
+    "id": "d00_premises_lease_rent_start",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Rent starts while the fit-out is unfinished",
+    "text": "The contractual commencement date arrives before the shop can trade.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": null,
+    "trigger": "schedule: rent commencement date passes while status = setup",
+    "realSignal": "Signed rent commencement clause matures with opening approvals still incomplete.",
+    "mergedWith": "free_rent_runs_out",
+    "effects": [
+     {
+      "field": "setupRentDays",
+      "add": 17,
+      "byBuildoutClass": {
+       "light": 17,
+       "standard": 47,
+       "heavy": 137
+      }
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "optionId": "rent_from_permits",
+      "label": "Tie rent start to permits",
+      "cost": {
+       "faceRentMult": 1.01
+      },
+      "result": "rent starts 90 days after DOB approval"
+     }
+    ],
+    "realFrequency": "Same as free_rent_runs_out",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/"
+    ],
+    "confidence": "estimate",
+    "note": "Same event seen from D00; calibrated with the free_rent_runs_out numbers so the assembler can merge them."
+   },
+   {
+    "id": "landlord_late_delivery",
+    "sourceFragment": "D01",
+    "group": "lease",
+    "name": "The landlord hands over the space late",
+    "text": "The previous tenant has not moved out, or the landlord's own work is unfinished. You hold a signed lease and no keys.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "attribute: space still occupied on signing day (holdover tenant) or landlord work unfinished",
+    "realSignal": "Whether the space is vacant and broom-clean on the day the lease is signed (visible on a walk-through)",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 45
+     },
+     {
+      "field": "rent",
+      "mult": 0.0,
+      "note": "no base rent until the space is delivered (SBS guide: you start paying once the space is available)"
+     },
+     {
+      "field": "setupCost",
+      "add": 375,
+      "note": "insurance and utilities already started: 1.5 months x $250"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "optionId": "outside_delivery_date",
+      "label": "Outside delivery date: cancel and get money back",
+      "cost": {
+       "cash": 0
+      },
+      "result": "if the space is not delivered by the date, cancel and recover the deposit (RPL §223-a gives this by default unless the lease says otherwise)"
+     },
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "walk_through",
+      "label": "Sign only a vacant, broom-clean space",
+      "cost": {
+       "cash": 0,
+       "searchDays": 14
+      },
+      "result": "no delay; two more weeks of looking"
+     }
+    ],
+    "realFrequency": "The SBS guide warns that removing a holdover tenant 'may be weeks or months'; D01 cites a five-month delay held reasonable by a court",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/RPP/223-A"
+    ],
+    "confidence": "estimate",
+    "note": "45 days is my midpoint between 'weeks' and 'months'; D01 had 60. The delay costs time and frozen cash (deposit $18,000 already paid), not rent. RPL §223-a (opened): unless the lease says otherwise, the landlord must deliver possession at the start of the term; if not, the tenant may rescind and recover what was paid."
+   },
+   {
+    "id": "first_timer_turned_away",
+    "sourceFragment": "D01",
+    "group": "lease",
+    "name": "Landlords will not rent to a first-timer",
+    "text": "Brokers on the best blocks stop returning calls once they learn this is your first shop. Prime addresses want a track record, a bigger deposit or a full guaranty.",
+    "tier": "core",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "attribute: prime tier address + player has no operating history + guaranty_type != full",
+    "realSignal": "Applicant has no operating history; address is in the prime rent tier",
+    "effects": [
+     {
+      "field": "depositMonths",
+      "add": 3,
+      "note": "3 -> 6 months: $18,000 more cash frozen at $6,000 rent; on a prime block at $12,000 rent, $36,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "full",
+      "label": "Sign a full personal guaranty",
+      "cost": {
+       "personalExposure": "all rent to the end of the term"
+      },
+      "result": "deposit back to 3 months"
+     },
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "good_guy",
+      "label": "Good guy guaranty",
+      "cost": {
+       "depositMonthsAdd": 1
+      },
+      "result": "deposit 4 months, exposure limited to rent until surrender"
+     },
+     {
+      "kind": "choice",
+      "id": "entry_mode",
+      "optionId": "takeover",
+      "label": "Buy a shop with an assignable lease",
+      "cost": {
+       "see": "takeover_listing"
+      },
+      "result": "track record of the seller's lease"
+     }
+    ],
+    "realFrequency": "SBS guide: deposit 'commonly two' months, larger for a business with little financial history; brokers quote 6-12 months for startups and restaurants. In Q3 2026 Manhattan retail availability fell to a record 9.8% (Cushman & Wakefield), so prime landlords can choose",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.metro-manhattan.com/security-deposit/",
+     "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail"
+    ],
+    "confidence": "estimate",
+    "note": "The pack's deposit is already 3 months. +3 months is the low end of the broker range for startups. Applies only to prime tier; mid and cheap blocks keep 3."
+   },
+   {
+    "id": "letter_of_credit_wait",
+    "sourceFragment": "D01",
+    "group": "lease",
+    "name": "The bank needs three weeks for the letter of credit",
+    "text": "The landlord wants the deposit as a bank letter of credit. Your bank will issue it only against cash and needs two to three weeks.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: guaranty_type = no_guaranty_big_deposit (deposit as letter of credit)",
+    "realSignal": "Lease requires the security deposit as a standby letter of credit",
+    "effects": [
+     {
+      "field": "leaseSigningDelayDays",
+      "add": 18
+     },
+     {
+      "field": "monthlyFees",
+      "add": 23,
+      "note": "1.5% a year on $18,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "good_guy",
+      "label": "Cash deposit plus good guy guaranty",
+      "cost": {
+       "cash": 0
+      },
+      "result": "no bank wait, no fee"
+     }
+    ],
+    "realFrequency": "SBS guide: the landlord may require a letter of credit; the bank charges a fee and may require collateral",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.metro-manhattan.com/security-deposit/"
+    ],
+    "confidence": "estimate",
+    "note": "D01 numbers kept: 14-21 days to issue, fee 0.75-2% a year (secondary). The cash behind the letter stays frozen at the bank."
+   },
+   {
+    "id": "vacancy_leverage",
+    "sourceFragment": "D01",
+    "group": "lease",
+    "name": "Empty storefronts give tenants leverage",
+    "text": "One storefront in nine in the city is empty, one in five in some districts. Landlords with a dark window agree to more free rent.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: block storefront vacancy above 15% (cheap tier blocks only)",
+    "realSignal": "Citywide storefront vacancy rate (Live XYZ data published quarterly by City Planning and by the Comptroller): 11.0% in April 2026",
+    "tiers": [
+     "cheap"
+    ],
+    "effects": [
+     {
+      "field": "freeRentMonths",
+      "add": 2,
+      "appliesTo": "leases signed while active"
+     },
+     {
+      "field": "rent",
+      "mult": 0.9,
+      "appliesTo": "leases signed while active"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "free_rent_deal",
+      "optionId": "long_free",
+      "label": "Ask for more free months",
+      "cost": {
+       "faceRentMult": 1.0
+      },
+      "result": "on an empty block the landlord gives months without raising face rent"
+     }
+    ],
+    "realFrequency": "Not in 2026 Manhattan corridors: availability at a record low 9.8% (Q3 2026) and asking rents +5% a year (CBRE). Still seen on weak outer-borough blocks",
+    "source": "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail",
+    "supportingSources": [
+     "https://www.cbre.com/insights/figures/manhattan-retail-figures-q3-2026",
+     "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/"
+    ],
+    "confidence": "estimate",
+    "note": "Vendor estimate: effective rents land 10-25% below asking after concessions; I take the low end (0.9) and +2 free months for cheap-tier blocks only. Prime and mid blocks get no leverage in 2026: the event is off there. Correction to D01, which applied it everywhere."
+   },
+   {
+    "id": "tax_escalation_bill",
+    "sourceFragment": "D01",
+    "group": "lease",
+    "name": "The property-tax escalation bill arrives",
+    "text": "The city's new tax year starts and the building's bill is higher. Your lease passes your share of the increase to you as additional rent.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     7
+    ],
+    "durationMonths": 12,
+    "trigger": "schedule: tax year starts July 1; first bill in the second lease year (base year = first year)",
+    "realSignal": "NYC property tax bills for the fiscal year starting July 1 (Department of Finance final assessment roll and Class 4 tax rate)",
+    "effects": [
+     {
+      "field": "rentAdd",
+      "add": 52,
+      "unit": "$/month, new lease, second year",
+      "note": "3.9% x $20/sq ft x 800 sq ft / 12"
+     },
+     {
+      "field": "rentAdd",
+      "add": 281,
+      "unit": "$/month, assigned lease with a base year 5 years old",
+      "appliesTo": "takeover"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "cap_escalation",
+      "label": "Cap the tax pass-through at 5% a year",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "rentAdd capped; estimate: landlords accept caps for small tenants rarely"
+     },
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Read the base year before buying",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "the $281 a month is priced into the offer"
+     }
+    ],
+    "realFrequency": "Yearly in most store leases (SBS guide lists 'a share of the increase in real estate taxes' as additional rent)",
+    "source": "https://www.nyc.gov/site/finance/about/press/press-release-fy27-tentative-assessment-roll.page",
+    "supportingSources": [
+     "https://www.nyc.gov/site/finance/property/property-tax-rates.page",
+     "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "DOF (opened): Class 4 assessed value +5.8% on the FY2027 tentative roll; the Class 4 rate was 10.848% in tax year 2026 and the Council's provisional FY2027 rate is 10.658% (search excerpt) -> taxes about +3.9%. Tax share of $20 a sq ft for an $90/sq ft storefront is my assumption. New lease: first escalation only in month 13, so inside a 12-month season it hits only a bought lease. Takeover: (1.039^5 - 1) = 21% x $20 x 800 / 12 = $281 a month. Same id appears in D01, D08 and D10; one calibration for all three."
+   },
+   {
+    "id": "annual_rent_step",
+    "sourceFragment": "D01",
+    "group": "lease",
+    "name": "Rent goes up 3%",
+    "text": "The first lease year is over. The yearly increase in your lease takes effect.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "schedule: each lease anniversary (month 13 of a new lease; any month for an assigned lease)",
+    "realSignal": "Lease anniversary; fixed yearly escalation clause",
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.03,
+      "note": "compounding: $6,000 -> $6,180"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "two_percent_steps",
+      "label": "2% steps instead of 3%",
+      "cost": {
+       "faceRentMult": 1.047
+      },
+      "result": "start at $6,282 instead of $6,000; the landlord collects the same over 10 years"
+     }
+    ],
+    "realFrequency": "SBS guide (opened): a fixed increase 'typically 2-3% each year'",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "Verified: 2-3% a year (SBS). 1.03 is the top of the range used by brokers for NYC retail. Landlord-neutral 2% schedule: sum of 1.03^k for k=0..9 = 11.464, of 1.02^k = 10.950, ratio 1.047. Same as D08 rent_step_anniversary."
+   },
+   {
+    "id": "rent_step_anniversary",
+    "sourceFragment": "D08",
+    "group": "lease",
+    "name": "Lease anniversary: the rent steps up",
+    "text": "Most store leases raise the rent every year by a fixed percentage written into the lease. Month 13 costs more than month 12.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "schedule: lease anniversary",
+    "realSignal": "The escalation clause of the shop's own lease",
+    "mergedWith": "annual_rent_step",
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "two_percent_steps",
+      "label": "2% steps",
+      "cost": {
+       "faceRentMult": 1.047
+      },
+      "result": "see annual_rent_step"
+     }
+    ],
+    "realFrequency": "Yearly",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "Duplicate of annual_rent_step (D08)."
+   },
+   {
+    "id": "lease_renewal_offer",
+    "sourceFragment": "D10",
+    "group": "lease",
+    "name": "The renewal letter",
+    "text": "Six months before your lease ends the landlord names the new rent. It is priced at what the block asks today, not at what you paid.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 60,
+    "trigger": "schedule: 6 months before the lease ends (an assigned lease with little time left, or a long game)",
+    "realSignal": "Asking rent per sq ft for ground-floor retail on the corridor (REBNY and Cushman & Wakefield retail reports) divided by your contract rent",
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.2,
+      "byTier": {
+       "prime": 1.3,
+       "mid": 1.2,
+       "cheap": 1.05
+      },
+      "note": "new rent = today's market rent; relative to the last stepped rent"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "renew_at_market",
+      "label": "Renew at the landlord's price",
+      "cost": {
+       "rentMult": 1.2
+      },
+      "result": "keep the build-out and the regulars"
+     },
+     {
+      "kind": "choice",
+      "id": "relocate",
+      "label": "Move",
+      "cost": {
+       "buildout": "new light/standard/heavy build-out",
+       "awareness": 0.5
+      },
+      "result": "rent at market elsewhere; the build-out stays with the landlord"
+     },
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "renewal_option_cap",
+      "label": "At signing: 5-year renewal option at 95% of market",
+      "cost": {
+       "faceRentMult": 1.0,
+       "lawyerHours": 2
+      },
+      "result": "renewal mult x 0.95 and the right to stay"
+     }
+    ],
+    "realFrequency": "Every lease end. No law caps commercial renewal rent in NYC (D08). Cushman & Wakefield: five-year asking-rent growth to Q3 2026 of 47.1% in SoHo, 35.1% on Third Avenue, 25.6% on the Upper West Side",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail",
+     "https://www.cbre.com/insights/figures/manhattan-retail-figures-q3-2026"
+    ],
+    "confidence": "estimate",
+    "note": "Lease of 10 years with 3% steps: last rent = 1.03^9 = 1.305 x start. Market after 10 years at 4.7% a year (UWS pace) = 1.583 -> ratio 1.21; at 6.2% (Third Ave) 1.36 -> 1.3 cap; cheap blocks with flat rents 1.05. SBS guide (opened): the most common term is 10 years with an option to renew for 5; options can cap the new rent at 90-95% of market."
+   },
+   {
+    "id": "lease_renewal_reset",
+    "sourceFragment": "D08",
+    "group": "lease",
+    "name": "The lease ends: renew at the landlord's price or leave",
+    "text": "No law caps the new rent or gives you the right to stay. The build-out you paid for stays with the landlord.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 60,
+    "trigger": "schedule: lease end without a renewal option",
+    "realSignal": "Expiration date of the shop's lease; asking rents on the same street",
+    "mergedWith": "lease_renewal_offer",
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.2,
+      "byTier": {
+       "prime": 1.3,
+       "mid": 1.2,
+       "cheap": 1.05
+      }
+     },
+     {
+      "field": "buildoutValue",
+      "mult": 0.0,
+      "note": "improvements stay with the landlord if you leave"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "renew_at_market",
+      "label": "Pay the new rent",
+      "cost": {
+       "rentMult": 1.2
+      },
+      "result": "stay"
+     },
+     {
+      "kind": "choice",
+      "id": "relocate",
+      "label": "Leave",
+      "cost": {
+       "buildout": "new"
+      },
+      "result": "start over"
+     }
+    ],
+    "realFrequency": "Every lease end",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail"
+    ],
+    "confidence": "estimate",
+    "note": "Same numbers as lease_renewal_offer."
+   },
+   {
+    "id": "rent_default_notice",
+    "sourceFragment": "D08",
+    "group": "lease",
+    "name": "A 14-day rent demand is served",
+    "text": "You missed the rent. The landlord's process server delivers a written demand: pay within 14 days or give up the space. Next comes court, then a marshal.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: rent unpaid 5 days after the due date",
+    "realSignal": "The shop's own unpaid rent",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -300,
+      "note": "late charge 5% of rent: common clause, estimate"
+     },
+     {
+      "field": "cash",
+      "add": -2500,
+      "note": "landlord's legal fees billed as additional rent if it goes to court, estimate"
+     },
+     {
+      "field": "evictionClockDays",
+      "add": 14,
+      "note": "written 14-day demand, then a court case, then a 14-day marshal notice"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "pay_within_14_days",
+      "label": "Pay all arrears within 14 days",
+      "cost": {
+       "cash": 6300
+      },
+      "result": "case never filed"
+     },
+     {
+      "kind": "choice",
+      "id": "payment_plan",
+      "label": "Ask for a payment plan",
+      "cost": {
+       "cash": 0
+      },
+      "result": "landlord's choice; no right to one"
+     },
+     {
+      "kind": "choice",
+      "id": "surrender_good_guy",
+      "label": "Give notice and hand back the keys",
+      "cost": {
+       "rentMonths": 3
+      },
+      "result": "good guy guarantor free after surrender"
+     }
+    ],
+    "realFrequency": "Steady stream in Civil Court's commercial part; D08 lists recent closings over rent",
+    "source": "https://www.nysenate.gov/legislation/laws/RPA/711",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/RPA/749",
+     "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    ],
+    "confidence": "verified",
+    "note": "Verified: RPAPL §711(2) requires a written demand with at least 14 days' notice; §749 requires the marshal to give at least 14 days' notice before eviction (both opened). Late charge and legal fees are estimates from typical lease clauses."
+   },
+   {
+    "id": "landlord_pressure",
+    "sourceFragment": "D08",
+    "group": "lease",
+    "name": "The landlord wants the space back early",
+    "text": "Heat goes off, the hallway is 'under repair', your deliveries are blocked. It is cheaper for him than buying you out.",
+    "tier": "exotic",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "state: the tenant pays below-market rent with more than 3 years left (building sold or redevelopment)",
+    "realSignal": "A redevelopment plan or a richer tenant for the building",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.9,
+      "note": "blocked hallway and deliveries"
+     },
+     {
+      "field": "closureDays",
+      "add": 2
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "harassment_claim",
+      "label": "Sue under the commercial tenant harassment law",
+      "cost": {
+       "cash": -7500
+      },
+      "result": "civil penalty on the landlord $10,000-$50,000; injunction"
+     },
+     {
+      "kind": "choice",
+      "id": "buyout",
+      "label": "Negotiate a buyout to leave",
+      "cost": {
+       "cash": 0
+      },
+      "result": "cash in exchange for surrender; estimate 6-12 months of rent"
+     }
+    ],
+    "realFrequency": "Rare; the harassment law exists because it happens",
+    "source": "https://intro.nyc/local-laws/2019-185",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "Local Law 185 of 2019 raised the civil penalty under Admin. Code §22-903(a) to $10,000-$50,000 (intro.nyc, search excerpt). Demand and closure values are game estimates."
+   },
+   {
+    "id": "holdover_after_expiry",
+    "sourceFragment": "D08",
+    "group": "lease",
+    "name": "Staying past the end of the lease",
+    "text": "Talks dragged on and the lease ran out. Every extra month is billed at the holdover rate in the lease.",
+    "tier": "exotic",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: lease expired, no renewal signed, tenant still in",
+    "realSignal": "The holdover clause of the shop's own lease",
+    "effects": [
+     {
+      "field": "rent",
+      "mult": 1.5,
+      "note": "holdover rate; often 2.0 after the first 30 days; engine clamps at 1.5"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "sign_renewal",
+      "label": "Sign the renewal",
+      "cost": {
+       "rentMult": 1.2
+      },
+      "result": "back to the renewal rent"
+     },
+     {
+      "kind": "choice",
+      "id": "vacate",
+      "label": "Move out",
+      "cost": {
+       "see": "d00_closures_nyc_event_bare_handover"
+      },
+      "result": "holdover ends"
+     }
+    ],
+    "realFrequency": "When renewal talks drag on",
+    "source": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/RPP/232-C"
+    ],
+    "confidence": "estimate",
+    "note": "Courts enforce holdover rent of 150% or 200% (law firm, D08). RPL §232-c (opened): if the landlord accepts rent after the term, the tenancy becomes month to month."
+   },
+   {
+    "id": "assignment_consent_price",
+    "sourceFragment": "D01",
+    "group": "lease",
+    "name": "The landlord names a price for consent",
+    "text": "The lease needs the landlord's consent to an assignment. The landlord will consent: with a new guaranty, a bigger deposit and the rent brought up to market.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: buy a shop whose lease needs the landlord's consent to assign",
+    "realSignal": "Assignment clause of the seller's lease; inherited rent against market rent",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "closingDelayDays",
+      "add": 30
+     },
+     {
+      "field": "cash",
+      "add": -2500,
+      "note": "landlord's legal and processing fee, estimate"
+     },
+     {
+      "field": "rent",
+      "mult": 1.1,
+      "note": "landlord resets part of the way to market as the price of consent, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Read the assignment clause before the offer",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "price the 10% rise into the offer"
+     },
+     {
+      "kind": "choice",
+      "id": "walk_away",
+      "label": "Walk away",
+      "cost": {
+       "cash": -2500
+      },
+      "result": "no deal"
+     }
+    ],
+    "realFrequency": "Every assignment; SBS guide: most landlords permit an assignment only with their consent",
+    "source": "https://www.nysenate.gov/legislation/laws/RPP/226-B",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+     "https://commercialobserver.com/2013/08/weighing-in-on-key-money-deals/"
+    ],
+    "confidence": "estimate",
+    "note": "RPL §226-b (opened) gives a right to sublet or assign only for residential tenants; a store tenant has whatever the lease says. Commercial Observer: on consent the landlord may raise the rent, the deposit or ask for a new guaranty. 30 days from D14; +10% and $2,500 are my estimates."
+   },
+   {
+    "id": "landlord_blocks_the_sale",
+    "sourceFragment": "D09",
+    "group": "lease",
+    "name": "The landlord will not sign the assignment",
+    "text": "The buyer needs your lease. The landlord asks for a fee and a higher rent, or says no.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "decision: player sells; lease needs consent",
+    "realSignal": "Lease assignment clause and remaining term; New York listings state the years left (one Queens cafe: three years)",
+    "effects": [
+     {
+      "field": "salePrice",
+      "mult": 0.9,
+      "note": "buyer discounts for the higher rent"
+     },
+     {
+      "field": "closingDelayDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "consent_not_unreasonably_withheld",
+      "label": "At signing: consent not unreasonably withheld",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "landlord can only refuse with a reason"
+     },
+     {
+      "kind": "choice",
+      "id": "sell_assets_only",
+      "label": "Sell the equipment, not the business",
+      "cost": {
+       "salePriceMult": 0.3
+      },
+      "result": "liquidation value"
+     }
+    ],
+    "realFrequency": "Every sale that needs the lease (D09)",
+    "source": "https://www.nysenate.gov/legislation/laws/RPP/226-B",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+     "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    ],
+    "confidence": "estimate",
+    "note": "Mirror of assignment_consent_price for the seller. 0.9 = the 10% rent rise the buyer must absorb, capitalised roughly; estimate."
+   },
+   {
+    "id": "short_lease_left",
+    "sourceFragment": "D01",
+    "group": "lease",
+    "name": "Three years left on the lease you bought",
+    "text": "The price looked low because the lease was short. It ends in three years, and a commercial tenant in New York has no right to renew.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "attribute: listing with 3 years or less left on the lease and no renewal option",
+    "realSignal": "Years remaining on the assigned lease (stated in the listing or the lease)",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "takeoverPrice",
+      "mult": 0.85,
+      "note": "fair price discount for renewal risk, estimate"
+     },
+     {
+      "field": "renewalRentMult",
+      "add": 0.2,
+      "note": "at month 37: lease_renewal_offer"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Ask the landlord for a new 10-year lease as a condition of closing",
+      "cost": {
+       "cash": 7500,
+       "rentMult": 1.1
+      },
+      "result": "renewal risk gone at a higher rent"
+     }
+    ],
+    "realFrequency": "Common in listings (D01)",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    ],
+    "confidence": "estimate",
+    "note": "Beyond a 12-month season the renewal hits after the game ends; the event matters for the price. 15% is my estimate of what a careful buyer knocks off."
+   },
+   {
+    "id": "still_on_the_lease_after_sale",
+    "sourceFragment": "D09",
+    "group": "lease",
+    "name": "The buyer stops paying rent and the landlord calls you",
+    "text": "You sold the shop a year ago. The lease was assigned without a release.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "state: player sold the shop, lease assigned without a release, buyer stops paying",
+    "realSignal": "New York law: an assignor stays liable on the lease unless the landlord expressly releases it",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -18000,
+      "note": "three months of the buyer's unpaid rent claimed from the seller"
+     },
+     {
+      "field": "cash",
+      "add": -3000,
+      "note": "own lawyer, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "exit_terms",
+      "optionId": "release_at_assignment",
+      "label": "Ask for a release when assigning",
+      "cost": {
+       "salePriceMult": 0.95
+      },
+      "result": "no claim"
+     },
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "good_guy",
+      "label": "Have signed a good guy guaranty",
+      "cost": {},
+      "result": "personal exposure ends at surrender"
+     }
+    ],
+    "realFrequency": "D09 story; SBS guide: whether you assign or sublet, you still have obligations",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "SBS guide (opened): 'Whether you assign the lease or sublet the space, you still have obligations'. Three months at $6,000 is my estimate of a default before the landlord re-lets; New York commercial landlords have no duty to mitigate (Holy Properties v. Kenneth Cole, 1995; RPL §227-e imposes the duty only for dwellings), so it can be more."
+   },
+   {
+    "id": "deposit_kept_by_landlord",
+    "sourceFragment": "D09",
+    "group": "lease",
+    "name": "The landlord keeps part of the deposit",
+    "text": "Unpaid rent and the cost of restoring the space come out of the security deposit.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "state: player leaves the space",
+    "realSignal": "Lease surrender terms: rent paid to the surrender date, space empty and broom-clean",
+    "effects": [
+     {
+      "field": "depositRefundDelayDays",
+      "add": 45
+     },
+     {
+      "field": "depositRefund",
+      "add": -6000,
+      "note": "restoration and repairs deducted, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "restore_before_leaving",
+      "label": "Restore the space yourself",
+      "cost": {
+       "cash": -4000
+      },
+      "result": "deposit back in full"
+     }
+    ],
+    "realFrequency": "Common at exit (D09)",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "SBS guide (opened): the landlord 'will usually refund the security deposit 30 to 45 days after you vacate'. $6,000 deduction and $4,000 own restoration are estimates."
+   },
+   {
+    "id": "building_sold",
+    "sourceFragment": "D10",
+    "group": "lease",
+    "name": "The building is sold",
+    "text": "Your building has a new owner. Your lease runs to its last day; after that the new owner decides.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: the building changes hands",
+    "realSignal": "Deed recorded in ACRIS (NYC Department of Finance property records) for the lot",
+    "effects": [
+     {
+      "field": "renewalRentMult",
+      "add": 0.1,
+      "note": "new owners reprice at renewal, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "renewal_option_cap",
+      "label": "Renewal option already in the lease",
+      "cost": {},
+      "result": "binds the new owner"
+     }
+    ],
+    "realFrequency": "Story in D10; no rate",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "The lease binds the buyer of the building; nothing changes until renewal. Small effect on purpose."
+   },
+   {
+    "id": "d00_premises_guaranty_scope",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Guaranty reaches the owner",
+    "text": "The lease draft asks the owner to guarantee obligations personally.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "state: business closes or defaults with time left on the lease",
+    "realSignal": "Draft guaranty covers all tenant obligations.",
+    "effects": [
+     {
+      "field": "personalLiability",
+      "add": 36000,
+      "unit": "good guy: 6 months of notice and rent to surrender",
+      "byGuaranty": {
+       "good_guy": 36000,
+       "full": 432000,
+       "none": 0
+      }
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "good_guy",
+      "label": "Good guy guaranty",
+      "cost": {
+       "depositMonthsAdd": 1
+      },
+      "result": "exposure $18,000-$36,000"
+     },
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "full",
+      "label": "Full guaranty",
+      "cost": {},
+      "result": "exposure to the end of the term"
+     },
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "none_big_deposit",
+      "label": "No guaranty, 6-month deposit",
+      "cost": {
+       "depositMonthsAdd": 3
+      },
+      "result": "exposure = the deposit"
+     }
+    ],
+    "realFrequency": "Every owner who closes early",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.metro-manhattan.com/security-deposit/"
+    ],
+    "confidence": "estimate",
+    "note": "SBS guide (opened): a full guaranty covers all the tenant's obligations; under a good guy guaranty the guarantor is not responsible for rent after the tenant vacates. Full exposure: 72 months left x $6,000 = $432,000 (no duty to mitigate for commercial landlords in NY: Holy Properties v. Kenneth Cole, 1995, search excerpt; RPL §227-e, opened, covers only dwellings). Good guy notice 3-6 months (secondary, D01)."
+   },
+   {
+    "id": "d00_premises_surrender_clawback",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Exit clauses claw back concessions",
+    "text": "A proposed surrender triggers repayment language for lease concessions.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "state: early surrender under a 'good guy' clause that repays concessions",
+    "realSignal": "Counsel identifies concession clawbacks in the signed exit terms.",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -33120,
+      "note": "3 free months $18,000 + broker commission $15,120"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "true_good_guy",
+      "label": "Strike the repayment clause",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "surrender costs only rent to the surrender date"
+     }
+    ],
+    "realFrequency": "SBS guide names it as a trap to avoid",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "SBS guide (opened): a lease is not a true good guy guaranty if it makes you repay the improvement allowance, free rent or the broker's commission. Broker commission from the guide's own example: 5% of the first year's base rent and 4% for years two to five = 21% x $72,000 = $15,120. Free rent 3 x $6,000."
+   },
+   {
+    "id": "d00_premises_landlord_access",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Landlord blocks access to the leased shop",
+    "text": "A documented access dispute threatens operations and needs legal handling.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: lease dispute open",
+    "realSignal": "Landlord changes access or removes keys without lawful resolution of tenancy.",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 2,
+      "note": "lost contribution about $1,200 a day"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "court_order",
+      "label": "Ask the court for an order to restore access",
+      "cost": {
+       "cash": -3000
+      },
+      "result": "access back in days"
+     }
+    ],
+    "realFrequency": "Rare; part of the harassment pattern the 2019 law targets",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://intro.nyc/local-laws/2019-185"
+    ],
+    "confidence": "estimate",
+    "note": "Lockout of a paying tenant can be commercial tenant harassment (Admin. Code §22-902, D08). Values are estimates."
+   },
+   {
+    "id": "d00_premises_landlord_permit",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Landlord refuses cooperation on permitted work",
+    "text": "The cafe cannot progress agreed legal construction without owner cooperation.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: build-out filing needs the owner's authorization and the landlord delays it",
+    "realSignal": "Documented unreasonable refusal blocks the tenant permitted project.",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "optionId": "landlord_cooperation",
+      "label": "Lease clause: landlord signs filings within 10 days",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "delay 0"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "SBS guide: certain agencies may not permit alterations to start until the space complies; require the landlord to deliver compliance. DOB filings are made for the owner. 30 days is my estimate (one month of chasing)."
+   },
+   {
+    "id": "d00_premises_lease_court",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "A lease dispute moves beyond advisory help",
+    "text": "The city assistance program cannot serve as the litigation representation plan.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "state: lease dispute not settled after 30 days",
+    "realSignal": "Negotiation fails and the dispute requires court representation.",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -7500,
+      "note": "retainer, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "free_lease_help",
+      "label": "City's free commercial lease help",
+      "cost": {
+       "cash": 0
+      },
+      "result": "advice and a letter, not a court case"
+     },
+     {
+      "kind": "choice",
+      "id": "settle",
+      "label": "Settle",
+      "cost": {
+       "rentMonths": 1
+      },
+      "result": "dispute ends"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "SBS runs free commercial lease assistance for small businesses (mentioned across SBS materials; page not opened this session). Court costs are estimates."
+   },
+   {
+    "id": "d00_premises_lease_hours",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Shorter trading hours conflict with the lease",
+    "text": "A continuous-operation covenant restricts the proposed labor-saving schedule.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: shorten hours below the lease's operating covenant",
+    "realSignal": "Owner reduces hours below a signed operating covenant.",
+    "effects": [
+     {
+      "field": "defaultNotice",
+      "add": 1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "no_operating_covenant",
+      "label": "No hours clause at signing",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "free to cut hours"
+     }
+    ],
+    "realFrequency": "Mall and building-lobby leases mostly",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Qualitative: a covenant to operate turns a cost cut into a lease default."
+   },
+   {
+    "id": "d00_premises_short_tenure_capex",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Expansion investment lacks secure tenure",
+    "text": "A landlord-change scenario leaves the cafe contemplating long-lived improvements without a durable lease.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: spend on the room with fewer than 3 years of lease left",
+    "realSignal": "Player plans expansion while only short-term occupancy is documented.",
+    "effects": [
+     {
+      "field": "capexValueLost",
+      "mult": 0.6,
+      "note": "share of a 10-year improvement written off if the lease ends in 4 years"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "extend_first",
+      "label": "Extend the lease before spending",
+      "cost": {
+       "rentMult": 1.1
+      },
+      "result": "keeps the value"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "1 - 4/10 = 0.6 for a 120-month improvement with 48 months left."
+   },
+   {
+    "id": "d00_premises_landlord_utility_exit",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Repeated property dependencies change the stay-or-leave decision",
+    "text": "A utility interruption exposes poor landlord communication and uncertain tenure.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "state: third building failure (gas, water, power) in 12 months",
+    "realSignal": "Announced building service interruption remains unresolved and player lacks a durable lease.",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 3,
+      "unit": "per failure"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "abatement_clause",
+      "label": "Rent abatement after 3 days without service",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "rent stops while the building is broken"
+     },
+     {
+      "kind": "choice",
+      "id": "relocate",
+      "label": "Leave at renewal",
+      "cost": {
+       "buildout": "new"
+      },
+      "result": "end of dependency"
+     }
+    ],
+    "realFrequency": "Older buildings",
+    "source": "https://www.nysenate.gov/legislation/laws/RPP/227",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "RPL §227 (opened) lets a tenant quit only when the building becomes untenantable; partial failures need a lease clause."
+   },
+   {
+    "id": "d00_closures_nyc_event_repair_dispute_surrender",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Repair dispute reaches lease surrender",
+    "text": "A documented landlord-tenant repair dispute reaches a settlement decision.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "state: landlord repair dispute open for 3 months",
+    "realSignal": "Proposed settlement requires giving up possession while specifying repair claims and payments.",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 5
+     },
+     {
+      "field": "cash",
+      "add": -3000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "negotiated_surrender",
+      "label": "Negotiated surrender",
+      "cost": {
+       "rentMonths": 1
+      },
+      "result": "exit without guaranty claim"
+     }
+    ],
+    "realFrequency": "Closure stories in D00",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/RPP/227"
+    ],
+    "confidence": "estimate",
+    "note": "Estimates."
+   },
+   {
+    "id": "d00_closures_nyc_event_renewal_fight",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Owner declines a renewal dispute",
+    "text": "A landlord refuses a lease extension and the owner must choose whether to pursue the dispute.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "trigger": "schedule: lease end, landlord refuses to renew",
+    "realSignal": "Written refusal to extend the lease and legal advice on available remedies.",
+    "effects": [
+     {
+      "field": "leaseEndsInMonths",
+      "add": 6
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "relocate",
+      "label": "Find a new space now",
+      "cost": {
+       "buildout": "new"
+      },
+      "result": "continuity"
+     },
+     {
+      "kind": "choice",
+      "id": "close",
+      "label": "Close at lease end",
+      "cost": {},
+      "result": "exit"
+     }
+    ],
+    "realFrequency": "No right to renew without an option clause",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "SBS guide (opened): no guarantee that the landlord will renew without an option."
+   },
+   {
+    "id": "d00_closures_nyc_event_pass_through_jump",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Renewal includes a tax pass-through increase",
+    "text": "The renewal offer raises total occupancy cost through rent and taxes.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     7
+    ],
+    "durationMonths": 12,
+    "trigger": "schedule: renewal resets the tax base year",
+    "realSignal": "Written renewal offer and itemized occupancy bill.",
+    "effects": [
+     {
+      "field": "rentAdd",
+      "add": 281
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "cap_escalation",
+      "label": "Keep the old base year",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "rentAdd 0"
+     }
+    ],
+    "realFrequency": "At renewal",
+    "source": "https://www.nyc.gov/site/finance/about/press/press-release-fy27-tentative-assessment-roll.page",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "Same arithmetic as tax_escalation_bill for a 5-year-old base year."
+   },
+   {
+    "id": "d00_closures_nyc_event_owner_landlord_exit",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Owner-landlord wants to stop operating",
+    "text": "The owner chooses between running the cafe and letting the premises to someone else.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "trigger": "announced: the landlord wants the space for own use at lease end",
+    "realSignal": "Owner’s documented retirement or business-exit decision while owning the building.",
+    "effects": [
+     {
+      "field": "leaseEndsInMonths",
+      "add": 6
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "relocate",
+      "label": "Relocate",
+      "cost": {
+       "buildout": "new"
+      },
+      "result": "continuity"
+     }
+    ],
+    "realFrequency": "Stories in D00",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Qualitative."
+   },
+   {
+    "id": "d00_closures_nyc_event_relocation_repeats",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "A relocated cafe faces another lease exit",
+    "text": "The next written occupancy terms exceed the location-specific cash the cafe can support.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: relocate",
+    "realSignal": "Owner compares the proposed rent obligation with measured cash generation; a previous relocation does not establish affordability.",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 70000,
+      "note": "a new light build-out"
+     },
+     {
+      "field": "awareness",
+      "mult": 0.5
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "longer_lease",
+      "label": "Sign 10 years with a renewal option",
+      "cost": {},
+      "result": "avoids the next move"
+     }
+    ],
+    "realFrequency": "Stories in D00",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [
+     "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc"
+    ],
+    "confidence": "estimate",
+    "note": "Build-out from the pack's light class; awareness halves as regulars must find the new address (estimate)."
+   },
+   {
+    "id": "d00_closures_nyc_event_bare_handover",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "The lease exit requires an empty room",
+    "text": "A handover demand requires removal of furniture and operating equipment.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "state: lease ends; lease requires removal of the tenant's work",
+    "realSignal": "Written surrender terms and the landlord’s vacant-delivery deadline.",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -6000,
+      "note": "removal and patching, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "sell_furnishings",
+      "label": "Sell fixtures to the next tenant",
+      "cost": {},
+      "result": "+$2,000 and no removal, estimate"
+     }
+    ],
+    "realFrequency": "Common clause",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimates."
+   },
+   {
+    "id": "d00_closures_nyc_event_espresso_exclusivity",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Neighbor’s lease excludes espresso sales",
+    "text": "Lease due diligence reveals a neighboring tenant’s product exclusivity affecting the proposed menu.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "attribute: another tenant of the building holds an exclusive on coffee",
+    "realSignal": "Counsel identifies a relevant written restriction before equipment purchase or a menu expansion.",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.7,
+      "note": "drip only, no espresso drinks; effectively a different shop"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "lease_lawyer",
+      "label": "Lawyer reads the building's exclusives",
+      "cost": {
+       "cash": 3500
+      },
+      "result": "found before signing"
+     }
+    ],
+    "realFrequency": "Mixed-use buildings with a coffee tenant",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "0.7 is the engine's lower bound for a cafe without espresso; estimate."
+   },
+   {
+    "id": "d00_closures_nyc_event_shared_basement",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Pests cross the landlord’s basement",
+    "text": "Repeated pest findings require work outside the cafe’s controlled area.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "state: landlord's basement has pests; cafe stores stock there",
+    "realSignal": "Inspection findings and contractor report identify a shared-building route.",
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.2
+     },
+     {
+      "field": "monthlyFees",
+      "add": 175,
+      "note": "own pest contract"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "pest_control",
+      "optionId": "monthly",
+      "label": "Own pest contract",
+      "cost": {
+       "monthly": 175
+      },
+      "result": "documented treatment"
+     },
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "landlord_pest_clause",
+      "label": "Landlord treats common areas",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "basement treated"
+     }
+    ],
+    "realFrequency": "Old buildings",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "$175 is the pack's pest_control lever."
+   },
+   {
+    "id": "d00_closures_nyc_event_building_repair_limbo",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Reopening depends on building repairs",
+    "text": "The cafe has ceased service and repair work outside its own operation remains unresolved.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "state: fire, flood or structural damage in the building, landlord repairs",
+    "realSignal": "A documented building repair prevents lawful use of required utilities.",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 45
+     },
+     {
+      "field": "rent",
+      "mult": 0.0,
+      "note": "only if the lease abates rent or the tenant surrenders under RPL §227"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "insurance",
+      "optionId": "business_interruption",
+      "label": "Business interruption cover",
+      "cost": {
+       "monthly": 40
+      },
+      "result": "lost profit paid after a waiting period, estimate"
+     },
+     {
+      "kind": "choice",
+      "id": "surrender_227",
+      "label": "Surrender the untenantable space",
+      "cost": {},
+      "result": "no further rent (RPL §227)"
+     }
+    ],
+    "realFrequency": "Closure stories in D00",
+    "source": "https://www.nysenate.gov/legislation/laws/RPP/227",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "RPL §227 (opened): if the building is destroyed or made untenantable without the tenant's fault and the lease says nothing else, the tenant may surrender and owes no further rent. 45 days and $40/month are estimates."
+   },
+   {
+    "id": "d00_world_event_split_premises_dependency",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "One essential unit loses its lease",
+    "text": "The cafe leases service and production areas separately.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "state: production space leased separately and that lease ends",
+    "realSignal": "The player-selected split-site operation loses a required kitchen renewal.",
+    "effects": [
+     {
+      "field": "capacity",
+      "mult": 0.8
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "single_lease",
+      "label": "Keep production under one lease",
+      "cost": {},
+      "result": "no split risk"
+     }
+    ],
+    "realFrequency": "Rare",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   },
+   {
+    "id": "d00_world_event_landlord_authority_unclear",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "An undisclosed partner delays the lease decision",
+    "text": "The apparent landlord introduces another decision-maker after terms are discussed.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: lease talks with a person who is not the owner of record",
+    "realSignal": "The proposed lease lacks verified signatory authority and the new participant has not agreed.",
+    "effects": [
+     {
+      "field": "leaseSigningDelayDays",
+      "add": 21
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "lease_lawyer",
+      "label": "Check the deed",
+      "cost": {
+       "cash": 0
+      },
+      "result": "owner of record known on day 1"
+     }
+    ],
+    "realFrequency": "Rare",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   },
+   {
+    "id": "d00_world_event_outside_seating_withdrawn",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "Essential outdoor seats are withdrawn",
+    "text": "The cafe’s plan depends on outside seats subject to a landlord condition.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "durationMonths": 6,
+    "trigger": "state: outdoor seats depend on the landlord's consent and it is withdrawn",
+    "realSignal": "A disclosed site condition causes the landlord to withdraw permission for those seats.",
+    "effects": [
+     {
+      "field": "seats",
+      "add": -8
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "outdoor_rights",
+      "label": "Write the outdoor area into the lease",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "seats kept"
+     }
+    ],
+    "realFrequency": "Rare",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "8 seats is a typical sidewalk setup; estimate."
+   },
+   {
+    "id": "d00_labor_finance_crt_review",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "A rent change requires CRT eligibility review",
+    "text": "Rent alone is not the complete commercial-rent-tax calculation.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "state: annual rent crosses $250,000 in Manhattan south of 96th Street",
+    "realSignal": "Player signs a lease in the covered geography with rent reaching a filing or tax trigger.",
+    "effects": [
+     {
+      "field": "tax",
+      "add": 0,
+      "note": "reference shop ($72,000 a year) owes nothing"
+     },
+     {
+      "field": "tax",
+      "mult": 0.039,
+      "base": "rent",
+      "appliesIf": "rent >= $250,000/yr and (income > $5M or rent >= $500,000)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "accountant",
+      "label": "Accountant checks eligibility and files",
+      "cost": {
+       "cash": 300
+      },
+      "result": "credit claimed"
+     }
+    ],
+    "realFrequency": "Only very large Manhattan rents",
+    "source": "https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "DOF (opened): tenants in Manhattan south of 96th Street with annual rent of at least $250,000; rate 6% of base rent with a 35% base reduction = 3.9%; a small business credit fully exempts total income of $5,000,000 or less with base rent under $500,000. A single cafe is always exempt in practice; $300 for the return is my estimate."
+   },
+   {
+    "id": "d00_labor_finance_zero_sales_return",
+    "sourceFragment": "D00",
+    "group": "lease",
+    "name": "A renovation month still needs tax filing",
+    "text": "No sales does not mean the registered business can skip required returns.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     3,
+     6,
+     9,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "schedule: quarterly sales tax return due while status = setup",
+    "realSignal": "Player has an active certificate and leaves a no-sales period unfiled.",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 50,
+      "appliesIf": "return not filed",
+      "note": "minimum penalty even with no sales"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "accountant",
+      "label": "File a zero return",
+      "cost": {
+       "cash": 0
+      },
+      "result": "no penalty"
+     }
+    ],
+    "realFrequency": "Every quarter of a registered vendor",
+    "source": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "Tax Law §1145 (opened): for a registered vendor the penalty for failure to file a return is never less than $50; interest 14.5% a year or the commissioner's rate if tax is owed. Return due dates: quarterly (months are the quarter ends; the return is due on the 20th of the next month)."
+   },
+   {
+    "id": "dob_permit_issued",
+    "sourceFragment": "D14",
+    "group": "buildout_permits",
+    "name": "Building permit issued",
+    "text": "The Buildings Department approved your plans. The contractor may start.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "schedule: DOB NOW filing + 25 days",
+    "realSignal": "DOB NOW approval, 20 days on average after filing (FY2025)",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 25,
+      "note": "average filing-to-approval, all DOB NOW applications, FY2026"
+     },
+     {
+      "field": "setupCost",
+      "add": 970,
+      "byBuildoutClass": {
+       "light": 970,
+       "standard": 2103,
+       "heavy": 3545
+      },
+      "note": "DOB filing fee"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "shortcut",
+      "id": "start_work_before_permit",
+      "label": "Start before approval",
+      "cost": {
+       "riskFine": 15000
+      },
+      "result": "opens 20 days sooner; if found: $6,000-$15,000 and a stop work order"
+     },
+     {
+      "kind": "lever",
+      "id": "permit_help",
+      "optionId": "dob_walk_in",
+      "label": "Free DOB/SBS review before filing",
+      "cost": {
+       "days": 5
+      },
+      "result": "permit wait x 0.9 (design value)"
+     }
+    ],
+    "realFrequency": "Every build-out with a permit; DOB completed 156,389 first plan reviews in FY2026",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf"
+    ],
+    "confidence": "verified",
+    "note": "Verified (MMR FY2026, opened): average days from filing to approval in DOB NOW rose from 20.3 (FY2025) to 25.4 (FY2026); first review of a minor renovation 4.4 days, of a major one (Alteration CO) 8.4 days. Correction to D14, which used 20 days. DOB fee for an alteration in a building under 7 floors (service notice, opened): $280 for the first $3,000 plus $10.30 per $1,000 above: light $70,000 -> $970; standard $180,000 -> $2,103; heavy $320,000 -> $3,545."
+   },
+   {
+    "id": "plan_examiner_objections",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The plan examiner sends objections",
+    "text": "The Buildings examiner returned your plans with objections. The architect has to answer each one and resubmit before any work can start.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: application has an objection (design professional's first submission incomplete)",
+    "realSignal": "Scope of the job: a heavy conversion or a change of use draws a full plan examination; a light renovation can be professionally certified",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 19,
+      "note": "one correction cycle: about 14 days with the applicant + 5 days of re-review"
+     },
+     {
+      "field": "setupCost",
+      "add": 1500,
+      "note": "architect's correction time, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "permit_help",
+      "optionId": "dob_walk_in",
+      "label": "Pre-filing review",
+      "cost": {
+       "days": 5
+      },
+      "result": "fewer objections (design value)"
+     },
+     {
+      "kind": "setup",
+      "id": "architect_expediter",
+      "label": "Experienced expediter",
+      "cost": {
+       "pctOfBuildout": 0.1
+      },
+      "result": "already in the pack's 10%"
+     }
+    ],
+    "realFrequency": "Typical, not rare: DOB NOW had 111,842 resubmission reviews against 156,389 first reviews in FY2026 (0.72 per job)",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "MMR FY2026 (opened): the time a filing sits with the applicant making corrections 'is typically three times as long as the time the filing is with the Department'. With 25.4 days in total, about 6 days at DOB and 19 with the applicant over 0.72 cycles: one full cycle is about 19 days. $1,500 is my estimate."
+   },
+   {
+    "id": "stop_work_order_served",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "An inspector tapes a Stop Work Order to the door",
+    "text": "Someone called 311 about the dumpster and the noise. The inspector found no permit on the wall. All work stops today.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: shortcut start_work_before_permit or work beyond the approved plans, found by a complaint or a DOB sweep",
+    "realSignal": "A 311 construction complaint on a site with no posted permit",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 15000,
+      "note": "work without a permit on a full light build-out: 21 x $970 capped at $15,000; partial work not less than $6,000"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 32,
+      "note": "work stops until the permit (25 days) and rescission after re-inspection (7 days, estimate)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "small_business_waiver",
+      "label": "Ask for the one-time small business waiver",
+      "cost": {
+       "cash": 0
+      },
+      "result": "fine waived once (fewer than 100 employees, space used only by the business); the delay stays"
+     },
+     {
+      "kind": "choice",
+      "id": "work_through_swo",
+      "label": "Keep working anyway",
+      "cost": {
+       "fine": 6000
+      },
+      "result": "second penalty $6,000; order not lifted until all paid"
+     }
+    ],
+    "realFrequency": "DOB issued 7,882 stop work orders in FY2026, 19% more than in FY2025, after creating a Strategic Enforcement Division focused on work without a permit",
+    "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf"
+    ],
+    "confidence": "verified",
+    "note": "1 RCNY §102-04(b)(3) (opened): work without a permit in a building other than a one- or two-family home costs the greater of 21 x the permit fee (capped at $15,000) or $6,000; a light build-out (fee $970 x 21 = $20,372) hits the $15,000 cap. Legalizing before a violation is issued: $6,000. A repeat within a year doubles it. A business with fewer than 100 employees can get the penalty waived once ((d)(10)), but the permit is still required. Working against a stop work order: $6,000 the first time, $12,000 after (DOB SWO page, opened); DOB will not rescind the order until penalties are paid. Correction to D14: the rule in force is 21 x the fee with a $6,000 floor and $15,000 cap, not 14 x with a $5,000 floor."
+   },
+   {
+    "id": "stop_work_order",
+    "sourceFragment": "D14",
+    "group": "buildout_permits",
+    "name": "Stop work order",
+    "text": "A Buildings inspector found work without a permit and stopped your construction. Pay the penalty and wait for the permit.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "as stop_work_order_served",
+    "realSignal": "DOB complaint or inspection; penalty 14 x the permit fee or $5,000, whichever is greater (1 RCNY 102-04)",
+    "mergedWith": "stop_work_order_served",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 15000
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 32
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "small_business_waiver",
+      "label": "One-time small business waiver",
+      "cost": {},
+      "result": "fine waived once"
+     }
+    ],
+    "realFrequency": "See stop_work_order_served",
+    "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    ],
+    "confidence": "verified",
+    "note": "D14 duplicate. 1 RCNY §102-04(b)(3) (opened): work without a permit in a building other than a one- or two-family home costs the greater of 21 x the permit fee (capped at $15,000) or $6,000; a light build-out (fee $970 x 21 = $20,372) hits the $15,000 cap. Legalizing before a violation is issued: $6,000. A repeat within a year doubles it. A business with fewer than 100 employees can get the penalty waived once ((d)(10)), but the permit is still required. Working against a stop work order: $6,000 the first time, $12,000 after (DOB SWO page, opened); DOB will not rescind the order until penalties are paid."
+   },
+   {
+    "id": "d00_premises_swo_partial",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "A partial stop-work order divides the project",
+    "text": "Only identified work is barred, and permitted remedial steps must follow the order.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: one trade (gas, electric, plumbing) found without a permit",
+    "realSignal": "DOB issues a partial stop-work order for the site.",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 14,
+      "note": "only the cited work stops"
+     },
+     {
+      "field": "fine",
+      "add": 6000,
+      "note": "floor of the work-without-permit penalty for partial work"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "file_trade_permit",
+      "label": "File the missing trade permit",
+      "cost": {
+       "cash": 500
+      },
+      "result": "rest of the job continues"
+     }
+    ],
+    "realFrequency": "DOB 'has prioritized reducing full stop work order issuance in favor of partial stop work orders' (MMR FY2026)",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    ],
+    "confidence": "verified",
+    "note": "DOB SWO page (opened): a partial SWO prohibits certain work or work in a particular area. $6,000 floor from 1 RCNY §102-04(b)(3). 14 days is my estimate for a trade permit and re-inspection."
+   },
+   {
+    "id": "d00_premises_swo_rescission",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Permit arrives but stop-work order remains",
+    "text": "The contractor cannot resume prohibited work merely because a permit was issued.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: permit issued but SWO still open (penalty unpaid or no re-inspection requested)",
+    "realSignal": "Work permit exists but DOB has not rescinded the stop-work order.",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 10
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "pay_and_request_reinspection",
+      "label": "Pay penalties and request re-inspection",
+      "cost": {
+       "fine": 6000
+      },
+      "result": "order rescinded"
+     }
+    ],
+    "realFrequency": "DOB rescinded 8,069 orders in FY2026 against 7,882 issued",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf"
+    ],
+    "confidence": "verified",
+    "note": "DOB (opened): to lift a SWO, correct the conditions, request a re-inspection, pay applicable penalties, contact the unit; 'the Department will not rescind a SWO until these civil penalties have been paid'. 10 days is my estimate."
+   },
+   {
+    "id": "asbestos_found",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The asbestos report comes back positive",
+    "text": "The old floor tile and the pipe wrap contain asbestos. A licensed abatement crew has to remove it, with a week's notice to the city, before your contractor can touch the room.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "attribute: building constructed before April 1, 1987 and the build-out disturbs existing materials",
+    "realSignal": "Building built before April 1, 1987 and materials that test positive in the ACP-5 investigation",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 1000,
+      "note": "asbestos investigation (ACP-5), estimate"
+     },
+     {
+      "field": "buildoutCost",
+      "add": 6900,
+      "appliesIf": "material found above 10 sq ft / 25 linear ft",
+      "note": "300 sq ft of tile and mastic at $15 + monitoring $2,000 + ACP-7 fee $400"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 14,
+      "appliesIf": "material found"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "asbestos_survey_before_lease",
+      "label": "Survey before signing",
+      "cost": {
+       "cash": 1000
+      },
+      "result": "landlord abates as a condition of the lease, or you walk"
+     },
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "optionId": "landlord_delivers_acm_free",
+      "label": "Landlord delivers the space free of asbestos",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "$6,900 and 14 days move to the landlord"
+     }
+    ],
+    "realFrequency": "Any pre-1987 building: most NYC storefronts",
+    "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+    "supportingSources": [
+     "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-23455"
+    ],
+    "confidence": "estimate",
+    "note": "DOB (opened): before a permit in buildings constructed before April 1, 1987, an asbestos assessment is required unless no existing materials are disturbed; below the asbestos-project threshold an ACP-5 is filed. 15 RCNY Chapter 1 (search excerpt): ACP-7 notification fee $200 / $400 / $800 / $1,200 by size band. Survey price $400-$1,500 (contractor page) -> $1,000. Abatement $10-$25 per sq ft of material (cost guides) -> $15. 14 days is my estimate: DEP's notice period was not found."
+   },
+   {
+    "id": "d00_premises_asbestos_scope",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Renovation disturbs asbestos-containing material",
+    "text": "The certified investigation changes what can be demolished.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: the scope grows to disturb more material than the ACP-5 covered",
+    "realSignal": "Investigator identifies material within the planned work area.",
+    "mergedWith": "asbestos_found",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "add": 6900
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "asbestos_survey_before_lease",
+      "label": "Survey the full scope",
+      "cost": {
+       "cash": 1000
+      },
+      "result": "no surprise"
+     }
+    ],
+    "realFrequency": "As asbestos_found",
+    "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+    "supportingSources": [
+     "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-23455"
+    ],
+    "confidence": "estimate",
+    "note": "Same numbers as asbestos_found."
+   },
+   {
+    "id": "hidden_conditions",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The walls are opened and the surprises come out",
+    "text": "Behind the old counter: rotted subfloor, a drain that goes nowhere, wiring from another century. None of it was in the bid.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "attribute: building age and former use; walls opened during build-out",
+    "realSignal": "Age and prior use of the space; none of it visible without opening walls",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.1
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contingency_level",
+      "optionId": "fifteen_percent",
+      "label": "Hold a 15% reserve",
+      "cost": {
+       "cashHeld": 10500
+      },
+      "result": "absorbed without new debt"
+     },
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "contractor_walkthrough",
+      "label": "Contractor opens test holes before the bid",
+      "cost": {
+       "cash": 1500
+      },
+      "result": "multiplier 1.05 instead of 1.10"
+     }
+    ],
+    "realFrequency": "Typical: change orders average about 10% of contract value (Dodge, via secondary); 5-10% increases are 'expected on most projects' (ASEE)",
+    "source": "https://www.rhumbix.com/blog/how-much-are-change-orders-costing-your-construction-business",
+    "supportingSources": [
+     "https://peer.asee.org/change-orders-impact-on-project-cost",
+     "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc"
+    ],
+    "confidence": "estimate",
+    "note": "1.10 on a light $70,000 job = $7,000. D01 had 1.12; I take the published average of 10%. 14 days is D01's estimate."
+   },
+   {
+    "id": "change_orders_pile_up",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "Change orders pile up",
+    "text": "The low bid left things out. Every missing item comes back as a change order, priced by a contractor who knows you cannot switch now.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: player changes finishes or layout after the contract is signed",
+    "realSignal": "Bid well below the others; scope gaps in the contract",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.08
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 10
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "optionId": "fixed_price",
+      "label": "Fixed-price contract with a frozen drawing set",
+      "cost": {
+       "buildoutCostMult": 1.03
+      },
+      "result": "changes priced up front; no surprise"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://www.rhumbix.com/blog/how-much-are-change-orders-costing-your-construction-business",
+    "supportingSources": [
+     "https://peer.asee.org/change-orders-impact-on-project-cost"
+    ],
+    "confidence": "estimate",
+    "note": "Owner-driven share of the ~10% average; estimate."
+   },
+   {
+    "id": "d00_premises_design_changes",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Design sessions add scope beyond the initial estimate",
+    "text": "New counters, cabinets or electrical scope change the written construction bid.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: design sessions add scope",
+    "realSignal": "Player approves design changes before updating the project budget.",
+    "mergedWith": "change_orders_pile_up",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.05
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "optionId": "fixed_price",
+      "label": "Freeze the design before bids",
+      "cost": {},
+      "result": "no added scope"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://www.rhumbix.com/blog/how-much-are-change-orders-costing-your-construction-business",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   },
+   {
+    "id": "d00_premises_bid_after_lease",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "The first firm bids break the signed-lease budget",
+    "text": "A prospective owner account illustrates an irreversible commitment preceding reliable construction prices.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: lease signed before contractor bids",
+    "realSignal": "Player signs lease on preliminary costs, then receives higher written bids.",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.2,
+      "note": "first firm bids above the planning number"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "bid_before_lease",
+      "label": "Get two bids during the lease negotiation",
+      "cost": {
+       "cash": 3000,
+       "searchDays": 21
+      },
+      "result": "cost known before signing"
+     },
+     {
+      "kind": "choice",
+      "id": "rescope",
+      "label": "Cut scope to the light class",
+      "cost": {
+       "quality": -0.02
+      },
+      "result": "multiplier back to 1.0"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://terrapincg.com/news/average-cost-to-build-high-end-restaurant",
+    "supportingSources": [
+     "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc"
+    ],
+    "confidence": "estimate",
+    "note": "Published 2026 ranges are wide: a contractor gives $200-$300 per sq ft for a counter-service cafe in a former food space; another $425-$700 for a Manhattan restaurant; the pack plans $87.50 for a light refresh. 1.2 is a cautious estimate of the gap between planning and first bids."
+   },
+   {
+    "id": "mechanics_lien_filed",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "A subcontractor files a lien on the building",
+    "text": "Your contractor did not pay the electrician. The electrician filed a mechanic's lien against the property, and your landlord's lawyer is calling it a lease default.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "state: contractor did not pay a subcontractor; lien filed within 8 months of the last work",
+    "realSignal": "Contractor paid up front without lien waivers; New York Lien Law gives 8 months to file on commercial work",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -8000,
+      "note": "paying the sub directly (worst case: twice for the same work)"
+     },
+     {
+      "field": "monthlyFees",
+      "add": 0
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "bond_the_lien",
+      "label": "Discharge it with a bond at 110%",
+      "cost": {
+       "cash": -264,
+       "collateral": 8800
+      },
+      "result": "lien off the building; fight later"
+     },
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "optionId": "lien_waivers",
+      "label": "Pay only against lien waivers",
+      "cost": {
+       "cash": 0
+      },
+      "result": "event cannot happen"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://www.nysenate.gov/legislation/laws/LIE/10",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/LIE/19"
+    ],
+    "confidence": "estimate",
+    "note": "Lien Law §10 (opened): a lien may be filed during the work or within eight months after the last work or materials. §19(4) (opened): discharged by a bond of 110% of the lien. $8,000 is my estimate of one unpaid trade on a $70,000 job; bond premium 3% of $8,800 = $264 (estimate). Leases usually make the tenant discharge liens fast."
+   },
+   {
+    "id": "d00_premises_construction_lien",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Unpaid construction work becomes a lien dispute",
+    "text": "Closing or changing tenants does not erase the unpaid fit-out claim.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "as mechanics_lien_filed",
+    "realSignal": "Contractor files a mechanic lien following an unpaid certified invoice.",
+    "mergedWith": "mechanics_lien_filed",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -8000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "optionId": "lien_waivers",
+      "label": "Pay against lien waivers",
+      "cost": {},
+      "result": "no lien"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://www.nysenate.gov/legislation/laws/LIE/10",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/LIE/19"
+    ],
+    "confidence": "estimate",
+    "note": "Same as mechanics_lien_filed."
+   },
+   {
+    "id": "landmark_review",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The block is in a historic district",
+    "text": "Your storefront is in a historic district. The sign, the awning and the new door need a Landmarks permit before the Buildings permit can be issued.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "attribute: address in one of 159 historic districts or an individual landmark; exterior work or a DOB permit",
+    "realSignal": "Address inside a designated historic district (public map of the Landmarks Preservation Commission)",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 14,
+      "note": "staff-level CNE or PMW: 90% within 10 business days"
+     },
+     {
+      "field": "permitWaitDays",
+      "add": 60,
+      "appliesIf": "storefront change that needs a public hearing",
+      "note": "estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "match_existing_storefront",
+      "label": "Keep the existing storefront and sign size",
+      "cost": {},
+      "result": "staff-level permit only"
+     },
+     {
+      "kind": "lever",
+      "id": "permit_help",
+      "optionId": "lpc_preapplication",
+      "label": "Pre-application meeting with LPC staff",
+      "cost": {
+       "days": 7
+      },
+      "result": "complete application on first try"
+     }
+    ],
+    "realFrequency": "LPC protects 38,550 buildings and sites; 11,766 permit applications in FY2026",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/lpc.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "MMR FY2026 (opened): about 90% of Certificates of No Effect and 90% of Permits for Minor Work issued within 10 business days; 95% of expedited CNEs within two business days. 10 business days = 14 calendar days. 60 days for a hearing case is my estimate."
+   },
+   {
+    "id": "d00_premises_landmark_repaint",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "A quick facade refresh needs landmark review",
+    "text": "The chosen storefront paint or exterior change needs LPC permission.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: repaint or re-sign a landmark storefront without an LPC permit; complaint",
+    "realSignal": "Landmarks map identifies the premises and proposed work changes the exterior.",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -2000,
+      "note": "undo or redo to approved colors, estimate"
+     },
+     {
+      "field": "permitWaitDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "apply_pmw_first",
+      "label": "Apply for a Permit for Minor Work first",
+      "cost": {
+       "days": 14
+      },
+      "result": "no warning letter"
+     }
+    ],
+    "realFrequency": "LPC received 774 complaints and took 566 enforcement actions (warning letters, summonses, stop work orders) in FY2026",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/lpc.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "PMW covers painting, window or door replacement (MMR, opened). Cost is my estimate."
+   },
+   {
+    "id": "d00_premises_landmark_terrace",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Outdoor seating has a second approval path",
+    "text": "A designated storefront needs landmark review as well as applicable sidewalk dining permission.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     3,
+     4,
+     5
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: outdoor seating or awning in a historic district",
+    "realSignal": "Outdoor seating plan is at a designated building.",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "standard_furniture",
+      "label": "Use the standard approved furniture",
+      "cost": {},
+      "result": "staff-level review"
+     }
+    ],
+    "realFrequency": "Seasonal applications before the outdoor season",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/lpc.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Second approval path in addition to the outdoor dining license; 14 days from the LPC timeliness figure."
+   },
+   {
+    "id": "d00_premises_lpc_incomplete",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Landmark application lacks usable drawings",
+    "text": "A proposed access ramp or shopfront change needs complete supporting material.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: LPC application without usable drawings",
+    "realSignal": "Application lacks dimensioned drawings or current photographs.",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "architect_expediter",
+      "label": "Drawings by the architect",
+      "cost": {},
+      "result": "complete application"
+     }
+    ],
+    "realFrequency": "Common for first-time applicants",
+    "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/lpc.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "One more 10-business-day cycle."
+   },
+   {
+    "id": "certificate_of_occupancy_mismatch",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The Certificate of Occupancy does not say \"eating and drinking\"",
+    "text": "The architect pulls the building's Certificate of Occupancy: the ground floor is listed as a store. A cafe there needs the Buildings Department to accept the use, or the owner to amend the certificate.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "attribute: former use is retail or salon (CO does not list eating and drinking)",
+    "realSignal": "Use shown on the Certificate of Occupancy on file for the address (public record)",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "add": 15000,
+      "note": "architect, egress and fire-safety items of an Alteration-CO job, estimate"
+     },
+     {
+      "field": "permitWaitDays",
+      "add": 45,
+      "note": "major renovation path and final sign-offs, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "check_co_before_lease",
+      "label": "Read the CO before signing",
+      "cost": {
+       "cash": 0
+      },
+      "result": "choose a former cafe or food space"
+     },
+     {
+      "kind": "choice",
+      "id": "open_on_tco",
+      "label": "Open on a Temporary CO",
+      "cost": {
+       "cash": 130
+      },
+      "result": "valid 90 days; renew until the final CO"
+     }
+    ],
+    "realFrequency": "Every change of use",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "DOB (opened): existing buildings need an amended CO when there is a change in use, egress or type of occupancy; a CO has no expiration. TCO (opened): typically expires 90 days after issuance, $130 fee, renewable; if the space is not occupied for more than 30 days a new TCO is needed. MMR FY2026: first review of an Alteration CO job 8.4 days against 4.4 for a minor job. $15,000 and 45 days are my estimates."
+   },
+   {
+    "id": "d00_premises_use_mismatch",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "The advertised shop is not approved for your use",
+    "text": "The intended cafe use does not match the property record.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "as certificate_of_occupancy_mismatch",
+    "realSignal": "Architect compares proposed use against CO and finds a mismatch.",
+    "mergedWith": "certificate_of_occupancy_mismatch",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "add": 15000
+     },
+     {
+      "field": "permitWaitDays",
+      "add": 45
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "check_co_before_lease",
+      "label": "Check the CO",
+      "cost": {},
+      "result": "avoid"
+     }
+    ],
+    "realFrequency": "Every change of use",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page"
+    ],
+    "confidence": "estimate",
+    "note": "Same as certificate_of_occupancy_mismatch."
+   },
+   {
+    "id": "no_certificate_of_occupancy",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The building has no Certificate of Occupancy",
+    "text": "The building is older than 1938 and has no Certificate of Occupancy on file. Before permits, the Buildings Department must issue a Letter of No Objection for a cafe.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "attribute: building older than CO requirements, no CO on file",
+    "realSignal": "Building built or altered before 1938 with no Certificate of Occupancy in Buildings Department records",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 30,
+      "note": "letter confirming the legal use, estimate"
+     },
+     {
+      "field": "setupCost",
+      "add": 2000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "check_co_before_lease",
+      "label": "Ask the landlord for proof of legal use",
+      "cost": {},
+      "result": "landlord's job before signing"
+     }
+    ],
+    "realFrequency": "Older buildings",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimates; the letter's fee and time were not found."
+   },
+   {
+    "id": "d00_premises_old_legal_use",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Older premises have no modern occupancy certificate",
+    "text": "An exempt older building needs documented confirmation of lawful use.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "as no_certificate_of_occupancy",
+    "realSignal": "Property search finds no CO and professional identifies an older-building exemption.",
+    "mergedWith": "no_certificate_of_occupancy",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 30
+     },
+     {
+      "field": "setupCost",
+      "add": 2000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "check_co_before_lease",
+      "label": "Proof of legal use first",
+      "cost": {},
+      "result": "avoid"
+     }
+    ],
+    "realFrequency": "Older buildings",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Same as no_certificate_of_occupancy."
+   },
+   {
+    "id": "d00_premises_temporary_occupancy",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Opening depends on temporary occupancy conditions",
+    "text": "The building is safe for conditional occupancy but final matters remain.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "state: open on a TCO; final sign-offs outstanding",
+    "realSignal": "DOB issues temporary rather than final occupancy authorization.",
+    "effects": [
+     {
+      "field": "monthlyFees",
+      "add": 43,
+      "note": "$130 every 90 days"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "finish_signoffs",
+      "label": "Close out the job",
+      "cost": {
+       "cash": 1500
+      },
+      "result": "final CO, no renewals"
+     }
+    ],
+    "realFrequency": "Common for alteration jobs",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "DOB TCO page (opened): typically expires 90 days after issuance; $130 fee; may be renewed; a space unoccupied more than 30 days needs a new TCO."
+   },
+   {
+    "id": "d00_premises_signoffs_missing",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Construction looks finished but the job is open",
+    "text": "Final inspection and filing close-out remain incomplete.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: construction finished but trade sign-offs not filed",
+    "realSignal": "DOB job record lacks required signed-off permits or final documents.",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 30
+     },
+     {
+      "field": "setupCost",
+      "add": 1500
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "architect_expediter",
+      "label": "Expediter closes the job",
+      "cost": {},
+      "result": "sign-offs filed with the work"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "Estimates."
+   },
+   {
+    "id": "building_arrears_block_permit",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The landlord's unpaid fines block your permit",
+    "text": "The building owes the city more than $25,000 in unpaid penalties. The permit system refuses your application until you prove you are only a tenant.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "attribute: unpaid work-without-permit penalty in this space from a previous tenant or the owner",
+    "realSignal": "Property flagged for arrears or excessive violations in the Buildings Department property profile (Local Law 160 of 2017, Local Law 104 of 2019)",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 30
+     },
+     {
+      "field": "cash",
+      "add": -6000,
+      "appliesIf": "player pays the old penalty to unblock"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "check_dob_violations",
+      "label": "Search the building's open violations",
+      "cost": {
+       "cash": 0
+      },
+      "result": "landlord clears it before signing"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "1 RCNY §102-04(a)(1) (opened): the civil penalty must be paid before a permit is issued for work in a space where work was done without a permit and the penalty is unpaid; (c) lets DOB permit work in an unrelated space. The $6,000 floor applies; 30 days is my estimate."
+   },
+   {
+    "id": "failed_trade_inspection",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The plumbing fails inspection",
+    "text": "The inspector asks which licensed plumber did the work. Nobody did. The lines are opened up and redone.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: unlicensed plumber or electrician to save money",
+    "realSignal": "Plumbing or electrical work with no licensed firm on the filing",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     },
+     {
+      "field": "buildoutCost",
+      "add": 12000
+     },
+     {
+      "field": "cash",
+      "add": -5000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "optionId": "licensed_trades",
+      "label": "Licensed plumber and electrician",
+      "cost": {},
+      "result": "passes"
+     }
+    ],
+    "realFrequency": "Story in D01",
+    "source": "https://citylandnyc.org/unlicensed-plumber-fined",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01 numbers kept (redo $12,000, penalty $5,000 of the reported case)."
+   },
+   {
+    "id": "city_cuts_red_tape",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The city cuts small-business red tape",
+    "text": "City Hall announces more than 50 reforms for small businesses: a free project manager for anyone opening, one permit instead of two for frozen desserts, lower fines for three food-safety violations.",
+    "tier": "deep",
+    "scale": "city",
+    "months": [
+     7
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: city reform package (July 2026)",
+    "realSignal": "Mayoral executive orders and Small Business Services announcements (Executive Order 11 of January 14, 2026; Executive Order 18 and \"OPEN for Small Business\" of July 20, 2026)",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "mult": 0.9
+     },
+     {
+      "field": "fines",
+      "mult": 0.83,
+      "note": "three food-safety fines $600 -> $500"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "permit_help",
+      "optionId": "dob_walk_in",
+      "label": "Use the free project manager",
+      "cost": {
+       "days": 5
+      },
+      "result": "shorter wait"
+     }
+    ],
+    "realFrequency": "One announcement",
+    "source": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01 numbers kept: 50+ reforms announced in July 2026; 0.9 is a design value."
+   },
+   {
+    "id": "buildings_walk_in_help",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "Free permit help at the Buildings office",
+    "text": "The Department of Buildings holds free walk-in sessions for small business owners, and Small Business Services offers a project manager. Owners who use them get answers before they file, not after an objection.",
+    "tier": "exotic",
+    "scale": "city",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: player takes the free pre-filing review",
+    "realSignal": "DOB small-business sessions and NYC BEST enrollment",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "mult": 0.9
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 5
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "permit_help",
+      "optionId": "dob_walk_in",
+      "label": "Book the walk-in",
+      "cost": {
+       "days": 5
+      },
+      "result": "fewer objections"
+     }
+    ],
+    "realFrequency": "Always available",
+    "source": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf"
+    ],
+    "confidence": "estimate",
+    "note": "With 0.72 correction cycles per job of about 19 days (MMR), avoiding a third of them saves ~5 days net; the 0.9 multiplier is consistent with that."
+   },
+   {
+    "id": "structural_surprise",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "A buckling wall stops the job",
+    "text": "The crew uncovers a wall that is bowing. Work stops until an engineer and the landlord agree who fixes the building.",
+    "tier": "exotic",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 4,
+    "trigger": "attribute: old building; demolition exposes structure",
+    "realSignal": "Structural condition of an old building, found only during demolition",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 120
+     },
+     {
+      "field": "rent",
+      "mult": 1.0,
+      "note": "rent runs unless the lease abates it"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "structural_carveout",
+      "label": "Structure is the landlord's; rent abates during structural repair",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "120 days without rent"
+     }
+    ],
+    "realFrequency": "Rare",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01 value kept (design value for 'months')."
+   },
+   {
+    "id": "worker_falls_on_site",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "A worker falls from a ladder on your job",
+    "text": "A laborer on the cheap crew fell while hanging the ceiling. His lawyer names the building owner, the contractor and you: the tenant who ordered the work.",
+    "tier": "exotic",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: uninsured contractor",
+    "realSignal": "Contractor with no liability insurance or no workers' compensation on a job the tenant contracted",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -25000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "optionId": "insured_contractor",
+      "label": "Contractor's insurance names you and the owner",
+      "cost": {
+       "buildoutCostMult": 1.05
+      },
+      "result": "claim goes to the contractor's insurer"
+     }
+    ],
+    "realFrequency": "Rare for a small job",
+    "source": "https://www.nysenate.gov/legislation/laws/LAB/240",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "NY Labor Law §240 makes owners and contractors absolutely liable for elevation falls; the $25,000 deductible-and-legal value is D01's design value. 5% premium for an insured crew is my estimate."
+   },
+   {
+    "id": "fit_out_prices_rise",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "Contractors raise their prices",
+    "text": "This year's cost guides are out: fitting out a store in New York costs 7% more than last year.",
+    "tier": "deep",
+    "scale": "city",
+    "months": [
+     3
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: yearly cost guides",
+    "realSignal": "Cushman & Wakefield Retail Fit-Out Cost Guide, published each March: New York in-line retail $181 per sq ft in 2026, up 7.0%",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.05,
+      "appliesTo": "contracts signed after the announcement"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "sign_before",
+      "label": "Sign the contract before the announcement",
+      "cost": {},
+      "result": "old price"
+     }
+    ],
+    "realFrequency": "Yearly",
+    "source": "https://www.commercialsearch.com/news/will-construction-costs-go-up-in-2026/",
+    "supportingSources": [
+     "https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide"
+    ],
+    "confidence": "estimate",
+    "note": "2026 bid-price escalation forecasts: 4.25% (Turner & Townsend), about 5% (JLL), via secondary. D01 used 7% from the C&W fit-out guide for plain retail; I take 5%."
+   },
+   {
+    "id": "contractor_adds_sales_tax",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The contractor's invoice comes with sales tax",
+    "text": "The final invoice adds 8.875% sales tax. Your lease never said the improvements belong to the landlord, so the state treats the job as a taxable installation.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: no Form ST-124 given within 90 days",
+    "realSignal": "Lease silent on ownership of improvements; no Form ST-124 given to the contractor",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "add": 3106,
+      "note": "8.875% on the labor half of a $70,000 job"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "give_st124",
+      "label": "Give the contractor Form ST-124",
+      "cost": {},
+      "result": "labor exempt as a capital improvement"
+     }
+    ],
+    "realFrequency": "Every build-out",
+    "source": "https://tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "DTF (search excerpt): services that result in a capital improvement are exempt with Form ST-124 given within 90 days; the contractor pays tax on materials. Labor share 50% is my assumption."
+   },
+   {
+    "id": "pre_permit_inspection_blocked",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The Health inspector cannot inspect a construction site",
+    "text": "You asked for the pre-permit inspection to open early. It needs all construction finished and no food on the premises. The punch list is not done.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "state: Health Department visit while construction is still on",
+    "realSignal": "Pre-permit inspection requested before construction is complete",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 0,
+      "note": "you may open 22 days after applying even without the pre-permit inspection"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "apply_22_days_ahead",
+      "label": "Apply 22 days before the planned opening",
+      "cost": {},
+      "result": "no delay"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "NYC Business (opened): 'you can open 22 days after you submit your application, even if you haven't had a pre-permit inspection'. The first graded inspection still comes, unannounced (D19)."
+   },
+   {
+    "id": "d00_premises_prepermit_fail",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Pre-permit inspection lists corrections",
+    "text": "The inspected space does not satisfy the health requirements.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: pre-permit inspection lists corrections",
+    "realSignal": "Inspector issues a correction list after pre-permit inspection.",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 1000,
+      "note": "hand sink, thermometers, coving: estimate"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 0,
+      "appliesIf": "fixed before day 22"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "fix_before_opening",
+      "label": "Fix before day 22",
+      "cost": {
+       "cash": 1000
+      },
+      "result": "no effect on opening"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   },
+   {
+    "id": "d00_premises_early_stock",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Food arrives before the pre-operational visit",
+    "text": "The scheduled pre-operational pathway requires no food storage, preparation or service on site.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: food delivered before the pre-operational visit",
+    "realSignal": "Owner schedules food delivery while seeking the pre-operational inspection pathway.",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -500,
+      "note": "spoiled or discarded stock, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "deliver_after_visit",
+      "label": "Schedule the first delivery after the visit",
+      "cost": {},
+      "result": "no loss"
+     }
+    ],
+    "realFrequency": "First-time owners",
+    "source": "https://www.nyc.gov/site/sbs/businesses/food-establishment-form.page",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "The pre-operational pathway requires no food storage on site (D00)."
+   },
+   {
+    "id": "d00_premises_exemption_scope",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Permit-exempt storefront work still has code duties",
+    "text": "The proposed small alteration affects requirements beyond the permit exemption.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: small storefront work treated as permit-exempt",
+    "realSignal": "Owner selects an exempt work category without checking other applicable rules.",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -2000,
+      "note": "redo to code, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "architect_expediter",
+      "label": "Ask the architect",
+      "cost": {},
+      "result": "scope checked"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   },
+   {
+    "id": "d00_premises_sign_relief_scope",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Sign assistance is mistaken for blanket permission",
+    "text": "A sign proposal still needs its actual construction and zoning requirements checked.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: oversized or unsafe sign installed relying on the sign moratorium",
+    "realSignal": "Owner relies on temporary accessory-sign relief without reviewing its scope.",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 0,
+      "appliesIf": "accessory storefront sign up to 150 sq ft and 1,200 lb",
+      "note": "no work-without-permit penalty under Local Law 15 of 2026"
+     },
+     {
+      "field": "cash",
+      "add": -1500,
+      "appliesIf": "unsafe or larger sign",
+      "note": "removal or a licensed sign hanger's permit, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "small_wall_sign",
+      "label": "Wall sign of 6 sq ft or less",
+      "cost": {},
+      "result": "no permit needed"
+     },
+     {
+      "kind": "choice",
+      "id": "licensed_sign_hanger",
+      "label": "Licensed sign hanger files the permit",
+      "cost": {
+       "cash": 1500
+      },
+      "result": "legal sign of any size"
+     }
+    ],
+    "realFrequency": "Every new storefront",
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page"
+    ],
+    "confidence": "estimate",
+    "note": "DOB signs page (opened): a wall sign of 6 sq ft or less needs no permit; up to 75 sq ft and 25 lb can be hung without a licensed sign hanger. Local Law 15 of 2026 (DOB page, search excerpt): no work-without-permit penalty for accessory storefront signs and past penalties since December 28, 2017 waived for signs up to 150 sq ft and 1,200 lb; it does not make an unsafe or noncompliant sign lawful."
+   },
+   {
+    "id": "d00_premises_hood_rearrange",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Moving a griddle changes suppression coverage",
+    "text": "The new equipment arrangement no longer matches the approved protection design.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: move cooking equipment under the hood",
+    "realSignal": "Owner proposes rearrangement or removal of equipment under the existing hood.",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 1500,
+      "note": "suppression re-design and test, estimate"
+     },
+     {
+      "field": "closureDays",
+      "add": 1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "no_cooking",
+      "label": "Stay a no-cook cafe",
+      "cost": {},
+      "result": "no hood, no event"
+     }
+    ],
+    "realFrequency": "Only cafes with a hood",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   },
+   {
+    "id": "d00_premises_outside_scope",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Plan review exposes work outside the cafe interior",
+    "text": "A comparison account illustrates why the project boundary must be confirmed before finishing interiors.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: plan review finds facade, sidewalk or building-system work",
+    "realSignal": "Written professional review identifies an applicable access or site requirement outside the initial fit-out scope.",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "add": 10000
+     },
+     {
+      "field": "permitWaitDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "landlord_base_building",
+      "label": "Base-building work is the landlord's",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "cost moves to the landlord"
+     }
+    ],
+    "realFrequency": "Older buildings",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimates."
+   },
+   {
+    "id": "d00_premises_toilet_renovation",
+    "sourceFragment": "D00",
+    "group": "buildout_permits",
+    "name": "Renovation changes an old toilet exemption",
+    "text": "An older food premises loses its exemption when the specified renovation condition is met.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: renovation with a construction permit in a 20+ seat room exempt since 1977",
+    "realSignal": "Architect identifies qualifying construction work at an otherwise exempt premises.",
+    "mergedWith": "renovation_triggers_restroom_rules",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "add": 12000
+     },
+     {
+      "field": "seats",
+      "add": -3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "stay_at_19_seats",
+      "label": "Stay at 19 seats",
+      "cost": {},
+      "result": "no toilet required"
+     }
+    ],
+    "realFrequency": "See D02",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 numbers (Health Code §81.22, read by D02)."
+   },
+   {
+    "id": "renovation_triggers_restroom_rules",
+    "sourceFragment": "D02",
+    "group": "buildout_permits",
+    "name": "Your renovation wakes up the restroom rules",
+    "text": "The old luncheonette never had a customer toilet and never needed one. Your building permit ends that: the plans must now show toilets for customers.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: renovation that needs a Buildings permit in a room of 20 or more seats",
+    "realSignal": "Seats on the plan (20 or more) and people in the space (more than 30)",
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "add": 12000
+     },
+     {
+      "field": "seats",
+      "add": -3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "stay_at_19_seats",
+      "label": "Plan 19 seats",
+      "cost": {
+       "seats": -1
+      },
+      "result": "no customer toilet required"
+     },
+     {
+      "kind": "setup",
+      "id": "customer_restroom",
+      "label": "Build the toilet",
+      "cost": {
+       "cash": 12000
+      },
+      "result": "20+ seats allowed"
+     }
+    ],
+    "realFrequency": "Former luncheonettes",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 numbers kept: Health Code §81.22(b) seat threshold 20 (verified by D02); $12,000 and 60 sq ft (3 seats) from the pack."
+   },
+   {
+    "id": "seat_20_restroom_line",
+    "sourceFragment": "D14",
+    "group": "buildout_permits",
+    "name": "The 20th seat needs a restroom",
+    "text": "Twenty seats, inside and out, require a customer restroom. It takes 56 sq ft of your room.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: size set to 20 seats or more (indoor plus outdoor)",
+    "realSignal": "seats >= 20 (Health Code 81.22)",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 12000,
+      "note": "customer_restroom"
+     },
+     {
+      "field": "seats",
+      "add": -3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "stay_at_19_seats",
+      "label": "19 seats",
+      "cost": {},
+      "result": "no toilet"
+     }
+    ],
+    "realFrequency": "Every 20-seat plan",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Health Code §81.22(b): customer toilet at a seating capacity of 20 or more, indoor and outdoor together (D02, page opened by D02; not reopened here)."
+   },
+   {
+    "id": "allowance_paid_after_the_work",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "The landlord's contribution arrives after you have paid",
+    "text": "The lease promised a construction allowance. It is a reimbursement: the landlord pays after the work is finished, inspected and free of liens. Until then every invoice is on you.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "decision: lease with a tenant improvement allowance paid as reimbursement",
+    "realSignal": "Work letter terms: allowance paid on completion against lien waivers",
+    "effects": [
+     {
+      "field": "cashFloat",
+      "add": -40000,
+      "durationDays": 60,
+      "note": "$50 per sq ft x 800 paid about 60 days after completion and lien waivers"
+     },
+     {
+      "field": "monthlyFees",
+      "add": 333,
+      "durationMonths": 2,
+      "note": "carrying cost at 10% a year"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "allowance_as_rent_credit",
+      "label": "Take it as free rent instead",
+      "cost": {},
+      "result": "no cash gap; fewer dollars"
+     }
+    ],
+    "realFrequency": "Strong tenants (D01)",
+    "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Allowance $50-$150 per sq ft for strong tenants, paid as reimbursement after completion (law firm, secondary). 60 days and 10% are my estimates."
+   },
+   {
+    "id": "construction_noise_complaint",
+    "sourceFragment": "D01",
+    "group": "buildout_permits",
+    "name": "A neighbor complains about construction noise",
+    "text": "The tenant upstairs calls 311 about the demolition. An environmental inspector comes to look for the noise plan that every site must post.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: construction rush with night or weekend work; neighbor calls 311",
+    "realSignal": "311 construction-noise complaint about the address",
+    "effects": [
+     {
+      "field": "fine",
+      "add": 6000,
+      "appliesIf": "after-hours work without a variance"
+     },
+     {
+      "field": "fine",
+      "add": 560,
+      "appliesIf": "unreasonable construction noise"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "construction_pace",
+      "optionId": "rush_with_variance",
+      "label": "Get an after-hours variance",
+      "cost": {
+       "cash": 500
+      },
+      "result": "legal night work"
+     },
+     {
+      "kind": "lever",
+      "id": "construction_pace",
+      "optionId": "standard",
+      "label": "Weekday hours only",
+      "cost": {},
+      "result": "no complaint"
+     }
+    ],
+    "realFrequency": "DOB answered non-emergency complaints in 21.5 days on average in FY2026 (MMR)",
+    "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf"
+    ],
+    "confidence": "verified",
+    "note": "1 RCNY §102-04(b)(4) (opened): work after hours without a variance permit $6,000 in a building other than a one- or two-family home. DEP schedule (opened): unreasonable construction noise §24-228, $560 first offense. Variance fee $500 is my estimate."
+   }
+  ],
+  "notCalibrated": [
+   {
+    "id": "gas_turn_on_wait",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "gas_shut_off_in_building",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "electrical_service_too_small",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "utility_deposit_demand",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "sellers_tax_claim",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "sellers_tax_debt_inherited",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "overstated_cash_sales",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "equipment_lien_surprise",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "permit_gap_at_closing",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "sellers_unpaid_health_fines",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "inherited_unemployment_rate",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "regulars_test_new_owner",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "old_equipment_gives_out",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "equity_injection_gap",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "acquisition_tax_at_closing",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "franchise_cooling_off",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "franchise_royalty_bite",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "franchise_buildout_not_yours",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "young_franchise_system",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "supervisory_licenses_released",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "commissary_has_no_room",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "market_season_ends",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "host_ends_the_arrangement",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "parks_kiosk_rfp",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "inherited_sick_leave_balances",
+    "sourceFragment": "D01",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "saturday_room_full",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "laptop_camp",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "solo_guests_hold_big_tables",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "morning_line_out_the_door",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "seat_count_at_inspection",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "service_upgrade_wait",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "breaker_trips_at_peak",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "building_gas_shutoff",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "cellar_stairs_tax",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "aisle_too_narrow",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "neighbor_noise_complaint",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "roll_down_gate_deadline",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "winter_draft_at_the_door",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "vestibule_must_come_down",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "open_mic_over_capacity",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "peak_kw_bill_jump",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "tight_tables_reviews",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "quiet_room_afternoons",
+    "sourceFragment": "D02",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "gas_connection_wait",
+    "sourceFragment": "D14",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "permit_ready_after_buildout",
+    "sourceFragment": "D14",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "takeover_listing",
+    "sourceFragment": "D14",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "bulk_sale_claim",
+    "sourceFragment": "D14",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "seller_tax_debt_surfaces",
+    "sourceFragment": "D14",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "rebrand_loses_regulars",
+    "sourceFragment": "D14",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "no_seat_left",
+    "sourceFragment": "D14",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "line_out_the_door",
+    "sourceFragment": "D14",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "buyer_makes_an_offer",
+    "sourceFragment": "D09",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "gas_red_tag",
+    "sourceFragment": "D10",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "garden_complaint",
+    "sourceFragment": "D10",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "commissary_rent_hike",
+    "sourceFragment": "D13",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "shared_kitchen_lockout",
+    "sourceFragment": "D13",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "transit_stall_rfp",
+    "sourceFragment": "D13",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "permit_holder_takes_back_permit",
+    "sourceFragment": "D13",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_seller_tax_claim",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_permit_transfer",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_gas_sequence",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_backflow_install",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_utility_deposit",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_utility_extra",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_meter_not_live",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_access_route",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_entrance_step",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_event_capacity",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_odor_home",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_toilet_route",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_ac_neighbor",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_public_landlord_use",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_takeover_asset_list",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_premises_exit_storage",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_world_event_predecessor_brand_confusion",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_world_event_seller_addbacks_unverified",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_world_event_planned_pop_up_end",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_world_event_snowmelt_counter_damage",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   },
+   {
+    "id": "d00_street_hidden_sign",
+    "sourceFragment": "D00",
+    "reason": "not reached in this session"
+   }
+  ]
+ },
+ "sources": [
+  {
+   "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-23455",
+   "title": "15 RCNY Chapter 1 (asbestos), ACP-7 fee tiers",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+   "title": "Alpha Contractors NY, commercial build-out cost NYC 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://peer.asee.org/change-orders-impact-on-project-cost",
+   "title": "ASEE paper, change orders impact on project cost",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+   "title": "BizBuySell, coffee shop and cafe valuation benchmarks",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.cbre.com/insights/figures/manhattan-retail-figures-q3-2026",
+   "title": "CBRE, Manhattan Retail Figures Q3 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://commercialobserver.com/2013/08/weighing-in-on-key-money-deals/",
+   "title": "Commercial Observer, key money deals",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail",
+   "title": "Cushman & Wakefield, Manhattan Retail MarketBeat Q3 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf",
+   "title": "DEP, Noise Code Penalty Schedule (15 RCNY §31-115)",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf",
+   "title": "DOB service notice, fee updates in DOB NOW: Build, January 8, 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+   "title": "DOB, Project Requirements: Asbestos",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
+   "title": "DOB, Certificate of Occupancy",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+   "title": "DOB, Project Requirements: Signs",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+   "title": "DOB, Stop Work Orders",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+   "title": "DOB, Temporary Certificate of Occupancy",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.rhumbix.com/blog/how-much-are-change-orders-costing-your-construction-business",
+   "title": "Rhumbix citing Dodge Data & Analytics on change orders",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page",
+   "title": "NYC DOF, Commercial Rent Tax",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/site/finance/about/press/press-release-fy27-tentative-assessment-roll.page",
+   "title": "NYC DOF, FY2027 tentative assessment roll, January 15, 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/site/finance/property/property-tax-rates.page",
+   "title": "NYC DOF, property tax rates",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide",
+   "title": "Cushman & Wakefield, retail fit-out cost guide",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+   "title": "NYC Business, Food Service Establishment Permit",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+   "title": "Habitat, holdover rent premiums enforced by NY courts",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+   "title": "DHC Legal via JD Supra, build-out provisions in NYC restaurant leases",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/LAB/240",
+   "title": "NY Labor Law §240 (scaffold law)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/LIE/10",
+   "title": "NY Lien Law §10, filing of notice of lien",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/LIE/19",
+   "title": "NY Lien Law §19, discharge of lien by bond",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page",
+   "title": "DOB, Accessory Sign Education & Outreach (Local Law 15 of 2026)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://intro.nyc/local-laws/2019-185",
+   "title": "Local Law 185 of 2019, commercial tenant harassment penalties",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.metro-manhattan.com/security-deposit/",
+   "title": "Metro Manhattan Office Space, security deposits",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+   "title": "Mayor's Management Report FY2026, Department of Buildings",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/lpc.pdf",
+   "title": "Mayor's Management Report FY2026, Landmarks Preservation Commission",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://citylandnyc.org/unlicensed-plumber-fined",
+   "title": "CityLand, unlicensed plumber fined",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+   "title": "1 RCNY §102-04, civil penalties for work without a permit and stop work orders",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
+   "title": "Mayor's Office, Open for Small Business reforms, July 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/RPA/711",
+   "title": "NY RPAPL §711, grounds for summary proceedings (14-day rent demand)",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/RPA/749",
+   "title": "NY RPAPL §749, warrant and 14-day marshal notice",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/RPP/223-A",
+   "title": "NY RPL §223-a, remedies when possession is not delivered",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/RPP/226-B",
+   "title": "NY RPL §226-b, right to sublease or assign (residential only)",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/RPP/227",
+   "title": "NY RPL §227, when tenant may surrender premises",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/RPP/232-C",
+   "title": "NY RPL §232-c, holding over after a term longer than one month",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/site/sbs/businesses/food-establishment-form.page",
+   "title": "SBS, food establishment pre-operational pathway",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+   "title": "NYC SBS, Comprehensive Guide to Commercial Leasing in New York City",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm",
+   "title": "NYS DTF, Tax Bulletin Capital Improvements (TB-ST-104)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+   "title": "NY Tax Law §1145, penalties and interest",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://terrapincg.com/news/average-cost-to-build-high-end-restaurant",
+   "title": "Terrapin Construction Group, restaurant construction cost 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.commercialsearch.com/news/will-construction-costs-go-up-in-2026/",
+   "title": "CommercialSearch on 2026 construction cost outlook (Turner & Townsend 4.25%, JLL)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  }
+ ]
+}
