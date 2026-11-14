@@ -1,44 +1,53 @@
-// Small form pieces used by both folders. Labels are real <label>s so tests and screen readers find them.
+// Small form pieces shared by the network and desk screens. Inputs carry aria-labels so tests and screen readers find them.
 import type { ReactNode } from 'react';
+import { Field } from './ui';
 
 export function MoneyField(props: { label: string; value: number; onChange: (v: number) => void; min?: number; max?: number; step?: number; hint?: ReactNode }) {
   return (
-    <label className="nw-field">
-      <span className="nw-field__label">{props.label}</span>
-      <span className="nw-field__box">
-        <span className="nw-field__prefix">$</span>
+    <Field label={props.label} hint={props.hint}>
+      <span className="nw-input">
+        <span className="nw-input__affix" aria-hidden="true">$</span>
         <input
-          type="number" inputMode="numeric" aria-label={props.label}
+          className="input" type="number" inputMode="numeric" aria-label={props.label}
           value={Number.isFinite(props.value) ? props.value : ''}
           min={props.min} max={props.max} step={props.step ?? 100}
           onChange={(e) => props.onChange(e.target.value === '' ? 0 : Number(e.target.value))}
         />
       </span>
-      {props.hint && <span className="nw-field__hint">{props.hint}</span>}
-    </label>
+    </Field>
   );
 }
 
-export function NumberField(props: { label: string; value: number; onChange: (v: number) => void; min: number; max: number; step?: number; suffix?: string }) {
+export function NumberField(props: { label: string; value: number; onChange: (v: number) => void; min: number; max: number; step?: number; suffix?: string; hint?: ReactNode }) {
   return (
-    <label className="nw-field">
-      <span className="nw-field__label">{props.label}</span>
-      <span className="nw-field__box">
+    <Field label={props.label} hint={props.hint}>
+      <span className="nw-input">
         <input
-          type="number" inputMode="decimal" aria-label={props.label}
+          className="input" type="number" inputMode="decimal" aria-label={props.label}
           value={Number.isFinite(props.value) ? props.value : ''}
           min={props.min} max={props.max} step={props.step ?? 1}
           onChange={(e) => props.onChange(e.target.value === '' ? 0 : Number(e.target.value))}
         />
-        {props.suffix && <span className="nw-field__suffix">{props.suffix}</span>}
+        {props.suffix && <span className="nw-input__affix">{props.suffix}</span>}
       </span>
-    </label>
+    </Field>
   );
 }
 
-export function Lines(props: { lines: string[]; tone?: 'muted' | 'warn' }) {
+/** A labelled stepper row: label on the left, − value + on the right. */
+export function StepRow(props: { label: string; children: ReactNode }) {
   return (
-    <ul className={`nw-lines nw-lines--${props.tone ?? 'muted'}`}>
+    <div className="row-between nw-steprow">
+      <span className="field__label">{props.label}</span>
+      {props.children}
+    </div>
+  );
+}
+
+export function Lines(props: { lines: string[]; tone?: 'plain' | 'warn' }) {
+  if (!props.lines.length) return null;
+  return (
+    <ul className={`nw-lines${props.tone === 'warn' ? ' nw-lines--warn' : ''}`}>
       {props.lines.map((l) => <li key={l}>{l}</li>)}
     </ul>
   );
@@ -46,5 +55,5 @@ export function Lines(props: { lines: string[]; tone?: 'muted' | 'warn' }) {
 
 export function Stars(props: { value: number }) {
   const v = Math.round(Math.max(0, Math.min(1, props.value)) * 50) / 10;
-  return <span className="nw-stars" aria-label={`Reputation ${v} of 5`}>★ {v.toFixed(1)}</span>;
+  return <span className="nw-stars num" aria-label={`Reputation ${v.toFixed(1)} of 5`}>★ {v.toFixed(1)}</span>;
 }

@@ -345,7 +345,8 @@ export function blockFundInfo(bf: BlockFundStatus): BlockFundInfo {
 // ───────────── report to the city ─────────────
 
 /** Reports that apply to a business of this niche: common ones plus the niche pack's. */
-export function reportOptions(packs: PackSet, niche: NicheId): PackReport[] {
+export function reportOptions(packs: PackSet | null, niche: NicheId): PackReport[] {
+  if (!packs) return [];
   const all = [...packs.common.reports, ...(packs.niches[niche]?.reports ?? [])];
   return all.filter((r, i) => all.findIndex((x) => x.id === r.id) === i);
 }
@@ -404,7 +405,8 @@ export function reportOutcomeText(r: MyReport): string {
   return 'Filed';
 }
 
-export function reportName(packs: PackSet, reportId: string): string {
+export function reportName(packs: PackSet | null, reportId: string): string {
+  if (!packs) return 'Report';
   const all: PackReport[] = [...packs.common.reports, ...Object.values(packs.niches).flatMap((p) => p?.reports ?? [])];
   return all.find((r) => r.id === reportId)?.name ?? reportId;
 }
