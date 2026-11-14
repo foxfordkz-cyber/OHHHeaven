@@ -1,8 +1,8 @@
 # Deck screenshots
 
-Only real screens of the running product, taken by `docs/pitch/deck/capture.mjs`. Nothing is drawn over them. Wide map screens are JPEG, phone screens PNG. The ad frames (`ad-*.png`) are one card of a real screen, cut out by the script around a piece of text.
+Only real screens of the running product, taken by `docs/pitch/deck/capture.mjs`. Nothing is drawn over them. Wide map screens are JPEG, phone screens PNG. The ad frames (`ad-*.png`) are one card of a real screen, cut out by the script around a piece of text; `capture.json` → `frames` keeps the text of each, so the ad lines on page 7 can be checked against them.
 
-Current set: the integration build of the night (`claude/cool-archimedes-blis6z`, commit 19a73f0, 23:05 UTC), the build the main branch is fast-forwarded to — `capture.json` says which.
+Current set: the integration build of the night (`claude/cool-archimedes-blis6z`, commit 4a2cc1b, 23:25 UTC), the build the main branch is fast-forwarded to — `capture.json` says which.
 
 How they were made (the exact run is in `capture.json`: commit, city id, every step and the month report):
 
@@ -20,7 +20,7 @@ How they were made (the exact run is in `capture.json`: commit, city id, every s
 | `start-idea.png` | Opening, step 1: idea | — |
 | `start-place.png` | Opening, step 2: storefront card | 3 |
 | `start-plan.png` | Opening, step 3: the plan by days | — |
-| `start-decision.png` | Opening, step 5: decision 1 of 7 (team), cash left, opening day and bills on top | 3 |
+| `start-decision.png` | Opening, step 5: decision 1 of 14 (seats), cash left, opening day and bills on top | 3 |
 | `start-setup.png` | Opening, step 5: where the money goes and "Your bet" | — |
 | `ad-bet.png` | The "Your bet" card alone | 7 (ad 1) |
 | `start-waiting.png` | Opening, step 6: permits in progress | — |

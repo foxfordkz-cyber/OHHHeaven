@@ -78,6 +78,15 @@ async function shotAround(page, text, name, minHeight = 160) {
   }, minHeight);
   await page.waitForTimeout(400);
   await page.screenshot({ path: join(out, `${name}.png`), clip: box });
+  // the text of the cut-out card, so the ad lines in the deck can be checked against the frame
+  log.frames ??= {};
+  log.frames[name] = await page.evaluate((b) => {
+    const els = [...document.querySelectorAll('body *')].filter((e) => {
+      const r = e.getBoundingClientRect();
+      return e.children.length === 0 && r.top >= b.y - 1 && r.bottom <= b.y + b.height + 1 && (e.textContent || '').trim();
+    });
+    return els.map((e) => e.textContent.trim()).join(' · ').slice(0, 600);
+  }, box);
   note(`shot ${name}.png (around "${text}")`);
 }
 
@@ -180,7 +189,11 @@ try {
   // The return screen (/brief), where the build has one, then the business screen.
   await page.goto(`${BASE}/brief?world=${worldId}`);
   await page.waitForTimeout(3000);
-  if (/brief/.test(page.url()) && (await page.locator('main, #root').first().innerText()).trim().length > 40) await shot(page, 'brief');
+  if (/brief/.test(page.url()) && (await page.locator('main, #root').first().innerText()).trim().length > 40) {
+    await shot(page, 'brief');
+    log.frames ??= {};
+    log.frames.brief = (await page.innerText('body')).replace(/\s+/g, ' ').slice(0, 600);
+  }
   else note('no /brief screen in this build');
   // What the free plan shows after the first month, and what Pro adds.
   await page.goto(`${BASE}/pro?world=${worldId}`);
