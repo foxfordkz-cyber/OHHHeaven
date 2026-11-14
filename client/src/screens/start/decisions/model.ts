@@ -281,12 +281,12 @@ const sameSet = (a: readonly string[], b: readonly string[]): boolean => a.lengt
  * groups its optional items into real-life choices; whatever the texts do not cover still becomes a decision, so a
  * new item or lever in the pack is never decided silently for the player.
  */
-export function buildDecisions(pack: Pack, common: CommonPack | undefined, place: Place | undefined, rec: Choices | null, texts: DecisionTexts = {}): Decision[] {
+export function buildDecisions(pack: Pack, common: CommonPack | undefined, place: Place | undefined, rec: Choices | null, texts: DecisionTexts = {}, size: number = pack.sizing.min): Decision[] {
   const out: Decision[] = [];
   const takeover = isTakeover(pack, place);
   const priceOf = (id: string): Money => {
     const d = pack.setup.find((s) => s.id === id);
-    return d ? setupItemCost(pack, d, place) : 0;
+    return d ? round2(setupItemCost(pack, d, place) * (d.scalesWithSize ? size : 1)) : 0;
   };
   const pts = (q: number | undefined): number | undefined => (q ? Math.round(q * 100) : undefined);
   const optional = optionalItems(pack);
@@ -332,8 +332,6 @@ export function buildDecisions(pack: Pack, common: CommonPack | undefined, place
   for (const lever of pack.levers) {
     if (lever.options.length < 2) continue;
     const t = texts.levers?.[lever.id];
-    const cheapest = Math.min(...lever.options.map((o) => o.monthlyCost));
-    void cheapest;
     out.push({
       id: `lever_${lever.id}`, kind: 'lever', leverId: lever.id, title: t?.title ?? lever.name, question: t?.question ?? `${lever.name}: which way?`, why: t?.why,
       options: lever.options.map((o) => ({
@@ -347,10 +345,13 @@ export function buildDecisions(pack: Pack, common: CommonPack | undefined, place
 
   out.push({ id: 'price', kind: 'price', title: 'Price', question: texts.price?.question ?? `What does one ${pack.unit.name} cost?`, why: texts.price?.why, options: [], recommended: rec ? String(rec.price) : String(pack.unit.refPrice) });
 
+  // the room first, then what stands in it, then the people, then how the shop runs, the price last;
+  // inside each group the niche's own order, and whatever it does not name keeps the order of the pack
   const order = texts.order;
   if (!order) return out;
+  const groupOf: Record<DecisionKind, number> = { size: 0, items: 1, staff: 2, lever: 3, price: 4 };
   const rank = (d: Decision) => { const i = order.indexOf(d.id); return i < 0 ? order.length : i; };
-  return out.map((d, i) => ({ d, i })).sort((a, b) => rank(a.d) - rank(b.d) || a.i - b.i).map((x) => x.d);
+  return out.map((d, i) => ({ d, i })).sort((a, b) => groupOf[a.d.kind] - groupOf[b.d.kind] || rank(a.d) - rank(b.d) || a.i - b.i).map((x) => x.d);
 }
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
@@ -395,4 +396,19 @@ export function setSize(pack: Pack, place: Place | undefined, c: Choices, size: 
 
 export function setPrice(pack: Pack, c: Choices, price: number): Choices {
   return { ...c, price: round2(clamp(price, pack.unit.priceMin, pack.unit.priceMax)) };
+}
+
+/** `open_business` wants a kit id: the ready-made kit whose optional purchases are closest to what the player chose. */
+export function closestKit(pack: Pack, c: Choices): Pack['kits'][number]['id'] {
+  const optional = new Set(optionalItems(pack).map((s) => s.id));
+  const mine = new Set([...c.extras, ...forcedExtras(pack, c.size)]);
+  let best = pack.kits[0], bestScore = -1;
+  for (const k of pack.kits) {
+    const theirs = new Set(k.items.filter((i) => i.qty > 0 && optional.has(i.id)).map((i) => i.id));
+    const both = [...mine].filter((id) => theirs.has(id)).length;
+    const either = new Set([...mine, ...theirs]).size;
+    const score = either === 0 ? 1 : both / either;
+    if (score > bestScore) { best = k; bestScore = score; }
+  }
+  return best?.id ?? 'standard';
 }

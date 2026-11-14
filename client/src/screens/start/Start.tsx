@@ -5,12 +5,13 @@ import { useCatalog } from '../../app/catalog';
 import { useStoreState, useView } from '../../app/store';
 import { Button, Card, ProgressBar, Skeleton, TopBar } from '../../ui';
 import { IdeaStep, JoinStep, PlaceStep, PlanStep } from './steps';
-import { KitStep } from './KitStep';
+import { DecisionsStep, type SetupDraft } from './decisions/Decisions';
 import { WaitStep } from './WaitStep';
 import './start.css';
 
 export type WizardStep = 'idea' | 'place' | 'plan' | 'kit';
-export interface Draft { step: WizardStep; idea: string; match: IdeaMatch | null; niche: NicheId | null; name: string; placeId: string | null }
+/** `setup` holds the opening decisions made so far for one place: they survive a reload and a step back. */
+export interface Draft { step: WizardStep; idea: string; match: IdeaMatch | null; niche: NicheId | null; name: string; placeId: string | null; setup?: SetupDraft | null }
 
 const EMPTY: Draft = { step: 'idea', idea: '', match: null, niche: null, name: '', placeId: null };
 // The name and the entry fee are asked after the plan: a newcomer sees the address, the cost and the permits first.
@@ -30,7 +31,7 @@ function readDraft(key: string): Draft | null {
   }
 }
 
-/** /start — idea → niche → place → opening plan → setup kit → waiting for permits → open doors. */
+/** /start — idea → niche → place → opening plan → the opening decisions → construction and permits → open doors. */
 export function Start({ initial }: { initial?: Partial<Draft> }) {
   const view = useView();
   const { mode, worldId, status } = useStoreState();
@@ -104,8 +105,8 @@ export function Start({ initial }: { initial?: Partial<Draft> }) {
         <>
           {draft.step === 'idea' && <IdeaStep draft={draft} update={update} catalog={catalog} />}
           {draft.step === 'place' && <PlaceStep draft={draft} update={update} catalog={catalog} view={view} />}
-          {draft.step === 'plan' && <PlanStep draft={draft} update={update} catalog={catalog} />}
-          {draft.step === 'kit' && view.kind === 'owner' && <KitStep draft={draft} update={update} catalog={catalog} view={view} />}
+          {draft.step === 'plan' && <PlanStep draft={draft} update={update} catalog={catalog} today={view.world.day} />}
+          {draft.step === 'kit' && view.kind === 'owner' && <DecisionsStep draft={draft} update={update} catalog={catalog} view={view} />}
         </>
       )}
       {phase === 'wait' && view?.kind === 'owner' && catalog && <WaitStep view={view} catalog={catalog} />}
