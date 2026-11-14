@@ -31,7 +31,7 @@ describe('home page', () => {
     renderHome(cityView);
     expect(screen.getByText('Test your business idea in real New York.')).toBeTruthy();
     expect(screen.getByText('Real rent, real permits, real taxes. None of your savings at risk.')).toBeTruthy();
-    expect(screen.getByRole('button', { name: /Start my business/ })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'See my plan' })).toBeTruthy();
     expect(screen.getByRole('button', { name: /Work for the city — free/ })).toBeTruthy();
     expect(screen.getByText('$230')).toBeTruthy();
     for (const n of ['Coffee shop', 'Barbershop', 'Corner store', 'Guesthouse', 'Apartment rentals']) expect(screen.getByText(n)).toBeTruthy();

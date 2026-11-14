@@ -2,7 +2,7 @@
 // the real money is decided by the engine when `open_business` arrives.
 import type { BusinessState, CommonPack, NicheId, Pack, PackSetupItem, PackViolation, Place, PublicBusiness, SetupKind } from '@ohh/shared/types';
 import { RULES } from '@ohh/shared/rules';
-import { buildoutOf, daysToOpenOf, isTakeover, setupItemCost } from '@ohh/shared/place';
+import { buildoutOf, daysToOpenOf, isTakeover, openingCost, setupItemCost } from '@ohh/shared/place';
 import type { IconName } from '../../ui';
 
 export type KitItems = { id: string; qty: number }[];
@@ -57,6 +57,12 @@ export function maxSizeFor(pack: Pack, place: Place | undefined): number {
   if (!place || !sqftPerUnit) return max;
   const fit = Math.floor((place.sqft * RULES.USABLE_FLOOR_SHARE) / sqftPerUnit);
   return Math.max(min, Math.min(max, fit));
+}
+
+/** The least it costs to open at this place: the cheapest ready-made kit, sized to the room. An estimate for the list of places. */
+export function cheapestOpening(pack: Pack, place: Place): number {
+  const costs = pack.kits.map((k) => openingCost(pack, k.items, Math.min(k.size, maxSizeFor(pack, place)), place));
+  return costs.length ? Math.round(Math.min(...costs)) : 0;
 }
 
 export const rentPerMonth = (place: Place): number => Math.round((place.sqft * place.rentPerSqftYear) / 12);
