@@ -1,0 +1,38 @@
+{
+  "name": "ohhheaven",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "First Year \u2014 a slow persistent NYC city where you live the first year of your own business.",
+  "workspaces": [
+    "shared",
+    "engine",
+    "ai",
+    "host",
+    "server",
+    "bots",
+    "client"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n server,client -c blue,green \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "npm run dev -w @ohh/server",
+    "dev:client": "npm run dev -w @ohh/client",
+    "test": "npm run test --workspaces --if-present",
+    "check": "npm run check --workspaces --if-present",
+    "build": "npm run build -w @ohh/client",
+    "start": "npm run start -w @ohh/server",
+    "smoke": "node scripts/smoke.mjs",
+    "validate": "node scripts/validate-all.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "concurrently": "9.2.5",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vite": "7.3.8",
+    "vitest": "3.2.7"
+  }
+}
