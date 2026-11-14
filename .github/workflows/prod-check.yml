@@ -1,8 +1,9 @@
 # The public address, checked from outside (round 3, B05).
 # Set the address once: Settings → Secrets and variables → Actions → Variables → New repository variable
 #   PROD_URL = https://<your-app>.up.railway.app      (optional: secret CLOCK_KEY, if the server has one)
-# Every 30 minutes: --quick (health, the page, the city, an owner joins; a few requests, nobody's clock touched).
-# Run workflow by hand: the full walk — an opening and a month of trading in the shared demo city (2–4 minutes).
+# Every 30 minutes: --quick — health, the page, the city; read only, so it never shows up as an owner on the public page.
+# Run workflow by hand: the full walk — "Prod Check" joins the shared demo city, opens a cafe and trades a month
+# (2–4 minutes). It is visible in the game until the demo season restarts: run it before a show, not during.
 # Scheduled runs start only from the default branch.
 name: Prod check
 

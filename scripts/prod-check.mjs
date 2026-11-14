@@ -3,12 +3,14 @@
 //
 //   node scripts/prod-check.mjs https://<your-app>.up.railway.app
 //   node scripts/prod-check.mjs http://127.0.0.1:8787 --new-city          # own city, drives its clock: ~20 s
-//   node scripts/prod-check.mjs <url> --quick                             # health, page, city, join only
+//   node scripts/prod-check.mjs <url> --quick                             # read only: health, page, city; joins nothing
 //   node scripts/prod-check.mjs <url> --new-city --remember w.json        # then restart the server and:
 //   node scripts/prod-check.mjs <url> --recall w.json                     # the world, the owner and the cafe came back
 //
-// By default it joins the shared `demo` city as one more owner and never touches that city's clock: people may be
-// watching it. A demo day is 2 s, so the opening and the first month take a few minutes of real time.
+// By default it joins the shared `demo` city as one more owner, "Prod Check", and opens "Prod Check Coffee": the
+// landing page counts that owner and the map shows the cafe until the demo season restarts (at most ~25 minutes).
+// So run the full check before a show, not during it, and use --quick for anything scheduled. It never touches the
+// shared city's clock: people may be watching it. A demo day is 2 s, so the full walk takes a few minutes.
 // --new-city creates a city of its own (POST /api/worlds) and fast-forwards it; every created city keeps one of the
 // server's 20 demo slots until the data volume is wiped, so use it on a local or staging server, not on every
 // production check. If the server has CLOCK_KEY set, pass it with --clock-key or the CLOCK_KEY variable.
@@ -22,7 +24,8 @@ const opt = (name, fallback) => { const i = argv.indexOf(`--${name}`); return i 
 const valued = new Set(['wait', 'remember', 'recall', 'clock-key', 'world', 'max-wait']);
 const positional = argv.filter((a, i) => !a.startsWith('--') && !valued.has(argv[i - 1]?.replace(/^--/, '')));
 if (flag('help') || flag('h')) {
-  console.log(readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1, 19).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
+  const lines = readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1);
+  console.log(lines.slice(0, lines.findIndex((l) => !l.startsWith('//'))).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
   process.exit(0);
 }
 const BASE = (positional[0] ?? process.env.PROD_URL ?? '').replace(/\/+$/, '');
@@ -83,6 +86,19 @@ const action = (t, a) => post(`/api/worlds/${ctx.worldId}/action`, a, t);
 const query = (t, q) => post(`/api/worlds/${ctx.worldId}/query`, q, t);
 const clock = async (b) => (await call('POST', `/api/worlds/${ctx.worldId}/clock`, b, undefined, CLOCK_KEY ? { 'x-clock-key': CLOCK_KEY } : {})).json;
 const days = (n) => n * (ctx.dayMs ?? 2_000);
+// shared/src/rules.ts: 30-day months, a 12-month season, new players join only until month 9 (RULES.JOIN_UNTIL_MONTH).
+const DAYS_PER_MONTH = 30, SEASON_MONTHS = 12, JOIN_UNTIL_MONTH = 9;
+const minutes = (ms) => `${Math.max(0, ms / 60_000).toFixed(1)} min`;
+function joinWindow(world) {
+  const dayMs = world.config?.dayMs ?? 2_000;
+  const month = Math.floor((world.day - 1) / DAYS_PER_MONTH) + 1;
+  const open = world.phase === 'running' && month <= JOIN_UNTIL_MONTH;
+  const left = open ? (JOIN_UNTIL_MONTH * DAYS_PER_MONTH - world.day + 1) * dayMs : (SEASON_MONTHS * DAYS_PER_MONTH - world.day) * dayMs;
+  const restart = 'a new one starts after the end screen (DEMO_RESTART_MIN, 10 min by default)';
+  return { open, month, text: open ? `new players can join for ${minutes(left)} more`
+    : world.phase !== 'running' ? `WARNING closed for new players: the season is over (end screen), ${restart}`
+    : `WARNING closed for new players (month ${month} of ${SEASON_MONTHS}): the season ends in ${minutes(left)}, ${restart}` };
+}
 
 const steps = {
   async health() {
@@ -122,13 +138,15 @@ const steps = {
     must(Array.isArray(list) && list.some((w) => w.id === ctx.worldId), `world '${ctx.worldId}' is not in GET /api/worlds (${(list ?? []).map?.((w) => w.id).join(', ')})`);
     const v = await view();
     must(v.kind === 'city', `city view expected, got ${v.kind ?? JSON.stringify(v).slice(0, 120)}`);
-    must(v.world?.phase === 'running', `world '${ctx.worldId}' is not running (phase ${v.world?.phase}); a finished demo season restarts within ~10 minutes`);
     ctx.dayMs = v.world.config?.dayMs ?? 2_000;
     ctx.businesses = (v.businesses ?? []).length;
+    ctx.join = joinWindow(v.world);
     return `${ctx.worldId} "${v.world.config?.name ?? ''}", day ${v.world.day}, ${ctx.businesses} businesses on the map, a day is ${ctx.dayMs / 1000} s`
-      + (NEW_CITY ? (ctx.ownClock ? ', clock under control' : ', clock locked (set --clock-key): real time') : ', clock untouched');
+      + (NEW_CITY ? (ctx.ownClock ? ', clock under control' : ', clock locked (set --clock-key): real time') : ', clock untouched')
+      + `\n    joining: ${ctx.join.text}`;
   },
   async join() {
+    must(ctx.join?.open !== false, `${ctx.worldId}: ${ctx.join?.text.replace(/^WARNING /, '')}. A visitor opening the game now cannot start; run again when the new season opens`);
     ctx.me = ack(await post(`/api/worlds/${ctx.worldId}/join`, { name: OWNER_NAME, kind: 'owner' }), 'join');
     must(ctx.me?.token, 'join returned no token');
     const v = await view(ctx.me.token);
@@ -198,7 +216,8 @@ const steps = {
   },
 };
 
-const plan = RECALL ? ['health', 'recall'] : QUICK ? ['health', 'page', 'city', 'join'] : ['health', 'page', 'city', 'join', 'open', 'month'];
+// --quick joins nothing: a scheduled check must not show up as an owner on the public page.
+const plan = RECALL ? ['health', 'recall'] : QUICK ? ['health', 'page', 'city'] : ['health', 'page', 'city', 'join', 'open', 'month'];
 const results = [];
 let red = false;
 const t0 = Date.now();
