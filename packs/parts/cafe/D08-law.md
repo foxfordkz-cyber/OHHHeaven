@@ -112,6 +112,19 @@
 - Комиссия по правам человека: шкала штрафов для малых работодателей за вопрос о судимости.
 - Алкогольное управление: пошлина и срок получения лицензии на пиво и вино; наказание за продажу без лицензии.
 
+Как закрыть этот пробел. В конце работы пользователь одобрил отдельную среду «OHHHeaven» с доступом к восьми официальным сайтам: `www.nyc.gov`, `codelibrary.amlegal.com`, `rules.cityofnewyork.us`, `nyc-business.nyc.gov`, `portal.311.nyc.gov`, `www.nysenate.gov`, `dol.ny.gov`, `sla.ny.gov`. Эта сессия перейти в неё не смогла, а запуск дочерней сессии был отклонён настройками разрешений. Сверку можно провести новой сессией в среде «OHHHeaven» на этой же ветке. Страницы для сверки, по порядку важности:
+
+1. Штрафная таблица общепита и лист баллов: https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf , https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593 , https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-136908
+2. Оценки, цикл, отмена штрафов, пробная проверка, таблички: https://www.nyc.gov/assets/doh/downloads/pdf/rii/restaurant-grading-faq.pdf , https://www.nyc.gov/assets/doh/downloads/pdf/rii/inspection-cycle-and-letter-grading.pdf , https://www.nyc.gov/assets/doh/downloads/pdf/rii/insp-fines-chngs.pdf , https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf , https://www.nyc.gov/site/doh/business/food-operators/required-signs.page
+3. Пожарные: https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214 , https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf
+4. Строительный департамент: https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page , https://www.nyc.gov/site/buildings/safety/installing-a-business-sign.page
+5. Санитарная служба улиц: https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf , https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page , https://www.nyc.gov/site/dsny/businesses/materials-handling/foam-containers.page , https://portal.311.nyc.gov/article/?kanumber=KA-01980
+6. Вода и шум: https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf , https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-30850
+7. Слушания и неявка: https://www.nyc.gov/site/oath/hearings/what-happens-if-i-do-not-pay.page , https://www.nyc.gov/site/oath/hearings/missed-hearings-default-frequently-asked-questions.page
+8. Надбавки в ресторанах: https://www.nyc.gov/assets/dca/downloads/pdf/businesses/DCAInspectionChecklist_RestaurantSurchargesandMandatoryGratuities.pdf , https://rules.cityofnewyork.us/wp-content/uploads/2026/03/NOA-DCWP-Restaurant-Surcharges.pdf
+9. Законы штата: https://www.nysenate.gov/legislation/laws/LAB/215 , https://www.nysenate.gov/legislation/laws/LAB/201-G , https://www.nysenate.gov/legislation/laws/LAB/218 , https://www.nysenate.gov/legislation/laws/GBS/518 , https://www.nysenate.gov/legislation/laws/PBH/1356 , https://www.nysenate.gov/legislation/laws/PBH/1357
+10. Алкоголь: https://sla.ny.gov/news/underage-drinking-compliance-checks-albany-county-august-2026 и страница пошлин на `sla.ny.gov`
+
 Статистика, которой нет в открытом виде или которую я не нашёл:
 
 - Доля оценок A и сумма санитарных штрафов за 2025–2026 годы. Есть только 93% и 22 миллиона долларов за 2016 финансовый год.
