@@ -31,7 +31,7 @@ AI agents wrote most of the code under a written contract between seven packages
 ## Что продаём (20%)
 
 **7. What exactly does someone pay for?**
-For nineteen dollars a month: the whole first year of play, the advisor, every business type, and a personal plan built from your own game — your address, your costs, your permits with official links. The city, your storefront and your first month stay free.
+For nineteen dollars a month: your decisions after the first month, every business type, the advisor beyond three free questions, and a personal plan built from your own game — your address, your costs, your permits with official links. The city, your storefront, your first month open and every move with neighbours stay free.
 
 **8. Why would someone come back tomorrow?**
 The city keeps its own clock: one game month passes every real day, so tomorrow there is a new month report, a neighbour's move and a decision waiting. That is a daily reason to return during the months someone is actually preparing to open.

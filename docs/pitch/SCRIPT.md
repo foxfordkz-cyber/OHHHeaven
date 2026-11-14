@@ -66,8 +66,8 @@ Six hundred thirty-nine automated tests are green. The repo is in front of you.
 
 ## 2:40–3:12 · Страница 6 — за что платят и зачем возвращаются
 
-The city, your storefront and your first month are free.
-For nineteen dollars a month you get the whole year, the advisor, and your personal plan: your costs, your permits, with official links.
+The city, your storefront and your first month open are free.
+For nineteen dollars a month you keep deciding for the rest of the year, and you get the advisor and your personal plan: your costs, your permits, with official links.
 At year end the game shows where you lost money. In our test run: rent and labour above the norm.
 Why come back tomorrow? One game month passes every real day: a report, a neighbour's move, a decision waiting.
 
