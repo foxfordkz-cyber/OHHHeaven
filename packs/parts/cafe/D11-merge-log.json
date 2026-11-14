@@ -11,34 +11,38 @@
   "D08-law.json",
   "D09-money.json",
   "D10-deaths-nonobvious-year.json",
+  "D12-number-check.json",
   "D13-formats.json",
-  "D14-mechanics.json"
+  "D14-mechanics.json",
+  "D15-calibration-premises.json",
+  "D16-calibration-equipment-food.json",
+  "D17-calibration-people-money.json"
  ],
  "base": "D11-base.json",
  "sections": {
   "setup": {
    "base": 33,
-   "candidates": 191,
+   "candidates": 197,
    "unique": 147,
-   "fixesOfBase": 19,
+   "fixesOfBase": 21,
    "newRecords": 114,
-   "multiSource": 24
+   "multiSource": 25
   },
   "monthlyCosts": {
    "base": 16,
-   "candidates": 75,
+   "candidates": 76,
    "unique": 62,
    "fixesOfBase": 7,
    "newRecords": 46,
-   "multiSource": 6
+   "multiSource": 7
   },
   "staff": {
    "base": 2,
-   "candidates": 15,
+   "candidates": 17,
    "unique": 12,
    "fixesOfBase": 2,
    "newRecords": 10,
-   "multiSource": 1
+   "multiSource": 2
   },
   "taxes": {
    "base": 1,
@@ -50,27 +54,27 @@
   },
   "levers": {
    "base": 5,
-   "candidates": 154,
+   "candidates": 159,
    "unique": 124,
-   "fixesOfBase": 1,
+   "fixesOfBase": 5,
    "newRecords": 119,
-   "multiSource": 23
+   "multiSource": 24
   },
   "shortcuts": {
    "base": 8,
-   "candidates": 126,
+   "candidates": 134,
    "unique": 90,
-   "fixesOfBase": 2,
+   "fixesOfBase": 8,
    "newRecords": 82,
-   "multiSource": 28
+   "multiSource": 30
   },
   "violations": {
    "base": 11,
-   "candidates": 166,
+   "candidates": 170,
    "unique": 101,
    "fixesOfBase": 11,
    "newRecords": 90,
-   "multiSource": 38
+   "multiSource": 42
   },
   "officials": {
    "base": 3,
@@ -90,11 +94,11 @@
   },
   "events": {
    "base": 6,
-   "candidates": 67,
+   "candidates": 71,
    "unique": 58,
-   "fixesOfBase": 3,
+   "fixesOfBase": 4,
    "newRecords": 52,
-   "multiSource": 5
+   "multiSource": 7
   },
   "ruleCards": {
    "base": 23,
@@ -106,9 +110,9 @@
   },
   "roadmap": {
    "base": 14,
-   "candidates": 112,
+   "candidates": 113,
    "unique": 96,
-   "fixesOfBase": 1,
+   "fixesOfBase": 2,
    "newRecords": 82,
    "multiSource": 14
   },
@@ -141,6 +145,35 @@
      "v": 120,
      "conf": "verified",
      "src": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "grinder",
+   "field": "cost",
+   "chosen": 3099,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "grinder",
+     "v": 2099,
+     "conf": "verified",
+     "src": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/"
+    },
+    {
+     "tag": "D03",
+     "id": "grinder",
+     "v": 2099,
+     "conf": "verified",
+     "src": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/"
+    },
+    {
+     "tag": "D12",
+     "id": "grinder",
+     "v": 3099,
+     "conf": "verified",
+     "src": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/"
     }
    ]
   },
@@ -190,6 +223,28 @@
   },
   {
    "section": "setup",
+   "id": "sinks",
+   "field": "cost",
+   "chosen": 1519,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "sinks",
+     "v": 1720,
+     "conf": "estimate",
+     "src": "https://www.webstaurantstore.com/regency-60-16-gauge-stainless-steel-three-compartment-commercial-sink-without-drainboards-17-x-17-x-12-bowls/600S31717X.html"
+    },
+    {
+     "tag": "D12",
+     "id": "sinks",
+     "v": 1519,
+     "conf": "estimate",
+     "src": "https://www.webstaurantstore.com/regency-60-16-gauge-stainless-steel-three-compartment-commercial-sink-without-drainboards-17-x-17-x-12-bowls/600S31717X.html"
+    }
+   ]
+  },
+  {
+   "section": "setup",
    "id": "fse_permit",
    "field": "waitDays",
    "chosen": 22,
@@ -202,11 +257,47 @@
      "src": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
     },
     {
+     "tag": "D12",
+     "id": "fse_permit",
+     "v": 22,
+     "conf": "verified",
+     "src": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    },
+    {
      "tag": "D14",
      "id": "fse_permit",
      "v": 22,
      "conf": "verified",
      "src": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    }
+   ]
+  },
+  {
+   "section": "setup",
+   "id": "decaf_grinder",
+   "field": "cost",
+   "chosen": 3099,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "decaf_grinder",
+     "v": 2099,
+     "conf": "verified",
+     "src": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/"
+    },
+    {
+     "tag": "D03",
+     "id": "decaf_grinder",
+     "v": 2099,
+     "conf": "verified",
+     "src": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/"
+    },
+    {
+     "tag": "D12",
+     "id": "decaf_grinder",
+     "v": 3099,
+     "conf": "verified",
+     "src": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/"
     }
    ]
   },
@@ -674,6 +765,28 @@
   },
   {
    "section": "monthlyCosts",
+   "id": "sick_leave_cover",
+   "field": "amount",
+   "chosen": 60,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "sick_leave_cover",
+     "v": 70,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page"
+    },
+    {
+     "tag": "D12",
+     "id": "sick_leave_cover",
+     "v": 60,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page"
+    }
+   ]
+  },
+  {
+   "section": "monthlyCosts",
    "id": "maintenance",
    "field": "amount",
    "chosen": 45,
@@ -783,6 +896,64 @@
    ]
   },
   {
+   "section": "staff",
+   "id": "barista",
+   "field": "hourlyWage",
+   "chosen": 18,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "barista",
+     "v": 21,
+     "conf": "estimate",
+     "src": "https://dol.ny.gov/minimum-wage-0"
+    },
+    {
+     "tag": "D05",
+     "id": "barista",
+     "v": 21,
+     "conf": "estimate",
+     "src": "https://culinaryagents.com/jobs/716734-Barista"
+    },
+    {
+     "tag": "D12",
+     "id": "barista",
+     "v": 18,
+     "conf": "estimate",
+     "src": "https://dol.ny.gov/statistics-oewswagezip"
+    }
+   ]
+  },
+  {
+   "section": "staff",
+   "id": "barista",
+   "field": "cashWage",
+   "chosen": 18,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "barista",
+     "v": 21,
+     "conf": "estimate",
+     "src": "https://dol.ny.gov/minimum-wage-0"
+    },
+    {
+     "tag": "D05",
+     "id": "barista",
+     "v": 21,
+     "conf": "estimate",
+     "src": "https://culinaryagents.com/jobs/716734-Barista"
+    },
+    {
+     "tag": "D12",
+     "id": "barista",
+     "v": 18,
+     "conf": "estimate",
+     "src": "https://dol.ny.gov/statistics-oewswagezip"
+    }
+   ]
+  },
+  {
    "section": "violations",
    "id": "dirty_surfaces",
    "field": "fine.perMonth",
@@ -807,8 +978,30 @@
   {
    "section": "violations",
    "id": "pest_activity",
+   "field": "fine.base",
+   "chosen": 350,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "pest_activity",
+     "v": 300,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D12",
+     "id": "pest_activity",
+     "v": 350,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "pest_activity",
    "field": "fine.perMonth",
-   "chosen": 0,
+   "chosen": 50,
    "values": [
     {
      "tag": "BASE",
@@ -822,6 +1015,35 @@
      "id": "pest_activity",
      "v": 0,
      "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D12",
+     "id": "pest_activity",
+     "v": 50,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    }
+   ]
+  },
+  {
+   "section": "violations",
+   "id": "pest_activity",
+   "field": "fine.max",
+   "chosen": 550,
+   "values": [
+    {
+     "tag": "BASE",
+     "id": "pest_activity",
+     "v": 450,
+     "conf": "verified",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D12",
+     "id": "pest_activity",
+     "v": 550,
+     "conf": "verified",
      "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
     }
    ]
@@ -830,7 +1052,7 @@
    "section": "violations",
    "id": "spoiled_food",
    "field": "fine.perMonth",
-   "chosen": 0,
+   "chosen": 50,
    "values": [
     {
      "tag": "BASE",
@@ -844,6 +1066,13 @@
      "id": "spoiled_food",
      "v": 0,
      "conf": "estimate",
+     "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
+    },
+    {
+     "tag": "D12",
+     "id": "spoiled_food",
+     "v": 50,
+     "conf": "verified",
      "src": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
     }
    ]
@@ -2410,7 +2639,7 @@
    "section": "events",
    "id": "coffee_price_spike",
    "field": "effect.mult",
-   "chosen": 1.07,
+   "chosen": 1.05,
    "values": [
     {
      "tag": "BASE",
@@ -2425,6 +2654,13 @@
      "v": 1.07,
      "conf": "estimate",
      "src": "https://fred.stlouisfed.org/series/APU0000717311"
+    },
+    {
+     "tag": "D12",
+     "id": "coffee_price_spike",
+     "v": 1.05,
+     "conf": "estimate",
+     "src": "https://fred.stlouisfed.org/series/APU0000717311"
     }
    ]
   },
@@ -2432,7 +2668,7 @@
    "section": "events",
    "id": "coffee_price_spike",
    "field": "months",
-   "chosen": 6,
+   "chosen": 3,
    "values": [
     {
      "tag": "BASE",
@@ -2447,6 +2683,13 @@
      "v": 6,
      "conf": "estimate",
      "src": "https://fred.stlouisfed.org/series/APU0000717311"
+    },
+    {
+     "tag": "D12",
+     "id": "coffee_price_spike",
+     "v": 3,
+     "conf": "estimate",
+     "src": "https://fred.stlouisfed.org/series/APU0000717311"
     }
    ]
   },
@@ -2454,7 +2697,7 @@
    "section": "events",
    "id": "milk_price_up",
    "field": "effect.mult",
-   "chosen": 1.01,
+   "chosen": 1.03,
    "values": [
     {
      "tag": "BASE",
@@ -2469,6 +2712,13 @@
      "v": 1.01,
      "conf": "estimate",
      "src": "https://www.ams.usda.gov/mnreports/dymadvancedprices.pdf"
+    },
+    {
+     "tag": "D12",
+     "id": "milk_price_up",
+     "v": 1.03,
+     "conf": "estimate",
+     "src": "https://fred.stlouisfed.org/series/APU0000709112"
     }
    ]
   },
@@ -2498,6 +2748,13 @@
      "v": 0.9,
      "conf": "estimate",
      "src": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag"
+    },
+    {
+     "tag": "D12",
+     "id": "sidewalk_shed",
+     "v": 0.93,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses"
     }
    ]
   },
@@ -2527,6 +2784,13 @@
      "v": 12,
      "conf": "estimate",
      "src": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag"
+    },
+    {
+     "tag": "D12",
+     "id": "sidewalk_shed",
+     "v": 6,
+     "conf": "estimate",
+     "src": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses"
     }
    ]
   },
@@ -4750,6 +5014,9 @@
   }
  ],
  "overrides": [
+  "staff.trainee_barista",
+  "staff.part_time_barista",
+  "levers.hours",
   "levers.early_deliveries",
   "levers.scheduling",
   "levers.training",
@@ -4763,15 +5030,57 @@
   "violations.dirty_sidewalk"
  ],
  "calibration": {
-  "applied": 0,
+  "applied": 497,
   "newEvents": 0,
-  "files": []
+  "files": [
+   "D15-calibration-premises.json",
+   "D16-calibration-equipment-food.json",
+   "D17-calibration-people-money.json"
+  ],
+  "duplicatesMerged": [
+   "d00_labor_finance_drawer_shortage -> drawer_comes_up_short",
+   "d00_labor_finance_no_notice_quit -> barista_quits_by_text",
+   "d00_labor_finance_tipped_overtime -> overtime_creep",
+   "d00_labor_finance_pay_frequency -> pay_frequency_claim",
+   "d00_labor_finance_manager_tip_pool -> tip_jar_fight",
+   "d00_labor_finance_db_renewal -> d00_labor_finance_db_pfl_gap",
+   "d00_labor_finance_payroll_insurance_audit -> workers_comp_audit_bill",
+   "d00_labor_finance_lactation_space -> pumping_breaks_on_return",
+   "d00_labor_finance_tax_deposit -> payroll_tax_deposit_15th",
+   "d00_labor_finance_school_schedule -> minor_back_to_school_hours",
+   "d00_labor_finance_call_in -> january_hours_squeeze",
+   "d00_labor_finance_spread_day -> open_to_close_doubles",
+   "d00_labor_finance_sales_tax_reserve -> sales_tax_quarter_due",
+   "d00_labor_finance_accountant_miss -> vendor_credit_lost",
+   "d00_labor_finance_gift_redemption -> gift_card_hangover",
+   "d00_labor_finance_equipment_exit_tax -> closing_auction",
+   "d00_labor_finance_tax_calendar -> vendor_credit_lost",
+   "d00_labor_finance_offline_reset -> offline_payments_lost",
+   "d00_labor_finance_offline_expiry -> offline_payments_lost",
+   "d00_labor_finance_processor_reserve -> processor_holds_funds",
+   "d00_labor_finance_catering_dispute -> card_dispute",
+   "d00_labor_finance_bank_holiday -> holiday_weekend_payout_gap",
+   "d00_labor_finance_insurance_scope -> power_cut_spoilage_uninsured",
+   "d00_labor_finance_daily_debt -> cash_advance_calls",
+   "d00_labor_finance_ui_claim_notice -> unemployment_claim_notice",
+   "d00_labor_finance_ui_rate_change -> unemployment_rate_notice",
+   "d00_labor_finance_annual_training -> yearly_harassment_training_due",
+   "d00_labor_finance_owner_cover_spiral -> owner_runs_on_empty",
+   "d00_labor_finance_retention_pressure -> chain_raises_pay",
+   "d00_labor_finance_owner_estimates -> estimated_tax_due",
+   "d00_equipment_food_offline_pending -> offline_payments_lost",
+   "d00_world_event_payroll_not_funded -> payroll_friday_account_short",
+   "d00_world_event_owner_income_target -> owner_savings_run_out",
+   "d00_world_event_liquidation_auction -> closing_auction",
+   "owner_sick_nobody_can_open -> flu_takes_the_only_supervisor",
+   "regulars_follow_the_barista -> key_barista_leaves"
+  ]
  },
  "eventCatalog": {
-  "total": 899,
-  "afterFuzzyDedupe": 886,
-  "inPack": 484,
-  "inReference": 402,
+  "total": 902,
+  "afterFuzzyDedupe": 853,
+  "inPack": 695,
+  "inReference": 158,
   "fuzzyAliases": {
    "gas_red_tag": "gas_shut_off_in_building",
    "bulk_sale_claim": "sellers_tax_claim",
@@ -4785,7 +5094,43 @@
    "back_to_school_boba": "school_year_starts",
    "slip_and_fall_claim": "customer_slip_claim",
    "dsny_snow_sweep": "sanitation_ticket_hours",
-   "big_chain_store_closes": "chain_leaves"
+   "big_chain_store_closes": "chain_leaves",
+   "d00_labor_finance_drawer_shortage": "drawer_comes_up_short",
+   "d00_labor_finance_no_notice_quit": "barista_quits_by_text",
+   "d00_labor_finance_tipped_overtime": "overtime_creep",
+   "d00_labor_finance_pay_frequency": "pay_frequency_claim",
+   "d00_labor_finance_manager_tip_pool": "tip_jar_fight",
+   "d00_labor_finance_db_renewal": "d00_labor_finance_db_pfl_gap",
+   "d00_labor_finance_payroll_insurance_audit": "workers_comp_audit_bill",
+   "d00_labor_finance_lactation_space": "pumping_breaks_on_return",
+   "d00_labor_finance_tax_deposit": "payroll_tax_deposit_15th",
+   "d00_labor_finance_school_schedule": "minor_back_to_school_hours",
+   "d00_labor_finance_call_in": "january_hours_squeeze",
+   "d00_labor_finance_spread_day": "open_to_close_doubles",
+   "d00_labor_finance_sales_tax_reserve": "sales_tax_quarter_due",
+   "d00_labor_finance_accountant_miss": "vendor_credit_lost",
+   "d00_labor_finance_gift_redemption": "gift_card_hangover",
+   "d00_labor_finance_equipment_exit_tax": "closing_auction",
+   "d00_labor_finance_tax_calendar": "vendor_credit_lost",
+   "d00_labor_finance_offline_reset": "offline_payments_lost",
+   "d00_labor_finance_offline_expiry": "offline_payments_lost",
+   "d00_labor_finance_processor_reserve": "processor_holds_funds",
+   "d00_labor_finance_catering_dispute": "card_dispute",
+   "d00_labor_finance_bank_holiday": "holiday_weekend_payout_gap",
+   "d00_labor_finance_insurance_scope": "power_cut_spoilage_uninsured",
+   "d00_labor_finance_daily_debt": "cash_advance_calls",
+   "d00_labor_finance_ui_claim_notice": "unemployment_claim_notice",
+   "d00_labor_finance_ui_rate_change": "unemployment_rate_notice",
+   "d00_labor_finance_annual_training": "yearly_harassment_training_due",
+   "d00_labor_finance_owner_cover_spiral": "owner_runs_on_empty",
+   "d00_labor_finance_retention_pressure": "chain_raises_pay",
+   "d00_labor_finance_owner_estimates": "estimated_tax_due",
+   "d00_equipment_food_offline_pending": "offline_payments_lost",
+   "d00_world_event_payroll_not_funded": "payroll_friday_account_short",
+   "d00_world_event_owner_income_target": "owner_savings_run_out",
+   "d00_world_event_liquidation_auction": "closing_auction",
+   "owner_sick_nobody_can_open": "flu_takes_the_only_supervisor",
+   "regulars_follow_the_barista": "key_barista_leaves"
   }
  },
  "provenance": {
@@ -4833,9 +5178,10 @@
     "from": [
      "BASE",
      "D00",
-     "D03"
+     "D03",
+     "D12"
     ],
-    "chosen": "D03"
+    "chosen": "D12"
    },
    "water_filtration": {
     "from": [
@@ -4861,9 +5207,10 @@
    },
    "sinks": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "prep_table_shelving": {
     "from": [
@@ -4933,9 +5280,10 @@
     "from": [
      "BASE",
      "D00",
+     "D12",
      "D14"
     ],
-    "chosen": "D14"
+    "chosen": "D12"
    },
    "food_protection_cert": {
     "from": [
@@ -4946,17 +5294,19 @@
    },
    "batch_brewer": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "decaf_grinder": {
     "from": [
      "BASE",
      "D00",
-     "D03"
+     "D03",
+     "D12"
     ],
-    "chosen": "D03"
+    "chosen": "D12"
    },
    "ice_machine": {
     "from": [
@@ -5009,9 +5359,10 @@
    "sidewalk_cafe_license": {
     "from": [
      "BASE",
-     "D00"
+     "D00",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "dob_alteration_filing_fee": {
     "from": [
@@ -5564,9 +5915,10 @@
    "sick_leave_cover": {
     "from": [
      "BASE",
-     "D00"
+     "D00",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "maintenance": {
     "from": [
@@ -5719,17 +6071,19 @@
    "barista": {
     "from": [
      "BASE",
-     "D05"
+     "D05",
+     "D12"
     ],
-    "chosen": "D05"
+    "chosen": "D12"
    },
    "shift_lead": {
     "from": [
      "BASE",
      "D00",
-     "D05"
+     "D05",
+     "D12"
     ],
-    "chosen": "D05"
+    "chosen": "D12"
    },
    "trainee_barista": {
     "from": [
@@ -5847,34 +6201,39 @@
   "levers": {
    "cleaning": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "sourcing": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "hours": {
     "from": [
      "BASE",
-     "D06"
+     "D06",
+     "D12"
     ],
     "chosen": "D06"
    },
    "pest_control": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "staff_pay": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "laptop_policy": {
     "from": [
@@ -6517,53 +6876,61 @@
   "shortcuts": {
    "skip_food_protection_cert": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "keep_old_food": {
     "from": [
      "BASE",
-     "D00"
+     "D00",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "home_baked_pastries": {
     "from": [
      "BASE",
-     "D00"
+     "D00",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "keep_tips": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "unpaid_trial_shifts": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "no_spread_of_hours": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "sidewalk_tables": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "skip_grease_trap_cleaning": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "build_without_permit": {
     "from": [
@@ -7119,9 +7486,10 @@
    "no_food_protection_cert": {
     "from": [
      "BASE",
-     "D00"
+     "D00",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "dirty_surfaces": {
     "from": [
@@ -7133,16 +7501,18 @@
    "pest_activity": {
     "from": [
      "BASE",
-     "D00"
+     "D00",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "spoiled_food": {
     "from": [
      "BASE",
-     "D00"
+     "D00",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "unapproved_food_source": {
     "from": [
@@ -7175,9 +7545,10 @@
    "unlicensed_sidewalk_cafe": {
     "from": [
      "BASE",
-     "D00"
+     "D00",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "grease_interceptor_neglect": {
     "from": [
@@ -8176,28 +8547,32 @@
    "coffee_price_spike": {
     "from": [
      "BASE",
-     "D04"
+     "D04",
+     "D12"
     ],
-    "chosen": "D04"
+    "chosen": "D12"
    },
    "milk_price_up": {
     "from": [
      "BASE",
-     "D04"
+     "D04",
+     "D12"
     ],
-    "chosen": "D04"
+    "chosen": "D12"
    },
    "restaurant_week": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "sidewalk_shed": {
     "from": [
      "BASE",
      "D07",
-     "D10"
+     "D10",
+     "D12"
     ],
     "chosen": "D07"
    },
@@ -10793,9 +11168,10 @@
    },
    "get_fse_permit": {
     "from": [
-     "BASE"
+     "BASE",
+     "D12"
     ],
-    "chosen": "BASE"
+    "chosen": "D12"
    },
    "arrange_grease_and_waste": {
     "from": [
@@ -11863,8 +12239,8 @@
   "ruleCards": 352,
   "roadmap": 76,
   "suppliers": 73,
-  "eventCatalog": 484,
-  "mechanics": 121,
+  "eventCatalog": 695,
+  "mechanics": 138,
   "formatRecords": {
    "setup": 40,
    "monthlyCosts": 10,
@@ -11880,7 +12256,7 @@
   "conditionalMonthlyCosts": 22,
   "preOpeningChoices": 16,
   "reference": {
-   "eventCatalog": 402,
+   "eventCatalog": 158,
    "nonObvious": 640,
    "failureStories": 177
   }

@@ -17,7 +17,7 @@ const base = read(path.join(HERE, 'D11-base.json'));
 const common = read(path.join(ROOT, 'packs/_common.json'));
 
 // Фрагменты: основной JSON каждого задания. Служебные файлы D00 (аудит, дедупликация) читаются отдельно.
-const SKIP = /audit|dedup|validation|reference|merge-log|base/;
+const SKIP = /audit|dedup|validation|reference|merge-log|base|\.common\./;
 const fragFiles = fs.readdirSync(HERE).filter((f) => /^D\d\d-.*\.json$/.test(f) && !SKIP.test(f)).sort();
 const frags = fragFiles.map((f) => ({ tag: f.slice(0, 3), file: f, calib: /calibration/.test(f), p: read(path.join(HERE, f)) }));
 
@@ -87,6 +87,9 @@ for (const sec of SECTIONS) {
     const full = cands.filter((c) => !c.partial && c.tag !== 'BASE');
     const pref = D.prefer[sec] && D.prefer[sec][cid];
     full.sort((a, b) => score(sec, a.tag, a.r) - score(sec, b.tag, b.r));
+    // D12 — проверка чисел существующего пакета по первоисточникам: её правка записи из основы важнее оценок других фрагментов
+    const d12 = baseRec && !pref && full.findIndex((c) => c.tag === 'D12');
+    if (d12 !== false && d12 >= 0) full.push(full.splice(d12, 1)[0]);
     if (pref) { const i = full.findIndex((c) => c.tag === pref); if (i >= 0) full.push(full.splice(i, 1)[0]); }
     const winner = full[full.length - 1];
     let rec = baseRec ? structuredClone(baseRec.r) : {};
@@ -194,7 +197,7 @@ pack.version = 3;
 const lastObj = (key) => { let v = null; for (const f of frags) if (f.p[key] && typeof f.p[key] === 'object' && !Array.isArray(f.p[key])) v = { tag: f.tag, v: f.p[key] }; return v; };
 const topFrom = {};
 for (const key of ['unit', 'market', 'capacity', 'sizing', 'benchmarks', 'manager']) {
-  const owners = { market: 'D06', sizing: 'D02', manager: 'D05', capacity: null, benchmarks: 'D00', unit: 'D04' };
+  const owners = { market: 'D06', sizing: 'D02', manager: 'D05', capacity: null, benchmarks: 'D00', unit: 'D12' };
   let src = null;
   for (const f of frags) if (f.p[key] && typeof f.p[key] === 'object') { if (!src || f.tag === owners[key]) src = { tag: f.tag, v: f.p[key] }; }
   if (src) { pack[key] = { ...pack[key], ...structuredClone(src.v) }; topFrom[key] = src.tag; }
@@ -229,7 +232,7 @@ pack.kits = kitSrc.map((k) => {
 const extra = structuredClone(base.extra || {});
 const ref = { eventCatalog: [], eventCatalogFull: [], nonObvious: [], failureStories: [], parts: {} };
 // значения для движка, которые фрагменты уточнили
-const extraOverride = { weekdayMult: 'D06', weekdayMultNote: 'D06', seatThresholds: 'D02', taxableShare: 'D04', taxableShareNote: 'D04' };
+const extraOverride = { weekdayMult: 'D06', weekdayMultNote: 'D06', seatThresholds: 'D02', taxableShare: 'D04', taxableShareNote: 'D04', tipCredit: 'D12', takeover: 'D12' };
 for (const [k, tag] of Object.entries(extraOverride)) { const f = frags.find((x) => x.tag === tag); if (f && f.p.extra && f.p.extra[k] !== undefined) { extra[k] = structuredClone(f.p.extra[k]); topFrom['extra.' + k] = tag; } }
 
 // каталог событий: один id, псевдонимы, ходы игрока с новыми id
@@ -279,10 +282,24 @@ for (let i = 0; i < evs.length; i++) if (!absorbed.has(i)) catalog.push(evs[i]);
 // калибровка D15–D19: числа поверх события с тем же id (или его псевдонимом); калибровка важнее исходной записи
 const byAnyId = new Map(); for (const e of catalog) { byAnyId.set(e.id, e); for (const a of e.aliases || []) byAnyId.set(a, e); }
 log.calibration = { applied: 0, newEvents: 0, files: frags.filter((f) => f.calib).map((f) => f.file) };
-for (const f of frags) if (f.calib) for (const c of (f.p.extra && f.p.extra.eventCatalog) || []) {
+log.calibration.duplicatesMerged = [];
+for (const f of frags) if (f.calib) for (const c of [...((f.p.extra && f.p.extra.eventCatalog) || []), ...((f.p.extra && f.p.extra.eventCalibration) || [])]) {
   const t = byAnyId.get(c.id) || byAnyId.get(evAlias[c.id]) || byAnyId.get((D.alias.events || {})[c.id]);
-  if (t) { const { id, ...rest } = c; Object.assign(t, rest, { calibrated: f.tag, from: [...new Set([...(t.from || []), f.tag])] }); log.calibration.applied++; }
-  else { catalog.push({ ...c, from: [f.tag], calibrated: f.tag }); byAnyId.set(c.id, catalog[catalog.length - 1]); log.calibration.newEvents++; }
+  // калибровщик нашёл, что событие D00 повторяет событие другого фрагмента: склеиваем
+  const dup = c.duplicateOf && byAnyId.get(c.duplicateOf);
+  if (dup && t && dup !== t) {
+    dup.aliases = [...new Set([...(dup.aliases || []), t.id, ...(t.aliases || [])])];
+    dup.playerMoves = [...(dup.playerMoves || []), ...(t.playerMoves || [])];
+    dup.from = [...new Set([...(dup.from || []), ...(t.from || []), f.tag])];
+    evAlias[t.id] = dup.id;
+    const i = catalog.indexOf(t); if (i >= 0) catalog.splice(i, 1);
+    byAnyId.set(t.id, dup);
+    log.calibration.duplicatesMerged.push(`${t.id} -> ${dup.id}`);
+    continue;
+  }
+  const { id, from: _f, sourceFragment: _s, duplicateOf: _d, ...rest } = c;
+  if (t) { Object.assign(t, rest, { calibrated: f.tag, from: [...new Set([...(t.from || []), f.tag])] }); log.calibration.applied++; }
+  else { catalog.push({ ...rest, id: c.id, from: [f.tag], calibrated: f.tag }); byAnyId.set(c.id, catalog[catalog.length - 1]); log.calibration.newEvents++; }
 }
 // ходы игрока — по новым id; поле эффекта — по словарю синонимов
 const FIELD_SYN = D.effectFieldSynonyms || {};

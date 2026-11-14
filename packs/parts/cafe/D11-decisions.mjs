@@ -199,7 +199,7 @@ export const alias = {
 // Чья запись — основа, если в группе несколько версий (id -> тег фрагмента).
 export const prefer = {
   violations: { accessibility_barrier: 'D08', card_surcharge_undisclosed: 'D08', loud_music_noise: 'D08', occupancy_contrary_to_co: 'D01', single_use_handouts: 'D08', snow_ice_not_cleared: 'D07', overcrowding: 'D08', retaliation: 'D05', illegal_deductions: 'D05', pay_frequency_violation: 'D10', commercial_waste_in_litter_basket: 'D07', hand_wash_station_down: 'D08', banned_additive_cbd: 'D08', foam_containers: 'D08' },
-  levers: { hvac_service: 'D03', insurance_package: 'D09', entrance_floor_safety: 'D07', winter_proofing: 'D07', laptop_policy: 'D02', owner_schedule: 'D10', snow_ice_plan: 'D07', waste_service: 'D04', delivery_apps: 'D06', harassment_prevention: 'D05', job_ads: 'D05', card_pricing: 'D06', catering: 'D06', day_end_surplus: 'D04', seasonal_menu: 'D04', restroom_access: 'D02', seating_layout: 'D02', takeout_packaging: 'D08', utility_concept: 'D01', music: 'D08' },
+  levers: { hours: 'D06', hvac_service: 'D03', insurance_package: 'D09', entrance_floor_safety: 'D07', winter_proofing: 'D07', laptop_policy: 'D02', owner_schedule: 'D10', snow_ice_plan: 'D07', waste_service: 'D04', delivery_apps: 'D06', harassment_prevention: 'D05', job_ads: 'D05', card_pricing: 'D06', catering: 'D06', day_end_surplus: 'D04', seasonal_menu: 'D04', restroom_access: 'D02', seating_layout: 'D02', takeout_packaging: 'D08', utility_concept: 'D01', music: 'D08' },
   setup: { ac_replacement: 'D03', dob_alteration_filing_fee: 'D01', takeover_due_diligence: 'D14', sba_guaranty_fee: 'D09', con_ed_security_deposit: 'D01', convection_oven: 'D03', snow_kit: 'D07' },
   events: { january_slump: 'D06', chain_opens_nearby: 'D06', street_dig_long: 'D07', sidewalk_shed: 'D07', minimum_wage_march_2027: 'D09' },
   monthlyCosts: { turnover_replacement: 'D05', backflow_test: 'D03' },
@@ -290,6 +290,10 @@ export const drop = {
 
 // Правки после проверки первоисточника сборщиком (веб-поиск D11, 14.11.2026). section -> id -> поля.
 export const override = {
+  staff: {
+    trainee_barista: { hourlyWage: 17, cashWage: 17, note: 'D11: D05 set the pay ladder against a $21 barista (trainee $18, part-time $19). D12 moved the barista to $18 (NY DOL OEWS Q1 2026, NYC, SOC 35-3023: median $17.57, entry $17.07). The ladder is kept in order: a new barista starts at the NYC minimum wage, $17.00 (NY DOL; no increase on January 1, 2027).' },
+    part_time_barista: { hourlyWage: 18, cashWage: 18, note: 'D11: D05 had $19 against a $21 barista; with the D12 barista wage of $18 a part-timer is paid the same hourly rate (part-time work in New York carries no separate minimum).' },
+  },
   violations: {
     sign_without_permit: {
       fine: { base: 0, perMonth: 0, pctOfSaved: 1, max: null },
@@ -316,6 +320,7 @@ export const leverOptions = {
   snow_ice_plan: { cost: { staff_shovel: 30, contractor: 133 }, why: 'D07 prices are per winter month (December-March). The engine charges levers every month, so the cost is spread over 12 months: 90 x 4 / 12 = 30, 400 x 4 / 12 = 133. Back to 90 and 400 once levers can have active months (D07 activeMonths).' },
   sidewalk_care: { cost: { sweep_open_close: 0, sweep_and_power_wash: 150 }, why: 'D07 valued 10 minutes a day of a barista ($85). Staff hours are already paid in staff.hoursPerMonth, so charging it again counts the same hour twice. Power washing stays a real extra ($150 a visit, D07).' },
   delivery_hatch_rule: { cost: { spotter_and_cones: 0 }, why: 'The spotter is a barista already on shift (D07 valued 10 minutes x 16 days = $45); charging it again counts the same paid hours twice.' },
+  hours: { cost: { long: 2000 }, why: 'D12 recalculated the long-hours option with the D12 barista wage: 90 more paid hours x $18 x 1.116 employer taxes = $1,808 plus about $200 of power and supplies = about $2,000 (was $2,300 at $21). D06 options kept (it added the short day).' },
   refund_policy: { cost: { remake: 65 }, why: 'D10 put remade drinks at about 0.5% of sales ($250) valued at the menu price. A remake costs the shop its ingredients and cup, not the price: 0.5% x $50,000 x 0.26 (unit.cogsPerUnit / unit.refPrice = 2.21 / 8.50) = $65.' },
   entrance_floor_safety: { cost: { mats_and_signs: 43 }, why: 'D07 had $80 without a price list; D14 found about $5 a mat a week (2 mats x 5 x 52 / 12 = $43, chainstoreage.com vendor estimate).' },
 };
