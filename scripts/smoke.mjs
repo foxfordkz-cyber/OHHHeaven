@@ -155,10 +155,10 @@ const run = {
     const packs = await get('/api/packs');
     const pack = packs.niches?.cafe;
     const all = (k) => [...(pack?.[k] ?? []), ...(packs.common?.[k] ?? [])];
-    for (const rep of all('reports')) {
-      const sc = all('shortcuts').find((s) => rep.checks?.includes(s.violation));
-      if (sc) { ctx.report = rep; ctx.shortcut = sc; break; }
-    }
+    // Prefer off-the-books wages: nobody finds it by routine in the first month, so the complaint is what triggers the case.
+    const pairs = all('reports').flatMap((rep) => all('shortcuts').filter((s) => rep.checks?.includes(s.violation)).map((sc) => ({ rep, sc })));
+    const pick = pairs.find((x) => x.sc.id === 'cash_wages') ?? pairs[0];
+    if (pick) { ctx.report = pick.rep; ctx.shortcut = pick.sc; }
     ctx.report ??= all('reports')[0];
     if (ctx.shortcut) ack(await action(ctx.b.token, { type: 'set_orders', orders: { shortcuts: [ctx.shortcut.id] } }), 'set_orders shortcut');
     return `A at ${pa.address}, B at ${pb.address}${ctx.shortcut ? `; B uses '${ctx.shortcut.id}'` : ''}`;
@@ -178,6 +178,13 @@ const run = {
   },
   async case() {
     must(ctx.report, 'no report type in packs');
+    // The city may already have caught and closed owner 2 (a closed business cannot be reported): wait until it reopens.
+    if ((await view(ctx.b.token)).business?.status === 'closed') {
+      if (ctx.clock) await clock({ paused: false, dayMs: 40 });
+      const reopened = await waitFor(async () => (await view(ctx.b.token)).business?.status === 'open', ctx.clock ? 30_000 : 20 * 2_000, 250);
+      if (ctx.clock) await clock({ paused: true });
+      must(reopened, 'owner 2 stayed closed');
+    }
     const before = (await view(ctx.a.token)).me.inbox?.length ?? 0;
     ack(await action(ctx.a.token, { type: 'report', targetBusinessId: ctx.b.businessId, reportId: ctx.report.id }), 'report');
     const startDay = (await view()).world.day;
