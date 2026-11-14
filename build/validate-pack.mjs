@@ -45,6 +45,27 @@ if (!isCommon) {
   const c = pack.capacity || {};
   if (!num(c.unitsPerStaffMonth) && !num(c.hardCapUnits)) err('capacity: нужно unitsPerStaffMonth или hardCapUnits');
   if (!num(c.minStaff) || !num(c.maxStaff)) err('capacity.minStaff / maxStaff: нужны числа');
+  const z = pack.sizing || {};
+  for (const k of ['min', 'max', 'default', 'sqftPerUnit', 'unitsServedPerSizeMonth', 'cleaningCostPerSizeMonth']) if (!num(z[k])) err(`sizing.${k}: нужно число`);
+  if (!str(z.unitName)) err('sizing.unitName: пусто');
+  if (num(z.min) && num(z.max) && num(z.default) && !(z.min <= z.default && z.default <= z.max)) err('sizing: должно быть min <= default <= max');
+  const b = pack.benchmarks || {};
+  for (const k of ['cogsPct', 'laborPct', 'rentPct', 'netMarginPct']) if (!num(b[k]) || b[k] > 1) err(`benchmarks.${k}: нужна доля от 0 до 1`);
+  const kits = Array.isArray(pack.kits) ? pack.kits : [];
+  const setupById = new Map((Array.isArray(pack.setup) ? pack.setup : []).filter((x) => x && x.id).map((x) => [x.id, x]));
+  for (const want of ['lean', 'standard', 'premium']) if (!kits.some((k) => k && k.id === want)) err(`kits: нет набора «${want}»`);
+  kits.forEach((k, i) => {
+    const at = `kits[${i}]${k && k.id ? ` (${k.id})` : ''}`;
+    if (!k || !Array.isArray(k.items)) return err(`${at}: нужен список items`);
+    if (!num(k.size) || (num(z.min) && k.size < z.min) || (num(z.max) && k.size > z.max)) err(`${at}.size: вне sizing.min…max`);
+    if (!str(k.name) || !str(k.pitch)) err(`${at}: нужны name и pitch`);
+    const inKit = new Set(k.items.map((x) => x && x.id));
+    k.items.forEach((x) => { if (!x || !setupById.has(x.id)) err(`${at}: предмета «${x && x.id}» нет в setup`); });
+    for (const [id, it] of setupById) if (it.required === true && !inKit.has(id)) err(`${at}: нет обязательного предмета «${id}»`);
+    let total = 0;
+    k.items.forEach((x) => { const it = setupById.get(x && x.id); if (it && num(it.cost)) total += it.cost * (it.scalesWithSize ? k.size : (num(x.qty) ? x.qty : 1)); });
+    if (num(pack.startCapital) && total > pack.startCapital) err(`${at}: набор стоит ${Math.round(total)}, это больше startCapital ${pack.startCapital}`);
+  });
 }
 
 // Общая проверка списков
@@ -76,7 +97,7 @@ checkList('setup', (it, at) => {
 });
 checkList('monthlyCosts', (it, at) => {
   if (!num(it.amount) || it.amount < 0) err(`${at}.amount: нужно число`);
-  oneOf(it.basis, ['fixed', 'per_staff', 'per_unit', 'pct_revenue'], at, 'basis');
+  oneOf(it.basis, ['fixed', 'per_staff', 'per_unit', 'pct_revenue', 'per_size'], at, 'basis');
   oneOf(it.kind, ['rent', 'utilities', 'insurance', 'supplies', 'cleaning', 'marketing', 'fees', 'maintenance', 'debt', 'other'], at, 'kind');
   if (it.basis === 'pct_revenue' && it.amount > 1) err(`${at}.amount: доля, а не проценты`);
 });
@@ -122,6 +143,7 @@ checkList('violations', (it, at) => {
 });
 checkList('officials', (it, at) => {
   if (!str(it.agency)) err(`${at}.agency: пусто`);
+  oneOf(it.role, ['inspector', 'tax_auditor'], at, 'role');
   if (!Array.isArray(it.checks) || !it.checks.length) warn(`${at}.checks: чиновник ничего не проверяет`);
   else it.checks.forEach((c) => { if (!violationIds.has(c)) err(`${at}.checks: нарушения «${c}» нет`); });
 });
@@ -146,7 +168,7 @@ arr('violations').forEach((v) => { if (v && v.id && !reachable.has(v.id)) warn(`
 // Минимальный объём
 const min = isCommon
   ? { taxes: 5, shortcuts: 5, violations: 6, officials: 2, ruleCards: 8 }
-  : { setup: 10, monthlyCosts: 10, staff: 2, levers: 4, shortcuts: 8, violations: 10, officials: 2, attacks: 4, events: 5, ruleCards: 12 };
+  : { setup: 12, monthlyCosts: 10, staff: 2, levers: 4, shortcuts: 8, violations: 10, officials: 2, attacks: 4, events: 5, ruleCards: 12 };
 for (const [k, n] of Object.entries(min)) if (arr(k).length < n) warn(`${k}: ${arr(k).length}, нужно не меньше ${n}`);
 if (!arr('sources').length) warn('sources: список источников пуст');
 

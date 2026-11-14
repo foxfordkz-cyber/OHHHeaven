@@ -1,6 +1,6 @@
-# Формат «пакета ниши» — контракт между исследователями и движком
+# Формат «пакета ниши» — контракт между данными и движком
 
-Решение ведущего, 14 ноября 2026, 10:46 UTC. Движок один на все ниши; ниша — это файл данных `packs/<id>.json`. Чтобы в игре было пять ниш «как в жизни», пять исследователей сдают пять файлов **в одном формате**. Файл, который не проходит проверку `node build/validate-pack.mjs packs/<id>.json`, не принимается.
+Решение ведущего, 14 ноября 2026, 10:46 UTC. Движок один на все ниши; ниша — это файл данных `packs/<id>.json`. Чтобы в игре было пять ниш «как в жизни», агенты ниш сдают пять файлов **в одном формате**; типы — `Pack` и `CommonPack` в `shared/src/types.ts`. Файл, который не проходит проверку `node build/validate-pack.mjs packs/<id>.json`, не принимается.
 
 ## Правила для содержимого
 
@@ -36,16 +36,38 @@
                 "hardCapUnits": null,          // для отеля и квартир: число комнат × 30 или число квартир
                 "note": "…" },
 
+  // Физический размер: места в кафе, кресла, метры полок, комнаты, квартиры. Игрок выбирает size; движок считает,
+  // что будет, если мест мало (очередь, потерянные продажи) или много (лишние расходы, пустой зал).
+  "sizing": { "unitName": "seat", "min": 6, "max": 40, "default": 18,
+              "sqftPerUnit": 18,                 // площадь на одно место вместе с проходами
+              "unitsServedPerSizeMonth": 150,    // сколько заказов «в зале» в месяц пропускает одно место
+              "takeawayShare": 0.45,             // доля спроса, которой место не нужно; 0, если такого нет
+              "cleaningCostPerSizeMonth": 12,
+              "crowdPenaltyAbove": 0.9, "emptyPenaltyBelow": 0.3,
+              "source": "…", "confidence": "estimate", "note": "расчёт" },
+
   // Разовые расходы до открытия: ремонт, мебель, оборудование, депозит, разрешения, лицензии, первый запас.
   "setup": [
     { "id": "espresso_machine", "name": "Espresso machine", "kind": "equipment",   // equipment | furniture | buildout | deposit | permit | license | inventory | other
-      "cost": 9000, "required": true, "source": "…", "confidence": "estimate", "note": "…" }
+      "cost": 9000, "required": true, "lifespanMonths": 84, "qualityBonus": 0.03,
+      "source": "…", "confidence": "estimate", "note": "…" },
+    { "id": "chair", "name": "Dining chair", "kind": "furniture", "cost": 85, "required": true,
+      "scalesWithSize": true,                     // цена за одну единицу размера: движок умножит на size
+      "lifespanMonths": 60, "source": "…", "confidence": "verified" }
+  ],
+
+  // Три готовых набора. Система рекомендует их игроку: он не выбирает мебель по одной.
+  // В каждом — все предметы с required: true. qty у предметов со scalesWithSize не указывается (берётся size).
+  "kits": [
+    { "id": "lean",     "name": "Lean start",  "size": 12, "items": [ { "id": "espresso_machine", "qty": 1 }, { "id": "chair", "qty": 12 } ], "pitch": "Cheapest way to open. Small room, used equipment." },
+    { "id": "standard", "name": "Standard",    "size": 18, "items": [ … ], "pitch": "…" },
+    { "id": "premium",  "name": "Premium",     "size": 24, "items": [ … ], "pitch": "…" }
   ],
 
   // Ежемесячные расходы, кроме зарплаты и налогов.
   "monthlyCosts": [
     { "id": "rent", "name": "Rent", "kind": "rent",      // rent | utilities | insurance | supplies | cleaning | marketing | fees | maintenance | debt | other
-      "basis": "fixed",                                   // fixed | per_staff | per_unit | pct_revenue
+      "basis": "fixed",                                   // fixed | per_staff | per_unit | pct_revenue | per_size
       "amount": 9500, "source": "…", "confidence": "verified", "note": "…" }
   ],
 
@@ -92,6 +114,7 @@
   // Госслужащие, которые проверяют эту нишу (роли для бесплатных игроков).
   "officials": [
     { "id": "health_inspector", "name": "Health inspector", "agency": "NYC DOHMH",
+      "role": "inspector",                          // inspector (городские инспекции) | tax_auditor (налоги и труд)
       "checks": ["dirty_surfaces"], "realProcess": "Как проверка идёт в жизни, 2–3 фразы", "source": "…" }
   ],
 
@@ -111,6 +134,9 @@
     { "id": "letter_grade", "title": "Letter grades", "text": "До 280 знаков, по-английски, с числом.", "source": "…" }
   ],
 
+  // Нормы отрасли для аналитики игрока: доли от выручки.
+  "benchmarks": { "cogsPct": 0.30, "laborPct": 0.30, "rentPct": 0.08, "netMarginPct": 0.06, "source": "…", "confidence": "verified" },
+
   "sources": [ { "url": "…", "title": "…", "checked": "2026-11-14" } ]
 }
 ```
@@ -119,7 +145,10 @@
 
 | Раздел | Минимум |
 |---|---|
-| `setup` | 10 строк, среди них мебель, оборудование, депозит, ремонт, все обязательные разрешения и лицензии |
+| `setup` | 12 строк, среди них мебель и оборудование поимённо, депозит, ремонт, все обязательные разрешения и лицензии |
+| `sizing` | заполнен полностью |
+| `kits` | ровно три: `lean`, `standard`, `premium` |
+| `benchmarks` | заполнен, с источником |
 | `monthlyCosts` | 10 строк |
 | `staff` | 2 роли |
 | `taxes` | всё, что специфично для ниши |
