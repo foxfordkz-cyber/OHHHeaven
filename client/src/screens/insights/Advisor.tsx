@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import type { AdvisorAnswer, OwnerView, Query } from '@shared/types';
+import type { AdvisorAnswer, OwnerView, Query } from '@ohh/shared/types';
 import { AiBadge, Badge, Button, Card, Icon, Sheet, Skeleton } from '../../ui';
 import { advisorPresets } from './model';
 

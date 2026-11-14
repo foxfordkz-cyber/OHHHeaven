@@ -15,6 +15,14 @@ export interface CityMapProps {
   niche?: NicheId;
   onPick?: (placeId: string) => void;
   onOpenBusiness?: (businessId: string) => void;
+  /** live mode: the button on the card of a tapped business */
+  businessCta?: { label: string; onClick: (businessId: string) => void };
+  /** shows the expand button; the caller opens the full-screen map */
+  onExpand?: () => void;
+  /** the map sits inside a scrolling page */
+  embedded?: boolean;
+  /** open this business's card right away */
+  initialBusinessId?: string;
   /** stand-in only: height in px */
   height?: number;
   /** stand-in only: highlighted place in pick mode */
@@ -26,7 +34,7 @@ export function CityMapSlot(props: CityMapProps) {
   if (import.meta.env.MODE === 'test') return <StubCityMap {...props} />;
   const { height = 240, selectedPlaceId: _selected, ...rest } = props;
   return (
-    <div style={{ height, borderRadius: 16, overflow: 'hidden' }}>
+    <div className="glass-frame" style={{ height }}>
       <CityMap {...rest} intro={false} />
     </div>
   );

@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import type { NicheId, OwnerView } from '@shared/types';
+import type { NicheId, OwnerView } from '@ohh/shared/types';
 import { AiBadge, Badge, Card, Icon, NICHE_ICON, SegmentedControl } from '../../ui';
-import { compactMoney, money, nicheName, nicheShort } from '../insights/format';
-import { allBoards, officialsBoard, type BoardRow, type NicheBoard } from './prizes';
+import { compactMoney, money, nicheName, nicheShort, ordinal } from '../insights/format';
+import { allBoards, myResult, officialsBoard, type BoardRow, type NicheBoard } from './prizes';
 import './end.css';
 
 export type RankingRow = { name: string; points: number; isAi: boolean };
 
-/** Officials ranking is not in OwnerView yet: take it from `extra` (see agents/11.md, requests). */
+/** Officials ranking of the city (OwnerView.officialsRanking); empty until the server sends it. */
 export function rankingOf(view: OwnerView): RankingRow[] {
-  const extra = (view as OwnerView & { extra?: { officialsRanking?: RankingRow[] } }).extra;
-  return extra?.officialsRanking ?? [];
+  return view.officialsRanking ?? [];
 }
 
 function Row({ r, testMoney }: { r: BoardRow; testMoney: boolean }) {
@@ -33,6 +32,13 @@ function Row({ r, testMoney }: { r: BoardRow; testMoney: boolean }) {
   );
 }
 
+/** "Top 3 human businesses split it 50 / 30 / 20." — or the split used when fewer can win. */
+export function splitText(split: number[]): string {
+  if (split.length === 0) return 'No human business can win it yet.';
+  if (split.length === 1) return 'The only human business that can win takes it all.';
+  return `Top ${split.length} human businesses split it ${split.join(' / ')}.`;
+}
+
 /** One niche: podium highlighted, prize per place, AI marked without prize, my row pinned at the bottom if it is far down. */
 export function NicheTable({ board, testMoney, limit }: { board: NicheBoard; testMoney: boolean; limit?: number }) {
   const shown = limit ? board.rows.slice(0, limit) : board.rows;
@@ -49,7 +55,7 @@ export function NicheTable({ board, testMoney, limit }: { board: NicheBoard; tes
         </ol>
       )}
       <p className="xsmall faint lb-note">
-        Prize fund of this niche: {money(board.pool, { cents: true })}. Top 3 human businesses split it 50 / 30 / 20. AI businesses run by the city win nothing.
+        Prize fund of this niche: {money(board.pool, { cents: true })}. {splitText(board.split)} AI businesses run by the city win nothing.
       </p>
     </div>
   );
@@ -99,9 +105,12 @@ export function LeaderboardCard({ view, onOpen }: { view: OwnerView; onOpen?: ()
   const niche = view.business?.niche;
   const board = allBoards(view).find((b) => b.niche === niche);
   if (!board) return null;
-  const mine = board.mine;
+  const me = myResult(view);
+  const subtitle = me
+    ? `#${me.rank} of ${me.of} ${nicheName(board.niche).toLowerCase()}${me.humans > 0 && me.humans < me.of ? ` · ${ordinal(me.humanRank)} of ${me.humans} run by players` : ''}`
+    : nicheName(board.niche);
   return (
-    <Card title="Leaderboard" subtitle={mine ? `#${mine.rank} of ${board.rows.length} ${nicheName(board.niche).toLowerCase()}` : nicheName(board.niche)}
+    <Card title="Leaderboard" subtitle={subtitle}
       action={onOpen ? <button type="button" className="chip" onClick={onOpen}>All <Icon name="chevronRight" size={14} /></button> : undefined}>
       <NicheTable board={board} testMoney={view.world.config.demo} limit={3} />
     </Card>

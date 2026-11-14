@@ -3,13 +3,13 @@
 const usd0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 const usd2 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const int0 = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
-const dec1 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const dec1 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
 
-/** $41,230 · −$1,200 · +$2,480 with `sign`. Cents only below $100 or when asked. */
+/** $41,230 · −$1,200 · +$2,480 with `sign`. Cents only for amounts below $100 that have them ($7.50, not $89.00), or when asked. */
 export function money(n: number, opts: { sign?: boolean; cents?: boolean } = {}): string {
   if (!Number.isFinite(n)) return '—';
   const abs = Math.abs(n);
-  const body = (opts.cents ?? abs < 100) ? usd2.format(abs) : usd0.format(Math.round(abs));
+  const body = (opts.cents ?? (abs < 100 && Math.round(abs * 100) % 100 !== 0)) ? usd2.format(abs) : usd0.format(Math.round(abs));
   if (n < 0) return `−${body}`;
   return opts.sign && n > 0 ? `+${body}` : body;
 }
@@ -38,7 +38,8 @@ export function toFraction(x: number): number {
 export function pct(x: number, digits = 0): string {
   if (!Number.isFinite(x)) return '—';
   const v = toFraction(x) * 100;
-  return `${digits ? v.toFixed(digits) : Math.round(v)}%`;
+  const text = `${digits ? Math.abs(v).toFixed(digits) : Math.abs(Math.round(v))}%`;
+  return v < 0 && text !== '0%' ? `−${text}` : text;
 }
 
 export function monthsLabel(n: number | null): string {
@@ -71,6 +72,13 @@ export const NICHE_NAMES: Record<string, string> = {
 };
 
 export const nicheName = (niche: string): string => NICHE_NAMES[niche] ?? niche;
+
+/** 1st, 2nd, 3rd, 4th … 11th, 12th, 13th, 21st. */
+export function ordinal(n: number): string {
+  const tens = n % 100;
+  const suffix = tens >= 11 && tens <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th';
+  return `${n}${suffix}`;
+}
 
 /** Short tab labels that fit a 390 px segmented control. */
 export const NICHE_SHORT: Record<string, string> = { cafe: 'Cafes', barbershop: 'Barbers', bodega: 'Stores', guesthouse: 'Hotels', rentals: 'Rentals' };

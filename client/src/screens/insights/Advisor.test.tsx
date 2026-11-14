@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
-import type { Query } from '@shared/types';
-import { advisorAnswer, cafeView } from './fixtures';
+import type { Query } from '@ohh/shared/types';
+import { advisorAnswer, cafeRiskyView, cafeView } from './fixtures';
 import { AdvisorCard, askAdvisor, TIMEOUT_TEXT } from './Advisor';
 
 afterEach(() => { cleanup(); vi.useRealTimers(); localStorage.clear(); });
@@ -28,9 +28,9 @@ describe('askAdvisor', () => {
 
 describe('Ask the advisor card', () => {
   it('a preset question shows the answer, its sources and who answered', async () => {
-    render(<AdvisorCard view={cafeView} ask={async (q: Query) => advisorAnswer((q as { question: string }).question)} />);
+    render(<AdvisorCard view={cafeRiskyView} ask={async (q: Query) => advisorAnswer((q as { question: string }).question)} />);
     fireEvent.click(screen.getByText('Is paying cash wages worth the risk?'));
-    expect(await screen.findByText(/You save about \$940 a month/)).toBeTruthy();
+    expect(await screen.findByText(/You keep about \$1,414 a month/)).toBeTruthy();
     expect(screen.getByRole('link', { name: /IRS: Trust Fund Recovery Penalty/ }).getAttribute('href')).toBe('https://www.irs.gov/TFRP');
     expect(screen.getByText('From the rule book')).toBeTruthy();
   });
@@ -40,6 +40,8 @@ describe('Ask the advisor card', () => {
     fireEvent.change(screen.getByLabelText('Your question'), { target: { value: 'Where do I find a coffee supplier in real life?' } });
     fireEvent.click(screen.getByRole('button', { name: 'Ask' }));
     expect(screen.getByText(/Thinking/)).toBeTruthy();
+    // RTL turns the act environment off between its own calls; this manual act() needs it on
+    (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
     await act(async () => { await vi.advanceTimersByTimeAsync(5_000); });
     expect(screen.getByText(TIMEOUT_TEXT, { exact: false })).toBeTruthy();
   });

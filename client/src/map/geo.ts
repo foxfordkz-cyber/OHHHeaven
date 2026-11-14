@@ -9,11 +9,11 @@ export interface NicheMeta { label: string; color: string; glyph: string; unitNa
 
 /** Fallback sizing when packs are not loaded yet (estimate; packs/<niche>.json sizing wins). */
 export const NICHE_META: Record<NicheId, NicheMeta> = {
-  cafe: { label: 'Café', color: '#ffb347', glyph: '☕', unitName: 'seats', sqftPerUnit: 18 },
-  barbershop: { label: 'Barbershop', color: '#4cc9f0', glyph: '✂', unitName: 'chairs', sqftPerUnit: 55 },
-  bodega: { label: 'Bodega', color: '#7ee081', glyph: '🛒', unitName: 'shelf feet', sqftPerUnit: 12 },
-  guesthouse: { label: 'Guesthouse', color: '#c77dff', glyph: '🛏', unitName: 'rooms', sqftPerUnit: 280 },
-  rentals: { label: 'Rentals', color: '#ff7aa8', glyph: '🏠', unitName: 'apartments', sqftPerUnit: 650 },
+  cafe: { label: 'Café', color: '#e8a53a', glyph: '☕', unitName: 'seats', sqftPerUnit: 18 },
+  barbershop: { label: 'Barbershop', color: '#4f9fc4', glyph: '✂', unitName: 'chairs', sqftPerUnit: 55 },
+  bodega: { label: 'Bodega', color: '#6fae62', glyph: '🛒', unitName: 'shelf feet', sqftPerUnit: 12 },
+  guesthouse: { label: 'Guesthouse', color: '#a487cf', glyph: '🛏', unitName: 'rooms', sqftPerUnit: 280 },
+  rentals: { label: 'Rentals', color: '#d9768f', glyph: '🏠', unitName: 'apartments', sqftPerUnit: 650 },
 };
 
 export type LngLat = [number, number];

@@ -1,6 +1,6 @@
 import { BrowserRouter, Link, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { ReactNode } from 'react';
-import { Badge, Banner, Button, Card, Icon, List, ListRow, TopBar } from '../ui';
+import { Badge, Banner, Button, Card, Icon, List, ListRow, ThemeToggle, TopBar } from '../ui';
 import { DevUi } from '../ui/DevUi';
 import { getDevScreens, getRoutes, type DevScreen, type ScreenRoute } from './screens';
 import { StoreToaster } from './dev';
@@ -96,6 +96,7 @@ function Shell({ wide, children }: { wide?: boolean; children: ReactNode }) {
     <div className={`app${wide ? ' app--wide' : ''}`}>
       <StatusBar />
       {children}
+      <ThemeToggle floating />
     </div>
   );
 }

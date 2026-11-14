@@ -1,13 +1,16 @@
-import type { ScreenModule } from '../../app/screens';
-import { useCatalog } from '../../app/catalog';
+// Network tab of /biz (neighbors, deals, block fund, report to the city) and its /dev pages.
+// The router of agent 08 finds this module by itself; agent 10 renders the tab from getBizTabs().
+import type { ScreenModule } from './deps';
 import { NetworkTabScreen } from './NetworkTab';
-
-/** The Network tab of /biz: neighbors, deals, the block fund and "report to the city". */
-function NetworkTabRoute() {
-  const catalog = useCatalog();
-  return <NetworkTabScreen places={catalog?.places} packs={catalog?.packs ?? null} />;
-}
+import { DevNetwork, DevNetworkSetup, DevNetworkWeek } from './dev';
 
 export const screen: ScreenModule = {
-  bizTabs: [{ id: 'network', label: 'Network', order: 40, element: <NetworkTabRoute /> }],
+  bizTabs: [{ id: 'network', label: 'Network', order: 40, element: <NetworkTabScreen /> }],
+  dev: [
+    { id: 'network', title: 'Network tab — offers, deals, block fund, reports', render: () => <DevNetwork /> },
+    { id: 'network-week', title: 'Network tab — block fund on, report used this week', render: () => <DevNetworkWeek /> },
+    { id: 'network-setup', title: 'Network tab — business not open yet', render: () => <DevNetworkSetup /> },
+  ],
 };
+
+export { NetworkTab, NetworkTabScreen } from './NetworkTab';

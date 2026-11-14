@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import type { OwnerView } from '@shared/types';
+import type { OwnerView } from '@ohh/shared/types';
 import { Badge, Button, Card, Icon, ProgressBar } from '../../ui';
 import { useGame, useOwnerView } from '../../app/store';
 import { LeaderboardCard } from '../end/Leaderboards';
+import { usePackInfo, type PackInfo } from '../end/rulecards';
 import { AdvisorCard, type AskFn } from './Advisor';
 import { BreakEvenChart, CapacityBars, CostBar, TrendChart } from './Charts';
 import { int, money, pct, unitWord } from './format';
@@ -11,6 +12,8 @@ import { StatTile, Tip } from './Tip';
 import './insights.css';
 
 export interface InsightsLinks { plan: string; leaderboards: string }
+/** Names from the packs (taxes, violations); without them ids are turned into words. */
+export type PackNames = Partial<Pick<PackInfo, 'taxName' | 'violationName'>>;
 const LINKS: InsightsLinks = { plan: '/end/plan', leaderboards: '/leaderboards' };
 
 function TitleTip({ k, children }: { k: string; children: string }) {
@@ -27,7 +30,7 @@ function PlanCta({ href }: { href: string }) {
 }
 
 /** The Insights tab of /biz: the business seen with an owner's eyes. Shows only numbers from the view. */
-export function InsightsTab({ view, ask, links = LINKS }: { view: OwnerView; ask: AskFn; links?: InsightsLinks }) {
+export function InsightsTab({ view, ask, links = LINKS, names = {} }: { view: OwnerView; ask: AskFn; links?: InsightsLinks; names?: PackNames }) {
   const navigate = useNavigate();
   const b = view.business;
   if (!b || !view.analytics) {
@@ -45,8 +48,8 @@ export function InsightsTab({ view, ask, links = LINKS }: { view: OwnerView; ask
   const costs = costModel(view);
   const trend = trendModel(view);
   const cap = capacityModel(view);
-  const tax = taxModel(view);
-  const risk = riskModel(view);
+  const tax = taxModel(view, names.taxName);
+  const risk = riskModel(view, names.violationName);
   const unit = unitWord(b.niche, 2);
 
   return (
@@ -116,7 +119,7 @@ export function InsightsTab({ view, ask, links = LINKS }: { view: OwnerView; ask
 
       {tax && (
         <Card title={<TitleTip k="taxes">Taxes ahead</TitleTip>} tone={tax.enough === false ? 'warn' : 'default'}
-          subtitle={tax.next ? `${money(tax.next.amount)} due ${tax.next.label}${tax.next.inDays ? ` · in ${tax.next.inDays} days` : ' · today'}` : 'Nothing due right now'}>
+          subtitle={tax.next ? `${money(tax.next.amount)} due ${tax.next.label} · ${tax.next.inDays === 0 ? 'today' : tax.next.inDays === 1 ? 'tomorrow' : `in ${tax.next.inDays} days`}` : 'Nothing due right now'}>
           {tax.next && (
             <div className={`ins-taxline ${tax.enough ? 'ins-taxline--ok' : 'ins-taxline--short'}`}>
               <Icon name={tax.enough ? 'check' : 'alert'} size={16} />
@@ -137,6 +140,17 @@ export function InsightsTab({ view, ask, links = LINKS }: { view: OwnerView; ask
             <StatTile k="exposure" label="Fines if found today" value={money(risk.exposure)} tone={risk.exposure > 0 ? 'bad' : 'good'} />
             <StatTile k="savings" label="Saved by cutting corners" value={money(risk.saved)} tone="neutral" sub={risk.open.length ? `${risk.open.length} open violation${risk.open.length > 1 ? 's' : ''}` : undefined} />
           </div>
+          {risk.open.length > 0 && (
+            <ul className="ins-reasons" aria-label="Open violations">
+              {risk.open.map((t) => (
+                <li key={t.violationId}>
+                  <span className="grow">{t.name}</span>
+                  <span className="faint small">{t.months} {t.months === 1 ? 'month' : 'months'}</span>
+                  {t.saved > 0 && <span className="num">{money(t.saved)} saved</span>}
+                </li>
+              ))}
+            </ul>
+          )}
         </Card>
       )}
 
@@ -158,6 +172,7 @@ export function InsightsTab({ view, ask, links = LINKS }: { view: OwnerView; ask
 export function InsightsTabConnected({ links }: { links?: InsightsLinks }) {
   const view = useOwnerView();
   const { query } = useGame();
+  const names = usePackInfo();
   if (!view) return <p className="muted">Join the city to see your analytics.</p>;
-  return <InsightsTab view={view} ask={query} links={links} />;
+  return <InsightsTab view={view} ask={query} links={links} names={names} />;
 }

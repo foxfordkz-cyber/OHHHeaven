@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Debrief, OwnerView, PackRuleCard, Query } from '@shared/types';
+import type { Debrief, OwnerView, PackRuleCard, Query } from '@ohh/shared/types';
 import { Badge, Button, Card, Icon, MoneyText, RuleCard, Skeleton } from '../../ui';
 import { useGame, useOwnerView } from '../../app/store';
-import { money, nicheName } from '../insights/format';
+import { money, nicheName, ordinal } from '../insights/format';
 import { OriginBadge } from '../insights/Advisor';
 import { Leaderboards } from './Leaderboards';
 import { myResult } from './prizes';
@@ -59,9 +59,10 @@ export function EndScreen({ view, ask, cards, planHref = '/end/plan' }: { view: 
           <>
             <div className="end-place num" aria-label={`Place ${result.rank}`}>#{result.rank}</div>
             <div className="h3">of {result.of} {nicheName(result.niche).toLowerCase()}</div>
+            {result.humans > 0 && result.humans < result.of && <div className="small muted">{ordinal(result.humanRank)} of {result.humans} run by players · prizes go to the top 3 of them</div>}
             <p className="muted" style={{ margin: 'var(--s-2) 0 0' }}>
               {result.payout > 0
-                ? <>{result.final ? 'You won' : 'Prize at this place'} <strong className="num">{money(result.payout, { cents: true })}</strong>{testMoney ? ' in test money' : ''}.</>
+                ? <>{result.final ? 'You won' : ended ? 'Your prize:' : 'Prize at this place'} <strong className="num">{money(result.payout, { cents: true })}</strong>{testMoney ? ' in test money' : ''}.</>
                 : result.final ? 'No prize this season: only the top 3 human businesses of a niche win.' : 'Top 3 human businesses of each niche win a prize.'}
             </p>
             {!ended && <p className="xsmall faint" style={{ margin: 'var(--s-1) 0 0' }}>The table can still change until the last day of the season.</p>}
@@ -73,17 +74,21 @@ export function EndScreen({ view, ask, cards, planHref = '/end/plan' }: { view: 
         <h2 className="h2" style={{ margin: 0 }}>Where you lost money</h2>
         {debrief && <div className="row"><OriginBadge origin={debrief.origin} /><span className="xsmall faint">Debrief of your season</span></div>}
         {loading && <div className="stack-sm" aria-busy="true"><Skeleton height={72} /><Skeleton height={72} /><Skeleton height={72} /></div>}
-        {failed && <p className="muted small"><Icon name="alert" size={14} /> The debrief is not ready yet. Your plan below has the same three lessons.</p>}
+        {failed && <p className="muted small"><Icon name="alert" size={14} /> The debrief is not ready yet. Your plan lists the biggest losses from your own books.</p>}
         {debrief && (
           <>
             {debrief.headline && <p className="h3" style={{ margin: 0 }}>{debrief.headline}</p>}
             <LostMoney items={debrief.lostMoneyOn} cards={ruleCards} />
-            <Card title="What worked">
-              <ul className="end-list">{debrief.didWell.map((d) => <li key={d}>{d}</li>)}</ul>
-            </Card>
-            <Card title="Next time">
-              <ol className="end-list">{debrief.nextTime.map((d) => <li key={d}>{d}</li>)}</ol>
-            </Card>
+            {debrief.didWell.length > 0 && (
+              <Card title="What worked">
+                <ul className="end-list">{debrief.didWell.map((d) => <li key={d}>{d}</li>)}</ul>
+              </Card>
+            )}
+            {debrief.nextTime.length > 0 && (
+              <Card title="Next time">
+                <ol className="end-list">{debrief.nextTime.map((d) => <li key={d}>{d}</li>)}</ol>
+              </Card>
+            )}
           </>
         )}
       </section>

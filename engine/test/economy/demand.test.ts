@@ -8,7 +8,8 @@ import { act, config, ctxWith, owner, places, run } from '../fixtures/world';
 import { createWorld } from '../../src/index';
 
 const m = marketParams(cafePack);
-const shop = (id: string, over: Partial<DemandInput> = {}): DemandInput => ({ id, price: 6.5, quality: 0.5, reputation: 0.5, footTraffic: 0.5, marketing: 0, ...over });
+const REF = cafePack.unit.refPrice;
+const shop = (id: string, over: Partial<DemandInput> = {}): DemandInput => ({ id, price: REF, quality: 0.5, reputation: 0.5, footTraffic: 0.5, marketing: 0, ...over });
 
 describe('demand model (report 43, generalised)', () => {
   it('identical businesses get equal shares, exactly unitsPerSlotMonth at the reference point', () => {
@@ -19,7 +20,7 @@ describe('demand model (report 43, generalised)', () => {
   it('raising own price by 1% cuts own demand by about |priceElasticity| %', () => {
     for (const n of [1, 3, 6, 12]) {
       const base = monthlyDemand(m, Array.from({ length: n }, (_, i) => shop(`s${i}`)));
-      const up = monthlyDemand(m, Array.from({ length: n }, (_, i) => shop(`s${i}`, i === 0 ? { price: 6.5 * 1.01 } : {})));
+      const up = monthlyDemand(m, Array.from({ length: n }, (_, i) => shop(`s${i}`, i === 0 ? { price: REF * 1.01 } : {})));
       const pct = ((up.demand[0] - base.demand[0]) / base.demand[0]) * 100;
       expect(pct).toBeGreaterThan(cafePack.market.priceElasticity * 1.1);
       expect(pct).toBeLessThan(cafePack.market.priceElasticity * 0.9);
@@ -29,8 +30,20 @@ describe('demand model (report 43, generalised)', () => {
 
   it('when everyone raises prices the market shrinks', () => {
     const base = monthlyDemand(m, [shop('a'), shop('b'), shop('c')]).demand.reduce((a, b) => a + b, 0);
-    const up = monthlyDemand(m, [shop('a', { price: 7.5 }), shop('b', { price: 7.5 }), shop('c', { price: 7.5 })]).demand.reduce((a, b) => a + b, 0);
+    const up = monthlyDemand(m, [shop('a', { price: REF * 1.15 }), shop('b', { price: REF * 1.15 }), shop('c', { price: REF * 1.15 })]).demand.reduce((a, b) => a + b, 0);
     expect(up).toBeLessThan(base * 0.97);
+  });
+
+  it('a price far above fair loses money alone and together; up to fair × 1.1 costs only the ordinary elasticity', () => {
+    const city = (p0: number, others: number) => Array.from({ length: 6 }, (_, i) => shop(`s${i}`, { price: i === 0 ? p0 : others }));
+    const rev = (xs: DemandInput[], mm = m) => monthlyDemand(mm, xs).demand[0] * xs[0].price;
+    const atRef = rev(city(REF, REF));
+    expect(rev(city(REF * 1.5, REF))).toBeLessThan(atRef * 0.5);          // alone: +50% takes in less than half
+    expect(rev(city(REF * 1.5, REF * 1.5))).toBeLessThan(atRef * 0.6);    // together: customers go elsewhere
+    const inBand = monthlyDemand(m, city(REF * 1.08, REF)).demand[0] / monthlyDemand(m, city(REF, REF)).demand[0];
+    expect(inBand).toBeGreaterThan(Math.pow(1.08, -priceSensitivity(m, 6)) * 0.999);
+    const flat = marketParams({ ...cafePack, extra: { ...cafePack.extra, overpriceSteepness: 0 } });   // a pack can turn it off
+    expect(rev(city(REF * 1.5, REF), flat)).toBeGreaterThan(rev(city(REF * 1.5, REF)) * 3);
   });
 
   it('quality, reputation, location and ads each raise a business share', () => {

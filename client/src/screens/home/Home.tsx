@@ -6,8 +6,7 @@ import { CityMapSlot } from '../../app/slots';
 import { switchMode, useGame, useStoreState, useView } from '../../app/store';
 import {
   AiBadge, Badge, Banner, Button, Card, Clock, Feed, Icon, List, ListRow, MoneyText, NICHE_ICON, Skeleton, Stat, formatMoney, formatNumber,
-  type IconName,
-} from '../../ui';
+  type IconName, ThemeToggle } from '../../ui';
 import './home.css';
 
 const IDEA_EXAMPLES = ['A coffee shop near the subway', 'A barbershop with three chairs', 'A corner store with long hours'];
@@ -29,6 +28,7 @@ export function Home() {
   const view = useView();
   const { status, mode } = useStoreState();
   const catalog = useCatalog();
+  const navigate = useNavigate();
 
   if (!view) {
     return (
@@ -42,30 +42,63 @@ export function Home() {
   const businesses = visibleBusinesses(view);
   const ownerWithBusiness = view.kind === 'owner' && view.business ? view : null;
 
+  const lead = view.kind === 'city' || (view.kind === 'owner' && !view.business) ? (
+    <>
+      {view.kind === 'owner' && <ContinueCard />}
+      <Pitch />
+      <IdeaBox />
+      <Ctas />
+    </>
+  ) : view.kind === 'owner' ? (
+    <AwayCard view={view} />
+  ) : (
+    <DeskCard queue={view.queue.length} mine={view.mine.length} />
+  );
+
   return (
     <main className="screen home">
-      <CityStrip view={view} />
-      <CityMapSlot mode="live" places={catalog?.places ?? []} businesses={businesses} myBusinessId={ownerWithBusiness?.business?.id} weather={view.weather[0]} events={view.events} height={230} />
-      {view.kind === 'city' || (view.kind === 'owner' && !view.business) ? (
-        <>
-          {view.kind === 'owner' && <ContinueCard />}
-          <Pitch />
-          <IdeaBox />
-          <Ctas />
-        </>
-      ) : view.kind === 'owner' ? (
-        <AwayCard view={view} />
-      ) : (
-        <DeskCard queue={view.queue.length} mine={view.mine.length} />
-      )}
-      <PrizeBank view={view} />
+      <HomeNav demo={view.world.config.demo} />
+      <section className="home-hero">
+        <div className="home-hero__strip"><CityStrip view={view} /></div>
+        <div className="home-hero__map">
+          <CityMapSlot mode="live" places={catalog?.places ?? []} businesses={businesses} myBusinessId={ownerWithBusiness?.business?.id} weather={view.weather[0]} events={view.events} height={300} embedded onExpand={() => navigate('/map')} onOpenBusiness={(id) => navigate('/map?b=' + encodeURIComponent(id))} />
+        </div>
+        <div className="home-hero__lead">{lead}</div>
+      </section>
       <NicheCards view={view} businesses={businesses} catalog={catalog} />
-      <HowItWorks />
-      <Card title="City feed" subtitle="Inspections, deals, openings and bankruptcies">
-        <Feed items={view.feed} max={8} />
-      </Card>
+      <section className="home-band">
+        <PrizeBank view={view} />
+        <HowItWorks />
+      </section>
+      <section className="home-feed">
+        <Card title="City feed" subtitle="Inspections, deals, openings and bankruptcies">
+          <Feed items={view.feed} max={8} />
+        </Card>
+      </section>
       <Footer worldId={view.world.config.id} mode={mode} />
     </main>
+  );
+}
+
+// ───────────────────────── 0. top bar ─────────────────────────
+
+function HomeNav({ demo }: { demo: boolean }) {
+  const navigate = useNavigate();
+  return (
+    <nav className="home-nav" aria-label="Main">
+      <button type="button" className="home-nav__brand" onClick={() => navigate('/')}>
+        <span className="home-nav__mark" aria-hidden="true">1</span>
+        <span>First Year</span>
+        {demo && <Badge tone="accent" icon="play">Demo city</Badge>}
+      </button>
+      <div className="home-nav__links">
+        <button type="button" className="home-nav__link" onClick={() => navigate('/map')}>City map</button>
+        <button type="button" className="home-nav__link" onClick={() => navigate('/leaderboards')}>Leaderboards</button>
+        <a className="home-nav__link" href="#how-it-works">How it works</a>
+      </div>
+      <ThemeToggle />
+      <Button size="sm" icon="store" onClick={() => navigate('/start')}>Start</Button>
+    </nav>
   );
 }
 
@@ -320,7 +353,7 @@ const STEPS: { icon: IconName; title: string; text: string }[] = [
 
 function HowItWorks() {
   return (
-    <section className="stack">
+    <section className="stack" id="how-it-works">
       <h2 className="h3">How it works</h2>
       <ol className="home-steps">
         {STEPS.map((s, i) => (

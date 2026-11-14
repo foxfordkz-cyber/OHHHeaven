@@ -2,9 +2,10 @@ import { useState } from 'react';
 import type { Action, OwnerView, PackSet, PublicBusiness } from '../../../../shared/src/types';
 import { Button, Field, Sheet } from './ui';
 import { Lines } from './fields';
-import { act, myReports, NICHE_LABEL, reportConsequences, reportEligibility, reportLimit, reportOptions, type NetworkExtra } from './logic';
+import { act, myReports, NICHE_LABEL, reportCheckers, reportConsequences, reportEligibility, reportLimit, reportOptions, type NetworkExtra } from './logic';
 
-export const ROLE_LABEL = { inspector: 'City health inspector', tax_auditor: 'Tax auditor' } as const;
+/** Same names as the engine (engine/src/law/util.ts); used when the packs do not name the official. */
+export const ROLE_LABEL = { inspector: 'City inspector', tax_auditor: 'Tax auditor' } as const;
 
 /** «Report to the city»: the only attack in the game. The target is fixed (opened from a profile) or picked here. */
 export function ReportSheet(props: {
@@ -65,7 +66,7 @@ export function ReportSheet(props: {
               <span>
                 <span className="nw-report__name">{o.name}</span>
                 <span className="nw-report__text">{o.text}</span>
-                <span className="nw-report__who">Checked by: {ROLE_LABEL[o.role]}</span>
+                <span className="nw-report__who">Checked by: {reportCheckers(props.packs, target!.niche, o).join(' · ') || ROLE_LABEL[o.role]}</span>
               </span>
             </label>
           ))}

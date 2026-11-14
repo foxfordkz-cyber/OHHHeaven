@@ -18,15 +18,20 @@ const pack: Pack = found;
 console.log(`Pack: ${existsSync(`packs/${niche}.json`) ? `packs/${niche}.json` : 'test fixture'} · common: ${existsSync('packs/_common.json') ? 'packs/_common.json' : 'test fixture'}`);
 
 const mapPlaces = (readJson<Place[]>('data/places.json') ?? []).filter((p) => p.suitableFor.length === 0 || p.suitableFor.includes(niche));
-const sqftFor = (size: number) => Math.ceil((size * pack.sizing.sqftPerUnit) / RULES.USABLE_FLOOR_SHARE) + 1;
-const typical = mapPlaces.length > 0 ? mapPlaces[Math.floor(mapPlaces.length / 2)] : null;
-const rentPerSqft = typical?.rentPerSqftYear ?? 90;
-console.log(`Rent: $${rentPerSqft}/sq ft/yr (${typical ? `median-ish map place ${typical.id}` : 'estimate, no data/places.json'})\n`);
+// The space: 800 sq ft (the research notes' cafe) unless the room needs more; rent from the pack's mid tier if it has one,
+// else the median map place, else $90.
+const BASE_SQFT = 800;
+const sqftFor = (size: number) => Math.max(BASE_SQFT, Math.ceil((size * pack.sizing.sqftPerUnit) / RULES.USABLE_FLOOR_SHARE) + 1);
+const midTier = ((pack.extra ?? {}) as { rentByTier?: { mid?: { rentPerSqftYear?: number } } }).rentByTier?.mid?.rentPerSqftYear;
+const typical = mapPlaces.length > 0 ? [...mapPlaces].sort((a, b) => a.rentPerSqftYear - b.rentPerSqftYear)[Math.floor(mapPlaces.length / 2)] : null;
+const rentPerSqft = midTier ?? typical?.rentPerSqftYear ?? 90;
+const rentFrom = midTier ? 'pack extra.rentByTier.mid' : typical ? `median map place ${typical.id}` : 'estimate, no data/places.json';
+console.log(`Space: ${BASE_SQFT} sq ft (more if the room needs it) at $${rentPerSqft}/sq ft/yr (${rentFrom}), foot traffic 0.5\n`);
 
 interface Result { kit: string; size: number; setup: number; cashLeft: number; revenue: number; profit: number; bankrupt: number; lostShare: number; util: number; balanced: boolean }
 
 function season(kit: PackKit, size: number, n = 6): Result {
-  const places = Array.from({ length: n }, (_, i) => place(i + 1, { sqft: sqftFor(Math.max(size, pack.sizing.max)), rentPerSqftYear: rentPerSqft, footTraffic: 0.5 }));
+  const places = Array.from({ length: n }, (_, i) => place(i + 1, { sqft: sqftFor(size), rentPerSqftYear: rentPerSqft, footTraffic: 0.5 }));
   const ctx: EngineCtx = { packs: { common, niches: { [niche]: pack } }, places };
   let w: WorldState = { ...createWorld(config()), players: Array.from({ length: n }, (_, i) => owner(i + 1)) };
   for (let i = 1; i <= n; i++) {

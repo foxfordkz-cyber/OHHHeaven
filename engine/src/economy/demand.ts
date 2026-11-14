@@ -19,15 +19,25 @@ export interface MarketParams {
   unitsPerSlotMonth: number;
   outside: number;             // weight of "buy elsewhere" per business at the reference point
   adsHalf: number;             // ad stock that gives ln(2) × ADS_W of utility
+  fairBand: number;            // price up to fair × fairBand costs only the ordinary elasticity
+  overprice: number;           // steepness of the extra loss above that band (utility −overprice × ln(p / band)²)
 }
 
 /** Report 43: utility += 0.22 · ln(1 + ads / half). */
 export const ADS_W = 0.22;
-export const OUTSIDE_DEFAULT = 0.5;
+export const OUTSIDE_DEFAULT = 1;
+export const FAIR_BAND_DEFAULT = 1.1;
+export const OVERPRICE_DEFAULT = 25;
+
+/** What customers think a fair price is for this quality: the reference price, ±30% between the worst and the best quality. */
+export function fairPrice(refPrice: number, quality: number): number {
+  return refPrice * (1 + 0.6 * (quality - 0.5));
+}
 
 export function marketParams(pack: Pack): MarketParams {
   const extra = (pack.extra ?? {}) as Record<string, unknown>;
-  const outside = typeof extra.outsideWeight === 'number' ? extra.outsideWeight : OUTSIDE_DEFAULT;
+  const num = (k: string, d: number): number => (typeof extra[k] === 'number' && Number.isFinite(extra[k] as number) ? (extra[k] as number) : d);
+  const outside = num('outsideWeight', OUTSIDE_DEFAULT);
   return {
     refPrice: pack.unit.refPrice,
     elasticity: pack.market.priceElasticity,
@@ -35,6 +45,8 @@ export function marketParams(pack: Pack): MarketParams {
     unitsPerSlotMonth: pack.market.unitsPerSlotMonth,
     outside,
     adsHalf: Math.max(1, 0.05 * pack.market.unitsPerSlotMonth * pack.unit.refPrice),
+    fairBand: Math.max(1, num('fairPriceBand', FAIR_BAND_DEFAULT)),
+    overprice: Math.max(0, num('overpriceSteepness', OVERPRICE_DEFAULT)),
   };
 }
 
@@ -47,7 +59,11 @@ export function priceSensitivity(m: MarketParams, n: number): number {
   return Math.abs(m.elasticity) / (1 - s);
 }
 
-/** Attractiveness of each business: exp(utility). Non-price terms are scaled by |elasticity| and the weight ratios. */
+/**
+ * Attractiveness of each business: exp(utility). Non-price terms are scaled by |elasticity| and the weight ratios.
+ * Above fair price × fairBand customers leave fast (they know what a cup costs on this street): the extra term keeps
+ * the contract's elasticity at the reference price and makes a price far above fair a losing move, alone or together.
+ */
 export function attractiveness(m: MarketParams, xs: readonly DemandInput[]): number[] {
   const e = priceSensitivity(m, xs.length);
   const k = Math.abs(m.elasticity);
@@ -57,8 +73,10 @@ export function attractiveness(m: MarketParams, xs: readonly DemandInput[]): num
   const kl = k * (m.weights.location / wp);
   return xs.map((x) => {
     const p = Math.max(0.01, x.price);
+    const over = Math.max(0, Math.log(p / (fairPrice(m.refPrice, x.quality) * m.fairBand)));
     const u =
-      -e * Math.log(p / m.refPrice) +
+      -e * Math.log(p / m.refPrice) -
+      m.overprice * over * over +
       kq * (x.quality - 0.5) +
       kr * (x.reputation - 0.5) +
       kl * (x.footTraffic - 0.5) +

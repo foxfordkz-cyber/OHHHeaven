@@ -1,9 +1,10 @@
-// CityMap — the real East Village under a dark game style: places to pick, businesses at war and in deals,
+// CityMap — the real East Village in the app's theme (night map on dark, day map on light): places to pick, businesses at war and in deals,
 // weather, closed streets and lit blocks. Falls back to a saved offline snapshot when tiles do not load.
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Map as MapLibreMap, Marker, setWorkerUrl, type GeoJSONSource, type MapLayerMouseEvent } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { BusinessCard, type BusinessCta } from './BusinessCard';
 import './map.css';
 import offlineImageUrl from '../../../data/offline-map.png';
 import offlineMeta from '../../../data/offline-map.json';
@@ -15,7 +16,8 @@ import {
   closedBlocks, liveEvents, partnerLines, placeFeatures, realFeatures, todayWeather, type BizMarker, type LngLat,
   type RealBusinessLabel,
 } from './geo';
-import { isTileFailure, nightStyle, offlineStyle, type StyleSpecification } from './mapStyle';
+import { cityStyle, isTileFailure, mapPalette, offlineStyle, type MapTheme, type StyleSpecification } from './mapStyle';
+import { getTheme, useTheme } from '../ui/theme';
 import { PlaceCard } from './PlaceCard';
 import { WeatherLayer } from './WeatherLayer';
 
@@ -31,6 +33,14 @@ export interface CityMapProps {
   niche?: NicheId;
   onPick?: (placeId: string) => void;
   onOpenBusiness?: (businessId: string) => void;
+  /** Live mode: the button on the card that opens when a business is tapped. */
+  businessCta?: BusinessCta;
+  /** Shows an "expand" button (the caller opens the full-screen map). */
+  onExpand?: () => void;
+  /** Open this business's card right away (full-screen map opened from a tap elsewhere). */
+  initialBusinessId?: string;
+  /** The map sits inside a scrolling page: scroll and one finger move the page, ctrl+scroll or two fingers move the map. */
+  embedded?: boolean;
   /** Today's game day: filters events and weather. Without it every event passed in is shown. */
   day?: number;
   /** Lit streets: blocks whose fund is active this month. */
@@ -55,68 +65,69 @@ const FINAL_VIEW = { pitch: 55, bearing: 29 };
 const MAX_BOUNDS: [LngLat, LngLat] = [[-74.014, 40.705], [-73.952, 40.748]];
 const EMPTY = { type: 'FeatureCollection', features: [] };
 
-const offlineAssets = () => offlineStyle({
+const offlineAssets = (theme: MapTheme) => offlineStyle({
   imageUrl: offlineImageUrl,
   coordinates: offlineMeta.coordinates as [[number, number], [number, number], [number, number], [number, number]],
   buildingsUrl: offlineBuildingsUrl,
-});
+}, theme);
 
 const reducedMotion = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 const isSmallScreen = () => typeof window !== 'undefined' && window.innerWidth < 700;
 
 type GeoData = Parameters<GeoJSONSource['setData']>[0];
 
-function installOverlays(map: MapLibreMap) {
+function installOverlays(map: MapLibreMap, theme: MapTheme) {
+  const c = mapPalette(theme);
   for (const id of ['ohh-real', 'ohh-fund', 'ohh-closed', 'ohh-deals', 'ohh-places', 'ohh-biz']) {
     if (!map.getSource(id)) map.addSource(id, { type: 'geojson', data: EMPTY as GeoData });
   }
   const add = (layer: Parameters<MapLibreMap['addLayer']>[0]) => { if (!map.getLayer(layer.id)) map.addLayer(layer); };
   add({
     id: 'ohh-real-dot', type: 'circle', source: 'ohh-real', minzoom: 14.5,
-    paint: { 'circle-color': '#6b76a3', 'circle-opacity': 0.75, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 14.5, 1.5, 18, 4], 'circle-stroke-color': '#0a0f1f', 'circle-stroke-width': 0.8 },
+    paint: { 'circle-color': c.poi, 'circle-opacity': 0.75, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 14.5, 1.5, 18, 4], 'circle-stroke-color': c.outline, 'circle-stroke-width': 0.8 },
   });
   if (map.getStyle().glyphs) {
     add({
       id: 'ohh-real-name', type: 'symbol', source: 'ohh-real', minzoom: 16.2,
       layout: { 'text-field': ['get', 'label'], 'text-font': ['Noto Sans Regular'], 'text-size': 10.5, 'text-offset': [0, 0.9], 'text-anchor': 'top', 'text-optional': true, 'text-max-width': 9 },
-      paint: { 'text-color': '#7c87b5', 'text-halo-color': '#0a0f1f', 'text-halo-width': 1.3 },
+      paint: { 'text-color': c.label, 'text-halo-color': c.halo, 'text-halo-width': 1.3 },
     });
   }
-  add({ id: 'ohh-fund-glow', type: 'line', source: 'ohh-fund', layout: { 'line-cap': 'round' }, paint: { 'line-color': '#7ee081', 'line-width': 18, 'line-blur': 12, 'line-opacity': 0.45 } });
-  add({ id: 'ohh-fund-line', type: 'line', source: 'ohh-fund', layout: { 'line-cap': 'round' }, paint: { 'line-color': '#b6f7c1', 'line-width': 3 } });
-  add({ id: 'ohh-closed-glow', type: 'line', source: 'ohh-closed', layout: { 'line-cap': 'round' }, paint: { 'line-color': '#ff2d55', 'line-width': 20, 'line-blur': 12, 'line-opacity': 0.5 } });
-  add({ id: 'ohh-closed-line', type: 'line', source: 'ohh-closed', paint: { 'line-color': '#ff4d6d', 'line-width': 5, 'line-dasharray': [1.4, 1] } });
-  add({ id: 'ohh-deals-glow', type: 'line', source: 'ohh-deals', paint: { 'line-color': '#ffd166', 'line-width': 8, 'line-blur': 6, 'line-opacity': 0.35 } });
-  add({ id: 'ohh-deals-line', type: 'line', source: 'ohh-deals', paint: { 'line-color': '#ffd166', 'line-width': 2.2, 'line-dasharray': [2, 1.6] } });
+  add({ id: 'ohh-fund-glow', type: 'line', source: 'ohh-fund', layout: { 'line-cap': 'round' }, paint: { 'line-color': c.fund, 'line-width': 14, 'line-blur': 10, 'line-opacity': 0.3 } });
+  add({ id: 'ohh-fund-line', type: 'line', source: 'ohh-fund', layout: { 'line-cap': 'round' }, paint: { 'line-color': c.fundLine, 'line-width': 3 } });
+  add({ id: 'ohh-closed-glow', type: 'line', source: 'ohh-closed', layout: { 'line-cap': 'round' }, paint: { 'line-color': c.closed, 'line-width': 14, 'line-blur': 10, 'line-opacity': 0.3 } });
+  add({ id: 'ohh-closed-line', type: 'line', source: 'ohh-closed', paint: { 'line-color': c.closedLine, 'line-width': 5, 'line-dasharray': [1.4, 1] } });
+  add({ id: 'ohh-deals-glow', type: 'line', source: 'ohh-deals', paint: { 'line-color': c.deal, 'line-width': 8, 'line-blur': 6, 'line-opacity': 0.25 } });
+  add({ id: 'ohh-deals-line', type: 'line', source: 'ohh-deals', paint: { 'line-color': c.deal, 'line-width': 2.2, 'line-dasharray': [2, 1.6] } });
   add({
     id: 'ohh-places-halo', type: 'circle', source: 'ohh-places', filter: ['==', ['get', 'state'], 'free'],
     paint: {
-      'circle-color': '#36e2b4', 'circle-blur': 0.9, 'circle-opacity': 0.55,
+      'circle-color': c.free, 'circle-blur': 0.9, 'circle-opacity': 0.4,
       'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, 8, 17, ['case', ['boolean', ['feature-state', 'selected'], false], 34, 22]],
     },
   });
   add({
     id: 'ohh-places-dot', type: 'circle', source: 'ohh-places',
     paint: {
-      'circle-color': ['match', ['get', 'state'], 'free', '#36e2b4', 'taken', '#ff6b6b', '#3a4570'],
+      'circle-color': ['match', ['get', 'state'], 'free', c.free, 'taken', c.taken, c.other],
       'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, ['match', ['get', 'state'], 'free', 3.5, 2.2], 17,
         ['case', ['boolean', ['feature-state', 'selected'], false], 13, ['match', ['get', 'state'], 'free', 8, 5]]],
-      'circle-stroke-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#ffffff', '#0a0f1f'],
+      'circle-stroke-color': ['case', ['boolean', ['feature-state', 'selected'], false], c.ring, c.outline],
       'circle-stroke-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 1],
     },
   });
   add({ id: 'ohh-places-hit', type: 'circle', source: 'ohh-places', paint: { 'circle-radius': 18, 'circle-opacity': 0 } });
   add({
     id: 'ohh-biz-halo', type: 'circle', source: 'ohh-biz', filter: ['!', ['get', 'dim']],
-    paint: { 'circle-color': ['get', 'color'], 'circle-blur': 1, 'circle-opacity': 0.5, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, 7, 17, ['case', ['get', 'mine'], 34, 20]] },
+    paint: { 'circle-color': ['get', 'color'], 'circle-blur': 1, 'circle-opacity': 0.35, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, 7, 17, ['case', ['get', 'mine'], 34, 20]] },
   });
   add({
     id: 'ohh-biz-dot', type: 'circle', source: 'ohh-biz',
     paint: {
-      'circle-color': ['case', ['get', 'dim'], '#4a5070', ['get', 'color']],
+      'circle-color': ['case', ['get', 'dim'], c.dim, ['get', 'color']],
       'circle-opacity': ['case', ['get', 'dim'], 0.6, 1],
       'circle-radius': ['interpolate', ['linear'], ['zoom'], 13, ['case', ['get', 'mine'], 5, 3], 17, ['case', ['get', 'mine'], 12, 7]],
-      'circle-stroke-color': ['case', ['get', 'mine'], '#ffffff', ['get', 'ai'], '#8a93b8', '#0a0f1f'],
+      'circle-stroke-color': ['case', ['get', 'mine'], c.ring, ['get', 'ai'], c.aiRing, c.outline],
       'circle-stroke-width': ['case', ['get', 'mine'], 3, 1.2],
     },
   });
@@ -171,7 +182,7 @@ function declutter(map: MapLibreMap, pins: Map<string, Marker>, markers: BizMark
 
 export function CityMap(props: CityMapProps) {
   const {
-    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness,
+    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness, businessCta, onExpand, embedded = false, initialBusinessId,
     blockFunds, packs, realBusinesses, offline: forceOffline = false, intro = true, orbit = false, className, style,
   } = props;
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -181,9 +192,17 @@ export function CityMap(props: CityMapProps) {
   const markersRef = useRef<BizMarker[]>([]);
   const handlersRef = useRef({ onPick, onOpenBusiness, mode });
   handlersRef.current = { onPick, onOpenBusiness, mode };
+  const openBusiness = (id: string) => { setOpenBiz(id); handlersRef.current.onOpenBusiness?.(id); };
+  const openBusinessRef = useRef(openBusiness);
+  openBusinessRef.current = openBusiness;
   const [styleEpoch, setStyleEpoch] = useState(0);
+  const theme = useTheme();
+  const themeRef = useRef<MapTheme>(theme);
+  const shownThemeRef = useRef<MapTheme>(theme);
+  themeRef.current = theme;
   const [offline, setOffline] = useState(forceOffline || (typeof navigator !== 'undefined' && navigator.onLine === false));
   const [selected, setSelected] = useState<string | null>(null);
+  const [openBiz, setOpenBiz] = useState<string | null>(initialBusinessId ?? null);
   const [zoomedOut, setZoomedOut] = useState(true);
 
   const segments = useMemo(() => blockSegments(places), [places]);
@@ -198,6 +217,7 @@ export function CityMap(props: CityMapProps) {
   const wx = todayWeather(weather, day);
   const live = useMemo(() => liveEvents(events, day), [events, day]);
   const selectedPlace = selected ? places.find((p) => p.id === selected) ?? null : null;
+  const openBizItem = openBiz ? businesses.find((x) => x.id === openBiz) ?? null : null;
 
   // create the map once
   useEffect(() => {
@@ -209,7 +229,7 @@ export function CityMap(props: CityMapProps) {
     const startOffline = forceOffline || (typeof navigator !== 'undefined' && navigator.onLine === false);
     const map = new MapLibreMap({
       container: el,
-      style: (startOffline ? offlineAssets() : nightStyle()) as StyleSpecification,
+      style: (startOffline ? offlineAssets(getTheme()) : cityStyle(getTheme())) as StyleSpecification,
       center,
       zoom: calm ? finalZoom : 13.7,
       pitch: calm ? FINAL_VIEW.pitch : 0,
@@ -217,6 +237,7 @@ export function CityMap(props: CityMapProps) {
       maxPitch: 65, minZoom: 12.8, maxZoom: 19,
       maxBounds: MAX_BOUNDS,
       attributionControl: { compact: true },
+      cooperativeGestures: embedded,
       pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
       fadeDuration: 0,
       canvasContextAttributes: { antialias: !isSmallScreen() },
@@ -227,7 +248,7 @@ export function CityMap(props: CityMapProps) {
       if (isOffline) return;
       isOffline = true;
       setOffline(true);
-      map.setStyle(offlineAssets() as StyleSpecification, { diff: false });
+      map.setStyle(offlineAssets(themeRef.current) as StyleSpecification, { diff: false });
     };
     map.on('error', (e) => { if (!isOffline && isTileFailure(e as never)) goOffline(); });
     const timer = window.setTimeout(() => {
@@ -236,7 +257,7 @@ export function CityMap(props: CityMapProps) {
       try { ok = map.isSourceLoaded('openmaptiles'); } catch { ok = false; }
       if (!ok) goOffline();
     }, TILE_TIMEOUT_MS);
-    map.on('style.load', () => { installOverlays(map); setStyleEpoch((n) => n + 1); });
+    map.on('style.load', () => { installOverlays(map, themeRef.current); setStyleEpoch((n) => n + 1); });
 
     // interaction: pick a place, open a business
     map.on('click', 'ohh-places-hit', (e: MapLayerMouseEvent) => {
@@ -247,7 +268,7 @@ export function CityMap(props: CityMapProps) {
     map.on('click', 'ohh-biz-dot', (e: MapLayerMouseEvent) => {
       if (handlersRef.current.mode !== 'live') return;
       const id = e.features?.[0]?.properties?.id;
-      if (typeof id === 'string') handlersRef.current.onOpenBusiness?.(id);
+      if (typeof id === 'string') openBusinessRef.current(id);
     });
     for (const layer of ['ohh-places-hit', 'ohh-biz-dot']) {
       map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
@@ -296,8 +317,16 @@ export function CityMap(props: CityMapProps) {
   // honour a forced offline switch after mount
   useEffect(() => {
     const map = mapRef.current;
-    if (map && forceOffline && !offline) { setOffline(true); map.setStyle(offlineAssets() as StyleSpecification, { diff: false }); }
+    if (map && forceOffline && !offline) { setOffline(true); map.setStyle(offlineAssets(themeRef.current) as StyleSpecification, { diff: false }); }
   }, [forceOffline, offline]);
+
+  // the theme changed: redraw the map in the day or the night style
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || shownThemeRef.current === theme) return;
+    shownThemeRef.current = theme;
+    map.setStyle((offline ? offlineAssets(theme) : cityStyle(theme)) as StyleSpecification, { diff: false });
+  }, [theme, offline]);
 
   // data → sources
   useEffect(() => {
@@ -336,7 +365,7 @@ export function CityMap(props: CityMapProps) {
     for (const m of wanted) {
       const existing = pins.get(m.id);
       if (existing) { existing.setLngLat([m.lng, m.lat]); updatePin(existing.getElement(), m); continue; }
-      const marker = new Marker({ element: pinElement(m, (id) => handlersRef.current.onOpenBusiness?.(id)), anchor: 'bottom', offset: [0, -10] })
+      const marker = new Marker({ element: pinElement(m, (id) => openBusinessRef.current(id)), anchor: 'bottom', offset: [0, -10] })
         .setLngLat([m.lng, m.lat]).addTo(map);
       pins.set(m.id, marker);
     }
@@ -361,7 +390,7 @@ export function CityMap(props: CityMapProps) {
   }, [closed, segments]);
 
   const legend = mode === 'pick'
-    ? [{ color: '#36e2b4', label: niche ? `Free for a ${NICHE_META[niche].label.toLowerCase()}` : 'Free' }, { color: '#3a4570', label: 'Other niche' }, { color: '#ff6b6b', label: 'Taken' }]
+    ? [{ color: mapPalette(theme).free, label: niche ? `Free for a ${NICHE_META[niche].label.toLowerCase()}` : 'Free' }, { color: mapPalette(theme).other, label: 'Other niche' }, { color: mapPalette(theme).taken, label: 'Taken' }]
     : [...new Set(markers.map((m) => m.niche))].map((n) => ({ color: NICHE_META[n].color, label: NICHE_META[n].label }));
 
   return (
@@ -391,6 +420,25 @@ export function CityMap(props: CityMapProps) {
         <ul className="cm-legend" aria-label="Legend">
           {legend.map((l) => <li key={l.label}><i style={{ background: l.color }} />{l.label}</li>)}
         </ul>
+      )}
+      <div className="cm-ctl" role="group" aria-label="Map controls">
+        {onExpand && (
+          <button type="button" className="cm-ctl__btn" onClick={onExpand} aria-label="Open the full map" title="Open the full map">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
+          </button>
+        )}
+        <button type="button" className="cm-ctl__btn" onClick={() => mapRef.current?.zoomIn({ duration: 320 })} aria-label="Zoom in" title="Zoom in">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+        </button>
+        <button type="button" className="cm-ctl__btn" onClick={() => mapRef.current?.zoomOut({ duration: 320 })} aria-label="Zoom out" title="Zoom out">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M5 12h14" /></svg>
+        </button>
+      </div>
+      {mode === 'live' && !embedded && openBizItem && (
+        <BusinessCard
+          business={openBizItem} place={places.find((p) => p.id === openBizItem.placeId)} mine={openBizItem.id === myBusinessId}
+          cta={businessCta} onClose={() => setOpenBiz(null)}
+        />
       )}
       {mode === 'pick' && selectedPlace && (
         <PlaceCard
