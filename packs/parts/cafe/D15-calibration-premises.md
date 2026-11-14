@@ -24,7 +24,7 @@
 | `extra.mechanics` | 8 | см. раздел 5 |
 | `extra.effectFields` | 1 словарь | какие поля эффектов уже есть в движке, какие предложил D01/D02/D14, какие новые у D15 |
 | `extra.corrections` | 13 | исправления чужих записей тем же `id` |
-| `extra.verifiedFacts` | 33 | факты, которые я сам увидел в первоисточнике |
+| `extra.verifiedFacts` | 34 | факты, которые я сам увидел в первоисточнике |
 | `extra.notFound` | 12 | см. раздел 6 |
 | `sources` | 113 | 33 проверенных первоисточника и 80 вторичных |
 | `extra.calibrationReference` | 1 | эталон для денег в расчётах: 800 кв. футов, аренда $6,000, выручка $51,000, прибыль $9,719 в месяц; день закрытия — $1,700 выручки и $1,200 маржи; день аренды — $200 |
@@ -49,7 +49,7 @@
 14. **Две новые городские отмены.** Закон 2009 года о прозрачных роллетах со сроком 1 июля 2026 года отменён голосованием 51:0 за день до срока: кто заменил решётку заранее, потратил около $6,500 зря. Local Law 15 of 2026 снял штраф за работу без разрешения для вывесок до 150 кв. футов и простил такие штрафы с 2017 года, поэтому прежнее «вывеска без разрешения — $6,000» неверно.
 15. **Шум стоит по-разному.** Кондиционер громче 42 дБ(A) у соседа: $560, потом $1,120 и $1,680. Музыка сверх нормы: $3,200, потом $6,400 и $9,600, но первый штраф можно свести к $0, если за 30 дней подтвердить исправление. Работа на стройке вечером без разрешения на сверхурочные: $6,000. Это дороже, чем 15 сэкономленных ночными сменами дней аренды ($3,000).
 
-Ещё, коротко: под охраной LPC 38,550 зданий в 159 исторических районах, но 90% мелких разрешений выдают за 10 рабочих дней, так что исторический район обычно добавляет около двух недель. Для зданий до 1 апреля 1987 года оценка асбеста обязательна до разрешения DOB, то есть почти для всех старых витрин. Если помещение стало непригодным не по вине арендатора, по закону можно съехать и больше не платить (RPL §227), но договор обычно это меняет. Налог на коммерческую аренду (CRT) кафе не касается: порог — $250,000 аренды в год, а малым арендаторам полагается полный кредит. Декларацию налога с продаж нужно подавать и в месяцы ремонта: за неподанную штраф не меньше $50. Клиенту с медицинским диагнозом надо дать служебный туалет, если на смене двое работников (GBL §492).
+Ещё, коротко: под охраной LPC 38,550 зданий в 159 исторических районах, но 90% мелких разрешений выдают за 10 рабочих дней, так что исторический район обычно добавляет около двух недель. Для зданий до 1 апреля 1987 года оценка асбеста обязательна до разрешения DOB, то есть почти для всех старых витрин. Если в зоне удаления асбеста идёт сантехника (кроме замены приборов) или сносят стену больше 45 кв. футов, нужно отдельное разрешение на удаление с планом безопасности от архитектора (правила DEP, открыл) — для кафе это почти всегда так; 300 кв. футов плитки уже «крупный проект» (от 160 кв. футов). Если помещение стало непригодным не по вине арендатора, по закону можно съехать и больше не платить (RPL §227), но договор обычно это меняет. Налог на коммерческую аренду (CRT) кафе не касается: порог — $250,000 аренды в год, а малым арендаторам полагается полный кредит. Декларацию налога с продаж нужно подавать и в месяцы ремонта: за неподанную штраф не меньше $50. Клиенту с медицинским диагнозом надо дать служебный туалет, если на смене двое работников (GBL §492).
 
 ## 4. Исправления существующего пакета и фрагментов
 
@@ -96,7 +96,7 @@
 - Измерение задержек газа новее 2017 года.
 - Типичная частная мировая по иску ADA к маленькому кафе со ступенькой. Нашлись только государственный штраф $20,000 для Katz's Deli и замечания судей.
 - Налог на недвижимость на квадратный фут небольшой витрины. Взял $20 как допущение.
-- Цена разрешения на сверхурочные работы (AHV) для небольшого объекта.
+- Официальный текст пошлины за разрешение на сверхурочные работы (AHV). Цифры $130–$650 за подачу и $80 в день я видел только в выдержке поиска со страницы DOB.
 - Ежегодная плата Dining Out NYC за квадратный фут в 2026 году (сайт закрыт для этой сессии).
 - Пошлина и срок письма DOB о законном использовании (Letter of No Objection) для зданий без CO.
 - Типичная плата арендодателя за согласие на переуступку договора.
@@ -110,6 +110,7 @@
 Полный список с пометкой «проверено» или «оценка» — в `sources` файла данных (113). Первоисточники, которые я открыл сам:
 
 - [NYC311, outdoor dining (Dining Out NYC) licenses and seasons](https://portal.311.nyc.gov/article/?kanumber=KA-03604)
+- [DEP, final rule amending the asbestos rules (15 RCNY Chapter 1)](https://rules.cityofnewyork.us/wp-content/uploads/2025/04/Asbestos-Rules-2022-Final.pdf)
 - [DEP, Noise Code Penalty Schedule (15 RCNY §31-115)](https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-penalty-schedule.pdf)
 - [DOB service notice, fee updates in DOB NOW: Build, January 8, 2026](https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf)
 - [DOB, Project Requirements: Asbestos](https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page)
@@ -149,6 +150,7 @@
 - [European Acustica, soundproofing a cafe (Spain)](https://www.europeanacustica.com/insonorizar-cafeteria/)
 - [2010 ADA Standards for Accessible Design](https://www.ada.gov/law-and-regs/design-standards/2010-stds/)
 - [NY1, surge in ADA lawsuits by a small group of filers (2019)](https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny)
+- [DOB, AHV renewal guidelines and fees](https://www.nyc.gov/site/buildings/industry/ahvs-renewal-guidelines-fees.page)
 - [ACHR News, air curtains end cold-draft complaints](https://achrnews.com/articles/159663-michigan-eatery-eliminates-cold-complaints-with-air-curtains)
 - [Alpha Contractors NY, commercial build-out cost NYC 2026](https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc)
 - [ASEE paper, change orders impact on project cost](https://peer.asee.org/change-orders-impact-on-project-cost)
@@ -193,6 +195,7 @@
 - [DOB, Accessory Sign Education & Outreach (Local Law 15 of 2026)](https://www.nyc.gov/site/buildings/safety/sign-ll15of2026.page)
 - [Local Law 185 of 2019, commercial tenant harassment penalties](https://intro.nyc/local-laws/2019-185)
 - [NY1, Council repeals roll-down gate deadline, July 2, 2026](https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates)
+- [DOB, Letter of No Objection](https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page)
 - [LPC, storefronts](https://www.nyc.gov/site/lpc/applications/storefronts.page)
 - [Metro Manhattan Office Space, security deposits](https://www.metro-manhattan.com/security-deposit/)
 - [NPR 2014, cafe without laptops](https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales)
