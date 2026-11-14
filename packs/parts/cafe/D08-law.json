@@ -1,4 +1,159 @@
 {
+  "setup": [
+    {
+      "id": "health_signs_kit",
+      "name": "Required health signs and posters",
+      "kind": "other",
+      "cost": 25,
+      "required": false,
+      "waitDays": 5,
+      "agency": "NYC DOHMH (free through 311)",
+      "link": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "withoutItViolation": "required_signs_missing",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "confidence": "estimate",
+      "note": "Seen at NYC Health: the choking first aid poster, CPR equipment notice, food allergy poster, no smoking sign and alcohol-pregnancy sign are free by calling 311. The $25 for frames and tape and the 5 days of mail are my estimate. Should be required in every kit: the lead or the assembler can flip the flag once kits include it."
+    },
+    {
+      "id": "allergen_menu_statement",
+      "name": "Allergy statement on menus and allergy poster for staff",
+      "kind": "other",
+      "cost": 60,
+      "required": false,
+      "agency": "NYS Department of Health / NYC DOHMH",
+      "link": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "withoutItViolation": "allergen_notice_missing",
+      "source": "https://newyork.public.law/laws/n.y._public_health_law_section_1356/",
+      "confidence": "estimate",
+      "note": "Public Health Law §1356: the notice must appear on each menu, on online ordering pages, and on a staff poster in the workers' languages. $60 to reprint a menu board and paper menus is my estimate; the poster is free. Should be required in every kit."
+    },
+    {
+      "id": "labor_posters_and_notices",
+      "name": "Workplace posters, 'Your Rights at Work' notice, harassment policy",
+      "kind": "other",
+      "cost": 0,
+      "required": false,
+      "agency": "NYS Department of Labor; NYC DCWP",
+      "link": "https://dol.ny.gov/posting-requirements",
+      "withoutItViolation": "workers_rights_poster_missing",
+      "source": "https://dol.ny.gov/posting-requirements",
+      "confidence": "estimate",
+      "note": "All required posters and the state's model harassment policy and training are free downloads from the agencies (NYS DOL posting requirements page; DCWP). The cost is $0 by design; mailers that bill $92.58 for a 'mandatory poster' are a known scam (BBB Scam Tracker). Should be required in every kit."
+    },
+    {
+      "id": "smoking_policy_and_signs",
+      "name": "No smoking and no vaping signs, written smoking policy",
+      "kind": "other",
+      "cost": 0,
+      "required": false,
+      "agency": "NYC DOHMH",
+      "link": "https://www.nyc.gov/site/doh/business/permits-and-licenses/smoke-free-air-act-exemptions-and-registrations.page",
+      "withoutItViolation": "smoking_vaping_allowed",
+      "source": "https://www.nyc.gov/site/doh/business/permits-and-licenses/smoke-free-air-act-exemptions-and-registrations.page",
+      "confidence": "estimate",
+      "note": "NYC Health: owners must post the signs and adopt a written smoking and e-cigarette policy shared with staff. Signs are free from the city; $0 is by design."
+    },
+    {
+      "id": "consultative_inspection_new",
+      "name": "City practice inspection before the first graded one",
+      "kind": "other",
+      "cost": 100,
+      "required": false,
+      "waitDays": 14,
+      "agency": "NYC DOHMH",
+      "link": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf",
+      "qualityBonus": 0.01,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf",
+      "confidence": "verified",
+      "note": "NYC Health: a new restaurant may request one consultative inspection for $100 after it has begun serving food and before its first graded inspection ($400 for a restaurant already graded). No violations are written unless a public health hazard cannot be fixed on the spot. The 14 days of waiting are my estimate; the city publishes no service time."
+    },
+    {
+      "id": "open_flame_permit",
+      "name": "FDNY open flame permit (candles)",
+      "kind": "permit",
+      "cost": 210,
+      "required": false,
+      "waitDays": 30,
+      "agency": "FDNY",
+      "link": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+      "withoutItViolation": "candles_without_permit",
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+      "confidence": "verified",
+      "note": "FDNY Restaurant Fire Safety Guide: the open flame permit's yearly inspection fee is $210. The 30 days of waiting are my estimate; FDNY publishes no service time. Needed only if you put candles on tables."
+    },
+    {
+      "id": "sign_permit_and_hanger",
+      "name": "Sign permit and licensed sign hanger",
+      "kind": "permit",
+      "cost": 1500,
+      "required": false,
+      "waitDays": 30,
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.nyc.gov/site/buildings/safety/installing-a-business-sign.page",
+      "withoutItViolation": "sign_without_permit",
+      "source": "https://www.nyc.gov/site/buildings/safety/installing-a-business-sign.page",
+      "confidence": "estimate",
+      "note": "Seen at the Department of Buildings: a sign over 6 square feet needs a permit, and the installation must be done by a licensed sign hanger. The $1,500 for the filing, the hanger and the insurance certificate and the 30 days are my estimate; quotes vary widely. Not needed for a sign of 6 square feet or less. This is on top of the pack's $1,500 line for making the sign."
+    },
+    {
+      "id": "backflow_initial_test",
+      "name": "Backflow device test and first report",
+      "kind": "other",
+      "cost": 240,
+      "required": false,
+      "agency": "NYC DEP",
+      "link": "https://www.nyc.gov/site/dep/about/cross-connection-controls.page",
+      "source": "https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf",
+      "confidence": "estimate",
+      "note": "The yearly test report is the legal duty (15 RCNY §20-04(e), seen in the OATH penalty schedule). $240 per test is my estimate from plumbers' advertised ranges of $150 to $350. If the space has no device at all, installing one is plumbing work with filed plans and costs thousands: check before signing the lease."
+    },
+    {
+      "id": "portable_ramp_and_bell",
+      "name": "Portable ramp, doorbell and a lowered counter section",
+      "kind": "equipment",
+      "cost": 1600,
+      "required": false,
+      "lifespanMonths": 120,
+      "source": "https://www.irs.gov/forms-pubs/about-form-8826",
+      "confidence": "estimate",
+      "note": "My estimate: an aluminum portable ramp for one step ($300-$700), a wireless doorbell with a sign ($50), and carpentry for a 36-inch-high section of counter ($800). A small business gets back 50% of access spending between $250 and $10,250 as the federal Disabled Access Credit, up to $5,000 a year (IRS Form 8826): about $675 of this."
+    },
+    {
+      "id": "website_accessibility_pass",
+      "name": "Website and online menu a screen reader can use",
+      "kind": "other",
+      "cost": 800,
+      "required": false,
+      "source": "https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/",
+      "confidence": "estimate",
+      "note": "My estimate for a small site: text alternatives for images, a real text menu instead of a photo or PDF, labeled buttons, and a check with a screen reader. Why it matters: 3,117 federal website accessibility suits in 2025, 1,021 of them in New York (Seyfarth Shaw)."
+    },
+    {
+      "id": "trademark_search_and_filing",
+      "name": "Trademark search and federal application for the shop's name",
+      "kind": "other",
+      "cost": 350,
+      "required": false,
+      "waitDays": 365,
+      "agency": "U.S. Patent and Trademark Office",
+      "link": "https://www.uspto.gov/trademarks/search",
+      "source": "https://www.clickondetroit.com/news/2016/05/26/michigan-cafe-has-to-change-name-after-caribou-coffee-files-lawsuit",
+      "confidence": "estimate",
+      "note": "The search is free. The $350 filing fee per class and the roughly one year to registration are from memory of the 2025 USPTO fee schedule; I did not open it this session. Why it matters: a renamed Michigan cafe paid about $5,000 after a chain sued, against an estimated $50,000 to fight."
+    }
+  ],
+  "monthlyCosts": [
+    {
+      "id": "music_license",
+      "name": "Background music license",
+      "kind": "other",
+      "basis": "fixed",
+      "amount": 35,
+      "source": "https://musicforbusinessfinder.com/ascap-music-license-costs-guide/",
+      "confidence": "estimate",
+      "note": "A business music service with the performance licenses included: vendors advertise roughly $17 to $50 a month in 2026; $35 is my midpoint. Buying the licenses directly costs $636 to $1,600 a year for a small cafe (ASCAP from $324-$502, BMI from about $312, SESAC from $580, per vendor guides). Follows the 'music' lever: the default option costs this much."
+    }
+  ],
   "levers": [
     {
       "id": "music",
@@ -1703,6 +1858,220 @@
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/notice/2025/noa-ch23-food-service-inspections.pdf"
     }
   ],
+  "roadmap": [
+    {
+      "id": "check_building_violations",
+      "title": "Look up the building before you sign",
+      "kind": "space",
+      "text": "Search the address in the Buildings Department's public records. Open violations and Stop Work Orders on the building can hold up your own permits, and the Certificate of Occupancy must allow an eating and drinking place on your floor.",
+      "agency": "NYC Department of Buildings",
+      "link": "https://a810-bisweb.nyc.gov/bisweb/bispi00.jsp"
+    },
+    {
+      "id": "negotiate_lease_law_terms",
+      "title": "Read the lease for what happens later",
+      "kind": "space",
+      "text": "There is no rent control for shops. Ask for a renewal option with a stated rent formula, a cap on yearly increases and on your share of real estate tax, a holdover rate, and clear words on who pays for the sidewalk, the backflow test and building violations.",
+      "link": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf"
+    },
+    {
+      "id": "search_the_name",
+      "title": "Search the name before you print it",
+      "kind": "legal",
+      "text": "Search the federal trademark database and the state business records for your shop's name and anything close to it. Renaming after a lawyer's letter costs thousands; fighting one costs tens of thousands.",
+      "setupItemId": "trademark_search_and_filing",
+      "fee": 350,
+      "agency": "U.S. Patent and Trademark Office",
+      "link": "https://www.uspto.gov/trademarks/search"
+    },
+    {
+      "id": "file_sign_permit",
+      "title": "File for the sign permit",
+      "kind": "permit",
+      "text": "A sign over 6 square feet needs a Buildings permit and a licensed sign hanger. File while the build-out is under way: a sign hung without a permit can cost $6,000 after a single 311 complaint.",
+      "setupItemId": "sign_permit_and_hanger",
+      "fee": 1500,
+      "waitDays": 30,
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.nyc.gov/site/buildings/safety/installing-a-business-sign.page"
+    },
+    {
+      "id": "make_the_door_accessible",
+      "title": "Make the door and the website usable for everyone",
+      "kind": "space",
+      "text": "A step at the entrance, a counter nobody in a wheelchair can reach, or a menu that exists only as a photo are the usual grounds for an access lawsuit. Fix what is readily achievable and claim the federal tax credit: half of the spending, up to $5,000 a year.",
+      "setupItemId": "portable_ramp_and_bell",
+      "fee": 1600,
+      "link": "https://www.irs.gov/forms-pubs/about-form-8826"
+    },
+    {
+      "id": "test_backflow_device",
+      "title": "Test the backflow device and file the report",
+      "kind": "permit",
+      "text": "Hire a certified tester for the backflow valve on your water service and send the report to Environmental Protection. Repeat every year: the city tracks missing reports from its own files, and the fine is $500.",
+      "setupItemId": "backflow_initial_test",
+      "fee": 240,
+      "waitDays": 7,
+      "agency": "NYC Department of Environmental Protection",
+      "link": "https://www.nyc.gov/site/dep/about/cross-connection-controls.page"
+    },
+    {
+      "id": "tag_fire_extinguishers",
+      "title": "Mount and tag the fire extinguishers",
+      "kind": "permit",
+      "text": "Have an FDNY-certified company mount and tag your extinguishers, then initial the tag after a quick check every month. Keep the exit path clear from day one: no stock in the corridor.",
+      "fee": 120,
+      "waitDays": 3,
+      "agency": "FDNY",
+      "link": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/portable-fire-extinguishers-in-your-business.pdf"
+    },
+    {
+      "id": "post_required_signs",
+      "title": "Order and post the required signs",
+      "kind": "legal",
+      "text": "Call 311 for the free posters: choking first aid, CPR kit, food allergy, no smoking. Add hand-wash signs at every sink and keep a spot in the window for the grade card. All of it must be up before the first inspection.",
+      "setupItemId": "health_signs_kit",
+      "fee": 0,
+      "waitDays": 5,
+      "agency": "NYC DOHMH",
+      "link": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page"
+    },
+    {
+      "id": "print_allergy_notice",
+      "title": "Put the allergy notice on every menu",
+      "kind": "legal",
+      "text": "State law requires an allergy statement on each menu and on your online ordering page, and a poster for staff in their languages. If you wrap food made in the shop for takeaway, label its major allergens: required since November 12, 2026.",
+      "setupItemId": "allergen_menu_statement",
+      "fee": 60,
+      "agency": "NYS Department of Health / NYC DOHMH",
+      "link": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page"
+    },
+    {
+      "id": "set_up_workplace_notices",
+      "title": "Workplace posters, harassment policy, pay-range ads",
+      "kind": "people",
+      "text": "Before the first hire: download the free state, city and federal posters, adopt the state's model harassment policy, schedule the yearly training, and write job ads with a pay range. Hand every new worker the city's 'Your Rights at Work' notice on day one.",
+      "setupItemId": "labor_posters_and_notices",
+      "fee": 0,
+      "agency": "NYS Department of Labor; NYC DCWP",
+      "link": "https://dol.ny.gov/posting-requirements"
+    },
+    {
+      "id": "license_your_music",
+      "title": "License the music",
+      "kind": "supplier",
+      "text": "Sign up for a background music service made for businesses, or buy licenses from the performing rights societies. A personal streaming account is not licensed for a shop, and the societies do send agents.",
+      "fee": 35
+    },
+    {
+      "id": "book_practice_inspection",
+      "title": "Book the city's practice inspection",
+      "kind": "permit",
+      "text": "Once you are serving, and before your first graded inspection, ask 311 for a Restaurant Consultative Inspection: $100, no violations written. It shows you the shop through an inspector's eyes while mistakes are still free.",
+      "setupItemId": "consultative_inspection_new",
+      "fee": 100,
+      "waitDays": 14,
+      "agency": "NYC DOHMH",
+      "link": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf"
+    },
+    {
+      "id": "learn_the_hearing_process",
+      "title": "Know what to do with a summons",
+      "kind": "legal",
+      "text": "Every city ticket carries a hearing date at OATH. Decide who opens the mail and answers within the deadline: fix and prove it, settle, or contest. A missed hearing means the top penalty and, unpaid, a court judgment.",
+      "agency": "NYC Office of Administrative Trials and Hearings (OATH)",
+      "link": "https://www.nyc.gov/site/oath/help-center/you-received-a-summons-now-what.page"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "backflow_tester",
+      "category": "Backflow testing",
+      "what": "A state-certified backflow prevention device tester, usually a licensed plumbing firm, who tests the valve once a year and files the report with the city",
+      "whereToFind": "Ask the building's plumber or search licensed master plumbers who advertise backflow testing; confirm the tester's state certification before the visit",
+      "examples": "Licensed master plumbing firms in every borough offer it as a yearly service",
+      "link": "https://www.nyc.gov/site/dep/about/cross-connection-controls.page",
+      "source": "https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf",
+      "confidence": "estimate",
+      "note": "No official price list; $150-$350 a test is my estimate from advertised ranges."
+    },
+    {
+      "id": "fire_extinguisher_service",
+      "category": "Fire extinguisher service",
+      "what": "A company approved by the Fire Department whose technicians hold the W-96 certificate; it sells, mounts, tags and services extinguishers once a year",
+      "whereToFind": "The Fire Department publishes a list of approved portable fire extinguisher companies; never buy service from someone who walks in unannounced",
+      "examples": "Borough fire-safety companies that also service restaurant hood systems",
+      "link": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/portable-fire-extinguishers-in-your-business.pdf",
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+      "confidence": "estimate",
+      "note": "FDNY guide: yearly servicing must be done by a W-96 certificate holder working for an FDNY-approved company. Prices are my estimate: about $120 a year for two units."
+    },
+    {
+      "id": "business_music",
+      "category": "Licensed music",
+      "what": "A background music subscription for businesses that includes the public performance licenses, or direct licenses from ASCAP, BMI, SESAC and GMR",
+      "whereToFind": "Compare business music services online; if you want your own playlists or live music, contact the performing rights societies directly",
+      "examples": "Soundtrack, Pandora CloudCover, Rockbot, SiriusXM Music for Business",
+      "source": "https://musicforbusinessfinder.com/ascap-music-license-costs-guide/",
+      "confidence": "estimate",
+      "note": "Service names are well-known examples, not endorsements; prices of $17-$50 a month are from vendor comparison pages for 2026."
+    },
+    {
+      "id": "hospitality_lawyer",
+      "category": "Legal help",
+      "what": "A lawyer who knows restaurants: lease terms, summonses, wage rules, access lawsuits. Also registered representatives who appear at city hearings for a flat fee",
+      "whereToFind": "The city's Small Business Services office and the New York City Bar referral service; the city tribunal's own Help Center explains hearings for free",
+      "examples": "NYC Small Business Services legal assistance for commercial leases; OATH Help Center; NYC Bar Legal Referral Service",
+      "link": "https://www.nyc.gov/site/oath/help-center/you-received-a-summons-now-what.page",
+      "source": "https://www.nyc.gov/assets/oath/downloads/pdf/small-business-dohmh-en-ada.pdf",
+      "confidence": "estimate",
+      "note": "OATH materials: a free Help Center and a small-business unit exist. Lawyer prices are not published; the pack's legal_help lever uses my estimate of $150 a month."
+    },
+    {
+      "id": "food_safety_consultant",
+      "category": "Food safety consulting",
+      "what": "A private consultant, often a former inspector, who runs a mock inspection with the city's own scoring sheet and trains the staff",
+      "whereToFind": "Ask other owners and the restaurant trade association; the Health Department sells its own consultative inspection through 311",
+      "examples": "Independent food safety consultants; the Health Department's Restaurant Consultative Inspection ($100 new, $400 after grading)",
+      "link": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf",
+      "confidence": "estimate",
+      "note": "City prices seen at NYC Health; private consultants at about $350 a visit are my estimate."
+    },
+    {
+      "id": "sign_hanger",
+      "category": "Signs",
+      "what": "A licensed sign hanger who files the sign permit and installs the sign; a sign shop alone cannot hang anything over 6 square feet",
+      "whereToFind": "Search the Buildings Department's license lookup for sign hangers and ask for the license number and insurance certificate",
+      "examples": "Licensed master and special sign hangers working with neighborhood sign shops",
+      "link": "https://www.nyc.gov/site/buildings/safety/installing-a-business-sign.page",
+      "source": "https://www.nyc.gov/site/buildings/safety/installing-a-business-sign.page",
+      "confidence": "estimate",
+      "note": "Seen at the Department of Buildings: bigger signs need a permit obtained by a licensed sign hanger. Prices are quotes."
+    },
+    {
+      "id": "accessibility_help",
+      "category": "Accessibility",
+      "what": "Portable ramps and door hardware, a carpenter for a lowered counter, and a web developer who can test the site with a screen reader",
+      "whereToFind": "Medical supply and ramp dealers, your contractor, and your website builder's accessibility checklist; keep receipts for the tax credit",
+      "examples": "Aluminum threshold and portable ramps; website builders' built-in accessibility checkers",
+      "link": "https://www.irs.gov/forms-pubs/about-form-8826",
+      "source": "https://www.irs.gov/forms-pubs/about-form-8826",
+      "confidence": "estimate",
+      "note": "IRS: the Disabled Access Credit (Form 8826) is open to businesses with $1 million or less in revenue or no more than 30 full-time workers. Product prices are my estimates."
+    },
+    {
+      "id": "free_posters",
+      "category": "Posters and notices",
+      "what": "Every required poster and notice: health signs from the city, labor posters from the state, city and federal agencies, the model harassment policy",
+      "whereToFind": "Call 311 for the health posters; download the rest from the agencies' own websites. Never pay a mailer that looks like a government invoice",
+      "examples": "NYC Health required signs; NYS Department of Labor posting requirements; DCWP 'Your Rights at Work' poster",
+      "link": "https://dol.ny.gov/posting-requirements",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "confidence": "estimate",
+      "note": "Free by design. BBB Scam Tracker shows a New York mailer demanding $92.58 for a workplace poster."
+    }
+  ],
   "sources": [
     {
       "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
@@ -2062,6 +2431,31 @@
     {
       "url": "https://www.nyc.gov/assets/doh/downloads/pdf/notice/2025/noa-ch23-food-service-inspections.pdf",
       "title": "DOHMH Notice of Adoption: Chapter 23 amendments effective November 15, 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/posting-requirements",
+      "title": "NYS Department of Labor: Posting Requirements",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dep/about/cross-connection-controls.page",
+      "title": "NYC DEP: Cross-connection controls (backflow prevention)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.uspto.gov/trademarks/search",
+      "title": "USPTO: Trademark search",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://a810-bisweb.nyc.gov/bisweb/bispi00.jsp",
+      "title": "NYC Department of Buildings: Buildings Information System (property lookup)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/oath/help-center/you-received-a-summons-now-what.page",
+      "title": "OATH Help Center: You received a summons, now what?",
       "checked": "2026-11-14"
     }
   ]
