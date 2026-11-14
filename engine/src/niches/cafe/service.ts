@@ -325,4 +325,6 @@ export const part: CafePart = {
     const s = cfg ? serviceDay(d) : null;
     return s && cfg && s.seats.crowded ? -cfg.crowdQualityDrop : 0;
   },
+  // B04: wired so the owner hears why orders were lost; with the other parts' notes present the engine no longer says it.
+  notes: serviceDayNotes,
 };

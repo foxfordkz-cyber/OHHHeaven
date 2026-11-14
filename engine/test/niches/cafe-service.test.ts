@@ -186,7 +186,9 @@ describe('cafe service — checks of FORMATS.md 3.6', () => {
     expect(part.qualityDelta!(d)).toBe(0);
     expect(serviceKpis({ ...b, days: [report(DAY, 300)] }, plain)).toEqual([]);
     expect(serviceDayNotes(b, report(DAY, 300), plain)).toEqual([]);
-    expect(Object.keys(part).sort()).toEqual(['capacityDay', 'qualityDelta']);   // kpis and notes wait for the engine (journal)
+    expect(part.notes!(b, report(DAY, 300), plain)).toEqual([]);
+    // notes wired by the integrator (B04): the other parts' notes already silence the engine's own loss lines; kpis wait for the engine
+    expect(Object.keys(part).sort()).toEqual(['capacityDay', 'notes', 'qualityDelta']);
   });
 });
 
