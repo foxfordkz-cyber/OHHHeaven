@@ -177,7 +177,8 @@ function closeMonth(b: BusinessState, w: WorldState, ctx: Ctx, pack: Pack): void
   }
   for (const lever of pack.levers) {
     const o = chosenOption(lever, b.orders);
-    if (o.causes) grow(o.causes, Math.max(0, Math.max(...lever.options.filter((x) => !x.causes).map((x) => x.monthlyCost), 0) - o.monthlyCost));
+    const legal = lever.options.filter((x) => !x.causes).map((x) => x.monthlyCost);
+    if (o.causes) grow(o.causes, Math.max(0, (legal.length ? Math.min(...legal) : o.monthlyCost) - o.monthlyCost));
   }
   if (b.status === 'open') for (const p of b.permits) {
     const def = pack.setup.find((s) => s.id === p.itemId);
