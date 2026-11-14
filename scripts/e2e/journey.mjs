@@ -20,7 +20,12 @@ const STAMP = stamp();
 const OUT = opt('out', join(HERE, 'docs/qa/runs', STAMP));
 const SHOTS = opt('shots', null);
 const WIDTHS = opt('widths', '375,1440').split(',').map(Number).filter(Boolean);
-const WITH_END = !flag('no-end');
+// Against a deployed server the season is not run to the end unless --end is given: an ended demo city is restarted by the
+// server ten minutes later as a running one, with bots, and stays among the 20 allowed (BUGS.md, №15). A paused city costs nothing.
+const REMOTE = Boolean(opt('url', process.env.E2E_URL ?? ''));
+const WITH_END = REMOTE ? flag('end') : !flag('no-end');
+// --scheme dark: the system theme of the browser (the app follows prefers-color-scheme).
+const SCHEME = opt('scheme', 'light');
 // Names a player would type: they show up in screenshots for the deck. Each run has its own city, so they never clash.
 const PLAYER = opt('name', 'Jordan');
 const RIVAL = 'Sam\'s Cuts';
@@ -41,7 +46,7 @@ async function walk(browser, width) {
   ack(await call('POST', `/api/worlds/${W}/clock`, { paused: true }), 'pause clock');
   // Retina only on the phone: a full-page 2× shot of the desktop home stretches the WebGL map to ~2880×6000 and headless
   // Chromium (software GL) stops drawing the page. A test artifact, not a player's problem; desktop shots stay 1×.
-  const ctx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS && phone ? 2 : 1, isMobile: phone, hasTouch: phone });
+  const ctx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS && phone ? 2 : 1, isMobile: phone, hasTouch: phone, colorScheme: SCHEME });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(`pageerror: ${String(e).slice(0, 200)}`));
@@ -135,6 +140,8 @@ async function walk(browser, width) {
     await page.goto(`${base.url}/?world=${W}&mode=remote`, { waitUntil: 'domcontentloaded' });
     const idea = await visible(page.locator('#idea'), 15000);
     await sleep(800);
+    // --scheme dark also presses the app's own theme button: the app does not follow the system theme by itself.
+    if (SCHEME === 'dark') { const t = page.getByRole('button', { name: /Switch to the dark theme/ }); if (await t.count()) { await t.first().click(); await sleep(500); } }
     await shot('home');
     await idea.fill('A coffee shop near the subway with fresh pastries');
     await click(/See my plan|Показать план/);
@@ -516,7 +523,7 @@ async function walk(browser, width) {
   // 10b. The official's desk in its own browser: the case from the report is in the queue, the inspector takes it
   await step('desk', 'City official desk: the report is in the case queue; "Take" starts an inspection', async () => {
     if (!state.official) throw new Error('no official (the report step failed)');
-    const octx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS && phone ? 2 : 1, isMobile: phone, hasTouch: phone });
+    const octx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS && phone ? 2 : 1, isMobile: phone, hasTouch: phone, colorScheme: SCHEME });
     try {
       await octx.addInitScript((s) => {
         localStorage.setItem('ohh.sessions.v1', JSON.stringify({ [`remote:${s.worldId}`]: s }));
@@ -652,6 +659,7 @@ async function walk(browser, width) {
     });
   }
 
+  await call('POST', `/api/worlds/${W}/clock`, { paused: true }); // leave the city paused: no bots running for nobody
   return { results, errors, state, page, ctx, dir, W };
 }
 
