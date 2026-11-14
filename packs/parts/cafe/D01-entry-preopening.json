@@ -46,6 +46,7 @@
         "franchise"
       ],
       "phase": "design_and_permits",
+      "withoutItViolation": "work_without_permit",
       "exemptIf": "building built after April 1, 1987 (ASB4 exemption)",
       "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
       "confidence": "estimate",
@@ -184,7 +185,7 @@
     {
       "id": "franchise_initial_fee",
       "name": "Franchise fee (example: Gregorys Coffee)",
-      "kind": "license",
+      "kind": "other",
       "cost": 35000,
       "required": false,
       "appliesTo": [
@@ -437,6 +438,23 @@
       "confidence": "estimate",
       "seenIn": "primary_search_extract",
       "note": "SBA information notice on fiscal 2026 fees, seen in extract: the upfront guaranty fee on 7(a) loans of $150,000 or less is 2% of the guaranteed portion (3% from $150,001 to $700,000); the only waiver is for manufacturers. Calculation: $150,000 loan x 85% guaranteed (the standard share for loans up to $150,000, from my knowledge of the program, not re-checked) x 2% = $2,550. A complete change of ownership also needs 10% of the project cost from the buyer (SOP 50 10 8)."
+    },
+    {
+      "id": "fdny_g46_certificate",
+      "name": "Fire Department certificate for carbon dioxide or nitrogen cylinders (G-46)",
+      "kind": "license",
+      "cost": 25,
+      "required": false,
+      "waitDays": 7,
+      "agency": "New York City Fire Department (FDNY)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/cof-g46",
+      "withoutItViolation": "no_certificate_of_fitness",
+      "appliesIf": "the shop keeps compressed-gas cylinders: soda, sparkling water or nitro cold brew",
+      "phase": "pre_opening",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/cof-g46",
+      "confidence": "verified",
+      "seenIn": "page_opened",
+      "note": "Page opened (NYC Business, G-46): application fee $25, renewal $15, valid 3 years; covers non-flammable gases including carbon dioxide; obtained by a written exam or an exemption based on education and experience; \"If you pass the test, you will get your certificate right away\". The certificate belongs to a person, so the holder leaving the job leaves the shop without one. The 7 days are my estimate for study and an exam slot."
     }
   ],
   "officials": [
@@ -465,6 +483,17 @@
       ],
       "realProcess": "Officers walk vending corridors and answer 311 complaints from storefront businesses. They ask for the vendor's license and check the permit decal on the cart. A vendor with neither gets a summons returnable to the city's hearings office, and a cart with no licensed person at it can be seized.",
       "source": "https://nyc.gov/VendorEnforcement"
+    },
+    {
+      "id": "fire_inspector",
+      "name": "Fire inspector",
+      "agency": "New York City Fire Department (FDNY), Bureau of Fire Prevention",
+      "role": "inspector",
+      "checks": [
+        "no_certificate_of_fitness"
+      ],
+      "realProcess": "Inspectors visit before opening and then periodically. They ask to see permits, test records and the Certificate of Fitness of the person in charge of compressed-gas cylinders and other regulated equipment. A missing certificate is a summons to the city hearings office.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
     }
   ],
   "violations": [
@@ -653,6 +682,27 @@
       "confidence": "verified",
       "seenIn": "page_opened",
       "note": "Page opened (NYC Business, restaurant resources): \"Occupancy Contrary to That Allowed by the Certificate of Occupancy or Department of Buildings Records. Penalty: $400 - $25,000 fine\"; how to avoid it: a current Certificate of Occupancy on file, a Letter of No Objection for a space built before 1938, an amended Certificate of Occupancy filed by the property owner if the use, egress or occupancy changes. The section number is from my knowledge of Title 28 and was not re-read. closureDays is my estimate of the time to legalize the use; the base is the bottom of the published range. Page opened (NYC Business, Certificate of Occupancy): an existing building needs a new certificate \"if there is a change in use, exit routes or type of occupancy\", and \"You cannot use a building until the Department gives you a CO or a Temporary Certificate of Occupancy\"."
+    },
+    {
+      "id": "no_certificate_of_fitness",
+      "name": "Gas cylinders with no Certificate of Fitness holder",
+      "law": "NYC Fire Code §107.1 (maintenance and supervision) and the Fire Department's Certificate of Fitness rules",
+      "official": "fire_inspector",
+      "foundBy": [
+        "inspection"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 5000
+      },
+      "closureDays": 0,
+      "reputationHit": 0,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "verified",
+      "seenIn": "page_opened",
+      "note": "Page opened (NYC Business, restaurant resources): \"Failure to Obtain Specified Certificates of Fitness and Certificates of Qualification... Penalty: $1,000 - $5,000 fine\", legal basis NYC Fire Code §107.1. The same page says a restaurant may need a Certificate of Fitness for the Storage, Handling, Use and Refilling of Non-Flammable Gas Cylinders (G-46) if it uses soda guns. Whether a single small carbon dioxide or nitrogen cylinder for nitro cold brew crosses the threshold was not confirmed: ask the gas supplier."
     }
   ],
   "shortcuts": [
@@ -1150,6 +1200,39 @@
       "order": 32,
       "text": "The city lets a food entrepreneur rent space in a permitted restaurant, supervised by its operator. A coffee counter run that way has no permit of its own: the host carries the inspection and can end the arrangement. Put the rent, the hours and who owns the customers in writing.",
       "link": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about"
+    },
+    {
+      "id": "check_zoning",
+      "title": "Check that the address is zoned for a cafe",
+      "kind": "space",
+      "path": "scratch",
+      "order": 1.5,
+      "text": "Look the address up on the city's zoning map before you call the broker. A storefront on a residential block may be legal only because an old use never stopped; if you plan beer or wine, the law also sets a distance from schools and places of worship, and the Community Board is heard.",
+      "agency": "NYC Department of City Planning (ZoLa map)",
+      "link": "https://zola.planning.nyc.gov/"
+    },
+    {
+      "id": "free_plan_review",
+      "title": "Have the city look at your plans for free before you file",
+      "kind": "permit",
+      "path": "scratch",
+      "order": 10.5,
+      "text": "Small Business Services offers free plan examinations, and its client managers walk you through the Buildings process. An objection found here costs nothing; the same objection after filing costs weeks of rent.",
+      "agency": "NYC Department of Small Business Services",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+      "id": "fdny_pre_opening",
+      "title": "Schedule the Fire Department pre-opening inspection",
+      "kind": "permit",
+      "path": "scratch",
+      "order": 18.5,
+      "text": "The city's checklist has you schedule pre-operational inspections with the Fire Department. If you keep carbon dioxide or nitrogen cylinders, someone on staff needs a G-46 Certificate of Fitness: $25, valid 3 years. Operating without the right certificate is fined $1,000 to $5,000.",
+      "setupItemId": "fdny_g46_certificate",
+      "fee": 25,
+      "waitDays": 7,
+      "agency": "New York City Fire Department (FDNY)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/cof-g46"
     }
   ],
   "ruleCards": [
@@ -1422,6 +1505,24 @@
       "title": "A noise plan on the wall of the site",
       "text": "Every construction site in the city, a cafe renovation included, must post a Construction Noise Mitigation Plan where inspectors can see it at all times. It is not filed with anyone, just posted. Without it a neighbor's noise complaint becomes a fine.",
       "source": "https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan"
+    },
+    {
+      "id": "no_certificate_of_fitness",
+      "title": "A certificate for the gas cylinders",
+      "text": "Soda guns and other compressed-gas setups need a staff member with a Fire Department Certificate of Fitness (G-46): $25, valid 3 years, $15 to renew. Operating without the required certificate is fined $1,000 to $5,000.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/cof-g46"
+    },
+    {
+      "id": "zoning_before_lease",
+      "title": "Zoning comes before the lease",
+      "text": "A cafe is legal only where zoning allows it. Since June 2024 the city lets a vacant storefront on a residential block be reused without a 2-year deadline, but only for neighborhood uses. Check the address on the city's zoning map first.",
+      "source": "https://www.nyc.gov/site/planning/plans/city-of-yes/city-of-yes-economic-opportunity.page"
+    },
+    {
+      "id": "nyc_best_services",
+      "title": "One free team for all the agencies",
+      "text": "The NYC Business Express Service Team gives small businesses free one-on-one help: getting licenses and permits faster, preparing for inspections and fixing issues beforehand. Call 888-SBS-4NYC. In July 2026 the mayor ordered a project manager for each client.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03439"
     }
   ],
   "monthlyCosts": [
@@ -5878,7 +5979,7 @@
         },
         {
           "url": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
-          "confirmed": "may operate on the 22nd day; unannounced pre-permit inspection that must be passed; Place of Assembly permit at 75 people; occupancy contrary to the Certificate of Occupancy fined $400-$25,000; landmark approval before work; licensed architect and contractor"
+          "confirmed": "may operate on the 22nd day; unannounced pre-permit inspection that must be passed; Place of Assembly permit at 75 people; occupancy contrary to the Certificate of Occupancy fined $400-$25,000; missing Certificates of Fitness fined $1,000-$5,000; landmark approval before work; licensed architect and contractor; free plan examinations from Small Business Services; Fire Department pre-operational inspections; zoning check"
         },
         {
           "url": "https://nyc-business.nyc.gov/nycbusiness/description/asbestos-rules-and-regulations",
@@ -5907,6 +6008,14 @@
         {
           "url": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vendor-permit-temporary-seasonal",
           "confirmed": "seasonal permits run April 1 to October 31, are limited in number and have a waiting list"
+        },
+        {
+          "url": "https://nyc-business.nyc.gov/nycbusiness/description/cof-g46",
+          "confirmed": "G-46 Certificate of Fitness: fee $25, renewal $15, valid 3 years, covers carbon dioxide; certificate issued right after a passed exam"
+        },
+        {
+          "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03439",
+          "confirmed": "NYC BEST: free one-on-one support to get licenses and permits faster and prepare for inspections; 888-727-4692"
         },
         {
           "url": "https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan",
@@ -6800,6 +6909,16 @@
         "text": "The city publishes its fines for restaurants on one page, by agency, with the amounts.",
         "why": "The NYC Business restaurant page lists penalties from $5 (no carter decal) to $25,000 (wrong occupancy) and can be opened without trouble: a ready primary source for the other researchers' violations.",
         "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+      },
+      {
+        "text": "A nitro tap or a soda gun can make the Fire Department part of your opening.",
+        "why": "Compressed-gas cylinders can require a staff member with a G-46 Certificate of Fitness ($25, 3 years); the certificate is personal, so it leaves with the employee. Missing certificates are fined $1,000-$5,000.",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/cof-g46"
+      },
+      {
+        "text": "The city will examine your construction plans for free before you file them.",
+        "why": "Small Business Services offers free plan examinations and client managers; an objection caught there does not stop a rent clock.",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
       }
     ],
     "failureStories": [
@@ -6876,5 +6995,612 @@
         "source": "https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/"
       }
     ]
-  }
+  },
+  "sources": [
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+      "title": "Opened and read: Form AU-196.10 at least 10 days before paying or taking possession; answer within 5 business days (AU-197.1 or AU-196.2); amount stated within 90 days; payment up to purchase price or fair market valu",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pdf/current_forms/st/au196_10.pdf",
+      "title": "Opened and read: notice submitted by registered mail at least 10 days before taking possession or paying",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/advisory_opinions/sales/24-54s.htm",
+      "title": "Opened and read: TSB-A-24(54)S, November 12, 2024: work for or by a tenant presumed temporary; Form ST-124",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm",
+      "title": "Opened and read: leasehold improvements may not qualify if the lease does not transfer ownership to the property owner; salon sink example",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "title": "Opened and read: fee $280.00 (+$25 frozen desserts); may operate 22 days after applying; unannounced pre-permit inspection after opening",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02955",
+      "title": "Opened and read: consultative inspection $100 for newly opened restaurants before the first graded inspection; advisory inspection $400 for existing; pre-operational inspection needs all construction complete and no f",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.osc.ny.gov/press/releases/2026/07/dinapoli-nyc-department-buildings-meets-critical-goals-lags-lower-priority-issues",
+      "title": "Opened and read: July 2, 2026: first plan review 3.7 business days, application to approval 20.3 days in 2025, 23.6 days early in fiscal 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://comptroller.nyc.gov/reports/whos-minding-the-storefronts/",
+      "title": "Opened and read: citywide vacancy 11.0% on April 15, 2026; about 15,700 vacant storefronts; Financial District-Battery Park City 21.1%; Ocean Hill 19.5%; Manhattan peak 15.8% in late 2023",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf",
+      "title": "Opened and read: new customers must pay a deposit; not more than two times the average monthly bill",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide",
+      "title": "Opened and read: request through the Project Center; \"service layout\" agreement; contractor prepares the site",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/transfers-business-and-your-contribution-rate",
+      "title": "Opened and read: buyer takes on all prior unemployment insurance experience; rate redetermined as of the transfer date",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.franchising.inspirebrands.com/dunkin",
+      "title": "Opened and read: initial franchise fee $40,000; royalty 5.9%; advertising 5%; investment $443,000-$1,832,500; $250,000 liquid assets; $500,000 net worth; disclosure document of March 26, 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide",
+      "title": "Opened and read: national $157 per sq ft, up 1.4%; New York City $181 per sq ft (the 7.0% rise was not on this page)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+      "title": "Opened and read: September 2017; average wait about 68 days; majority at least 30 days; 69% of those who gave a length; 17% served on time; one over a year; almost $2.2 million lost, over $140,000 per business",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://a856-cityrecord.nyc.gov/RequestDetail/20240628149",
+      "title": "Opened and read: Parks concession for a cafe at Dag Hammarskjold Park with an option for one mobile food unit: $40,000 vs 4% in year 1, then $42,000, $44,100, $46,305",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.law.cornell.edu/nyctap/I08_0054.htm",
+      "title": "Opened and read: Sanatass v. Consolidated Investing: owner liable under Labor Law 240(1) even though a tenant contracted for the work without the owner's knowledge",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://a816-health.nyc.gov/ABCEatsRestaurants/App/partials/controllers/faq.html",
+      "title": "Opened and read: A = 0 to 13 points, B = 14 to 27; Grade Pending defined",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license",
+      "title": "Opened and read: license $50.00, two years, no fee for veterans",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
+      "title": "Opened and read: $200 processing / $75 non-processing two-year permit; seasonal $35; supervisory license required and available only from the waitlist; inspection within six months, in person",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit",
+      "title": "Opened and read: private commercially zoned property or Parks land; exempt from the statutory limits; no waiting list; sidewalk in front of a store does not qualify; $200 (P) - $75 (NP)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishment-permit",
+      "title": "Opened and read: $70.00; events of 14 days or less; valid one year; $25 frozen dessert permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01825",
+      "title": "Opened and read: annual fee $70; an additional permit for each additional simultaneous event",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-protection-course-for-mobile-vendors",
+      "title": "Opened and read: course $53; license $50",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03354",
+      "title": "Opened and read: cap raised by 445 a year in fiscal 2023-2026 and by 2,200 a year in fiscal 2027-2031 (500 citywide, 1,500 non-Manhattan, 200 disabled people and veterans)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about",
+      "title": "Opened and read: an entrepreneur may rent space in a permitted restaurant's kitchen; the restaurant's operator would supervise",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/business-services/legal-assistance/commercial-lease-assistance-program",
+      "title": "Opened and read: free legal services for eligible businesses with lease issues",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/small-business-energy-efficiency-program",
+      "title": "Opened and read: free energy surveys; some equipment installed free",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://ag.ny.gov/sites/default/files/publications/franchise_booklet.pdf",
+      "title": "Opened and read: New York law: disclosure document at least 10 business days before signing or paying",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "title": "Opened and read: may operate on the 22nd day; unannounced pre-permit inspection that must be passed; Place of Assembly permit at 75 people; occupancy contrary to the Certificate of Occupancy fined $400-$25,000; missin",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/asbestos-rules-and-regulations",
+      "title": "Opened and read: notify the Department of Environmental Protection at least seven days before asbestos work; licensed abatement contractor; fees $200 / $400 / $800 / $1,200 by amount disturbed",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02023",
+      "title": "Opened and read: every building built after 1938 requires a Certificate of Occupancy; Letter of No Objection for buildings constructed before 1938, requested at the borough office",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/certificate-of-occupancy",
+      "title": "Opened and read: a new certificate is needed on a change in use, exit routes or type of occupancy; the building cannot be used without it",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01911",
+      "title": "Opened and read: no work may occur under a Stop Work Order until the Department issues an order to rescind",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/performing-work-on-a-landmarked-property",
+      "title": "Opened and read: Landmarks permit before any work and for any work needing a Buildings permit; lists an older fee of $50 + $3 per $1,000 above $25,000",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/business-services/initiatives/street-vending-in-nyc",
+      "title": "Opened and read: permits increase by 12,780 by 2031; supervisory license not required for green cart, seasonal or restricted-area permits",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vendor-permit-temporary-seasonal",
+      "title": "Opened and read: seasonal permits run April 1 to October 31, are limited in number and have a waiting list",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/cof-g46",
+      "title": "Opened and read: G-46 Certificate of Fitness: fee $25, renewal $15, valid 3 years, covers carbon dioxide; certificate issued right after a passed exam",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03439",
+      "title": "Opened and read: NYC BEST: free one-on-one support to get licenses and permits faster and prepare for inspections; 888-727-4692",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan",
+      "title": "Opened and read: construction sites must post a Construction Noise Plan, visible at all times; it is not filed with the Department of Environmental Protection",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/",
+      "title": "Search extract only, used for: The gas to the building is shut off",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://acquisitionstars.com/buying-a-business/coffee-shop",
+      "title": "Search extract only, used for: The espresso machine belongs to a lender",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://americasbestfranchises.com/franchises/gregorys-coffee/",
+      "title": "Search extract only, used for: Franchise marketing fund",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://bisnow.com/new-york/news/retail/owners-of-landmarked-beatnik-caf-sue-landlord-for-constructive-eviction-117169",
+      "title": "Search extract only, used for: A buckling wall stops the job",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
+      "title": "Search extract only, used for: First month after buying",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://blueberrybuilders.com/resources/cost-overruns-in-construction/",
+      "title": "Search extract only, used for: Build-out contingency reserve",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://citylandnyc.org/unlicensed-plumber-fined",
+      "title": "Search extract only, used for: Plumbing or electrical work by an unlicensed person",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650",
+      "title": "Search extract only, used for: Department of Buildings alteration filing fee",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-157685",
+      "title": "Search extract only, used for: civil penalty for work without a permit, multiple of the permit fee (other than 1-2 family",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-215585",
+      "title": "Search extract only, used for: Vending on a cart permit rented from its holder",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-44016",
+      "title": "Search extract only, used for: Keep trading on the seller's Health permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://commercialobserver.com/2013/08/weighing-in-on-key-money-deals/",
+      "title": "Search extract only, used for: Key money for a closed, built-out cafe",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://commercialobserver.com/2018/05/artisanal-owes-tf-cornerstone-24m-in-rent-at-387-park-avenue-south",
+      "title": "Search extract only, used for: rent a court held a restaurant owed for a Park Avenue South space it never opened, USD",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://corporate.findlaw.com/business-operations/security-deposit-concerns-for-the-thoughtful-tenant.html",
+      "title": "Search extract only, used for: Bank fee for a letter of credit posted as the lease deposit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dailycoffeenews.com/2025/09/05/delonghis-computer-that-makes-coffee-trolls-u-s-tariffs",
+      "title": "Search extract only, used for: Tariff on European espresso machines",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dailycoffeenews.com/2026/02/18/backed-by-craveworthy-gregorys-coffee-launches-franchising",
+      "title": "Search extract only, used for: The brand has never had a franchisee",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://documentedny.com/2026/03/06/street-vendors-criminal-summons-crackdowns-mamdani/",
+      "title": "Search extract only, used for: Vending enforcement sweeps the corridor",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/bizserve/ui/prg/rate/wbarchive",
+      "title": "Search extract only, used for: 2026 unemployment-insurance wage base per worker, USD",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://evgrieve.com/2022/04/owner-citys-bureaucratic-red-tape.html",
+      "title": "Search extract only, used for: An East Village deli at 75 Second Avenue sat finished but closed for months in 2022.",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://franchise.gregoryscoffee.com/",
+      "title": "Search extract only, used for: Franchise fee (example: Gregorys Coffee)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://freshcup.com/coffee-goods-in-limbo-as-tariffs-impact-gear-manufacturers/",
+      "title": "Search extract only, used for: The espresso machine costs 15% more",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://itkowitz.com/?p=4676",
+      "title": "Search extract only, used for: Protections written into the lease",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://itkowitz.com/?p=505",
+      "title": "Search extract only, used for: Selling does not free you from the lease",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://jerseydigs.com/?p=27849",
+      "title": "Search extract only, used for: Cafe Peanut in Jersey City could not open ten months after signing its lease.",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://lawyerforbusiness.com/how-much-does-business-sale-lawyer-cost-ny/",
+      "title": "Search extract only, used for: Lawyer and accountant for buying a business",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc.gov/site/lpc/about/pr2025/lpc-releases-new-analysis-20250414.page",
+      "title": "Search extract only, used for: share of Landmarks approvals issued at staff level",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc.gov/VendorEnforcement",
+      "title": "Search extract only, used for: Street vending enforcement officer",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyrej.com/let-s-talk-money-what-s-the-commission",
+      "title": "Search extract only, used for: Who pays the broker",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+      "title": "Search extract only, used for: The black market in cart permits",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://reach.dog/shop/vertical-ledge/products/full-service-mobile-coffee-cart",
+      "title": "Search extract only, used for: Coffee cart built to Health Department specifications",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://riverdalepress.com/stories/small-businesses-need-some-serious-help-now,73068",
+      "title": "Search extract only, used for: months one Bronx owner reported paying rent before opening",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sg.news.yahoo.com/papaya-king-settles-latest-legal-024500763.html",
+      "title": "Search extract only, used for: Papaya King's owner spent $500,000 on a new space and could not open there.",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://specialtyfoodmagazine.epubxp.com/i/123797/51",
+      "title": "Search extract only, used for: Where the pop-up stands",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://station-crm-site.pages.dev/blog/restaurant-leasing-nyc-broker-guide",
+      "title": "Search extract only, used for: renovation of an existing restaurant build-out, months (low)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://totalfood.com/buying-a-restaurant-watch-out-for-the-sellers-sales-tax-liabilities/",
+      "title": "Search extract only, used for: A tax bill arrives for the previous owner's sales",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.6sqft.com/nyc-street-vendor-advocates-push-to-lift-cap-on-licenses-after-adams-veto/",
+      "title": "Search extract only, used for: people on the waiting list, advocates' estimate",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.6sqft.com/smorgasburg-returns-for-16th-year-this-april-with-new-vendors/",
+      "title": "Search extract only, used for: The market season ends",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.800buycart.com/?p=740",
+      "title": "Search extract only, used for: A cart built to Health Department rules and a permitted commissary to store, clean and sup",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "title": "Search extract only, used for: light renovation: days from lease to opening in this model (21 + 21 + 7 + 60 + 14)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.aprio.com/insights-events/bulk-sales-in-new-york-how-a-purchaser-was-left-responsible-for-a-sellers-sales-tax-liability-ins-article-tax/",
+      "title": "Search extract only, used for: Buyers of delis and restaurants were assessed for their sellers' sales tax in a line of Ne",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bisnow.com/new-york/news/other/key-considerations-for-determining-the-appropriate-security-deposit-and-good-guy-guarantee-77148",
+      "title": "Search extract only, used for: Personal guaranty",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bizbuysell.com/learning-center/article/buyer-training-after-business-sale/",
+      "title": "Search extract only, used for: Who pays the business broker",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+      "title": "Search extract only, used for: Purchase price of an operating coffee shop",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bizbuysell.com/new-york/coffee-shops-and-cafes-for-sale/",
+      "title": "Search extract only, used for: Listings of operating coffee shops and built-out spaces offered for key money, with asking",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.carltonfields.com/leasing-retail-stores-in-new-york-city/",
+      "title": "Search extract only, used for: You pay the landlord's tax increases",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.commercialcafe.com/blog/good-guy-guarantee-nyc-real-estate/",
+      "title": "Search extract only, used for: Good guy guaranty",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cssny.org/news/entry/testimony-street-vendor-justice-will-strengthen-nycs-economy-through-equitable-inclusive-growth",
+      "title": "Search extract only, used for: reported black-market rent for a cart permit, USD (low)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20150708/flatiron/con-ed-work-delays-slowing-down-new-restaurants-from-opening",
+      "title": "Search extract only, used for: A Lower East Side restaurant opened with salads and cold tapas in 2015.",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.entrepreneur.com/growth-strategies/no-one-would-rent-me-a-cafe-in-trendy-nyc-neighborhoods/438828",
+      "title": "Search extract only, used for: Landlords will not rent to a first-timer",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.franchisepayback.com/franchise/caffe-aronne",
+      "title": "Search extract only, used for: small-format espresso franchise, lowest total initial investment seen (Caffe Aronne), USD",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.ftc.gov/business-guidance/resources/consumers-guide-buying-franchise",
+      "title": "Search extract only, used for: The 14-day rule for franchises",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+      "title": "Search extract only, used for: Rent starts before sales do",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.katalystos.com/blog/restaurant-build-out-contract-and-liens",
+      "title": "Search extract only, used for: A subcontractor files a lien on the building",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.levelset.com/mechanics-lien/new-york-lien-law-faqs",
+      "title": "Search extract only, used for: Your contractor's unpaid bills",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.metro-manhattan.com/blog/rentescalations",
+      "title": "Search extract only, used for: Rent goes up every year",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.metro-manhattan.com/security-deposit/",
+      "title": "Search extract only, used for: How big the deposit gets",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.naggl.org/wp-content/uploads/2025/08/SBA-Info-5000-872051.7aFees.8.28.25.pdf",
+      "title": "Search extract only, used for: SBA loan guaranty fee (if you borrow to buy or build)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/pdf/ll156_sn.pdf",
+      "title": "Search extract only, used for: Construction work without a Department of Buildings permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/pdf/ll160of2017_sn.pdf",
+      "title": "Search extract only, used for: The landlord's unpaid fines block your permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article5.pdf",
+      "title": "Search extract only, used for: The seller left unpaid Health Department fines",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter6.pdf",
+      "title": "Search extract only, used for: Lattes change the class of your cart",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/mobile-food-vending-unit-penalty-schedule-for-administrative-code.pdf",
+      "title": "Search extract only, used for: Vending food from a cart with no license or no unit permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/supervisory-licenses-what-vendors-need-to-know.pdf",
+      "title": "Search extract only, used for: Supervisory license renewal (cart)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/lpc/downloads/pdf/Storefronts_in_Historic_Districts_Fact_Sheet.pdf",
+      "title": "Search extract only, used for: Landmarks permit for storefront work (historic districts only)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/mayors-office/news/2026/07/executive-order-no--18.html",
+      "title": "Search extract only, used for: A free city project manager",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
+      "title": "Search extract only, used for: The city cuts small-business red tape",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+      "title": "Search extract only, used for: Asbestos investigation (ACP-5) before the permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/industry/ahvs-renewal-guidelines-fees.page",
+      "title": "Search extract only, used for: Construction pace",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/do-i-need-a-permit.page",
+      "title": "Search extract only, used for: Let a handyman do the plumbing and wiring",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/safety/swo.page",
+      "title": "Search extract only, used for: Buildings inspector",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "title": "Search extract only, used for: Sick leave balances survive a sale",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+      "title": "Search extract only, used for: A cart needs a commissary",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/business/food-operators/temporary-food-service-establishments.page",
+      "title": "Search extract only, used for: Selling food at a market or pop-up without a temporary permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/lpc/applications/fees.page",
+      "title": "Search extract only, used for: Storefronts in historic districts",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "title": "Search extract only, used for: The block is in a historic district",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/planning/plans/city-of-yes/city-of-yes-economic-opportunity.page",
+      "title": "Search extract only, used for: Zoning comes before the lease",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nycctp.com/wp-content/uploads/2021/03/EV-Make-Ready-Information-Sheet-DOT.pdf",
+      "title": "Search extract only, used for: utility-side electrical upgrade, months (low; Con Edison 2021 fleet sheet)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pdf/current_forms/st/dtf17i.pdf",
+      "title": "Search extract only, used for: days before the first taxable sale to apply for the sales-tax Certificate of Authority",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+      "title": "Search extract only, used for: Staying past the lease",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+      "title": "Search extract only, used for: The machine you bought with the shop dies",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.westsiderag.com/2014/03/27/bocca-di-bye-bye-restaurant-backs-out-because-of-red-tape",
+      "title": "Search extract only, used for: Bocca di Bacco walked away from a signed Upper West Side lease and about $100,000 in 2014.",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.whitefordlaw.com/news-events/client-alert-sba-issues-sop-50-10-8-key-changes-impacting-sba-7a-lending",
+      "title": "Search extract only, used for: Borrowing to buy a business",
+      "checked": "2026-11-14"
+    }
+  ]
 }

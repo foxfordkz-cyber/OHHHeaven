@@ -4,23 +4,23 @@
 
 ## 1. Вердикт
 
-1. Задание закрыто выше порога: 23 записи `setup`, 32 шага `roadmap`, 59 событий в каталоге, 14 механик, среди них «ремонт без выручки» и «покупка готового бизнеса».
+1. Задание закрыто выше порога: 24 записи `setup`, 35 шагов `roadmap`, 59 событий в каталоге, 14 механик, среди них «ремонт без выручки» и «покупка готового бизнеса».
 2. Главный вывод по ремонту: бесплатных месяцев аренды (обычно 3–6) не хватает. От подписания до открытия выходит 123 дня для бывшего кафе, 160 для переоборудования и 280 для помещения без общепита; при трёх бесплатных месяцах это $6 600, $14 000 и $38 000 аренды без выручки.
 3. Главный вывод по покупке: работающее кафе стоит около двух годовых заработков владельца (медиана 2,0×; 0,41× годовой выручки). Для эталонной точки пакета это примерно $233 000 — втрое дороже лёгкого ремонта, зато продажи идут с первой недели. Текущая оценка в ветке keen-cray (0,2× выручки, потолок $200 000) занижена.
 4. Покупателю переходят долги продавца по налогу с продаж (если не подано уведомление AU-196.10), его ставка страхования по безработице и накопленные больничные работников; разрешение на общепит не переходит никогда.
-5. **Сверка по первоисточникам сделана частично.** После одобрения окружения с 20 хостами я открыл 37 страниц и дословно сверил числа: 32 числа помечены `verified`, ещё у 28 записей правило прочитано на странице, а само число — мой расчёт. Сайты www.nyc.gov, свод законов города, BizBuySell и FTC отказали автоматическим запросам, поэтому сборы и штрафы Департамента зданий, тексты Health Code и кратные цены продажи остались с пометкой `primary_search_extract` (32 записи).
+5. **Сверка по первоисточникам сделана частично.** После одобрения окружения с 20 хостами я открыл 39 страниц и дословно сверил числа: 34 числа помечены `verified`, ещё у 28 записей правило прочитано на странице, а само число — мой расчёт. Сайты www.nyc.gov, свод законов города, BizBuySell и FTC отказали автоматическим запросам, поэтому сборы и штрафы Департамента зданий, тексты Health Code и кратные цены продажи остались с пометкой `primary_search_extract` (32 записи).
 
 ## 2. Что добавлено
 
 | Раздел | Записей | Что внутри |
 |---|---|---|
-| `setup` | 23 | Сбор DOB за подачу проекта (формула), асбестовое обследование и удаление, разрешение Landmarks, Letter of No Objection, резерв на непредвиденное, налог с продаж на работы подрядчика, депозит Con Edison, усиление электроввода, консультативная инспекция; цена готового бизнеса, key money, юрист и бухгалтер при покупке, налог с продаж на купленное оборудование, сбор SBA; взнос и обучение франшизы; лицензия, курс, разрешение и сама тележка, разрешение для частной территории, временное разрешение для ярмарок |
-| `roadmap` | 32 | Пять путей: с нуля (19 шагов), покупка (6), франшиза (2), тележка (3), временная точка (2). У каждого шага поле `path` и порядковый номер |
-| `ruleCards` | 45 | Аренда (10), ремонт и разрешения (16), покупка бизнеса (9), франшиза (2), тележка и временная точка (6), открытие (2) |
+| `setup` | 24 | Сертификат FDNY на газовые баллоны, сбор DOB за подачу проекта (формула), асбестовое обследование и удаление, разрешение Landmarks, Letter of No Objection, резерв на непредвиденное, налог с продаж на работы подрядчика, депозит Con Edison, усиление электроввода, консультативная инспекция; цена готового бизнеса, key money, юрист и бухгалтер при покупке, налог с продаж на купленное оборудование, сбор SBA; взнос и обучение франшизы; лицензия, курс, разрешение и сама тележка, разрешение для частной территории, временное разрешение для ярмарок |
+| `roadmap` | 35 | Пять путей: с нуля (22 шага), покупка (6), франшиза (2), тележка (3), временная точка (2). У каждого шага поле `path` и порядковый номер |
+| `ruleCards` | 48 | Аренда (11), ремонт и разрешения (18), покупка бизнеса (9), франшиза (2), тележка и временная точка (6), открытие (2) |
 | `levers` | 16 | 12 разовых решений (способ входа, гарантия, бесплатная аренда, защитные пункты договора, проверка адреса, газ или электричество, подрядчик, резерв, режим открытия, проверка покупки, срок подачи на разрешение, первый месяц после покупки) и 4 ежемесячных |
 | `shortcuts` | 9 | Открытие в помещении без законного назначения под кафе, ремонт без разрешения, работа под Stop Work Order, сантехника и проводка силами разнорабочего, торговля по разрешению продавца, покупка без уведомления налоговой, тележка без разрешения, аренда чужого разрешения, ярмарка без временного разрешения |
-| `violations` | 8 | Восемь новых с законом и штрафом. Ещё одно (`no_fse_permit`) уже есть в пакете, на него ссылается срезанный угол при покупке |
-| `officials` | 2 | Инспектор Департамента зданий; офицер по уличной торговле |
+| `violations` | 9 | Девять новых с законом и штрафом. Ещё одно (`no_fse_permit`) уже есть в пакете, на него ссылается срезанный угол при покупке |
+| `officials` | 3 | Инспектор Департамента зданий; офицер по уличной торговле; пожарный инспектор |
 | `reports` | 2 | Жалоба на стройку без разрешения; жалоба на тележку без лицензии |
 | `monthlyCosts` | 7 | Ежегодный рост аренды, доля роста налога на недвижимость, комиссия за аккредитив, роялти и маркетинговый фонд франшизы, плата за стоянку тележки, продление лицензии |
 | `events` | 4 | Городские и общенациональные: замедление DOB, рост цен стройки на 7%, пошлина 15% на европейское оборудование, высокая вакантность витрин |
@@ -31,7 +31,7 @@
 | `extra.leaseTerms` | 1 | Типичные условия аренды с источником у каждого |
 | `extra.preOpeningTimeline` | 13 шагов | Дни по шагам для трёх классов помещения, зависимости и параллельность |
 | `extra.takeover` | 1 | Замена оценки цены готового бизнеса |
-| `extra.nonObvious` | 45 | Неочевидное: текст, причина, источник |
+| `extra.nonObvious` | 47 | Неочевидное: текст, причина, источник |
 | `extra.failureStories` | 12 | Истории срывов до открытия и при покупке |
 | `extra.fixesExisting` | 8 | Исправления существующего пакета |
 | `extra.kitAdditions` | 1 | Что добавить в три набора |
@@ -101,7 +101,8 @@
 
 - В событиях каталога эффекты бывают прибавкой (`add`), а не только множителем (`mult`). Список из 23 новых полей — в `extra.newEffectFields`.
 - У события добавлено поле `trigger`: объявлено заранее, следует из свойства адреса или из решения игрока. Вероятностей нет.
-- Две новые обязательные записи `setup` (`dob_alteration_filing_fee`, `asbestos_survey_acp5`) нужно добавить во все три набора: `extra.kitAdditions`. Остальные 21 помечены `required: false`.
+- Две новые обязательные записи `setup` (`dob_alteration_filing_fee`, `asbestos_survey_acp5`) нужно добавить во все три набора: `extra.kitAdditions`. Остальные 22 помечены `required: false`.
+- Пробное слияние я сделал у себя, не сохраняя в репозиторий: массивы фрагмента дописаны к `packs/cafe.json`, две обязательные записи добавлены в наборы. `node build/validate-pack.mjs` дал 0 ошибок и 0 предупреждений, повторов идентификаторов нет.
 - В нарушении `bulk_sale_not_notified` «штраф» — это унаследованный долг: `pctOfSaved: 1` означает полную сумму скрытого долга продавца из объявления.
 
 ## 6. Не найдено
@@ -127,7 +128,7 @@
 
 ## 7. Источники
 
-Проверка: 14 ноября 2026. Страницы, которые я открыл и прочитал сам, перечислены с подтверждёнными числами в `extra.verification.openedPages` (37 страниц: налоговая штата, NYC Business, NYC311, Контролёры штата и города, Con Edison, Департамент труда, Inspire Brands, Cushman & Wakefield, Сенат штата, City Record, Генеральный прокурор штата, Корнелл, ABCEats). Остальные источники увидены только в выдержках поиска.
+Проверка: 14 ноября 2026. Страницы, которые я открыл и прочитал сам, перечислены с подтверждёнными числами в `extra.verification.openedPages` (39 страниц: налоговая штата, NYC Business, NYC311, Контролёры штата и города, Con Edison, Департамент труда, Inspire Brands, Cushman & Wakefield, Сенат штата, City Record, Генеральный прокурор штата, Корнелл, ABCEats). Остальные источники увидены только в выдержках поиска.
 
 Что изменила сверка:
 
@@ -140,10 +141,11 @@
 - Сбор Landmarks расходится в двух городских источниках: на открытой странице NYC Business — $50 и $3 за каждую тысячу сверх $25 000, на странице самой комиссии (только выдержка) — $95 и $5. В пакете оставлено $95 с пометкой о расхождении.
 - За удаление асбеста город берёт от $200 до $1 200 по площади; для пола кафе в 800 кв. футов — $800. Запись `asbestos_abatement` пересчитана до $5 600.
 - На странице NYC Business «Restaurant» нашлись два требования, которых не было ни в пакете, ни в моём первом проходе: штраф $400–$25 000 за работу вопреки Certificate of Occupancy и обязательный шумовой план на стройке. Оба добавлены.
+- Городской чек-лист для ресторанов дал ещё три шага до открытия: проверку зонирования по карте ZoLa, бесплатную экспертизу чертежей в Small Business Services и предоткрытую инспекцию FDNY с сертификатом G-46 на газовые баллоны ($25, штраф за отсутствие $1 000–$5 000).
 - Эта же страница содержит шкалу штрафов для ресторанов по всем ведомствам (от $5 до $25 000) и открывается без отказов: она пригодится исследователям D07 и D08 для подтверждения их нарушений.
 
 
-### Открыты и прочитаны (37)
+### Открыты и прочитаны (39)
 
 - https://a816-health.nyc.gov/ABCEatsRestaurants/App/partials/controllers/faq.html — The first graded inspection, unannounced
 - https://a856-cityrecord.nyc.gov/RequestDetail/20240628149 — A kiosk in a park; A stall at a seasonal food market, or a city concession for a kiosk or
@@ -154,6 +156,7 @@
 - https://nyc-business.nyc.gov/nycbusiness/business-services/legal-assistance/commercial-lease-assistance-program — Get the lease reviewed, free if you qualify; Free lease lawyer
 - https://nyc-business.nyc.gov/nycbusiness/description/asbestos-rules-and-regulations — Asbestos abatement (only if the report is positive); The asbestos report comes back positive
 - https://nyc-business.nyc.gov/nycbusiness/description/certificate-of-occupancy
+- https://nyc-business.nyc.gov/nycbusiness/description/cof-g46 — Fire Department certificate for carbon dioxide or nitrogen cylinders (; Schedule the Fire Department pre-opening inspection
 - https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan — A noise plan on the wall of the site; A neighbor complains about construction noise
 - https://nyc-business.nyc.gov/nycbusiness/description/food-protection-course-for-mobile-vendors — Food Protection Course for Mobile Vendors
 - https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit — Buying a shop: apply for every permit in your own name; The 22-day clock starts when you apply
@@ -165,13 +168,14 @@
 - https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about — Corner in someone else's shop: work under the host's permit; The host wants the corner back
 - https://nyc-business.nyc.gov/nycbusiness/description/small-business-energy-efficiency-program — A project manager who maps your permits and coordinates pre-opening in
 - https://nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishment-permit — Temporary Food Service Establishment permit (markets, street fairs, po; Pop-up or market stand: get the temporary permit
-- https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant — Running a cafe where the Certificate of Occupancy does not allow one; Open in a space that is not legal for a cafe
+- https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant — Fire inspector; Running a cafe where the Certificate of Occupancy does not allow one
 - https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf — Waiting for gas; Gas or all-electric
 - https://portal.311.nyc.gov/article/?kanumber=KA-01825 — temporary food permit for a market stand, USD a year; Market stand or a corner in someone else's shop
 - https://portal.311.nyc.gov/article/?kanumber=KA-01911
 - https://portal.311.nyc.gov/article/?kanumber=KA-02023 — Letter of No Objection for an old building without a Certificate of Oc; The building has no Certificate of Occupancy
 - https://portal.311.nyc.gov/article/?kanumber=KA-02955 — Health Department consultative inspection (optional, ungraded); Pass the trade inspections and close out the permit
 - https://portal.311.nyc.gov/article/?kanumber=KA-03354 — Cart: get on the waiting list for a supervisory license; Cart permits are capped
+- https://portal.311.nyc.gov/article/?kanumber=KA-03439 — One free team for all the agencies
 - https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf — Con Edison security deposit for a new business account; Utility deposit
 - https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide — Electrical service upgrade for espresso, ice and refrigeration loads; Walk the space with an architect and an electrician
 - https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide — Construction costs up 7%; Contractors raise their prices
@@ -183,7 +187,7 @@
 - https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm — Sales tax on the furniture and equipment bought with a business; Bought a business without notifying the Tax Department (bulk sale)
 - https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm — Add the clause that saves sales tax on the build-out; Sales tax on your build-out
 
-### Первоисточники, увиденные только в выдержках поиска (38)
+### Первоисточники, увиденные только в выдержках поиска (40)
 
 - https://a810-bisweb.nyc.gov/bisweb/bispi00.jsp — Look up the address before you fall in love with it
 - https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650 — Department of Buildings alteration filing fee; The note says the 10% excludes government fees; those fees are now sep
@@ -221,8 +225,10 @@
 - https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page
 - https://www.nyc.gov/site/lpc/applications/fees.page — Storefronts in historic districts
 - https://www.nyc.gov/site/lpc/applications/storefronts.page — Landmarks permit for storefront work (historic districts only); In a historic district: get the Landmarks permit first
+- https://www.nyc.gov/site/planning/plans/city-of-yes/city-of-yes-economic-opportunity.page — Zoning comes before the lease
 - https://www.nycctp.com/wp-content/uploads/2021/03/EV-Make-Ready-Information-Sheet-DOT.pdf — utility-side electrical upgrade, months (low; Con Edison 2021 fleet sh; utility-side electrical upgrade, months (high)
 - https://www.tax.ny.gov/pdf/current_forms/st/dtf17i.pdf — days before the first taxable sale to apply for the sales-tax Certific
+- https://zola.planning.nyc.gov/ — Check that the address is zoned for a cafe
 
 ### Вторичные: юристы, брокеры, отраслевая пресса, новости (50)
 
