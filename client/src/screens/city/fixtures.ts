@@ -1,6 +1,6 @@
 // Example CityView for /dev/city: the map fixtures plus world numbers, standings and a feed.
-import type { CityView, FeedItem, NicheId, Standing, WorldConfig } from '../../../../shared/src/types';
-import { RULES, dateOf } from '../../../../shared/src/rules';
+import type { CityView, FeedItem, NicheId, Standing, WorldConfig } from '@ohh/shared/types';
+import { RULES, dateOf } from '@ohh/shared/rules';
 import { businesses, day, events, weather } from '../../map/fixtures';
 
 const config: WorldConfig = {

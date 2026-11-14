@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { CityView, WorldPublic } from '../../../../shared/src/types';
+import type { CityView, WorldPublic } from '@ohh/shared/types';
 import { clockState, dayProgress, feedRows, formatCountdown, leaderBoards, msLeft, seasonDays } from './cityModel';
 import { cityView } from './fixtures';
 

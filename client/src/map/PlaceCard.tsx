@@ -1,5 +1,5 @@
 // Card for one place in "pick" mode: the facts a future owner needs before signing a lease.
-import type { NicheId, PackSet, Place, PublicBusiness } from '../../../shared/src/types';
+import type { NicheId, PackSet, Place, PublicBusiness } from '@ohh/shared/types';
 import { NICHE_META, capacityFor, competitorsNearby, money, occupiedPlaceIds, rentPerMonth, trafficLabel } from './geo';
 
 export interface PlaceCardProps {

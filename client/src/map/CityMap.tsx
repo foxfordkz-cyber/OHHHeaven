@@ -8,8 +8,8 @@ import './map.css';
 import offlineImageUrl from '../../../data/offline-map.png';
 import offlineMeta from '../../../data/offline-map.json';
 import offlineBuildingsUrl from '../../../data/offline-buildings.json?url';
-import type { BlockFundStatus, DayWeather, GameEvent, NicheId, PackSet, Place, PublicBusiness } from '../../../shared/src/types';
-import { dateOf } from '../../../shared/src/rules';
+import type { BlockFundStatus, DayWeather, GameEvent, NicheId, PackSet, Place, PublicBusiness } from '@ohh/shared/types';
+import { dateOf } from '@ohh/shared/rules';
 import {
   NICHE_META, WEATHER_ICON, activeFundBlocks, blockLines, blockSegments, businessFeatures, businessMarkers, centerOf,
   closedBlocks, liveEvents, partnerLines, placeFeatures, todayWeather, type BizMarker, type LngLat,

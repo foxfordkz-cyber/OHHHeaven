@@ -1,7 +1,7 @@
 // Polls the open city picture (CityView) and sends demo clock commands.
 // When agent 08's store and useView() land, CityScreenRoute switches to them; this hook stays as a fallback.
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { CityView, ClientView, GameClient } from '../../../../shared/src/types';
+import type { CityView, ClientView, GameClient } from '@ohh/shared/types';
 
 export interface ClockCommand { paused?: boolean; speed?: number }
 

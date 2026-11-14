@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { GameEvent, PackSet, Place, PublicBusiness } from '../../../shared/src/types';
+import type { GameEvent, PackSet, Place, PublicBusiness } from '@ohh/shared/types';
 import {
   activeFundBlocks, blockSegments, businessMarkers, capacityFor, closedBlocks, competitorsNearby, distanceM, liveEvents,
   occupiedPlaceIds, partnerLines, placeFeatures, rentPerMonth, todayWeather, trafficLabel,

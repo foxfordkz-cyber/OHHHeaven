@@ -2,7 +2,7 @@ import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CityMap } from '../../CityMap';
 import * as fx from '../../fixtures';
-import type { NicheId, WeatherCondition } from '../../../../../shared/src/types';
+import type { NicheId, WeatherCondition } from '@ohh/shared/types';
 
 const params = new URLSearchParams(location.search);
 

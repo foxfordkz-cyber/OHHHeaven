@@ -1,6 +1,6 @@
 // Example data for /dev/map and /dev/city. Business names are made up; places are data/places.json.
 import placesJson from '../../../data/places.json';
-import type { BlockFundStatus, DayWeather, GameEvent, NicheId, Place, PublicBusiness } from '../../../shared/src/types';
+import type { BlockFundStatus, DayWeather, GameEvent, NicheId, Place, PublicBusiness } from '@ohh/shared/types';
 
 export const places = placesJson as Place[];
 

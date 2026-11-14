@@ -1,6 +1,6 @@
 // Weather over the map: rain and snow particles on a canvas, tints for heat, clouds and storms.
 import { useEffect, useRef } from 'react';
-import type { WeatherCondition } from '../../../shared/src/types';
+import type { WeatherCondition } from '@ohh/shared/types';
 
 interface Drop { x: number; y: number; v: number; len: number; drift: number; r: number }
 

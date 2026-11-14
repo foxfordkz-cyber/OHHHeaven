@@ -5,7 +5,7 @@ import { CityScreen, CityScreenRoute } from '../../../screens/city/CityScreen';
 import { cityView } from '../../../screens/city/fixtures';
 import { places } from '../../fixtures';
 import type { ClockCommand } from '../../../screens/city/useCityView';
-import { RULES, dateOf } from '../../../../../shared/src/rules';
+import { RULES, dateOf } from '@ohh/shared/rules';
 
 const params = new URLSearchParams(location.search);
 

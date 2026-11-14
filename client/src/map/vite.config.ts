@@ -1,6 +1,6 @@
 // Dev harness for agent 09 until the client shell (agent 08) exists.
 // Pages: /dev/map/ and /dev/city/ on fixtures.
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';

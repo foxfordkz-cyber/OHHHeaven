@@ -1,6 +1,6 @@
 // Pure helpers for the city screen: shaping a CityView for display. No game math here.
-import type { CityView, FeedItem, FeedKind, NicheId, WorldPublic } from '../../../../shared/src/types';
-import { RULES } from '../../../../shared/src/rules';
+import type { CityView, FeedItem, FeedKind, NicheId, WorldPublic } from '@ohh/shared/types';
+import { RULES } from '@ohh/shared/rules';
 
 export const NICHE_ORDER: NicheId[] = ['cafe', 'barbershop', 'bodega', 'guesthouse', 'rentals'];
 export const NICHE_LABEL: Record<NicheId, string> = { cafe: 'Cafés', barbershop: 'Barbershops', bodega: 'Bodegas', guesthouse: 'Guesthouses', rentals: 'Rentals' };

@@ -1,7 +1,7 @@
 // City screen for the projector (/city/:id): live map on two thirds, the city's pulse on the right.
 import { useEffect, useMemo, useState } from 'react';
-import type { CityView, GameClient, Place } from '../../../../shared/src/types';
-import { dateOf } from '../../../../shared/src/rules';
+import type { CityView, GameClient, Place } from '@ohh/shared/types';
+import { dateOf } from '@ohh/shared/rules';
 import placesJson from '../../../../data/places.json';
 import { CityMap } from '../../map/CityMap';
 import { WEATHER_ICON } from '../../map/geo';

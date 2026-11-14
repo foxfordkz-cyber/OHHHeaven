@@ -1,7 +1,7 @@
 // Pure helpers for CityMap: everything here is data in → data out, no DOM and no map instance.
 import type {
   BlockFundStatus, DayWeather, GameEvent, NicheId, PackSet, Place, PublicBusiness, WeatherCondition,
-} from '../../../shared/src/types';
+} from '@ohh/shared/types';
 
 export const USABLE_FLOOR_SHARE = 0.6; // mirrors RULES.USABLE_FLOOR_SHARE in shared/src/rules.ts
 
