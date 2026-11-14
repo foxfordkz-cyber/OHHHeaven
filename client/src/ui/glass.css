@@ -640,3 +640,7 @@ button.list-row:active { background: var(--press); }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   :root, :root[data-theme='light'] { --glass-thick: var(--glass-solid); }
 }
+
+/* ───────── the opened business on the map: a ring, its name always shown, above its neighbours ───────── */
+.cm-pin[data-sel] { display: inline-flex !important; opacity: 1 !important; pointer-events: auto !important; filter: none; z-index: 5; outline: 2px solid var(--primary); outline-offset: 2px; }
+.cm-pin[data-sel] .cm-pin__name { display: inline; text-decoration: none; }

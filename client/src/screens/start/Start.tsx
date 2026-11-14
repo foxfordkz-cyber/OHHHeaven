@@ -13,8 +13,9 @@ export type WizardStep = 'idea' | 'place' | 'plan' | 'kit';
 export interface Draft { step: WizardStep; idea: string; match: IdeaMatch | null; niche: NicheId | null; name: string; placeId: string | null }
 
 const EMPTY: Draft = { step: 'idea', idea: '', match: null, niche: null, name: '', placeId: null };
-const STEPS = ['Join', 'Idea', 'Place', 'Plan', 'Setup', 'Open'] as const;
-const WIZARD_INDEX: Record<WizardStep, number> = { idea: 1, place: 2, plan: 3, kit: 4 };
+// The name and the entry fee are asked after the plan: a newcomer sees the address, the cost and the permits first.
+const STEPS = ['Idea', 'Place', 'Plan', 'Join', 'Setup', 'Open'] as const;
+const WIZARD_INDEX: Record<WizardStep, number> = { idea: 0, place: 1, plan: 2, kit: 4 };
 
 function draftKey(mode: string, worldId: string) {
   return `ohh.start.draft.v1:${mode}:${worldId}`;
@@ -60,21 +61,23 @@ export function Start({ initial }: { initial?: Partial<Draft> }) {
 
   const update = (patch: Partial<Draft>) => setDraft((d) => ({ ...d, ...patch }));
 
-  // Where are we: not joined → join; owner without business → wizard; setup → waiting; open → done.
+  // Where are we: a guest walks idea → place → plan and joins only then; owner without business → wizard;
+  // setup → waiting; open → done. A future city official joins at once.
   const phase = useMemo(() => {
     if (!view) return 'loading' as const;
-    if (view.kind === 'city') return 'join' as const;
+    if (view.kind === 'city') return asOfficial || draft.step === 'kit' ? ('join' as const) : ('wizard' as const);
     if (view.kind === 'official') return 'official' as const;
     if (!view.business) return 'wizard' as const;
     return view.business.status === 'setup' ? ('wait' as const) : ('done' as const);
-  }, [view]);
+  }, [view, asOfficial, draft.step]);
 
   useEffect(() => {
     if (phase === 'official') navigate('/desk', { replace: true });
   }, [phase, navigate]);
 
-  const stepIndex = phase === 'join' ? 0 : phase === 'wizard' ? WIZARD_INDEX[draft.step] : phase === 'wait' ? 5 : 5;
+  const stepIndex = phase === 'join' ? 3 : phase === 'wizard' ? WIZARD_INDEX[draft.step] : phase === 'wait' ? 5 : 5;
   const back = () => {
+    if (phase === 'join' && !asOfficial) return update({ step: 'plan' });
     if (phase !== 'wizard') return navigate('/');
     const order: WizardStep[] = ['idea', 'place', 'plan', 'kit'];
     const i = order.indexOf(draft.step);
@@ -97,12 +100,12 @@ export function Start({ initial }: { initial?: Partial<Draft> }) {
 
       {phase === 'loading' && (status === 'offline' ? <OfflineCard /> : <div className="stack"><Skeleton height={120} /><Skeleton height={54} /></div>)}
       {phase === 'join' && view && <JoinStep view={view} asOfficial={asOfficial} />}
-      {phase === 'wizard' && view?.kind === 'owner' && catalog && (
+      {phase === 'wizard' && view && view.kind !== 'official' && catalog && (
         <>
           {draft.step === 'idea' && <IdeaStep draft={draft} update={update} catalog={catalog} />}
           {draft.step === 'place' && <PlaceStep draft={draft} update={update} catalog={catalog} view={view} />}
           {draft.step === 'plan' && <PlanStep draft={draft} update={update} catalog={catalog} />}
-          {draft.step === 'kit' && <KitStep draft={draft} update={update} catalog={catalog} view={view} />}
+          {draft.step === 'kit' && view.kind === 'owner' && <KitStep draft={draft} update={update} catalog={catalog} view={view} />}
         </>
       )}
       {phase === 'wait' && view?.kind === 'owner' && catalog && <WaitStep view={view} catalog={catalog} />}
