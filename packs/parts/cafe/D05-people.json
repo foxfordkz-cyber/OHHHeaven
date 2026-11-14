@@ -123,7 +123,7 @@
       "required": false,
       "source": "https://dol.ny.gov/hospitality-wage-order-faq",
       "confidence": "estimate",
-      "note": "Arithmetic: 8 candidates x 3 hours x $17.00 = $408. A trial shift is work: search-seen (primary, NY DOL Hospitality Wage Order FAQ and Part 146): anyone who reports for duty at your request is owed at least 3 hours (or the scheduled shift if shorter) under 12 NYCRR 146-1.5. Eight candidates for four jobs is my assumption."
+      "note": "Arithmetic: 8 candidates x 3 hours x $17.00 = $408. A trial shift is work: search-seen (primary, NY DOL Hospitality Wage Order FAQ and Part 146): anyone who reports for duty at your request is owed at least 3 hours (or the scheduled shift if shorter) under 12 NYCRR 146-1.5. Eight candidates for four jobs is my assumption. Opened: Part 146, section 146-1.5 (three hours) and the NY DOL minimum wage page ($17.00)."
     },
     {
       "id": "extra_food_protection_certs",
@@ -137,7 +137,7 @@
       "withoutItViolation": "no_food_protection_cert",
       "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
       "confidence": "estimate",
-      "note": "Arithmetic: 2 leads x ($24 exam + 15 paid hours x $24) = $768. The exam fee and the 15 lessons are in the existing pack (seen there at NYC Health); one paid hour per lesson is my assumption, and study time you require is paid time. One certificate covers one person on one shift: a shop open 84 hours a week needs at least three holders (owner plus two) so that sickness or a day off never leaves a shift uncovered."
+      "note": "Arithmetic: 2 leads x ($24 exam + 15 paid hours x $24) = $768. The exam fee and the 15 lessons are in the existing pack (seen there at NYC Health); one paid hour per lesson is my assumption, and study time you require is paid time. One certificate covers one person on one shift: a shop open 84 hours a week needs at least three holders (owner plus two) so that sickness or a day off never leaves a shift uncovered. Opened: NYC Health: the online course is free and has 15 lessons, the exam costs $24, and at least one certified supervisor must be on site whenever the establishment operates."
     },
     {
       "id": "handbook_and_policies",
@@ -655,10 +655,10 @@
     {
       "id": "staff_pay_for_uniforms",
       "name": "Staff buy the logo shirts and wash them at home",
-      "what": "You require the branded shirt and apron but supply none: about $86 per worker a month. The employer must pay for a required uniform and, unless it supplies enough wash-and-wear sets, $19.85 a week to keep it clean.",
+      "what": "You require the branded shirt and apron but supply none: about $91 per worker a month. The employer must pay for a required uniform and, unless it supplies enough wash-and-wear sets, $21.10 a week to keep it clean.",
       "saves": {
         "basis": "per_staff",
-        "amount": 86
+        "amount": 91
       },
       "violation": "uniform_costs_unpaid"
     },
@@ -705,7 +705,7 @@
     {
       "id": "minors_no_papers",
       "name": "Hire 16-year-olds with no working papers and let them close",
-      "what": "A high-school student takes $17 where a trained barista wants $21: about $320 a month. Under 18 means working papers, 4 hours on a school night and no work after 10 pm. Fines now reach $10,000 for a first violation.",
+      "what": "A high-school student takes $17 where a trained barista wants $21: about $320 a month. Under 18 means working papers, 4 hours on a school night and no work after 10 pm without written consent. Fines now reach $10,000 for a first violation.",
       "saves": {
         "basis": "fixed",
         "amount": 320
@@ -773,7 +773,7 @@
       "reputationHit": 0.02,
       "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
       "confidence": "estimate",
-      "note": "Search-seen (secondary, law firms): Labor Law 191(1)(a) requires manual workers to be paid weekly, not later than seven days after the week ends; the Labor Department treats anyone doing physical tasks more than 25% of the time as a manual worker, which covers baristas. Since May 9, 2025 a first violation by an employer who paid in full at least twice a month costs lost interest only (16% a year); after a prior finding, liquidated damages of 100% of the late wages. Arithmetic: half of a $13,440 monthly payroll is paid a week late: $6,720 x 16% x 7/365 = $21 a month. Base $1,000 is the top civil penalty for a first non-wage violation under Labor Law 218 (from the user's research report). A second finding would cost about $6,720 for each month: the engine needs a repeat multiplier (extra.mechanics.repeat_offense_ladder)."
+      "note": "Search-seen (secondary, law firms): Labor Law 191(1)(a) requires manual workers to be paid weekly, not later than seven days after the week ends; the Labor Department treats anyone doing physical tasks more than 25% of the time as a manual worker, which covers baristas. Since May 9, 2025 a first violation by an employer who paid in full at least twice a month costs lost interest only (16% a year); after a prior finding, liquidated damages of 100% of the late wages. Arithmetic: half of a $13,440 monthly payroll is paid a week late: $6,720 x 16% x 7/365 = $21 a month. Base $1,000 is the top civil penalty for a first non-wage violation under Labor Law 218 (from the user's research report). A second finding would cost about $6,720 for each month: the engine needs a repeat multiplier (extra.mechanics.repeat_offense_ladder). Opened: NY DOL Frequency of Pay page: manual workers must be paid weekly, other workers at least twice a month. The 2025 damages rule and the penalty were not opened."
     },
     {
       "id": "no_wage_notice_statements",
@@ -792,9 +792,9 @@
       },
       "closureDays": 0,
       "reputationHit": 0.03,
-      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
-      "confidence": "estimate",
-      "note": "Search-seen (primary, nysenate.gov, Labor Law 198): damages for missing wage statements are $250 for each work day, not more than $5,000 per worker. The user's research report cites the same statute for the hiring notice: $50 for each work day, up to $5,000 per worker. These are damages paid to the worker, not a fine. A worker passes the $5,000 pay-stub cap in 20 work days. Game formula for a five-person team: $5,000 at once, $5,000 for each further month, capped at $50,000 (5 x $10,000). In hospitality the notice must also be given again before any change in the pay rate (12 NYCRR 146-2.2), including the January minimum wage step."
+      "source": "https://dol.ny.gov/system/files/documents/2021/03/wage-theft-prevention-act-frequently-asked-questions.pdf",
+      "confidence": "verified",
+      "note": "Opened and seen: NY DOL Wage Theft Prevention Act FAQ: damages of $50.00 per day per worker if proper notice is not given and $250.00 per day per worker if proper wage statements are not given, each capped at $5,000.00 per worker; notices in the worker's primary language, kept six years. Part 146, section 146-2.2: notice before the start of employment and again before any change in the hourly rate; signed acknowledgment kept six years. Earlier note: Search-seen (primary, nysenate.gov, Labor Law 198): damages for missing wage statements are $250 for each work day, not more than $5,000 per worker. The user's research report cites the same statute for the hiring notice: $50 for each work day, up to $5,000 per worker. These are damages paid to the worker, not a fine. A worker passes the $5,000 pay-stub cap in 20 work days. Game formula for a five-person team: $5,000 at once, $5,000 for each further month, capped at $50,000 (5 x $10,000). In hospitality the notice must also be given again before any change in the pay rate (12 NYCRR 146-2.2), including the January minimum wage step."
     },
     {
       "id": "call_in_pay_unpaid",
@@ -814,8 +814,8 @@
       "closureDays": 0,
       "reputationHit": 0.03,
       "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
-      "confidence": "estimate",
-      "note": "Search-seen (primary, NY DOL Part 146 and Hospitality Wage Order FAQ): an employee who reports for duty at the employer's request must be paid at least three hours for one shift, or the scheduled shift if shorter; six hours for two shifts totalling six hours or less. The FAQ example: sent home after one hour of an eight-hour shift = the hour worked plus two call-in hours at the minimum wage. Arithmetic for the saving: 2 send-homes a month x 2 unpaid hours x $17.00 = $68 per worker. Owed back with 100% liquidated damages (Labor Law 198): 2.0 x what was withheld. It also applies when you close early for a snowstorm after people have arrived."
+      "confidence": "verified",
+      "note": "Opened and seen: Part 146, section 146-1.5: an employee who reports for duty by request or permission is paid for at least three hours for one shift, six hours for two shifts totalling six hours or less, eight hours for three shifts, or the scheduled shift if less. NY DOL Hospitality FAQ: owed even when sent home early. Earlier note: Search-seen (primary, NY DOL Part 146 and Hospitality Wage Order FAQ): an employee who reports for duty at the employer's request must be paid at least three hours for one shift, or the scheduled shift if shorter; six hours for two shifts totalling six hours or less. The FAQ example: sent home after one hour of an eight-hour shift = the hour worked plus two call-in hours at the minimum wage. Arithmetic for the saving: 2 send-homes a month x 2 unpaid hours x $17.00 = $68 per worker. Owed back with 100% liquidated damages (Labor Law 198): 2.0 x what was withheld. It also applies when you close early for a snowstorm after people have arrived."
     },
     {
       "id": "meal_period_denied",
@@ -834,9 +834,9 @@
       },
       "closureDays": 0,
       "reputationHit": 0.03,
-      "source": "https://dol.ny.gov/ls443-guidelines-meal-periods",
+      "source": "https://forms.labor.ny.gov/WP/LS443.pdf",
       "confidence": "estimate",
-      "note": "Search-seen (primary, NY DOL meal period guidelines LS 443): at least 30 minutes for a shift of more than six hours that spans 11 am to 2 pm. Where only one person is on duty the Department accepts eating on the job if the worker voluntarily consents, but an uninterrupted meal period must be given to any worker who asks. The statute sets no dollar amount of its own; the game uses Labor Law 218: up to $1,000 for a first violation, $2,000 for a second, $3,000 after that (from the user's research report). Arithmetic for the saving: one hour a day of break relief x 30 days x $21 = $630."
+      "note": "Search-seen (primary, NY DOL meal period guidelines LS 443): at least 30 minutes for a shift of more than six hours that spans 11 am to 2 pm. Where only one person is on duty the Department accepts eating on the job if the worker voluntarily consents, but an uninterrupted meal period must be given to any worker who asks. The statute sets no dollar amount of its own; the game uses Labor Law 218: up to $1,000 for a first violation, $2,000 for a second, $3,000 after that (from the user's research report). Arithmetic for the saving: one hour a day of break relief x 30 days x $21 = $630. Opened: NY DOL guidelines LS 443: the 30-minute rule and the one-employee shift exception with voluntary consent. The penalty ladder was not opened."
     },
     {
       "id": "illegal_deductions",
@@ -856,8 +856,8 @@
       "closureDays": 0,
       "reputationHit": 0.04,
       "source": "https://dol.ny.gov/illegal-deductions",
-      "confidence": "estimate",
-      "note": "Search-seen (primary, NY DOL \"Illegal Deductions\" page): breakages, cash shortages, fines and losses to the business may not be deducted from wages; only deductions required by law or authorized in writing for the worker's own benefit are allowed. Owed back with 100% liquidated damages: 2.0 x what was taken. The $40 per worker a month is my estimate of small drawer shortages and broken glass. Making the worker pay you back in cash \"by separate transaction\" is banned too."
+      "confidence": "verified",
+      "note": "Opened and seen: NY DOL Illegal Deductions page lists breakages, cash shortages and fines among deductions an employer may not make. Earlier note: Search-seen (primary, NY DOL \"Illegal Deductions\" page): breakages, cash shortages, fines and losses to the business may not be deducted from wages; only deductions required by law or authorized in writing for the worker's own benefit are allowed. Owed back with 100% liquidated damages: 2.0 x what was taken. The $40 per worker a month is my estimate of small drawer shortages and broken glass. Making the worker pay you back in cash \"by separate transaction\" is banned too."
     },
     {
       "id": "uniform_costs_unpaid",
@@ -877,8 +877,8 @@
       "closureDays": 0,
       "reputationHit": 0.02,
       "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
-      "confidence": "estimate",
-      "note": "Search-seen (primary, NY DOL Part 146, rates from January 1, 2026, New York City): uniform maintenance pay is $19.85 a week for more than 30 hours, $15.80 for more than 20 and up to 30, $9.55 for 20 hours or fewer; none is due for wash-and-wear uniforms supplied in sufficient number. Arithmetic: $19.85 x 4.33 weeks = $86 a month for a full-timer. The purchase cost of a required uniform is the employer's as well (146-1.8). A plain black shirt the worker could wear anywhere is not a uniform; a shirt with your logo is. 2.0 x what was withheld."
+      "confidence": "verified",
+      "note": "Opened and seen: Part 146, section 146-1.7, New York City, on and after January 1, 2026: $21.10 High (over 30 hours), $16.75 Medium, $10.10 Low; subdivision (b) wash-and-wear exception; applies whatever the worker's rate of pay. Earlier note: Part 146, section 146-1.7, New York City, on and after January 1, 2026: uniform maintenance pay is $21.10 a week for over 30 hours, $16.75 for more than 20 but fewer than 30, $10.10 for 20 hours or fewer (the same for large and small employers); none is due for wash-and-wear uniforms supplied in sufficient number. The search results had shown $19.85 / $15.80 / $9.55, which is the rate for the rest of the state: corrected after opening the order. Arithmetic: $21.10 x 4.33 weeks = $91 a month for a full-timer. The purchase cost of a required uniform is the employer's as well (146-1.8). A plain black shirt the worker could wear anywhere is not a uniform; a shirt with your logo is. 2.0 x what was withheld."
     },
     {
       "id": "tip_pool_ineligible",
@@ -899,7 +899,7 @@
       "reputationHit": 0.06,
       "source": "https://www.dol.gov/agencies/whd/flsa/tipsFAQ",
       "confidence": "estimate",
-      "note": "Search-seen (primary, dol.gov): an employer may not keep employees' tips or let managers or supervisors keep them; a manager may keep only tips for service he or she \"directly and solely\" provides (opinion letter FLSA2026-13, September 2026). The employer owes the tips kept plus an equal amount as liquidated damages, and a civil money penalty of up to $1,100 per violation in the statute (adjusted upward each year; the 2026 figure was not in the results). Search-seen (secondary): New York's wage order limits tip pools to workers whose principal duty is personal service to customers, so a dishwasher or baker cannot be put in a required pool even though federal law would allow it when no tip credit is taken. Arithmetic: one of five shares of $2,000 in card tips = $400 a month. In April 2026 the US Labor Department recovered $85,000 for 36 workers at a coffee bar near Austin over tip pool violations."
+      "note": "Search-seen (primary, dol.gov): an employer may not keep employees' tips or let managers or supervisors keep them; a manager may keep only tips for service he or she \"directly and solely\" provides (opinion letter FLSA2026-13, September 2026). The employer owes the tips kept plus an equal amount as liquidated damages, and a civil money penalty of up to $1,100 per violation in the statute (adjusted upward each year; the 2026 figure was not in the results). Search-seen (secondary): New York's wage order limits tip pools to workers whose principal duty is personal service to customers, so a dishwasher or baker cannot be put in a required pool even though federal law would allow it when no tip credit is taken. Arithmetic: one of five shares of $2,000 in card tips = $400 a month. In April 2026 the US Labor Department recovered $85,000 for 36 workers at a coffee bar near Austin over tip pool violations. Opened: Part 146, section 146-2.14(e): eligibility is by duties, not titles; eligible occupations include wait staff and counter personnel who serve food or beverages. NY DOL tips FAQ: card tips due by the next regular payday, less the pro-rated card charge. The federal page was not opened (the site refused)."
     },
     {
       "id": "invalid_tip_credit",
@@ -919,8 +919,8 @@
       "closureDays": 0,
       "reputationHit": 0.05,
       "source": "https://dol.ny.gov/minimum-wage-tipped-workers-p717-english",
-      "confidence": "estimate",
-      "note": "Search-seen (primary, NY DOL): food service workers in New York City in 2026 may be paid a cash wage of $11.35 with a tip credit of $5.65 toward the $17.00 minimum; the 2027 figures are reported unchanged. The credit holds only if the worker got written notice of it before starting, records are kept, and tips really bring the hour up to $17.00; otherwise the employer makes up the gap. Arithmetic: $5.65 x 160 hours = $904 per worker a month. A cafe's tips run about $3.10 an hour (extra.tips), so even a properly noticed credit could lawfully save about $3.10, not $5.65. A day with more than 2 hours or 20% of the shift on untipped work loses the credit for that day (146-2.9, as cited in the existing pack). 2.0 x the credit taken, with a six-year reach."
+      "confidence": "verified",
+      "note": "Opened and seen: NY DOL minimum wage page and sheet P717: New York City food service workers $11.35 cash wage and $5.65 tip credit, minimum wage $17.00, and the same figures in the table for January 1, 2027 (\"the minimum wage will stay the same\"; an off-ramp condition was met). Part 146, sections 146-2.2 and 146-2.9 (two hours or more, or more than 20 percent of the shift, at untipped work). Earlier note: Search-seen (primary, NY DOL): food service workers in New York City in 2026 may be paid a cash wage of $11.35 with a tip credit of $5.65 toward the $17.00 minimum; the 2027 figures are reported unchanged. The credit holds only if the worker got written notice of it before starting, records are kept, and tips really bring the hour up to $17.00; otherwise the employer makes up the gap. Arithmetic: $5.65 x 160 hours = $904 per worker a month. A cafe's tips run about $3.10 an hour (extra.tips), so even a properly noticed credit could lawfully save about $3.10, not $5.65. A day with more than 2 hours or 20% of the shift on untipped work loses the credit for that day (146-2.9, as cited in the existing pack). 2.0 x the credit taken, with a six-year reach."
     },
     {
       "id": "exempt_misclassification",
@@ -939,9 +939,9 @@
       },
       "closureDays": 0,
       "reputationHit": 0.04,
-      "source": "https://www.proskauer.com/blog/new-york-state-minimum-wage-and-exempt-salary-updates-for-2026",
-      "confidence": "estimate",
-      "note": "Search-seen (secondary, several law firms): the executive and administrative exemptions need a salary of at least $1,275 a week in New York City in 2026 and a real management job. From memory of the Hospitality Wage Order (page not opened): 146-2.5 requires non-exempt staff to be paid hourly rates, and 146-3.5 sets the regular rate of a salaried non-exempt worker at weekly pay divided by the lesser of 40 and the hours worked. Arithmetic: $1,100 / 40 = $27.50; overtime owed 10 h x $41.25 = $412.50 a week, against $220 a week saved ($1,320 - $1,100); doubled by liquidated damages = $825, which is 3.75 x the saving."
+      "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
+      "confidence": "verified",
+      "note": "Opened and seen: Part 146: executive and administrative salary threshold $1,275.00 per week in New York City on and after January 1, 2026; section 146-2.5: employers may not pay employees on a daily, weekly, salary, piece rate or other non-hourly rate basis; section 146-3.5: regular rate = total weekly earnings divided by the lesser of 40 hours or the hours actually worked. The 'from memory' remark in this note no longer applies. Earlier note: Search-seen (secondary, several law firms): the executive and administrative exemptions need a salary of at least $1,275 a week in New York City in 2026 and a real management job. From memory of the Hospitality Wage Order (page not opened): 146-2.5 requires non-exempt staff to be paid hourly rates, and 146-3.5 sets the regular rate of a salaried non-exempt worker at weekly pay divided by the lesser of 40 and the hours worked. Arithmetic: $1,100 / 40 = $27.50; overtime owed 10 h x $41.25 = $412.50 a week, against $220 a week saved ($1,320 - $1,100); doubled by liquidated damages = $825, which is 3.75 x the saving."
     },
     {
       "id": "retaliation",
@@ -961,7 +961,7 @@
       "reputationHit": 0.08,
       "source": "https://dol.ny.gov/wages-and-hours-frequently-asked-questions",
       "confidence": "estimate",
-      "note": "Search-seen (primary, NY DOL FAQ): employers who retaliate \"can be fined up to $20,000\". From memory of Labor Law 215 (page not opened): a civil penalty of $1,000 to $10,000, up to $20,000 for a repeat within six years, plus lost pay, reinstatement and liquidated damages of up to $20,000. Game formula, my estimate: $5,000 (middle of the first-violation range) plus $3,400 for each month of lost pay (160 h x $21), capped at $30,000 ($10,000 + $20,000). Search-seen (primary, nyc.gov): under the city Protected Time Off Law retaliation costs full compensation plus $500, or $2,500 if the worker was fired. Threatening to call immigration authorities counts as retaliation."
+      "note": "Search-seen (primary, NY DOL FAQ): employers who retaliate \"can be fined up to $20,000\". From memory of Labor Law 215 (page not opened): a civil penalty of $1,000 to $10,000, up to $20,000 for a repeat within six years, plus lost pay, reinstatement and liquidated damages of up to $20,000. Game formula, my estimate: $5,000 (middle of the first-violation range) plus $3,400 for each month of lost pay (160 h x $21), capped at $30,000 ($10,000 + $20,000). Search-seen (primary, nyc.gov): under the city Protected Time Off Law retaliation costs full compensation plus $500, or $2,500 if the worker was fired. Threatening to call immigration authorities counts as retaliation. Opened: NYC Protected Time Off FAQ: retaliation costs full compensation plus damages of $500 or $2,500. The NY DOL pages opened state no dollar amount for Labor Law 215."
     },
     {
       "id": "child_labor",
@@ -982,7 +982,7 @@
       "reputationHit": 0.08,
       "source": "https://www.littler.com/news-analysis/asap/new-york-enacts-sweeping-amendments-child-labor-laws",
       "confidence": "estimate",
-      "note": "Search-seen (secondary, Littler and Proskauer on the 2025 state budget): since May 9, 2025 Labor Law 141 allows up to $10,000 for a first violation, $2,000 to $25,000 for a second and $10,000 to $55,000 after that; before, the caps were $1,000 to $3,000. Search-seen (primary, NY DOL hours chart): every worker under 18 needs an employment certificate; at 16 and 17, while school is in session, 4 hours on a day before a school day, 8 hours on other days, between 6 am and 10 pm. Game formula is my spread of the first-violation range: $4,000 in the first month up to $10,000. The saving assumes one student for 80 hours at $17 instead of $21."
+      "note": "Search-seen (secondary, Littler and Proskauer on the 2025 state budget): since May 9, 2025 Labor Law 141 allows up to $10,000 for a first violation, $2,000 to $25,000 for a second and $10,000 to $55,000 after that; before, the caps were $1,000 to $3,000. Search-seen (primary, NY DOL hours chart): every worker under 18 needs an employment certificate; at 16 and 17, while school is in session, 4 hours on a day before a school day, 8 hours on other days, between 6 am and 10 pm. Game formula is my spread of the first-violation range: $4,000 in the first month up to $10,000. The saving assumes one student for 80 hours at $17 instead of $21. Opened: NY DOL: youth aged 14 to 17 need working papers (digital from 2027); at 16 and 17, work between 10 pm and midnight before a school day needs written permission from a parent and a certificate from the school; 48 hours a week when school is out. The new penalty amounts were not opened."
     },
     {
       "id": "unpaid_volunteer_labor",
@@ -1022,8 +1022,8 @@
       "closureDays": 0,
       "reputationHit": 0,
       "source": "https://www.irs.gov/irm/part4/irm_04-023-007",
-      "confidence": "estimate",
-      "note": "Search-seen (primary, irs.gov, Internal Revenue Manual 4.23.7 and Form 941 instructions): when workers report tips to the IRS but not to the employer, the IRS issues a Section 3121(q) Notice and Demand for the employer share of Social Security and Medicare tax; the employer owes it from the date of the notice, with no earlier penalty, and reports it on Form 941 line 5f. So the game charges 1.0 x the tax skipped. The workers carry the larger risk (tax plus a penalty on their own return). Arithmetic: $1,000 of cash tips x 7.65% = $77 a month = 0.15% of $51,000 sales; the $1,000 is my assumption (half the card tips). Since tax year 2025 only reported tips qualify for the workers' federal deduction of up to $25,000, so staff now ask for tips to be on the W-2."
+      "confidence": "verified",
+      "note": "Opened and seen: IRS Internal Revenue Manual 4.23.7 and the Form 941 instructions: the Section 3121(q) Notice and Demand; the employer is not liable for its share of tax on unreported tips until the notice; reported on line 5f. Earlier note: Search-seen (primary, irs.gov, Internal Revenue Manual 4.23.7 and Form 941 instructions): when workers report tips to the IRS but not to the employer, the IRS issues a Section 3121(q) Notice and Demand for the employer share of Social Security and Medicare tax; the employer owes it from the date of the notice, with no earlier penalty, and reports it on Form 941 line 5f. So the game charges 1.0 x the tax skipped. The workers carry the larger risk (tax plus a penalty on their own return). Arithmetic: $1,000 of cash tips x 7.65% = $77 a month = 0.15% of $51,000 sales; the $1,000 is my assumption (half the card tips). Since tax year 2025 only reported tips qualify for the workers' federal deduction of up to $25,000, so staff now ask for tips to be on the W-2."
     },
     {
       "id": "unfair_labor_practice",
@@ -1062,9 +1062,9 @@
       },
       "closureDays": 0,
       "reputationHit": 0.02,
-      "source": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611",
+      "source": "https://forms.labor.ny.gov/WP/LS611.pdf",
       "confidence": "estimate",
-      "note": "Search-seen (primary, NY DOL form LS 611 and Labor Law 161): an employer operating a restaurant must give every employee at least 24 consecutive hours of rest in each calendar week (Sunday to Saturday) and name the day in advance. The game uses the Labor Law 218 ladder: up to $1,000, $2,000, $3,000 (from the user's research report). A worker who agrees to a seventh day is not a defence without a Labor Department variance."
+      "note": "Search-seen (primary, NY DOL form LS 611 and Labor Law 161): an employer operating a restaurant must give every employee at least 24 consecutive hours of rest in each calendar week (Sunday to Saturday) and name the day in advance. The game uses the Labor Law 218 ladder: up to $1,000, $2,000, $3,000 (from the user's research report). A worker who agrees to a seventh day is not a defence without a Labor Department variance. Opened: NY DOL form LS 611: restaurants must give at least twenty-four consecutive hours of rest in any calendar week. The penalty ladder was not opened."
     },
     {
       "id": "no_disability_pfl_coverage",
@@ -1085,8 +1085,8 @@
       "reputationHit": 0.02,
       "criminal": "Failure to secure the coverage is a misdemeanor: a fine of $100 to $500 or up to one year in jail, or both (Workers' Compensation Board).",
       "source": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp",
-      "confidence": "estimate",
-      "note": "Search-seen (primary, wcb.ny.gov): an employer without disability and Paid Family Leave coverage faces penalties and pays any claim that arises in the uninsured period; sole proprietors and partners can be held personally liable; it is a misdemeanor with a fine of $100 to $500. From memory of Section 220 (text not opened): a penalty of up to 0.5% of the payroll for the uninsured period plus up to $500. Arithmetic: 0.5% x $13,440 = $67 a month. The real cost is the claim: search-seen (primary, paidfamilyleave.ny.gov): in 2026 Paid Family Leave pays 67% of pay up to $1,228.53 a week for up to 12 weeks, $14,742.36 in all."
+      "confidence": "verified",
+      "note": "Opened and seen: Workers' Compensation Board: a penalty not in excess of 1/2 of one percent of payroll during the period of noncompliance plus up to $500; a misdemeanor with a fine of $100 to $500 or up to one year; the employer bears the cost of claims. Employee contribution to disability insurance: one-half of one percent of wages, not more than sixty cents a week. 2026 Paid Family Leave deduction 0.432%, capped at $411.91. The 'from memory' remark in this note no longer applies. Earlier note: Search-seen (primary, wcb.ny.gov): an employer without disability and Paid Family Leave coverage faces penalties and pays any claim that arises in the uninsured period; sole proprietors and partners can be held personally liable; it is a misdemeanor with a fine of $100 to $500. From memory of Section 220 (text not opened): a penalty of up to 0.5% of the payroll for the uninsured period plus up to $500. Arithmetic: 0.5% x $13,440 = $67 a month. The real cost is the claim: search-seen (primary, paidfamilyleave.ny.gov): in 2026 Paid Family Leave pays 67% of pay up to $1,228.53 a week for up to 12 weeks, $14,742.36 in all."
     },
     {
       "id": "no_harassment_policy_training",
@@ -1148,7 +1148,7 @@
       "reputationHit": 0.01,
       "source": "https://pillsburylaw.com/en/news-and-insights/nyc-pay-transparency-law.html",
       "confidence": "estimate",
-      "note": "Search-seen (secondary): employers with four or more workers, counting the owner and contractors, must state the minimum and maximum pay in every job ad, including a sign in the window or a social media post. The city commission may fine up to $250,000, but a first violation costs nothing if the ad is fixed within 30 days of the notice. The state law (in force since September 17, 2023) covers the same employers; its penalty amounts were not in the results. Game value $1,000 is my estimate for an ad left unfixed."
+      "note": "Search-seen (secondary): employers with four or more workers, counting the owner and contractors, must state the minimum and maximum pay in every job ad, including a sign in the window or a social media post. The city commission may fine up to $250,000, but a first violation costs nothing if the ad is fixed within 30 days of the notice. The state law (in force since September 17, 2023) covers the same employers; its penalty amounts were not in the results. Game value $1,000 is my estimate for an ad left unfixed. Opened: NY DOL pay transparency page (Labor Law 194-B, four or more employees, minimum and maximum pay) and the city commission's page (good faith pay range in all job ads since November 1, 2022). Penalty amounts were not on the pages opened."
     },
     {
       "id": "illegal_hiring_questions",
@@ -1169,7 +1169,7 @@
       "reputationHit": 0.03,
       "source": "https://www.nyc.gov/site/cchr/media/fair-chance-faqs.page",
       "confidence": "estimate",
-      "note": "Search-seen (primary, NYC Commission on Human Rights Fair Chance FAQ): employers with four or more workers, the owner and contractors included, may not ask about criminal history until after a conditional job offer, and must give a written analysis and a chance to respond before taking the offer back. Search-seen (secondary): the same law bans credit checks for most jobs and questions about past pay; the Commission may impose up to $125,000, or $250,000 for a willful violation. The Commission also sends testers who pose as applicants. Game value $5,000 is my estimate of a small-employer settlement; I found no published average."
+      "note": "Search-seen (primary, NYC Commission on Human Rights Fair Chance FAQ): employers with four or more workers, the owner and contractors included, may not ask about criminal history until after a conditional job offer, and must give a written analysis and a chance to respond before taking the offer back. Search-seen (secondary): the same law bans credit checks for most jobs and questions about past pay; the Commission may impose up to $125,000, or $250,000 for a willful violation. The Commission also sends testers who pose as applicants. Game value $5,000 is my estimate of a small-employer settlement; I found no published average. Opened: NYC Commission on Human Rights Fair Chance FAQ: four or more employees including the owner and contractors; criminal records only after a conditional offer. Penalty amounts were not on the page."
     }
   ],
   "officials": [
@@ -1388,7 +1388,7 @@
       "months": 2,
       "source": "https://www.nyc.gov/mayors-office/news/2026/02/mayor-mamdani-announces-major-expansion-of-protected-time-off-fo",
       "confidence": "estimate",
-      "note": "Search-seen (primary, nyc.gov, February 2026): the mayor announced the expansion of protected time off for 4.3 million workers together with a new data-driven enforcement strategy. The 1.5x inspection rate is a game-balance value."
+      "note": "Search-seen (primary, nyc.gov, February 2026): the mayor announced the expansion of protected time off for 4.3 million workers together with a new data-driven enforcement strategy. The 1.5x inspection rate is a game-balance value. Opened: the mayor's February 2026 release (4.3 million workers, new enforcement strategy, 32 unpaid hours on hire)."
     },
     {
       "id": "i9_audit_notices",
@@ -1465,7 +1465,7 @@
     {
       "id": "meal_period_denied",
       "title": "Meal periods",
-      "source": "https://dol.ny.gov/ls443-guidelines-meal-periods",
+      "source": "https://forms.labor.ny.gov/WP/LS443.pdf",
       "text": "A shift of more than 6 hours that covers 11 am to 2 pm includes a 30-minute meal period. On a one-person shift the worker may agree to eat on the job, but anyone who asks for an uninterrupted break must get one (NY Labor Law 162)."
     },
     {
@@ -1478,7 +1478,7 @@
       "id": "uniform_costs_unpaid",
       "title": "Uniforms",
       "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
-      "text": "If you require a logo shirt or apron, you pay for it. Unless you supply enough wash-and-wear sets you also owe weekly uniform maintenance pay: $19.85 for over 30 hours, $15.80 for 20 to 30, $9.55 for 20 or fewer (NYC, 2026)."
+      "text": "If you require a logo shirt or apron, you pay for it. Unless you supply enough wash-and-wear sets you also owe weekly uniform maintenance pay: $21.10 for over 30 hours, $16.75 for 20 to 30, $10.10 for 20 or fewer (NYC, 2026)."
     },
     {
       "id": "tip_pool_ineligible",
@@ -1508,7 +1508,7 @@
       "id": "child_labor",
       "title": "Workers under 18",
       "source": "https://dol.ny.gov/hours-work-minors",
-      "text": "Workers under 18 need working papers. At 16 and 17 during the school year: 4 hours on school nights, 8 hours on other days, never after 10 pm. Since May 2025 a first violation can cost up to $10,000."
+      "text": "Workers under 18 need working papers. At 16 and 17 during the school year: 4 hours on school nights, 8 on other days, and after 10 pm only with written consent from a parent and the school. Since May 2025 a first violation can cost up to $10,000."
     },
     {
       "id": "unpaid_volunteer_labor",
@@ -1531,7 +1531,7 @@
     {
       "id": "no_day_of_rest",
       "title": "One day of rest in seven",
-      "source": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611",
+      "source": "https://forms.labor.ny.gov/WP/LS611.pdf",
       "text": "Restaurant employers must give every worker at least 24 hours off in a row each calendar week and name the day in advance (NY Labor Law 161). A worker who agrees to a seventh day does not make it legal."
     },
     {
@@ -1597,7 +1597,7 @@
     {
       "id": "unemployment_charges",
       "title": "Unemployment claims raise your rate",
-      "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+      "source": "https://forms.labor.ny.gov/UI/IA318.2.pdf",
       "text": "Benefits paid to people you let go are charged to your account and raise your state rate: 1.7% to 9.5% in 2026 against 4.1% for a new employer. A quit without good cause or a firing for misconduct is not charged, if you answer the state's notice on time."
     },
     {
@@ -1749,7 +1749,7 @@
       "title": "Build the schedule",
       "kind": "people",
       "text": "Cover every open hour with a certificate holder. Keep each workday inside 10 hours from start to finish, give everyone 24 hours off in a row each week, and plan who relieves whom for the 30-minute meal period.",
-      "link": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611"
+      "link": "https://forms.labor.ny.gov/WP/LS611.pdf"
     },
     {
       "id": "train_before_opening",
@@ -1877,9 +1877,21 @@
   ],
   "extra": {
     "d05Method": {
-      "howNumbersWereChecked": "No page could be opened in this session: the cloud environment blocks every outbound host (the proxy answered 403 for dol.ny.gov, nyc.gov, nysenate.gov, bls.gov, irs.gov and the rest). Only web search worked. So nothing in this fragment is marked verified. Each note says how the number was seen: \"Search-seen (primary)\" = the figure appeared in a search result taken from the primary source's own site; \"Search-seen (secondary)\" = from a law firm, trade press or vendor page; \"From memory\" = I know the rule but no result showed it; \"Arithmetic\" = my calculation from the figures above; \"My estimate\" or \"game-balance value\" = a design choice. Every \"Search-seen (primary)\" figure is a candidate for promotion to verified once someone opens the page.",
+      "howNumbersWereChecked": "Two passes on November 14, 2026. First pass: the cloud environment blocked every outbound host, so only web search worked and every number was recorded as an estimate with a note saying where it was seen (\"Search-seen (primary)\" = in a search result taken from the primary source's own site; \"Search-seen (secondary)\" = law firm, trade press or vendor page; \"From memory\"; \"Arithmetic\"; \"My estimate\" or \"game-balance value\"). Second pass: the owner allowed 20 government hosts and I opened the pages myself. Pages opened and read: NY Department of Labor (dol.ny.gov and forms.labor.ny.gov: minimum wage, tipped wage sheet P717, Part 146 Hospitality Wage Order, Hospitality FAQ, illegal deductions, meal period guidelines LS 443, day of rest LS 611, wage theft prevention FAQ, tips FAQ, frequency of pay, minors' hours, child labor, pay transparency, lactation, unemployment employer guide IA 318.2, 2026 contribution rates, Record of Employment, hiring incentives, Youth Jobs fact sheet), New York City (Protected Time Off FAQ of February 22, 2026 and the employee notice, the mayor's February 2026 release, Fair Chance FAQ, pay transparency page, Health Academy, Workforce1, First Course NYC, Summer Youth Employment employer sheet and FAQ), Workers' Compensation Board (disability and Paid Family Leave penalties, employer page, 2026 payroll class codes, 2026 Paid Family Leave deduction notice), IRS (Internal Revenue Manual 4.23.7, Form 941 instructions, Form 8846). An entry is marked verified only when its legal rule and its dollar figures were read on one of those pages; the note then begins \"Opened and seen:\". Sites that refused automated access even after being allowed (nysenate.gov, bls.gov, dol.gov, nycourts.gov, paidfamilyleave.ny.gov, ny.gov, dfs.ny.gov answer with a bot check or 'access denied') were not opened: figures from them stay estimates. Opening the sources corrected two search-result errors: New York City uniform maintenance pay is $21.10 a week, not $19.85 (that is the rest-of-state rate), and the $869 unemployment maximum took effect on October 6, 2025, not October 13.",
       "playerMoveKinds": "In extra.eventCatalog a playerMove has kind \"lever\" or \"shortcut\" (ids from this fragment, the existing cafe pack or _common), \"staff\" (hire or let go a role from staff), or \"manager\" (hire the manager).",
-      "effectFields": "Event effects use the engine targets where one exists (staffAvailability, wages, demand, inspections, cogs). Other fields are requests to the lead: capacity, quality, reputation, closureDays, and one-off money as { field: \"cash\", add: -amount }."
+      "effectFields": "Event effects use the engine targets where one exists (staffAvailability, wages, demand, inspections, cogs). Other fields are requests to the lead: capacity, quality, reputation, closureDays, and one-off money as { field: \"cash\", add: -amount }.",
+      "alsoOpened": [
+        "https://dol.ny.gov/frequency-pay",
+        "https://dol.ny.gov/child-labor",
+        "https://dol.ny.gov/pay-transparency",
+        "https://www.nyc.gov/site/cchr/media/pay-transparency.page",
+        "https://dol.ny.gov/new-york-youth-jobs-program-employers-fact-sheet",
+        "https://dol.ny.gov/retaliation",
+        "https://www.wcb.ny.gov/content/main/BoardAssessments/ga-3_payroll-class-codes_2026.pdf",
+        "https://www.wcb.ny.gov/content/main/forms/PFLDocs/pfl-pay-deduction-notice-2026.pdf",
+        "https://www.irs.gov/pub/irs-pdf/f8846.pdf",
+        "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSafeSickLeave-MandatoryNotice-English.pdf"
+      ]
     },
     "tips": {
       "cardTipsPerMonth": 2000,
@@ -1971,21 +1983,24 @@
         "counts": "employees",
         "rule": "Workers' compensation, disability and Paid Family Leave insurance, unemployment insurance, Form I-9, written pay notice, weekly pay for manual workers, harassment policy and yearly training, 40 hours of safe and sick leave (unpaid under 5 employees), 32 unpaid protected hours",
         "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
-        "confidence": "estimate"
+        "confidence": "verified",
+        "note": "Opened and seen: NYC Protected Time Off FAQ (updated February 22, 2026): employers with 4 or fewer employees give up to 40 hours, unpaid if net income is under $1 million; 32 hours of unpaid protected time from the first day of employment."
       },
       {
         "employees": 4,
         "counts": "employees plus the owner and contractors",
         "rule": "NYC Human Rights Law hiring rules: pay range in job ads, no criminal history questions before an offer, no credit checks, no salary history questions",
         "source": "https://www.nyc.gov/site/cchr/media/fair-chance-faqs.page",
-        "confidence": "estimate"
+        "confidence": "verified",
+        "note": "Opened and seen: NYC Commission on Human Rights Fair Chance FAQ: employers with four or more employees, which includes the business owner and independent contractors. NY DOL pay transparency page: four or more employees."
       },
       {
         "employees": 5,
         "counts": "employees",
         "rule": "The 40 hours of safe and sick leave become paid for every worker",
         "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
-        "confidence": "estimate"
+        "confidence": "verified",
+        "note": "Opened and seen: NYC Protected Time Off FAQ: employers with 5 or more employees must provide up to 40 hours of paid protected time off (99 or fewer employees)."
       },
       {
         "employees": 10,
@@ -2013,7 +2028,8 @@
         "counts": "employees",
         "rule": "Safe and sick leave rises to 56 paid hours",
         "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
-        "confidence": "estimate"
+        "confidence": "verified",
+        "note": "Opened and seen: NYC Protected Time Off FAQ: up to 56 hours of paid protected time off with 100 or more employees."
       }
     ],
     "thresholdsNote": "Search-seen for each row at the source given (primary for the nyc.gov and nycourts.gov rows, secondary for the rest). The 56 hours at 100 employees is from memory of the same city law. A coffee shop moves through the first four rows in its first year: the fifth person on payroll is the expensive step (paid sick leave for all).",
@@ -2980,11 +2996,11 @@
             "id": "complaint_handling"
           }
         ],
-        "realFrequency": "The maximum weekly benefit rose from $504 to $869 on October 13, 2025; 2026 employer rates run 1.7% to 9.5%, new employers 4.1%.",
+        "realFrequency": "The maximum weekly benefit has been $869 since October 6, 2025 (it was $504); 2026 employer rates run 1.7% to 9.5%, new employers 4.1%.",
         "tier": "core",
-        "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+        "source": "https://forms.labor.ny.gov/UI/IA318.2.pdf",
         "confidence": "estimate",
-        "note": "Search-seen (primary, NY DOL employer guide IA 318.2): the last employer is charged seven times the weekly benefit first, the rest is shared by wage history, up to 26 weeks; no charge for misconduct or a quit without good cause if the employer answers on time. Arithmetic: a $21, 40-hour barista earns $10,920 a quarter; benefit about 1/26 of that = $420; 7 x $420 = $2,940 charged. The 1/26 rule is from memory."
+        "note": "Opened (NY DOL employer guide IA 318.2): the last employer is charged seven times the claimant's weekly benefit first, the rest is shared among base-period employers, up to 26 weeks; a worker who left without good cause or was dismissed for misconduct is not eligible; the weekly benefit is 1/26 of the highest quarter's earnings. Arithmetic: a $21, 40-hour barista earns $10,920 a quarter; $10,920 / 26 = $420; 7 x $420 = $2,940 charged."
       },
       {
         "id": "customer_harasses_staff",
@@ -4556,7 +4572,7 @@
         ],
         "realFrequency": "No rate found. Since June 19, 2024 each break of up to 30 minutes is paid (Labor Law 206-c), for every employer.",
         "tier": "exotic",
-        "source": "https://www.littler.com/publication-press/publication/new-york-now-requires-paid-lactation-breaks",
+        "source": "https://dol.ny.gov/expressing-breast-milk-workplace",
         "confidence": "estimate",
         "note": "Arithmetic: 1 to 1.5 paid hours a shift needing cover, about 1% of team hours."
       },
@@ -4899,13 +4915,13 @@
           {
             "what": "Meal period, minutes, for a shift over 6 hours across 11 am to 2 pm",
             "value": 30,
-            "source": "https://dol.ny.gov/ls443-guidelines-meal-periods",
+            "source": "https://forms.labor.ny.gov/WP/LS443.pdf",
             "confidence": "estimate"
           },
           {
             "what": "Consecutive hours of rest each calendar week",
             "value": 24,
-            "source": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611",
+            "source": "https://forms.labor.ny.gov/WP/LS611.pdf",
             "confidence": "estimate"
           },
           {
@@ -5228,7 +5244,7 @@
         "title": "Letting people go raises next year's unemployment rate",
         "tier": "deep",
         "playerDecision": "Fire, lay off or cut hours; answer the state's notice; document misconduct.",
-        "engineMath": "Each chargeable separation (a layoff, a firing without documented misconduct, hours cut to 30 or fewer a week) adds a charge to the employer's account: 7 x the worker's weekly benefit at once, up to 26 weeks in all. Weekly benefit = quarterly wages / 26, capped at $869. Not chargeable: a quit without good cause, or a firing for misconduct, if the owner answers the notice in the same month. In January the state rate is reset: the new-employer rate of 4.1% applies in the first year; after that, rate = 4.1% + 1 point for each $3,000 of net charges, between 1.7% and 9.5%, on the first $17,600 of each worker's pay.",
+        "engineMath": "Each chargeable separation (a layoff, a firing without documented misconduct, hours cut to 30 or fewer a week) adds a charge to the employer's account: 7 x the worker's weekly benefit at once, up to 26 weeks in all. Weekly benefit = highest-quarter wages / 26, capped at $869. Not chargeable: a quit without good cause, or a firing for misconduct, if the owner answers the notice in the same month. In January the state rate is reset: the new-employer rate of 4.1% applies in the first year; after that, rate = 4.1% + 1 point for each $3,000 of net charges, between 1.7% and 9.5%, on the first $17,600 of each worker's pay.",
         "fieldsNeeded": [
           "business.uiAccountCharges",
           "taxes.ny_unemployment.rateOverride",
@@ -5238,22 +5254,22 @@
           {
             "what": "Weeks of benefit charged first to the last employer",
             "value": 7,
-            "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+            "source": "https://forms.labor.ny.gov/UI/IA318.2.pdf",
             "confidence": "estimate",
             "note": "Search-seen (primary, NY DOL employer guide IA 318.2)."
           },
           {
             "what": "Maximum weeks chargeable",
             "value": 26,
-            "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+            "source": "https://forms.labor.ny.gov/UI/IA318.2.pdf",
             "confidence": "estimate"
           },
           {
-            "what": "Maximum weekly benefit from October 13, 2025",
+            "what": "Maximum weekly benefit, effective October 6, 2025",
             "value": 869,
-            "source": "https://www.littler.com/news-analysis/asap/new-york-state-drastically-increases-maximum-weekly-unemployment-insurance",
+            "source": "https://forms.labor.ny.gov/UI/IA318.2.pdf",
             "confidence": "estimate",
-            "note": "Search-seen (secondary, several)."
+            "note": "Opened: NY DOL employer guide IA 318.2."
           },
           {
             "what": "Rate range in 2026, including the 0.075% re-employment fund",
@@ -5277,7 +5293,7 @@
           {
             "what": "One point per $3,000 of charges",
             "value": 3000,
-            "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+            "source": "https://forms.labor.ny.gov/UI/IA318.2.pdf",
             "confidence": "estimate",
             "note": "Game simplification of the state rate tables, which use the account balance divided by five-year average payroll; not the real formula."
           }
@@ -5394,8 +5410,8 @@
         "unit": "free service",
         "when": "all year",
         "source": "https://www.nyc.gov/employment/employers/services/workforce1",
-        "confidence": "estimate",
-        "note": "Search-seen (primary): sourcing, screening and interview scheduling at no cost to the business."
+        "confidence": "verified",
+        "note": "Opened and seen: nyc.gov Workforce1 page: free recruiting and screening for businesses, 'at no cost to you'. Earlier note: Search-seen (primary): sourcing, screening and interview scheduling at no cost to the business."
       },
       {
         "id": "first_course_nyc",
@@ -5404,8 +5420,8 @@
         "unit": "dollars per apprentice",
         "when": "cohort dates set by the city",
         "source": "https://www.nyc.gov/employment/employers/services/first-course-nyc",
-        "confidence": "estimate",
-        "note": "Arithmetic: 50% x 210 hours x $17.00 = $1,785. Search-seen (primary): restaurant partners are reimbursed 50% of training wages for the first six weeks, up to 210 hours."
+        "confidence": "verified",
+        "note": "Opened and seen: nyc.gov First Course NYC page: reimburses restaurant partners 50 percent of training wages during the initial 6 weeks, up to 210 hours. Earlier note: Arithmetic: 50% x 210 hours x $17.00 = $1,785. Search-seen (primary): restaurant partners are reimbursed 50% of training wages for the first six weeks, up to 210 hours."
       },
       {
         "id": "summer_youth_employment",
@@ -5414,8 +5430,8 @@
         "unit": "dollars of wages per participant paid by the city",
         "when": "six weeks in July and August; employer sign-up late January to early May",
         "source": "https://www.nyc.gov/assets/dycd/downloads/pdf/SYEP_Employer_Partnerships_2026.pdf",
-        "confidence": "estimate",
-        "note": "Arithmetic: 150 hours x $17.00 = $2,550. Search-seen (primary, nyc.gov): six weeks, up to 25 hours a week, ages 16 to 24 paid the minimum wage by the city, no cost to the host; more than 100,000 participants in 2026. The search extract of the wage figure was garbled and needs a direct look. Participants under 18 fall under the child labor hours rules."
+        "confidence": "verified",
+        "note": "Opened and seen: DYCD employer sheet 2026 and FAQ: youth ages 16-24, six-week placements, up to 25 hours per week, $17.00 per hour paid by the City of New York, no cost to the host. The wage figure is no longer in doubt. Earlier note: Arithmetic: 150 hours x $17.00 = $2,550. Search-seen (primary, nyc.gov): six weeks, up to 25 hours a week, ages 16 to 24 paid the minimum wage by the city, no cost to the host; more than 100,000 participants in 2026. The search extract of the wage figure was garbled and needs a direct look. Participants under 18 fall under the child labor hours rules."
       },
       {
         "id": "ny_youth_jobs_credit",
@@ -5424,8 +5440,8 @@
         "unit": "dollars per full-time hire (3,750 part time)",
         "when": "apply by November 30 of the program year",
         "source": "https://dol.ny.gov/hiring-incentives-tax-credits-and-funding-opportunities",
-        "confidence": "estimate",
-        "note": "Search-seen (primary, NY DOL). The hire must be 16 to 24, unemployed, living in New York and meet an at-risk condition; the employer must be certified first."
+        "confidence": "verified",
+        "note": "Opened and seen: NY DOL hiring incentives page and fact sheet: up to $7,500 per youth full time, $3,750 part time; ages 16-24; businesses must be certified. Earlier note: Search-seen (primary, NY DOL). The hire must be 16 to 24, unemployed, living in New York and meet an at-risk condition; the employer must be certified first."
       },
       {
         "id": "wotc",
@@ -5444,571 +5460,619 @@
       "url": "https://100hires.com/indeed-job-posting-cost.html",
       "title": "100Hires: how much it costs to post a job on Indeed (2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/",
       "title": "Black Box Intelligence: State of the Restaurant Workforce, turnover",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://blogs.duanemorris.com/immigrationlaw/2026/07/24/tps-terminations-are-coming-fast-what-employers-need-to-know-right-now/",
       "title": "Duane Morris: TPS terminations, what employers need to know (July 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://columbianewsservice.com/2025/09/30/tearing-my-family-apart-starbucks-closes-dozens-of-city-stores/",
       "title": "Columbia News Service: a coffee chain closes dozens of city stores (September 2025)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://culinaryagents.com/jobs/716734-Barista",
       "title": "Culinary Agents: New York City barista job postings, 2026",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://documentedny.com/2026/06/22/nyc-mayor-signs-heat-safety-order/",
       "title": "Documented: mayor announces workplace heat safety guidelines (June 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
+    },
+    {
+      "url": "https://dol.ny.gov/child-labor",
+      "title": "NYS Department of Labor: Child labor",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://dol.ny.gov/expressing-breast-milk-workplace",
+      "title": "NYS Department of Labor: Expressing breast milk in the workplace (Labor Law 206-c)",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://dol.ny.gov/frequency-pay",
+      "title": "NYS Department of Labor: Frequency of pay",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/hiring-incentives-tax-credits-and-funding-opportunities",
       "title": "NYS Department of Labor: hiring incentives, tax credits and funding opportunities",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/hospitality-wage-order-faq",
       "title": "NYS Department of Labor: Hospitality Wage Order Frequently Asked Questions",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/hours-work-minors",
       "title": "NYS Department of Labor: When a minor can work (hours chart)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/illegal-deductions",
       "title": "NYS Department of Labor: Illegal deductions (Labor Law 193)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
-    },
-    {
-      "url": "https://dol.ny.gov/ls443-guidelines-meal-periods",
-      "title": "NYS Department of Labor: Guidelines for Meal Periods (LS 443)",
-      "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/minimum-wage-0",
       "title": "NYS Department of Labor: Minimum wage",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/minimum-wage-tipped-workers-p717-english",
       "title": "NYS Department of Labor: Combining cash wages and tip credits (P717), 2026 rates",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://dol.ny.gov/new-york-youth-jobs-program-employers-fact-sheet",
+      "title": "NYS Department of Labor: New York Youth Jobs Program, fact sheet for businesses",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/notice-eligibility-ui-benefits",
       "title": "NYS Department of Labor: Notice of eligibility for unemployment benefits (Record of Employment, IA 12.3)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
-      "url": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611",
-      "title": "NYS Department of Labor: One Day Rest in Seven, Labor Law 161 (LS 611)",
+      "url": "https://dol.ny.gov/pay-transparency",
+      "title": "NYS Department of Labor: Pay transparency (Labor Law 194-B)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://dol.ny.gov/retaliation",
+      "title": "NYS Department of Labor: Retaliation",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/system/files/documents/2021/03/wage-theft-prevention-act-frequently-asked-questions.pdf",
       "title": "NYS Department of Labor: Wage Theft Prevention Act Frequently Asked Questions",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
       "title": "NYS Department of Labor: Tips and Gratuities Frequently Asked Questions (January 2025)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
-    },
-    {
-      "url": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
-      "title": "NYS Department of Labor: Unemployment Insurance Benefits, An Employer's Guide (IA 318.2, October 2025)",
-      "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/unemployment-insurance-rate-information",
       "title": "NYS Department of Labor: Current 2026 employer contribution rate",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/wage-theft-resources",
       "title": "NYS Department of Labor: Wage theft resources (2025 recoveries)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://dol.ny.gov/wages-and-hours-frequently-asked-questions",
       "title": "NYS Department of Labor: Wages and Hours Frequently Asked Questions",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://forms.labor.ny.gov/UI/IA318.2.pdf",
+      "title": "NYS Department of Labor: Unemployment Insurance Benefits, An Employer's Guide (IA 318.2)",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
     },
     {
       "url": "https://forms.labor.ny.gov/WP/CR146.pdf",
       "title": "NYS Department of Labor: Part 146 Hospitality Industry Wage Order (12 NYCRR 146)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://forms.labor.ny.gov/WP/LS443.pdf",
+      "title": "NYS Department of Labor: Guidelines for Meal Periods (LS 443)",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://forms.labor.ny.gov/WP/LS611.pdf",
+      "title": "NYS Department of Labor: One Day Rest in Seven, Labor Law 161 (LS 611)",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
     },
     {
       "url": "https://gusto.com/product/pricing",
       "title": "Gusto: pricing",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://gusto.com/resources/guides/switch-payroll-providers/square-pricing",
       "title": "Gusto: Square Payroll pricing for 2026",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://insureon.com/small-business-insurance/employment-practices-liability/cost",
       "title": "Insureon: employment practices liability insurance cost",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://jobs.generalcatalyst.com/companies/blank-street/jobs/86227204-barista-manhattan",
       "title": "Coffee chain job postings, Manhattan barista and shift lead pay (2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://lavu.com/labor-cost-for-coffee-shop/",
       "title": "Lavu: labor cost control for coffee shops (2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://modernrestaurantmanagement.com/?p=40802",
       "title": "Modern Restaurant Management: the 'little to no breathing room' reality for restaurants (owner survey)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://newyork.public.law/laws/n.y._labor_law_section_201-g",
       "title": "NY Labor Law 201-g: prevention of sexual harassment",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://nycourts.gov/REPORTER/3dseries/2013/2013_04754.htm",
       "title": "Barenboim v. Starbucks Corp., NY Court of Appeals (2013)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://paidfamilyleave.ny.gov/2026",
       "title": "New York Paid Family Leave updates for 2026",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
       "title": "Perfect Daily Grind: how long should it take to train your baristas?",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://pillsburylaw.com/en/news-and-insights/nyc-pay-transparency-law.html",
       "title": "Pillsbury: NYC pay transparency law",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://pos.toasttab.com/blog/data/restaurant-tipping-trends",
       "title": "Toast: restaurant tipping trends (Q2 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://pulserevops.com/industry-kpis/ik0402",
       "title": "Pulse RevOps: KPIs for coffee shops (low-quality source)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://riskandinsurance.com/lost-time-and-your-latte/",
       "title": "Risk & Insurance: lost time and your latte (AmTrust restaurant claims study)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://rsmus.com/insights/tax-alerts/2026/no-tax-tips-final-rules-confirm-qualifying-occupations-tip-definition.html",
       "title": "RSM: final rules on the no-tax-on-tips deduction (2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://squareup.com/us/en/pricing",
       "title": "Square: pricing",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://timesofsandiego.com/business/2026/04/08/la-mesa-coffee-public-square-closed-unpaid-wages/",
       "title": "Times of San Diego: coffee house closed after a walkout over unpaid wages (April 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.7shifts.com/blog/restaurant-sales-per-labor-hour-splh/",
       "title": "7shifts: restaurant sales per labor hour",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.bls.gov/news.release/jolts.t04.htm",
       "title": "BLS JOLTS Table 4: quits levels and rates by industry (September 2026 results)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.bls.gov/news.release/tenure.htm",
       "title": "BLS Employee Tenure news release (January 2026 data)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.bls.gov/oes/2023/May/oes_35620.htm",
       "title": "BLS OEWS May 2023: New York-Newark-Jersey City metro area",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.bls.gov/regions/northeast/news-release/2026/occupationalemploymentandwages_newyork_20260605.htm",
       "title": "BLS: Occupational Employment and Wages in New York-Newark-Jersey City, May 2025",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.brooklynpaper.com/ocean-hill-the-daily-press-unionizes",
       "title": "Brooklyn Paper: an Ocean Hill coffee shop unionizes",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.buchalter.com/blogs/recreational-equipment-inc-and-united-food-commercial-workers-local-555-nlrb-alj-finds-unlawful-discharge-during-organizing-drive-but-denies-gissel-bargaining-order/",
       "title": "Buchalter: NLRB judge finds unlawful discharge during an organizing drive (January 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.deputy.com/blog/restaurant-no-shows-what-they-cost-and-how-to-cover",
       "title": "Deputy: restaurant no-shows, what they cost (quotes BLS absence rates)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.dfs.ny.gov/reports_and_publications/press_releases/pr20250829",
       "title": "NYS Department of Financial Services: 2026 health insurance premium rates (August 29, 2025)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.dglaw.com/new-york-state-legislation-significantly-expands-workplace-harassment-protections/",
       "title": "Davis+Gilbert: New York expands workplace harassment protections",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.dol.gov/agencies/whd/flsa/tipsFAQ",
       "title": "US Department of Labor, Wage and Hour Division: tip regulations FAQ",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.dol.gov/sites/dolgov/files/WHD/opinion-letters/FLSA/FLSA2026-13.pdf",
       "title": "US Department of Labor opinion letter FLSA2026-13 (managers and tips, September 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.dwt.com/blogs/employment-labor-and-benefits/2021/11/monitoring-electronic-communications-new-york",
       "title": "Davis Wright Tremaine: New York notice of electronic monitoring",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.ebglaw.com/workforce-bulletin/new-york-enacts-amendment-to-limit-frequency-of-pay-damages-for-manual-workers",
       "title": "Epstein Becker Green: amendment limiting frequency-of-pay damages",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.fisherphillips.com/en/news-insights/do-your-contractors-carry-workers-compensation-coverage-how-it-can-impact-your-policy-and-5-ways-to-prepare-for-insurance-audits-and-disputes.html",
       "title": "Fisher Phillips: contractors' workers' compensation coverage and premium audits",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.fisherphillips.com/news-insights/new-york-publishes-guidance-adult-cannabis.html",
       "title": "Fisher Phillips: New York guidance on adult cannabis use and the workplace",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.heraldnet.com/news/lynnwood-barista-accused-of-faking-a-robbery/",
       "title": "Everett Herald: barista accused of faking a robbery to hide skimming",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.instawork.com/temp-work-rate/barista-rate-in-new-york-ny",
       "title": "Instawork: temp barista rate in New York, NY",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.irs.gov/instructions/i941",
       "title": "IRS: Instructions for Form 941 (March 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.irs.gov/irm/part4/irm_04-023-007",
       "title": "IRS Internal Revenue Manual 4.23.7: Employment Tax on Tip Income",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://www.irs.gov/pub/irs-pdf/f8846.pdf",
+      "title": "IRS Form 8846: Credit for Employer Social Security and Medicare Taxes Paid on Certain Employee Tips",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
     },
     {
       "url": "https://www.joinhomebase.com/compare/homebase-vs-7shifts",
       "title": "Homebase: Homebase vs 7shifts",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.katalystos.com/blog/employee-theft-and-pos-fraud-in-restaurants",
       "title": "Katalyst: employee theft and POS fraud in restaurants (quotes ACFE and NRA figures)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.littler.com/news-analysis/asap/new-york-city-proposes-bill-sets-higher-minimum-wages-and-eliminates-tip-credits",
       "title": "Littler: New York City bill Int. 757 on a $30 minimum wage and tip credits",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.littler.com/news-analysis/asap/new-york-enacts-sweeping-amendments-child-labor-laws",
       "title": "Littler: New York enacts sweeping amendments to child labor laws",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
-    },
-    {
-      "url": "https://www.littler.com/news-analysis/asap/new-york-state-drastically-increases-maximum-weekly-unemployment-insurance",
-      "title": "Littler: New York raises the maximum weekly unemployment benefit to $869",
-      "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.littler.com/news-analysis/asap/nys-legislature-increases-daily-jury-duty-fee-40-72",
       "title": "Littler: New York raises the daily jury fee from $40 to $72",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
-    },
-    {
-      "url": "https://www.littler.com/publication-press/publication/new-york-now-requires-paid-lactation-breaks",
-      "title": "Littler: New York now requires paid lactation breaks",
-      "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
       "title": "Mayer Brown: New York amends Labor Law to limit damages for late payments to manual workers (July 2025)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.mercer.com/en-us/insights/law-and-policy/most-new-york-employers-have-secure-choice-deadlines-approaching/",
       "title": "Mercer: New York Secure Choice deadlines (2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.morganlewis.com/pubs/2026/04/ice-rewrites-the-rules-on-form-i-9-violations",
       "title": "Morgan Lewis: ICE rewrites the rules on Form I-9 violations (April 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.morganlewis.com/pubs/2026/06/after-mullin-a-practical-guide-for-employers-with-tps-workers",
       "title": "Morgan Lewis: a practical guide for employers with TPS workers (June 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.munichre.com/hsb/en/products/specialty-liability-insurance/epl-plus.html",
       "title": "HSB (Munich Re): employment practices liability, claim cost figures",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.nlrb.gov/case/02-RC-380277",
       "title": "NLRB case 02-RC-380277 (Manhattan coffee store election, March 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.ny.gov/sites/default/files/2023-04/Worker_Toolkit.pdf",
       "title": "New York State: sexual harassment prevention, worker toolkit",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSafeSickLeave-MandatoryNotice-English.pdf",
       "title": "NYC DCWP: Notice of Employee Rights, Protected Time Off (February 22, 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
       "title": "NYC DCWP: Protected Time Off Law, Frequently Asked Questions (updated February 22, 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.nyc.gov/assets/dycd/downloads/pdf/SYEP_Employer_Partnerships_2026.pdf",
       "title": "NYC DYCD: Become an SYEP employer (2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.nyc.gov/employment/employers/services/first-course-nyc",
       "title": "NYC Jobs: First Course NYC (restaurant apprenticeships)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.nyc.gov/employment/employers/services/workforce1",
       "title": "NYC Jobs: Workforce1 services for employers",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.nyc.gov/mayors-office/news/2026/02/mayor-mamdani-announces-major-expansion-of-protected-time-off-fo",
       "title": "NYC Mayor's Office: expansion of protected time off and data-driven enforcement (February 2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.nyc.gov/site/cchr/media/fair-chance-faqs.page",
       "title": "NYC Commission on Human Rights: Fair Chance Act FAQ",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://www.nyc.gov/site/cchr/media/pay-transparency.page",
+      "title": "NYC Commission on Human Rights: Salary transparency in job advertisements",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
     },
     {
       "url": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
       "title": "NYC Health: Food Protection Course (online, free)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.nyc.gov/site/dycd/services/jobs-internships/summer-youth-employment-program-faq-for-employers.page",
       "title": "NYC DYCD: Summer Youth Employment Program FAQ for employers",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.nycourts.gov/media/24781",
       "title": "NY State Unified Court System: juror pay guidance",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.nysenate.gov/legislation/laws/LAB/198",
       "title": "NY Labor Law 198: costs, remedies (NY Senate)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.nysenate.gov/legislation/laws/LAB/218",
       "title": "NY Labor Law 218: violations of certain provisions, civil penalties (NY Senate)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.peoplekeep.com/blog/qsehra-contribution-limits",
       "title": "PeopleKeep: QSEHRA contribution limits",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.proskauer.com/blog/new-york-state-minimum-wage-and-exempt-salary-updates-for-2026",
       "title": "Proskauer: New York State minimum wage and exempt salary updates for 2026",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.restaurantdive.com/news/nra-restaurants-summer-hiring-surge-low-labor-supply-wage-growth/823673/",
       "title": "Restaurant Dive: summer restaurant hiring forecast (2026)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.shrm.org/topics-tools/news/employers-advised-stay-the-course-wotc-expires",
       "title": "SHRM: employers advised to stay the course as WOTC expires",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.thehartford.com/insights-center/business-management/restaurant-owner-stress-management-tips",
       "title": "The Hartford: restaurant owner stress (quotes owner surveys)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.vitalcitynyc.org/nyc-minimum-wage-increase-restaurant-industry/",
       "title": "Vital City: the minimum wage proposal and New York City restaurants",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
+    },
+    {
+      "url": "https://www.wcb.ny.gov/content/main/BoardAssessments/ga-3_payroll-class-codes_2026.pdf",
+      "title": "NYS Workers' Compensation Board: payroll class codes and loss costs, 2026",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
     },
     {
       "url": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/employer-disability-benefits.jsp",
       "title": "NYS Workers' Compensation Board: disability benefits, employer page",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
     },
     {
       "url": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp",
       "title": "NYS Workers' Compensation Board: penalties for no disability and Paid Family Leave coverage",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "opened and read"
+    },
+    {
+      "url": "https://www.wcb.ny.gov/content/main/forms/PFLDocs/pfl-pay-deduction-notice-2026.pdf",
+      "title": "NYS Workers' Compensation Board: employee notice of Paid Family Leave payroll deduction for 2026",
+      "checked": "2026-11-14",
+      "seen": "opened and read"
     },
     {
       "url": "https://www.wsmv.com/2023/06/23/barista-parlor-locations-close-following-employee-walkout/",
       "title": "WSMV: coffee locations close after an employee walkout (June 2023)",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     },
     {
       "url": "https://www.yahoo.com/news/former-isle-palms-caf-manager-210904482.html",
       "title": "Local news: former cafe manager accused of stealing over $12,000",
       "checked": "2026-11-14",
-      "seen": "search result only; page not opened (host blocked in this session)"
+      "seen": "search result only; page not opened"
     }
   ]
 }
