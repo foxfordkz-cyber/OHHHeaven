@@ -1776,6 +1776,2052 @@
         "source": "https://www.sage.com/en-us/blog/small-business-survival-skills-one-st-petersburg-cafe-became-community-haven-local-residents/",
         "tier": "deep"
       }
+    ],
+    "eventCatalog": [
+      {
+        "id": "lease_renewal_offer",
+        "name": "The renewal letter",
+        "text": "Six months before your lease ends the landlord names the new rent. It is priced at what the block asks today, not at what you paid.",
+        "scale": "point",
+        "months": [],
+        "trigger": "calendar: six months before the lease end date of this business (only takeovers and short leases meet it inside a 12-month season)",
+        "realSignal": "Asking rent per sq ft for ground-floor retail on the corridor (REBNY and Cushman & Wakefield retail reports) divided by your contract rent",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 2
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "lease_terms"
+          },
+          {
+            "kind": "mechanic",
+            "id": "relocate_or_close"
+          }
+        ],
+        "realFrequency": "Every lease ends. 2025 Brooklyn cases: offers of about 2x to 3x the old rent (Sippy Cafe, Bushwick Public House), +$4,000 a month (Connecticut Muffin).",
+        "tier": "core",
+        "source": "https://greenpointers.com/2025/08/21/greenpoint-coffee-shop-sippy-cafe-will-close-this-october/",
+        "confidence": "estimate",
+        "note": "Multiplier 2.0 is the low end of the reported 2x-3x offers; with a renewal option written into the lease (lever lease_terms: option) the increase is the lease's own figure, typically 3% a year. No statistic of renewal increases exists."
+      },
+      {
+        "id": "building_sold",
+        "name": "The building is sold",
+        "text": "Your building has a new owner. Your lease runs to its last day; after that the new owner decides.",
+        "scale": "block",
+        "months": [],
+        "trigger": "announced: the host picks a block; every business there whose lease ends within 18 months gets no renewal",
+        "realSignal": "Deed recorded in ACRIS (NYC Department of Finance property records) for the lot",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "lease_terms"
+          },
+          {
+            "kind": "mechanic",
+            "id": "relocate_or_close"
+          }
+        ],
+        "realFrequency": "Crown Heights juice shop closed December 1, 2025 after a sale; more than 20 Greenpoint businesses got one-month terminations in October 2025.",
+        "tier": "deep",
+        "source": "https://brooklyn.news12.com/2025/12/10/popular-juice-shop-in-crown-heights-closes-its-doors/1nmkac7r25b71vtq38DmnB",
+        "confidence": "estimate",
+        "note": "No money effect at announcement: the effect is the loss of renewal. A lease with a recorded renewal option survives a sale."
+      },
+      {
+        "id": "tax_escalation_bill",
+        "name": "Real estate tax bill from the landlord",
+        "text": "Once a year the landlord bills your share of the building's property tax increase over the base year, in one lump.",
+        "scale": "city",
+        "months": [
+          7
+        ],
+        "trigger": "calendar: July, when the city's fiscal year starts and new tax bills go out",
+        "realSignal": "NYC Department of Finance final assessment roll (May) and the Class 4 tax rate set by the City Council (June)",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "lease_terms"
+          },
+          {
+            "kind": "lever",
+            "id": "cash_reserve"
+          }
+        ],
+        "realFrequency": "Annual in most New York City retail leases. Cup & Saucer's 2017 notice quoted its new rent \"including real estate taxes\".",
+        "tier": "core",
+        "source": "https://www.thelodownny.com/?p=111961",
+        "confidence": "estimate",
+        "note": "A lump sum of about 2.5% of yearly base rent, shown as rent x1.3 for one month (0.3 x 1 month = 2.5% of 12 months). The share and the base year are set in each lease; no public average exists."
+      },
+      {
+        "id": "street_dig",
+        "name": "The street is torn up",
+        "text": "The city replaces a water main on your block. Fences, plates and noise for most of a year. The lease runs at full rent.",
+        "scale": "block",
+        "months": [],
+        "trigger": "announced one month ahead for one block",
+        "realSignal": "NYC Department of Design and Construction project notices and DOT street-opening permits for the block",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.75
+          }
+        ],
+        "durationMonths": 9,
+        "playerMoves": [
+          {
+            "kind": "deal",
+            "id": "block_fund"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "catering_wholesale"
+          }
+        ],
+        "realFrequency": "On Second Avenue during subway construction owners reported sales down 20-50%; 31 businesses between 63rd and 96th Streets had closed by 2010.",
+        "tier": "deep",
+        "source": "https://therealdeal.com/2010/08/24/second-avenue-merchants-subway-construction-cutting-business-by-up-to-40/",
+        "confidence": "estimate",
+        "note": "x0.75 is the low-to-middle of the 20-50% drops owners reported; the reports are owner estimates, not audited data."
+      },
+      {
+        "id": "barricades",
+        "name": "Barricades on the block",
+        "text": "Police fence off the street for a long demonstration. People can reach your door only by walking around.",
+        "scale": "block",
+        "months": [],
+        "trigger": "announced for one block in the prime tier",
+        "realSignal": "NYPD street closure advisories",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.7
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "catering_wholesale"
+          },
+          {
+            "kind": "lever",
+            "id": "cash_reserve"
+          }
+        ],
+        "realFrequency": "Milk Street Cafe, 40 Wall Street, 2011: sales down about 30% for three months, 21 workers laid off, closed.",
+        "tier": "exotic",
+        "source": "https://www.dnainfo.com/new-york/20111213/downtown/milk-street-cafe-closing-thursday-after-struggle-with-nypd-barricades",
+        "confidence": "estimate",
+        "note": "x0.7 is the 30% drop the owner reported."
+      },
+      {
+        "id": "gas_red_tag",
+        "name": "Gas shut off to the building",
+        "text": "The utility finds a leak and locks the building's gas. Restoring it takes a plumber, a Buildings Department permit, a pressure test and an inspection.",
+        "scale": "block",
+        "months": [],
+        "trigger": "announced for one building; hits only businesses whose kit uses gas (lever kitchen_energy: gas)",
+        "realSignal": "Utility gas shut-off (red tag) on the building; DOB gas work permit and inspection dates",
+        "effects": [
+          {
+            "field": "closureMonths",
+            "value": 6
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "kitchen_energy"
+          }
+        ],
+        "realFrequency": "Vanka Cafe, Brooklyn: closed 8+ months in 2019; the pizzeria next door 7 months; a Bronx coffee shop of 43 years never reopened; four restaurants in one Amsterdam Avenue building closed in 2017.",
+        "tier": "core",
+        "source": "https://www.brooklynpaper.com/two-sheepshead-bay-businesses-closed-for-months-after-nearby-gas-leak",
+        "confidence": "estimate",
+        "note": "Six months is below the 7-8 months of the Brooklyn case. An all-electric shop is untouched. Needs a \"closed for N months, rent still due\" effect: see mechanics."
+      },
+      {
+        "id": "water_off",
+        "name": "Water shut off for repairs",
+        "text": "The building shuts the water for a riser repair. No hot and cold running water means no service: the Health Code treats it as an imminent hazard.",
+        "scale": "point",
+        "months": [],
+        "trigger": "announced three days ahead for one building",
+        "realSignal": "Building or DEP water shut-off notice",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cash_reserve"
+          },
+          {
+            "kind": "shortcut",
+            "id": "serve_without_water"
+          }
+        ],
+        "realFrequency": "Routine in old mixed-use buildings; \"no hot and cold running water\" is a standing reason for Health Department closures.",
+        "tier": "deep",
+        "source": "https://regs.health.ny.gov/node/48391",
+        "confidence": "estimate",
+        "note": "Two closed days out of 30 = -6.7% of the month, rounded to x0.95 because some sales shift to the days after."
+      },
+      {
+        "id": "summer_outage",
+        "name": "Heat-wave power outage",
+        "text": "On the third day near 100°F the feeder fails and the neighborhood goes dark for the evening. Fridges warm up; milk and pastry above 41°F for four hours must be thrown out.",
+        "scale": "block",
+        "months": [
+          7,
+          8
+        ],
+        "trigger": "announced with the heat advisory, for selected blocks",
+        "realSignal": "National Weather Service heat advisory for New York City plus the Con Edison outage map",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.04
+          },
+          {
+            "field": "demand",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "insurance_endorsements"
+          },
+          {
+            "kind": "shortcut",
+            "id": "keep_old_food"
+          }
+        ],
+        "realFrequency": "July 13, 2019: 72,000-73,000 customers in Manhattan for 3-5 hours. July 21, 2019: more than 50,000 customers in Brooklyn and Queens, 30,000 of them cut off on purpose to protect the grid.",
+        "tier": "core",
+        "source": "https://en.wikipedia.org/wiki/Manhattan_blackout_of_July_2019",
+        "confidence": "estimate",
+        "note": "One discarded day of milk and pastry is about 1/30 of monthly cost of goods (+3.3%, shown as x1.04 with the remake waste); one lost evening and the next slow morning about -3% of the month. With the endorsement the insurer pays the spoiled stock up to its limit."
+      },
+      {
+        "id": "key_barista_leaves",
+        "name": "Your best barista gives notice",
+        "text": "The barista regulars ask for by name is leaving. Two weeks later the bar is slower and some of the morning crowd follows the barista down the street.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: at market pay, month 9 after opening; with pay above market and cross-training, not within the first year",
+        "realSignal": "Median barista tenure of 8-14 months (trade surveys)",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.9
+          },
+          {
+            "field": "demand",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "cross_training"
+          }
+        ],
+        "realFrequency": "Annual turnover above 50% in coffee shops; replacing one hourly worker costs about $1,500-$3,500.",
+        "tier": "core",
+        "source": "https://www.dripos.com/counter-talk/how-to-keep-your-best-baristas----and-actually-reduce-turnover",
+        "confidence": "estimate",
+        "note": "One of four baristas at half speed for two months = -12% of hands, rounded to x0.9; -3% demand is my estimate of regulars lost. Replacement cost $2,500 (middle of the range) is charged once."
+      },
+      {
+        "id": "staff_walkout",
+        "name": "The whole team quits on the same day",
+        "text": "The staff hand in one letter together and post it online. The shop is dark until you hire and train a new crew.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: two or more labor shortcuts (kept tips, unpaid trial shifts, off-the-clock work, no spread-of-hours pay) active for three months in a row",
+        "realSignal": "Number of active labor violations per business",
+        "effects": [
+          {
+            "field": "closureDays",
+            "value": 16
+          },
+          {
+            "field": "demand",
+            "mult": 0.85
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "keep_tips"
+          },
+          {
+            "kind": "shortcut",
+            "id": "unpaid_trial_shifts"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "Gorilla Coffee, Park Slope, April 2010: all baristas resigned at once, 16 days closed, \"tepid\" business after reopening.",
+        "tier": "core",
+        "source": "https://www.brooklynpaper.com/gorilla-warfare-as-entire-staff-quits-fifth-ave-coffee-bar",
+        "confidence": "estimate",
+        "note": "16 closed days is the Gorilla Coffee figure; x0.85 for two months afterwards is my reading of \"tepid\"."
+      },
+      {
+        "id": "union_petition",
+        "name": "Your baristas file for a union election",
+        "text": "The staff petition for a union. You can bargain or you can fight; the neighborhood reads about it either way.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: five or more staff and any labor shortcut active for six months",
+        "realSignal": "NLRB representation petitions filed by coffee shop workers",
+        "effects": [
+          {
+            "field": "wages",
+            "mult": 1.08
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "OCF Coffee House (Philadelphia) closed all shops in June 2024 after a union push; The Wydown (Washington) closed six days before its election in May 2024.",
+        "tier": "exotic",
+        "source": "https://dailycoffeenews.com/2024/06/11/philadelphias-ocf-coffee-closing-all-shops-after-union-push",
+        "confidence": "estimate",
+        "note": "A first contract raising pay about 8% is my estimate; no statistic for independent cafes was found."
+      },
+      {
+        "id": "wage_step_january",
+        "name": "January 1: the minimum wage goes up",
+        "text": "From 2027 the minimum wage rises every January by the three-year average of Northeast inflation. The number is announced by October 1.",
+        "scale": "city",
+        "months": [
+          1
+        ],
+        "trigger": "calendar: every January 1; announced October 1",
+        "realSignal": "New York State Department of Labor minimum wage order; CPI-W for the Northeast, three-year moving average",
+        "effects": [
+          {
+            "field": "wages",
+            "mult": 1.03
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Yearly. $16.50 to $17.00 on January 1, 2026 (+3.0%); a 3% index adds about 51 cents in 2027.",
+        "tier": "core",
+        "source": "https://www.ny.gov/programs/minimum-wage",
+        "confidence": "estimate",
+        "note": "3% is the projection quoted in the search results for a 3% CPI-W; the 2027 figure itself was not found."
+      },
+      {
+        "id": "owner_burnout",
+        "name": "You are running on empty",
+        "text": "Nine months of opening shifts. You snap at a regular, forget an order, miss a tax notice.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: owner_schedule \"every shift\" for nine months without a manager or a day off",
+        "realSignal": "Owner hours per week",
+        "effects": [
+          {
+            "field": "quality",
+            "add": -0.05
+          },
+          {
+            "field": "reputation",
+            "add": -0.03
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "owner_schedule"
+          },
+          {
+            "kind": "lever",
+            "id": "cross_training"
+          }
+        ],
+        "realFrequency": "\"Burned out\" is the owner's stated reason in closings from Milwaukee (2026) to Los Angeles (2025).",
+        "tier": "core",
+        "source": "https://urbanmilwaukee.com/?p=1084521",
+        "confidence": "estimate",
+        "note": "The size of the quality and reputation loss is a game-balance choice. Needs the owner-hours mechanic."
+      },
+      {
+        "id": "flu_takes_the_only_supervisor",
+        "name": "The only certified supervisor is out sick",
+        "text": "Flu season. The one person holding the Food Protection Certificate - you - is in bed for a week. Open without a certificate holder and it is a violation.",
+        "scale": "city",
+        "months": [
+          1,
+          2
+        ],
+        "trigger": "calendar event flu_season; hits only shops with a single Food Protection Certificate holder",
+        "realSignal": "NYC Health Department weekly influenza surveillance report",
+        "effects": [
+          {
+            "field": "closureDays",
+            "value": 5
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cross_training"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_food_protection_cert"
+          }
+        ],
+        "realFrequency": "A certificate holder must be on site every open hour; the free online course costs $24 for the exam.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+        "confidence": "estimate",
+        "note": "Five days is a typical flu absence, my estimate. A second certificate costs $24 plus about 15 paid hours of study."
+      },
+      {
+        "id": "theft_discovered",
+        "name": "The deposits do not match the register",
+        "text": "The bank statement is short of the daily reports, and has been for months.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: cash_controls \"none\" for three months; discovered when the option changes or in month 6",
+        "realSignal": "Difference between register reports and bank deposits",
+        "effects": [
+          {
+            "field": "cashLossPctRevenue",
+            "value": 0.015
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cash_controls"
+          }
+        ],
+        "realFrequency": "A New Zealand cafe lost about $25,000 in three months to an inherited manager; Good Karma Cafe in Philadelphia reported $17,000 embezzled.",
+        "tier": "deep",
+        "source": "https://www.odt.co.nz/regions/central-otago/theft-lockdown-lead-cafe-owners-close-business",
+        "confidence": "estimate",
+        "note": "1.5% of sales a month is my estimate: about $750 a month on $51,000 of sales, far below the two reported cases."
+      },
+      {
+        "id": "chain_opens_next_door",
+        "name": "A chain coffee shop opens on your block",
+        "text": "A \"Coming soon\" sign goes up 100 yards away. Cheaper drip coffee, an app, a longer lease than yours.",
+        "scale": "block",
+        "months": [],
+        "trigger": "announced two months ahead for one block",
+        "realSignal": "New Health Department food service permits within 250 m (DOHMH restaurant data); chain store counts",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.88
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "lever",
+            "id": "lease_terms"
+          },
+          {
+            "kind": "lever",
+            "id": "wifi_policy"
+          }
+        ],
+        "realFrequency": "Dunkin' has 623 shops in the city. Buddies Coffee's owner learned of a coffee shop opening next door in the months before closing (2025).",
+        "tier": "core",
+        "source": "https://secretnyc.co/buddies-coffee-closing-williamsburg/",
+        "confidence": "estimate",
+        "note": "x0.88: one more rival among about seven within 250 m takes roughly an eighth of the same walkers. In the footfall model of the keen-cray branch the rival should simply be added to the rivals list; the multiplier is the fallback."
+      },
+      {
+        "id": "chain_leaves",
+        "name": "The chain on your corner closes",
+        "text": "The chain store two blocks away is on the closure list. Its morning regulars need a new place.",
+        "scale": "block",
+        "months": [],
+        "trigger": "announced one month ahead for one block",
+        "realSignal": "Chain closure announcements; DOHMH permits not renewed",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.06
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "Starbucks closed 42 New York City stores (12%) in September 2025; Blank Street closed its last East Village shop in August 2026.",
+        "tier": "deep",
+        "source": "https://abc7ny.com/post/starbucks-close-dozens-nyc-coffee-shop-locations-amid-restructure/17918006/",
+        "confidence": "estimate",
+        "note": "x1.06 is my estimate: half the gain of a rival's arrival, because a closed chain's customers scatter among all shops."
+      },
+      {
+        "id": "coffee_carts_2027",
+        "name": "More coffee carts on the street",
+        "text": "The city issues thousands of new vending licenses. A cart with $2 coffee sets up near the subway entrance on your corner.",
+        "scale": "city",
+        "months": [],
+        "trigger": "announced: 2027 licensing round",
+        "realSignal": "Mobile food vending permits and supervisory licenses issued by the Health Department",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.96
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Reform package: 10,700 new general vending licenses in 2027 and 2,200 food supervisory licenses a year until 2031.",
+        "tier": "deep",
+        "source": "https://immresearch.org/reports/street-vendor-victory-reshaping-the-way-nyc-authorizes-vending/",
+        "confidence": "estimate",
+        "note": "x0.96 is my estimate for take-away drip coffee lost at commuter corners; no measurement exists."
+      },
+      {
+        "id": "feature_and_flood",
+        "name": "A food account features your block",
+        "text": "A video of the block passes a million views. For three weeks there is a line out the door - and a hold on your card payouts while the processor reviews the spike.",
+        "scale": "block",
+        "months": [],
+        "trigger": "announced one week ahead for one block",
+        "realSignal": "Views of posts geotagged to the block; card volume against the business's own three-month average",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "cash_reserve"
+          }
+        ],
+        "realFrequency": "Buddies Coffee: 7 million views in February 2025, crowds for weeks, closed in May. Processors list an unexpected rise in transactions as a reason to hold funds.",
+        "tier": "deep",
+        "source": "https://www.nerdwallet.com/business/software/learn/square-concern",
+        "confidence": "estimate",
+        "note": "x1.3 is the engine's upper limit for an event. Payout hold: a shop whose month is more than 50% above its three-month average receives that month's card money one month late (my rule; processors publish no threshold)."
+      },
+      {
+        "id": "rating_slide",
+        "name": "Your rating drops a star",
+        "text": "Slow service and a B in the window turn into one-star reviews. New customers pick the place across the street.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: quality below 0.4 for two months, or a posted grade of B or C",
+        "realSignal": "Average star rating on Yelp and Google",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.93
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          }
+        ],
+        "realFrequency": "Harvard Business School study of Yelp and Washington State tax records: one star more means 5-9% more revenue for independent restaurants, nothing for chains.",
+        "tier": "core",
+        "source": "https://www.hbs.edu/faculty/Pages/item.aspx?num=41233",
+        "confidence": "estimate",
+        "note": "x0.93 is the middle of the 5-9% range for one star."
+      },
+      {
+        "id": "office_days_up",
+        "name": "Offices call people back",
+        "text": "Big employers move from three office days to four or five. Weekday mornings in office districts fill up.",
+        "scale": "city",
+        "months": [
+          9,
+          10
+        ],
+        "trigger": "announced one month ahead; prime-tier blocks only",
+        "realSignal": "Kastle Back to Work Barometer for New York City; Partnership for New York City office survey",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.06
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "Kastle: New York City peak-day occupancy of 87.3% on Tuesday, October 27, 2026, the highest since March 2020; a monthly average of 66.0%.",
+        "tier": "deep",
+        "source": "https://www.kastle.com/safety-wellness/getting-america-back-to-work/",
+        "confidence": "estimate",
+        "note": "x1.06 for prime-tier weekday traffic is my estimate. Card-swipe data measures buildings, not workers."
+      },
+      {
+        "id": "january_trough",
+        "name": "January",
+        "text": "The slowest month of the coffee year. Gift cards sold in December come back as free drinks. The wage step, the quarter's sales tax and the year-end payroll filings land in the same weeks.",
+        "scale": "city",
+        "months": [
+          1
+        ],
+        "trigger": "calendar",
+        "realSignal": "Chain same-store sales by month; card transaction data",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.88
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cash_reserve"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "mechanic",
+            "id": "financing"
+          }
+        ],
+        "realFrequency": "Every year. Starbucks: December sales 58% above January (2016 card data). Restaurants: same-store sales growth -4.5% in January 2024.",
+        "tier": "core",
+        "source": "https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/",
+        "confidence": "estimate",
+        "note": "x0.88 is my estimate for an independent shop: far milder than the Starbucks holiday swing (driven by gift cards and seasonal drinks), stronger than the restaurant-wide -4.5%."
+      },
+      {
+        "id": "laptop_winter",
+        "name": "Laptop season",
+        "text": "It is cold outside and warm inside. Half your tables hold one person, one laptop and one drink bought at 9am.",
+        "scale": "city",
+        "months": [
+          12,
+          1,
+          2
+        ],
+        "trigger": "calendar; hits shops with wifi_policy \"open\"",
+        "realSignal": "Average minutes per seated customer; orders per seat per day",
+        "effects": [
+          {
+            "field": "seatTurnover",
+            "mult": 0.85
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "wifi_policy"
+          }
+        ],
+        "realFrequency": "New York shops now limit Wi-Fi to two hours on weekdays and switch it off on weekends (Devocion), or confine laptops to one room (Sweetleaf).",
+        "tier": "core",
+        "source": "https://www.axios.com/2025/05/09/coffee-shops-no-wifi-laptops-remote-work",
+        "confidence": "estimate",
+        "note": "x0.85 on unitsServedPerSizeMonth is my estimate; no dwell-time data for cafes was found. The engine has no seat-turnover effect target yet."
+      },
+      {
+        "id": "sales_tax_warrant",
+        "name": "Tax warrant and seizure",
+        "text": "Two quarters of sales tax unpaid. The state files a warrant, posts a SEIZED notice and changes the locks.",
+        "scale": "point",
+        "months": [
+          3,
+          6,
+          9,
+          12
+        ],
+        "trigger": "decision: shortcut keep_sales_tax (from the common pack) active across two quarterly due dates",
+        "realSignal": "New York State tax warrants filed against the business",
+        "effects": [
+          {
+            "field": "closureDays",
+            "value": 30
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "keep_sales_tax"
+          },
+          {
+            "kind": "spend",
+            "id": "accountant"
+          }
+        ],
+        "realFrequency": "Vox Pop, Brooklyn: seized December 2009 and April 2010 over $66,000; assets auctioned.",
+        "tier": "core",
+        "source": "https://www.brooklynpaper.com/vox-popped-outlaw-coffeeshop-closed-down-by-taxman-again",
+        "confidence": "estimate",
+        "note": "Two missed quarters before a seizure and 30 closed days are my simplification; the real sequence is notice, warrant, levy. Quarterly returns are due March 20, June 20, September 20 and December 20."
+      },
+      {
+        "id": "comp_audit_bill",
+        "name": "Workers' compensation audit",
+        "text": "The insurer audits last year's payroll. You paid more wages than you estimated; here is the bill for the difference.",
+        "scale": "point",
+        "months": [],
+        "trigger": "calendar: month 14 after opening (after the first policy year)",
+        "realSignal": "Actual payroll against the payroll estimated on the policy",
+        "effects": [
+          {
+            "field": "oneOffCostPctPayroll",
+            "value": 0.004
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cash_reserve"
+          }
+        ],
+        "realFrequency": "Every policy year for every employer.",
+        "tier": "deep",
+        "source": "https://www.craneagency.com/why-workers-compensation-premiums-increase-at-audit/",
+        "confidence": "estimate",
+        "note": "If payroll ran 20% over the estimate, the extra premium is 20% of a premium of about 2% of payroll = 0.4% of annual payroll, about $650 on $165,000. Falls after a 12-month season: belongs in the personal plan."
+      },
+      {
+        "id": "cash_advance_offer",
+        "name": "\"Cash in 24 hours\"",
+        "text": "A broker calls every week in January: $40,000 tomorrow, repaid as a share of each day's card sales.",
+        "scale": "city",
+        "months": [
+          1,
+          2
+        ],
+        "trigger": "announced: offered to every business whose cash is under two months of fixed costs",
+        "realSignal": "Factor rate and daily holdback in merchant cash advance agreements",
+        "effects": [
+          {
+            "field": "holdbackPctCardSales",
+            "value": 0.15
+          }
+        ],
+        "durationMonths": 8,
+        "playerMoves": [
+          {
+            "kind": "mechanic",
+            "id": "financing"
+          },
+          {
+            "kind": "lever",
+            "id": "cash_reserve"
+          }
+        ],
+        "realFrequency": "Court record: 35% of a Manhattan restaurant's card receipts every weekday until $145,000 was collected (2019). A $100,000 advance is typically repaid as $140,000-$150,000.",
+        "tier": "core",
+        "source": "https://www.nycourts.gov/reporter/pdfs/2020/2020_30413.pdf",
+        "confidence": "estimate",
+        "note": "Game terms: $40,000 advanced, $56,000 repaid (factor 1.4, the low end of the quoted range), 15% of card sales held back daily - milder than the 35% in the court case so that the choice is not an instant loss."
+      },
+      {
+        "id": "access_claim",
+        "name": "Accessibility lawsuit",
+        "text": "A federal complaint arrives: one step at the entrance, no ramp. The plaintiff has filed dozens like it this year.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: a place with a step at the door and no ramp (setup item portable_ramp not bought), month 8 after opening",
+        "realSignal": "ADA Title III complaints filed in the Southern and Eastern Districts of New York",
+        "effects": [
+          {
+            "field": "oneOffCost",
+            "value": 10000
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "setup",
+            "id": "portable_ramp"
+          }
+        ],
+        "realFrequency": "One plaintiffs' firm has filed about 600 such suits in New York federal courts; coffee shops and breweries are named targets.",
+        "tier": "core",
+        "source": "https://www.mondaq.com/unitedstates/discrimination-disability-sexual-harassment/1763220/ada-lawsuits-against-coffee-shops-and-breweries-on-the-rise-how-small-businesses-can-avoid-costly-accessibility-claims-about-architectural-barriers-and-websites",
+        "confidence": "estimate",
+        "note": "$10,000 covers a settlement and your own lawyer; published ranges ($5,000-$25,000) come from vendor blogs and are not verified. Needs the private-claims mechanic and a place attribute \"step at entrance\"."
+      },
+      {
+        "id": "music_letter",
+        "name": "A letter from a music rights society",
+        "text": "A licensing agent sat in your shop for an hour and wrote down the songs. Pay for a license and for the months already played.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: shortcut personal_playlist active for six months",
+        "realSignal": "Licensing demand letters from ASCAP, BMI, SESAC, GMR",
+        "effects": [
+          {
+            "field": "oneOffCost",
+            "value": 1500
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "music"
+          },
+          {
+            "kind": "shortcut",
+            "id": "personal_playlist"
+          }
+        ],
+        "realFrequency": "Statutory damages for willful infringement reach $150,000 a work; small-shop licenses run a few hundred dollars a year per society.",
+        "tier": "deep",
+        "source": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/",
+        "confidence": "estimate",
+        "note": "$1,500 = about two societies at $350 for the current year plus the back year; my estimate of a settled letter, not a court award."
+      },
+      {
+        "id": "pay_frequency_claim",
+        "name": "Pay-frequency claim",
+        "text": "A former barista's lawyer writes: manual workers must be paid weekly, and you paid every two weeks.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: shortcut biweekly_pay active for six months",
+        "realSignal": "Labor Law §191 complaints and class actions",
+        "effects": [
+          {
+            "field": "oneOffCostPctPayroll",
+            "value": 0.003
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "biweekly_pay"
+          }
+        ],
+        "realFrequency": "Class actions became common after a 2019 appellate ruling; the May 2025 amendment limits a first violation to interest.",
+        "tier": "deep",
+        "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+        "confidence": "estimate",
+        "note": "First violation: interest at 16% a year on wages paid a week late = about 0.3% of the late wages. A repeat violation costs 100% of the late-paid wages."
+      },
+      {
+        "id": "rescue_campaign",
+        "name": "The neighborhood wants to save you",
+        "text": "Regulars offer to start a fundraiser. The money is real, and so is the question of what it changes.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: available once, when cash is under one month of fixed costs and reputation is above 0.6",
+        "realSignal": "Crowdfunding campaigns for restaurants and cafes",
+        "effects": [
+          {
+            "field": "oneOffIncomeMonthsOfRevenue",
+            "value": 0.5
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "mechanic",
+            "id": "rescue_campaign"
+          }
+        ],
+        "realFrequency": "Boris & Horton raised $250,000 in February 2024 and ran out of money by the end of that year; a Florida cafe raised $2,000 for a grease trap.",
+        "tier": "exotic",
+        "source": "https://www.westsidespirit.com/home/boris-horton-dog-cafe-in-east-village-goes-belly-up-are-talks-afoot-with-new-owner-HA3983108",
+        "confidence": "estimate",
+        "note": "Half a month of revenue is a game-balance value. If the business closes within six months of a campaign its owner's reliability score takes the hit."
+      },
+      {
+        "id": "coffee_price_slide",
+        "name": "Coffee falls on the exchange",
+        "text": "Arabica futures are a third below last year's peak. Your roaster's price list moves down slowly.",
+        "scale": "world",
+        "months": [],
+        "trigger": "announced",
+        "realSignal": "ICE Coffee C front-month futures against the six-month average",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          }
+        ],
+        "realFrequency": "About $4.23 a pound on November 11, 2025 and about $2.80 on November 6, 2026.",
+        "tier": "deep",
+        "source": "https://tradingeconomics.com/commodity/coffee/news/599144",
+        "confidence": "estimate",
+        "note": "A 34% fall in green coffee, passed on by half, on beans at about 25% of cost of goods = -4%; shown as x0.98 because roasters lag (my estimate)."
+      },
+      {
+        "id": "world_cup_2026",
+        "name": "World Cup summer",
+        "text": "Eight matches across the river, the final on July 19. Hotels are full. Fan zones and bars with screens are packed; a quiet block sees an ordinary summer.",
+        "scale": "city",
+        "months": [
+          6,
+          7
+        ],
+        "trigger": "calendar: June 11 - July 19, 2026; prime-tier blocks only",
+        "realSignal": "NYC Tourism visitor counts and hotel revenue",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.05
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Hotel room revenue up 20.6% year on year; the city rewards program logged about 10,000 visits across 1,000+ small businesses.",
+        "tier": "deep",
+        "source": "https://www.governor.ny.gov/news/governor-hochul-highlights-statewide-fifa-world-cup-impacts",
+        "confidence": "estimate",
+        "note": "x1.05 in the prime tier only is my estimate."
+      },
+      {
+        "id": "marathon_sunday",
+        "name": "Marathon Sunday",
+        "text": "First Sunday of November: the course runs through all five boroughs. Blocks on the route are closed to cars and lined with spectators from 8am.",
+        "scale": "block",
+        "months": [
+          11
+        ],
+        "trigger": "calendar: November 1, 2026; blocks on the course",
+        "realSignal": "TCS New York City Marathon course map and road closure schedule",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.03
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "Yearly; November 1, 2026 was the 50th running of the five-borough course.",
+        "tier": "exotic",
+        "source": "https://www.findtherun.com/race/130698/2026-tcs-new-york-city-marathon",
+        "confidence": "estimate",
+        "note": "One day at double traffic = +3% of the month on route blocks; deliveries cannot reach the shop that morning."
+      },
+      {
+        "id": "garden_complaint",
+        "name": "A neighbor complains about the back yard",
+        "text": "Someone upstairs calls 311 about the tables in your yard. The Buildings Department orders the space vacated.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: shortcut backyard_seating active; found by a complaint or an inspection like any other violation",
+        "realSignal": "DOB complaints and partial vacate orders",
+        "effects": [
+          {
+            "field": "seats",
+            "mult": 0.7
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "backyard_seating"
+          }
+        ],
+        "realFrequency": "Yaffa Cafe, East Village: a 100-seat garden used for three decades, vacated after one neighbor's complaint in 2014; the cafe closed weeks later.",
+        "tier": "deep",
+        "source": "https://www.dnainfo.com/new-york/20141006/east-village/city-waited-3-decades-rule-yaffa-cafes-back-patio-illegal-manager-says",
+        "confidence": "estimate",
+        "note": "Fits the game's \"report to the city\" attack: see report_illegal_seating."
+      },
+      {
+        "id": "gift_card_hangover",
+        "name": "December gift cards come home",
+        "text": "The gift cards you sold before the holidays are being spent. Cups go out; no money comes in.",
+        "scale": "point",
+        "months": [
+          1,
+          2
+        ],
+        "trigger": "decision: lever gift_cards \"push in December\"",
+        "realSignal": "Gift card liability on the balance sheet",
+        "effects": [
+          {
+            "field": "cashShiftPctDecemberRevenue",
+            "value": 0.06
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "gift_cards"
+          }
+        ],
+        "realFrequency": "New York gift cards cannot expire for nine years and can be cashed out under $5.",
+        "tier": "deep",
+        "source": "https://www.governor.ny.gov/news/governor-hochul-signs-package-legislation-protect-credit-and-gift-card-holders",
+        "confidence": "estimate",
+        "note": "6% of December sales moved from January-February cash into December is my estimate."
+      },
+      {
+        "id": "processor_reserve",
+        "name": "Rolling reserve on card payouts",
+        "text": "After two chargebacks in a month the processor starts keeping part of every day's card sales in reserve.",
+        "scale": "point",
+        "months": [],
+        "trigger": "decision: refund_policy \"no refunds\" for three months",
+        "realSignal": "Chargeback ratio on the merchant account",
+        "effects": [
+          {
+            "field": "payoutDelayPct",
+            "value": 0.1
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "refund_policy"
+          }
+        ],
+        "realFrequency": "Processors describe holds (payouts paused) and reserves (a percentage kept back) as tools against chargeback risk.",
+        "tier": "exotic",
+        "source": "https://www.nerdwallet.com/business/software/learn/square-concern",
+        "confidence": "estimate",
+        "note": "10% of card sales held for 90 days is my estimate; reports from 2020 mention up to 30% for 120 days."
+      }
     ]
-  }
+  },
+  "levers": [
+    {
+      "id": "lease_terms",
+      "name": "Lease terms (chosen when you sign)",
+      "phase": "setup",
+      "options": [
+        {
+          "id": "five_no_option",
+          "label": "Five years, no renewal option",
+          "monthlyCost": 0
+        },
+        {
+          "id": "ten_with_option",
+          "label": "Ten years with a renewal option at fixed 3% yearly steps; one more month of deposit and a longer negotiation",
+          "monthlyCost": 0,
+          "setupCost": 1500,
+          "effects": {
+            "reputation": 0
+          }
+        },
+        {
+          "id": "assignment_takeover",
+          "label": "Take over the last years of someone else's lease",
+          "monthlyCost": 0
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "confidence": "estimate",
+      "note": "The option decides what events lease_renewal_offer and building_sold can do to you. $1,500 is extra lawyer time, my estimate. Commercial tenants in New York have no statutory right to renew; an option exists only if it is written into the lease."
+    },
+    {
+      "id": "kitchen_energy",
+      "name": "Kitchen energy (chosen at build-out)",
+      "phase": "setup",
+      "options": [
+        {
+          "id": "all_electric",
+          "label": "All electric: espresso, oven, water heater",
+          "monthlyCost": 0
+        },
+        {
+          "id": "gas",
+          "label": "Gas water heater and range: cheaper to run, more permits",
+          "monthlyCost": -110,
+          "effects": {
+            "quality": 0
+          },
+          "exposesTo": "gas_red_tag"
+        }
+      ],
+      "source": "https://www.brooklynpaper.com/two-sheepshead-bay-businesses-closed-for-months-after-nearby-gas-leak",
+      "confidence": "estimate",
+      "note": "Gas is assumed to save 10% of the $1,100 utilities line; my estimate, not a tariff comparison. A gas shop is exposed to the gas_red_tag event; an all-electric shop is not."
+    },
+    {
+      "id": "cash_reserve",
+      "name": "Repair and slow-season reserve",
+      "options": [
+        {
+          "id": "none",
+          "label": "Nothing set aside",
+          "monthlyCost": 0
+        },
+        {
+          "id": "one_percent",
+          "label": "Set aside 1% of sales",
+          "monthlyCost": 510,
+          "effects": {}
+        },
+        {
+          "id": "three_percent",
+          "label": "Set aside 3% of sales",
+          "monthlyCost": 1530,
+          "effects": {}
+        }
+      ],
+      "source": "https://tucson.com/life-entertainment/local/food-drink/article_21b69e75-5d55-49b2-9846-c39246a599d7.html",
+      "confidence": "estimate",
+      "note": "Not an expense: the money moves to a reserve the business still owns (see mechanic reserve_fund). Amounts are 1% and 3% of the reference month's $51,000 of sales. One-off bills (repairs, audit, tax escalation, claims) are paid from the reserve first."
+    },
+    {
+      "id": "cross_training",
+      "name": "Second keyholder and second certificate",
+      "options": [
+        {
+          "id": "owner_only",
+          "label": "Only you hold the keys and the Food Protection Certificate",
+          "monthlyCost": 0
+        },
+        {
+          "id": "second_keyholder",
+          "label": "Train a lead: second certificate, keys, opening and closing",
+          "monthlyCost": 160,
+          "effects": {
+            "capacity": 0.02
+          }
+        }
+      ],
+      "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+      "confidence": "estimate",
+      "note": "$160 a month = a $1 an hour lead premium x 140 hours + the $24 exam and about 15 paid study hours ($255) spread over a year. Protects against flu_takes_the_only_supervisor and softens key_barista_leaves and owner_burnout."
+    },
+    {
+      "id": "owner_schedule",
+      "name": "Your own hours behind the bar",
+      "options": [
+        {
+          "id": "manage_only",
+          "label": "Manage; no bar shifts",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": 0.02
+          }
+        },
+        {
+          "id": "half_shifts",
+          "label": "Work half the shifts yourself",
+          "monthlyCost": -1680,
+          "effects": {}
+        },
+        {
+          "id": "every_shift",
+          "label": "Open and close every day yourself",
+          "monthlyCost": -3360,
+          "effects": {
+            "quality": 0.02
+          },
+          "exposesTo": "owner_burnout"
+        }
+      ],
+      "source": "https://urbanmilwaukee.com/?p=1084521",
+      "confidence": "estimate",
+      "note": "Negative cost = barista wages you do not pay: $3,360 a month is one barista at 140 hours and $17 plus employer taxes as the engine prices it; half of that for half the shifts. Nine months of \"every shift\" triggers owner_burnout."
+    },
+    {
+      "id": "cash_controls",
+      "name": "Cash and bank controls",
+      "options": [
+        {
+          "id": "none",
+          "label": "Trust the team; look at the bank balance now and then",
+          "monthlyCost": 0,
+          "exposesTo": "theft_discovered"
+        },
+        {
+          "id": "owner_daily",
+          "label": "Count the drawer every night, match deposits weekly (your time)",
+          "monthlyCost": 0
+        },
+        {
+          "id": "bookkeeper_weekly",
+          "label": "Bookkeeper reconciles register, bank and payroll every week",
+          "monthlyCost": 200
+        }
+      ],
+      "source": "https://billypenn.com/2023/01/11/good-karma-cafe-closes-wash-west-theft-embezzlement/",
+      "confidence": "estimate",
+      "note": "$200 a month on top of the pack's $400 bookkeeping line is my estimate. \"owner_daily\" costs no money but counts as owner hours."
+    },
+    {
+      "id": "wifi_policy",
+      "name": "Wi-Fi and laptops",
+      "options": [
+        {
+          "id": "open",
+          "label": "Open Wi-Fi, stay as long as you like",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": 0.03
+          },
+          "exposesTo": "laptop_winter"
+        },
+        {
+          "id": "two_hours",
+          "label": "Two-hour Wi-Fi code with a purchase",
+          "monthlyCost": 0
+        },
+        {
+          "id": "no_laptops_weekends",
+          "label": "No Wi-Fi; no laptops on weekends",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.03,
+            "seatTurnover": 0.1
+          }
+        }
+      ],
+      "source": "https://www.axios.com/2025/05/09/coffee-shops-no-wifi-laptops-remote-work",
+      "confidence": "estimate",
+      "note": "Effect sizes are game-balance values. Real policies: Devocion limits Wi-Fi to two hours on weekdays and switches it off on weekends."
+    },
+    {
+      "id": "insurance_endorsements",
+      "name": "Insurance add-ons",
+      "options": [
+        {
+          "id": "basic",
+          "label": "Basic business owner's policy",
+          "monthlyCost": 0
+        },
+        {
+          "id": "utility_spoilage_breakdown",
+          "label": "Add utility interruption, spoilage and equipment breakdown",
+          "monthlyCost": 40
+        }
+      ],
+      "source": "https://roughnotes.com/utility-services-coverage-often-overlooked-endorsement/",
+      "confidence": "estimate",
+      "note": "$40 a month is my estimate; no price list was found. Typical utility-services sublimits are $2,500-$25,000. With the add-on, summer_outage costs only the deductible."
+    },
+    {
+      "id": "music",
+      "name": "Music",
+      "options": [
+        {
+          "id": "licensed_service",
+          "label": "Licensed business music service",
+          "monthlyCost": 35
+        },
+        {
+          "id": "silence",
+          "label": "No music",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.01
+          }
+        }
+      ],
+      "source": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/",
+      "confidence": "estimate",
+      "note": "$35 a month is my estimate of a bundled business streaming plan; direct licenses from ASCAP and BMI start at roughly $250-$415 a year each (vendor-quoted). The illegal option is shortcut personal_playlist."
+    },
+    {
+      "id": "street_presence",
+      "name": "Sign on the sidewalk",
+      "options": [
+        {
+          "id": "window_only",
+          "label": "Window and wall sign only",
+          "monthlyCost": 0
+        },
+        {
+          "id": "a_frame",
+          "label": "Chalkboard A-frame on the sidewalk",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": 0.02
+          },
+          "causes": "sidewalk_obstruction"
+        }
+      ],
+      "source": "https://themidtowngazette.com/?p=10092",
+      "confidence": "estimate",
+      "note": "+2% demand is a game-balance value. Sanitation fines: $100 first, up to $300 after (figures reported in 2015)."
+    },
+    {
+      "id": "catering_wholesale",
+      "name": "Sales that do not need the sidewalk",
+      "options": [
+        {
+          "id": "none",
+          "label": "Counter sales only",
+          "monthlyCost": 0
+        },
+        {
+          "id": "office_catering_beans",
+          "label": "Office coffee boxes, catering trays and bags of beans",
+          "monthlyCost": 300,
+          "effects": {
+            "demand": 0.04
+          }
+        }
+      ],
+      "source": "https://www.brooklynpaper.com/brooklyn-roasting-company-files-bankruptcy-plans-to-close-two-remaining-cafe-locations",
+      "confidence": "estimate",
+      "note": "$300 a month for packaging and deliveries and +4% demand are my estimates. This demand is not multiplied by foot-traffic events (street_dig, barricades, sidewalk shed)."
+    },
+    {
+      "id": "gift_cards",
+      "name": "Gift cards",
+      "options": [
+        {
+          "id": "off",
+          "label": "No gift cards",
+          "monthlyCost": 0
+        },
+        {
+          "id": "push_december",
+          "label": "Promote gift cards in December",
+          "monthlyCost": 0,
+          "exposesTo": "gift_card_hangover"
+        }
+      ],
+      "source": "https://www.governor.ny.gov/news/governor-hochul-signs-package-legislation-protect-credit-and-gift-card-holders",
+      "confidence": "estimate",
+      "note": "Moves cash from January-February into December; see gift_card_hangover."
+    },
+    {
+      "id": "refund_policy",
+      "name": "Complaints and refunds",
+      "options": [
+        {
+          "id": "remake",
+          "label": "Remake or refund without argument",
+          "monthlyCost": 250,
+          "effects": {
+            "reputation": 0.02
+          }
+        },
+        {
+          "id": "no_refunds",
+          "label": "No refunds",
+          "monthlyCost": 0,
+          "effects": {
+            "reputation": -0.02
+          },
+          "exposesTo": "processor_reserve"
+        }
+      ],
+      "source": "https://www.nerdwallet.com/business/software/learn/square-concern",
+      "confidence": "estimate",
+      "note": "$250 a month = about 0.5% of sales in remade drinks, my estimate."
+    },
+    {
+      "id": "surplus_app",
+      "name": "End-of-day pastry",
+      "options": [
+        {
+          "id": "bin",
+          "label": "Throw it out",
+          "monthlyCost": 0
+        },
+        {
+          "id": "surprise_bags",
+          "label": "Sell surprise bags through a surplus-food app",
+          "monthlyCost": -300
+        }
+      ],
+      "source": "https://www.toogoodtogo.com/en-us/blog/what-too-good-to-go-partners-recover",
+      "confidence": "estimate",
+      "note": "-$300 a month (income) is my estimate: three bags a day at about $5 after the app's cut, 22 days. The app's own example: a two-shop New York bakery cafe earned $66,576 (period not stated)."
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "biweekly_pay",
+      "name": "Pay baristas every two weeks",
+      "what": "One payroll run instead of two saves the run fee and a week of float. New York says manual workers are paid weekly.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 40
+      },
+      "violation": "pay_frequency_violation"
+    },
+    {
+      "id": "personal_playlist",
+      "name": "Play your own streaming playlist",
+      "what": "A personal music account is not licensed for a shop. Saves the business plan fee until a rights society notices.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 35
+      },
+      "violation": "unlicensed_music"
+    },
+    {
+      "id": "hidden_card_fee",
+      "name": "Add a 3% card fee at the register",
+      "what": "Customers pay your processing fee. Legal only if the card price itself is posted and the fee is no more than your processor charges.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.0255
+      },
+      "violation": "illegal_surcharge"
+    },
+    {
+      "id": "backyard_seating",
+      "name": "Seat customers in the back yard",
+      "what": "Twelve more seats without a filing at the Buildings Department. One complaint from a neighbor ends it.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.05
+      },
+      "violation": "illegal_occupancy"
+    },
+    {
+      "id": "serve_without_water",
+      "name": "Stay open while the water is off",
+      "what": "No running water means no handwashing and no dishwashing. Closing for the day costs a day of sales.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.03
+      },
+      "violation": "no_running_water"
+    },
+    {
+      "id": "ignore_the_step",
+      "name": "Leave the step at the door as it is",
+      "what": "A portable ramp and a bell cost a few hundred dollars. Without them the shop is a ready-made accessibility lawsuit.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 25
+      },
+      "violation": "access_barrier"
+    }
+  ],
+  "violations": [
+    {
+      "id": "pay_frequency_violation",
+      "name": "Manual workers not paid weekly",
+      "law": "NY Labor Law §191(1)(a); §198(1-a) as amended May 9, 2025",
+      "official": "labor_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 20,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+      "confidence": "estimate",
+      "note": "First violation by an employer who paid at least twice a month: interest only (16% a year, about 0.3% of the late wages). Half of a $13,456 monthly payroll is paid a week late: about $20 a month. A repeat violation owes 100% of the late-paid wages as liquidated damages - the engine should switch to perMonth = half the monthly payroll on the second finding."
+    },
+    {
+      "id": "unlicensed_music",
+      "name": "Music played without a public performance license",
+      "law": "17 U.S.C. §§106, 504",
+      "official": "private_plaintiff",
+      "foundBy": [
+        "sting",
+        "complaint"
+      ],
+      "fine": {
+        "base": 1500,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": 150000
+      },
+      "closureDays": 0,
+      "reputationHit": 0,
+      "source": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/",
+      "confidence": "estimate",
+      "note": "Not a city fine: a rights society sends an agent, then a demand letter. $1,500 is my estimate of a settled letter (two licenses plus the back year); statutory damages for willful infringement reach $150,000 a work."
+    },
+    {
+      "id": "illegal_surcharge",
+      "name": "Card surcharge not posted as a price",
+      "law": "NY General Business Law §518 (effective February 11, 2024)",
+      "official": "dcwp_inspector",
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 500
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://www.nfib.com/news/news/understanding-new-york-state-credit-card-surcharge-guidelines/",
+      "confidence": "estimate",
+      "note": "Up to $500 per violation. The pack charges one violation per finding; a real enforcement action can count each transaction or each day."
+    },
+    {
+      "id": "sidewalk_obstruction",
+      "name": "A-frame sign blocking the sidewalk",
+      "law": "NYC Administrative Code §16-118; Department of Sanitation rules",
+      "official": "sanitation_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 100,
+        "perMonth": 100,
+        "pctOfSaved": 0,
+        "max": 300
+      },
+      "closureDays": 0,
+      "reputationHit": 0,
+      "source": "https://themidtowngazette.com/?p=10092",
+      "confidence": "estimate",
+      "note": "$100 for a first sign violation and up to $300 after, as a Sanitation spokesperson told the Midtown Gazette (2015 enforcement). The current schedule was not found."
+    },
+    {
+      "id": "illegal_occupancy",
+      "name": "Back yard used for seating contrary to the Certificate of Occupancy",
+      "law": "NYC Administrative Code §28-118.3.2",
+      "official": "buildings_inspector",
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 1250,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://nycadmincode.readthedocs.io/t28/c01/art118/",
+      "confidence": "estimate",
+      "note": "The section exists; the current penalty amount was NOT found. $1,250 is the default penalty of a Class 2 violation in an older schedule and stands here as a placeholder. The real cost is the vacate order: the seats are gone (event garden_complaint)."
+    },
+    {
+      "id": "no_running_water",
+      "name": "Operating without hot and cold running water",
+      "law": "NYC Health Code §81.20; 24 RCNY Chapter 23 (public health hazard)",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 400,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 2,
+      "reputationHit": 0.08,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "estimate",
+      "note": "The penalty schedule lists inadequate potable water as a public health hazard; the dollar amount for running without hot and cold water was NOT found, $400 is a placeholder at the level of the pack's other health fines. An uncorrected public health hazard closes the shop."
+    },
+    {
+      "id": "access_barrier",
+      "name": "Entrance not accessible",
+      "law": "Americans with Disabilities Act Title III, 42 U.S.C. §12182; NYC Human Rights Law",
+      "official": "private_plaintiff",
+      "foundBy": [
+        "sting",
+        "complaint"
+      ],
+      "fine": {
+        "base": 10000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0,
+      "source": "https://www.mondaq.com/unitedstates/discrimination-disability-sexual-harassment/1763220/ada-lawsuits-against-coffee-shops-and-breweries-on-the-rise-how-small-businesses-can-avoid-costly-accessibility-claims-about-architectural-barriers-and-websites",
+      "confidence": "estimate",
+      "note": "A private lawsuit, not an inspection. $10,000 = settlement plus your own lawyer, my estimate inside the unverified $5,000-$25,000 range quoted by vendors."
+    }
+  ],
+  "officials": [
+    {
+      "id": "sanitation_agent",
+      "name": "Sanitation enforcement agent",
+      "agency": "NYC Department of Sanitation",
+      "role": "inspector",
+      "checks": [
+        "sidewalk_obstruction"
+      ],
+      "realProcess": "Agents walk commercial streets on set routes and write summonses for dirty sidewalks, bags without bins, late set-out and sidewalk obstructions. Summonses are answered at OATH.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page"
+    },
+    {
+      "id": "buildings_inspector",
+      "name": "Buildings inspector",
+      "agency": "NYC Department of Buildings",
+      "role": "inspector",
+      "checks": [
+        "illegal_occupancy"
+      ],
+      "realProcess": "Answers 311 complaints about illegal use, unpermitted work and signs. Can issue a violation and a partial vacate order for a space used contrary to the Certificate of Occupancy.",
+      "source": "https://nycadmincode.readthedocs.io/t28/c01/art118/"
+    },
+    {
+      "id": "private_plaintiff",
+      "name": "Private plaintiff",
+      "agency": "Civil court (no city agency: a person or a rights society sues)",
+      "role": "inspector",
+      "checks": [
+        "unlicensed_music",
+        "access_barrier"
+      ],
+      "realProcess": "A tester or licensing agent visits like any customer, documents the problem and sends a demand letter or files suit. Most cases settle for less than the cost of a defense.",
+      "source": "https://www.mondaq.com/unitedstates/discrimination-disability-sexual-harassment/1763220/ada-lawsuits-against-coffee-shops-and-breweries-on-the-rise-how-small-businesses-can-avoid-costly-accessibility-claims-about-architectural-barriers-and-websites"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_illegal_seating",
+      "name": "Report illegal seating or use (311, Buildings)",
+      "text": "In real life: a 311 complaint to the Department of Buildings about a back yard, basement or roof used without approval. An inspector visits; an illegal space is ordered vacated. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "illegal_occupancy"
+      ]
+    },
+    {
+      "id": "report_sidewalk_sign",
+      "name": "Report a blocked sidewalk (311, Sanitation)",
+      "text": "In real life: a 311 complaint about an A-frame sign or other obstruction on the sidewalk. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "sidewalk_obstruction"
+      ]
+    },
+    {
+      "id": "report_card_fee",
+      "name": "Report a hidden card fee (Consumer Protection)",
+      "text": "In real life: a complaint about a surcharge added at checkout that was not posted as a price. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "illegal_surcharge"
+      ]
+    }
+  ],
+  "setup": [
+    {
+      "id": "portable_ramp",
+      "name": "Portable ramp, door bell and accessibility sign",
+      "kind": "equipment",
+      "cost": 300,
+      "required": false,
+      "lifespanMonths": 120,
+      "source": "https://www.mondaq.com/unitedstates/discrimination-disability-sexual-harassment/1763220/ada-lawsuits-against-coffee-shops-and-breweries-on-the-rise-how-small-businesses-can-avoid-costly-accessibility-claims-about-architectural-barriers-and-websites",
+      "confidence": "estimate",
+      "note": "$300 is my estimate of a folding threshold ramp, a wireless bell and a sign; no price list was opened. Removes the access_claim event for a place with one step. A permanent ramp needs an architect and a Buildings filing."
+    },
+    {
+      "id": "consultative_inspection",
+      "name": "Health Department consultative inspection (before the first graded one)",
+      "kind": "other",
+      "cost": 100,
+      "required": false,
+      "agency": "NYC DOHMH",
+      "link": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/environmental/fse-application-packet.pdf",
+      "confidence": "estimate",
+      "note": "From the permit application packet as returned by search: $100 for a consultative inspection requested after opening and before the first graded inspection; $400 for one requested later. No grade and no fines are issued. Number seen in a search summary, page not opened."
+    },
+    {
+      "id": "lease_review",
+      "name": "Free lease review (NYC Small Business Services)",
+      "kind": "other",
+      "cost": 0,
+      "required": false,
+      "agency": "NYC Department of Small Business Services",
+      "link": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "confidence": "estimate",
+      "note": "The city offers free commercial lease help to small businesses; this item is the in-game hook that reveals the lease's renewal, termination and tax-escalation clauses before signing."
+    }
+  ],
+  "monthlyCosts": [
+    {
+      "id": "music_license",
+      "name": "Licensed background music",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 35,
+      "source": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/",
+      "confidence": "estimate",
+      "note": "My estimate of a bundled business music plan. Direct licenses from ASCAP and BMI start at roughly $250-$415 a year each for a small room (vendor-quoted)."
+    },
+    {
+      "id": "staff_replacement",
+      "name": "Hiring and training replacements",
+      "kind": "other",
+      "basis": "per_staff",
+      "amount": 105,
+      "source": "https://www.dripos.com/counter-talk/how-to-keep-your-best-baristas----and-actually-reduce-turnover",
+      "confidence": "estimate",
+      "note": "Annual turnover of 50% x $2,500 to replace one hourly worker (middle of the $1,500-$3,500 range) / 12 = $104 per worker a month. Trade figures, not a survey of New York."
+    },
+    {
+      "id": "pastry_waste",
+      "name": "Unsold pastry thrown out",
+      "kind": "supplies",
+      "basis": "pct_revenue",
+      "amount": 0.01,
+      "source": "https://www.toogoodtogo.com/en-us/b2b/what-cafes-do-with-surplus-food",
+      "confidence": "estimate",
+      "note": "My estimate: pastry is about a fifth of sales, bought at half the menu price, and about one in ten pieces is left at closing: 0.2 x 0.5 x 0.1 = 1% of sales. The pack's cost of goods already includes \"spoilage\" inside its 26%, so this line should be split out of it, not added."
+    }
+  ],
+  "events": [
+    {
+      "id": "january_trough",
+      "name": "January",
+      "text": "The slowest month of the coffee year, with the wage step and the quarter's sales tax due around it.",
+      "effect": {
+        "field": "demand",
+        "mult": 0.88
+      },
+      "months": 1,
+      "source": "https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/",
+      "confidence": "estimate",
+      "note": "Starbucks: December 58% above January (2016 card data); restaurants -4.5% in January 2024. x0.88 is my estimate for an independent shop."
+    },
+    {
+      "id": "chain_opens_next_door",
+      "name": "A chain coffee shop opens on your block",
+      "text": "One more place selling coffee to the same walkers.",
+      "effect": {
+        "field": "demand",
+        "mult": 0.88
+      },
+      "months": 12,
+      "source": "https://secretnyc.co/buddies-coffee-closing-williamsburg/",
+      "confidence": "estimate",
+      "note": "One more rival among about seven within 250 m. Block-level event."
+    },
+    {
+      "id": "street_dig",
+      "name": "The street is torn up",
+      "text": "A water main replacement fences off the block for most of a year.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 0.75
+      },
+      "months": 9,
+      "source": "https://therealdeal.com/2010/08/24/second-avenue-merchants-subway-construction-cutting-business-by-up-to-40/",
+      "confidence": "estimate",
+      "note": "Owners on Second Avenue reported sales down 20-50% during subway construction."
+    },
+    {
+      "id": "wage_step_january",
+      "name": "Minimum wage rises with inflation",
+      "text": "Every January 1 from 2027, announced by October 1.",
+      "effect": {
+        "field": "wages",
+        "mult": 1.03
+      },
+      "months": 12,
+      "source": "https://www.ny.gov/programs/minimum-wage",
+      "confidence": "estimate",
+      "note": "Three-year average of CPI-W for the Northeast; 3% is the projection quoted for 2027."
+    },
+    {
+      "id": "office_days_up",
+      "name": "Offices call people back",
+      "text": "Weekday mornings fill up in office districts.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 1.06
+      },
+      "months": 12,
+      "source": "https://www.kastle.com/safety-wellness/getting-america-back-to-work/",
+      "confidence": "estimate",
+      "note": "Kastle: peak-day occupancy 87.3% in New York City on October 27, 2026. Prime tier only."
+    },
+    {
+      "id": "rating_slide",
+      "name": "Your rating drops a star",
+      "text": "One star less on review sites costs an independent restaurant 5-9% of revenue.",
+      "effect": {
+        "field": "demand",
+        "mult": 0.93
+      },
+      "months": 3,
+      "source": "https://www.hbs.edu/faculty/Pages/item.aspx?num=41233",
+      "confidence": "estimate",
+      "note": "Luca (Harvard Business School): one star = 5-9% of revenue for independents. Triggered by the player's own quality, not by chance."
+    },
+    {
+      "id": "sidewalk_shed",
+      "name": "Sidewalk shed goes up on your block",
+      "text": "Scaffolding covers your storefront while the building repairs its facade. The average shed in the city has stood for a year and a half.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 0.9
+      },
+      "months": 12,
+      "source": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag",
+      "confidence": "estimate",
+      "note": "CORRECTION of the existing event (same id): months 3 -> 12. Average shed age: 509 days in May 2025 (8,559 sheds), 557 days in March 2026. Twelve months is the cap of a season. The 10% drop stays an estimate."
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "no_right_to_renew",
+      "title": "Your lease ends when it ends",
+      "text": "A commercial tenant in New York has no right to renew and no cap on the next rent. In 2025 Brooklyn cafes were offered two to three times their old rent. An option to renew exists only if it is written into the lease.",
+      "source": "https://greenpointers.com/2025/08/21/greenpoint-coffee-shop-sippy-cafe-will-close-this-october/"
+    },
+    {
+      "id": "gas_restore",
+      "title": "Gas comes back slowly",
+      "text": "After a utility shuts off a building's gas, service returns only after a licensed plumber, a Buildings permit, a pressure test and an inspection. One Brooklyn cafe was dark for more than 8 months over a $3,000 repair.",
+      "source": "https://www.brooklynpaper.com/two-sheepshead-bay-businesses-closed-for-months-after-nearby-gas-leak"
+    },
+    {
+      "id": "shed_duration",
+      "title": "Sidewalk sheds",
+      "text": "The city had 8,559 sidewalk sheds in May 2025 with an average age of 509 days. The building puts the shed up; a standard lease gives the tenant no rent relief.",
+      "source": "https://commercialobserver.com/2025/03/ny-city-council-approves-reforms-sidewalk-shed-laws/"
+    },
+    {
+      "id": "pay_frequency_violation",
+      "title": "Weekly pay",
+      "text": "New York manual workers - more than 25% of the time on physical tasks - must be paid weekly. A first offender who paid twice a month owes interest; a repeat offender owes 100% of the late wages.",
+      "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers"
+    },
+    {
+      "id": "unlicensed_music",
+      "title": "Music is licensed",
+      "text": "A personal streaming account does not cover a shop. Public performance needs licenses from ASCAP, BMI, SESAC and GMR or a business music service. Statutory damages for willful infringement reach $150,000 a work.",
+      "source": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/"
+    },
+    {
+      "id": "illegal_surcharge",
+      "title": "Card fees must be posted as prices",
+      "text": "Since February 11, 2024 a New York seller that charges more for cards must post the card price (or both prices) and may not add more than its processor charges. Penalty: up to $500 per violation.",
+      "source": "https://www.nfib.com/news/news/understanding-new-york-state-credit-card-surcharge-guidelines/"
+    },
+    {
+      "id": "sidewalk_obstruction",
+      "title": "The A-frame sign",
+      "text": "A sign standing on the sidewalk is an obstruction. Sanitation tickets have run $100 for a first sign and up to $300 after.",
+      "source": "https://themidtowngazette.com/?p=10092"
+    },
+    {
+      "id": "illegal_occupancy",
+      "title": "Space you may not use",
+      "text": "A yard, basement or roof not covered by the Certificate of Occupancy can be ordered vacated after a single complaint. Yaffa Cafe lost a 100-seat garden it had used for 30 years.",
+      "source": "https://www.dnainfo.com/new-york/20141006/east-village/city-waited-3-decades-rule-yaffa-cafes-back-patio-illegal-manager-says"
+    },
+    {
+      "id": "no_running_water",
+      "title": "No water, no service",
+      "text": "A food business needs hot and cold running water every open minute. Without it the Health Department treats the shop as a public health hazard and can close it on the spot.",
+      "source": "https://regs.health.ny.gov/node/48391"
+    },
+    {
+      "id": "access_barrier",
+      "title": "The step at the door",
+      "text": "One step at the entrance is enough for a federal accessibility lawsuit. One plaintiffs' firm has filed about 600 in New York; coffee shops are frequent targets. Settling usually costs less than defending.",
+      "source": "https://www.mondaq.com/unitedstates/discrimination-disability-sexual-harassment/1763220/ada-lawsuits-against-coffee-shops-and-breweries-on-the-rise-how-small-businesses-can-avoid-costly-accessibility-claims-about-architectural-barriers-and-websites"
+    },
+    {
+      "id": "sales_tax_seizure",
+      "title": "Sales tax seizure",
+      "text": "For unpaid sales tax New York files a warrant and can seize the business: a notice on the door, new locks, an auction. A Brooklyn cafe was padlocked twice over $66,000. Returns are due March 20, June 20, September 20 and December 20.",
+      "source": "https://www.brooklynpaper.com/vox-popped-outlaw-coffeeshop-closed-down-by-taxman-again"
+    },
+    {
+      "id": "bulk_sale_notice",
+      "title": "Buying a business: the bulk sale notice",
+      "text": "A buyer of a business files Form AU-196.10 with the Tax Department at least 10 days before paying or taking possession. Skip it and the seller's unpaid sales tax can be collected from you.",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    },
+    {
+      "id": "cash_advance",
+      "title": "Merchant cash advance",
+      "text": "An advance is repaid as a share of every day's card sales. Court records show 35% of a restaurant's receipts taken daily until $145,000 was collected. A $100,000 advance is commonly repaid as $140,000-$150,000.",
+      "source": "https://www.nycourts.gov/reporter/pdfs/2020/2020_30413.pdf"
+    },
+    {
+      "id": "outage_insurance",
+      "title": "Power outages and insurance",
+      "text": "A standard policy excludes a power failure that starts off your premises. Lost sales and spoiled stock are paid only with a utility-services endorsement and spoilage coverage, often limited to $2,500-$25,000.",
+      "source": "https://roughnotes.com/utility-services-coverage-often-overlooked-endorsement/"
+    },
+    {
+      "id": "reinspection_relief",
+      "title": "Fines can be erased",
+      "text": "Score under 14 points on re-inspection and the penalties from that inspection are waived. New restaurants can book a consultative visit with no grade and no fines: $100 before the first graded inspection.",
+      "source": "https://www.nyc.gov/assets/oath/downloads/pdf/Small-Business-DOHMH.pdf"
+    },
+    {
+      "id": "unpaid_time_off_2026",
+      "title": "Protected time off, 2026",
+      "text": "Since February 22, 2026 every New York City employer owes each worker 32 unpaid hours a year from day one, on top of 40 paid hours, plus 20 hours of paid prenatal leave. Paid and unpaid balances are tracked separately.",
+      "source": "https://www.mayerbrown.com/en/insights/publications/2026/07/new-york-city-adopts-amended-sick-and-safe-leave-rules"
+    },
+    {
+      "id": "wage_index_2027",
+      "title": "Wage indexing",
+      "text": "From January 1, 2027 the minimum wage rises yearly by the three-year average of Northeast CPI-W. The Labor Department announces the rate by October 1. At 3% that is about 51 cents an hour in New York City.",
+      "source": "https://www.ny.gov/programs/minimum-wage"
+    },
+    {
+      "id": "startup_costs_tax",
+      "title": "Pre-opening costs and tax",
+      "text": "Only $5,000 of start-up costs is deductible in the first year, and nothing at once when they exceed $55,000. The rest is spread over 180 months. Rent paid before opening day is a start-up cost.",
+      "source": "https://www.everycrsreport.com/files/2025-04-16_IF12970_089de047373b3b37f31f7c8b286333da57803926.html"
+    },
+    {
+      "id": "lidded_bins",
+      "title": "Bins, not bags",
+      "text": "Since March 1, 2024 every business that sets trash on the curb must use bins with secure lids. Fines: $50, $100, then $200. Sidewalk and 18 inches of gutter must be kept clean.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/setup-operations/setout.page"
+    },
+    {
+      "id": "skip_the_stuff",
+      "title": "Skip the Stuff",
+      "text": "Since July 31, 2023 take-out and delivery orders may not include utensils, napkins or condiment packets unless the customer asks. Fines: $50, $150, then $250 within 12 months.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page"
+    },
+    {
+      "id": "first_year_myth",
+      "title": "The first year is not the dangerous one",
+      "text": "A study of 81,000 independent restaurants found 17% failed in year one - not 90%. An Ohio study found 26% in year one and 59% within three years: shops die when the opening money is gone.",
+      "source": "https://news.osu.edu/restaurant-failure-rate-much-lower-than-commonly-assumed-study-finds/"
+    }
+  ]
 }
