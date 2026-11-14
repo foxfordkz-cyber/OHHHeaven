@@ -4,11 +4,11 @@
 
 ## 1. Вердикт
 
-1. Задание закрыто выше порога: 23 записи `setup`, 32 шага `roadmap`, 57 событий в каталоге, 14 механик, среди них «ремонт без выручки» и «покупка готового бизнеса».
+1. Задание закрыто выше порога: 23 записи `setup`, 32 шага `roadmap`, 59 событий в каталоге, 14 механик, среди них «ремонт без выручки» и «покупка готового бизнеса».
 2. Главный вывод по ремонту: бесплатных месяцев аренды (обычно 3–6) не хватает. От подписания до открытия выходит 123 дня для бывшего кафе, 160 для переоборудования и 280 для помещения без общепита; при трёх бесплатных месяцах это $6 600, $14 000 и $38 000 аренды без выручки.
 3. Главный вывод по покупке: работающее кафе стоит около двух годовых заработков владельца (медиана 2,0×; 0,41× годовой выручки). Для эталонной точки пакета это примерно $233 000 — втрое дороже лёгкого ремонта, зато продажи идут с первой недели. Текущая оценка в ветке keen-cray (0,2× выручки, потолок $200 000) занижена.
 4. Покупателю переходят долги продавца по налогу с продаж (если не подано уведомление AU-196.10), его ставка страхования по безработице и накопленные больничные работников; разрешение на общепит не переходит никогда.
-5. **Сверка по первоисточникам сделана частично.** После одобрения окружения с 20 хостами я открыл 29 страниц и дословно сверил числа: 29 чисел помечены `verified`, ещё у 51 записи правило прочитано на странице, а само число — мой расчёт. Сайты www.nyc.gov, свод законов города, BizBuySell и FTC отказали автоматическим запросам, поэтому сборы и штрафы Департамента зданий, тексты Health Code и кратные цены продажи остались с пометкой `primary_search_extract` (35 записей).
+5. **Сверка по первоисточникам сделана частично.** После одобрения окружения с 20 хостами я открыл 30 страниц и дословно сверил числа: 30 чисел помечены `verified`, ещё у 24 записей правило прочитано на странице, а само число — мой расчёт. Сайты www.nyc.gov, свод законов города, BizBuySell и FTC отказали автоматическим запросам, поэтому сборы и штрафы Департамента зданий, тексты Health Code и кратные цены продажи остались с пометкой `primary_search_extract` (35 записей).
 
 ## 2. Что добавлено
 
@@ -16,22 +16,22 @@
 |---|---|---|
 | `setup` | 23 | Сбор DOB за подачу проекта (формула), асбестовое обследование и удаление, разрешение Landmarks, Letter of No Objection, резерв на непредвиденное, налог с продаж на работы подрядчика, депозит Con Edison, усиление электроввода, консультативная инспекция; цена готового бизнеса, key money, юрист и бухгалтер при покупке, налог с продаж на купленное оборудование, сбор SBA; взнос и обучение франшизы; лицензия, курс, разрешение и сама тележка, разрешение для частной территории, временное разрешение для ярмарок |
 | `roadmap` | 32 | Пять путей: с нуля (19 шагов), покупка (6), франшиза (2), тележка (3), временная точка (2). У каждого шага поле `path` и порядковый номер |
-| `ruleCards` | 43 | Аренда (10), ремонт и разрешения (14), покупка бизнеса (9), франшиза (2), тележка и временная точка (6), открытие (2) |
+| `ruleCards` | 45 | Аренда (10), ремонт и разрешения (16), покупка бизнеса (9), франшиза (2), тележка и временная точка (6), открытие (2) |
 | `levers` | 16 | 12 разовых решений (способ входа, гарантия, бесплатная аренда, защитные пункты договора, проверка адреса, газ или электричество, подрядчик, резерв, режим открытия, проверка покупки, срок подачи на разрешение, первый месяц после покупки) и 4 ежемесячных |
-| `shortcuts` | 8 | Ремонт без разрешения, работа под Stop Work Order, сантехника и проводка силами разнорабочего, торговля по разрешению продавца, покупка без уведомления налоговой, тележка без разрешения, аренда чужого разрешения, ярмарка без временного разрешения |
-| `violations` | 7 | Шесть новых с законом и штрафом; седьмое (`no_fse_permit`) уже есть в пакете, на него ссылается срезанный угол при покупке |
+| `shortcuts` | 9 | Открытие в помещении без законного назначения под кафе, ремонт без разрешения, работа под Stop Work Order, сантехника и проводка силами разнорабочего, торговля по разрешению продавца, покупка без уведомления налоговой, тележка без разрешения, аренда чужого разрешения, ярмарка без временного разрешения |
+| `violations` | 8 | Восемь новых с законом и штрафом. Ещё одно (`no_fse_permit`) уже есть в пакете, на него ссылается срезанный угол при покупке |
 | `officials` | 2 | Инспектор Департамента зданий; офицер по уличной торговле |
 | `reports` | 2 | Жалоба на стройку без разрешения; жалоба на тележку без лицензии |
 | `monthlyCosts` | 7 | Ежегодный рост аренды, доля роста налога на недвижимость, комиссия за аккредитив, роялти и маркетинговый фонд франшизы, плата за стоянку тележки, продление лицензии |
 | `events` | 4 | Городские и общенациональные: замедление DOB, рост цен стройки на 7%, пошлина 15% на европейское оборудование, высокая вакантность витрин |
 | `suppliers` | 7 | Объявления о продаже бизнеса, юрист, экспедитор и асбестовый инспектор, бесплатная помощь города, франчайзеры, тележки и стоянки, рынки и концессии в парках |
-| `extra.eventCatalog` | 57 | 22 `core`, 28 `deep`, 7 `exotic`; 42 на уровне точки, 4 квартала, 8 города, 3 страны. У каждого события причина (`trigger`), настоящий показатель (`realSignal`) и ходы игрока |
+| `extra.eventCatalog` | 59 | 23 `core`, 29 `deep`, 7 `exotic`; 43 на уровне точки, 5 квартала, 8 города, 3 страны. У каждого события причина (`trigger`), настоящий показатель (`realSignal`) и ходы игрока |
 | `extra.mechanics` | 14 | 9 `core`, 5 `deep`; 85 чисел с источниками |
 | `extra.entryModes` | 8 | Деньги, срок до первой выручки и риски для каждого способа входа |
 | `extra.leaseTerms` | 1 | Типичные условия аренды с источником у каждого |
 | `extra.preOpeningTimeline` | 13 шагов | Дни по шагам для трёх классов помещения, зависимости и параллельность |
 | `extra.takeover` | 1 | Замена оценки цены готового бизнеса |
-| `extra.nonObvious` | 42 | Неочевидное: текст, причина, источник |
+| `extra.nonObvious` | 45 | Неочевидное: текст, причина, источник |
 | `extra.failureStories` | 12 | Истории срывов до открытия и при покупке |
 | `extra.fixesExisting` | 8 | Исправления существующего пакета |
 | `extra.kitAdditions` | 1 | Что добавить в три набора |
@@ -137,9 +137,11 @@
 - Работы для арендатора освобождаются от налога с продаж, только если договор передаёт улучшения собственнику и не обязывает их демонтировать.
 - Опрос о газе — сентябрь 2017 года; средний ущерб от задержки — $140 000 на заведение.
 - Закон штата требует вручить документ франшизы за 10 рабочих дней; федеральное правило о 14 днях открыть не удалось.
+- На странице NYC Business «Restaurant» нашлись два требования, которых не было ни в пакете, ни в моём первом проходе: штраф $400–$25 000 за работу вопреки Certificate of Occupancy и обязательный шумовой план на стройке. Оба добавлены.
+- Эта же страница содержит шкалу штрафов для ресторанов по всем ведомствам (от $5 до $25 000) и открывается без отказов: она пригодится исследователям D07 и D08 для подтверждения их нарушений.
 
 
-### Открыты и прочитаны (29)
+### Открыты и прочитаны (30)
 
 - https://a816-health.nyc.gov/ABCEatsRestaurants/App/partials/controllers/faq.html — The first graded inspection, unannounced
 - https://a856-cityrecord.nyc.gov/RequestDetail/20240628149 — A kiosk in a park; A stall at a seasonal food market, or a city concession for a kiosk or
@@ -147,6 +149,7 @@
 - https://comptroller.nyc.gov/reports/whos-minding-the-storefronts/ — Empty storefronts are leverage; One storefront in nine is empty
 - https://dol.ny.gov/transfers-business-and-your-contribution-rate — You inherit the seller's unemployment record; You inherit the seller's unemployment-insurance record
 - https://nyc-business.nyc.gov/nycbusiness/business-services/legal-assistance/commercial-lease-assistance-program — Get the lease reviewed, free if you qualify; Free lease lawyer
+- https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan — A noise plan on the wall of the site; A neighbor complains about construction noise
 - https://nyc-business.nyc.gov/nycbusiness/description/food-protection-course-for-mobile-vendors — Food Protection Course for Mobile Vendors
 - https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit — Buying a shop: apply for every permit in your own name; The 22-day clock starts when you apply
 - https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license — Mobile Food Vending License (the vendor's personal license); Cart: take the vendor course and get your license
@@ -155,7 +158,7 @@
 - https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about — Corner in someone else's shop: work under the host's permit; The host wants the corner back
 - https://nyc-business.nyc.gov/nycbusiness/description/small-business-energy-efficiency-program — A project manager who maps your permits and coordinates pre-opening in
 - https://nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishment-permit — Temporary Food Service Establishment permit (markets, street fairs, po; Pop-up or market stand: get the temporary permit
-- https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant
+- https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant — Running a cafe where the Certificate of Occupancy does not allow one; Open in a space that is not legal for a cafe
 - https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf — Waiting for gas; Gas or all-electric
 - https://portal.311.nyc.gov/article/?kanumber=KA-01825 — temporary food permit for a market stand, USD a year; Market stand or a corner in someone else's shop
 - https://portal.311.nyc.gov/article/?kanumber=KA-02955 — Health Department consultative inspection (optional, ungraded); Pass the trade inspections and close out the permit

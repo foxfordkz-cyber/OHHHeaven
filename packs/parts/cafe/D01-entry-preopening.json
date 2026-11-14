@@ -85,6 +85,7 @@
       "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
       "appliesIf": "building built or altered before 1938 with no Certificate of Occupancy on file",
       "phase": "before_lease",
+      "withoutItViolation": "occupancy_contrary_to_co",
       "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
       "confidence": "estimate",
       "seenIn": "primary_search_extract",
@@ -447,7 +448,8 @@
       "checks": [
         "work_without_permit",
         "stop_work_order_violation",
-        "unlicensed_trade_work"
+        "unlicensed_trade_work",
+        "occupancy_contrary_to_co"
       ],
       "realProcess": "Most visits start with a 311 complaint from a neighbor or a competitor about noise, dust or a dumpster. The inspector checks the posted permits against the work in progress. Work with no permit gets a violation and a Stop Work Order; the order is lifted only after the permit is obtained and the civil penalties are paid.",
       "source": "https://www.nyc.gov/site/buildings/safety/swo.page"
@@ -628,6 +630,29 @@
       "confidence": "estimate",
       "seenIn": "primary_search_extract",
       "note": "Admin. Code text seen in extract: \"no license, permit or plate issued under this subchapter shall be assignable or transferable\"; the Health Department's renewal form makes the holder attest the permit was not sold, lent, leased or transferred (Health Code §89.17). The fine is my reading: the renter is cited as an unpermitted unit ($1,000 on the Health Department schedule). Black-market rent for a two-year permit: $6,000-$8,000 (Community Service Society testimony), $15,000 (one vendor), up to $25,000 (Queens Eagle, April 2025). closureDays is my estimate for replacing a seized cart or permit."
+    },
+    {
+      "id": "occupancy_contrary_to_co",
+      "name": "Running a cafe where the Certificate of Occupancy does not allow one",
+      "law": "NYC Admin. Code §28-118.3.2 (occupancy contrary to the Certificate of Occupancy or Department of Buildings records)",
+      "official": "dob_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 400,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 25000
+      },
+      "closureDays": 30,
+      "reputationHit": 0.03,
+      "criminal": "The Department of Buildings can order the premises vacated until the use is legalized.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "confidence": "verified",
+      "seenIn": "page_opened",
+      "note": "Page opened (NYC Business, restaurant resources): \"Occupancy Contrary to That Allowed by the Certificate of Occupancy or Department of Buildings Records. Penalty: $400 - $25,000 fine\"; how to avoid it: a current Certificate of Occupancy on file, a Letter of No Objection for a space built before 1938, an amended Certificate of Occupancy filed by the property owner if the use, egress or occupancy changes. The section number is from my knowledge of Title 28 and was not re-read. closureDays is my estimate of the time to legalize the use; the base is the bottom of the published range."
     }
   ],
   "shortcuts": [
@@ -747,18 +772,32 @@
       ],
       "savesNote": "what the rented decal buys is time: years on the waiting list. Valued at one month of a cart's contribution margin, my estimate; the rent itself costs about $625-$1,040 a month ($15,000-$25,000 over 24 months)",
       "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-215585"
+    },
+    {
+      "id": "open_in_wrong_use_space",
+      "name": "Open in a space that is not legal for a cafe",
+      "what": "The rent is low because the Certificate of Occupancy says \"store\", or there is none. Legalizing the use takes a letter from the Buildings Department or an amended certificate filed by the owner. Open anyway and the fine runs from $400 to $25,000.",
+      "saves": {
+        "basis": "pct_rent",
+        "amount": 1
+      },
+      "violation": "occupancy_contrary_to_co",
+      "phase": "before_lease",
+      "savesNote": "one month of rent: the wait for a Letter of No Objection that is skipped (at least a month in a clear case)",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
     }
   ],
   "reports": [
     {
       "id": "report_illegal_construction",
-      "name": "Report construction without a permit (311)",
-      "text": "The Department of Buildings sends an inspector to check the posted permits against the work. If there is no permit, the site is stopped and fined. If the work is legal, you get a warning for a false complaint.",
+      "name": "Report construction without a permit or an illegal use (311)",
+      "text": "The Department of Buildings sends an inspector to check the posted permits against the work and the use against the Certificate of Occupancy. No permit: the site is stopped and fined. If everything is legal, you get a warning for a false complaint.",
       "role": "inspector",
       "checks": [
         "work_without_permit",
         "stop_work_order_violation",
-        "unlicensed_trade_work"
+        "unlicensed_trade_work",
+        "occupancy_contrary_to_co"
       ]
     },
     {
@@ -1371,6 +1410,18 @@
       "title": "Who pays the business broker",
       "text": "When a small business is sold through a broker, the seller pays the success fee, usually 8-15% of the price, at closing. Sellers price it in. Two to four weeks of training by the seller are normally part of the deal; ask for it in writing.",
       "source": "https://www.bizbuysell.com/learning-center/article/buyer-training-after-business-sale/"
+    },
+    {
+      "id": "occupancy_contrary_to_co",
+      "title": "The space must be legal for a cafe",
+      "text": "The building's Certificate of Occupancy has to allow your kind of business; a pre-1938 building needs a Letter of No Objection instead. Occupancy contrary to the certificate is fined $400 to $25,000, and only the owner can file to amend it.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+    },
+    {
+      "id": "construction_noise_plan",
+      "title": "A noise plan on the wall of the site",
+      "text": "Every construction site in the city, a cafe renovation included, must post a Construction Noise Mitigation Plan where inspectors can see it at all times. It is not filed with anyone, just posted. Without it a neighbor's noise complaint becomes a fine.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan"
     }
   ],
   "monthlyCosts": [
@@ -4842,6 +4893,105 @@
         "source": "https://www.nyc.gov/mayors-office/news/2026/07/executive-order-no--18.html",
         "seenIn": "primary_search_extract",
         "note": "The 10% is a design value; the city has published no measured effect."
+      },
+      {
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "certificate_of_occupancy_mismatch",
+        "name": "The Certificate of Occupancy does not say \"eating and drinking\"",
+        "tier": "core",
+        "text": "The architect pulls the building's Certificate of Occupancy: the ground floor is listed as a store. A cafe there needs the Buildings Department to accept the use, or the owner to amend the certificate.",
+        "realSignal": "Use shown on the Certificate of Occupancy on file for the address (public record)",
+        "trigger": "attribute:former_use=retail_or_salon",
+        "effects": [
+          {
+            "field": "openingDelayDays",
+            "add": 30
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "site_due_diligence"
+          },
+          {
+            "kind": "lever",
+            "id": "lease_contingencies"
+          },
+          {
+            "kind": "shortcut",
+            "id": "open_in_wrong_use_space"
+          }
+        ],
+        "realFrequency": "Applies to every space that was not a food business before; the city lists it first among Buildings violations for restaurants, with a $400-$25,000 penalty",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+        "seenIn": "page_opened",
+        "note": "Page opened: \"If you plan to change the use, egress, or occupancy of your space, make sure the property owner has filed for an amended Certificate of Occupancy.\" One architecture firm says a store converted to an eating and drinking place for under 75 people can often proceed on a Letter of No Objection instead of an amended certificate (secondary, not confirmed with the Department). 30 days is the letter's wait in a clear case; an amended certificate takes far longer and no measured time was found."
+      },
+      {
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "durationMonths": 1,
+        "confidence": "estimate",
+        "id": "construction_noise_complaint",
+        "name": "A neighbor complains about construction noise",
+        "tier": "deep",
+        "text": "The tenant upstairs calls 311 about the demolition. An environmental inspector comes to look for the noise plan that every site must post.",
+        "realSignal": "311 construction-noise complaint about the address",
+        "trigger": "announced",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -440,
+            "note": "only if no plan is posted"
+          }
+        ],
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "contractor_choice"
+          },
+          {
+            "kind": "lever",
+            "id": "construction_pace"
+          },
+          {
+            "kind": "shortcut",
+            "id": "build_without_permit"
+          }
+        ],
+        "realFrequency": "Noise is among the most common 311 complaints in the city; no rate per site was found",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan",
+        "seenIn": "page_opened",
+        "note": "Page opened: \"Construction sites must post a Construction Noise Plan... It must be visible at the site all the time... You do not need to file the plan with the Department of Environmental Protection\"; not following the requirements can bring \"significant financial penalties\". The $440 is the lowest figure visible in a garbled search extract of the Noise Code penalty schedule (roughly $440 to $4,200 by offense): an unconfirmed estimate. After-hours work without a variance multiplies complaints. A site with its plan posted and its permits in order loses nothing."
       }
     ],
     "mechanics": [
@@ -5726,7 +5876,11 @@
         },
         {
           "url": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
-          "confirmed": "may operate on the 22nd day; unannounced pre-permit inspection that must be passed; Place of Assembly permit at 75 people"
+          "confirmed": "may operate on the 22nd day; unannounced pre-permit inspection that must be passed; Place of Assembly permit at 75 people; occupancy contrary to the Certificate of Occupancy fined $400-$25,000; landmark approval before work; licensed architect and contractor"
+        },
+        {
+          "url": "https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan",
+          "confirmed": "construction sites must post a Construction Noise Plan, visible at all times; it is not filed with the Department of Environmental Protection"
         }
       ],
       "refusedBySite": [
@@ -6601,6 +6755,21 @@
         "text": "Imported espresso machines carry a 15% tariff; a used machine already in the country does not.",
         "why": "US tariff on EU goods since July 2025; buying a shop with its equipment sidesteps it.",
         "source": "https://dailycoffeenews.com/2025/09/05/delonghis-computer-that-makes-coffee-trolls-u-s-tariffs"
+      },
+      {
+        "text": "A cafe renovation must have a noise plan taped up on site, and nobody tells you because it is not filed anywhere.",
+        "why": "The Construction Noise Mitigation Plan is posted, not submitted; its absence turns a neighbor's 311 call into a fine.",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan"
+      },
+      {
+        "text": "Only the building's owner can amend the Certificate of Occupancy, and the tenant pays the fine if the use is wrong.",
+        "why": "Occupancy contrary to the certificate is fined $400-$25,000; the city tells tenants to make sure the owner has filed, which means making it a condition of the lease.",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
+      },
+      {
+        "text": "The city publishes its fines for restaurants on one page, by agency, with the amounts.",
+        "why": "The NYC Business restaurant page lists penalties from $5 (no carter decal) to $25,000 (wrong occupancy) and can be opened without trouble: a ready primary source for the other researchers' violations.",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant"
       }
     ],
     "failureStories": [
