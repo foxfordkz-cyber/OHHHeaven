@@ -1,10 +1,10 @@
 // ЗАГЛУШКА движка до появления настоящих модулей в основной ветке:
 //   tickDay, netWorth — агент 02 (engine/src/index.ts); dealModifiers — агент 13 (engine/src/deals);
-//   exposureOf — агент 03 (engine/src/law); nicheKpisHook — крючки ниш (engine/src/niches, агенты 01 и 14).
+//   exposureOf — агент 03 (engine/src/law).
 // Подключается только через ../link.ts. Простая детерминированная экономика по разделу 3 CONTRACT:
 // спрос дня, мощность по людям и залу, потери с причиной, закрытие месяца по модели затрат, следы нарушений.
 import type {
-  BusinessState, DayReport, Money, MonthReport, NicheKpi, Pack, PnlLine, WorldState,
+  BusinessState, DayReport, Money, MonthReport, Pack, PnlLine, WorldState,
 } from '../../../../shared/src/types';
 import { RULES, dateOf, isMonthEnd } from '../../../../shared/src/rules';
 import {
@@ -52,8 +52,6 @@ export function netWorth(b: BusinessState, ctx: Ctx): Money {
   const owed = b.liabilities.filter((l) => !l.paid).reduce((s, l) => s + l.amount, 0);
   return r2(b.cash + RULES.NET_WORTH_ITEMS_SHARE * items - owed);
 }
-
-export function nicheKpisHook(_b: BusinessState, _pack: Pack): NicheKpi[] | null { return null; }
 
 // ───────────────────────── день ─────────────────────────
 
