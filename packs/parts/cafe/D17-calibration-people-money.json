@@ -1,1 +1,6304 @@
-{"id":"cafe","fragment":"D17-calibration-people-money","status":"in_progress","extra":{"eventCalibration":[]}}
+{
+ "id": "cafe",
+ "fragment": "D17-calibration-people-money",
+ "researcher": "D17",
+ "topic": "People, wages, taxes, money, payments: calibration of events",
+ "checked": "2026-11-14",
+ "howToRead": "extra.eventCalibration holds one record per event id of the source fragment (sourceFragment). It replaces that event's months, durationMonths and effects, and adds cost/result to each player move. Ids are unchanged.",
+ "extra": {
+  "calibrationSummary": {
+   "events": 91,
+   "core": 74,
+   "deep": 17,
+   "exotic": 0,
+   "byFragment": {
+    "D00": 91
+   },
+   "byConfidence": {
+    "verified": 41,
+    "estimate": 50
+   },
+   "duplicatesMarked": 34
+  },
+  "eventCalibration": [
+   {
+    "id": "d00_labor_finance_pay_notice",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a hire starts work without the signed pay notice (LS 54 for tipped food service, LS 59 otherwise)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "no_wage_notice_statements",
+      "perWorkday": 50,
+      "cap": 5000,
+      "note": "Labor Law 198(1-b): $50 for each workday without the notice, capped at $5,000 per worker; the clock starts if the notice is not given within 10 business days of hire"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_pay_notice_response",
+      "optionId": "option_a",
+      "label": "Hand over the signed notice before the first shift",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": [
+       {
+        "field": "violationAccrual",
+        "add": 0,
+        "note": "no exposure"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_pay_notice_response",
+      "optionId": "option_b",
+      "label": "Delay the start one week while payroll prepares it",
+      "cost": [
+       {
+        "field": "capacity",
+        "mult": 0.95,
+        "note": "one barista missing for a week = 40 of 640 hired hours, about 6%; rounded"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_hiring_paperwork",
+      "cost": [],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -12,
+        "note": "D05 saves $12 per worker"
+       }
+      ],
+      "violation": "no_wage_notice_statements",
+      "note": "22 workdays x $50 = $1,100 a month per worker, reaching the $5,000 cap after about 100 workdays"
+     }
+    ],
+    "source": "https://law.justia.com/codes/new-york/lab/article-6/198/",
+    "confidence": "verified",
+    "note": "Numbers seen in the statute text (Justia, 2025): 198(1-b) $50 per workday up to $5,000; 198(1-d) $250 per workday up to $5,000 for wage statements. Game: deterministic accrual from the hire date, found by any wage audit or complaint.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "realFrequency": "Every hire; the notice is a one-page form, so the event only fires if the player skips it."
+   },
+   {
+    "id": "d00_labor_finance_sidework_tip_credit",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: tip credit used AND a tipped barista is given more than 2 hours or 20% of the shift of untipped work (prep, dishes, cleaning)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "wages",
+      "mult": 1.0,
+      "note": "no change unless the pack's tip credit is switched on (extra.tipCredit.used is false)"
+     },
+     {
+      "field": "cashOut",
+      "add": 45.2,
+      "unit": "per affected worker-day",
+      "note": "the full $17.00 instead of the $11.35 cash wage for that day: $5.65 x 8 h"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_sidework_tip_credit_response",
+      "optionId": "option_a",
+      "label": "Pay the full minimum wage for that day",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 45.2,
+        "unit": "per worker-day"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_sidework_tip_credit_response",
+      "optionId": "option_b",
+      "label": "Move prep to an untipped porter (D05 role dishwasher_porter)",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 1474,
+        "note": "80 h a month x $17 x 1.084 employer taxes"
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.02
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "tip_credit_no_notice",
+      "cost": [],
+      "result": [],
+      "violation": "invalid_tip_credit",
+      "note": "If every shift of four baristas breaks the 20% rule: 4 x 22 x $45.20 = $3,978 a month owed back, x2 with liquidated damages"
+     }
+    ],
+    "source": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
+    "confidence": "verified",
+    "note": "NY DOL Tips FAQ and 12 NYCRR 146-3.9: a food service worker who spends more than 2 hours or more than 20% of the shift on untipped work is not tipped for that day. 2026 NYC cash wage $11.35, credit $5.65 (dol.ny.gov tipped page).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "realFrequency": "Every day for a counter cafe where baristas also prep and wash; the reason many cafes skip the tip credit."
+   },
+   {
+    "id": "d00_labor_finance_drawer_shortage",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: cash_controls set to trust, or no daily count",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 100,
+      "note": "2% of the $5,100 cash sales a month (10% of $51,000); my estimate for an owner-present shop"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "cash_controls",
+      "optionId": "pins_and_counts",
+      "label": "Count the drawer at every handover with POS PINs",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 60,
+        "note": "D05 lever price"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -80,
+        "note": "shortage falls to about 0.4% of cash sales; estimate"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_drawer_shortage_response",
+      "optionId": "option_b",
+      "label": "Investigate with access logs before accusing anyone",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 3
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -100,
+        "note": "stops a repeat if a person is found"
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "dock_pay_for_shortages",
+      "cost": [],
+      "result": [],
+      "violation": "illegal_deductions",
+      "note": "Deducting the shortage from pay is unlawful (Labor Law 193; Hospitality Wage Order 146-2.7): repaid in full x2 with liquidated damages"
+     }
+    ],
+    "source": "https://dol.ny.gov/system/files/documents/2021/03/hospitality-wage-order-frequently-asked-questions.pdf",
+    "confidence": "estimate",
+    "note": "Rule (no deductions for shortages) is in the hospitality wage order; the 2% size is my estimate, there is no public NYC cafe shrink series. The widely repeated industry claim (theft is about 75% of restaurant inventory shortages and about 4% of sales) is secondary and could not be traced to the NRA.",
+    "duplicateOf": "drawer_comes_up_short",
+    "supportingSources": [
+     "https://www.restroworks.com/blog/restaurant-employee-theft-statistics/"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_no_notice_quit",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: bench_depth = exact and a barista leaves (quit chosen by the staff model: pay below market, night-before scheduling or tenure pressure)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "capacity",
+      "mult": 0.81,
+      "note": "one of four baristas gone for 3 weeks: 1 - 0.25 x 0.75"
+     },
+     {
+      "field": "cashOut",
+      "add": 2706,
+      "note": "hard replacement cost per hourly restaurant worker, Black Box Intelligence 2025"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_no_notice_quit_response",
+      "optionId": "option_a",
+      "label": "Owner covers the missing shifts",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 120
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.15,
+        "note": "back to about 0.96"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "temp_cover",
+      "label": "Book a staffing-app barista for 120 hours",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3840,
+        "note": "$32 an hour: Instawork NYC barista pay $24.54 plus a platform markup of about 30%"
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.15
+       },
+       {
+        "field": "quality",
+        "add": -0.02
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_no_notice_quit_response",
+      "optionId": "option_b",
+      "label": "Pay the final wages on the next payday and recruit",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 60,
+        "note": "paid job posts with a pay range (D05 job_ads)"
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.1,
+        "note": "vacancy shortened to about 2 weeks"
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "withhold_final_pay",
+      "cost": [],
+      "result": [],
+      "violation": "unpaid_overtime",
+      "note": "Keeping the last paycheck as a 'fine' for no notice is unpaid wages: owed x2 plus 9% interest (Labor Law 198(1-a))"
+     }
+    ],
+    "source": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/",
+    "confidence": "estimate",
+    "note": "Turnover: accommodation and food services quits averaged 4.2% a month in 2025 (BLS JOLTS annual table, seen in search extract), about 2 quits a year for four baristas. Replacement $2,706 hard cost (Black Box 2025, search extract); $5,864 with lost output (Cornell, older). Vacancy 3 weeks is my estimate.",
+    "realFrequency": "About 0.17 quits a month for four baristas (4 x 4.2%).",
+    "duplicateOf": "barista_quits_by_text",
+    "supportingSources": [
+     "https://www.bls.gov/news.release/jolts.t22.htm",
+     "https://www.instawork.com/temp-work-rate/barista-rate-in-new-york-ny"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_tipped_overtime",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a worker is scheduled past 40 hours in a payroll week",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 210,
+      "note": "20 overtime hours in the month x $10.50 premium (half of $21)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_tipped_overtime_response",
+      "optionId": "option_a",
+      "label": "Pay time and a half on the full rate",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 210
+       }
+      ],
+      "result": [],
+      "note": "With the tip credit the overtime cash rate is 1.5 x $17.00 - $5.65 = $19.85, not 1.5 x $11.35 = $17.03 (dol.ny.gov tipped page)"
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_tipped_overtime_response",
+      "optionId": "option_b",
+      "label": "Spread the hours over a part-timer",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "same straight-time pay"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -210
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_overtime_pay",
+      "cost": [],
+      "result": [],
+      "violation": "unpaid_overtime"
+     }
+    ],
+    "source": "https://dol.ny.gov/minimum-wage-tipped-workers",
+    "confidence": "verified",
+    "note": "NY overtime: 1.5 x regular rate after 40 hours; for tipped food service the DOL page gives the tip-credit overtime arithmetic. 20 hours is my sizing of one covered absence.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "overtime_creep"
+   },
+   {
+    "id": "d00_labor_finance_tips_shortfall",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: tip credit used while card+cash tips are below $5.65 per hour worked",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1050,
+      "note": "($5.65 - $4.69) x 640 h = $614 at the pack's tips with cash; $1,613 at card tips only ($3.13/h); midpoint about $1,050"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_tips_shortfall_response",
+      "optionId": "option_a",
+      "label": "Top up wages to $17.00 and fix payroll",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1050
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_tips_shortfall_response",
+      "optionId": "option_b",
+      "label": "Stop using the tip credit; pay the full wage",
+      "cost": [
+       {
+        "field": "wages",
+        "mult": 1.0,
+        "note": "the pack already pays $21 with no credit"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -1050
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "tip_credit_no_notice",
+      "cost": [],
+      "result": [],
+      "violation": "invalid_tip_credit"
+     }
+    ],
+    "source": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
+    "confidence": "estimate",
+    "note": "Rule: the employer owes the difference when tips do not cover the credit (NY DOL Tips FAQ). Tip levels from D05 extra.tips (Toast quick-service 15.8% on about a quarter of sales). Non-obvious result: in a counter cafe the tip credit often does not pay for itself.",
+    "realFrequency": "Every slow month for a tip-credit cafe; January and February first."
+   },
+   {
+    "id": "d00_labor_finance_meal_cover",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a shift over 6 hours that spans 11 am - 2 pm is staffed by one barista alone",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "meal_period_denied",
+      "note": "Labor Law 162: 30-minute noon meal period; civil penalty up to $1,000 for a first violation, $2,000 second, $3,000 later (Labor Law 218)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_meal_cover_response",
+      "optionId": "option_a",
+      "label": "Owner covers the counter for 30 minutes a day",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 11,
+        "note": "0.5 h x 22 days"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_meal_cover_response",
+      "optionId": "option_b",
+      "label": "Pause service 30 minutes at the edge of lunch",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.99,
+        "note": "about 2% of a day's orders fall in a 30-minute slot at 2 pm, half are lost"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "bench_depth",
+      "optionId": "one_extra",
+      "label": "Add a part-time overlap at lunch",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 660
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.04
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "solo_shifts_no_break",
+      "cost": [],
+      "result": [],
+      "violation": "meal_period_denied"
+     }
+    ],
+    "source": "https://dol.ny.gov/day-rest-and-meal-periods",
+    "confidence": "verified",
+    "note": "Meal-period rule from NY DOL meal page; penalty tiers from Labor Law 218 text (newyork.public.law, search extract).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://newyork.public.law/laws/n.y._labor_law_section_218"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_rest_day",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a worker is rostered 7 days in a calendar week",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "no_day_of_rest",
+      "note": "Labor Law 161 covers restaurants: 24 consecutive hours of rest each calendar week; DOL orders compliance, civil penalty up to $1,000 first (Labor Law 218)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_rest_day_response",
+      "optionId": "option_a",
+      "label": "Swap one shift to give the rest day",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 8
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_rest_day_response",
+      "optionId": "option_b",
+      "label": "Apply for a DOL variance before using a 7-day schedule",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [],
+      "note": "Variance is discretionary; the player cannot assume it"
+     },
+     {
+      "kind": "lever",
+      "id": "bench_depth",
+      "optionId": "one_extra",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 660
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.04
+       }
+      ]
+     }
+    ],
+    "source": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611",
+    "confidence": "verified",
+    "note": "Coverage of restaurants and the 24-hour rule seen in Labor Law 161 text (Justia 2025) and DOL LS 611; exemption only for resort/seasonal restaurants in towns under 15,000.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://newyork.public.law/laws/n.y._labor_law_section_218"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_childcare_leave",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "announced: citywide school or childcare closure (snow day, public health order) known a day ahead",
+    "months": [
+     1,
+     2,
+     3,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.98,
+      "note": "one worker out 1.5 days = 12 of 640 hours"
+     },
+     {
+      "field": "cashOut",
+      "add": 252,
+      "note": "12 paid protected hours x $21 when the shop has 5+ employees; unpaid (but protected) below 5"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_childcare_leave_response",
+      "optionId": "option_a",
+      "label": "Approve and call in relief",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 252
+       },
+       {
+        "field": "ownerHours",
+        "add": 12
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_childcare_leave_response",
+      "optionId": "option_b",
+      "label": "Approve and cut service hours that day",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 252
+       },
+       {
+        "field": "demand",
+        "mult": 0.99
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "no_paid_sick_leave",
+      "cost": [],
+      "result": [],
+      "violation": "sick_leave_denied",
+      "note": "Refusing or punishing protected leave: $500 per instance plus 3x the unpaid wages (DCWP FAQ)"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+    "confidence": "verified",
+    "note": "DCWP Protected Time Off FAQ (updated Feb 22, 2026): paid time for 5+ employees, plus 32 hours of unpaid protected time for every employer from Feb 22, 2026 (Local Law 145). Months are the NYC public-school snow-day season; size is my estimate.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://www.nyc.gov/mayors-office/news/2026/02/mayor-mamdani-announces-major-expansion-of-protected-time-off-fo"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_prenatal_leave",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a pregnant employee asks for appointment time",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.995,
+      "note": "about 4 hours a month of a 640-hour roster"
+     },
+     {
+      "field": "cashOut",
+      "add": 84,
+      "note": "20 paid hours a year spread as 4 h a month x $21"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_prenatal_leave_response",
+      "optionId": "option_a",
+      "label": "Track the separate 20-hour bank and roster relief",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 84
+       },
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_prenatal_leave_response",
+      "optionId": "option_b",
+      "label": "Owner covers the appointment windows",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 84
+       },
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "count_it_as_sick_time",
+      "cost": [],
+      "result": [],
+      "violation": "sick_leave_denied",
+      "note": "Charging prenatal hours to the sick bank is unlawful: prenatal leave is separate (NY Labor Law 196-b)"
+     }
+    ],
+    "source": "https://www.ny.gov/new-york-state-paid-prenatal-leave/information-employers",
+    "confidence": "verified",
+    "note": "NY Paid Prenatal Leave: 20 paid hours a year for every private employer since Jan 1, 2025, separate from sick leave, paid at the regular rate, not paid out at separation (ny.gov employer page, search extract).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_leave_policy",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: the leave form asks for a doctor's note for absences of 3 days or less, or for the diagnosis",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "sick_leave_denied",
+      "perInstance": 500,
+      "note": "DCWP: up to $500 per first violation, $750 second, $1,000 later, per employee and per instance"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_leave_policy_response",
+      "optionId": "option_a",
+      "label": "Replace the form with the DCWP model policy",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_leave_policy_response",
+      "optionId": "option_b",
+      "label": "Have an adviser rewrite the policy and train the scheduler",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 300,
+        "note": "one hour of an employment lawyer or HR service; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "sick_call_policy",
+      "optionId": "find_your_own_cover",
+      "label": "Make workers find their own cover",
+      "cost": [
+       {
+        "field": "violationAccrual",
+        "id": "sick_leave_denied",
+        "perInstance": 500
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.02
+       },
+       {
+        "field": "quality",
+        "add": -0.02
+       }
+      ],
+      "violation": "sick_leave_denied",
+      "note": "Requiring a replacement as a condition of leave is itself prohibited"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+    "confidence": "verified",
+    "note": "Penalty tiers seen in the DCWP FAQ extract ($500 / $750 / $1,000, per employee and instance); documentation rule (no note for 3 consecutive workdays or less) from the same FAQ.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_pay_frequency",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: payroll app left on every two weeks for baristas (manual workers must be paid weekly, Labor Law 191)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "pay_frequency_violation",
+      "note": "first violation since May 9, 2025: damages = lost interest only on the late half of wages; after a prior finding: 100% of the late-paid wages as liquidated damages"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_pay_frequency_response",
+      "optionId": "option_a",
+      "label": "Switch payroll to weekly",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3104,
+        "note": "one-time: you lose a week of float, the first weekly run is paid a week earlier"
+       },
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "Gusto-type plans run weekly at no extra fee"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_pay_frequency_response",
+      "optionId": "option_b",
+      "label": "Ask DOL for authorization to pay less often",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 3
+       }
+      ],
+      "result": [],
+      "note": "Authorization is only for employers with a large average workforce; a cafe will not qualify (estimate)"
+     },
+     {
+      "kind": "shortcut",
+      "id": "pay_every_two_weeks",
+      "cost": [],
+      "result": [],
+      "violation": "pay_frequency_violation",
+      "note": "Interest on the late half: $6,720 x 9% x 7/365 = about $12 a month; after any finding the exposure jumps to 100% of the late wages, up to six years back"
+     }
+    ],
+    "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+    "confidence": "verified",
+    "note": "2025 amendment to Labor Law 198(1-a) seen in several law-firm summaries (Mayer Brown, Nixon Peabody): first-violation damages limited to lost interest; liquidated damages only after a prior finding. 9% is the NY statutory judgment rate (CPLR 5004), my assumption for 'interest'.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "pay_frequency_claim"
+   },
+   {
+    "id": "d00_labor_finance_termination_notice",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: employment ends without the written termination notice and the unemployment Record of Employment",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "termination_notice_missing",
+      "note": "Labor Law 195(6): written notice of the exact termination date within 5 working days; enforced by DOL order, penalty up to $1,000 first (Labor Law 218); also the IA 12.3 Record of Employment"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_termination_notice_response",
+      "optionId": "option_a",
+      "label": "Issue the notice and the final pay stub",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_termination_notice_response",
+      "optionId": "option_b",
+      "label": "Run the payroll service's offboarding checklist",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 50,
+        "note": "extra payroll run fee; estimate"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://newyork.public.law/laws/n.y._labor_law_section_218",
+    "confidence": "estimate",
+    "note": "Penalty ceiling from Labor Law 218 (non-wage violation). The 5-day notice rule is Labor Law 195(6); the statute text was not opened in this session.",
+    "realFrequency": "Every departure: about 2 a year for four baristas."
+   },
+   {
+    "id": "d00_labor_finance_manager_tip_pool",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a promoted shift lead with hire/fire or scheduling authority keeps a share of the tip pool",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 500,
+      "note": "the lead's quarter of $2,000 card tips a month is owed back to the pool"
+     },
+     {
+      "field": "quality",
+      "mult": 0.99,
+      "note": "staff notice the split"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_manager_tip_pool_response",
+      "optionId": "option_a",
+      "label": "Remove the lead from the pool and raise the lead's wage instead",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 520,
+        "note": "+$3 an hour x 160 h x 1.084 to keep the lead whole"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_manager_tip_pool_response",
+      "optionId": "option_b",
+      "label": "Narrow the lead's duties (no hiring, firing or discipline) so the lead stays eligible",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 10,
+        "note": "the owner takes back scheduling and discipline"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "manager_in_tip_pool",
+      "cost": [],
+      "result": [],
+      "violation": "tip_pool_ineligible",
+      "note": "Owed back x2 with liquidated damages, six years back (Labor Law 196-d, 198)"
+     }
+    ],
+    "source": "https://www.dol.gov/agencies/whd/fact-sheets/15b-managers-supervisors-tips-flsa",
+    "confidence": "verified",
+    "note": "FLSA 3(m)(2)(B): managers and supervisors may not keep any employee tips (US DOL fact sheet 15B); NY 196-d is stricter. $500 is my arithmetic on the pack's $2,000 card tips.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "tip_jar_fight"
+   },
+   {
+    "id": "d00_labor_finance_wcb_proof_gap",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: policy bought but the carrier's proof of coverage is not on the Board's file (new policy, broker error)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "ownerHours",
+      "add": 4
+     },
+     {
+      "field": "violationAccrual",
+      "id": "no_wc_insurance",
+      "per10Days": 500,
+      "note": "If not cleared within 30 days the Board treats it as no coverage: $500 per 10-day period for 5 or fewer employees"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_wcb_proof_gap_response",
+      "optionId": "option_a",
+      "label": "Ask the carrier to file proof and send the policy to the Board",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "violationAccrual",
+        "add": 0
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_wcb_proof_gap_response",
+      "optionId": "option_b",
+      "label": "Appeal the penalty with the policy documents within 30 days",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.wcb.ny.gov/icpencalc/pencalchelp.jsp",
+    "confidence": "verified",
+    "note": "WCB penalty calculator help (search extract): rate per 10-day period $500 for 5 or fewer employees, $750 for 6-10, $1,000 for 11-24, $2,000 for 25+; statute cap $2,000 per 10 days or twice the premium. Employers have 30 days from the initial penalty to appeal.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://www.wcb.ny.gov/content/main/Employers/violations-wclaw.jsp"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_db_pfl_gap",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: staff hired without a disability (DBL) and Paid Family Leave policy",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "no_disability_pfl_coverage",
+      "note": "WCL 220(2): up to 0.5% of payroll for the period without coverage plus up to $500 per period; the employer also owes any benefits claimed meanwhile"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_db_pfl_gap_response",
+      "optionId": "option_a",
+      "label": "Buy the DBL/PFL policy now",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 6,
+        "note": "DBL employer part $17.68 per worker a year (NYSIF 2026) x 4 / 12; PFL premium comes from the 0.432% payroll deduction"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_disability_pfl_insurance",
+      "cost": [],
+      "result": [],
+      "violation": "no_disability_pfl_coverage",
+      "note": "Saves about $6 a month; exposure 0.5% x $13,440 = $67 a month plus up to $500 per period, and a 12-week PFL claim at 67% of pay (about $8,400) paid by the owner"
+     }
+    ],
+    "source": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp",
+    "confidence": "verified",
+    "note": "Penalty formula seen in WCB DBL/PFL penalties page extract; PFL 2026 0.432% of wages up to $411.91 a year, benefit 67% of the average weekly wage up to $1,228.53 (paidfamilyleave.ny.gov/2026). The policy price is the pack's _common note.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://paidfamilyleave.ny.gov/2026"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_youth_certificate",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a 16- or 17-year-old starts without working papers (Employment Certificate)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "child_labor",
+      "note": "Labor Law 141 since May 9, 2025: up to $10,000 for a first violation, $25,000 second, $55,000 third"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_youth_certificate_response",
+      "optionId": "option_a",
+      "label": "Delay the start until the papers arrive",
+      "cost": [
+       {
+        "field": "staffAvailability",
+        "mult": 0.98,
+        "note": "the planned 20 h a week missing for two weeks"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_youth_certificate_response",
+      "optionId": "option_b",
+      "label": "Hire an adult for the shifts",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "no youth wage in NY: the same $17 floor"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "minors_no_papers",
+      "cost": [],
+      "result": [],
+      "violation": "child_labor"
+     }
+    ],
+    "source": "https://dol.ny.gov/laws-governing-employment-minors-p882",
+    "confidence": "verified",
+    "note": "Penalty tiers seen in NY DOL guidance extract (updated May 9, 2025: first $0-$10,000, second $2,000-$25,000, third $10,000-$55,000; previous caps were $1,000/$2,000/$3,000).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_db_renewal",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: the DBL/PFL policy anniversary, if auto-renew is off",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "no_disability_pfl_coverage",
+      "note": "same exposure as a gap from the expiry date"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_db_renewal_response",
+      "optionId": "option_a",
+      "label": "Renew with the current carrier",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 71,
+        "note": "a year of employer DBL for four workers at $17.68"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_db_renewal_response",
+      "optionId": "option_b",
+      "label": "Move to another carrier with no gap",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       },
+       {
+        "field": "cashOut",
+        "add": 71
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp",
+    "confidence": "estimate",
+    "note": "Renewal price from the pack's _common NYSIF figure; the gap exposure from the WCB penalties page.",
+    "duplicateOf": "d00_labor_finance_db_pfl_gap"
+   },
+   {
+    "id": "d00_labor_finance_payroll_insurance_audit",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: workers' compensation premium audit at the policy anniversary (declared payroll vs payroll records)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 820,
+      "note": "$161,280 real payroll - $120,000 declared = $41,280 x 2% planning rate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_payroll_insurance_audit_response",
+      "optionId": "option_a",
+      "label": "Pay the adjustment and declare the true payroll next year",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 820
+       },
+       {
+        "field": "insurance",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_payroll_insurance_audit_response",
+      "optionId": "option_b",
+      "label": "Send records to dispute a wrong class code",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -200,
+        "note": "if a clerical code was misapplied; estimate"
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "lowball_payroll_to_insurer",
+      "cost": [],
+      "result": [],
+      "violation": "wc_premium_misrepresentation"
+     }
+    ],
+    "source": "https://www.wcb.ny.gov/content/main/Employers/violations-wclaw.jsp",
+    "confidence": "estimate",
+    "note": "Audit mechanism is standard; the 2% rate is the pack's planning rate. From Oct 1, 2026 NY loss costs fall 21.9% (DFS), so the same gap costs about $640 on new policies.",
+    "duplicateOf": "workers_comp_audit_bill",
+    "supportingSources": [
+     "https://www.dfs.ny.gov/reports_and_publications/press_releases/pr20260715"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_lactation_space",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a returning employee asks for lactation breaks while the back room is all storage",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 231,
+      "note": "paid 30-minute break each shift: 0.5 h x 22 shifts x $21"
+     },
+     {
+      "field": "capacity",
+      "mult": 0.99,
+      "note": "11 h a month away from the bar"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_lactation_space_response",
+      "optionId": "option_a",
+      "label": "Clear a private corner and roster cover",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 200,
+        "note": "one-time: curtain, chair, outlet; estimate"
+       },
+       {
+        "field": "cashOut",
+        "add": 231
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_lactation_space_response",
+      "optionId": "option_b",
+      "label": "Agree a nearby alternative space in writing",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       },
+       {
+        "field": "cashOut",
+        "add": 231
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "no_lactation_breaks",
+      "cost": [],
+      "result": [],
+      "violation": "lactation_denied",
+      "note": "Unpaid or refused breaks: Labor Law 206-c; NYC Human Rights Law complaint"
+     }
+    ],
+    "source": "https://dol.ny.gov/expressing-breast-milk-workplace",
+    "confidence": "verified",
+    "note": "NY Labor Law 206-c since June 19, 2024: 30 minutes of paid break time each time the employee needs to express milk, for up to three years after birth, any employer size (DOL page extract).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "pumping_breaks_on_return"
+   },
+   {
+    "id": "d00_labor_finance_tax_deposit",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: spend_payroll_withholding active on the 15th (monthly 941 depositor)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 356,
+      "note": "10% failure-to-deposit penalty on a $3,562 deposit more than 15 days late; 2% if 1-5 days, 5% if 6-15 days, 15% after an IRS notice"
+     },
+     {
+      "field": "ownerDebt",
+      "add": 2381,
+      "note": "trust-fund part (employee FICA $1,181 + withheld income tax $1,200) becomes the owner's personal debt under the trust fund recovery penalty"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_tax_deposit_response",
+      "optionId": "option_a",
+      "label": "Refill the account and deposit within 5 days",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 71,
+        "note": "2% tier on $3,562"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_tax_deposit_response",
+      "optionId": "option_b",
+      "label": "Call the IRS for an installment agreement and stop the diversion",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 356
+       },
+       {
+        "field": "monthlyCost",
+        "add": 21,
+        "note": "7% a year interest on $3,562"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "spend_payroll_withholding",
+      "cost": [],
+      "result": [],
+      "violation": "payroll_tax_not_deposited"
+     }
+    ],
+    "source": "https://www.irs.gov/payments/failure-to-deposit-penalty",
+    "confidence": "verified",
+    "note": "IRS failure-to-deposit tiers (2/5/10/15%) from the IRS penalty page extract; 7% underpayment interest Q4 2026 (IRS newsroom). Deposit size: 15.3% of $15,440 wages and tips + about $1,200 withheld income tax (D09).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "payroll_tax_deposit_15th",
+    "supportingSources": [
+     "https://www.irs.gov/newsroom/interest-rates-remain-the-same-for-the-fourth-quarter-of-2026",
+     "https://www.irs.gov/publications/p15"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_service_charge",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a mandatory 3% charge on catering orders is run through payroll as tips",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 12,
+      "note": "FICA credit (Form 8846) wrongly claimed on service charges: 7.65% x $150 a month of catering charges"
+     },
+     {
+      "field": "ownerHours",
+      "add": 1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_service_charge_response",
+      "optionId": "option_a",
+      "label": "Recode the charge as wages and re-run withholding",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 150,
+        "note": "one accountant hour"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_service_charge_response",
+      "optionId": "option_b",
+      "label": "Replace the charge with an optional tip line",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 1.0
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -12
+       }
+      ]
+     }
+    ],
+    "source": "https://www.irs.gov/instructions/iw2w3",
+    "confidence": "verified",
+    "note": "IRS 2026 W-2 instructions extract: mandatory service charges are not qualified tips (no-tax-on-tips deduction) and are wages; 45B credit applies only to tips. Catering volume ($5,000 a month, 3% = $150) is my assumption.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://www.irs.gov/businesses/small-businesses-self-employed/fica-tip-credit-for-employers"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_final_payroll",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: the player closes the business",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 7700,
+      "note": "last weekly payroll $3,104 + accrued payroll tax deposit $3,562 + final unemployment quarter about $500 + accountant for final returns about $500"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_final_payroll_response",
+      "optionId": "option_a",
+      "label": "Fund final wages and file final 941, 940, NYS-45 and the final sales tax return within 20 days",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 7700
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_final_payroll_response",
+      "optionId": "option_b",
+      "label": "Hire an accountant to run the wind-down",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1500,
+        "note": "instead of $500; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_tax_filings",
+      "cost": [],
+      "result": [],
+      "violation": "returns_not_filed",
+      "note": "Unfiled final returns keep generating penalties billed to the owner personally (tax.ny.gov final return page)"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_a_final_sales_tax_return.htm",
+    "confidence": "verified",
+    "note": "Final sales tax return due within 20 days after business stops (tax.ny.gov extract); final wages by the next regular payday (Labor Law 191(3)). Dollar total is my arithmetic on the reference month.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://www.irs.gov/publications/p15"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_school_schedule",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: NYC public schools reopen (September) while 16-17-year-olds keep summer hours",
+    "months": [
+     9
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.97,
+      "note": "a minor on 30 h a week drops to at most 20-28 h: about 43 h a month of a 640 h roster (-6.7%), half re-covered by others"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_school_schedule_response",
+      "optionId": "option_a",
+      "label": "Rebuild the roster for the school term",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 3
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_school_schedule_response",
+      "optionId": "option_b",
+      "label": "Give closing shifts after 10 pm to adults",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "same wage, fewer student hours"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "minors_no_papers",
+      "cost": [],
+      "result": [],
+      "violation": "child_labor"
+     }
+    ],
+    "source": "https://dol.ny.gov/hours-work-minors",
+    "confidence": "verified",
+    "note": "Hours for 16-17-year-olds when school is in session (DOL hours-of-work page): 4 h on school days, 28 h a week, 6 am-10 pm (midnight with consent on non-school nights).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "minor_back_to_school_hours"
+   },
+   {
+    "id": "d00_labor_finance_call_in",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a scheduled barista is sent home after reporting because trade is slow",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 34,
+      "unit": "per send-home",
+      "note": "sent home after 1 h of an 8 h shift: 2 more call-in hours x $17.00 basic minimum"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_call_in_response",
+      "optionId": "option_a",
+      "label": "Pay the call-in hours",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 34,
+        "unit": "per send-home"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_call_in_response",
+      "optionId": "option_b",
+      "label": "Keep the worker 3 hours on deep cleaning and prep",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 42,
+        "note": "2 h at $21 instead of 2 h at $17"
+       }
+      ],
+      "result": [
+       {
+        "field": "quality",
+        "add": 0.005
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "scheduling",
+      "optionId": "two_weeks_fixed",
+      "label": "Text cuts before people leave home",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 400
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.02
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "send_home_no_call_in_pay",
+      "cost": [],
+      "result": [],
+      "violation": "call_in_pay_unpaid"
+     }
+    ],
+    "source": "https://www.law.cornell.edu/regulations/new-york/12-NYCRR-146-1.5",
+    "confidence": "verified",
+    "note": "12 NYCRR 146-1.5 (Cornell LII extract): at least 3 hours for one shift or the regular shift if shorter; hours not worked are paid at the basic minimum with no tip credit; the DOL FAQ example (8-hour shift sent home after 1 hour: 1 h regular + 2 h minimum).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "january_hours_squeeze",
+    "supportingSources": [
+     "https://dol.ny.gov/system/files/documents/2021/03/hospitality-wage-order-frequently-asked-questions.pdf"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_spread_day",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: split or open-to-close shifts with more than 10 hours between start and end",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 17,
+      "unit": "per worker-day",
+      "note": "one extra hour at the $17.00 basic minimum"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_spread_day_response",
+      "optionId": "option_a",
+      "label": "Pay the spread-of-hours hour",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 170,
+        "note": "ten long days a month"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_spread_day_response",
+      "optionId": "option_b",
+      "label": "Re-cut shifts to under 10 hours",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": -0.01
+       }
+      ]
+     },
+     {
+      "kind": "shortcut",
+      "id": "no_spread_of_hours",
+      "cost": [],
+      "result": [],
+      "violation": "spread_of_hours_unpaid"
+     }
+    ],
+    "source": "https://www.law.cornell.edu/regulations/new-york/12-NYCRR-146-1.6",
+    "confidence": "verified",
+    "note": "12 NYCRR 146-1.6 (Cornell LII extract): one additional hour at the basic minimum for each day the spread exceeds 10 hours; applies to every employee of a restaurant regardless of rate; not counted as hours worked.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "open_to_close_doubles"
+   },
+   {
+    "id": "d00_labor_finance_uniform_care",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a branded uniform that cannot be washed with ordinary clothes is required",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "monthlyCost",
+      "add": 365,
+      "note": "NYC 2026 uniform maintenance pay $21.10 a week for over 30 h x 4.33 x 4 baristas"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_uniform_care_response",
+      "optionId": "option_a",
+      "label": "Launder the uniforms in-house or by service",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 80,
+        "note": "laundry service for aprons and shirts; estimate"
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -365
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "wash_and_wear_uniform",
+      "label": "Switch to wash-and-wear T-shirts and aprons",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 300,
+        "note": "3 shirts x $25 x 4 people"
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -365
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_uniform_care_response",
+      "optionId": "option_b",
+      "label": "Pay uniform maintenance pay with the wages",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 365
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "staff_pay_for_uniforms",
+      "cost": [],
+      "result": [],
+      "violation": "uniform_costs_unpaid"
+     }
+    ],
+    "source": "https://forms.labor.ny.gov/WP/LS400.pdf",
+    "confidence": "verified",
+    "note": "NY DOL LS 400 extract: NYC uniform maintenance pay 1/1/2026-12/31/2026 is $10.10 (20 h or fewer), $16.75 (20-30 h), $21.10 (over 30 h) a week; not required for wash-and-wear uniforms that can be washed with personal clothes. Class actions over this rule are rising.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://dol.ny.gov/system/files/documents/2021/03/hospitality-wage-order-frequently-asked-questions.pdf"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_sales_tax_reserve",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: the 20th of March/June/September/December arrives and the collected sales tax was spent",
+    "months": [
+     3,
+     6,
+     9,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1558,
+      "note": "10% late-payment penalty on $13,579 + the lost $200 vendor credit"
+     },
+     {
+      "field": "monthlyCost",
+      "add": 164,
+      "note": "14.5% a year NY interest on sales tax on $13,579, while unpaid"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_sales_tax_reserve_response",
+      "optionId": "option_a",
+      "label": "Restore the reserve from other cash and pay in full",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 13579
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "tax_reserve_account",
+      "label": "Sweep 8.875% of taxable sales into a separate account daily",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -1558
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_sales_tax_reserve_response",
+      "optionId": "option_b",
+      "label": "Ask for an installment payment agreement",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 164
+       }
+      ],
+      "result": [],
+      "note": "Penalty and interest keep running; the agreement stops the warrant ladder while kept"
+     },
+     {
+      "kind": "shortcut",
+      "id": "keep_sales_tax",
+      "cost": [],
+      "result": [],
+      "violation": "sales_tax_not_remitted"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_and_use_tax_penalties.htm",
+    "confidence": "verified",
+    "note": "NY sales tax: late penalty 10% of the tax for the first month + 1% a month, max 30%, minimum $50 (ST-100 instructions extract); interest on sales tax 14.5% in every 2026 quarter (tax.ny.gov interest tables, Q4 2026); vendor credit 5% up to $200 only if filed and paid on time (TB-ST-925).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "sales_tax_quarter_due",
+    "supportingSources": [
+     "https://www.tax.ny.gov/pay/interest/2026/p4.htm",
+     "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/vendor_collection_credit.htm"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_accountant_miss",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: filing outsourced, a return is missed and a notice arrives",
+    "months": [
+     4,
+     7,
+     10,
+     1
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1408,
+      "note": "$50 minimum or 10% + 1% a month of the $13,579: two months late = $1,494; minus no credit; rounded with interest of $55"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_accountant_miss_response",
+      "optionId": "option_a",
+      "label": "Send records and file the missing return now",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 3
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_accountant_miss_response",
+      "optionId": "option_b",
+      "label": "Ask the preparer to pay the penalty and change preparer",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 100,
+        "note": "better bookkeeper; estimate"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -700,
+        "note": "half recovered from the preparer; depends on the contract"
+       }
+      ]
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_and_use_tax_penalties.htm",
+    "confidence": "estimate",
+    "note": "Penalty rule verified (see sales_tax_reserve); the responsible-person rule makes the owner liable even when the accountant missed it. Months = the month after each sales-tax due date, when notices arrive (estimate).",
+    "duplicateOf": "vendor_credit_lost"
+   },
+   {
+    "id": "d00_labor_finance_pos_archive",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: the old POS is cancelled without exporting item-level sales history",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "auditExposure",
+      "add": 0.1,
+      "note": "at a later sales-tax audit with missing records the auditor estimates: assume +10% of taxable sales for the periods without records"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_pos_archive_response",
+      "optionId": "option_a",
+      "label": "Export 3 years of item-level data before cancelling",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "auditExposure",
+        "add": 0
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_pos_archive_response",
+      "optionId": "option_b",
+      "label": "Keep a read-only plan on the old POS",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 30,
+        "note": "estimate"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_by_restaurants.htm",
+    "confidence": "estimate",
+    "note": "Restaurants must keep guest checks / register records for at least three years (sales by restaurants bulletin); without records the Department may estimate. The +10% is my placeholder for a test-period estimate, not a statistic."
+   },
+   {
+    "id": "d00_labor_finance_gift_redemption",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: December gift cards are redeemed in January",
+    "months": [
+     1
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 178,
+      "note": "8.875% tax missed on $2,000 of redemptions if the POS treats the redemption as already taxed"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_gift_redemption_response",
+      "optionId": "option_a",
+      "label": "Set the POS to tax at redemption, not at sale",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_gift_redemption_response",
+      "optionId": "option_b",
+      "label": "Reconcile last year's cards and amend the return",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 150
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_by_restaurants.htm",
+    "confidence": "verified",
+    "note": "NY: a gift card sale is not a taxable sale; tax is due when it is redeemed for taxable food or drink (sales by restaurants bulletin, D00 source). Gift cards sold on or after Dec 10, 2022 are valid 9 years with no fees (NY Division of Consumer Protection). $2,000 is my assumption.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "gift_card_hangover",
+    "supportingSources": [
+     "https://dos.ny.gov/news/consumer-alert-nys-division-consumer-protection-alerts-consumers-new-laws-related-gift-cards"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_zero_sales_return",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: a sales-tax quarter ends while the shop is still in build-out (Certificate of Authority already active)",
+    "months": [
+     3,
+     6,
+     9,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 50,
+      "note": "minimum late-filing penalty even when no tax is due"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_zero_sales_return_response",
+      "optionId": "option_a",
+      "label": "File the zero return online",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -50
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_zero_sales_return_response",
+      "optionId": "option_b",
+      "label": "If the opening is cancelled, file the final return and surrender the certificate",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.tax.ny.gov/forms/current-forms/st/st100i.htm",
+    "confidence": "verified",
+    "note": "ST-100 instructions extract: minimum $50 penalty for late filing even if no tax is due.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_entity_switch",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: the player converts the LLC to a corporation or elects S status mid-year",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "ownerHours",
+      "add": 6
+     },
+     {
+      "field": "cashOut",
+      "add": 500,
+      "note": "accountant for the new registration, final return of the old entity and payroll account change; estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_entity_switch_response",
+      "optionId": "option_a",
+      "label": "Register the new entity 20 days before it starts selling",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 500
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_entity_switch_response",
+      "optionId": "option_b",
+      "label": "Wait until January 1",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0,
+        "note": "keeps the old tax treatment for the rest of the year"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "sell_on_old_certificate",
+      "cost": [],
+      "result": [],
+      "violation": "no_certificate_of_authority"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_a_final_sales_tax_return.htm",
+    "confidence": "estimate",
+    "note": "A new legal entity needs its own Certificate of Authority and the old one files a final return within 20 days (tax.ny.gov). An S corporation in NYC still pays the city General Corporation Tax (D09 nyc_gct_s_corp).",
+    "realFrequency": "Once, usually after the first profitable year."
+   },
+   {
+    "id": "d00_labor_finance_equipment_exit_tax",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: equipment is sold while winding down",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 692,
+      "note": "8.875% sales tax on $7,800 of equipment sold at auction, owed by the seller if not collected from buyers"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_equipment_exit_tax_response",
+      "optionId": "option_a",
+      "label": "Collect tax from buyers and remit with the final return",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -692
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_equipment_exit_tax_response",
+      "optionId": "option_b",
+      "label": "Let the auctioneer collect and remit",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 0,
+        "note": "inside the usual 15% commission"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -692
+       }
+      ]
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_a_final_sales_tax_return.htm",
+    "confidence": "verified",
+    "note": "tax.ny.gov final-return page extract: when selling business assets you must collect sales tax on them and give buyers Form TP-153. $7,800 is D09's auction estimate for the standard kit.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "closing_auction"
+   },
+   {
+    "id": "d00_labor_finance_loan_not_grant",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: the opening is financed with an SBA 7(a) loan",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 120,
+    "effects": [
+     {
+      "field": "monthlyCost",
+      "add": 1308,
+      "id": "sba_loan_payment",
+      "note": "$100,000 over 10 years at prime 7.00% + 2.75% = 9.75%"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_loan_not_grant_response",
+      "optionId": "option_a",
+      "label": "Borrow less: $60,000",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 785
+       }
+      ],
+      "result": [
+       {
+        "field": "cashIn",
+        "add": -40000
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_loan_not_grant_response",
+      "optionId": "option_b",
+      "label": "Open with the lean kit on own capital",
+      "cost": [
+       {
+        "field": "capacity",
+        "mult": 0.85,
+        "note": "12 seats instead of 18"
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -1308
+       }
+      ]
+     }
+    ],
+    "source": "https://www.sba.gov/loans/7a-loans/",
+    "confidence": "verified",
+    "note": "SBA 7(a) maximum rates (sba.gov extract): base + 6.5% up to $50,000, + 6.0% to $250,000, + 4.5% to $350,000, + 3.0% above. Prime 7.00% in October-November 2026 (Bankrate, secondary). At the $50-250k cap (13%) the payment is $1,493.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "supportingSources": [
+     "https://www.bankrate.com/rates/interest-rates/wall-street-prime-rate/"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_pledged_assets",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: the player tries to sell equipment pledged under the loan (UCC lien)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "saleBlocked",
+      "add": 1,
+      "note": "the buyer's lender or the auction will not release funds without a lien release"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_pledged_assets_response",
+      "optionId": "option_a",
+      "label": "Get lender consent and a lien release",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 3
+       },
+       {
+        "field": "cashOut",
+        "add": 0,
+        "note": "sale proceeds go to the loan first"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_pledged_assets_response",
+      "optionId": "option_b",
+      "label": "Keep the machine and raise cash another way",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.sba.gov/loans/7a-loans/",
+    "confidence": "estimate",
+    "note": "Collateral and lien practice is standard SBA lending; no public number."
+   },
+   {
+    "id": "d00_labor_finance_ubt_surprise",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: April 15, for an unincorporated cafe (LLC with one owner or a partnership) with gross income over $95,000",
+    "months": [
+     4
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1349,
+      "note": "($116,600 profit - $10,000 owner allowance - $5,000 exemption) x 4% = $4,064; partial credit x (5,400 - 4,064) / 2,000 = $2,715; net $1,349"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_ubt_surprise_response",
+      "optionId": "option_a",
+      "label": "File NYC-202 with the credit worked out",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1349
+       },
+       {
+        "field": "cashOut",
+        "add": 200,
+        "note": "accountant time"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_ubt_surprise_response",
+      "optionId": "option_b",
+      "label": "Check entity choice with an adviser (S corporation pays GCT instead)",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 500
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nyc.gov/site/finance/business/business-unincorporated-business-tax-ubt.page",
+    "confidence": "estimate",
+    "note": "NYC Finance (search extract): 4% UBT; full credit when the tax is $3,400 or less, partial up to $5,400; return required above $95,000 of gross income. The owner allowance and exemption are from the pack's _common note (NYC-202 instructions 2025); my arithmetic for the reference shop.",
+    "realFrequency": "Once a year from the second year; zero for profit under about $100,000."
+   },
+   {
+    "id": "d00_labor_finance_crt_review",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a lease south of 96th Street in Manhattan with annual rent of $200,000 or more",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "ownerHours",
+      "add": 3,
+      "note": "a return is required from $200,000; tax from $250,000 at 3.9% effective, wiped out by the small-business credit for income under $5 million and rent under $500,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_crt_review_response",
+      "optionId": "option_a",
+      "label": "File the CRT return with the small-business credit",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 200,
+        "note": "accountant"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_crt_review_response",
+      "optionId": "option_b",
+      "label": "Compare a site north of 96th Street or outside Manhattan",
+      "cost": [
+       {
+        "field": "rent",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nyc.gov/site/finance/business/business-commercial-rent-tax-crt.page",
+    "confidence": "verified",
+    "note": "NYC Finance CRT page (pack _common, verified there): 6% of base rent after a 35% reduction, only in Manhattan south of 96th Street, from $250,000 a year; small business credit up to $500,000 rent. A cafe at $72,000 a year never reaches it.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_tax_calendar",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: one generic quarter-end reminder for every tax",
+    "months": [
+     3,
+     6,
+     9,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1558,
+      "note": "the sales-tax return due on the 20th is missed: $200 credit + 10% of $13,579"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_tax_calendar_response",
+      "optionId": "option_a",
+      "label": "Separate reminders: 941 deposits on the 15th, NYS-1 within 5 business days of payroll, ST-100 on the 20th, NYS-45 at month-end after the quarter, estimates Apr/Jun/Sep/Jan 15",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -1558
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_tax_calendar_response",
+      "optionId": "option_b",
+      "label": "Pay the accountant to keep the calendar",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 100
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.tax.ny.gov/forms/current-forms/st/st100i.htm",
+    "confidence": "estimate",
+    "note": "Due dates verified individually (ST-100: 20th after the quarter; IRS monthly depositor: 15th; NYS-45: last day of the month after the quarter; estimates: p505). The size uses D09 vendor_credit_lost.",
+    "duplicateOf": "vendor_credit_lost",
+    "supportingSources": [
+     "https://www.irs.gov/publications/p505",
+     "https://www.tax.ny.gov/forms/publications/wt/nys50.htm"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_offline_reset",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "announced: a processor or internet outage puts the terminal in offline mode, and the device is reset",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 280,
+      "note": "2 hours of card sales queued offline (2/12 of $1,666) lost if the app is reset before upload"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_offline_reset_response",
+      "optionId": "option_a",
+      "label": "Reconnect via a phone hotspot and upload first",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -280
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_offline_reset_response",
+      "optionId": "option_b",
+      "label": "Take cash only until the line is back",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.995,
+        "note": "some card-only customers leave"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+    "confidence": "verified",
+    "note": "Square offline-mode help (search extract): offline payments are lost if not uploaded; Terminal/Register sessions up to 24 hours; expired payments cannot be retrieved. Fees are the same as online.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "offline_payments_lost"
+   },
+   {
+    "id": "d00_labor_finance_offline_expiry",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: offline payments not uploaded within 24 hours (latest 72 hours on Register/Terminal)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1666,
+      "note": "a full day of card sales taken offline and never uploaded"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_offline_expiry_response",
+      "optionId": "option_a",
+      "label": "Restore connectivity before the deadline",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 40,
+        "note": "spare LTE hotspot plan for a month; estimate"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -1666
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_offline_expiry_response",
+      "optionId": "option_b",
+      "label": "Stop accepting offline cards after 1 hour and go cash-only",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.99
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+    "confidence": "verified",
+    "note": "Square help extract: payments must be uploaded within 24 hours (no later than 72 hours on Register, Terminal and Handheld) or they expire; Reader/Stand sessions last 1 hour.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "offline_payments_lost"
+   },
+   {
+    "id": "d00_labor_finance_processor_reserve",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a large keyed-in catering prepayment on a young account",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashFrozenDays",
+      "add": 14,
+      "on": "prepayment",
+      "note": "the $3,000 prepayment is held until after delivery; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_processor_reserve_response",
+      "optionId": "option_a",
+      "label": "Buy the catering stock from available cash and keep delivery proof",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 900,
+        "note": "food and packaging for a $3,000 order at 30%"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_processor_reserve_response",
+      "optionId": "option_b",
+      "label": "Invoice by bank transfer instead of card",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "cashFrozenDays",
+        "add": -14
+       }
+      ]
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/6832-reserves-faq",
+    "confidence": "estimate",
+    "note": "Square reserves FAQ (D00 source): a reserve can hold part of payouts; the size and length are account-specific. 14 days is a game value.",
+    "duplicateOf": "processor_holds_funds"
+   },
+   {
+    "id": "d00_labor_finance_refund_bank_debit",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a large refund after the proceeds were transferred out",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1235,
+      "note": "$1,200 catering refund debited from the bank + $35 overdraft fee if the account is empty"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_refund_bank_debit_response",
+      "optionId": "option_a",
+      "label": "Keep the refund amount in the bank first",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1200
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -35
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_refund_bank_debit_response",
+      "optionId": "option_b",
+      "label": "Agree the refund date with the customer",
+      "cost": [
+       {
+        "field": "reputation",
+        "mult": 0.998
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees",
+    "confidence": "estimate",
+    "note": "Square payment terms (D00 source) allow debiting the linked bank account for refunds; the overdraft fee is a typical bank fee, not a sourced number."
+   },
+   {
+    "id": "d00_labor_finance_descriptor",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: card statements show the owner's name or an old business name",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 26,
+      "note": "three 'I don't recognize this' disputes a month x $8.50; no per-dispute fee on Square, $15 on Stripe"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_descriptor_response",
+      "optionId": "option_a",
+      "label": "Set the descriptor to the shop name and phone",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -26
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_descriptor_response",
+      "optionId": "option_b",
+      "label": "Answer each dispute with the itemized receipt",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1.5
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://chargebacks911.com/chargeback-types/square-disputes/square-dispute-costs/",
+    "confidence": "estimate",
+    "note": "Square charges no dispute fee (Chargebacks911, secondary); Stripe charges $15 per dispute plus $15 if countered (since June 17, 2025; Chargeback Gurus, secondary). Three disputes a month is my estimate.",
+    "supportingSources": [
+     "https://www.chargebackgurus.com/blog/stripe-dispute-fees"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_catering_dispute",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a $1,200 catering order paid by card is disputed",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cashFrozenDays",
+      "add": 60,
+      "on": "disputed amount"
+     },
+     {
+      "field": "cashOut",
+      "add": 1200,
+      "note": "lost if no signed delivery receipt"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_catering_dispute_response",
+      "optionId": "option_a",
+      "label": "Submit the signed delivery receipt and order emails",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -1200,
+        "note": "won with proof"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_catering_dispute_response",
+      "optionId": "option_b",
+      "label": "Refund part and keep the client",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 300
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://chargebacks911.com/chargeback-types/square-disputes/square-dispute-costs/",
+    "confidence": "estimate",
+    "note": "Dispute mechanics from processor help pages (D00 sources); the outcome rule (proof wins) is a game simplification.",
+    "duplicateOf": "card_dispute"
+   },
+   {
+    "id": "d00_labor_finance_bank_holiday",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: a weekday Federal Reserve holiday delays card payouts before payroll or rent",
+    "months": [
+     1,
+     2,
+     5,
+     6,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashDelayDays",
+      "add": 1,
+      "note": "one extra day of card sales ($1,666) arrives after the payroll or rent date"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_bank_holiday_response",
+      "optionId": "option_a",
+      "label": "Keep a week of payroll as a buffer",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3104,
+        "note": "one-time cash set aside"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_bank_holiday_response",
+      "optionId": "option_b",
+      "label": "Use an instant transfer for that day",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 32,
+        "note": "1.95% x $1,666"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashDelayDays",
+        "add": -1
+       }
+      ]
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/3807",
+    "confidence": "estimate",
+    "note": "2026 weekday bank holidays (my calendar arithmetic from the Federal Reserve schedule, not opened): Jan 1 & 19, Feb 16, May 25, Jun 19, Sep 7, Oct 12, Nov 11 & 26, Dec 25. Instant transfer fee 1.95% (Square US help extract).",
+    "duplicateOf": "holiday_weekend_payout_gap"
+   },
+   {
+    "id": "d00_labor_finance_instant_limit",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a supplier is paid on the strength of an instant transfer",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 58,
+      "note": "1.95% fee on a $3,000 instant transfer"
+     },
+     {
+      "field": "cashDelayDays",
+      "add": 1,
+      "note": "if the account or amount is ineligible, the money arrives next business day"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_instant_limit_response",
+      "optionId": "option_a",
+      "label": "Pay from reserves on the normal schedule",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 0
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -58
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_instant_limit_response",
+      "optionId": "option_b",
+      "label": "Ask the supplier for net-7 terms before the due date",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/3807",
+    "confidence": "verified",
+    "note": "Square US help extract: instant transfers cost 1.95% of the amount; standard next-business-day transfers are free. Per-transfer limits vary by account (not found).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_insurance_scope",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a loss that the purchased BOP excludes (employee theft, equipment breakdown, spoilage, flood)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 3000,
+      "note": "uncovered loss; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_insurance_scope_response",
+      "optionId": "option_a",
+      "label": "File the claim and let the insurer decide",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 3
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "insurance_package",
+      "label": "Add crime and equipment-breakdown endorsements at renewal",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 40,
+        "note": "estimate"
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -2000,
+        "note": "covered above a $1,000 deductible"
+       }
+      ]
+     }
+    ],
+    "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+    "confidence": "estimate",
+    "note": "Insureon (search extract): coffee shops pay a median $126 a month for a BOP, $82 for general liability, $88 for workers' comp; endorsement prices are not published.",
+    "duplicateOf": "power_cut_spoilage_uninsured"
+   },
+   {
+    "id": "d00_labor_finance_no_damage_interruption",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "announced: a slow month or street closure with no physical damage to the shop",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashIn",
+      "add": 0,
+      "note": "business interruption pays only after direct physical loss: expected payout $0"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_no_damage_interruption_response",
+      "optionId": "option_a",
+      "label": "Rebuild the forecast without a payout",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_no_damage_interruption_response",
+      "optionId": "option_b",
+      "label": "Ask the insurer for a written coverage decision",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://content.naic.org/cipr-topics/business-interruptionbusinessowners-policies-bop",
+    "confidence": "estimate",
+    "note": "NAIC (D00 source): business interruption under a BOP generally requires direct physical loss; a typical 72-hour waiting period applies (D09)."
+   },
+   {
+    "id": "d00_labor_finance_mca_overdebit",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: daily cash-advance debits continue after the agreed amount is collected",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 675,
+      "note": "three extra daily debits of $225 ($54,000 / 240 business days)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_mca_overdebit_response",
+      "optionId": "option_a",
+      "label": "Dispute with the bank statements and demand a refund",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 5
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -675
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_mca_overdebit_response",
+      "optionId": "option_b",
+      "label": "Have a lawyer and the bank revoke the ACH authorization",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1000,
+        "note": "lawyer letter; estimate"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.ftc.gov/news-events/news/press-releases/2021/04/cash-advance-firm-pay-98m-settle-ftc-complaint-it-overcharged-small-businesses",
+    "confidence": "estimate",
+    "note": "FTC 2021: a cash-advance firm paid $9.8 million to settle charges it took more than authorized from small businesses. Debit size is my arithmetic on D09's $40,000 advance at 1.35.",
+    "supportingSources": [
+     "https://www.merchantmaverick.com/merchant-cash-advances-aprs/"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_daily_debt",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a merchant cash advance with fixed daily debits is signed",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 8,
+    "effects": [
+     {
+      "field": "monthlyCost",
+      "add": 6750,
+      "id": "mca_daily_holdback",
+      "note": "$40,000 at a 1.35 factor = $54,000 over 8 months"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_daily_debt_response",
+      "optionId": "option_a",
+      "label": "Compare a slower product before signing (microloan, NYC fund)",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 6
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -6000,
+        "note": "a $40,000 loan at 7.5% interest-only is about $250 a month"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_daily_debt_response",
+      "optionId": "option_b",
+      "label": "Negotiate a lower daily amount before missing one",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 4
+       },
+       {
+        "field": "monthlyCost",
+        "add": -2000,
+        "note": "term stretched, total cost similar"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.merchantmaverick.com/merchant-cash-advances-aprs/",
+    "confidence": "estimate",
+    "note": "Factor rates 1.1-1.5; a 1.35 factor repaid in 6 months is about 70% APR by the simple formula, more with fees (Merchant Maverick and others, secondary). At $6,750 a month the reference profit of $9,719 falls to $2,969 before owner taxes.",
+    "duplicateOf": "cash_advance_calls",
+    "supportingSources": [
+     "https://nyc-business.nyc.gov/nycbusiness/business-services/financial-assistance/nyc-future-fund"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_gross_1099",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: Form 1099-K arrives showing gross card volume (sales + tax + tips + refunds) above booked sales",
+    "months": [
+     2
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "ownerHours",
+      "add": 3
+     },
+     {
+      "field": "cashOut",
+      "add": 250,
+      "note": "accountant reconciliation"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_gross_1099_response",
+      "optionId": "option_a",
+      "label": "Reconcile gross to sales, tax, tips and refunds",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 3
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_gross_1099_response",
+      "optionId": "option_b",
+      "label": "Let the preparer do it before filing",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 250
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/businesses/understanding-your-form-1099-k",
+    "confidence": "verified",
+    "note": "IRS 1099-K page extract: card processors report gross payments for any amount (the $20,000 / 200-transaction threshold applies only to third-party networks such as apps and marketplaces, reinstated retroactively by the 2025 law). Gross card volume of the reference shop is about $52,000 a month vs $51,000 of sales.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_ui_claim_notice",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a dismissed or laid-off barista files for unemployment; the LO 400 notice arrives",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "uiAccountCharge",
+      "add": 2716,
+      "note": "last employer is charged the first 7 weeks: $3,360 a month x 3 = $10,080 high quarter / 26 = $388 a week x 7"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_ui_claim_notice_response",
+      "optionId": "option_a",
+      "label": "Answer within 10 calendar days with the separation reason",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "uiAccountCharge",
+        "add": -2716,
+        "note": "no charge if the worker quit without good cause or was fired for misconduct"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_ui_claim_notice_response",
+      "optionId": "option_b",
+      "label": "Have the payroll service rebuild the record",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 100
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+    "confidence": "verified",
+    "note": "NY DOL employer guide (IA 318.2, search extract): respond within 10 calendar days of the notice date; last employer charged first 7 weeks; no charge for a quit without good cause or misconduct only if the employer responds timely. Benefit = 1/26 of the high quarter, max $869 a week since Oct 2025 (dol.ny.gov/mbr).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "unemployment_claim_notice",
+    "fixesFragmentValue": {
+     "unemployment_claim_notice.effects.uiAccountCharge": "2940 -> 2716 (pack hours 160, not 140)"
+    },
+    "supportingSources": [
+     "https://dol.ny.gov/mbr"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_ui_rate_change",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: the yearly unemployment rate notice, once the shop has its own experience",
+    "months": [
+     1
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "unemploymentTax",
+      "add": 0.0,
+      "note": "first two years: new-employer 4.1% on $17,600; afterwards the rate follows the account balance"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_ui_rate_change_response",
+      "optionId": "option_a",
+      "label": "Update payroll and the cash plan",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_ui_rate_change_response",
+      "optionId": "option_b",
+      "label": "Challenge a wrong charge on the notice",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://dol.ny.gov/unemployment-insurance-rate-information",
+    "confidence": "verified",
+    "note": "NY DOL rate page (search extract): new employer 4.1% total (4.025% UI + 0.075% RSF); wage base $17,600 in 2026, set at 18% of the state average wage from 2026 (NYS-50).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "unemployment_rate_notice",
+    "supportingSources": [
+     "https://www.tax.ny.gov/forms/publications/wt/nys50.htm"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_annual_training",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: the yearly sexual-harassment prevention training (state law, every employer size)",
+    "months": [
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 84,
+      "note": "1 paid hour x 4 baristas x $21; the state's free model training"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_annual_training_response",
+      "optionId": "option_a",
+      "label": "Run the interactive state training in paid time",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 84
+       },
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_annual_training_response",
+      "optionId": "option_b",
+      "label": "Use a paid provider that keeps records",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 84
+       },
+       {
+        "field": "cashOut",
+        "add": 100
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_harassment_training",
+      "cost": [],
+      "result": [],
+      "violation": "no_harassment_policy_training"
+     }
+    ],
+    "source": "https://www.ny.gov/combating-sexual-harassment-workplace/sexual-harassment-prevention-model-policy-and-training",
+    "confidence": "verified",
+    "note": "ny.gov model policy and training page: every NY employer must adopt a policy and provide interactive training every year. NYC's own training rule applies from 15 employees. No fixed fine; the cost is losing the defense in a claim.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "yearly_harassment_training_due"
+   },
+   {
+    "id": "d00_labor_finance_owner_cover_spiral",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: no trained relief lead and an announced absence (illness, family, vacation)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "ownerHours",
+      "add": 80
+     },
+     {
+      "field": "quality",
+      "mult": 0.97,
+      "note": "fatigue; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_owner_cover_spiral_response",
+      "optionId": "option_a",
+      "label": "Train a relief lead",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 520,
+        "note": "+$3 an hour lead premium"
+       },
+       {
+        "field": "cashOut",
+        "add": 420,
+        "note": "20 training hours x $21"
+       }
+      ],
+      "result": [
+       {
+        "field": "ownerHours",
+        "add": -60
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_owner_cover_spiral_response",
+      "optionId": "option_b",
+      "label": "Cut opening hours to the staffed schedule",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.93,
+        "note": "the pack's hours lever: long hours add 8% demand"
+       }
+      ],
+      "result": [
+       {
+        "field": "ownerHours",
+        "add": -60
+       }
+      ]
+     }
+    ],
+    "source": "https://www.reddit.com/r/cafe/comments/1n1ln2q/cafe_owners_sick_and_tired/",
+    "confidence": "estimate",
+    "note": "Owner accounts (Reddit r/cafe, D00 source) describe this spiral; the hour and quality values are game estimates.",
+    "duplicateOf": "owner_runs_on_empty"
+   },
+   {
+    "id": "d00_labor_finance_closed_day_admin",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: every open hour is counter work and no admin time is planned",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "ownerHours",
+      "add": 40,
+      "note": "payroll, ordering, bookkeeping, tax and insurance paperwork: about 10 h a week; estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_closed_day_admin_response",
+      "optionId": "option_a",
+      "label": "Reserve one admin day a week",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0
+       },
+       {
+        "field": "capacity",
+        "mult": 0.97,
+        "note": "owner off the floor one day"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_closed_day_admin_response",
+      "optionId": "option_b",
+      "label": "Outsource bookkeeping and payroll",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 485,
+        "note": "pack accounting $400 + payroll service $85"
+       }
+      ],
+      "result": [
+       {
+        "field": "ownerHours",
+        "add": -25
+       }
+      ]
+     }
+    ],
+    "source": "https://www.reddit.com/r/coffeeshopowners/comments/1q7h0r3/what_part_of_running_a_cafe_quietly_drains_you/",
+    "confidence": "estimate",
+    "note": "Owner account on Reddit (D00 source). The 10 hours a week is my estimate."
+   },
+   {
+    "id": "d00_labor_finance_friend_hiring",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: friends hired without written duties, then a performance complaint",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "quality",
+      "mult": 0.98
+     },
+     {
+      "field": "ownerHours",
+      "add": 4
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_friend_hiring_response",
+      "optionId": "option_a",
+      "label": "Write duties and use the same review for everyone",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": [
+       {
+        "field": "quality",
+        "add": 0.02
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_friend_hiring_response",
+      "optionId": "option_b",
+      "label": "Put a lead between the owner and friends",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 520
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.reddit.com/r/coffeeshopowners/comments/1lmtcnh/coming_up_on_our_1_year_and_thinking_over_all_the/",
+    "confidence": "estimate",
+    "note": "One owner account (D00 source); effect sizes are game values."
+   },
+   {
+    "id": "d00_labor_finance_refund_dependency",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a due payment is planned against a refund (tax, deposit, insurance) not yet received",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "cashDelayDays",
+      "add": 60,
+      "on": "the refund amount",
+      "note": "a refund can take 60-90 days; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_refund_dependency_response",
+      "optionId": "option_a",
+      "label": "Fund the payment from reserves",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 0,
+        "note": "cash leaves now, refund later"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_refund_dependency_response",
+      "optionId": "option_b",
+      "label": "Negotiate the due date before it falls due",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.reddit.com/r/smallbusiness/comments/1s08cuk/i_took_over_a_coffee_business_through_seller/",
+    "confidence": "estimate",
+    "note": "Owner account (D00 source); no public refund-time statistic was found."
+   },
+   {
+    "id": "d00_labor_finance_unchanged_hours",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: one barista cut while opening hours stay the same",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "capacity",
+      "mult": 0.85,
+      "note": "three baristas for a four-barista schedule; owner absorbs part"
+     },
+     {
+      "field": "quality",
+      "mult": 0.97
+     },
+     {
+      "field": "ownerHours",
+      "add": 60
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_unchanged_hours_response",
+      "optionId": "option_a",
+      "label": "Shorten hours to the funded schedule",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.93
+       }
+      ],
+      "result": [
+       {
+        "field": "ownerHours",
+        "add": -60
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_unchanged_hours_response",
+      "optionId": "option_b",
+      "label": "Simplify the menu to speed up the bar",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.98
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.05
+       }
+      ]
+     }
+    ],
+    "source": "https://www.mumsnet.com/talk/small_business/5415197-any-other-cafe-owners-struggling-right-now",
+    "confidence": "estimate",
+    "note": "UK owner account (comparison, D00 source); arithmetic on the pack's 1,700 orders per barista."
+   },
+   {
+    "id": "d00_labor_finance_retention_pressure",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: barista pay at or below the NYC median while a nearby employer advertises more",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.9,
+      "note": "shifts uncovered while no applicant accepts; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "staff_pay",
+      "optionId": "above",
+      "label": "Pay $2 above market",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 1430,
+        "note": "pack lever"
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.04
+       },
+       {
+        "field": "quality",
+        "add": 0.04
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_retention_pressure_response",
+      "optionId": "option_b",
+      "label": "Cut the menu or hours to the team you have",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.95
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://perfectdailygrind.com/2026/10/why-running-a-coffee-shop-is-harder/",
+    "confidence": "estimate",
+    "note": "Trade interviews (D00 source). Temp baristas in NYC are paid $24.54 an hour on Instawork, above the pack's $21 wage.",
+    "duplicateOf": "chain_raises_pay",
+    "supportingSources": [
+     "https://www.instawork.com/temp-work-rate/barista-rate-in-new-york-ny"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_contractor_barista",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a regular barista on the shop's schedule is paid on a 1099",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "misclassification",
+      "note": "back unemployment contributions (4.1% of up to $17,600), workers' comp exposure ($500 per 10 days for an uninsured worker), employer FICA 7.65% and wage-law rights"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_contractor_barista_response",
+      "optionId": "option_a",
+      "label": "Put the barista on payroll",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 321,
+        "note": "$3,360 x (7.65% + 2.53% UI) employer taxes"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "contractor_1099",
+      "cost": [],
+      "result": [],
+      "violation": "misclassification"
+     }
+    ],
+    "source": "https://dol.ny.gov/worker-misclassification-employee-vs-independent-contractor-fare-grant",
+    "confidence": "estimate",
+    "note": "Rates from _common (FICA, UI) and WCB penalties; a barista who works set shifts with the shop's machine is an employee under NY tests (DOL, D00 source)."
+   },
+   {
+    "id": "d00_labor_finance_salary_ad",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a job post without a good-faith pay range (shop with 4 or more employees, owner counted)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "job_ad_no_pay_range",
+      "note": "no penalty for a first complaint if fixed within 30 days of the Commission's notice; uncured: up to $250,000"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_salary_ad_response",
+      "optionId": "option_a",
+      "label": "Post the real range ($19-$23 an hour plus tips)",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "job_ads",
+      "optionId": "paid_posts_with_range",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 60
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/cchr/downloads/pdf/publications/Salary-Transparency-Factsheet.pdf",
+    "confidence": "verified",
+    "note": "NYC Commission on Human Rights fact sheet (search extract): employers with 4+ employees; ranges must have a minimum and maximum; civil penalty up to $250,000; first complaint cured within 30 days = no penalty.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_after_close_meeting",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a staff meeting after clock-out",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 168,
+      "note": "2 meetings x 1 h x 4 baristas x $21 owed"
+     },
+     {
+      "field": "violationAccrual",
+      "id": "unpaid_training_time"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_after_close_meeting_response",
+      "optionId": "option_a",
+      "label": "Record and pay the meeting time",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 168
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_after_close_meeting_response",
+      "optionId": "option_b",
+      "label": "Hold the meeting inside a paid shift",
+      "cost": [
+       {
+        "field": "capacity",
+        "mult": 0.995
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "off_the_clock",
+      "cost": [],
+      "result": [],
+      "violation": "unpaid_overtime"
+     }
+    ],
+    "source": "https://www.dol.gov/agencies/whd/fact-sheets/22-flsa-hours-worked",
+    "confidence": "verified",
+    "note": "US DOL fact sheet 22: required meetings and training are hours worked. Pack violation unpaid_training_time (x2 of the saving).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_owner_estimates",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "calendar: estimated tax due April 15, June 15, September 15, January 15",
+    "months": [
+     1,
+     4,
+     6,
+     9
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 9078,
+      "note": "three months of the reference owner's tax ($3,026 a month)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "estimated_tax_plan",
+      "label": "Pay each instalment on time",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 9078
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_owner_estimates_response",
+      "optionId": "option_b",
+      "label": "Pay in April and accept the interest",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 53,
+        "note": "7% a year on the missed $9,078"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.irs.gov/publications/p505",
+    "confidence": "verified",
+    "note": "IRS Publication 505 (2026) for the due dates; 7% underpayment interest for Q4 2026 also applies to estimated tax underpayments (IRS newsroom).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "estimated_tax_due",
+    "supportingSources": [
+     "https://www.irs.gov/newsroom/interest-rates-remain-the-same-for-the-fourth-quarter-of-2026"
+    ]
+   },
+   {
+    "id": "d00_labor_finance_salary_history_question",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: the interview script asks for current or past pay",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "illegal_hiring_questions",
+      "note": "NYC salary history law, enforced by the Commission on Human Rights"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_salary_history_question_response",
+      "optionId": "option_a",
+      "label": "Ask about pay expectations instead",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "interview_screening",
+      "optionId": "paid_trial_and_references",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 50
+       }
+      ],
+      "result": [
+       {
+        "field": "quality",
+        "add": 0.01
+       }
+      ]
+     }
+    ],
+    "source": "https://www.nyc.gov/site/cchr/law/salary-history-law.page",
+    "confidence": "estimate",
+    "note": "Rule from the NYC CCHR salary history page (D00 source); penalty amounts were not in the search extracts I could read."
+   },
+   {
+    "id": "d00_labor_finance_complaint_retaliation",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: hours cut or a firing after a wage complaint",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationAccrual",
+      "id": "retaliation",
+      "note": "Labor Law 215: civil penalty $1,000-$10,000 ($20,000 if repeated within 6 years) and up to $20,000 liquidated damages per worker; class B misdemeanor"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_complaint_retaliation_response",
+      "optionId": "option_a",
+      "label": "Restore the hours and fix the wage issue",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 500,
+        "note": "the underlying back pay; game value"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "punish_the_complainer",
+      "cost": [],
+      "result": [],
+      "violation": "retaliation"
+     }
+    ],
+    "source": "https://law.justia.com/codes/new-york/lab/article-7/215/",
+    "confidence": "verified",
+    "note": "Labor Law 215 text (Justia 2022/2024 versions, search extract).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_franchise_coverage",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: the shop joins a chain with 30+ locations nationally (NYC Fair Workweek for fast food)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "wages",
+      "mult": 1.02,
+      "note": "premiums for schedule changes ($10-$75 each) and good-faith estimates; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_franchise_coverage_response",
+      "optionId": "option_a",
+      "label": "Post schedules 14 days ahead and pay premiums",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 4
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_franchise_coverage_response",
+      "optionId": "option_b",
+      "label": "Stay independent",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/FAQs-FairWorkweek-FastFood.pdf",
+    "confidence": "estimate",
+    "note": "Coverage test and premiums from the DCWP Fair Workweek FAQ (D00 source), not re-opened; the 2% is my estimate."
+   },
+   {
+    "id": "d00_labor_finance_personal_guarantee",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: loan signing for a borrower with a 20%+ owner",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "ownerDebt",
+      "add": 100000,
+      "contingent": true,
+      "note": "the whole loan balance becomes the owner's personal exposure on default"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_personal_guarantee_response",
+      "optionId": "option_a",
+      "label": "Sign after independent advice",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 500,
+        "note": "lawyer review; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_personal_guarantee_response",
+      "optionId": "option_b",
+      "label": "Borrow less or not at all",
+      "cost": [
+       {
+        "field": "capacity",
+        "mult": 0.85
+       }
+      ],
+      "result": [
+       {
+        "field": "ownerDebt",
+        "add": -60000
+       }
+      ]
+     }
+    ],
+    "source": "https://www.law.cornell.edu/cfr/text/13/120.160",
+    "confidence": "verified",
+    "note": "13 CFR 120.160 (Cornell): holders of 20% or more must guarantee SBA loans.",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_labor_finance_ambiguous_charge",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: a 'kitchen appreciation' or 'service' fee without the not-a-gratuity disclosure",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 1530,
+      "note": "3% of $51,000 owed to staff if customers reasonably think it is a tip"
+     },
+     {
+      "field": "violationAccrual",
+      "id": "tip_theft"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_ambiguous_charge_response",
+      "optionId": "option_a",
+      "label": "Pay the collected fee to staff and fix the menu text",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1530
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_labor_finance_ambiguous_charge_response",
+      "optionId": "option_b",
+      "label": "Disclose clearly that the fee is not a gratuity and keep it",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.99,
+        "note": "visible fee; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "menu_fee_line",
+      "cost": [],
+      "result": [],
+      "violation": "illegal_menu_surcharge"
+     }
+    ],
+    "source": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
+    "confidence": "verified",
+    "note": "NY DOL Tips FAQ: charges a reasonable customer would believe are gratuities belong to staff unless the employer discloses otherwise (12 NYCRR 146-2.18/2.19).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)"
+   },
+   {
+    "id": "d00_closures_nyc_event_owner_physical_limit",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: owner_hours = eighty for 6 months in a row, or an announced owner health limit",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "ownerHours",
+      "add": -80,
+      "note": "owner limited to 40 hours"
+     },
+     {
+      "field": "capacity",
+      "mult": 0.9
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_owner_physical_limit",
+      "optionId": "adapt",
+      "label": "Hire a manager",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 5356,
+        "note": "pack manager $4,800 + payroll taxes $556"
+       }
+      ],
+      "result": [
+       {
+        "field": "capacity",
+        "add": 0.1
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_owner_physical_limit",
+      "optionId": "exit_or_pause",
+      "label": "Plan an orderly sale",
+      "cost": [
+       {
+        "field": "salePrice",
+        "mult": 0.9,
+        "note": "a seller in a hurry; game value"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://greenpointers.com/2026/08/24/beloved-greenpoint-staple-ashbox-cafe-closes-its-doors/",
+    "confidence": "estimate",
+    "note": "Case from D00 (Greenpoint, 2026). Manager cost from the pack (manager.monthlySalary)."
+   },
+   {
+    "id": "d00_closures_nyc_event_busy_but_debt",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: debt service above 60% of profit before owner taxes for 3 months",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 0,
+      "note": "no new cost: the event is the visible warning; the debt payments are already in monthlyCosts"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_busy_but_debt",
+      "optionId": "adapt",
+      "label": "Refinance into a longer loan",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1200,
+        "note": "3% origination on $40,000 (NYC Future Fund terms, D09)"
+       }
+      ],
+      "result": [
+       {
+        "field": "monthlyCost",
+        "add": -6000
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_busy_but_debt",
+      "optionId": "exit_or_pause",
+      "label": "Sell while sales are strong",
+      "cost": [
+       {
+        "field": "salePrice",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://ny.eater.com/2019/10/21/20924653/city-bakery-closed-nyc",
+    "confidence": "estimate",
+    "note": "City Bakery (2019): busy shop closed by debt (D00 case). Threshold 60% is a game value.",
+    "supportingSources": [
+     "https://nyc-business.nyc.gov/nycbusiness/business-services/financial-assistance/nyc-future-fund"
+    ]
+   },
+   {
+    "id": "d00_equipment_food_offline_pending",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "announced: processor outage, terminal goes offline",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashDelayDays",
+      "add": 1,
+      "note": "offline card sales settle only after upload"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_equipment_food_offline_pending_response",
+      "optionId": "adapt",
+      "label": "Accept offline cards up to a set limit and upload the same day",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 0.5
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_equipment_food_offline_pending_response",
+      "optionId": "pause",
+      "label": "Cash only during the outage",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.995
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+    "confidence": "verified",
+    "note": "Square help extract (offline mode).",
+    "checkedVia": "search extract of the primary page (direct fetch blocked in this session)",
+    "duplicateOf": "d00_labor_finance_offline_expiry"
+   },
+   {
+    "id": "d00_premises_seller_tax_claim",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: buying a cafe; the Tax Department answers the bulk-sale notice with a Notice of Claim",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "closingDelayMonths",
+      "add": 3,
+      "note": "the buyer must hold back the claimed amount; the Department has up to 90 days to fix it; game value"
+     },
+     {
+      "field": "cashFrozen",
+      "add": 15000,
+      "note": "escrow of the seller's estimated tax debt; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_premises_move_seller_tax_claim",
+      "optionId": "first",
+      "label": "Hold the claimed amount in escrow and close",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 0,
+        "note": "money held from the price"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_premises_move_seller_tax_claim",
+      "optionId": "second",
+      "label": "Walk away before closing",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 2000,
+        "note": "due diligence and legal fees already spent; estimate"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_bulk_sale_notice",
+      "cost": [],
+      "result": [],
+      "violation": "bulk_sale_not_notified",
+      "note": "Buyer becomes liable for the seller's unpaid sales tax up to the price paid"
+     }
+    ],
+    "source": "https://www.tax.ny.gov/bus/doingbus/buy.htm",
+    "confidence": "estimate",
+    "note": "Bulk sale rules on tax.ny.gov (D00 source): notify at least 10 days before paying; the buyer is liable for the seller's sales tax if not. Delay and escrow sizes are game values (overlap with D15)."
+   },
+   {
+    "id": "d00_premises_guaranty_scope",
+    "sourceFragment": "D00",
+    "tier": "core",
+    "trigger": "decision: lease draft with a full personal guaranty",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "ownerDebt",
+      "add": 72000,
+      "contingent": true,
+      "note": "a full guaranty on a 10-year, $6,000 a month lease can reach every remaining month; shown as one year of rent"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "guaranty_type",
+      "optionId": "good_guy",
+      "label": "Negotiate a good-guy guarantee (liability ends on surrender with notice)",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 6000,
+        "note": "landlords often ask one more month of deposit; estimate"
+       }
+      ],
+      "result": [
+       {
+        "field": "ownerDebt",
+        "add": -66000
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_premises_move_guaranty_scope",
+      "optionId": "second",
+      "label": "Sign as drafted",
+      "cost": [
+       {
+        "field": "ownerDebt",
+        "add": 0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "confidence": "estimate",
+    "note": "NYC SBS commercial lease guide (D00 source) explains guaranty types; numbers are my arithmetic (overlap with D15 and D01 guaranty_type)."
+   },
+   {
+    "id": "d00_world_event_payroll_not_funded",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: projected bank balance on payday below the payroll",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 3104,
+      "note": "the week's payroll still has to be paid"
+     },
+     {
+      "field": "reputation",
+      "mult": 0.98
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_world_response_payroll_not_funded",
+      "optionId": "payroll_not_funded_a",
+      "label": "Owner lends the shop the gap",
+      "cost": [
+       {
+        "field": "ownerNetWorth",
+        "add": -3104
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_world_response_payroll_not_funded",
+      "optionId": "payroll_not_funded_b",
+      "label": "Delay a supplier, not the payroll",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "shortcut",
+      "id": "pay_staff_late",
+      "cost": [],
+      "result": [],
+      "violation": "pay_frequency_violation",
+      "note": "Late wages are the fastest way to a walkout (D05 whole_team_walks_out)"
+     }
+    ],
+    "source": "https://urbanmilwaukee.com/2025/03/28/interval-is-closed-indefinitely/",
+    "confidence": "estimate",
+    "note": "Case (Interval, Milwaukee 2025, D00); weekly payroll from the pack.",
+    "duplicateOf": "payroll_friday_account_short"
+   },
+   {
+    "id": "d00_world_event_owner_income_target",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: profit after owner taxes below the owner's declared household need for 3 months",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "ownerDraw",
+      "mult": 0.7,
+      "note": "the household gets 30% less than planned; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_world_response_owner_income_target",
+      "optionId": "owner_income_target_a",
+      "label": "Raise prices 5%",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.935,
+        "note": "elasticity -1.3 x 5%"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_world_response_owner_income_target",
+      "optionId": "owner_income_target_b",
+      "label": "Owner takes a part-time job",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": -60
+       }
+      ],
+      "result": [
+       {
+        "field": "ownerDraw",
+        "add": 1500
+       }
+      ]
+     }
+    ],
+    "source": "https://secrets.tbank.ru/trendy/pochemu-zakryvayutsya-kofejni/",
+    "confidence": "estimate",
+    "note": "Russian source on why cafes close (D00); elasticity from the pack's market block.",
+    "duplicateOf": "owner_savings_run_out"
+   },
+   {
+    "id": "d00_world_event_double_job_owner",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: owner_hours = forty while the owner keeps another job",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "capacity",
+      "mult": 0.92
+     },
+     {
+      "field": "quality",
+      "mult": 0.97
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_world_response_double_job_owner",
+      "optionId": "double_job_owner_a",
+      "label": "Hire a manager",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 5356
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_world_response_double_job_owner",
+      "optionId": "double_job_owner_b",
+      "label": "Cut opening hours",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.93
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.channelnewsasia.com/cna-insider/voices/cafe-food-and-beverage-fb-business-eatery-singapore-closure-5365741",
+    "confidence": "estimate",
+    "note": "Singapore owner account (D00); values are game estimates."
+   },
+   {
+    "id": "d00_world_event_employee_buyout_offer",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: the owner announces closure while the staff can raise a buyout",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "salePrice",
+      "mult": 0.6,
+      "note": "a worker buyout usually pays less than a broker sale; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_world_response_employee_buyout_offer",
+      "optionId": "employee_buyout_offer_a",
+      "label": "Sell to the staff co-op",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 20
+       }
+      ],
+      "result": [
+       {
+        "field": "cashIn",
+        "add": 40000,
+        "note": "game value"
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_world_response_employee_buyout_offer",
+      "optionId": "employee_buyout_offer_b",
+      "label": "Close and auction",
+      "cost": [
+       {
+        "field": "cashIn",
+        "add": 7800,
+        "note": "D09 auction estimate"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://nextcity.org/urbanist-news/when-a-cafe-owner-shut-down-his-business-workers-revived-it-as-a-co-op",
+    "confidence": "estimate",
+    "note": "Next City co-op case (D00)."
+   },
+   {
+    "id": "d00_world_event_liquidation_auction",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: close the business",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashIn",
+      "add": 7800,
+      "note": "25% of $36,500 equipment and furniture cost, minus 15% commission (D09)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_world_response_liquidation_auction",
+      "optionId": "liquidation_auction_a",
+      "label": "Auction everything",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 692,
+        "note": "sales tax collected and remitted"
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_world_response_liquidation_auction",
+      "optionId": "liquidation_auction_b",
+      "label": "Sell item by item for two months",
+      "cost": [
+       {
+        "field": "rent",
+        "mult": 1.0,
+        "note": "another month of rent if the lease allows"
+       },
+       {
+        "field": "ownerHours",
+        "add": 30
+       }
+      ],
+      "result": [
+       {
+        "field": "cashIn",
+        "add": 4000
+       }
+      ]
+     }
+    ],
+    "source": "https://www.0223.com.ar/nota/2026-8-10-10-0-0-tristeza-cerro-una-conocida-cafeteria-a-un-ano-de-abrir-y-rematan-absolutamente-todo",
+    "confidence": "estimate",
+    "note": "Argentine case (D00); numbers from D09 closing_auction.",
+    "duplicateOf": "closing_auction"
+   },
+   {
+    "id": "d00_world_event_partner_buyout_liquidity",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: a partner exercises an exit right",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 40000,
+      "note": "half of a $80,000 valuation; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_world_response_partner_buyout_liquidity",
+      "optionId": "partner_buyout_liquidity_a",
+      "label": "Pay over 24 months",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 1800
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_world_response_partner_buyout_liquidity",
+      "optionId": "partner_buyout_liquidity_b",
+      "label": "Sell the business",
+      "cost": [
+       {
+        "field": "salePrice",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.mvtimes.com/2026/01/15/mocha-motts-open-last-time-sunday/",
+    "confidence": "estimate",
+    "note": "Martha's Vineyard case (D00)."
+   },
+   {
+    "id": "d00_world_event_rescue_fund_shortfall",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: a public rescue fundraiser while debts exceed what supporters give",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashIn",
+      "add": 15000,
+      "note": "game value"
+     },
+     {
+      "field": "reputation",
+      "mult": 1.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_world_response_rescue_fund_shortfall",
+      "optionId": "rescue_fund_shortfall_a",
+      "label": "Use the funds to restructure debt",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 10
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_world_response_rescue_fund_shortfall",
+      "optionId": "rescue_fund_shortfall_b",
+      "label": "Close and refund donors",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 15000
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://nomsmagazine.com/downtown-vancouvers-finchs-tea-house-closes/",
+    "confidence": "estimate",
+    "note": "Vancouver case (D00); the inflow is taxable income."
+   },
+   {
+    "id": "d00_world_event_founder_contribution_missing",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: an investor agreement omits the founder's own cash",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "ownershipShare",
+      "mult": 0.8,
+      "note": "founder ends up with less equity; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_world_response_founder_contribution_missing",
+      "optionId": "founder_contribution_missing_a",
+      "label": "Fix the agreement with a lawyer",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 1500
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_world_response_founder_contribution_missing",
+      "optionId": "founder_contribution_missing_b",
+      "label": "Sign as is",
+      "cost": [
+       {
+        "field": "ownershipShare",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://t-j.ru/i-closed-kofeiniu/",
+    "confidence": "estimate",
+    "note": "Russian owner story (T-Zh, D00)."
+   },
+   {
+    "id": "d00_world_event_expansion_before_debt_recovery",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: a second location while the first loan is unpaid",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "monthlyCost",
+      "add": 1308,
+      "note": "a second SBA-size loan"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_world_response_expansion_before_debt_recovery",
+      "optionId": "expansion_before_debt_recovery_a",
+      "label": "Wait until debt service is under 30% of profit",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 1.0
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_world_response_expansion_before_debt_recovery",
+      "optionId": "expansion_before_debt_recovery_b",
+      "label": "Expand now",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 60
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.reddit.com/r/smallbusiness/comments/144nqve/expansion_advice/",
+    "confidence": "estimate",
+    "note": "Reddit discussion (D00)."
+   },
+   {
+    "id": "d00_closures_nyc_event_sunk_extension",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: a failing extension asks for another month of owner money",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "ownerNetWorth",
+      "add": -10000,
+      "note": "game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_sunk_extension",
+      "optionId": "adapt",
+      "label": "Set a stop-loss rule now",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_sunk_extension",
+      "optionId": "exit_or_pause",
+      "label": "Close the extension",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 3000,
+        "note": "exit costs"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.bkmag.com/2024/03/11/the-setting-of-the-sun-is-a-difficult-time-for-all-fish-the-rise-and-fall-of-littleneck/",
+    "confidence": "estimate",
+    "note": "Littleneck case (D00)."
+   },
+   {
+    "id": "d00_closures_nyc_event_succession_gap",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: a retirement date set with no trained successor",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "salePrice",
+      "mult": 0.5,
+      "note": "no successor: asset sale only; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_succession_gap",
+      "optionId": "adapt",
+      "label": "Train a manager to buy in",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 5356
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_succession_gap",
+      "optionId": "exit_or_pause",
+      "label": "Close on the date",
+      "cost": [
+       {
+        "field": "cashIn",
+        "add": 7800
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://ny.eater.com/2018/3/2/17072872/glasers-bake-shop-closing-nyc",
+    "confidence": "estimate",
+    "note": "Glaser's Bake Shop (D00)."
+   },
+   {
+    "id": "d00_closures_nyc_event_personal_exit",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: the owner chooses to stop",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "salePrice",
+      "mult": 1.0,
+      "note": "a planned sale gets the normal multiple"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_personal_exit",
+      "optionId": "adapt",
+      "label": "Hire a manager and stay as owner",
+      "cost": [
+       {
+        "field": "monthlyCost",
+        "add": 5356
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_personal_exit",
+      "optionId": "exit_or_pause",
+      "label": "List with a broker",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 0,
+        "note": "broker fee 10% at closing; estimate"
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://ny.eater.com/2017/12/19/16796350/saltie-closing-williamsburg-nyc",
+    "confidence": "estimate",
+    "note": "Saltie (D00)."
+   },
+   {
+    "id": "d00_closures_nyc_event_insurer_rent_timing",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: an insured closure while the landlord demands rent",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "cashDelayDays",
+      "add": 60,
+      "on": "business-income claim"
+     },
+     {
+      "field": "cashOut",
+      "add": 6000,
+      "note": "rent due before the claim pays"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_insurer_rent_timing",
+      "optionId": "adapt",
+      "label": "Show the landlord the claim and agree a date",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 3
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_closures_nyc_decision_insurer_rent_timing",
+      "optionId": "exit_or_pause",
+      "label": "Pay rent from reserves",
+      "cost": [
+       {
+        "field": "cashOut",
+        "add": 6000
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://tollbit.gothamist.com/2017/05/24/kushner_evict_pudge_knuckles.php",
+    "confidence": "estimate",
+    "note": "Gothamist case (D00)."
+   },
+   {
+    "id": "d00_street_weekday_mismatch",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: the same staffing template every weekday in an office area",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "wages",
+      "mult": 1.03,
+      "note": "paid hours on Monday and Friday with little trade; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_street_move_weekday_mismatch",
+      "optionId": "adapt",
+      "label": "Staff Tuesday-Thursday heavier",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 2
+       }
+      ],
+      "result": [
+       {
+        "field": "wages",
+        "mult": 0.97
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_street_move_weekday_mismatch",
+      "optionId": "reconfigure",
+      "label": "Close Monday mornings",
+      "cost": [
+       {
+        "field": "demand",
+        "mult": 0.99
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
+    "confidence": "estimate",
+    "note": "Partnership for NYC office attendance (D00); weekday curve belongs to D06/D18."
+   },
+   {
+    "id": "d00_street_phone_fee_nonsale",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: delivery-app phone-order fees not reconciled",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cashOut",
+      "add": 20,
+      "note": "a few unmatched fees a month; game value"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_street_move_phone_fee_nonsale",
+      "optionId": "adapt",
+      "label": "Audit the app invoice monthly",
+      "cost": [
+       {
+        "field": "ownerHours",
+        "add": 1
+       }
+      ],
+      "result": [
+       {
+        "field": "cashOut",
+        "add": -20
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "d00_street_move_phone_fee_nonsale",
+      "optionId": "reconfigure",
+      "label": "Turn off the app phone line",
+      "cost": [
+       {
+        "field": "deliveryShare",
+        "mult": 0.98
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+    "confidence": "estimate",
+    "note": "NYC law bars apps from charging for calls that do not become orders (DCWP page, D00 source)."
+   },
+   {
+    "id": "d00_street_points_expiry",
+    "sourceFragment": "D00",
+    "tier": "deep",
+    "trigger": "decision: loyalty points set to expire",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "reputation",
+      "mult": 0.995
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "d00_street_move_points_expiry",
+      "optionId": "adapt",
+      "label": "Honor expired points for regulars",
+      "cost": [
+       {
+        "field": "cogs",
+        "mult": 1.002
+       }
+      ],
+      "result": []
+     },
+     {
+      "kind": "lever",
+      "id": "d00_street_move_points_expiry",
+      "optionId": "reconfigure",
+      "label": "Remove expiry",
+      "cost": [
+       {
+        "field": "cogs",
+        "mult": 1.003
+       }
+      ],
+      "result": []
+     }
+    ],
+    "source": "https://squareup.com/help/us/en/article/3952-create-a-loyalty-program-with-square",
+    "confidence": "estimate",
+    "note": "Points are a promise, not a gift card: the 9-year gift card rule does not cover them (my reading)."
+   }
+  ]
+ }
+}
