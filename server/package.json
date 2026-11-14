@@ -10,7 +10,9 @@
     "dev": "tsx watch src/main.ts",
     "start": "tsx src/main.ts",
     "test": "vitest run --passWithNoTests",
-    "check": "tsc --noEmit -p tsconfig.json"
+    "check": "tsc --noEmit -p tsconfig.json",
+    "play": "tsx scripts/play.ts",
+    "load": "tsx scripts/load.ts"
   },
   "dependencies": {
     "@ohh/ai": "*",
@@ -22,6 +24,8 @@
     "tsx": "4.23.15"
   },
   "devDependencies": {
-    "@types/express": "5.0.6"
+    "@types/express": "5.0.6",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.0.0"
   }
 }

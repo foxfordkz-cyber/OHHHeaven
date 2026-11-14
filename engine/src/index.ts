@@ -4,8 +4,8 @@
 import type { Action, ActionResult, BusinessState, Money, PackSet, Place, WorldConfig, WorldState } from '@ohh/shared';
 import { isMonthEnd, RULES } from '@ohh/shared';
 import { economyActions, economyDay, economyMonthClose, netWorthOf, syncMonthStart } from './economy/index';
-import { lawActions, lawDay, lawMonthClose } from './__stubs__/law';
-import { computeStandings, dealActions, dealsDay, dealsMonthClose, finalizeSeason } from './__stubs__/deals';
+import { lawActions, lawDay, lawMonthClose } from './law/index';
+import { computeStandings, dealActions, dealsDay, dealsMonthClose, finalizeSeason } from './deals/index';
 
 export interface EngineCtx { packs: PackSet; places: Place[] }
 

@@ -76,7 +76,7 @@ export interface PackOfficial extends Sourced { id: string; name: string; agency
 /** «Сообщить городу»: жалоба на конкурента. Единственное нападение в игре. */
 export interface PackReport { id: string; name: string; text: string; role: OfficialRole; checks: string[] }
 
-export type EffectTarget = 'demand' | 'cogs' | 'staffAvailability' | 'footTraffic' | 'utilities' | 'deliveryShare' | 'rent';
+export type EffectTarget = 'demand' | 'cogs' | 'staffAvailability' | 'footTraffic' | 'utilities' | 'deliveryShare' | 'rent' | 'wages' | 'inspections';
 /** Множитель из белого списка. Движок обрезает mult до диапазона 0.5–1.5. */
 export interface EventEffect { target: EffectTarget; mult: number; niches?: NicheId[]; tiers?: PlaceTier[] }
 export interface PackEvent extends Sourced { id: string; name: string; text?: string; effect: { field: string; mult: number }; months: number }
@@ -147,6 +147,8 @@ export interface InboxItem { id: string; day: number; kind: 'summary' | 'deal' |
 export interface Player {
   id: string; name: string; kind: 'owner' | 'official'; isAi: boolean; paid: boolean;
   role?: OfficialRole; joinedDay: number; lastSeenDay: number; inbox: InboxItem[];
+  strategy?: string;                        // характер жителя под управлением ИИ; в view не отдаётся
+  seenCash?: Money; seenDay?: number;       // касса и день на момент последнего захода — для сводки «пока тебя не было»
 }
 
 export interface ViolationTrail { violationId: string; months: number; saved: Money; lastActiveMonth: number; discovered: boolean }
@@ -199,6 +201,8 @@ export interface BusinessState {
   mtd: { lines: PnlLine[]; demandUnits: number; servedUnits: number; lost: { size: number; staff: number; closure: number } }; // с начала месяца
   days: DayReport[];                                        // последние 30 дней
   history: MonthReport[];
+  staffPrev?: Record<string, number>;                       // штат на конец прошлого месяца (крючки ниш)
+  extra?: Record<string, unknown>;                          // служебные данные модулей: extra.econ, extra.law, extra.deals
 }
 
 // ───────────────────────── Сделки ─────────────────────────
@@ -251,7 +255,7 @@ export interface GameEvent {
 export type FeedKind = 'event' | 'inspection' | 'report' | 'bankruptcy' | 'deal' | 'opening' | 'bribe' | 'system';
 export interface FeedItem { id: string; day: number; kind: FeedKind; text: string; businessId?: string }
 
-export interface Standing { businessId: string; niche: NicheId; rank: number; netWorth: Money; isAi: boolean; bankrupt: boolean }
+export interface Standing { businessId: string; niche: NicheId; rank: number; netWorth: Money; isAi: boolean; bankrupt: boolean; name?: string; prize?: Money }   // prize — прогноз приза за это место
 export interface Payout { playerId: string; kind: 'owner' | 'official' | 'platform'; amount: Money; niche?: NicheId; rank?: number }
 
 export interface WorldState {
@@ -310,6 +314,7 @@ export interface Analytics {
   taxDueNext: { amount: Money; day: number } | null;
   exposure: Money;                             // сколько штрафов придёт, если найдут все текущие нарушения
   benchmarks: Benchmark[]; nicheKpis: NicheKpi[];
+  nicheAvgPrice?: Money;                       // средняя цена открытых бизнесов ниши
 }
 
 export interface Recommendation {
@@ -357,6 +362,8 @@ export interface OwnerView {
   weather: DayWeather[]; events: GameEvent[]; feed: FeedItem[];
   analytics: Analytics | null; recommendations: Recommendation[]; roadmap: RoadmapItem[];
   leaderboards: Partial<Record<NicheId, Standing[]>>; away: { days: number; profit: Money; items: InboxItem[] } | null;
+  payouts?: Payout[];                          // после конца сезона: выплаты этому игроку
+  officialsRanking?: { name: string; points: number; isAi: boolean }[];
 }
 
 export interface CaseCard { caseId: string; business: PublicBusiness; role: OfficialRole; origin: Case['origin']; openedDay: number; hints: string[]; status: Case['status']; bribeAmount?: Money; found?: FoundViolation[] }
@@ -372,6 +379,7 @@ export interface CityView {
   kind: 'city'; world: WorldPublic; businesses: PublicBusiness[];
   weather: DayWeather[]; events: GameEvent[]; feed: FeedItem[];
   leaderboards: Partial<Record<NicheId, Standing[]>>;
+  blockFunds?: BlockFundStatus[];              // улицы с работающим фондом квартала — для карты
 }
 
 export type ClientView = OwnerView | OfficialView | CityView;
@@ -380,7 +388,7 @@ export type ClientView = OwnerView | OfficialView | CityView;
 
 export type Query =
   | { type: 'recommend_opening'; niche: NicheId; placeId: string }      // → OpenRecommendation[]
-  | { type: 'what_if'; orders: Partial<StandingOrders> }                // → { projected: MonthReport; analytics: Analytics }
+  | { type: 'what_if'; orders: Partial<StandingOrders>; size?: number } // → { projected: MonthReport; analytics: Analytics }; size — прогноз при другом размере зала
   | { type: 'roadmap'; niche: NicheId }                                 // → RoadmapItem[]
   | { type: 'real_world_plan' }                                         // → RealWorldPlan
   | { type: 'advisor'; question: string }                               // → AdvisorAnswer

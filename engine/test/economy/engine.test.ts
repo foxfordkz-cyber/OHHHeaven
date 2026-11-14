@@ -36,7 +36,7 @@ describe('createWorld, applyAction, tickDay, netWorth', () => {
     expect(r.world.version).toBe(w.version + 1);
     expect(tickDay(w, ctx).version).toBe(w.version + 1);
     expect(applyAction(w, ctx, 'nobody', { type: 'launch' }).error).toBe('Unknown player');
-    expect(applyAction(w, ctx, 'pl1', { type: 'take_case', caseId: 'x' }).error).toMatch(/Unknown action/);
+    expect(applyAction(w, ctx, 'pl1', { type: 'no_such_action' } as never).error).toMatch(/Unknown action/);
   });
 
   it('net worth counts cash, half of furniture and equipment, minus unpaid taxes', () => {

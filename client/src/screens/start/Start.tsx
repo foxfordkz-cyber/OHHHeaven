@@ -1,0 +1,125 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import type { IdeaMatch, NicheId } from '@ohh/shared/types';
+import { useCatalog } from '../../app/catalog';
+import { useStoreState, useView } from '../../app/store';
+import { Button, Card, ProgressBar, Skeleton, TopBar } from '../../ui';
+import { IdeaStep, JoinStep, PlaceStep, PlanStep } from './steps';
+import { KitStep } from './KitStep';
+import { WaitStep } from './WaitStep';
+import './start.css';
+
+export type WizardStep = 'idea' | 'place' | 'plan' | 'kit';
+export interface Draft { step: WizardStep; idea: string; match: IdeaMatch | null; niche: NicheId | null; name: string; placeId: string | null }
+
+const EMPTY: Draft = { step: 'idea', idea: '', match: null, niche: null, name: '', placeId: null };
+const STEPS = ['Join', 'Idea', 'Place', 'Plan', 'Setup', 'Open'] as const;
+const WIZARD_INDEX: Record<WizardStep, number> = { idea: 1, place: 2, plan: 3, kit: 4 };
+
+function draftKey(mode: string, worldId: string) {
+  return `ohh.start.draft.v1:${mode}:${worldId}`;
+}
+
+function readDraft(key: string): Draft | null {
+  try {
+    const raw = sessionStorage.getItem(key);
+    return raw ? { ...EMPTY, ...(JSON.parse(raw) as Partial<Draft>) } : null;
+  } catch {
+    return null;
+  }
+}
+
+/** /start — idea → niche → place → opening plan → setup kit → waiting for permits → open doors. */
+export function Start({ initial }: { initial?: Partial<Draft> }) {
+  const view = useView();
+  const { mode, worldId, status } = useStoreState();
+  const catalog = useCatalog();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [params] = useSearchParams();
+  const asOfficial = params.get('as') === 'official';
+  const key = draftKey(mode, worldId);
+
+  const [draft, setDraft] = useState<Draft>(() => {
+    const fromHome = (location.state ?? {}) as { idea?: string; match?: IdeaMatch | null };
+    const nicheParam = params.get('niche') as NicheId | null;
+    const saved = readDraft(key);
+    const base: Draft = { ...EMPTY, ...saved, ...initial };
+    if (fromHome.idea) Object.assign(base, { idea: fromHome.idea, match: fromHome.match ?? null, niche: fromHome.match?.niche ?? base.niche, name: fromHome.match?.businessName ?? base.name, step: 'idea' });
+    if (nicheParam) Object.assign(base, { niche: nicheParam });
+    return base;
+  });
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(key, JSON.stringify(draft));
+    } catch {
+      /* private mode: the draft lives in memory only */
+    }
+  }, [key, draft]);
+
+  const update = (patch: Partial<Draft>) => setDraft((d) => ({ ...d, ...patch }));
+
+  // Where are we: not joined → join; owner without business → wizard; setup → waiting; open → done.
+  const phase = useMemo(() => {
+    if (!view) return 'loading' as const;
+    if (view.kind === 'city') return 'join' as const;
+    if (view.kind === 'official') return 'official' as const;
+    if (!view.business) return 'wizard' as const;
+    return view.business.status === 'setup' ? ('wait' as const) : ('done' as const);
+  }, [view]);
+
+  useEffect(() => {
+    if (phase === 'official') navigate('/desk', { replace: true });
+  }, [phase, navigate]);
+
+  const stepIndex = phase === 'join' ? 0 : phase === 'wizard' ? WIZARD_INDEX[draft.step] : phase === 'wait' ? 5 : 5;
+  const back = () => {
+    if (phase !== 'wizard') return navigate('/');
+    const order: WizardStep[] = ['idea', 'place', 'plan', 'kit'];
+    const i = order.indexOf(draft.step);
+    if (i <= 0) navigate('/');
+    else update({ step: order[i - 1] });
+  };
+
+  return (
+    <main className="screen start">
+      <TopBar title={asOfficial && phase === 'join' ? 'Work for the city' : 'Open your business'} onBack={back} />
+      {phase !== 'official' && !(asOfficial && phase === 'join') && (
+        <div className="start-progress" aria-label={`Step ${stepIndex + 1} of ${STEPS.length}: ${STEPS[stepIndex]}`}>
+          <div className="row-between xsmall">
+            <span className="faint">Step {stepIndex + 1} of {STEPS.length}</span>
+            <span className="accent" style={{ fontWeight: 650 }}>{STEPS[stepIndex]}</span>
+          </div>
+          <ProgressBar value={(stepIndex + 1) / STEPS.length} />
+        </div>
+      )}
+
+      {phase === 'loading' && (status === 'offline' ? <OfflineCard /> : <div className="stack"><Skeleton height={120} /><Skeleton height={54} /></div>)}
+      {phase === 'join' && view && <JoinStep view={view} asOfficial={asOfficial} />}
+      {phase === 'wizard' && view?.kind === 'owner' && catalog && (
+        <>
+          {draft.step === 'idea' && <IdeaStep draft={draft} update={update} catalog={catalog} />}
+          {draft.step === 'place' && <PlaceStep draft={draft} update={update} catalog={catalog} view={view} />}
+          {draft.step === 'plan' && <PlanStep draft={draft} update={update} catalog={catalog} />}
+          {draft.step === 'kit' && <KitStep draft={draft} update={update} catalog={catalog} view={view} />}
+        </>
+      )}
+      {phase === 'wait' && view?.kind === 'owner' && catalog && <WaitStep view={view} catalog={catalog} />}
+      {phase === 'done' && view?.kind === 'owner' && <DoneCard name={view.business?.name ?? 'Your business'} />}
+    </main>
+  );
+}
+
+function DoneCard({ name }: { name: string }) {
+  const navigate = useNavigate();
+  return (
+    <Card tone="profit" title="Your doors are open" subtitle={`${name} is serving customers. The city keeps going while you are away.`}>
+      <Button block size="lg" icon="store" onClick={() => navigate('/biz')}>Go to my business</Button>
+    </Card>
+  );
+}
+
+function OfflineCard() {
+  return <Card tone="warn" title="No connection to the city" subtitle='Use "Practice offline" at the top to open your business in the browser.' />;
+}
