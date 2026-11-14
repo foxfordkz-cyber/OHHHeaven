@@ -37,7 +37,7 @@ const common = <T>(xs: T[]): T[] => xs;
 export const cafePack: Pack = {
   id: 'cafe', version: 1, name: 'Coffee shop', tagline: 'Espresso, pastries and a line at 8 am', startCapital: 75000,
   unit: { name: 'order', refPrice: 6.5, priceMin: 3, priceMax: 12, cogsPerUnit: 1.9, ...EST },
-  market: { unitsPerSlotMonth: 6000, priceElasticity: -1.4, weights: { price: 0.35, quality: 0.25, reputation: 0.2, location: 0.2 }, ...EST },
+  market: { unitsPerSlotMonth: 7000, priceElasticity: -1.4, weights: { price: 0.35, quality: 0.25, reputation: 0.2, location: 0.2 }, ...EST },
   capacity: { unitsPerStaffMonth: 1800, minStaff: 1, maxStaff: 8, hardCapUnits: null },
   sizing: { unitName: 'seat', min: 6, max: 40, default: 18, sqftPerUnit: 18, unitsServedPerSizeMonth: 150, takeawayShare: 0.45, cleaningCostPerSizeMonth: 12, emptyPenaltyBelow: 0.3, crowdPenaltyAbove: 0.9, ...EST },
   setup: [
@@ -108,7 +108,7 @@ export const cafePack: Pack = {
 export const barbershopPack: Pack = {
   id: 'barbershop', version: 1, name: 'Barbershop', tagline: 'Fades, beards and Saturday lines', startCapital: 50000,
   unit: { name: 'haircut', refPrice: 35, priceMin: 15, priceMax: 80, cogsPerUnit: 2.5, ...EST },
-  market: { unitsPerSlotMonth: 900, priceElasticity: -1.2, weights: { price: 0.3, quality: 0.3, reputation: 0.25, location: 0.15 }, ...EST },
+  market: { unitsPerSlotMonth: 1000, priceElasticity: -1.2, weights: { price: 0.3, quality: 0.3, reputation: 0.25, location: 0.15 }, ...EST },
   capacity: { unitsPerStaffMonth: 280, minStaff: 1, maxStaff: 8, hardCapUnits: null },
   sizing: { unitName: 'chair', min: 2, max: 10, default: 4, sqftPerUnit: 60, unitsServedPerSizeMonth: 300, takeawayShare: 0, cleaningCostPerSizeMonth: 25, emptyPenaltyBelow: 0.3, crowdPenaltyAbove: 0.92, ...EST },
   setup: [
