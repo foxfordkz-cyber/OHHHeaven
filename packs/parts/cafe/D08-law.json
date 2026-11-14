@@ -370,6 +370,26 @@
       "source": "https://www.nyc.gov/site/oath/hearings/what-happens-if-i-do-not-pay.page",
       "confidence": "estimate",
       "note": "$150 a month is my estimate of a small retainer; no public price list exists. In the proposed hearing model (extra.mechanics.oath_hearing_choices) representation means no missed hearings and the mitigated penalty wherever the schedule offers one. OATH's own Help Center is free."
+    },
+    {
+      "id": "allergen_labels",
+      "name": "Labels on food you pack yourself",
+      "options": [
+        {
+          "id": "printed_labels",
+          "label": "Printed label with ingredients and major allergens on every wrapped item",
+          "monthlyCost": 30
+        },
+        {
+          "id": "name_only",
+          "label": "A sticker with the name, nothing else",
+          "monthlyCost": 0,
+          "causes": "allergen_notice_missing"
+        }
+      ],
+      "source": "https://newyork.public.law/laws/n.y._public_health_law_section_1357",
+      "confidence": "estimate",
+      "note": "Public Health Law §1357, in force since November 12, 2026: food prepared, packed and sold on the same premises must carry a label that names its major allergens. $30 a month for a label printer's rolls is my estimate. The law itself sets no penalty; the game charges the allergy-notice violation, and the larger exposure is the allergic-reaction claim in extra.lawsuits."
     }
   ],
   "shortcuts": [
@@ -382,7 +402,7 @@
         "amount": 0.03
       },
       "violation": "grade_card_hidden",
-      "note": "The 3% is my estimate of the walk-in sales a B costs a counter-service shop; no NYC figure for cafes was found."
+      "note": "The 3% is my estimate. Evidence of direction and size: a study of more than 15,000 NYC restaurants over 28 months found A grades raise revenue and lower the chance of closing, and C grades lower revenue compared with B (Silver, Rothbart and others, Public Administration Review, 2019); a Los Angeles sales-tax analysis put an A at up to +6% and a B at +1-2%, a gap of about 4 points."
     },
     {
       "id": "skip_backflow_test",
@@ -616,6 +636,17 @@
       "violation": "alcohol_to_minor",
       "requires": "beer_wine_license",
       "note": "The 0.5% is my estimate. Makes sense only once the beer and wine module exists (extra.mechanics.beer_wine_module)."
+    },
+    {
+      "id": "let_permit_lapse",
+      "name": "Let the health permit lapse",
+      "what": "The Food Service Establishment Permit renews every year for $280. Forgetting or skipping it saves $23 a month. Serving without a current permit is $1,000, $2,000 if you ignore the summons, and grounds to close the shop the same day.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 23
+      },
+      "violation": "no_fse_permit",
+      "note": "$280 / 12 = $23. In life this is almost always forgetfulness, not a plan: the renewal notice goes to an old email address."
     }
   ],
   "violations": [
@@ -999,8 +1030,8 @@
     },
     {
       "id": "allergen_notice_missing",
-      "name": "No food allergy notice on the menu or in the prep area",
-      "law": "NY Public Health Law §1356; NYC Administrative Code §17-195",
+      "name": "No food allergy notice on the menu, no allergen labels on packed food",
+      "law": "NY Public Health Law §1356 (allergy notice) and §1357 (allergen labels on food packed on the premises, in force since November 12, 2026); NYC Administrative Code §17-195",
       "official": "health_inspector",
       "foundBy": [
         "inspection",
@@ -1016,7 +1047,7 @@
       "reputationHit": 0.01,
       "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
       "confidence": "verified",
-      "note": "NYC Health: New York State requires restaurants to post a food allergies and intolerances sign where all food workers can see it, in the languages they speak, and to print an allergy statement on menus, online menus included; beginning January 2027 a restaurant that does not comply may receive a summons with a $100 fine. Public Health Law §1356 caps the civil penalty at $125 per violation. The fine is small; the real exposure is an allergic reaction with no notice on the wall (see extra.lawsuits)."
+      "note": "NYC Health: New York State requires restaurants to post a food allergies and intolerances sign where all food workers can see it, in the languages they speak, and to print an allergy statement on menus, online menus included; beginning January 2027 a restaurant that does not comply may receive a summons with a $100 fine. Public Health Law §1356 caps the civil penalty at $125 per violation. §1357 (allergen labels on food made, packed and sold in the same shop) names no penalty of its own; the game uses the same row for it. The fine is small; the real exposure is an allergic reaction with no notice and no label (extra.lawsuits)."
     },
     {
       "id": "trash_setout_violation",
@@ -2072,6 +2103,1382 @@
       "note": "Free by design. BBB Scam Tracker shows a New York mailer demanding $92.58 for a workplace poster."
     }
   ],
+  "extra": {
+    "eventCatalog": [
+      {
+        "id": "first_graded_inspection",
+        "name": "The first graded inspection",
+        "text": "A health inspector walks in unannounced, during service, with a thermometer and a flashlight. Whatever is true in the shop this month is what gets scored.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Date the shop started serving: every NYC restaurant gets an unannounced inspection at least once a year, and a new one gets its first graded visit after it opens (it may open 22 days after applying even if no inspector has come)",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "mock_inspection"
+          },
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "pest_control"
+          },
+          {
+            "kind": "lever",
+            "id": "food_handling"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_food_protection_cert"
+          }
+        ],
+        "realFrequency": "More than 38,000 food service inspections in fiscal year 2025 for about 29,000 restaurants (Health Department ombuds report and July 2025 press release)",
+        "tier": "core",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+        "confidence": "estimate",
+        "note": "In life the day is unknown. In the game the visit is announced as 'within your first two months' and happens to every new shop, so it is not a dice roll. The 1.5 multiplier is a design value."
+      },
+      {
+        "id": "reinspection_after_14",
+        "name": "Re-inspection: the visit that sets the grade",
+        "text": "You scored 14 or more. The inspector returns in about a month, and this score goes on the card in the window.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The shop's own initial inspection score: 14 points or more triggers a re-inspection no sooner than 7 days later, typically within a month",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "mock_inspection"
+          },
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          },
+          {
+            "kind": "shortcut",
+            "id": "hide_bad_grade"
+          }
+        ],
+        "realFrequency": "Follows every initial inspection of 14 points or more; older city figures put A grades at 85-93% of restaurants after re-inspection",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/restaurant-grading-faq.pdf",
+        "confidence": "verified",
+        "note": "Health Department FAQ and 24 RCNY Chapter 23: re-inspection after an initial score of 14 or more; until the hearing the shop may post Grade Pending. After a B the next cycle starts in 5-7 months, after a C in 3-5 months, after an A in 11-13 months."
+      },
+      {
+        "id": "monthly_inspections_after_28",
+        "name": "Inspectors every month",
+        "text": "A score of 28 or more puts the shop on a short leash: an inspector returns about once a month until the score drops under 28 or the shop is closed.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The shop's own score of 28 or more",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "pest_control"
+          },
+          {
+            "kind": "lever",
+            "id": "mock_inspection"
+          }
+        ],
+        "realFrequency": "Applies to every restaurant that scores 28 or more",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/restaurant-grading-faq.pdf",
+        "confidence": "verified",
+        "note": "Health Department FAQ: the Department may keep inspecting roughly once a month until the restaurant scores below 28 or is closed for serious and persistent violations. Duration is as long as the score stays at 28 or above; 3 is a placeholder."
+      },
+      {
+        "id": "closure_order_served",
+        "name": "Closed by order of the Health Commissioner",
+        "text": "A hazard that could not be fixed during the visit: no hot water, sewage on the floor, an infestation, or no permit. A yellow sign goes on the door and stays until a re-opening inspection.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The shop's own open violations at the worst condition level (28 points) or no valid permit at the time of an inspection",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 2,
+        "closureDays": 5,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "pest_control"
+          },
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "shortcut",
+            "id": "delay_hot_water_repair"
+          },
+          {
+            "kind": "shortcut",
+            "id": "let_permit_lapse"
+          }
+        ],
+        "realFrequency": "583 closures at 518 restaurants between October 2025 and September 2026, about 2.5% of the 20,932 restaurants inspected; mice were cited in 44% of closures (tracker of city data)",
+        "tier": "core",
+        "source": "https://restaurantinspectioncheck.com/nyc-restaurants-closed-by-health-department/",
+        "confidence": "estimate",
+        "note": "Follows from the player's own violations, never from chance. The 5 closure days and the 10% drop in demand for two months after re-opening are my estimates; closures are published by the city and picked up by neighborhood news sites. Rent, wages owed and spoilage continue while closed."
+      },
+      {
+        "id": "grade_goes_online",
+        "name": "Your grade is one tap from your menu",
+        "text": "Delivery apps must link every restaurant page to the city's inspection lookup. A B or C now costs delivery orders as well as walk-ins.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Health Department rule adopted October 16, 2025, in force November 15, 2025: delivery platforms must post a link to the Department's inspection lookup tool",
+        "effects": [
+          {
+            "field": "deliveryShare",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "mock_inspection"
+          }
+        ],
+        "realFrequency": "Permanent rule; affects only shops with a B, a C or Grade Pending",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/notice/2025/noa-ch23-food-service-inspections.pdf",
+        "confidence": "estimate",
+        "note": "The rule is real; the 10% loss of delivery orders for a shop without an A is my estimate. Applies only while the shop's grade is not an A."
+      },
+      {
+        "id": "inspection_sweep_announced",
+        "name": "The city announces an enforcement sweep",
+        "text": "An agency says in advance what it will ticket and from which date: a warning month first, then fines. Everyone on the street gets the same notice.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "An agency press release with a warning period and a start date for fines; example: lidded-bin rule for all businesses, warnings from March 1, 2024, fines from April 2024",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "bags_on_the_curb"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_sidewalk_sweeping"
+          },
+          {
+            "kind": "shortcut",
+            "id": "foam_cups"
+          },
+          {
+            "kind": "lever",
+            "id": "takeout_packaging"
+          }
+        ],
+        "realFrequency": "Several a year across agencies: bins (2024), utensils on request (warnings until July 1, 2024), plastic straws (enforced from November 1, 2022), allergy notices (summonses from January 2027)",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
+        "confidence": "estimate",
+        "note": "Fits the game's rule: announced a month ahead, the same for everyone. The 1.5 multiplier on inspections is a design value. The host picks which family of violations the sweep targets."
+      },
+      {
+        "id": "anonymous_311_complaints",
+        "name": "Someone keeps calling 311 about you",
+        "text": "A neighbor or a rival files complaint after complaint. Each one brings an inspector. If the shop is clean, each visit costs an hour; if not, it finds what is there.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "311 service requests against the address, public on NYC Open Data",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "inspector_door_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "Common enough that a 2026 Council bill (Intro 924) would bar inspections after three unverified anonymous complaints in six months; not passed",
+        "tier": "deep",
+        "source": "https://intro.nyc/0924-2026",
+        "confidence": "estimate",
+        "note": "In the game this is another player's 'report to the city', not an AI event. Proposed cap for the lead: three empty complaints against one address in six months and further ones are not sent (mechanic complaint_channels)."
+      },
+      {
+        "id": "allergen_label_law_starts",
+        "name": "Allergen labels become law",
+        "text": "From November 12, 2026 every item you make, pack and sell in the same shop for takeaway needs a label naming its major allergens.",
+        "scale": "city",
+        "months": [
+          11
+        ],
+        "realSignal": "NY Public Health Law §1357 (S.5381/A.6558A), signed November 2025, effective November 12, 2026",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.002
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "allergen_labels"
+          }
+        ],
+        "realFrequency": "One-time change of law; statewide, every food establishment whatever its size",
+        "tier": "core",
+        "source": "https://www.nysenate.gov/newsroom/press-releases/2025/pete-harckham/harckham-lunsford-bill-requiring-allergen-labeling",
+        "confidence": "estimate",
+        "note": "State law, modeled at city scale because every player is in New York. The 0.2% cost-of-goods effect is my estimate of label cost for a shop that packs a tenth of its food; it applies only with the printed-labels option."
+      },
+      {
+        "id": "allergy_summonses_begin",
+        "name": "Allergy notice: summonses start in January",
+        "text": "The Health Department starts writing $100 summonses for a missing allergy sign or a menu without the allergy statement.",
+        "scale": "city",
+        "months": [
+          1
+        ],
+        "realSignal": "NYC Health required-signs page: beginning January 2027 non-compliant food service establishments may receive a summons subject to a $100 fine",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.2
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "allergen_labels"
+          },
+          {
+            "kind": "lever",
+            "id": "mock_inspection"
+          }
+        ],
+        "realFrequency": "One-time start of enforcement",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+        "confidence": "verified",
+        "note": "The legal move is the free poster and the menu statement (setup item allergen_menu_statement). The multiplier is a design value."
+      },
+      {
+        "id": "waste_zone_goes_live",
+        "name": "Your block joins a commercial waste zone",
+        "text": "From the start date only the three carters authorized for your zone may pick up your trash. Your old contract ends; sign a new one and post the new decal.",
+        "scale": "block",
+        "months": [
+          10
+        ],
+        "realSignal": "DSNY adopted rule: Brooklyn East, Manhattan Northeast, Queens West and Manhattan West zones in force October 16, 2026",
+        "effects": [],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "dump_trash_in_baskets"
+          },
+          {
+            "kind": "shortcut",
+            "id": "bags_on_the_curb"
+          }
+        ],
+        "realFrequency": "Each zone once; the rollout runs zone by zone from January 2025",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/dsny/about/about-dsny/adopted-rules.page",
+        "confidence": "verified",
+        "note": "The legal move is signing with a zone carter at or under its maximum rate; the pack's waste line already carries the cost, and I found no figure for how prices change inside a zone, so there is no money effect. The illegal move is having no carter."
+      },
+      {
+        "id": "price_display_patrol",
+        "name": "Consumer inspectors check posted prices",
+        "text": "Inspectors compare the menu with the receipt: card fees not shown in the price, percentages added to the bill, cash refused.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "DCWP inspection checklist for restaurant surcharges and its amended surcharge rule (adopted March 2026); state card-surcharge law in force since February 11, 2024",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "hidden_card_fee"
+          },
+          {
+            "kind": "shortcut",
+            "id": "card_only"
+          }
+        ],
+        "realFrequency": "DCWP patrols and answers 311 consumer complaints all year",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/DCAInspectionChecklist_RestaurantSurchargesandMandatoryGratuities.pdf",
+        "confidence": "estimate",
+        "note": "The legal alternative to a hidden fee is two posted prices, cash and card (General Business Law §518). The multiplier is a design value. card_only is the existing common shortcut."
+      },
+      {
+        "id": "access_lawsuit_served",
+        "name": "A process server brings an access lawsuit",
+        "text": "A plaintiff who uses a wheelchair, or a screen reader, sues over the step at your door or your website. The same lawyer has filed dozens like it this year.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Federal ADA Title III filings: 8,667 in 2025, of them 3,117 website suits; New York first in website suits with 1,021",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -10000
+          }
+        ],
+        "durationMonths": 4,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_accessibility_fixes"
+          },
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "About 24 federal access suits a day nationwide in 2025; in New York a few plaintiffs file more than 100 suits each",
+        "tier": "core",
+        "source": "https://www.adatitleiii.com/2026/02/ada-title-iii-federal-lawsuit-filings-fall-slightly-to-8667-in-2025/",
+        "confidence": "estimate",
+        "note": "Deterministic rule proposed for the engine: the suit arrives after six months with the shortcut skip_accessibility_fixes active. 8,667 / 365 = 23.7 suits a day. The $10,000 is my estimate of settlement plus both lawyers; settlements are confidential."
+      },
+      {
+        "id": "music_license_letters",
+        "name": "Letters from the music licensing societies",
+        "text": "First a letter, then phone calls, then an agent who sits with a coffee and writes down the songs. A year of silence from you ends in federal court.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The shop plays music with no license on file at ASCAP, BMI or SESAC",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -3000
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "music"
+          }
+        ],
+        "realFrequency": "The societies canvass new businesses from public records; lawsuits against restaurants and bars are filed in batches every year",
+        "tier": "core",
+        "source": "https://hartfordbusiness.com/article/sued-for-a-song-music-licensing-lawsuits-hit-ct-restaurants/",
+        "confidence": "estimate",
+        "note": "Deterministic rule proposed: letters start in the third month of the personal_account option; the claim (violation unlicensed_music) lands in the twelfth. Switching to a licensed option before then ends it at no cost. Judgments averaged about $3,600 a song in four Connecticut cases."
+      },
+      {
+        "id": "customer_slip_claim",
+        "name": "A customer falls and files a claim",
+        "text": "A wet floor at the door, no mat, no sign. Weeks later a lawyer's letter arrives. With insurance you pay the deductible and a higher premium; without it, the settlement.",
+        "scale": "point",
+        "months": [
+          11,
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "Rain and snow days at the door plus the shop's own floor routine; slip-and-fall is among the five most frequent restaurant insurance claims (NEXT Insurance data, 2021-2024)",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -2500
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "floor_safety"
+          },
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "About one in eight restaurant claims (12.8% in a secondary summary of insurer data); settlements commonly $10,000 to $50,000",
+        "tier": "core",
+        "source": "https://www.latentinsure.com/blog/restaurant-risk-management",
+        "confidence": "estimate",
+        "note": "Deterministic rule proposed: the claim arrives after three wet-season months with floor_safety set to 'nothing'. The $2,500 is my estimate of a deductible plus the premium increase for an insured shop; an uninsured shop pays the settlement ($10,000 to $50,000, secondary source). A $575,000 settlement for a fall in a Brooklyn restaurant shows the tail."
+      },
+      {
+        "id": "allergic_reaction_claim",
+        "name": "A customer has an allergic reaction",
+        "text": "Oat milk steamed in the dairy pitcher, a pastry with no label. The customer goes to the emergency room, then to a lawyer, and files a complaint with 311.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The shop has no allergy notice, no allergen labels or handles ready-to-eat food carelessly",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          },
+          {
+            "field": "demand",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "allergen_labels"
+          },
+          {
+            "kind": "lever",
+            "id": "food_handling"
+          }
+        ],
+        "realFrequency": "Not found for cafes; New York answered with two laws: allergy notices on menus (§1356) and allergen labels on food packed on site (§1357, November 2026)",
+        "tier": "deep",
+        "source": "https://www.nysenate.gov/newsroom/press-releases/2025/pete-harckham/harckham-lunsford-bill-requiring-allergen-labeling",
+        "confidence": "estimate",
+        "note": "Deterministic rule proposed: arrives after six months with allergen_labels set to 'name_only' or with the allergy notice missing. No settlement figure was found, so the event carries an inspection and a 3% demand dip (my estimate) instead of a cash amount."
+      },
+      {
+        "id": "food_poisoning_complaint",
+        "name": "A customer reports getting sick",
+        "text": "Someone who ate at your shop calls 311. The Health Department interviews them and sends an inspector within days, looking at temperatures, hand washing and where the food came from.",
+        "scale": "point",
+        "months": [
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "realSignal": "The shop's own open trails: old food kept for sale, warm milk, food from a home kitchen, dirty surfaces",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          },
+          {
+            "field": "demand",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "keep_old_food"
+          },
+          {
+            "kind": "shortcut",
+            "id": "home_baked_pastries"
+          },
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          }
+        ],
+        "realFrequency": "Not found: the city takes foodborne illness complaints through 311 and publishes outbreak data, but I found no yearly count",
+        "tier": "core",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02955",
+        "confidence": "estimate",
+        "note": "Deterministic rule proposed: arrives in a warm month once spoiled_food or unapproved_food_source has been open for two months. The 5% demand dip is my estimate. Warm months are chosen because cold-holding failures grow with heat; that link is my assumption."
+      },
+      {
+        "id": "ex_worker_wage_claim",
+        "name": "A worker who left files a wage claim",
+        "text": "Claims are filed after the job ends. The investigator asks for six years of time and pay records for everyone, not only the one who complained.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "A worker leaves a shop that has any open wage trail: kept tips, unpaid training, unpaid overtime, off-the-clock work",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "worker_complaints"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "shortcut",
+            "id": "keep_tips"
+          },
+          {
+            "kind": "shortcut",
+            "id": "unpaid_trial_shifts"
+          }
+        ],
+        "realFrequency": "NYC restaurant wage suits settled for $725,000, $900,000 and $1.75 million in 2025; a coffee chain paid $35.5 million to about 15,000 city workers",
+        "tier": "core",
+        "source": "https://www.law360.com/articles/2363776",
+        "confidence": "estimate",
+        "note": "Deterministic rule proposed: when the head count drops while a wage shortcut is active, the audit is triggered the next month. Choosing 'cut_their_shifts' in the worker_complaints lever adds the retaliation case on top."
+      },
+      {
+        "id": "trademark_letter",
+        "name": "A lawyer's letter about your name",
+        "text": "A bigger company says your name or logo is too close to theirs. They give you days to stop using it.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The shop skipped the trademark search at opening",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -5000
+          },
+          {
+            "field": "demand",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "Rare for one shop; reported every year somewhere: a Michigan cafe renamed for about $5,000 against $50,000 to fight, another owner got 10 days to destroy branded goods",
+        "tier": "exotic",
+        "source": "https://www.clickondetroit.com/news/2016/05/26/michigan-cafe-has-to-change-name-after-caribou-coffee-files-lawsuit",
+        "confidence": "estimate",
+        "note": "Deterministic rule proposed: only for a shop that did not buy the setup item trademark_search_and_filing. The $5,000 is the reported cost of renaming; the 3% demand dip while regulars find the new name is my estimate."
+      },
+      {
+        "id": "fake_inspector_visit",
+        "name": "A man with a clipboard wants cash",
+        "text": "He says he is from the Fire Department and your extinguishers failed; pay now for the service or get a summons. Real inspectors show photo ID and never take money.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Scam alerts from fire and health departments; impostors work a whole street in a day",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -350
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "inspector_door_policy"
+          }
+        ],
+        "realFrequency": "Recurring: fire officials in Yonkers warned businesses about fake extinguisher inspectors; the city's investigators once caught a consultant selling fake A grade cards to restaurants",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/doi/downloads/pdf/2013/sept13/pr31rest92613.pdf",
+        "confidence": "estimate",
+        "note": "Hits the whole block the same month; only shops whose staff instruction is 'pay_whoever_asks' lose money. The $350 is my estimate of a fake service bill. Paying a real inspector instead would be bribery (common violation)."
+      },
+      {
+        "id": "poster_invoice_scam",
+        "name": "An official-looking invoice for a labor poster",
+        "text": "A mailer with a seal and a deadline demands $92.58 for a 'mandatory workplace poster'. The real posters are free on the agencies' websites.",
+        "scale": "city",
+        "months": [
+          1,
+          2
+        ],
+        "realSignal": "New business registrations are public; mailers follow every new filing and every January wage change",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -93
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "inspector_door_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "Reported to the Better Business Bureau from New York; arrives soon after a business registers",
+        "tier": "exotic",
+        "source": "https://www.bbb.org/scamtracker/lookupscam/980511",
+        "confidence": "verified",
+        "note": "The amount is from the BBB Scam Tracker report. Only shops with the 'pay_whoever_asks' instruction pay."
+      },
+      {
+        "id": "neighbor_noise_complaint",
+        "name": "The neighbors upstairs call 311 about the music",
+        "text": "An inspector takes a decibel reading inside their apartment. Over 42 means a $2,000 ticket that you can cut to zero once by fixing the sound and filing a consultant's report.",
+        "scale": "point",
+        "months": [
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "realSignal": "311 noise complaints against the address; open doors and windows in warm months",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "speaker_at_the_door"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "music"
+          }
+        ],
+        "realFrequency": "Noise is the largest 311 complaint category in New York City; the share against cafes was not found",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
+        "confidence": "estimate",
+        "note": "Deterministic rule proposed: arrives in a warm month while the speaker shortcut is active, or with long hours and music on. That noise leads 311 categories is from memory of city data."
+      },
+      {
+        "id": "sign_complaint_wave",
+        "name": "Someone reports every sign on the avenue",
+        "text": "Dozens of 311 complaints about shop signs land in one week. Buildings inspectors work down the block; signs without permits get $6,000 fines.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "311 illegal-sign complaints by community district (NYC Open Data); the 2018-2019 surge led to Local Law 28 of 2019",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "big_sign_no_permit"
+          }
+        ],
+        "realFrequency": "A citywide wave in 2018-2019, with fines of about $5,000-$6,000 per shop, prompted a temporary freeze and a task force",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/buildings/pdf/ll28_temp_biz_accessory_sign_program.pdf",
+        "confidence": "estimate",
+        "note": "Announced a month ahead to the whole block. The legal move is the setup item sign_permit_and_hanger or a sign of 6 square feet or less."
+      },
+      {
+        "id": "sanitation_ticket_hours",
+        "name": "Sanitation agents work your street",
+        "text": "Twice a day, in posted one-hour windows, agents can ticket a dirty sidewalk or gutter. Trash set out wrong and anything blocking the sidewalk can be ticketed at any hour.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "DSNY enforcement routing times for the block (two one-hour periods a day for commercial premises)",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.2
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_sidewalk_sweeping"
+          },
+          {
+            "kind": "shortcut",
+            "id": "bags_on_the_curb"
+          },
+          {
+            "kind": "shortcut",
+            "id": "a_frame_on_sidewalk"
+          },
+          {
+            "kind": "shortcut",
+            "id": "dump_trash_in_baskets"
+          }
+        ],
+        "realFrequency": "Every working day",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/dsny/docs/avoiding-common-sanitation-violations-acsv-f.pdf",
+        "confidence": "verified",
+        "note": "Not an event to announce: a standing fact of the street. Listed so the engine treats sanitation violations as found within the month they exist."
+      },
+      {
+        "id": "fire_company_walkthrough",
+        "name": "The local fire company inspects the block",
+        "text": "Firefighters from the neighborhood firehouse walk through every shop: extinguisher tags, the exit path, extension cords, candles.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "FDNY field inspection schedule for the administrative district",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_extinguisher_service"
+          },
+          {
+            "kind": "shortcut",
+            "id": "stock_in_exit_path"
+          },
+          {
+            "kind": "shortcut",
+            "id": "candles_no_permit"
+          },
+          {
+            "kind": "shortcut",
+            "id": "overpack_event_nights"
+          }
+        ],
+        "realFrequency": "Not found; FDNY says extinguishers are checked during every inspection for other permits",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf",
+        "confidence": "estimate",
+        "note": "Proposed as a yearly visit to every block, announced a month ahead. How often fire companies really reach a small cafe was not found."
+      },
+      {
+        "id": "backflow_report_due",
+        "name": "The yearly backflow test report is due",
+        "text": "Twelve months after the last report the city expects the next one. No report means a notice, then a $500 summons.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Date of the shop's last test report on file with Environmental Protection",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -240
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_backflow_test"
+          }
+        ],
+        "realFrequency": "Once a year for every property with a device; 8,780 violations for missing reports in 2018",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/oath/downloads/pdf/Final-Rule-Updating-OATH_s-Water-Penalty-Schedule-113021.pdf",
+        "confidence": "estimate",
+        "note": "Falls in the anniversary month of opening. The $240 test price is my estimate; the pack's maintenance line already reserves for it, so the engine should not charge it twice."
+      },
+      {
+        "id": "harassment_training_due",
+        "name": "Yearly harassment training is due",
+        "text": "Every worker needs the interactive training once a year, and new hires as soon as possible. Free materials, one paid hour each.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Twelve months since the shop's last training round",
+        "effects": [
+          {
+            "field": "staffAvailability",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "skip_harassment_training"
+          }
+        ],
+        "realFrequency": "Once a year for every employer in New York State",
+        "tier": "deep",
+        "source": "https://www.nysenate.gov/legislation/laws/LAB/201-G",
+        "confidence": "estimate",
+        "note": "One hour out of about 140 a month per worker is under 1% of hours; the multiplier is rounded."
+      },
+      {
+        "id": "permit_renewal_due",
+        "name": "Health permit renewal",
+        "text": "The Food Service Establishment Permit expires a year after it was issued. Renewal costs $280, and unpaid city fines can hold it up.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Expiration date printed on the shop's permit",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -280
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "let_permit_lapse"
+          }
+        ],
+        "realFrequency": "Once a year",
+        "tier": "core",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+        "confidence": "estimate",
+        "note": "The $280 is verified in the pack; the pack's permit_renewals line already reserves for it, so the engine should not charge it twice. That unpaid fines can block a renewal is how owners describe it; I did not find the rule text."
+      },
+      {
+        "id": "rent_step_anniversary",
+        "name": "Lease anniversary: the rent steps up",
+        "text": "Most store leases raise the rent every year by a fixed percentage written into the lease. Month 13 costs more than month 12.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The escalation clause of the shop's own lease",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1.03
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "Every year of the lease",
+        "tier": "core",
+        "source": "https://www.metro-manhattan.com/blog/rentescalations",
+        "confidence": "estimate",
+        "note": "Falls in the thirteenth month, so it matters for a second season or for a bought business. 3% a year is the figure brokers commonly quote for fixed steps; I did not verify it against a survey. The player's move is made at signing: a negotiated cap (roadmap step negotiate_lease_law_terms)."
+      },
+      {
+        "id": "tax_escalation_bill",
+        "name": "The landlord bills your share of the property tax increase",
+        "text": "The city's assessment went up, and the lease passes a share of every increase over the base year to you as additional rent.",
+        "scale": "block",
+        "months": [
+          7
+        ],
+        "realSignal": "NYC Department of Finance assessment roll and the tax rate set each June; bills run from July 1",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1.02
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "Yearly wherever the lease has a tax escalation clause; reported leases set the tenant's share at 10% or 15% of the increase over a base year",
+        "tier": "deep",
+        "source": "https://www.metro-manhattan.com/blog/rentescalations",
+        "confidence": "estimate",
+        "note": "The 2% of rent is my estimate. The July date and the June rate-setting are from memory of the city's tax calendar. Unpaid additional rent is a lease default like unpaid rent."
+      },
+      {
+        "id": "lease_renewal_reset",
+        "name": "The lease ends: renew at the landlord's price or leave",
+        "text": "No law caps the new rent or gives you the right to stay. The build-out you paid for stays with the landlord.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Expiration date of the shop's lease; asking rents on the same street",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "Once per lease term of 5 to 10 years. In 2025 one Brooklyn cafe reported its rent nearly tripled and another an extra $4,000 a month; both closed",
+        "tier": "deep",
+        "source": "https://brooklyn.news12.com/greenpoint-coffee-shop-sippy-caf-closing-after-rent-nearly-triples",
+        "confidence": "estimate",
+        "note": "Outside the first year unless the player buys a business with a short lease left. The engine clamps multipliers at 1.5; real resets range from none to nearly triple. A state bill to cap increases and guarantee 10-year renewals (S8319/A5568A) sat in committee in 2026."
+      },
+      {
+        "id": "rent_default_notice",
+        "name": "A 14-day rent demand is served",
+        "text": "You missed the rent. The landlord's process server delivers a written demand: pay within 14 days or give up the space. Next comes court, then a marshal.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The shop's own unpaid rent",
+        "effects": [
+          {
+            "field": "cash",
+            "add": -1500
+          }
+        ],
+        "durationMonths": 4,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "City marshals carried out about 10,900 commercial evictions from 2017 to 2025, 9% of all evictions (NYC Open Data dashboard)",
+        "tier": "core",
+        "source": "https://www.legalservicesnyc.org/resources/how-can-i-fight-a-commercial-eviction/",
+        "confidence": "estimate",
+        "note": "Follows from the player's own cash position, never from chance. Law seen: 14-day written demand (RPAPL §711(2)), then a nonpayment case, then a marshal's 14-day notice (RPAPL §749); paying everything owed before the eviction stops it. The four months from demand to lockout and the $1,500 of legal fees billed to the tenant under the lease are my estimates; no timeline statistic was found."
+      },
+      {
+        "id": "landlord_pressure",
+        "name": "The landlord wants the space back early",
+        "text": "Heat goes off, the hallway is 'under repair', your deliveries are blocked. It is cheaper for him than buying you out.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "A redevelopment plan or a richer tenant for the building",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "A Manhattan community board wrote in 2025 that most harassed small-business owners cannot afford to sue; few cases reach court",
+        "tier": "exotic",
+        "source": "https://intro.nyc/local-laws/2019-185",
+        "confidence": "estimate",
+        "note": "Commercial tenant harassment (Administrative Code §22-902) carries a civil penalty of $10,000 to $50,000 and lets the tenant sue; refusing to renew is not harassment. The 5% demand dip is my estimate. With the legal_help lever on, the pressure stops after one month."
+      },
+      {
+        "id": "holdover_after_expiry",
+        "name": "Staying past the end of the lease",
+        "text": "Talks dragged on and the lease ran out. Every extra month is billed at the holdover rate in the lease.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "The holdover clause of the shop's own lease",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "legal_help"
+          }
+        ],
+        "realFrequency": "New York courts have enforced holdover clauses of 150% and 200% of the last rent",
+        "tier": "exotic",
+        "source": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+        "confidence": "estimate",
+        "note": "The engine clamps multipliers at 1.5; leases reported in court decisions set 150%, 200%, or 150% rising to 200% after 30 days."
+      }
+    ]
+  },
   "sources": [
     {
       "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
@@ -2456,6 +3863,46 @@
     {
       "url": "https://www.nyc.gov/site/oath/help-center/you-received-a-summons-now-what.page",
       "title": "OATH Help Center: You received a summons, now what?",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://wagner.nyu.edu/impact/research/publications/what-are-financial-implications-public-quality-disclosure-evidence-new",
+      "title": "NYU Wagner: What are the financial implications of public quality disclosure? Evidence from New York City's restaurant grading policy",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "title": "NYC Business: Food Service Establishment Permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://a860-gpp.nyc.gov/downloads/xg94hv28t?locale=en",
+      "title": "NYC Health: Food Service Establishment Inspection Ombuds Office report, fiscal year 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02955",
+      "title": "NYC311: Restaurant inspection",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doi/downloads/pdf/2013/sept13/pr31rest92613.pdf",
+      "title": "NYC Department of Investigation: consultant charged with distributing fraudulent restaurant letter grade cards (2013)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.metro-manhattan.com/blog/rentescalations",
+      "title": "Metro Manhattan Office Space: how NYC landlords calculate annual commercial rent increases",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+      "title": "The Habitat Group: holdover rent clauses, 150% rising to 200%",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://therealdeal.com/new-york/2025/08/21/nyc-evictions-hit-seven-year-high-as-courts-clear-backlog",
+      "title": "The Real Deal: NYC evictions hit seven-year high as courts clear backlog (August 2025)",
       "checked": "2026-11-14"
     }
   ]
