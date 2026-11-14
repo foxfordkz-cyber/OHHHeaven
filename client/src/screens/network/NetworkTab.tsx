@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { Action, Deal, OwnerView, PackSet, Place, PublicBusiness } from '../../../../shared/src/types';
+import type { Action, BlockFundStatus, Deal, OwnerView, PackSet, Place, PublicBusiness } from '../../../../shared/src/types';
 import { RULES, dateOf } from '../../../../shared/src/rules';
 import { AiBadge, Badge, Button, Card, List, ListRow, MoneyText, ProgressBar, SegmentedControl, Sheet, Skeleton, Toggle } from './ui';
 import { CityMapSlot, useCatalog, useGame, useOwnerView } from './deps';
@@ -8,8 +8,8 @@ import { ProposeDealSheet } from './ProposeDealSheet';
 import { ReportSheet } from './ReportSheet';
 import {
   act, blockFundInfo, daysLeftText, dealEffect, dealEndDay, endEarlyWarning, formatDistance, groupDeals, lastMonthDealMoney,
-  monthBase, myReports, neighborRows, NICHE_LABEL, otherId, reportEligibility, reportInboxItems, reportLimit, reportName,
-  reportOutcomeText, sideOf, termsSummary, trustLabel, type DealGroups, type NeighborRow, type NetworkExtra,
+  monthBase, myReports, neighborRows, NICHE_LABEL, otherId, pendingBlockFund, reportEligibility, reportInboxItems, reportLimit, reportName,
+  rankText, reportOutcomeText, sideOf, termsSummary, trustLabel, type DealGroups, type NeighborRow, type NetworkExtra,
 } from './logic';
 import './network.css';
 
@@ -54,9 +54,11 @@ export function NetworkTab(props: NetworkTabProps) {
   const { view, places, packs, onAct } = props;
   const me = view.business;
   const [mode, setMode] = useState<'list' | 'map'>('list');
+  const [showAll, setShowAll] = useState(false);
   const [panel, setPanel] = useState<Panel>(null);
   const rows = useMemo(() => neighborRows(view, places), [view, places]);
   const groups = useMemo(() => groupDeals(view.deals, me?.id), [view.deals, me?.id]);
+  const fund = view.blockFund ?? pendingBlockFund(view, places);
   const bizOf = (id: string) => view.neighbors.find((n) => n.id === id);
   const nameOf = (id: string) => bizOf(id)?.name ?? 'a business';
   const rowOf = (id: string) => rows.find((r) => r.biz.id === id);
@@ -84,16 +86,23 @@ export function NetworkTab(props: NetworkTabProps) {
       )}
 
       <Card
-        title="Neighbors" subtitle={`${rows.length} nearby`} aria-label="Neighbors"
+        title="Neighbors" subtitle={`${rows.length} in the neighborhood, closest first`} aria-label="Neighbors"
         action={<SegmentedControl label="Show neighbors as" value={mode} onChange={setMode} options={[{ value: 'list', label: 'List' }, { value: 'map', label: 'Map' }]} />}
       >
         {mode === 'list' ? (
           rows.length === 0 ? (
             <div className="empty">No neighbors yet. The city fills up as people open businesses.</div>
           ) : (
-            <List>
-              {rows.map((r) => <NeighborListRow key={r.biz.id} row={r} onOpen={() => setPanel({ kind: 'profile', id: r.biz.id })} />)}
-            </List>
+            <>
+              <List>
+                {(showAll ? rows : rows.slice(0, LIST_FIRST)).map((r) => <NeighborListRow key={r.biz.id} row={r} onOpen={() => setPanel({ kind: 'profile', id: r.biz.id })} />)}
+              </List>
+              {rows.length > LIST_FIRST && (
+                <Button block variant="ghost" onClick={() => setShowAll((v) => !v)}>
+                  {showAll ? `Show the closest ${LIST_FIRST}` : `Show all ${rows.length} neighbors`}
+                </Button>
+              )}
+            </>
           )
         ) : (
           <CityMapSlot
@@ -106,7 +115,7 @@ export function NetworkTab(props: NetworkTabProps) {
 
       {me && <MyDeals view={view} groups={groups} nameOf={nameOf} onEndEarly={(dealId) => setPanel({ kind: 'end', dealId })} />}
 
-      {me && view.blockFund && <BlockFundCard view={view} onAct={onAct} />}
+      {me && fund && <BlockFundCard view={view} fund={fund} pending={!view.blockFund} onAct={onAct} />}
 
       <ReportsCard view={view} packs={packs} nameOf={nameOf} onReport={() => setPanel({ kind: 'report' })} />
 
@@ -147,6 +156,8 @@ function StatusBadge({ biz }: { biz: PublicBusiness }) {
 }
 
 const price = (n: number) => `$${n.toFixed(2)}`;
+/** A phone screen shows the closest neighbors first; the rest are one tap away. */
+const LIST_FIRST = 12;
 const money0 = (n: number) => `$${Math.round(n).toLocaleString('en-US')}`;
 
 function NeighborListRow({ row, onOpen }: { row: NeighborRow; onOpen: () => void }) {
@@ -155,7 +166,7 @@ function NeighborListRow({ row, onOpen }: { row: NeighborRow; onOpen: () => void
     <ListRow
       onClick={onOpen}
       title={<span className="nw-name">{b.name}{b.isAi && <AiBadge />}<StatusBadge biz={b} /></span>}
-      subtitle={`${NICHE_LABEL[b.niche]} · ${formatDistance(row.distanceM)} · ${price(b.price)} · #${b.rankInNiche} in ${NICHE_LABEL[b.niche].toLowerCase()}s`}
+      subtitle={`${NICHE_LABEL[b.niche]} · ${formatDistance(row.distanceM)} · ${price(b.price)} · ${rankText(b)}`}
       value={<span className="nw-rowvalue"><Stars value={b.reputation} /><span className="xsmall faint">{trustLabel(b.trust)}</span></span>}
     />
   );
@@ -192,7 +203,7 @@ function NeighborProfile(props: {
           <div><dt>Distance</dt><dd>{formatDistance(props.row.distanceM)}</dd></div>
           <div><dt>Price</dt><dd className="num">{price(b.price)}</dd></div>
           <div><dt>Reputation</dt><dd><Stars value={b.reputation} /></dd></div>
-          <div><dt>Place in niche</dt><dd className="num">#{b.rankInNiche}</dd></div>
+          <div><dt>Place in niche</dt><dd>{rankText(b)}</dd></div>
           <div><dt>Deal record</dt><dd>{trustLabel(b.trust)}</dd></div>
         </dl>
         <div>
@@ -289,8 +300,9 @@ function MyDeals(props: { view: OwnerView; groups: DealGroups; nameOf: (id: stri
   );
 }
 
-function BlockFundCard(props: { view: OwnerView; onAct: (a: Action) => unknown }) {
-  const bf = props.view.blockFund!;
+/** `pending`: the host has no count for this block yet (no month has closed since it got businesses). */
+function BlockFundCard(props: { view: OwnerView; fund: BlockFundStatus; pending: boolean; onAct: (a: Action) => unknown }) {
+  const bf = props.fund;
   const info = blockFundInfo(bf);
   const on = props.view.business?.orders.blockFund ?? false;
   return (
@@ -300,13 +312,25 @@ function BlockFundCard(props: { view: OwnerView; onAct: (a: Action) => unknown }
           Neighbors chip in for street cleaning and lights. When {Math.round(RULES.BLOCK_FUND_THRESHOLD * 100)}% of the open businesses on the block pay,
           the whole block gets {info.gives.replace(' for the whole block', '')}, even those who did not pay.
         </p>
-        <div className="row-between small">
-          <span><strong className="num">{bf.contributors} of {bf.eligible}</strong> neighbors chip in</span>
-          <span className="muted">{info.required} needed for the bonus</span>
-        </div>
-        <ProgressBar value={bf.eligible ? bf.contributors / bf.eligible : 0} tone={info.active ? 'profit' : 'accent'} label="Neighbors who chip in" />
-        <p className={`nw-blockline${info.active ? ' is-active' : ''}`} role="status">{info.line}</p>
-        <Toggle label={`Chip in ${money0(info.fee)}/month`} description="Paid from your cash at the start of each month" checked={on} onChange={(v) => props.onAct(act.blockFund(v))} />
+        {props.pending ? (
+          <p className="nw-blockline" role="status">
+            No count yet: the first one is when this month closes. {info.required} of the {bf.eligible} open {bf.eligible === 1 ? 'business' : 'businesses'} on the block need to chip in.
+          </p>
+        ) : (
+          <>
+            <div className="row-between small">
+              <span>This month: <strong className="num">{bf.contributors} of {bf.eligible}</strong> neighbors chip in</span>
+              <span className="muted">{info.required} needed for the bonus</span>
+            </div>
+            <ProgressBar value={bf.eligible ? bf.contributors / bf.eligible : 0} tone={info.active ? 'profit' : 'accent'} label="Neighbors who chip in" />
+            <p className={`nw-blockline${info.active ? ' is-active' : ''}`} role="status">{info.line}</p>
+          </>
+        )}
+        <Toggle
+          label={`Chip in ${money0(info.fee)}/month`}
+          description={on ? `You pay ${money0(info.fee)} when this month closes and count toward next month's bonus.` : "Charged when each month closes; that count decides next month's bonus."}
+          checked={on} onChange={(v) => props.onAct(act.blockFund(v))}
+        />
       </div>
     </Card>
   );

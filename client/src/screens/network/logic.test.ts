@@ -6,7 +6,7 @@ import {
   endEarlyWarning, formatDistance, groupDeals, lastMonthDealMoney, loanSchedule, monthBase, monthsLeftInSeason,
   myReports, neighborRows, reportConsequences, reportEligibility, reportInboxItems, reportLimit, reportName,
   reportOptions, reportOutcomeText, termsSummary, trustLabel, validateTerms, money, pct, falseReports,
-  DEAL_COPY, sideOf, otherId, daysLeftText,
+  DEAL_COPY, sideOf, otherId, daysLeftText, rankText, reportFiledDays, pendingBlockFund,
 } from './logic';
 import {
   analytics, blockFund, blockFundActive, deals, MY_ID, myBusiness, neighbors, ownerView, ownerViewBusyWeek, packs, places,
@@ -245,6 +245,26 @@ describe('report to the city', () => {
     expect(reportOutcomeText(history[0])).toBe('Nothing found — warning');
     expect(reportOutcomeText({ targetBusinessId: 'x', reportId: 'r', day: 1, status: 'taken' })).toBe('Inspection in progress');
     expect(reportInboxItems(ownerView).map((i) => i.id)).toEqual(['i1']);
+  });
+
+  it('without a structured history, counts the engine «Report filed» inbox items for the weekly limit', () => {
+    const filed = { id: 'law:case-1:filed', day: ownerView.world.day - 2, kind: 'case' as const, title: 'Report filed: Fade Factory', text: '', read: false };
+    const view = { ...ownerView, extra: undefined, me: { ...ownerView.me, inbox: [filed] } };
+    expect(reportFiledDays(view)).toEqual([ownerView.world.day - 2]);
+    expect(reportLimit(view)).toMatchObject({ allowed: false, nextDay: ownerView.world.day + 5 });
+    expect(reportLimit({ ...view, me: { ...view.me, inbox: [{ ...filed, day: ownerView.world.day - 7 }] } }).allowed).toBe(true);
+  });
+
+  it('before the first month close of a block, builds a pending block fund from places and neighbors', () => {
+    const pending = pendingBlockFund({ ...ownerView, blockFund: null }, places);
+    expect(pending).toMatchObject({ block: 'E 7th St, 1st–2nd Ave', contributors: 0, eligible: 3, active: false, feeMonth: RULES.BLOCK_FUND_FEE_MONTH });
+    expect(pendingBlockFund({ ...ownerView, business: { ...myBusiness, status: 'setup' } }, places)).toBeNull();
+    expect(pendingBlockFund(ownerView, [])).toBeNull();
+  });
+
+  it('says "new" instead of place 0 for a business that has no rank yet', () => {
+    expect(rankText({ rankInNiche: 2, niche: 'bodega' })).toBe('#2 in corner stores');
+    expect(rankText({ rankInNiche: 0, niche: 'barbershop' })).toBe('new in barbershops');
   });
 
   it('reads a top-level myReports field first, if the host sends one', () => {

@@ -39,6 +39,13 @@ export const pct = (fraction: number, digits = 0): string => `${(fraction * 100)
 export const NICHE_LABEL: Record<NicheId, string> = {
   cafe: 'Cafe', barbershop: 'Barbershop', bodega: 'Corner store', guesthouse: 'Guesthouse', rentals: 'Rentals',
 };
+const NICHE_PLURAL: Record<NicheId, string> = {
+  cafe: 'cafes', barbershop: 'barbershops', bodega: 'corner stores', guesthouse: 'guesthouses', rentals: 'rentals',
+};
+
+/** "#2 in cafes"; a business without a place yet (rank 0, just opened) is "new in cafes". */
+export const rankText = (b: Pick<PublicBusiness, 'rankInNiche' | 'niche'>): string =>
+  b.rankInNiche > 0 ? `#${b.rankInNiche} in ${NICHE_PLURAL[b.niche]}` : `new in ${NICHE_PLURAL[b.niche]}`;
 
 export const trustLabel = (t: { kept: number; broken: number }): string => `kept ${t.kept} · broke ${t.broken}`;
 
@@ -343,6 +350,21 @@ export function blockFundInfo(bf: BlockFundStatus): BlockFundInfo {
   return { needed, required, active: bf.active, line, gives, fee: bf.feeMonth };
 }
 
+/**
+ * The host sends no block fund status for a block until its first month close (engine/src/deals/month.ts writes it then).
+ * Until that, the card still lets the owner chip in: the block comes from my place and the count of businesses from
+ * neighbors on the same block that are open or closed by the city (engine rule `isLaunched`). Nobody has been counted yet.
+ */
+export function pendingBlockFund(view: OwnerView, places: Place[]): BlockFundStatus | null {
+  const me = view.business;
+  if (!me || (me.status !== 'open' && me.status !== 'closed')) return null;
+  const blockOf = new Map(places.map((p) => [p.id, p.block]));
+  const block = blockOf.get(me.placeId);
+  if (!block) return null;
+  const others = view.neighbors.filter((n) => n.id !== me.id && blockOf.get(n.placeId) === block && (n.status === 'open' || n.status === 'closed')).length;
+  return { block, month: view.world.date.month, contributors: 0, eligible: others + 1, active: false, feeMonth: RULES.BLOCK_FUND_FEE_MONTH };
+}
+
 // ───────────── report to the city ─────────────
 
 /** Reports that apply to a business of this niche: common ones plus the niche pack's. */
@@ -363,10 +385,18 @@ export function reportInboxItems(view: OwnerView) {
   return view.me.inbox.filter((i) => i.kind === 'case' && /report/i.test(i.title)).sort((a, b) => b.day - a.day);
 }
 
-export function reportLimit(view: OwnerView & { extra?: Partial<NetworkExtra> }): { allowed: boolean; reason?: string; nextDay?: number } {
-  const recent = myReports(view).filter((r) => r.day > view.world.day - 7 * RULES.REPORTS_PER_WEEK);
+/** Days I filed reports on: the structured history, or else the engine's «Report filed» inbox items (law:<case>:filed). */
+export function reportFiledDays(view: OwnerView & { extra?: Partial<NetworkExtra>; myReports?: MyReport[] }): number[] {
+  const structured = myReports(view);
+  if (structured.length) return structured.map((r) => r.day);
+  return view.me.inbox.filter((i) => i.kind === 'case' && (/:filed$/.test(i.id) || /^Report filed/i.test(i.title))).map((i) => i.day);
+}
+
+/** Same rule as the engine (engine/src/law/actions.ts): REPORTS_PER_WEEK reports in any 7 game days. */
+export function reportLimit(view: OwnerView & { extra?: Partial<NetworkExtra>; myReports?: MyReport[] }): { allowed: boolean; reason?: string; nextDay?: number } {
+  const recent = reportFiledDays(view).filter((d) => d > view.world.day - 7);
   if (recent.length < RULES.REPORTS_PER_WEEK) return { allowed: true };
-  const nextDay = Math.min(...recent.map((r) => r.day)) + 7;
+  const nextDay = Math.min(...recent) + 7;
   return { allowed: false, reason: `One report a week. Your next report: ${dateOf(nextDay).label}`, nextDay };
 }
 

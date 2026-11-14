@@ -34,6 +34,15 @@ describe('Network tab: neighbors', () => {
     expect(screen.queryByRole('button', { name: /^Luna Cafe/ })).toBeNull();
   });
 
+  it('shows the closest 12 neighbors first and the rest on request', () => {
+    const many = Array.from({ length: 15 }, (_, i) => ({ ...ownerView.neighbors[1], id: `n${i}`, name: `Neighbor ${String(i).padStart(2, '0')}`, partners: [] }));
+    setup({ ...ownerView, neighbors: many, deals: [] });
+    const list = screen.getByRole('region', { name: 'Neighbors' });
+    expect(list.querySelectorAll('.list-row')).toHaveLength(12);
+    fireEvent.click(within(list).getByRole('button', { name: 'Show all 15 neighbors' }));
+    expect(list.querySelectorAll('.list-row')).toHaveLength(15);
+  });
+
   it('switches to the map and back', () => {
     setup();
     fireEvent.click(screen.getByRole('button', { name: 'Map' }));
@@ -192,6 +201,14 @@ describe('Network tab: offers, my deals, block fund', () => {
     const fund = screen.getByRole('region', { name: 'Block fund' });
     expect(fund.textContent).toContain('2 of 7');
     expect(fund.textContent).toContain('3 more neighbors needed');
+    fireEvent.click(within(fund).getByRole('switch', { name: /Chip in \$300\/month/ }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'set_orders', orders: { blockFund: true } });
+  });
+
+  it('block fund before the first count: still lets the owner chip in', () => {
+    const onAct = setup({ ...ownerView, blockFund: null });
+    const fund = screen.getByRole('region', { name: 'Block fund' });
+    expect(fund.textContent).toContain('No count yet: the first one is when this month closes. 2 of the 3 open businesses on the block need to chip in.');
     fireEvent.click(within(fund).getByRole('switch', { name: /Chip in \$300\/month/ }));
     expect(onAct).toHaveBeenCalledWith({ type: 'set_orders', orders: { blockFund: true } });
   });
