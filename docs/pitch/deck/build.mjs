@@ -102,6 +102,8 @@ try {
       tbd: el.querySelectorAll('.tbd').length,
       // content must end above the footer line (bottom 100 px of the page)
       intoFooter: Math.max(0, ...[...el.querySelectorAll('*')].filter((c) => !c.closest('.foot') && !c.closest('svg')).map((c) => c.getBoundingClientRect().bottom - el.getBoundingClientRect().top)) - 980,
+      // a card, a screenshot or a table box whose own content spills out of it (overlaps its neighbours)
+      spills: [...el.querySelectorAll('.card, .shot, .step, table')].filter((c) => c.scrollHeight - c.clientHeight > 2).map((c) => (c.innerText || '').trim().split('\n')[0].slice(0, 30)),
       missingImages: [...el.querySelectorAll('img')].filter((img) => !img.complete || img.naturalWidth === 0).map((img) => img.getAttribute('src')),
     })),
   );
@@ -119,6 +121,10 @@ try {
     }
     if (r.intoFooter > 0) {
       notes.push(`content runs ${Math.ceil(r.intoFooter)}px into the footer`);
+      bad = true;
+    }
+    if (r.spills.length) {
+      notes.push(`content spills out of: ${r.spills.map((t) => `"${t}"`).join(', ')}`);
       bad = true;
     }
     if (r.missingImages.length) {
