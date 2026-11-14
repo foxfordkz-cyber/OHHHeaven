@@ -53,15 +53,15 @@ export function InsightsTab({ view, ask, links = LINKS, names = {} }: { view: Ow
   const unit = unitWord(b.niche, 2);
 
   return (
-    <div className="stack ins">
-      <div className="grid-2">
+    <div className="stack ins ins--main">
+      <div className="grid-2 ins-stats">
         {stats.map((s) => <StatTile key={s.key} k={s.key} label={s.label} value={s.value} sub={s.sub} tone={s.tone} />)}
       </div>
 
-      <AdvisorCard view={view} ask={ask} />
+      <div className="ins-advisor"><AdvisorCard view={view} ask={ask} /></div>
 
       {be && (
-        <Card title={<TitleTip k="breakEven">Break-even</TitleTip>} subtitle={be.caption} tone={be.ahead === false ? 'warn' : 'default'}>
+        <Card className="ins-be" title={<TitleTip k="breakEven">Break-even</TitleTip>} subtitle={be.caption} tone={be.ahead === false ? 'warn' : 'default'}>
           <BreakEvenChart input={be.input} caption={be.caption} />
           <div className="ins-facts">
             <Tip k="fixedCostsMonth"><span className="faint">Fixed costs</span> <span className="num">{money(a.fixedCostsMonth)}</span><span className="faint"> a month</span></Tip>
@@ -73,7 +73,7 @@ export function InsightsTab({ view, ask, links = LINKS, names = {} }: { view: Ow
       )}
 
       {costs && (
-        <Card title={<TitleTip k="costMix">Where your money goes</TitleTip>} subtitle={`Share of all costs · ${costs.period}`}>
+        <Card className="ins-costs" title={<TitleTip k="costMix">Where your money goes</TitleTip>} subtitle={`Share of all costs · ${costs.period}`}>
           <CostBar segments={costs.segments} />
           {costs.rows.length > 0 && (
             <Tip k="benchmarks" className="ins-bench">

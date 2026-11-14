@@ -1,11 +1,13 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { PackRuleCard, Query, RealWorldPlan } from '@ohh/shared/types';
 import { Button, Card, Icon, RuleCard, Skeleton } from '../../ui';
-import { useGame } from '../../app/store';
+import { useGame, useOwnerView } from '../../app/store';
 import { int, money, nicheName, unitWord } from '../insights/format';
 import { decodePlan, planLink, planTokenFromHash } from './plan-link';
 import { useRuleCards } from './rulecards';
 import { PLAN_PRINT_CSS } from './print';
+import { loadProgress, personalOf, progressKey, saveProgress, type ReserveMonths } from './personal';
+import { NextRealStep, PlanPlaceBlock, PlanRisks, PlanSummaryBlock, SavingsCheck, StepMine } from './PlanPersonal';
 import './plan.css';
 
 type AskFn = (q: Query) => Promise<unknown>;
@@ -38,6 +40,8 @@ export function lessonsTitle(n: number): string {
   return k === 0 ? 'Lessons from your season' : `${['One lesson', 'Two lessons', 'Three lessons'][k - 1]} from your season`;
 }
 
+const idx = (order: string[], id: string) => { const i = order.indexOf(id); return i < 0 ? order.length : i; };
+
 /** A text as a sentence: trimmed, with one full stop at the end. */
 const sentence = (t: string) => (/[.!?]$/.test(t.trim()) ? t.trim() : `${t.trim()}.`);
 
@@ -67,19 +71,48 @@ function Lead({ text }: { text: string }) {
   return <>{lead}{rest && <span className="plan-more"> {rest}</span>}</>;
 }
 
-/** The page a person takes home. Pure: everything comes from the RealWorldPlan. */
-export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards: Map<string, PackRuleCard>; actions?: ReactNode }) {
+/** What the person decided on this page, kept on this device: steps done in real life, savings, months of reserve. */
+export function usePlanProgress(plan: RealWorldPlan) {
+  const me = useMemo(() => personalOf(plan), [plan]);
+  const key = progressKey(plan, me);
+  const [state, setState] = useState(() => loadProgress(key));
+  useEffect(() => setState(loadProgress(key)), [key]);
+  const update = (next: typeof state) => { setState(next); saveProgress(key, next); };
+  const done = useMemo(() => new Set(state.done), [state.done]);
+  return {
+    me, done,
+    savings: state.savings ?? null,
+    reserveMonths: (state.reserveMonths ?? 6) as ReserveMonths,
+    toggle: (id: string) => update({ ...state, done: done.has(id) ? state.done.filter((x) => x !== id) : [...state.done, id] }),
+    setSavings: (n: number | null) => update({ ...state, savings: n ?? undefined }),
+    setReserve: (m: ReserveMonths) => update({ ...state, reserveMonths: m }),
+  };
+}
+
+/** The page a person takes home. Everything comes from the RealWorldPlan; the ticks and the savings stay on this device. */
+export function PlanView({ plan, cards, actions, day }: { plan: RealWorldPlan; cards: Map<string, PackRuleCard>; actions?: ReactNode; day?: number }) {
   const one = unitWord(plan.niche, 1);
   const many = unitWord(plan.niche, 2);
+  const progress = usePlanProgress(plan);
+  const { me, done } = progress;
+  const suppliers = me && me.supplierOrder.length
+    ? [...plan.suppliers].sort((a, b) => idx(me.supplierOrder, a.id) - idx(me.supplierOrder, b.id))
+    : plan.suppliers;
   return (
     <article className="plan" aria-label="Your real-world plan">
       <style data-plan-print="">{PLAN_PRINT_CSS}</style>
       <header className="plan-block plan-header">
         <div className="eyebrow">First Year · {nicheName(plan.niche)}</div>
         <h1 className="h1">Your real-world plan</h1>
-        <p className="muted">{plan.businessName} — built from your season in a learning simulation of real New York rents, permits, wages and taxes.</p>
+        <p className="muted">{plan.businessName}{me?.place ? ` at ${me.place.address}` : ''} — built from your season in a learning simulation of real New York rents, permits, wages and taxes.</p>
         {actions}
+        <NextRealStep steps={plan.checklist} done={done} />
       </header>
+
+      {me && <PlanSummaryBlock me={me} />}
+      {me && <SavingsCheck me={me} savings={progress.savings} reserveMonths={progress.reserveMonths} onSavings={progress.setSavings} onReserve={progress.setReserve} />}
+      {me && <PlanRisks me={me} />}
+      {me && <PlanPlaceBlock me={me} />}
 
       <div className="plan-pair">
       <section className="plan-block plan-half" aria-labelledby="plan-budget">
@@ -106,15 +139,20 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
         <h2 id="plan-docs" className="h3">Documents, in this order</h2>
         <ol className="plan-steps">
           {plan.checklist.map((s, i) => (
-            <li key={s.id} className="plan-row plan-step">
-              <div className="plan-step__title"><span className="plan-num" aria-hidden="true">{i + 1}</span>{s.title}</div>
+            <li key={s.id} className="plan-row plan-step" data-done={done.has(s.id) || undefined}>
+              <div className="plan-step__title">
+                <span className="plan-num" aria-hidden="true">{done.has(s.id) ? <Icon name="check" size={11} /> : i + 1}</span>
+                <span className="grow">{s.title}</span>
+                <label className="plan-tick no-print"><input type="checkbox" checked={done.has(s.id)} onChange={() => progress.toggle(s.id)} /> <span className="xsmall">Done in real life</span></label>
+              </div>
               <div className="plan-step__meta small">
                 {s.agency && <span>{s.agency}</span>}
                 {s.fee !== undefined && <span>{s.fee === 0 ? 'free' : money(s.fee, { cents: s.fee % 1 !== 0 })}</span>}
                 {s.waitDays !== undefined && <span>{s.waitDays} {s.waitDays === 1 ? 'day' : 'days'}</span>}
               </div>
+              <StepMine mine={me?.steps[s.id]} day={day} />
               <div className="small"><Lead text={s.text} /></div>
-              {s.link && <PlanLink href={s.link}>Official page <Icon name="arrowRight" size={12} /></PlanLink>}
+              {s.link ? <PlanLink href={s.link}>Official page <Icon name="arrowRight" size={12} /></PlanLink> : <span className="xsmall faint">No official page in our data yet: ask the agency.</span>}
             </li>
           ))}
         </ol>
@@ -122,11 +160,13 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
 
       <section className="plan-block plan-long" aria-labelledby="plan-suppliers">
         <h2 id="plan-suppliers" className="h3">Where to find suppliers</h2>
+        {me && Object.keys(me.supplierWhy).length > 0 && <p className="small muted plan-sub">The ones your choices need come first.</p>}
         <ul className="plan-suppliers">
-          {plan.suppliers.map((s) => (
-            <li key={s.id} className="plan-row plan-supplier">
+          {suppliers.map((s) => (
+            <li key={s.id} className="plan-row plan-supplier" data-mine={me?.supplierWhy[s.id] ? '' : undefined}>
               <strong>{s.category}</strong> — {sentence(s.what)} <span className="muted"><Lead text={sentence(s.whereToFind)} />{s.examples && <span className="plan-examples"> Examples: {sentence(s.examples)}</span>}</span>
               {s.link && <> <PlanLink href={s.link}>Link</PlanLink></>}
+              {me?.supplierWhy[s.id] && <div className="plan-for-you small"><strong>For you:</strong> {me.supplierWhy[s.id]}</div>}
             </li>
           ))}
         </ul>
@@ -179,7 +219,7 @@ export function usePlan(ask: AskFn | null): { plan: RealWorldPlan | null; loadin
   return state;
 }
 
-export function PlanScreen({ ask, cards, toast }: { ask: AskFn | null; cards?: PackRuleCard[]; toast?: (text: string, tone?: 'info' | 'success' | 'error') => void }) {
+export function PlanScreen({ ask, cards, toast, day }: { ask: AskFn | null; cards?: PackRuleCard[]; toast?: (text: string, tone?: 'info' | 'success' | 'error') => void; day?: number }) {
   const { plan, loading, fromLink } = usePlan(ask);
   const ruleCards = useRuleCards(cards);
   const [copied, setCopied] = useState(false);
@@ -214,12 +254,13 @@ export function PlanScreen({ ask, cards, toast }: { ask: AskFn | null; cards?: P
   );
   return (
     <main className="screen plan-root">
-      <PlanView plan={plan} cards={ruleCards} actions={actions} />
+      <PlanView plan={plan} cards={ruleCards} actions={actions} day={fromLink ? undefined : day} />
     </main>
   );
 }
 
 export function PlanConnected() {
   const { query, toast } = useGame();
-  return <PlanScreen ask={query} toast={toast} />;
+  const view = useOwnerView();
+  return <PlanScreen ask={query} toast={toast} day={view?.world.day} />;
 }

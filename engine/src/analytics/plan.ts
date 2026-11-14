@@ -222,7 +222,7 @@ function risksPart(b: BusinessState, w: WorldState, ctx: EngineCtx, pack: Pack, 
     if (n > 0) {
       const near = place.rivals.nearest ? ` The nearest, ${place.rivals.nearest.name}, is ${place.rivals.nearest.distM} m away.` : '';
       out.push({ id: 'rivals', title: `${plural(n, `${pack.name.toLowerCase()}`)} share your passers-by`, amount: null,
-        why: `${num(place.rivals.real150m)} real ones within 150 m and ${num(place.rivals.players)} in the game within ${place.rivals.radiusM} m split the same ${place.pedestriansPerDay ? num(place.pedestriansPerDay) + ' people a day' : 'foot traffic'}.${near}`,
+        why: `${[place.rivals.real150m > 0 ? `${num(place.rivals.real150m)} real ${place.rivals.real150m === 1 ? 'one' : 'ones'} within 150 m` : '', place.rivals.players > 0 ? `${num(place.rivals.players)} in the game within ${place.rivals.radiusM} m` : ''].filter(Boolean).join(' and ')} split the same ${place.pedestriansPerDay ? num(place.pedestriansPerDay) + ' people a day' : 'foot traffic'}.${near}`,
         fix: 'Walk the block at 8am and at 2pm before you sign; count their lines and their prices.' });
     }
   }
