@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import type { IdeaMatch, NicheId } from '@ohh/shared/types';
 import { useCatalog } from '../../app/catalog';
 import { useStoreState, useView } from '../../app/store';
-import { Button, Card, ProgressBar, Skeleton, TopBar } from '../../ui';
+import { Button, Card, ProgressBar, Skeleton, TopBar, useT } from '../../ui';
 import { IdeaStep, JoinStep, PlaceStep, PlanStep } from './steps';
 import { DecisionsStep, type SetupDraft } from './decisions/Decisions';
 import { WaitStep } from './WaitStep';
@@ -66,6 +66,8 @@ export function Start({ initial }: { initial?: Partial<Draft> }) {
   // setup → waiting; open → done. A future city official joins at once.
   const phase = useMemo(() => {
     if (!view) return 'loading' as const;
+    // nobody can join or open in a finished season: say so before the visitor fills in six steps
+    if (view.world.phase === 'ended' && (view.kind === 'city' || (view.kind === 'owner' && !view.business))) return 'ended' as const;
     if (view.kind === 'city') return asOfficial || draft.step === 'kit' ? ('join' as const) : ('wizard' as const);
     if (view.kind === 'official') return 'official' as const;
     if (!view.business) return 'wizard' as const;
@@ -89,7 +91,8 @@ export function Start({ initial }: { initial?: Partial<Draft> }) {
   return (
     <main className="screen start">
       <TopBar title={asOfficial && phase === 'join' ? 'Work for the city' : 'Open your business'} onBack={back} />
-      {phase !== 'official' && !(asOfficial && phase === 'join') && (
+      {phase === 'ended' && view && <SeasonOverCard name={view.world.config.name} demo={view.world.config.demo} />}
+      {phase !== 'official' && phase !== 'ended' && !(asOfficial && phase === 'join') && (
         <div className="start-progress" aria-label={`Step ${stepIndex + 1} of ${STEPS.length}: ${STEPS[stepIndex]}`}>
           <div className="row-between xsmall">
             <span className="faint">Step {stepIndex + 1} of {STEPS.length}</span>
@@ -120,6 +123,19 @@ function DoneCard({ name }: { name: string }) {
   return (
     <Card tone="profit" title="Your doors are open" subtitle={`${name} is serving customers. The city keeps going while you are away.`}>
       <Button block size="lg" icon="store" onClick={() => navigate('/biz')}>Go to my business</Button>
+    </Card>
+  );
+}
+
+function SeasonOverCard({ name, demo }: { name: string; demo: boolean }) {
+  const navigate = useNavigate();
+  const tr = useT();
+  return (
+    <Card tone="warn" title={tr(`This season of ${name} is over`, `Сезон города ${name} закончился`)}
+      subtitle={demo
+        ? tr('A new season starts a few minutes after the last one ends. What you chose so far is kept: come back and go on.', 'Новый сезон начинается через несколько минут после конца прошлого. Ваш выбор сохранён: вернитесь и продолжайте.')
+        : tr('A finished season takes no new businesses. The next one opens soon.', 'В законченный сезон нельзя открыть бизнес. Следующий скоро начнётся.')}>
+      <Button block variant="secondary" icon="trophy" onClick={() => navigate('/end')}>{tr('See how the season ended', 'Посмотреть, чем закончился сезон')}</Button>
     </Card>
   );
 }

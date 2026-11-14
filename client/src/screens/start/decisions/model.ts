@@ -41,14 +41,28 @@ export const optionalItems = (pack: Pack): PackSetupItem[] => pack.setup.filter(
 /** The legal default of a lever: the first option that causes no violation (same rule as the engine). */
 export const legalDefault = (lever: PackLever): PackLeverOption => lever.options.find((o) => !o.causes) ?? lever.options[0];
 
+/**
+ * What the address gives before any choice. An empty room gives nothing. An operating shop is bought as it stands:
+ * its seats and the equipment of the standard kit come with the price, and changing them is buying and selling
+ * after the lease is signed (`buy_item`, `sell_item`, `resize`).
+ */
+export interface Baseline { takeover: boolean; size: number; included: string[] }
+
+export function baselineOf(pack: Pack, place?: Place): Baseline {
+  if (!isTakeover(pack, place)) return { takeover: false, size: Math.min(pack.sizing.min, maxSizeFor(pack, place)), included: [] };
+  const optional = new Set(optionalItems(pack).map((s) => s.id));
+  const kit = pack.kits.find((k) => k.id === 'standard') ?? pack.kits[0];
+  return { takeover: true, size: place!.forSale!.size, included: (kit?.items ?? []).filter((i) => i.qty > 0 && optional.has(i.id)).map((i) => i.id) };
+}
+
 /** The least the law allows: required items only, the smallest room, the smallest team, default settings, the reference price. */
 export function baseChoices(pack: Pack, place?: Place): Choices {
   const levers: Record<string, string> = {};
   for (const l of pack.levers) if (l.options.length) levers[l.id] = legalDefault(l).id;
   const staff: Record<string, number> = {};
   pack.staff.forEach((r, i) => { staff[r.id] = i === 0 ? pack.capacity.minStaff : 0; });
-  const size = isTakeover(pack, place) ? place!.forSale!.size : Math.min(pack.sizing.min, maxSizeFor(pack, place));
-  return { size, extras: [], staff, levers, price: pack.unit.refPrice };
+  const base = baselineOf(pack, place);
+  return { size: base.size, extras: [...base.included], staff, levers, price: pack.unit.refPrice };
 }
 
 /** What the system would pick: the recommended kit of `recommend_opening`, as choices. */
@@ -57,18 +71,67 @@ export function recommendedChoices(pack: Pack, rec: OpenRecommendation, place?: 
   const optional = new Set(optionalItems(pack).map((s) => s.id));
   const max = maxSizeFor(pack, place);
   return {
+    // an operating shop is recommended as it stands: nothing to buy, nothing to sell
     size: isTakeover(pack, place) ? base.size : clamp(rec.size, pack.sizing.min, max),
-    extras: rec.items.filter((i) => i.qty > 0 && optional.has(i.id)).map((i) => i.id),
+    extras: isTakeover(pack, place) ? base.extras : rec.items.filter((i) => i.qty > 0 && optional.has(i.id)).map((i) => i.id),
     staff: { ...base.staff, ...rec.orders.staff },
     levers: { ...base.levers, ...rec.orders.levers },
     price: rec.orders.price,
   };
 }
 
-/** The list of items `open_business` gets: everything required, the extras, and what the seat rules add. */
+/** Everything that will stand in the shop: what is required, the extras, and what the seat rules add. */
 export function itemsOf(pack: Pack, c: Choices): KitItems {
   const extras = new Set([...c.extras, ...forcedExtras(pack, c.size)]);
   return pack.setup.filter((s) => s.required || extras.has(s.id)).map((s) => ({ id: s.id, qty: s.scalesWithSize ? c.size : 1 }));
+}
+
+/** The list `open_business` gets. An operating shop is signed for as it stands; the changes follow in `afterSigning`. */
+export function signingItems(pack: Pack, place: Place | undefined, c: Choices): { size: number; items: KitItems } {
+  const base = baselineOf(pack, place);
+  if (!base.takeover) return { size: c.size, items: itemsOf(pack, c) };
+  return { size: base.size, items: itemsOf(pack, { ...c, size: base.size, extras: base.included }) };
+}
+
+export type FollowUp =
+  | { type: 'buy_item'; itemId: string; qty: number }
+  | { type: 'sell_item'; itemId: string; qty: number }
+  | { type: 'resize'; size: number }
+  | { type: 'set_orders'; orders: Pick<StandingOrders, 'price' | 'staff' | 'levers'> };
+
+/**
+ * What is sent right after the lease is signed. Always the standing orders (team, settings, price). In an operating
+ * shop also the player's changes to what stands there: purchases first (a restroom must exist before the 20th seat),
+ * then the seats, then what is sold.
+ */
+export function afterSigning(pack: Pack, place: Place | undefined, c: Choices): FollowUp[] {
+  const base = baselineOf(pack, place);
+  const out: FollowUp[] = [];
+  if (base.takeover) {
+    const wanted = new Set([...c.extras, ...forcedExtras(pack, c.size)]);
+    for (const id of wanted) if (!base.included.includes(id)) out.push({ type: 'buy_item', itemId: id, qty: 1 });
+    if (c.size !== base.size) out.push({ type: 'resize', size: c.size });
+    for (const id of base.included) if (!wanted.has(id)) out.push({ type: 'sell_item', itemId: id, qty: 1 });
+  }
+  out.push({ type: 'set_orders', orders: ordersOf(c) });
+  return out;
+}
+
+/** Money the changes to an operating shop cost on top of its price: purchases at list price, sales at the resale share. */
+export function takeoverChanges(pack: Pack, place: Place | undefined, c: Choices): ReceiptLine[] {
+  const base = baselineOf(pack, place);
+  if (!base.takeover) return [];
+  const def = (id: string) => pack.setup.find((s) => s.id === id);
+  const out: ReceiptLine[] = [];
+  const wanted = new Set([...c.extras, ...forcedExtras(pack, c.size)]);
+  for (const id of wanted) if (!base.included.includes(id) && def(id)) out.push({ id, label: def(id)!.name, amount: def(id)!.cost, yours: true });
+  const perSeat = pack.setup.filter((x) => x.scalesWithSize).reduce((a, x) => a + x.cost, 0);
+  const delta = c.size - base.size;
+  const unit = pack.sizing.unitName;
+  if (delta > 0) out.push({ id: 'seats_added', label: `${delta} more ${unit}${delta === 1 ? '' : 's'}`, amount: round2(perSeat * delta), yours: true });
+  if (delta < 0) out.push({ id: 'seats_sold', label: `Sold: furniture of ${-delta} ${unit}${delta === -1 ? '' : 's'}`, amount: -round2(perSeat * -delta * RULES.RESALE_SHARE), yours: true });
+  for (const id of base.included) if (!wanted.has(id) && def(id)) out.push({ id: `sold_${id}`, label: `Sold: ${def(id)!.name}`, amount: -round2(def(id)!.cost * RULES.RESALE_SHARE), yours: true });
+  return out;
 }
 
 /** The standing orders sent right after the lease is signed. */
@@ -162,7 +225,8 @@ export function qualityOf(pack: Pack, c: Choices): number {
 
 export function summarize(pack: Pack, common: CommonPack | undefined, place: Place | undefined, c: Choices, capital: Money = pack.startCapital): Summary {
   const items = itemsOf(pack, c);
-  const paid = openingCost(pack, items, c.size, place);
+  const signed = signingItems(pack, place, c);
+  const paid = round2(openingCost(pack, signed.items, signed.size, place) + takeoverChanges(pack, place, c).reduce((a, l) => a + l.amount, 0));
   const build = buildoutOf(pack, place);
   const days = place && build ? daysToOpenOf(pack, items, place) : items.reduce((m, { id }) => {
     const d = pack.setup.find((s) => s.id === id);
@@ -193,17 +257,20 @@ export function summarize(pack: Pack, common: CommonPack | undefined, place: Pla
 
 // ───────────────────────── the receipt: why this much money is left ─────────────────────────
 
-export interface ReceiptLine { id: string; label: string; amount: Money; yours?: boolean }   // yours — bought because the player chose it
+export interface ReceiptLine { id: string; label: string; amount: Money; yours?: boolean }   // yours — bought or sold because the player chose it
 
-/** Everything paid on signing, grouped the way a person would explain it. Amounts are positive. */
-export function receipt(pack: Pack, place: Place | undefined, c: Choices): ReceiptLine[] {
-  const items = itemsOf(pack, c);
+/** Everything paid on signing, grouped the way a person would explain it. A positive amount is money paid, a negative one is money back. */
+export function receipt(pack: Pack, place: Place | undefined, choices: Choices): ReceiptLine[] {
+  const takeover = isTakeover(pack, place);
+  const signed = signingItems(pack, place, choices);
+  const items = signed.items;
+  const c = { ...choices, size: signed.size };
   const cost = (d: PackSetupItem) => setupItemCost(pack, d, place) * (d.scalesWithSize ? c.size : 1);
   const defs = items.map((i) => pack.setup.find((s) => s.id === i.id)!).filter(Boolean);
   const sum = (ds: PackSetupItem[]) => round2(ds.reduce((s, d) => s + cost(d), 0));
   const required = defs.filter((d) => d.required);
   const out: ReceiptLine[] = [];
-  if (isTakeover(pack, place)) out.push({ id: 'takeover', label: 'The operating shop: room, equipment, furniture and its regulars', amount: place!.forSale!.askingPrice });
+  if (takeover) out.push({ id: 'takeover', label: 'The operating shop: room, equipment, furniture and its regulars', amount: place!.forSale!.askingPrice });
   const build = buildoutOf(pack, place);
   const group = (id: string, label: string, ds: PackSetupItem[]) => {
     const amount = sum(ds);
@@ -215,6 +282,7 @@ export function receipt(pack: Pack, place: Place | undefined, c: Choices): Recei
   group('equipment', 'Equipment the law and the menu require', required.filter((d) => d.kind === 'equipment'));
   group('furniture', `Furniture for ${c.size} ${pack.sizing.unitName}${c.size === 1 ? '' : 's'}`, required.filter((d) => d.kind === 'furniture' || (d.kind === 'other' && d.scalesWithSize)));
   group('stock', 'Opening stock', required.filter((d) => d.kind === 'inventory'));
+  if (takeover) return [...out, ...takeoverChanges(pack, place, choices)];
   for (const d of defs.filter((x) => !x.required)) {
     const amount = round2(cost(d));
     out.push({ id: d.id, label: d.name, amount, yours: true });
@@ -238,6 +306,7 @@ export interface DecisionOption {
   capacity?: number;               // share of extra orders the team can make
   risk?: OptionRisk;               // breaking the law: what the city does when it finds out
   items?: string[];                // 'items' decisions: the optional items this option buys
+  standing?: boolean;              // an operating shop: this is how it stands today, nothing to buy or sell
 }
 
 export type DecisionKind = 'size' | 'items' | 'staff' | 'lever' | 'price';
@@ -283,31 +352,47 @@ const sameSet = (a: readonly string[], b: readonly string[]): boolean => a.lengt
  */
 export function buildDecisions(pack: Pack, common: CommonPack | undefined, place: Place | undefined, rec: Choices | null, texts: DecisionTexts = {}, size: number = pack.sizing.min): Decision[] {
   const out: Decision[] = [];
-  const takeover = isTakeover(pack, place);
+  const base = baselineOf(pack, place);
+  const takeover = base.takeover;
+  const def = (id: string) => pack.setup.find((s) => s.id === id);
+  // an empty room: the price of the item at this address; an operating shop: list price to add, the resale share back to sell
   const priceOf = (id: string): Money => {
-    const d = pack.setup.find((s) => s.id === id);
-    return d ? round2(setupItemCost(pack, d, place) * (d.scalesWithSize ? size : 1)) : 0;
+    const d = def(id);
+    if (!d) return 0;
+    return takeover ? d.cost : round2(setupItemCost(pack, d, place) * (d.scalesWithSize ? size : 1));
   };
+  /** What choosing this set of a group's items costs against what already stands in the shop. */
+  const costOf = (items: readonly string[], group: readonly string[]): Money => {
+    const had = base.included.filter((id) => group.includes(id));
+    const buy = items.filter((id) => !had.includes(id)).reduce((a, id) => a + priceOf(id), 0);
+    const sell = had.filter((id) => !items.includes(id)).reduce((a, id) => a + priceOf(id) * RULES.RESALE_SHARE, 0);
+    return round2(buy - sell);
+  };
+  const bonusOf = (items: readonly string[]): number => items.reduce((a, id) => a + (def(id)?.qualityBonus ?? 0), 0);
+  const qualityVs = (items: readonly string[], group: readonly string[]): number | undefined =>
+    pts(Math.round((bonusOf(items) - bonusOf(base.included.filter((id) => group.includes(id)))) * 1000) / 1000);
   const pts = (q: number | undefined): number | undefined => (q ? Math.round(q * 100) : undefined);
   const optional = optionalItems(pack);
   const forcedBySeats = new Set(seatRules(pack).map((t) => t.setupItemId).filter(Boolean) as string[]);
 
-  if (!takeover && maxSizeFor(pack, place) > pack.sizing.min) {
+  if (maxSizeFor(pack, place) > pack.sizing.min) {
     out.push({ id: 'size', kind: 'size', title: `${cap(pack.sizing.unitName)}s`, question: texts.size?.question ?? `How many ${pack.sizing.unitName}s?`, why: texts.size?.why, options: [], recommended: rec ? String(rec.size) : null });
   }
 
-  if (!takeover) {
+  {
     const grouped = new Set<string>();
     for (const g of texts.itemGroups ?? []) {
       const known = g.options.every((o) => o.items.every((id) => optional.some((s) => s.id === id)));
       if (!known) continue;
       const all = [...new Set(g.options.flatMap((o) => o.items))];
       all.forEach((id) => grouped.add(id));
+      const had = base.included.filter((id) => all.includes(id));
       const options: DecisionOption[] = g.options.map((o) => ({
         id: o.id, label: o.label, detail: o.detail, items: o.items,
-        upfront: round2(o.items.reduce((s, id) => s + priceOf(id), 0)), monthly: 0,
-        quality: pts(o.items.reduce((s, id) => s + (pack.setup.find((d) => d.id === id)?.qualityBonus ?? 0), 0)),
-        waitDays: o.items.reduce((m, id) => Math.max(m, pack.setup.find((d) => d.id === id)?.waitDays ?? 0), 0) || undefined,
+        upfront: costOf(o.items, all), monthly: 0,
+        quality: qualityVs(o.items, all),
+        waitDays: o.items.reduce((m, id) => Math.max(m, def(id)?.waitDays ?? 0), 0) || undefined,
+        standing: takeover && sameSet(o.items, had) ? true : undefined,
       }));
       const recPick = rec ? options.find((o) => sameSet(o.items ?? [], rec.extras.filter((id) => all.includes(id)))) : undefined;
       out.push({ id: g.id, kind: 'items', title: g.title, question: g.question, why: g.why, groupItems: all, options, recommended: recPick?.id ?? null });
@@ -317,8 +402,8 @@ export function buildDecisions(pack: Pack, common: CommonPack | undefined, place
       out.push({
         id: `item_${s.id}`, kind: 'items', title: s.name, question: `Buy it: ${s.name.toLowerCase()}?`, groupItems: [s.id],
         options: [
-          { id: 'skip', label: 'Open without it', upfront: 0, monthly: 0, items: [] },
-          { id: 'buy', label: s.name, upfront: priceOf(s.id), monthly: 0, items: [s.id], quality: pts(s.qualityBonus), waitDays: s.waitDays || undefined },
+          { id: 'skip', label: 'Open without it', upfront: costOf([], [s.id]), monthly: 0, items: [], quality: qualityVs([], [s.id]), standing: takeover && !base.included.includes(s.id) ? true : undefined },
+          { id: 'buy', label: s.name, upfront: costOf([s.id], [s.id]), monthly: 0, items: [s.id], quality: qualityVs([s.id], [s.id]), waitDays: s.waitDays || undefined, standing: takeover && base.included.includes(s.id) ? true : undefined },
         ],
         recommended: rec ? (rec.extras.includes(s.id) ? 'buy' : 'skip') : null,
       });

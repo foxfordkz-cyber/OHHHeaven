@@ -3,7 +3,7 @@
 // option carries a mark, and "Use recommended" is a separate button.
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { NicheId, OpenRecommendation, OwnerView, Pack, Place, PublicBusiness } from '@ohh/shared/types';
-import { dateOf } from '@ohh/shared/rules';
+import { RULES, dateOf } from '@ohh/shared/rules';
 import { footfallParams, isTakeover, rivalsOf, setupItemCost } from '@ohh/shared/place';
 import type { Catalog } from '../../../app/catalog';
 import { useGame } from '../../../app/store';
@@ -11,8 +11,8 @@ import { Badge, Banner, Button, Card, Icon, Skeleton, Slider, Stepper, cx, forma
 import { distanceM, maxSizeFor } from '../kit';
 import type { Draft } from '../Start';
 import {
-  applyRecommended, baseChoices, buildDecisions, choose, closestKit, forcedExtras, itemsOf, ordersOf, pickedOption, receipt, recommendedChoices,
-  seatRules, setPrice, setSize, setStaff, staffCount, summarize,
+  afterSigning, applyRecommended, baseChoices, baselineOf, buildDecisions, choose, closestKit, forcedExtras, pickedOption, receipt, recommendedChoices,
+  seatRules, setPrice, setSize, setStaff, signingItems, staffCount, summarize,
   type Choices, type Decision, type DecisionOption, type Summary,
 } from './model';
 import { textsFor } from './texts';
@@ -72,6 +72,11 @@ export function DecisionsStep({ draft, update, catalog, view }: { draft: Draft; 
 
   const count = decisions.length;
   const index = Math.min(at, count);
+  const go = (i: number) => {
+    setAt(i);
+    // a new card starts from its question, not from where the last one was scrolled to
+    if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') try { window.scrollTo({ top: 0 }); } catch { /* jsdom */ }
+  };
   const d = index < count ? decisions[index] : null;
   const openDate = dateOf(view.world.day + summary.days).label;
   const mark = (id: string) => setDecided((cur) => (cur.includes(id) ? cur : [...cur, id]));
@@ -83,15 +88,17 @@ export function DecisionsStep({ draft, update, catalog, view }: { draft: Draft; 
     for (const x of left) c = applyRecommended(x, c, rec);
     setChoices(c);
     setDecided(decisions.map((x) => x.id));
-    setAt(count);
+    go(count);
   }
 
   async function sign() {
     if (!draft.placeId) return;
     setBusy(true);
-    const ack = await act({ type: 'open_business', niche, placeId: draft.placeId, name: draft.name.trim() || 'My business', kitId: closestKit(pack, choices), size: choices.size, items: itemsOf(pack, choices) });
-    // team, pay, roaster, hours and price are standing orders: they go in as soon as the lease is signed
-    if (ack.ok) await act({ type: 'set_orders', orders: ordersOf(choices) });
+    const signing = signingItems(pack, place, choices);
+    const ack = await act({ type: 'open_business', niche, placeId: draft.placeId, name: draft.name.trim() || 'My business', kitId: closestKit(pack, choices), size: signing.size, items: signing.items });
+    // team, pay, roaster, hours and price are standing orders: they go in as soon as the lease is signed;
+    // in an operating shop the purchases, the seats and the sales follow the same way
+    if (ack.ok) for (const a of afterSigning(pack, place, choices)) await act(a);
     setBusy(false);
   }
 
@@ -100,8 +107,8 @@ export function DecisionsStep({ draft, update, catalog, view }: { draft: Draft; 
       <SummaryBar summary={summary} delta={delta} openDate={openDate} tr={tr} />
       {isTakeover(pack, place) && index === 0 && (
         <Banner tone="info" icon="info">
-          {tr(`You are buying an operating shop: its ${choices.size} ${pack.sizing.unitName}s, its equipment and its regulars come as they stand. What is yours to decide is the team, how the shop runs and the price.`,
-            `Вы покупаете работающее заведение: его ${choices.size} мест, оборудование и постоянные гости достаются как есть. Ваши решения — команда, как работает заведение и цена.`)}
+          {tr(`You are buying an operating shop: its ${baselineOf(pack, place).size} ${pack.sizing.unitName}s, its equipment and its regulars come with the price. Keep what stands there, add to it, or sell it — a sale brings back ${Math.round(RULES.RESALE_SHARE * 100)}% of the price.`,
+            `Вы покупаете работающее заведение: его ${baselineOf(pack, place).size} мест, оборудование и постоянные гости входят в цену. Оставьте, что там стоит, докупите или продайте — продажа возвращает ${Math.round(RULES.RESALE_SHARE * 100)}% цены.`)}
         </Banner>
       )}
 
@@ -120,12 +127,12 @@ export function DecisionsStep({ draft, update, catalog, view }: { draft: Draft; 
               decided={decided.includes(d.id)} onChange={(c) => { setChoices(c); mark(d.id); }} />
           </section>
 
-          <Dots decisions={decisions} decided={decided} index={index} onGo={setAt} tr={tr} />
+          <Dots decisions={decisions} decided={decided} index={index} onGo={go} tr={tr} />
 
           <div className="dx-actions">
-            <Button variant="secondary" icon="arrowLeft" disabled={index === 0} onClick={() => setAt(index - 1)} aria-label={tr('Previous decision', 'Предыдущее решение')} />
+            <Button variant="secondary" icon="arrowLeft" disabled={index === 0} onClick={() => go(index - 1)} aria-label={tr('Previous decision', 'Предыдущее решение')} />
             <Button block size="lg" iconRight="arrowRight" disabled={(d.kind === 'items' || d.kind === 'lever') && !decided.includes(d.id)}
-              onClick={() => { mark(d.id); setAt(index + 1); }}>
+              onClick={() => { mark(d.id); go(index + 1); }}>
               {(d.kind === 'items' || d.kind === 'lever') && !decided.includes(d.id)
                 ? tr('Choose one to go on', 'Выберите вариант')
                 : index + 1 < count ? `${tr('Next', 'Дальше')}: ${decisions[index + 1].title}` : tr('See what it adds up to', 'Посмотреть итог')}
@@ -139,7 +146,7 @@ export function DecisionsStep({ draft, update, catalog, view }: { draft: Draft; 
         </>
       ) : (
         <Review pack={pack} place={place} choices={choices} summary={summary} decisions={decisions} decided={decided} openDate={openDate} busy={busy} tr={tr}
-          onEdit={setAt} onSign={sign} demo={view.world.config.demo ? view.world.config.dayMs / 1000 : null} />
+          onEdit={go} onSign={sign} demo={view.world.config.demo ? view.world.config.dayMs / 1000 : null} />
       )}
     </div>
   );
@@ -211,6 +218,8 @@ function DecisionBody(p: BodyProps) {
 
 function optionPrice(o: DecisionOption, kind: Decision['kind'], tr: Tr): { main: string; sub: string } {
   if (kind === 'lever') return o.monthly > 0 ? { main: money(o.monthly), sub: tr('a month', 'в месяц') } : { main: '$0', sub: tr('a month', 'в месяц') };
+  if (o.standing) return { main: '$0', sub: tr('as it stands', 'как стоит сейчас') };
+  if (o.upfront < 0) return { main: `+${money(-o.upfront)}`, sub: tr('back from the sale', 'вернётся с продажи') };
   return o.upfront > 0 ? { main: money(o.upfront), sub: tr('on signing', 'при подписи') } : { main: '$0', sub: tr('nothing extra', 'без доплаты') };
 }
 
@@ -267,7 +276,10 @@ function RecommendedChip({ label, onUse, tr }: { label: string; onUse: () => voi
 function SizeBody({ d, pack, place, choices, rec, summary, onChange, tr }: BodyProps) {
   const unit = pack.sizing.unitName;
   const max = maxSizeFor(pack, place);
-  const perSeat = pack.setup.filter((s) => s.required && s.scalesWithSize).reduce((s, x) => s + setupItemCost(pack, x, place), 0);
+  const base = baselineOf(pack, place);
+  const perSeat = base.takeover
+    ? pack.setup.filter((s) => s.scalesWithSize).reduce((s, x) => s + x.cost, 0)
+    : pack.setup.filter((s) => s.required && s.scalesWithSize).reduce((s, x) => s + setupItemCost(pack, x, place), 0);
   const forced = forcedExtras(pack, choices.size);
   const set = (n: number) => onChange(setSize(pack, place, choices, n));
   return (
@@ -279,7 +291,14 @@ function SizeBody({ d, pack, place, choices, rec, summary, onChange, tr }: BodyP
       <Slider value={choices.size} min={pack.sizing.min} max={max} onChange={set} label={tr(`Number of ${unit}s`, 'Число мест')} marks={[String(pack.sizing.min), String(max)]} />
       {rec && d.recommended && <RecommendedChip label={`${rec.size} ${unit}s`} onUse={() => set(rec.size)} tr={tr} />}
       <ul className="dx-facts">
-        <li><span>{tr(`Furniture, ${money(perSeat)} a ${unit}`, `Мебель, ${money(perSeat)} за место`)}</span><span className="num">{money(perSeat * choices.size)}</span></li>
+        {base.takeover ? (
+          <li>
+            <span>{tr(`The shop has ${base.size}. A ${unit} you add costs ${money(perSeat)}; one you remove sells for ${money(perSeat * RULES.RESALE_SHARE)}`, `В заведении ${base.size}. Добавить место — ${money(perSeat)}; убранное продаётся за ${money(perSeat * RULES.RESALE_SHARE)}`)}</span>
+            <span className="num">{choices.size === base.size ? '$0' : choices.size > base.size ? money(perSeat * (choices.size - base.size)) : `+${money(perSeat * (base.size - choices.size) * RULES.RESALE_SHARE)}`}</span>
+          </li>
+        ) : (
+          <li><span>{tr(`Furniture, ${money(perSeat)} a ${unit}`, `Мебель, ${money(perSeat)} за место`)}</span><span className="num">{money(perSeat * choices.size)}</span></li>
+        )}
         <li><span>{tr(`Cleaning, ${money(pack.sizing.cleaningCostPerSizeMonth)} a ${unit} a month`, `Уборка, ${money(pack.sizing.cleaningCostPerSizeMonth)} за место в месяц`)}</span><span className="num">{money(pack.sizing.cleaningCostPerSizeMonth * choices.size)}</span></li>
         <li><span>{tr('The room can turn, with guests who take away', 'Зал пропускает, вместе с теми, кто берёт с собой')}</span><span className="num">{tr(`${summary.seatsCapDay} orders a day`, `${summary.seatsCapDay} заказов в день`)}</span></li>
         {summary.cornerOrdersDay != null && <li><span>{tr('An average, known shop on this corner sells', 'Средняя известная кофейня на этом углу продаёт')}</span><span className="num">{tr(`${summary.cornerOrdersDay} a day`, `${summary.cornerOrdersDay} в день`)}</span></li>}
@@ -388,6 +407,10 @@ function Review({ pack, place, choices, summary: s, decisions, decided, openDate
   const undecided = decisions.filter((d) => !decided.includes(d.id));
   const short = s.cashLeft < 0;
   const thin = !short && s.cashAtOpening < s.monthly;
+  const risks = decisions.flatMap((d) => {
+    const o = decided.includes(d.id) ? d.options.find((x) => x.id === pickedOption(d, choices)) : undefined;
+    return o?.risk ? [{ title: d.title, risk: o.risk }] : [];
+  });
   return (
     <div className="stack-lg">
       <div className="stack-sm">
@@ -405,7 +428,7 @@ function Review({ pack, place, choices, summary: s, decisions, decided, openDate
           {lines.map((l) => (
             <li key={l.id}>
               <span>{l.label}{l.yours && <span className="dx-receipt__yours"> · {tr('your choice', 'ваш выбор')}</span>}</span>
-              <span className="num">−{money(l.amount)}</span>
+              <span className="num">{l.amount < 0 ? `+${money(-l.amount)}` : `−${money(l.amount)}`}</span>
             </li>
           ))}
           <li className="dx-receipt__sum"><span>{tr('Cash left after signing', 'Останется после подписи')}</span><span className={cx('num', short && 'loss')} data-testid="dx-review-cash">{money(s.cashLeft)}</span></li>
@@ -420,12 +443,16 @@ function Review({ pack, place, choices, summary: s, decisions, decided, openDate
           <li><span>{tr('Orders a day that pay those bills', 'Заказов в день, чтобы их покрыть')}</span><span className="num">{s.breakEvenDay ?? '—'}</span></li>
           {s.cornerOrdersDay != null && <li><span>{tr('An average, known shop on this corner sells', 'Средняя известная кофейня на этом углу продаёт')}</span><span className="num">{tr(`${s.cornerOrdersDay} a day`, `${s.cornerOrdersDay} в день`)}</span></li>}
           {s.monthsOfBills != null && <li><span>{tr('Months of bills your opening-day cash covers with no sales', 'На сколько месяцев счетов хватит денег без единой продажи')}</span><span className="num">{s.monthsOfBills}</span></li>}
+          <li><span>{tr('Quality of what you set up (the usual shop is 50)', 'Качество того, что вы собрали (обычная кофейня — 50)')}</span><span className="num" data-testid="dx-quality">{tr(`${Math.round(s.quality * 100)} of 100`, `${Math.round(s.quality * 100)} из 100`)}</span></li>
         </ul>
         {f && f.awarenessStart < 1 && (
           <p className="small muted">{tr(
             `A new shop starts with about ${Math.round(f.awarenessStart * 100)}% of the crowd it will have once the block knows it, and closes most of the gap in about ${f.rampDays} days. The cash above has to carry you through that climb.`,
             `Новая кофейня начинает примерно с ${Math.round(f.awarenessStart * 100)}% гостей, которые будут у неё, когда квартал её узнает, и закрывает большую часть разрыва примерно за ${f.rampDays} дней. Денег выше должно хватить на этот подъём.`)}</p>
         )}
+        {risks.map((r) => (
+          <Banner key={r.title} tone="warn">{tr('You chose to break the law', 'Вы решили нарушить закон')} — {r.title}: {r.risk.name}. {tr('If an inspector finds it', 'Если найдёт инспектор')}: {r.risk.fine}.</Banner>
+        ))}
         {thin && <Banner tone="warn">{tr('Less than one month of bills in the bank on opening day. A slow first month ends the business. Go back and cut something, or pick a cheaper place.', 'В день открытия в банке меньше одного месяца счетов. Один медленный месяц — и бизнес закрыт. Вернитесь и сократите что-нибудь или выберите место дешевле.')}</Banner>}
       </Card>
 
