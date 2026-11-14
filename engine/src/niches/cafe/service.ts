@@ -278,10 +278,12 @@ export function serviceNotes(d: CafeDay, s: ServiceDay, inputsFor?: (d: CafeDay)
     const x = { ...d, b };
     return serviceDayWith(x, cfg, inputsFor ? inputsFor(x) : serviceInputs(x, cfg));
   };
-  const base = dayFor(d.b);
+  // counted only when a note needs them: a calm day asks for no "what if"
+  let baseDay: ServiceDay | undefined, plusOneDay: ServiceDay | undefined;
+  const base = (): ServiceDay => (baseDay ??= dayFor(d.b));
   const role = mainRole(d.b, d.pack);
   const roleName = (d.pack.staff.find((x) => x.id === role)?.name ?? role).toLowerCase();
-  const plusOne = dayFor(withOneMore(d.b, role));
+  const plusOne = (): ServiceDay => (plusOneDay ??= dayFor(withOneMore(d.b, role)));
   // what one more order leaves after ingredients, and what the extra person costs a day: the decision in one line
   const perOrder = Math.max(0, d.b.orders.price - (d.pack.unit.cogsPerUnit ?? 0));
   const usd = (x: number): string => `$${r0(x).toLocaleString('en-US')}`;
@@ -295,7 +297,7 @@ export function serviceNotes(d: CafeDay, s: ServiceDay, inputsFor?: (d: CafeDay)
     const walked = r0(s.rush.walked);
     const head = `Morning rush: served ${Math.round(s.rush.servedShare * 100)}% of ${r0(s.rush.orders)}`;
     if (walked > 0) {
-      const keep = r0(base.rush.walked - plusOne.rush.walked);
+      const keep = r0(base().rush.walked - plusOne().rush.walked);
       const atMachine = s.rush.capPerHour * s.labor >= cfg.machineOrdersPerHour - 1e-9;
       const fix = keep > 0 ? ` One more ${roleName} in the rush would keep about ${keep} of them.`
         : atMachine ? ` The espresso machine is at its ceiling (${r0(cfg.machineOrdersPerHour)} orders an hour): more hands will not shorten this line.` : '';
@@ -309,14 +311,14 @@ export function serviceNotes(d: CafeDay, s: ServiceDay, inputsFor?: (d: CafeDay)
   const causes: { size: number; text: string }[] = [];
   const labor = r0(s.lost.labor);
   if (labor > 0) {
-    const gain = r0(plusOne.served - base.served);
+    const gain = r0(plusOne().served - base().served);
     causes.push({ size: s.lost.labor, text: `Out of hands: ${plural(labor, 'order')} not made today — the team makes ${r0(s.teamPerDay)} a day.${gain > 0 ? ` One more ${roleName}: +${gain} orders, ${worth(gain)}.` : ''}` });
   }
   const left = r0(s.lost.seats);
   if (left > 0) {
     const room = s.seats.fit - s.seats.count;
     const more = Math.min(room, Math.max(2, Math.round(s.seats.count * 0.25)));
-    const gain = more > 0 ? r0(dayFor({ ...d.b, size: s.seats.count + more }).served - base.served) : 0;
+    const gain = more > 0 ? r0(dayFor({ ...d.b, size: s.seats.count + more }).served - base().served) : 0;
     const fix = gain > 0 ? ` ${more} more seats would keep about ${gain}.` : room <= 0 ? ' The floor is full: these guests are the price of a small room.' : '';
     causes.push({ size: s.lost.seats, text: `No free seat: ${plural(left, 'guest')} left, ${r0(s.seats.tookAway)} took it to go.${fix}` });
   }
