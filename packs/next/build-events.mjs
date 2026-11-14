@@ -452,7 +452,7 @@ function build() {
     rules: {
       note: 'Game rules, not facts: notice by scale, the limits of a multiplier, how many events run at once (build/EVENTS.md, section 2).',
       noticeDays: NOTICE_DAYS, multMin: MULT_MIN, multMax: MULT_MAX, softMax: SOFT_MAX,
-      seasonDays: 360, longFromDays: 61, maxLongActive: 2,
+      seasonDays: 360, longFromDays: 61, maxLongActive: 2, newLongEveryWindows: 3, minDaysOpenForPoint: 30,
       maxShortActive: { wide: 1, city: 1, local: 1 },             // wide = world and country, local = block and point; per business, at once
       newPerWindow: { wide: 1, city: 1, block: 1, pointPerBusiness: 1 }, pointEveryWindows: 2, repeatAfterMonths: 12,
     },
