@@ -217,15 +217,15 @@ export const fixtureDeals: Deal[] = [
 
 // Fees and waits: see the `source` of each step. Where no official number exists, `estimate`.
 export const fixtureRoadmap: RoadmapItem[] = [
-  { id: 'rm-entity', title: 'Form your business (LLC)', text: 'File Articles of Organization with New York State. Within 120 days, publish a notice in two newspapers for six weeks.', kind: 'legal', fee: 200, waitDays: 7, agency: 'NYS Department of State', link: 'https://dos.ny.gov/limited-liability-company-llc', status: 'done' },
+  { id: 'rm-entity', title: 'Form your business (LLC)', text: 'File Articles of Organization with New York State. Within 120 days, publish a notice in two newspapers for six weeks.', kind: 'legal', fee: 200, waitDays: 7, agency: 'NYS Department of State', link: 'https://dos.ny.gov/articles-organization-domestic-limited-liability-company-0', status: 'done' },
   { id: 'rm-ein', title: 'Get an Employer Identification Number', text: 'Free, online, issued immediately. You need it to hire staff and open a business bank account.', kind: 'legal', fee: 0, agency: 'IRS', link: 'https://www.irs.gov/businesses/small-businesses-self-employed/get-an-employer-identification-number', status: 'done' },
-  { id: 'rm-sales-tax', title: 'Register to collect sales tax', text: 'Apply for a Certificate of Authority at least 20 days before you start selling. Combined NYC sales tax is 8.875%.', kind: 'legal', setupItemId: 'sales_tax_cert', fee: 0, waitDays: 20, agency: 'NYS Department of Taxation and Finance', link: 'https://www.tax.ny.gov/bus/st/register.htm', status: 'done' },
+  { id: 'rm-sales-tax', title: 'Register to collect sales tax', text: 'Apply for a Certificate of Authority at least 20 days before you start selling. Combined NYC sales tax is 8.875%.', kind: 'legal', setupItemId: 'sales_tax_cert', fee: 0, waitDays: 20, agency: 'NYS Department of Taxation and Finance', link: 'https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/how_to_register_for_nys_sales_tax.htm', status: 'done' },
   { id: 'rm-lease', title: 'Sign a commercial lease', text: 'Landlords usually ask for a security deposit of several months of rent. Check the certificate of occupancy allows a café.', kind: 'space', setupItemId: 'deposit', agency: 'Landlord', status: 'done' },
   { id: 'rm-buildout', title: 'Build out and equip the space', text: 'Plumbing, sinks, counters, espresso machine and refrigeration. Most of your startup money goes here.', kind: 'money', setupItemId: 'buildout', waitDays: 14, agency: 'Contractor', status: 'done' },
-  { id: 'rm-fse', title: 'Food Service Establishment Permit', text: 'Required before you serve food or drinks. Expect a pre-permit inspection by the Health Department.', kind: 'permit', setupItemId: 'fse_permit', fee: 280, waitDays: 21, agency: 'NYC Department of Health and Mental Hygiene', link: 'https://www.nyc.gov/site/doh/business/food-operators/food-service-establishments.page', status: 'done' },
-  { id: 'rm-fpc', title: 'Food Protection Certificate', text: 'At least one supervisor on every shift must hold the certificate: free online course, in-person exam.', kind: 'people', waitDays: 10, agency: 'NYC Department of Health and Mental Hygiene', link: 'https://www.nyc.gov/site/doh/business/food-operators/food-protection-course.page', status: 'done' },
+  { id: 'rm-fse', title: 'Food Service Establishment Permit', text: 'Required before you serve food or drinks. Expect a pre-permit inspection by the Health Department.', kind: 'permit', setupItemId: 'fse_permit', fee: 280, waitDays: 21, agency: 'NYC Department of Health and Mental Hygiene', link: 'https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit', status: 'done' },
+  { id: 'rm-fpc', title: 'Food Protection Certificate', text: 'A supervisor with this certificate must be on site while you operate: free online course, then a $24 exam in person.', kind: 'people', fee: 24, waitDays: 10, agency: 'NYC Department of Health and Mental Hygiene', link: 'https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page', status: 'done' },
   { id: 'rm-suppliers', title: 'Choose suppliers', text: 'Coffee roaster, dairy, bakery and paper goods. Ask for net-30 terms once you have a track record.', kind: 'supplier', agency: 'Wholesalers', status: 'done' },
-  { id: 'rm-staff', title: 'Hire your team', text: 'Minimum wage in New York City is $17.00 an hour in 2026. You also need workers’ compensation and disability insurance.', kind: 'people', agency: 'NYS Department of Labor', link: 'https://dol.ny.gov/minimum-wage-0', status: 'done' },
+  { id: 'rm-staff', title: 'Hire your team', text: 'Minimum wage in New York City is $17.00 an hour in 2026. You also need workers’ compensation and disability insurance.', kind: 'people', agency: 'NYS Department of Labor', link: 'https://www.ny.gov/programs/minimum-wage', status: 'done' },
   { id: 'rm-launch', title: 'Open your doors', text: 'Opening before the permits arrive is a violation: the Health Department can fine you and close you.', kind: 'launch', status: 'done' },
 ];
 
@@ -293,7 +293,7 @@ export const fixtureViews: Record<string, ClientView> = { city: cityView, owner:
 
 // ───────────────────────── packs (placeholder until packs/*.json from agents 14–16) ─────────────────────────
 
-const NYC_SALES_TAX = 'https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/quick_reference_guide_for_taxable_and_exempt_property_and_services.htm';
+const NYC_SALES_TAX = 'https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf';
 
 export const fixtureCommon: CommonPack = {
   id: '_common', version: 1, name: 'New York City — common rules',
@@ -316,9 +316,9 @@ export const fixtureCafePack: Pack = {
   capacity: { unitsPerStaffMonth: 2_600, minStaff: 1, maxStaff: 8 },
   sizing: { unitName: 'seat', min: 8, max: 60, default: 24, sqftPerUnit: 18, unitsServedPerSizeMonth: 220, takeawayShare: 0.55, cleaningCostPerSizeMonth: 12, emptyPenaltyBelow: 0.25, crowdPenaltyAbove: 0.9, confidence: 'estimate' },
   setup: [
-    setup('llc', 'LLC filing fee', 'license', 200, true, { agency: 'NYS Department of State', link: 'https://dos.ny.gov/limited-liability-company-llc', waitDays: 7 }),
-    setup('sales_tax_cert', 'Certificate of Authority (sales tax)', 'license', 0, true, { agency: 'NYS Department of Taxation and Finance', link: 'https://www.tax.ny.gov/bus/st/register.htm', waitDays: 20, withoutItViolation: 'no_sales_tax_cert' }),
-    setup('fse_permit', 'Food Service Establishment Permit', 'permit', 280, true, { agency: 'NYC Department of Health and Mental Hygiene', link: 'https://www.nyc.gov/site/doh/business/food-operators/food-service-establishments.page', waitDays: 21, withoutItViolation: 'no_fse_permit' }),
+    setup('llc', 'LLC filing fee', 'license', 200, true, { agency: 'NYS Department of State', link: 'https://dos.ny.gov/articles-organization-domestic-limited-liability-company-0', waitDays: 7 }),
+    setup('sales_tax_cert', 'Certificate of Authority (sales tax)', 'license', 0, true, { agency: 'NYS Department of Taxation and Finance', link: 'https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/how_to_register_for_nys_sales_tax.htm', waitDays: 20, withoutItViolation: 'no_sales_tax_cert' }),
+    setup('fse_permit', 'Food Service Establishment Permit', 'permit', 280, true, { agency: 'NYC Department of Health and Mental Hygiene', link: 'https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit', waitDays: 21, withoutItViolation: 'no_fse_permit' }),
     setup('deposit', 'Security deposit (3 months of rent)', 'deposit', 27_000, true),
     setup('buildout', 'Build-out: plumbing, sinks, counter', 'buildout', 35_000, true),
     setup('espresso_machine', 'Espresso machine, two groups', 'equipment', 14_000, true, { lifespanMonths: 84, qualityBonus: 0.05 }),
@@ -339,7 +339,7 @@ export const fixtureCafePack: Pack = {
     { id: 'insurance', name: 'Insurance', kind: 'insurance', basis: 'fixed', amount: 420, confidence: 'estimate' },
   ],
   staff: [
-    { id: 'barista', name: 'Barista', hourlyWage: 17, hoursPerMonth: 160, source: 'https://dol.ny.gov/minimum-wage-0', confidence: 'verified' },
+    { id: 'barista', name: 'Barista', hourlyWage: 17, hoursPerMonth: 160, source: 'https://www.ny.gov/programs/minimum-wage', confidence: 'verified' },
     { id: 'shift_lead', name: 'Shift lead', hourlyWage: 21, hoursPerMonth: 160, confidence: 'estimate' },
   ],
   taxes: [],
@@ -349,19 +349,19 @@ export const fixtureCafePack: Pack = {
   ],
   shortcuts: [{ id: 'skip_cleaning', name: 'Clean less often', what: 'Cut the cleaning crew to once a week', saves: { basis: 'fixed', amount: 250 }, violation: 'unsanitary_conditions' }],
   violations: [
-    { id: 'no_fse_permit', name: 'Operating without a permit', law: 'NYC Health Code § 81.05', official: 'health_inspector', foundBy: ['inspection', 'complaint'], fine: { base: 1_000, max: 2_000 }, closureDays: 7, confidence: 'estimate' },
-    { id: 'no_sales_tax_cert', name: 'Selling without a Certificate of Authority', law: 'NY Tax Law § 1134', official: 'tax_office', foundBy: ['audit'], fine: { base: 500 }, confidence: 'estimate' },
+    { id: 'no_fse_permit', name: 'Operating without a permit', law: 'NYC Health Code § 81.05', official: 'health_inspector', foundBy: ['inspection', 'complaint'], fine: { base: 1_000, max: 2_000 }, closureDays: 7, source: 'https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf', confidence: 'estimate', note: 'The Health Department can close an unpermitted place until it gets a permit; fine amounts are an estimate.' },
+    { id: 'no_sales_tax_cert', name: 'Selling without a Certificate of Authority', law: 'NY Tax Law § 1134', official: 'tax_office', foundBy: ['audit'], fine: { base: 500 }, source: 'https://newyork.public.law/laws/n.y._tax_law_section_1134', confidence: 'estimate' },
     { id: 'unsanitary_conditions', name: 'Unsanitary conditions', law: 'NYC Health Code Article 81', official: 'health_inspector', foundBy: ['inspection', 'complaint'], fine: { base: 300, perMonth: 100, max: 2_000 }, reputationHit: 0.1, confidence: 'estimate' },
   ],
   officials: [{ id: 'health_inspector', name: 'Health inspector', agency: 'NYC Department of Health and Mental Hygiene', role: 'inspector', checks: ['no_fse_permit', 'unsanitary_conditions'] }],
   reports: [{ id: 'report_health', name: 'Report to the Health Department', text: 'You think their kitchen is dirty or they serve without a permit.', role: 'inspector', checks: ['no_fse_permit', 'unsanitary_conditions'] }],
   events: [],
-  ruleCards: [{ id: 'rc-fse', title: 'No permit, no coffee', text: 'You need a Food Service Establishment Permit before you serve anything. Opening early is a violation that can close you.', source: 'https://www.nyc.gov/site/doh/business/food-operators/food-service-establishments.page' }],
+  ruleCards: [{ id: 'rc-fse', title: 'No permit, no coffee', text: 'You need a Food Service Establishment Permit before you serve anything. Opening early is a violation that can close you.', source: 'https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf' }],
   benchmarks: { cogsPct: 0.3, laborPct: 0.3, rentPct: 0.1, netMarginPct: 0.08, confidence: 'estimate' },
   suppliers: [{ id: 'roaster', category: 'Coffee', what: 'Wholesale coffee beans', whereToFind: 'Local roasters sell wholesale with free training for new cafés.', confidence: 'estimate' }],
   roadmap: fixtureRoadmapTodo.map(({ status: _status, readyDay: _readyDay, ...step }) => step),
   manager: { monthlySalary: 4_800, confidence: 'estimate' },
-  sources: [{ url: 'https://dol.ny.gov/minimum-wage-0', title: 'NYS Department of Labor — minimum wage', checked: '2026-11-14' }],
+  sources: [{ url: 'https://www.ny.gov/programs/minimum-wage', title: 'NYS Department of Labor — minimum wage', checked: '2026-11-14' }],
 };
 
 /** Setup cost the way the client previews it: price x qty, or x size for items that scale with size. */
