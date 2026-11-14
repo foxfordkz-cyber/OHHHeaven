@@ -82,8 +82,11 @@
 .cs-loading { display: grid; place-items: center; height: 100vh; background: #070b18; color: #8d97c0; font: 16px system-ui; }
 
 @media (max-width: 900px) {
-  .cs-root { grid-template-columns: 1fr; grid-template-rows: 58vh auto; height: auto; min-height: 100vh; overflow: auto; }
-  .cs-side { overflow: visible; border-left: 0; border-top: 1px solid var(--cs-line); }
+  .cs-root { grid-template-columns: minmax(0, 1fr); grid-template-rows: 58vh auto; height: auto; min-height: 100vh; overflow-x: hidden; overflow-y: auto; }
+  .cs-side { overflow: visible; border-left: 0; border-top: 1px solid var(--cs-line); padding: 16px; min-width: 0; }
+  .cs-weather { flex-wrap: wrap; }
+  .cs-forecast { flex-wrap: wrap; gap: 6px; }
+  .cs-kpis dd { font-size: 19px; }
   .cs-feed { -webkit-mask-image: none; mask-image: none; }
   .cs-leaders { grid-template-columns: 1fr; }
 }

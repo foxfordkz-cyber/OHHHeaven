@@ -3,8 +3,9 @@ import { useEffect, useMemo, useState } from 'react';
 import type { CityView, GameClient, Place } from '@ohh/shared/types';
 import { dateOf } from '@ohh/shared/rules';
 import placesJson from '../../../../data/places.json';
+import realJson from '../../../../data/real-businesses.json';
 import { CityMap } from '../../map/CityMap';
-import { WEATHER_ICON } from '../../map/geo';
+import { WEATHER_ICON, type RealBusinessLabel } from '../../map/geo';
 import { FEED_ICON, clockState, dayProgress, feedRows, formatCountdown, leaderBoards, money, msLeft, seasonDays } from './cityModel';
 import { QrCode } from './QrCode';
 import { sendClock, useCityView, type ClockCommand } from './useCityView';
@@ -20,9 +21,10 @@ export interface CityScreenProps {
   onClock?: (cmd: ClockCommand) => void | Promise<unknown>;
   error?: string | null;
   districtName?: string;
+  realBusinesses?: RealBusinessLabel[];
 }
 
-export function CityScreen({ view, places, worldId, joinUrl, receivedAt, onClock, error, districtName = 'East Village' }: CityScreenProps) {
+export function CityScreen({ view, places, worldId, joinUrl, receivedAt, onClock, error, districtName = 'East Village', realBusinesses = realJson as RealBusinessLabel[] }: CityScreenProps) {
   const { world } = view;
   const [now, setNow] = useState(() => Date.now());
   const clock = clockState(world);
@@ -42,7 +44,7 @@ export function CityScreen({ view, places, worldId, joinUrl, receivedAt, onClock
   return (
     <div className="cs-root">
       <div className="cs-map">
-        <CityMap mode="live" places={places} businesses={view.businesses} weather={view.weather} events={view.events} day={world.day} orbit />
+        <CityMap mode="live" places={places} businesses={view.businesses} weather={view.weather} events={view.events} day={world.day} realBusinesses={realBusinesses} orbit />
       </div>
       <aside className="cs-side" aria-label="City status">
         <header className="cs-head">

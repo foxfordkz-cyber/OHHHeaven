@@ -13,6 +13,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { toLatLng, toGrid, distanceM, insideDistrict, streetName, avenueName } from './lib/grid.mjs';
 import { STATIONS, FOOT_DECAY_M, CORRIDOR_RENT, TIER_LIMITS, SOURCES } from './lib/config.mjs';
+import { REAL_MANUAL } from './lib/real-manual.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const NICHES = ['cafe', 'barbershop', 'bodega', 'guesthouse', 'rentals'];
@@ -171,6 +172,15 @@ export function buildManualPlaces() {
     }
   }
   return withFootTraffic(out);
+}
+
+/** Map labels from the hand-collected list (no grades: those come only from DOHMH data). */
+export function buildManualRealBusinesses() {
+  return REAL_MANUAL.map(([name, type, address, s, a, side], i) => {
+    const onStreet = side === 'n' || side === 's';
+    const { lat, lng } = toLatLng(s, a, onStreet ? (side === 'n' ? 14 : -14) : 0, onStreet ? 0 : side === 'w' ? -16 : 16);
+    return { id: `man-${String(i + 1).padStart(3, '0')}`, name, type, lat, lng, address, grade: null, source: 'manual', note: 'unverified' };
+  });
 }
 
 // ───────────── network pipeline (NYC Open Data, MTA) ─────────────
@@ -432,8 +442,10 @@ async function main(argv) {
   await mkdir(outDir, { recursive: true });
   if (has('--manual')) {
     const places = buildManualPlaces();
+    const biz = buildManualRealBusinesses();
     await writeFile(placesFile, JSON.stringify(places, null, 2) + '\n');
-    console.log(`manual: wrote ${places.length} places → ${placesFile}`);
+    await writeFile(bizFile, JSON.stringify(biz, null, 2) + '\n');
+    console.log(`manual: wrote ${places.length} places and ${biz.length} real-business labels → ${outDir}`);
     return;
   }
   const mode = has('--sample') ? 'sample' : 'network';

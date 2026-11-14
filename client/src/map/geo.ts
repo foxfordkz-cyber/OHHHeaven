@@ -192,3 +192,16 @@ export function centerOf(places: { lat: number; lng: number }[]): LngLat {
 }
 
 export const money = (n: number): string => `$${Math.round(n).toLocaleString('en-US')}`;
+
+/** Real working places from data/real-businesses.json: labels only, never game objects. */
+export interface RealBusinessLabel { id: string; name: string; type: string; lat: number; lng: number; grade?: string | null }
+
+export function realFeatures(list: RealBusinessLabel[] = []): FeatureCollection<Point> {
+  return {
+    type: 'FeatureCollection',
+    features: list.map((b, i) => ({
+      type: 'Feature', id: i, geometry: { type: 'Point', coordinates: [b.lng, b.lat] },
+      properties: { id: b.id, label: b.grade ? `${b.name} · ${b.grade}` : b.name, type: b.type },
+    })),
+  };
+}
