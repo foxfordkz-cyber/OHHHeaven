@@ -56,5 +56,20 @@ export const PLAN_PRINT_CSS = `
   .plan .rule-card__link { font-size: 7pt !important; }
   .plan .rule-card__link svg { display: none; }
   .plan svg { color: #333; }
+  /* the plan of this player: summary in one row, the savings check prints what was typed, the kit list unfolds */
+  .plan-summary__head { grid-template-columns: repeat(3, 1fr) !important; gap: 6pt; margin-bottom: 4pt; }
+  .plan-parts { gap: 1.5pt; font-size: 7.5pt; }
+  .plan-part__bar { height: 4pt; background: #e4e6ea !important; }
+  .plan-part__bar > span, .plan-next__bar > span { background: #111 !important; }
+  .plan-next { background: #f4f5f7 !important; padding: 4pt 6pt; gap: 2pt; }
+  .plan-next__bar { height: 3pt; background: #e4e6ea !important; }
+  .plan-check__verdict { background: #f4f5f7 !important; padding: 3pt 5pt; margin-top: 3pt; }
+  .plan-check .input { border: 0.75pt solid #b9bec6 !important; min-height: 0; padding: 1pt 4pt; font-size: 8pt; }
+  .plan-check .segmented button:not([aria-pressed='true']) { display: none; }
+  .plan-status { background: none !important; color: #111 !important; padding: 0; font-size: 6.5pt; }
+  .plan-status::before { content: '['; } .plan-status::after { content: ']'; }
+  .plan-step__mine { margin-left: 14pt; font-size: 7pt; }
+  .plan-step > .faint { margin-left: 14pt; }
+  .plan-kit .plan-kit__list { display: table !important; }
 }
 `;

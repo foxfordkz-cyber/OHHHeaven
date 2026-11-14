@@ -1,9 +1,9 @@
 // A store for /dev screens whose queries answer like the server would: after a delay, by question.
-import type { ClientView, Query } from '@ohh/shared/types';
+import type { ClientView, Query, RealWorldPlan } from '@ohh/shared/types';
 import { createStaticStore, type GameStore } from '../../app/store';
 import { fakeQuery } from './fixtures';
 
-export function devStore(view: ClientView, opts: { delayMs?: number; hang?: boolean } = {}): GameStore {
+export function devStore(view: ClientView, opts: { delayMs?: number; hang?: boolean; plan?: RealWorldPlan } = {}): GameStore {
   const store = createStaticStore(view);
   const fake = fakeQuery(opts);
   store.query = async <T,>(q: Query): Promise<T | null> => {

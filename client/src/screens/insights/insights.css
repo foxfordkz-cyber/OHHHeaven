@@ -101,3 +101,17 @@
 @keyframes ins-spin { to { transform: rotate(360deg); } }
 .ins-history-item { padding-bottom: var(--s-3); border-bottom: 1px solid var(--border); }
 @media (prefers-reduced-motion: reduce) { .ins-spinner { animation: none; } }
+
+/* B09: on a computer the essentials fit the first screen at 1440 × 900 — the four numbers in one row, break-even and
+   where the money goes side by side, the chart kept short; the advisor follows them. Phones keep the original order. */
+@media (min-width: 1024px) {
+  .ins--main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s-3); align-items: start; }
+  .ins--main > * { grid-column: 1 / -1; }
+  .ins--main > .ins-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); order: -3; }
+  .ins--main > .ins-be { grid-column: 1; order: -2; }
+  .ins--main > .ins-costs { grid-column: 2; order: -2; }
+  .ins--main > .ins-advisor { order: 1; }
+  .ins--main .ins-stat { min-height: 0; }
+  .ins--main > .ins-be .ins-chart svg { max-height: 210px; }
+  .ins--main > .ins-be .ins-facts { font-size: var(--fs-xs); }
+}

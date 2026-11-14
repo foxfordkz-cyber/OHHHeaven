@@ -31,3 +31,40 @@
 .plan-loss { color: var(--loss); font-weight: 700; white-space: nowrap; }
 .plan-rule { margin-top: 4px; }
 .plan-disclaimer { display: flex; gap: 8px; align-items: flex-start; color: var(--text-2); }
+
+/* B09: the plan of this player — summary, savings check, place and team, risks, real-life progress */
+.plan-summary__head { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3); margin-bottom: var(--s-3); }
+@media (max-width: 560px) { .plan-summary__head { grid-template-columns: 1fr; } }
+.plan-parts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: var(--fs-sm); }
+.plan-part { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) 76px; gap: var(--s-2); align-items: center; }
+.plan-part__bar { height: 8px; border-radius: var(--r-pill); background: var(--surface-3); overflow: hidden; }
+.plan-part__bar > span { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
+.plan-part__amount { text-align: right; white-space: nowrap; }
+.plan-check__inputs { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: flex-end; }
+.plan-check__field { flex: 1 1 200px; display: flex; flex-direction: column; gap: 6px; }
+.plan-check__verdict { margin-top: var(--s-3); display: flex; gap: 8px; align-items: flex-start; padding: var(--s-3); border-radius: var(--r-2); background: var(--surface-2); font-size: var(--fs-sm); }
+.plan-check__verdict[data-verdict='short'] { background: var(--loss-soft); color: var(--text); }
+.plan-check__verdict[data-verdict='short'] svg { color: var(--loss); flex: none; margin-top: 2px; }
+.plan-check__verdict[data-verdict='thin'] { background: var(--warn-soft); }
+.plan-check__verdict[data-verdict='thin'] svg { color: var(--warn); flex: none; margin-top: 2px; }
+.plan-check__verdict[data-verdict='ready'] { background: var(--profit-soft); }
+.plan-check__verdict[data-verdict='ready'] svg { color: var(--profit); flex: none; margin-top: 2px; }
+.plan-next { margin-top: var(--s-3); display: flex; flex-direction: column; gap: 6px; padding: var(--s-3); border-radius: var(--r-2); background: var(--accent-soft); }
+.plan-next__bar { height: 6px; border-radius: var(--r-pill); background: var(--surface-3); overflow: hidden; }
+.plan-next__bar > span { display: block; height: 100%; background: var(--accent); }
+.plan-step__title { display: flex; align-items: baseline; gap: 0; }
+.plan-tick { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; color: var(--text-2); cursor: pointer; min-height: 32px; }
+.plan-tick input { width: 18px; height: 18px; accent-color: var(--accent); }
+.plan-step[data-done] .plan-step__title > .grow { text-decoration: line-through; color: var(--text-2); }
+.plan-step__mine { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-left: 28px; align-items: baseline; }
+.plan-status { font-size: var(--fs-xs); font-weight: 700; padding: 1px 8px; border-radius: var(--r-pill); background: var(--surface-3); color: var(--text-2); white-space: nowrap; }
+.plan-status--done { background: var(--profit-soft); color: var(--profit); }
+.plan-status--waiting { background: var(--warn-soft); color: var(--warn); }
+.plan-step > .faint { margin-left: 28px; }
+.plan-for-you { margin-top: 2px; color: var(--text); }
+.plan-supplier[data-mine] { list-style-type: disc; }
+.plan-sub { margin: 0 0 var(--s-2); }
+.plan-kit { margin-top: var(--s-3); }
+.plan-kit__toggle { background: none; border: 0; padding: 6px 0; color: var(--info); cursor: pointer; text-align: left; min-height: 32px; }
+.plan-kit:not([data-open]) .plan-kit__list { display: none; }
+.plan-wrap { white-space: normal !important; }
