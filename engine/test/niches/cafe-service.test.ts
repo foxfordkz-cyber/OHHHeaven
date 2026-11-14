@@ -15,8 +15,9 @@ import {
   type Guests, type ServiceCfg, type ServiceInputs,
 } from '../../src/niches/cafe/service';
 import type { CafeDay, StaffPower } from '../../src/niches/cafe/contract';
+import { plainCafePack } from './plain-cafe-pack';
 
-const basePack = rawPack as unknown as Pack;
+const basePack = plainCafePack(rawPack as unknown as Pack);
 const X = (rawFormats as unknown as { extra: Record<string, any> }).extra;
 const pack: Pack = { ...basePack, extra: { ...(basePack.extra ?? {}), guestSegments: X.guestSegments, service: X.service, staffing: X.staffing } };
 const cfg = serviceCfg(pack) as ServiceCfg;

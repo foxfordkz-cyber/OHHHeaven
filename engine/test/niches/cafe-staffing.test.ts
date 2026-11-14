@@ -8,10 +8,11 @@ import { hooks } from '../../src/niches/cafe';
 import { defaultStaffPower, type CafeDay } from '../../src/niches/cafe/contract';
 import { coverage, part, staffPower, staffingCfg, teamChange, teamKpis, teamPower, type StaffingCfg } from '../../src/niches/cafe/staffing';
 import { config, owner, place } from '../fixtures/world';
+import { plainCafePack } from './plain-cafe-pack';
 
 const file = (name: string) => new URL(`../../../packs/${name}`, import.meta.url);
 const load = <T>(url: URL): T => JSON.parse(readFileSync(url, 'utf8')) as T;
-const plain = load<Pack>(file('cafe.json'));
+const plain = plainCafePack(load<Pack>(file('cafe.json')));
 const section = load<{ extra: { staffing: StaffingCfg } }>(file('parts/cafe/B03-staffing.json')).extra.staffing;
 const pack: Pack = { ...plain, extra: { ...(plain.extra ?? {}), staffing: section } };
 const cfg = staffingCfg(pack)!;

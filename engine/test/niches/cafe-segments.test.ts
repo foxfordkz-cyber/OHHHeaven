@@ -11,9 +11,10 @@ import { applyAction, createWorld, tickDay } from '../../src/index';
 import { recommendOpening } from '../../src/analytics/opening';
 import type { CommonPack, PackSet, Player, WorldState } from '@ohh/shared';
 import { config } from '../fixtures/world';
+import { plainCafePack } from './plain-cafe-pack';
 
 const read = <T>(p: string): T => JSON.parse(readFileSync(new URL(`../../../${p}`, import.meta.url), 'utf8')) as T;
-const base = read<Pack>('packs/cafe.json');
+const base = plainCafePack(read<Pack>('packs/cafe.json'));
 const data = read<{ extra: { guestSegments: unknown } }>('packs/parts/cafe/B02-segments.json').extra.guestSegments;
 const pack: Pack = { ...base, extra: { ...(base.extra ?? {}), guestSegments: data } };
 const places = read<Place[]>('data/places.json').filter((p) => p.suitableFor.length === 0 || p.suitableFor.includes('cafe'));

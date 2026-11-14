@@ -1,6 +1,7 @@
 // Puts the data of the cafe model parts (packs/parts/cafe/B0*-*.json) into packs/cafe.json.
-// Owner: the integrator (B04, build/ROUND3.md). Run: node packs/parts/cafe/apply-parts.mjs [B03 B01 …] [--dry]
-// With no ids it applies every B0*-*.json in this folder. Each part file has `extra.<key>`; that key replaces
+// Owner: the integrator (B04, build/ROUND3.md). Run: node packs/parts/cafe/apply-parts.mjs [B03 B01 … | file.json:key] [--dry]
+// With no ids it applies every B0*-*.json in this folder. `D20-formats.json:service` takes one section of any file in
+// this folder (the B01 part reads extra.service from A1's D20 file). Each part file has `extra.<key>`; that key replaces
 // packs/cafe.json → extra.<key>. `newRoles` inside it are added to pack.staff (by id, existing ids are kept as they
 // are), `newLeverOptions` are added to the lever they name. Both lists stay in extra too, so the part can read them.
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
@@ -13,10 +14,14 @@ const args = process.argv.slice(2);
 const dry = args.includes('--dry');
 const want = args.filter((a) => !a.startsWith('--'));
 
+const picks = want.filter((w) => w.includes(':')).map((w) => { const [file, key] = w.split(':'); return { file, key }; });
+const ids = want.filter((w) => !w.includes(':'));
 const files = readdirSync(here)
   .filter((f) => /^B0\d-.*\.json$/.test(f))
-  .filter((f) => want.length === 0 || want.some((id) => f.startsWith(id + '-')))
-  .sort();
+  .filter((f) => (ids.length === 0 && picks.length === 0) || ids.some((id) => f.startsWith(id + '-')))
+  .sort()
+  .map((file) => ({ file, key: null }))
+  .concat(picks);
 if (files.length === 0) {
   console.error(`no part files for ${want.join(', ') || 'B0*'} in ${here}`);
   process.exit(1);
@@ -26,9 +31,9 @@ const raw = readFileSync(packPath, 'utf8');
 const pack = JSON.parse(raw);
 pack.extra ??= {};
 
-for (const f of files) {
+for (const { file: f, key: only } of files) {
   const part = JSON.parse(readFileSync(join(here, f), 'utf8'));
-  const keys = Object.keys(part.extra ?? {});
+  const keys = Object.keys(part.extra ?? {}).filter((k) => only === null || k === only);
   if (keys.length === 0) { console.log(`${f}: no extra, skipped`); continue; }
   for (const key of keys) {
     const data = part.extra[key];
