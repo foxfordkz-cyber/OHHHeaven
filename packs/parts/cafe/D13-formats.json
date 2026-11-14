@@ -469,7 +469,24 @@
       ],
       "source": "https://sla.ny.gov/system/files/documents/2026/06/retail-fee-chart_6122026.pdf",
       "confidence": "verified",
-      "note": "SLA retail fee chart revised June 12, 2026: Restaurant Wine, New York City tier, $960 license fee for two years + $100 filing fee. Eligibility: a restaurant with a kitchen and a menu of meals (NYC Business); a pastry-only coffee shop is usually pointed to the Tavern Wine class, which community boards resist more. Wait: the SLA's own notice estimated 24-26 weeks for new applications (Rodriguez Law), so 180 days. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+      "note": "SLA retail fee chart revised June 12, 2026: Restaurant Wine, New York City tier, $960 license fee for two years + $100 filing fee. Eligibility: ABC Law 3(27) defines a restaurant as a place regularly and in a bona fide manner used for serving meals, with a kitchen able to cook the assortment of foods ordinary meals need, in charge of a chef; SLA guidance asks for full entree-style meals whenever open. A pastry-and-sandwich cafe fits the Tavern Wine class instead (soups and sandwiches), which community boards resist more. Wait: the SLA's own notice estimated 24-26 weeks for new applications (Rodriguez Law), so 180 days. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "sla_tavern_wine_license",
+      "name": "State Liquor Authority Tavern Wine license (wine and beer with light food, NYC, 2 years)",
+      "kind": "license",
+      "cost": 1252,
+      "required": false,
+      "waitDays": 180,
+      "agency": "New York State Liquor Authority (SLA)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/tavern-wine-license",
+      "withoutItViolation": "unlicensed_alcohol_sale",
+      "formats": [
+        "cafe_wine_bar"
+      ],
+      "source": "https://vicentellp.com/?p=5551",
+      "confidence": "estimate",
+      "note": "For places that serve soups, sandwiches and the like rather than full meals (SLA guidance on food requirements). Fee: a NYC law firm's buyer guide gives $1,252 for two years ($1,172 per extra bar); another guide gives $1,152; I could not read the Tavern Wine line of the official June 2026 fee chart. Community boards in NYC are reported to resist tavern applications more than restaurant ones (Rodriguez Law)."
     },
     {
       "id": "sla_temporary_retail_permit",
@@ -650,6 +667,69 @@
       "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/use-store-LPG-food-cart-commissaries.pdf",
       "confidence": "estimate",
       "note": "My allowance. FDNY rules limit how much LPG a commissary may store and who may swap cylinders (a G-23 holder)."
+    }
+  ],
+  "staff": [
+    {
+      "id": "baker",
+      "name": "Baker (early shift)",
+      "hourlyWage": 22.0,
+      "tipped": false,
+      "hoursPerMonth": 160,
+      "licenseRequired": null,
+      "formats": [
+        "bakery_cafe"
+      ],
+      "source": "https://www.bls.gov/oes/2023/May/oes_35620.htm",
+      "confidence": "estimate",
+      "note": "BLS OEWS May 2023, New York-Newark-Jersey City: bakers' mean wage $19.40 an hour, 16,160 employed; a NYSDOL data mirror gives a New York City region median of $44,060 a year. $22 = the 2023 mean raised for 2026 and for a 4 a.m. start (no legal night premium in New York; the premium is what it takes to hire). NYC minimum wage in 2026: $17.00."
+    },
+    {
+      "id": "prep_cook",
+      "name": "Sandwich maker / prep cook",
+      "hourlyWage": 19.0,
+      "tipped": false,
+      "hoursPerMonth": 140,
+      "licenseRequired": null,
+      "formats": [
+        "sandwich_bar",
+        "delivery_kitchen",
+        "bakery_cafe"
+      ],
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "confidence": "estimate",
+      "note": "My estimate: the $17.00 NYC minimum plus $2 to hold a lunch line. No 2026 metro statistic was found for this role."
+    },
+    {
+      "id": "evening_server_bartender",
+      "name": "Evening server-bartender (wine and beer)",
+      "hourlyWage": 17.0,
+      "tipped": true,
+      "cashWage": 11.35,
+      "hoursPerMonth": 100,
+      "licenseRequired": null,
+      "formats": [
+        "cafe_wine_bar"
+      ],
+      "source": "https://www.bls.gov/oes/2023/may/oes353011.htm",
+      "confidence": "estimate",
+      "note": "Paid the NYC tipped food service cash wage of $11.35 with a $5.65 tip credit only if tips cover the gap and written notice is given (same rule as the cafe pack); otherwise $17.00. BLS OEWS May 2023: bartenders in the New York metro earned a mean $27.91 and a median $21.68 an hour including tips. Servers must be at least 18 under most sources; sources disagree on 21 for bartending."
+    },
+    {
+      "id": "cart_helper",
+      "name": "Cart or truck helper (licensed vendor)",
+      "hourlyWage": 17.0,
+      "tipped": false,
+      "hoursPerMonth": 120,
+      "licenseRequired": "Mobile Food Vending License ($50 / 2 years) and the $53 mobile vendor food protection course",
+      "formats": [
+        "coffee_cart",
+        "food_truck",
+        "market_stall"
+      ],
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "confidence": "estimate",
+      "note": "NYC minimum wage $17.00 in 2026 (NY DOL). Every person working the unit needs a personal vending license."
     }
   ],
   "taxes": [
@@ -1715,6 +1795,24 @@
       "title": "Incubator bakers pay no state fee",
       "text": "New York waives the $400 Article 20-C food processing license fee for two years for a first-time applicant working in a kitchen incubator.",
       "source": "https://nysenate.gov/legislation/laws/AGM/251-Z-3"
+    },
+    {
+      "id": "tavern_wine_food",
+      "title": "Sandwiches are tavern food",
+      "text": "For the SLA a restaurant serves full entree-style meals from a chef-run kitchen; a tavern must serve at least soups and sandwiches. A cafe with toasties usually applies for Tavern Wine.",
+      "source": "https://sla.ny.gov/restaurant-license-quick-reference-0"
+    },
+    {
+      "id": "cart_size_limit",
+      "title": "Carts have a size limit",
+      "text": "A sidewalk food cart may be at most about 5 ft wide and 10 ft long including wheels and signs, parked with its long side along the curb. Trucks are exempt from the size rule.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/regulations-for-mobile-food-vendors.pdf"
+    },
+    {
+      "id": "station_concession",
+      "title": "Station cafes pay a share",
+      "text": "Transit kiosks and cafes are licensed by MTA Real Estate: a one-year Grand Central Madison pastry and coffee stall pays 15% of gross sales; larger station cafes pay base rent plus a share above a sales threshold.",
+      "source": "https://www.mta.info/document/186826"
     }
   ],
   "roadmap": [
@@ -2252,7 +2350,7 @@
           "seats": 24
         },
         "permits": [
-          "SLA Restaurant Wine (or Tavern Wine) license",
+          "SLA Tavern Wine license (soups and sandwiches; about $1,252 / 2 years, estimate) or Restaurant Wine ($960 + $100; full meals and a chef-run kitchen)",
           "SLA Temporary Retail Permit",
           "30-day community board notice",
           "NYC retail liquor license tax (25% of the annual fee)",
@@ -2401,7 +2499,7 @@
         "id": "concession_kiosk",
         "name": "Kiosk in a park, plaza or inside another business",
         "tier": "deep",
-        "differsFromCafe": "No market rent: you pay the owner the greater of a guaranteed minimum or a share of gross sales (NYC Parks: 6%-11%; Harlem Meer snack bar 9% vs $20,000 in year 1; Cadman Plaza cafe 10%). Spots are won by proposal (RFP) for multi-year terms; a business improvement district or park conservancy can run its own kiosk RFPs (Bryant Park 2024, The Battery 2025). Footfall is the park's: huge in summer weekends, thin in winter.",
+        "differsFromCafe": "No market rent: you pay the owner the greater of a guaranteed minimum or a share of gross sales (NYC Parks: 6%-11%; Harlem Meer snack bar 9% vs $20,000 in year 1; Cadman Plaza cafe 10%). Spots are won by proposal (RFP) for multi-year terms; a business improvement district or park conservancy can run its own kiosk RFPs (Bryant Park 2024, The Battery 2025). Footfall is the park's: huge in summer weekends, thin in winter. Transit stations work the same way: MTA Real Estate licensed a one-year coffee and pastry stall at Grand Central Madison for 15% of gross sales (2025), and a White Plains station coffee concession for $111,000 base rent plus 10% of sales above $1.14 million.",
         "startCost": {
           "min": 40000,
           "typical": 80000,
@@ -2446,7 +2544,9 @@
           "https://static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cadman-Plaza-Cafe-05122025__680bcae9c9b47.pdf",
           "https://www2.nycgovparks.org/opportunities/concessions/rfps-rfbs-rfeis",
           "https://www.thebattery.org/wp-content/uploads/2025/07/2025-RFP-Bosque-Kiosks-HC.pdf",
-          "https://bryantpark.org:443/assets/uploads/documents/general/RFP_for_BP_Kiosks_02-26-24.pdf"
+          "https://bryantpark.org:443/assets/uploads/documents/general/RFP_for_BP_Kiosks_02-26-24.pdf",
+          "https://www.mta.info/document/186826",
+          "https://www.amny.com/transit/mta-master-vendor-grand-central-madison-retail"
         ]
       }
     ],
@@ -2741,6 +2841,18 @@
             "value": 0.1,
             "source": "https://static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cadman-Plaza-Cafe-05122025__680bcae9c9b47.pdf",
             "confidence": "verified"
+          },
+          {
+            "what": "Grand Central Madison coffee and pastry stall, one-year license, share of gross",
+            "value": 0.15,
+            "source": "https://www.mta.info/document/186826",
+            "confidence": "estimate"
+          },
+          {
+            "what": "White Plains station coffee concession, base rent a year",
+            "value": 111000,
+            "source": "https://www.mta.info/document/186826",
+            "confidence": "estimate"
           }
         ]
       },
@@ -4576,6 +4688,40 @@
           "coffee_cart",
           "cafe"
         ]
+      },
+      {
+        "id": "transit_stall_rfp",
+        "name": "Station stalls up for bid",
+        "text": "MTA Real Estate releases individual requests for proposals for food stalls in a busy terminal: one-year licenses paid as a share of sales.",
+        "scale": "city",
+        "months": [
+          3,
+          9
+        ],
+        "realSignal": "MTA Real Estate RFPs and board staff summaries (Grand Central Madison moved from one master vendor to individual stall RFPs)",
+        "effects": [
+          {
+            "field": "opportunity",
+            "mult": 1.0
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cart_spot"
+          }
+        ],
+        "realFrequency": "Several a year",
+        "tier": "deep",
+        "source": "https://www.amny.com/transit/mta-master-vendor-grand-central-madison-retail",
+        "confidence": "estimate",
+        "note": "A choice event: bid a share of gross sales (15% in a 2025 one-year Grand Central Madison license) for a commuter-heavy stall.",
+        "formats": [
+          "concession_kiosk",
+          "takeaway_window",
+          "bakery_cafe"
+        ]
       }
     ]
   },
@@ -4731,6 +4877,16 @@
       "checked": "2026-11-14"
     },
     {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/tavern-wine-license",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/tavern-wine-license",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://vicentellp.com/?p=5551",
+      "title": "vicentellp.com/",
+      "checked": "2026-11-14"
+    },
+    {
       "url": "https://sla.ny.gov/eligibility-temporary-retail-permits",
       "title": "sla.ny.gov/eligibility-temporary-retail-permits",
       "checked": "2026-11-14"
@@ -4798,6 +4954,21 @@
     {
       "url": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/use-store-LPG-food-cart-commissaries.pdf",
       "title": "www.nyc.gov/assets/fdny/downloads/pdf/business/Support/use-store-LPG-fo",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bls.gov/oes/2023/May/oes_35620.htm",
+      "title": "www.bls.gov/oes/2023/May/oes_35620.htm",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/minimum-wage-0",
+      "title": "dol.ny.gov/minimum-wage-0",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bls.gov/oes/2023/may/oes353011.htm",
+      "title": "www.bls.gov/oes/2023/may/oes353011.htm",
       "checked": "2026-11-14"
     },
     {
@@ -4936,6 +5107,16 @@
       "checked": "2026-11-14"
     },
     {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/regulations-for-mobile-food-vendors.pdf",
+      "title": "www.nyc.gov/assets/doh/downloads/pdf/rii/regulations-for-mobile-food-ve",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.mta.info/document/186826",
+      "title": "www.mta.info/document/186826",
+      "checked": "2026-11-14"
+    },
+    {
       "url": "https://totalfood.com/getting-restaurant-open-easier-nyc-hospitality-alliance-con-edison/",
       "title": "totalfood.com/getting-restaurant-open-easier-nyc-hospitality-alliance-con",
       "checked": "2026-11-14"
@@ -5006,11 +5187,6 @@
       "checked": "2026-11-14"
     },
     {
-      "url": "https://nyc-business.nyc.gov/nycbusiness/description/tavern-wine-license",
-      "title": "nyc-business.nyc.gov/nycbusiness/description/tavern-wine-license",
-      "checked": "2026-11-14"
-    },
-    {
       "url": "https://thekitchendoor.com/kitchen-rental/nimbus-downtown-brooklyn",
       "title": "thekitchendoor.com/kitchen-rental/nimbus-downtown-brooklyn",
       "checked": "2026-11-14"
@@ -5058,6 +5234,11 @@
     {
       "url": "https://bryantpark.org:443/assets/uploads/documents/general/RFP_for_BP_Kiosks_02-26-24.pdf",
       "title": "bryantpark.org:443/assets/uploads/documents/general/RFP_for_BP_Kiosks_02-26-24",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.amny.com/transit/mta-master-vendor-grand-central-madison-retail",
+      "title": "www.amny.com/transit/mta-master-vendor-grand-central-madison-retail",
       "checked": "2026-11-14"
     },
     {
