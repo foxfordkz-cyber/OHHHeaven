@@ -7,10 +7,9 @@ import { dirname, join as pjoin, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Action, CommonPack, NicheId, OwnerView, Pack, PackSet, Place, Query, RealWorldPlan, WorldConfig, WorldState } from '@ohh/shared';
 import { STUB_PACKS, STUB_PLACES, defaultConfig } from '@ohh/shared/stubs';
-import { act, answer, join, newWorld, step, viewFor, type HostDeps } from '@ohh/host';
+import { act, answer, defaultDeps, join, markSeen, newWorld, step, viewFor, type HostDeps } from '@ohh/host';
 import type { EngineCtx } from '@ohh/engine';
-import { botBrain } from '@ohh/bots';
-import { askAdvisor, deckEvent, forecast, interpretIdea, writeDebrief } from '@ohh/ai';
+import { askAdvisor, interpretIdea, writeDebrief } from '@ohh/ai';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const ROOT = resolve(here, '../..');
@@ -21,21 +20,24 @@ function readJson<T>(path: string): T | null {
   try { return JSON.parse(readFileSync(path, 'utf8')) as T; } catch { return null; }
 }
 
-/** packs/_common.json + packs/<niche>.json; any missing piece falls back to stub data. */
+/** packs/*.json → server/fixtures/*.json (agent 06 examples) → shared stubs. `stub` lists what is not real data. */
 export function loadPacks(root = ROOT): { packs: PackSet; stub: string[] } {
   const stub: string[] = [];
-  const common = readJson<CommonPack>(pjoin(root, 'packs/_common.json')) ?? (stub.push('_common'), STUB_PACKS.common);
+  const pick = <T>(name: string): T | null => readJson<T>(pjoin(root, `packs/${name}.json`)) ?? ((): T | null => { const f = readJson<T>(pjoin(root, `server/fixtures/${name}.json`)); if (f) stub.push(name); return f; })();
+  const common = pick<CommonPack>('_common') ?? (stub.push('_common'), STUB_PACKS.common);
   const niches: Partial<Record<NicheId, Pack>> = {};
-  for (const n of NICHES) { const p = readJson<Pack>(pjoin(root, `packs/${n}.json`)); if (p) niches[n] = p; }
+  for (const n of NICHES) { const p = pick<Pack>(n); if (p) niches[n] = p; }
   if (!niches.cafe) { stub.push('cafe'); niches.cafe = STUB_PACKS.niches.cafe; }
-  return { packs: { common, niches }, stub };
+  return { packs: { common, niches }, stub: [...new Set(stub)] };
 }
 
-/** data/places.json (an array or { places: [...] }); stub places when it is missing. */
+/** data/places.json → server/fixtures/places.json → shared stubs (an array or { places: [...] }). */
 export function loadPlaces(root = ROOT): { places: Place[]; stub: boolean } {
-  const raw = readJson<Place[] | { places: Place[] }>(pjoin(root, 'data/places.json'));
-  const places = Array.isArray(raw) ? raw : raw?.places;
-  return places?.length ? { places, stub: false } : { places: STUB_PLACES, stub: true };
+  const list = (rel: string) => { const raw = readJson<Place[] | { places: Place[] }>(pjoin(root, rel)); return Array.isArray(raw) ? raw : raw?.places; };
+  const real = list('data/places.json');
+  if (real?.length) return { places: real, stub: false };
+  const fixture = list('server/fixtures/places.json');
+  return { places: fixture?.length ? fixture : STUB_PLACES, stub: true };
 }
 
 interface Room { world: WorldState; tokens: Map<string, string>; timer?: ReturnType<typeof setTimeout>; nextTickAt: number; dirty: boolean }
@@ -49,7 +51,7 @@ export function createGame(opts: GameOptions = {}) {
   const { packs, stub: stubPacks } = loadPacks(opts.root);
   const { places, stub: stubPlaces } = loadPlaces(opts.root);
   const ctx: EngineCtx = { packs, places };
-  const deps: HostDeps = { bots: botBrain, forecast, deckEvent };
+  const deps: HostDeps = defaultDeps();
   const dataDir = opts.dataDir ?? process.env.DATA_DIR ?? resolve(ROOT, '.data');
   const rooms = new Map<string, Room>();
   const tick = opts.tick ?? true;
@@ -127,7 +129,8 @@ export function createGame(opts: GameOptions = {}) {
     const r = room(req, res); if (!r) return;
     const { name, kind, role } = req.body ?? {};
     if (typeof name !== 'string' || !name.trim() || (kind !== 'owner' && kind !== 'official')) { res.status(400).json({ ok: false, error: 'name and kind are required' }); return; }
-    const out = join(r.world, { name: name.trim().slice(0, 40), kind, role });
+    const out = join(r.world, { name: name.trim().slice(0, 40), kind, role }) as { world: WorldState; playerId: string; error?: string };
+    if (out.error) { res.json({ ok: false, error: out.error }); return; }
     r.world = out.world; r.dirty = true;
     const token = randomBytes(16).toString('hex');
     r.tokens.set(token, out.playerId);
@@ -135,8 +138,10 @@ export function createGame(opts: GameOptions = {}) {
   });
   app.get('/api/worlds/:id/view', (req, res) => {
     const r = room(req, res); if (!r) return;
+    const me = playerOf(req, r);
+    if (me) r.world = markSeen(r.world, me);
     if (req.query.v !== undefined && Number(req.query.v) === r.world.version) { res.json({ unchanged: true }); return; }
-    const view = viewFor(r.world, ctx, playerOf(req, r));
+    const view = viewFor(r.world, ctx, me);
     view.world.msToNextDay = r.world.config.paused ? r.world.config.dayMs : Math.max(0, r.nextTickAt - Date.now());
     res.json(view);
   });

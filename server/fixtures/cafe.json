@@ -1,0 +1,108 @@
+{
+  "id": "cafe",
+  "version": 0,
+  "name": "Coffee shop",
+  "tagline": "Espresso, pastries and a few tables on a busy block.",
+  "startCapital": 95000,
+  "unit": { "name": "order", "refPrice": 7.5, "priceMin": 3, "priceMax": 15, "cogsPerUnit": 2.1, "source": "server fixture", "confidence": "estimate", "note": "Placeholder until packs/cafe.json (agent 14) lands: average NYC cafe ticket ~$7.5, food and cup cost ~28%." },
+  "market": { "unitsPerSlotMonth": 7500, "priceElasticity": -1.3, "weights": { "price": 0.35, "quality": 0.25, "reputation": 0.2, "location": 0.2 }, "source": "server fixture", "confidence": "estimate", "note": "~250 orders a day for an average spot before competition." },
+  "capacity": { "unitsPerStaffMonth": 1700, "minStaff": 1, "maxStaff": 8, "hardCapUnits": null, "note": "One barista serves ~55-60 orders per shift-day." },
+  "sizing": { "unitName": "seat", "min": 6, "max": 40, "default": 18, "sqftPerUnit": 18, "unitsServedPerSizeMonth": 170, "takeawayShare": 0.5, "cleaningCostPerSizeMonth": 10, "crowdPenaltyAbove": 0.9, "emptyPenaltyBelow": 0.3, "source": "server fixture", "confidence": "estimate", "note": "18 sq ft per seat with aisles; half of orders are to go." },
+  "setup": [
+    { "id": "buildout", "name": "Build-out and plumbing", "kind": "buildout", "cost": 22000, "required": true, "lifespanMonths": 120, "source": "server fixture", "confidence": "estimate" },
+    { "id": "security_deposit", "name": "Lease security deposit", "kind": "deposit", "cost": 15000, "required": true, "source": "server fixture", "confidence": "estimate", "note": "About 3 months of rent." },
+    { "id": "espresso_machine", "name": "Two-group espresso machine", "kind": "equipment", "cost": 11000, "required": true, "lifespanMonths": 84, "qualityBonus": 0.03, "source": "server fixture", "confidence": "estimate" },
+    { "id": "grinder", "name": "Espresso grinders (x2)", "kind": "equipment", "cost": 2800, "required": true, "lifespanMonths": 60, "source": "server fixture", "confidence": "estimate" },
+    { "id": "refrigeration", "name": "Under-counter fridges and pastry case", "kind": "equipment", "cost": 6500, "required": true, "lifespanMonths": 96, "source": "server fixture", "confidence": "estimate" },
+    { "id": "pos", "name": "POS terminal and tablet", "kind": "equipment", "cost": 1400, "required": true, "lifespanMonths": 48, "source": "server fixture", "confidence": "estimate" },
+    { "id": "smallwares", "name": "Smallwares, pitchers, cups", "kind": "equipment", "cost": 2500, "required": true, "lifespanMonths": 24, "source": "server fixture", "confidence": "estimate" },
+    { "id": "chair", "name": "Cafe chair", "kind": "furniture", "cost": 110, "required": true, "scalesWithSize": true, "lifespanMonths": 60, "source": "server fixture", "confidence": "estimate" },
+    { "id": "table_share", "name": "Table (share per seat)", "kind": "furniture", "cost": 95, "required": true, "scalesWithSize": true, "lifespanMonths": 72, "source": "server fixture", "confidence": "estimate" },
+    { "id": "signage", "name": "Storefront sign", "kind": "other", "cost": 2200, "required": false, "lifespanMonths": 120, "qualityBonus": 0.01, "source": "server fixture", "confidence": "estimate" },
+    { "id": "opening_inventory", "name": "Opening inventory: beans, milk, pastries", "kind": "inventory", "cost": 2600, "required": true, "source": "server fixture", "confidence": "estimate" },
+    { "id": "fse_permit", "name": "Food Service Establishment Permit", "kind": "permit", "cost": 280, "required": true, "waitDays": 21, "agency": "NYC DOHMH", "withoutItViolation": "no_fse_permit", "source": "server fixture", "confidence": "estimate", "note": "Fee and wait are placeholders until agent 14 verifies them." },
+    { "id": "premium_espresso_machine", "name": "Three-group espresso machine upgrade", "kind": "equipment", "cost": 7000, "required": false, "lifespanMonths": 96, "qualityBonus": 0.04, "source": "server fixture", "confidence": "estimate" }
+  ],
+  "kits": [
+    { "id": "lean", "name": "Lean start", "size": 12, "items": [ { "id": "buildout", "qty": 1 }, { "id": "security_deposit", "qty": 1 }, { "id": "espresso_machine", "qty": 1 }, { "id": "grinder", "qty": 1 }, { "id": "refrigeration", "qty": 1 }, { "id": "pos", "qty": 1 }, { "id": "smallwares", "qty": 1 }, { "id": "chair", "qty": 1 }, { "id": "table_share", "qty": 1 }, { "id": "opening_inventory", "qty": 1 }, { "id": "fse_permit", "qty": 1 } ], "pitch": "Cheapest way to open: a small room and the basics." },
+    { "id": "standard", "name": "Standard", "size": 18, "items": [ { "id": "buildout", "qty": 1 }, { "id": "security_deposit", "qty": 1 }, { "id": "espresso_machine", "qty": 1 }, { "id": "grinder", "qty": 1 }, { "id": "refrigeration", "qty": 1 }, { "id": "pos", "qty": 1 }, { "id": "smallwares", "qty": 1 }, { "id": "chair", "qty": 1 }, { "id": "table_share", "qty": 1 }, { "id": "signage", "qty": 1 }, { "id": "opening_inventory", "qty": 1 }, { "id": "fse_permit", "qty": 1 } ], "pitch": "The usual neighborhood cafe with a proper sign." },
+    { "id": "premium", "name": "Premium", "size": 26, "items": [ { "id": "buildout", "qty": 1 }, { "id": "security_deposit", "qty": 1 }, { "id": "espresso_machine", "qty": 1 }, { "id": "premium_espresso_machine", "qty": 1 }, { "id": "grinder", "qty": 1 }, { "id": "refrigeration", "qty": 1 }, { "id": "pos", "qty": 1 }, { "id": "smallwares", "qty": 1 }, { "id": "chair", "qty": 1 }, { "id": "table_share", "qty": 1 }, { "id": "signage", "qty": 1 }, { "id": "opening_inventory", "qty": 1 }, { "id": "fse_permit", "qty": 1 } ], "pitch": "Bigger room and a better machine: higher quality, higher costs." }
+  ],
+  "monthlyCosts": [
+    { "id": "utilities", "name": "Electricity, gas, water", "kind": "utilities", "basis": "fixed", "amount": 1150, "source": "server fixture", "confidence": "estimate" },
+    { "id": "insurance", "name": "General liability and property insurance", "kind": "insurance", "basis": "fixed", "amount": 260, "source": "server fixture", "confidence": "estimate" },
+    { "id": "supplies", "name": "Cups, lids, napkins", "kind": "supplies", "basis": "per_unit", "amount": 0.22, "source": "server fixture", "confidence": "estimate" },
+    { "id": "card_fees", "name": "Card processing fees", "kind": "fees", "basis": "pct_revenue", "amount": 0.028, "source": "server fixture", "confidence": "estimate" },
+    { "id": "maintenance", "name": "Equipment service", "kind": "maintenance", "basis": "fixed", "amount": 300, "source": "server fixture", "confidence": "estimate" },
+    { "id": "waste", "name": "Private carting (trash pickup)", "kind": "other", "basis": "fixed", "amount": 260, "source": "server fixture", "confidence": "estimate" },
+    { "id": "internet", "name": "Internet and phone", "kind": "other", "basis": "fixed", "amount": 120, "source": "server fixture", "confidence": "estimate" },
+    { "id": "pos_software", "name": "POS software subscription", "kind": "fees", "basis": "fixed", "amount": 90, "source": "server fixture", "confidence": "estimate" }
+  ],
+  "staff": [
+    { "id": "barista", "name": "Barista", "hourlyWage": 18, "hoursPerMonth": 150, "licenseRequired": null, "source": "server fixture", "confidence": "estimate", "note": "Above the NYC minimum wage." },
+    { "id": "shift_lead", "name": "Shift lead", "hourlyWage": 23, "hoursPerMonth": 160, "licenseRequired": null, "source": "server fixture", "confidence": "estimate" }
+  ],
+  "taxes": [
+    { "id": "sales_tax", "name": "NYC sales tax", "base": "taxable_revenue", "rate": 0.08875, "due": "monthly", "appliesIf": "prepared food and drinks", "source": "server fixture", "confidence": "estimate", "note": "Combined NYS + NYC + MCTD rate; prices in the game include it." }
+  ],
+  "levers": [
+    { "id": "cleaning", "name": "Cleaning", "options": [
+      { "id": "standard", "label": "Daily clean", "monthlyCost": 450 },
+      { "id": "deep", "label": "Daily deep clean", "monthlyCost": 900, "effects": { "quality": 0.04 } },
+      { "id": "minimal", "label": "Wipe and go", "monthlyCost": 150, "effects": { "quality": -0.04 }, "causes": "dirty_surfaces" }
+    ] },
+    { "id": "sourcing", "name": "Beans and milk", "options": [
+      { "id": "standard", "label": "Regular roaster", "monthlyCost": 0 },
+      { "id": "specialty", "label": "Specialty roaster", "monthlyCost": 600, "effects": { "quality": 0.05 } }
+    ] },
+    { "id": "hours", "name": "Opening hours", "options": [
+      { "id": "standard", "label": "7am - 6pm", "monthlyCost": 0 },
+      { "id": "long", "label": "6am - 9pm", "monthlyCost": 700, "effects": { "demand": 0.08 } }
+    ] },
+    { "id": "pest_control", "name": "Pest control", "options": [
+      { "id": "monthly", "label": "Licensed exterminator monthly", "monthlyCost": 120 },
+      { "id": "none", "label": "Skip it", "monthlyCost": 0, "causes": "pest_activity" }
+    ] }
+  ],
+  "shortcuts": [
+    { "id": "cash_wages", "name": "Pay staff in cash, off the books", "what": "No payroll taxes this month. If anyone audits you, you owe it all back with penalties.", "saves": { "basis": "pct_payroll", "amount": 0.11 }, "violation": "off_books_payroll" },
+    { "id": "underreport_sales", "name": "Underreport cash sales", "what": "Pay less sales tax. An audit compares your sales to your supplies.", "saves": { "basis": "pct_revenue", "amount": 0.02 }, "violation": "sales_tax_underreporting" }
+  ],
+  "violations": [
+    { "id": "off_books_payroll", "name": "Unreported cash payroll", "law": "NY Labor Law and federal payroll tax rules", "official": "tax_auditor", "foundBy": ["audit", "complaint"], "fine": { "base": 1000, "perMonth": 250, "pctOfSaved": 1.5, "max": 40000 }, "closureDays": 0, "reputationHit": 0.08, "source": "server fixture", "confidence": "estimate" },
+    { "id": "sales_tax_underreporting", "name": "Underreported sales tax", "law": "NY Tax Law sales tax provisions", "official": "tax_auditor", "foundBy": ["audit"], "fine": { "base": 500, "perMonth": 200, "pctOfSaved": 1.3, "max": 30000 }, "closureDays": 0, "reputationHit": 0.05, "source": "server fixture", "confidence": "estimate" },
+    { "id": "dirty_surfaces", "name": "Food contact surfaces not clean", "law": "NYC Health Code Article 81", "official": "health_inspector", "foundBy": ["inspection", "complaint"], "fine": { "base": 400, "perMonth": 100, "pctOfSaved": 0.5, "max": 3000 }, "closureDays": 0, "reputationHit": 0.06, "source": "server fixture", "confidence": "estimate" },
+    { "id": "pest_activity", "name": "Evidence of pests", "law": "NYC Health Code Article 81", "official": "health_inspector", "foundBy": ["inspection", "complaint"], "fine": { "base": 600, "perMonth": 150, "max": 5000 }, "closureDays": 2, "reputationHit": 0.1, "source": "server fixture", "confidence": "estimate" },
+    { "id": "no_fse_permit", "name": "Operating without a food service permit", "law": "NYC Health Code Article 81", "official": "health_inspector", "foundBy": ["inspection", "complaint"], "fine": { "base": 1000, "perMonth": 500, "max": 10000 }, "closureDays": 3, "reputationHit": 0.1, "source": "server fixture", "confidence": "estimate" }
+  ],
+  "officials": [
+    { "id": "health_inspector", "name": "Health inspector", "agency": "NYC DOHMH", "role": "inspector", "checks": ["dirty_surfaces", "pest_activity", "no_fse_permit"], "source": "server fixture" },
+    { "id": "tax_auditor", "name": "Tax auditor", "agency": "NYS Department of Taxation and Finance", "role": "tax_auditor", "checks": ["off_books_payroll", "sales_tax_underreporting"], "source": "server fixture" }
+  ],
+  "reports": [
+    { "id": "report_unsanitary", "name": "Report unsanitary conditions (311)", "text": "The Health Department sends an inspector. If you are wrong, you get a warning.", "role": "inspector", "checks": ["dirty_surfaces", "pest_activity"] },
+    { "id": "report_no_permit", "name": "Report operating without a permit", "text": "An inspector checks the permits on the wall.", "role": "inspector", "checks": ["no_fse_permit"] },
+    { "id": "report_cash_wages", "name": "Report off-the-books wages", "text": "A tax auditor compares payroll with staffing.", "role": "tax_auditor", "checks": ["off_books_payroll", "sales_tax_underreporting"] }
+  ],
+  "events": [
+    { "id": "coffee_price_spike", "name": "Coffee beans up 15%", "effect": { "field": "cogsPerUnit", "mult": 1.15 }, "months": 2, "source": "server fixture" }
+  ],
+  "ruleCards": [
+    { "id": "letter_grade", "title": "Letter grades", "text": "Every NYC restaurant and cafe gets a letter grade after inspection and must post it in the window.", "source": "server fixture" },
+    { "id": "cash_wages_card", "title": "Cash wages", "text": "Paying staff off the books skips payroll taxes, but audits recover the taxes plus penalties.", "source": "server fixture" }
+  ],
+  "benchmarks": { "cogsPct": 0.3, "laborPct": 0.32, "rentPct": 0.1, "netMarginPct": 0.06, "source": "server fixture", "confidence": "estimate" },
+  "suppliers": [
+    { "id": "coffee_beans", "category": "Coffee", "what": "Wholesale roasted beans", "whereToFind": "Local wholesale roasters; ask cafes you like who supplies them", "source": "server fixture", "confidence": "estimate" },
+    { "id": "dairy", "category": "Milk", "what": "Dairy and oat milk deliveries", "whereToFind": "Regional dairy distributors", "source": "server fixture", "confidence": "estimate" }
+  ],
+  "roadmap": [
+    { "id": "find_space", "title": "Find a storefront", "text": "Pick a spot with foot traffic you can afford.", "kind": "space" },
+    { "id": "get_fse_permit", "title": "Get your Food Service Establishment Permit", "text": "Apply before you build out. An inspector visits before you open.", "kind": "permit", "setupItemId": "fse_permit", "fee": 280, "waitDays": 21, "agency": "NYC DOHMH" },
+    { "id": "buy_equipment", "title": "Buy equipment and furniture", "text": "Espresso machine, grinders, fridges, seats.", "kind": "money" },
+    { "id": "hire", "title": "Hire baristas", "text": "Start with two people per shift at peak hours.", "kind": "people" },
+    { "id": "open_doors", "title": "Open your doors", "text": "Open once the permit is on the wall.", "kind": "launch" }
+  ],
+  "manager": { "monthlySalary": 5200, "source": "server fixture", "confidence": "estimate" },
+  "sources": [ { "url": "packs/cafe.json", "title": "Server fixture: replaced by the real pack from agent 14", "checked": "2026-11-14" } ]
+}

@@ -1,221 +1,454 @@
-// @ohh-stub — walking-skeleton host by agent 01, signatures from build/CONTRACT.md §6. Owner: agent 06 replaces this file.
+// @ohh/host — мир, вход, действия, игровой день и картина для каждого игрока (CONTRACT §6).
+// Чистый TypeScript без модулей Node: этот же пакет клиент запускает в браузере для игры без сервера.
 import type {
-  Action, ActionResult, Analytics, BusinessState, CaseCard, CaseNotice, CityView, ClientView, DayWeather, GameEvent,
-  NicheId, OfficialRole, OfficialView, OpenRecommendation, OwnerView, Pack, Player, PublicBusiness, Query, RealWorldPlan,
-  RoadmapItem, Standing, StandingOrders, WorldConfig, WorldPublic, WorldState,
+  Action, ActionResult, BusinessState, CityView, ClientView, GameEvent, InboxItem, NicheId, OfficialRole, OfficialState,
+  OfficialView, OwnerView, Player, Query, Standing, StandingOrders, WorldConfig, WorldState, EffectTarget, Analytics,
+  RealWorldPlan, Pack, CommonPack, PackSet,
 } from '@ohh/shared';
-import { RULES, dateOf, round2, sum, uid } from '@ohh/shared';
-import { applyAction, createWorld, netWorth, tickDay, type EngineCtx } from '@ohh/engine';
-import type { BotBrain } from '@ohh/bots';
+import { RULES, dateOf, isMonthEnd } from '@ohh/shared';
+import { engine } from './deps';
+import type { BotResident, EngineCtx, HostDeps, PlayerExtra } from './types';
+import { publicBusiness, worldPublic } from './public';
+import { checkAction, checkActionShape } from './validate';
+import { clamp, formatMoney, isObj, round2, sum } from './util';
 
-export interface HostDeps {
-  bots: BotBrain;
-  forecast(seed: number, fromDay: number, days: number): DayWeather[];
-  deckEvent(w: WorldState, ctx: EngineCtx): GameEvent | null;
+export type { EngineCtx, HostDeps, BotBrain, BotResident, EngineApi, AiApi, PlayerExtra } from './types';
+export { publicBusiness, worldPublic } from './public';
+export { checkAction, checkActionShape } from './validate';
+export { engine, bots, ai, defaultDeps, usingStubs } from './deps';
+
+export class HostError extends Error {}
+
+const MAX_BOT_ACTIONS_PER_DAY = 6;
+const VIEW_FEED = 40;
+const VIEW_INBOX = 50;
+const LEADERBOARD_SIZE = 20;
+const EFFECT_TARGETS: EffectTarget[] = ['demand', 'cogs', 'staffAvailability', 'footTraffic', 'utilities', 'deliveryShare', 'rent'];
+
+type ExtPlayer = Player & PlayerExtra;
+
+/** Настройки мира по умолчанию: живой город и демо (CONTRACT §6, shared/src/rules.ts). */
+export function defaultConfig(p: { id: string; name: string; demo: boolean; seed: number }): WorldConfig {
+  return {
+    id: p.id, name: p.name, city: 'nyc', seasonMonths: 12,
+    dayMs: p.demo ? RULES.DAY_MS_DEMO : RULES.DAY_MS_LIVE, paused: false,
+    maxOwners: 100, aiBusinessesTarget: 30, entryFee: 5,
+    prizeShare: 0.9, officialsShare: 0.05, platformShare: 0.05, nichePrizeTable: [0.5, 0.3, 0.2],
+    demo: p.demo, seed: p.seed,
+  };
 }
 
-type JoinInput = { name: string; kind: 'owner' | 'official'; role?: OfficialRole };
+const bump = (prev: WorldState, next: WorldState): WorldState => ({ ...next, version: Math.max(prev.version + 1, next.version) });
+const managedBy = (w: WorldState, playerId: string): BusinessState | undefined =>
+  w.businesses.find((b) => b.managerPlayerId === playerId && b.status !== 'bankrupt')
+  ?? [...w.businesses].reverse().find((b) => b.managerPlayerId === playerId);
 
-function addPlayer(w0: WorldState, p: JoinInput, isAi: boolean): { world: WorldState; playerId: string } {
-  const w = structuredClone(w0);
-  const playerId = `p_${uid(w.config.seed, w.players.length + 1)}`;
-  const player: Player = { id: playerId, name: p.name, kind: p.kind, isAi, paid: false, role: p.role, joinedDay: w.day, lastSeenDay: w.day, inbox: [] };
-  w.players.push(player);
-  if (p.kind === 'official') {
-    w.officials.push({ id: `o_${uid(w.config.seed, 500 + w.officials.length)}`, playerId, name: p.name, isAi, role: p.role ?? 'inspector', points: 0, casesClosed: 0, bribesTaken: 0, bribesThisMonth: 0, exposed: false });
+function nextId(prefix: string, ids: string[]): string {
+  let max = 0;
+  for (const id of ids) {
+    if (!id.startsWith(prefix)) continue;
+    const n = Number(id.slice(prefix.length));
+    if (Number.isInteger(n) && n > max) max = n;
   }
-  w.version += 1;
-  return { world: w, playerId };
+  return `${prefix}${max + 1}`;
 }
 
-function defaultOrders(pack: Pack): StandingOrders {
-  const levers: Record<string, string> = {};
-  for (const l of pack.levers) if (l.options[0]) levers[l.id] = l.options[0].id;
-  return { price: pack.unit.refPrice, staff: pack.staff[0] ? { [pack.staff[0].id]: Math.max(1, pack.capacity.minStaff) } : {}, levers, shortcuts: [], blockFund: false, autopilot: 'hold' };
+function pushInbox(w: WorldState, playerId: string, item: Omit<InboxItem, 'id' | 'day' | 'read'>): WorldState {
+  return {
+    ...w,
+    players: w.players.map((p) => {
+      if (p.id !== playerId || p.isAi) return p;
+      const id = `${p.id}_h${w.day}_${p.inbox.length}`;
+      return { ...p, inbox: [...p.inbox, { ...item, id, day: w.day, read: false }].slice(-80) };
+    }),
+  };
 }
 
-function kitCost(pack: Pack, size: number, items: { id: string; qty: number }[]): number {
-  return round2(sum(items, (it) => { const s = pack.setup.find((x) => x.id === it.id); return s ? s.cost * (s.scalesWithSize ? size : it.qty) : 0; }));
+function pushFeed(w: WorldState, kind: WorldState['feed'][number]['kind'], text: string, businessId?: string): WorldState {
+  const n = w.feed.filter((f) => f.day === w.day).length;
+  return { ...w, feed: [...w.feed, { id: `h${w.day}_${n}`, day: w.day, kind, text, businessId }].slice(-200) };
 }
+
+function addPlayer(w: WorldState, p: { name: string; kind: 'owner' | 'official'; role?: OfficialRole }, isAi: boolean, strategy?: string): { world: WorldState; playerId: string } {
+  const playerId = nextId('p', w.players.map((x) => x.id));
+  const paid = !isAi && p.kind === 'owner';
+  const player: ExtPlayer = {
+    id: playerId, name: p.name, kind: p.kind, isAi, paid, joinedDay: w.day, lastSeenDay: w.day, inbox: [],
+    ...(p.kind === 'official' ? { role: p.role } : {}),
+    ...(strategy ? { strategy } : {}),
+  };
+  let next: WorldState = { ...w, players: [...w.players, player], bank: paid ? round2(w.bank + w.config.entryFee) : w.bank };
+  if (p.kind === 'official') {
+    const off: OfficialState = {
+      id: nextId('o', w.officials.map((o) => o.id)), playerId, name: p.name, isAi, role: p.role ?? 'inspector',
+      points: 0, casesClosed: 0, bribesTaken: 0, bribesThisMonth: 0, exposed: false,
+    };
+    next = { ...next, officials: [...next.officials, off] };
+  }
+  return { world: next, playerId };
+}
+
+/** Заселение: житель открывает бизнес теми же Action. Заселённые при создании мира — давно работающие заведения, разрешения у них уже есть. */
+function openResident(w: WorldState, ctx: EngineCtx, playerId: string, r: BotResident & { businessName?: string }): WorldState {
+  if (!r.niche || !r.placeId) return w;
+  const rec = engine.recommendOpening(r.niche, r.placeId, w, ctx)[0];
+  const pack = ctx.packs.niches[r.niche];
+  if (!rec || !pack) return w;
+  const name = r.businessName ?? `${r.name.split(' ')[0]}'s ${pack.name.toLowerCase()}`;
+  let x = engine.applyAction(w, ctx, playerId, { type: 'open_business', niche: r.niche, placeId: r.placeId, name, kitId: rec.kitId, size: rec.size, items: rec.items });
+  if (x.error) return w;
+  const ordered = engine.applyAction(x.world, ctx, playerId, { type: 'set_orders', orders: rec.orders });
+  const opened = ordered.error ? x.world : ordered.world;
+  const established: WorldState = {
+    ...opened,
+    businesses: opened.businesses.map((b) => (b.managerPlayerId === playerId ? { ...b, permits: b.permits.map((p) => ({ ...p, readyDay: Math.min(p.readyDay, opened.day) })) } : b)),
+  };
+  x = engine.applyAction(established, ctx, playerId, { type: 'launch' });
+  return x.error ? established : x.world;
+}
+
+function withForecast(w: WorldState, deps: HostDeps, fromDay: number): WorldState {
+  return { ...w, weather: deps.forecast(w.config.seed, fromDay, RULES.FORECAST_DAYS + 1) };
+}
+
+// ───────────── API контракта ─────────────
 
 export function newWorld(config: WorldConfig, ctx: EngineCtx, deps: HostDeps): WorldState {
-  let w = createWorld(config);
-  w = { ...w, weather: deps.forecast(config.seed, w.day, RULES.FORECAST_DAYS + 1) };
-  // Cases nobody takes go to an AI official (CONTRACT §5), so the city always has one per role.
-  for (const role of ['inspector', 'tax_auditor'] as const) w = addPlayer(w, { name: role === 'inspector' ? 'City inspector (AI)' : 'Tax auditor (AI)', kind: 'official', role }, true).world;
-  for (const r of deps.bots.populate(w, ctx, config.seed)) {
-    const joined = addPlayer(w, { name: r.name, kind: r.kind, role: r.role }, true);
-    w = joined.world;
-    const pack = r.niche ? ctx.packs.niches[r.niche] : undefined;
-    if (r.kind === 'owner' && pack && r.placeId) {
-      const kit = pack.kits.find((k) => k.id === 'standard') ?? pack.kits[0];
-      if (!kit) continue;
-      const opened = applyAction(w, ctx, joined.playerId, { type: 'open_business', niche: pack.id, placeId: r.placeId, name: `${r.name}`, kitId: kit.id, size: kit.size, items: kit.items });
-      w = opened.error ? w : applyAction(opened.world, ctx, joined.playerId, { type: 'launch' }).world;
+  let w = engine.createWorld(config);
+  w = withForecast(w, deps, w.day);
+  const residents = deps.bots.populate(w, ctx, config.seed) as (BotResident & { businessName?: string })[];
+  for (const r of residents) {
+    const j = addPlayer(w, { name: r.name, kind: r.kind, role: r.role }, true, r.strategy);
+    w = j.world;
+    if (r.kind === 'owner') w = openResident(w, ctx, j.playerId, r);
+  }
+  w = { ...w, standings: engine.computeStandings(w, ctx) };
+  w = pushFeed(w, 'system', `${config.name} opens for the season: ${w.businesses.length} businesses on the map`);
+  return { ...w, version: Math.max(1, w.version) + 1 };
+}
+
+export function join(w: WorldState, p: { name: string; kind: 'owner' | 'official'; role?: OfficialRole }): { world: WorldState; playerId: string; error?: string } {
+  const fail = (error: string) => ({ world: w, playerId: '', error });
+  if (!isObj(p)) return fail('Bad request');
+  const name = typeof p.name === 'string' ? p.name.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 40) : '';
+  if (!name) return fail('Enter a name');
+  if (p.kind !== 'owner' && p.kind !== 'official') return fail('kind must be owner or official');
+  if (p.kind === 'official' && p.role !== 'inspector' && p.role !== 'tax_auditor') return fail('Pick a role: inspector or tax_auditor');
+  if (w.phase !== 'running') return fail('The season is over');
+  if (dateOf(w.day).month > RULES.JOIN_UNTIL_MONTH) return fail(`Joining closes after month ${RULES.JOIN_UNTIL_MONTH}`);
+  if (p.kind === 'owner' && w.players.filter((x) => x.kind === 'owner' && !x.isAi).length >= w.config.maxOwners) return fail('The city is full');
+  const j = addPlayer(w, { name, kind: p.kind, role: p.kind === 'official' ? p.role : undefined }, false);
+  const joined = pushFeed(j.world, 'system', p.kind === 'owner' ? `${name} joined as a business owner` : `${name} joined as a city ${p.role === 'tax_auditor' ? 'tax auditor' : 'inspector'}`);
+  return { world: bump(w, joined), playerId: j.playerId };
+}
+
+/** Проверка формы, роли и прав, затем движок. Отмечает, что игрок был в мире, и повышает версию. */
+export function act(w: WorldState, ctx: EngineCtx, playerId: string, a: Action): ActionResult {
+  const r = actInternal(w, ctx, playerId, a);
+  if (r.error) return r;
+  return { world: bump(w, touchSeen(r.world, playerId)) };
+}
+
+function actInternal(w: WorldState, ctx: EngineCtx, playerId: string, a: Action): ActionResult {
+  const p = w.players.find((x) => x.id === playerId);
+  if (!p) return { world: w, error: 'Unknown player' };
+  if (w.phase !== 'running' && (a as { type?: string })?.type !== 'read_inbox') return { world: w, error: 'The season is over' };
+  const err = checkAction(w, ctx, p, a);
+  if (err) return { world: w, error: err };
+  const r = engine.applyAction(w, ctx, playerId, a);
+  if (r.error) return { world: w, error: r.error };
+  return { world: r.world };
+}
+
+function touchSeen(w: WorldState, playerId: string): WorldState {
+  const b = managedBy(w, playerId);
+  return {
+    ...w,
+    players: w.players.map((p) => (p.id === playerId ? { ...p, lastSeenDay: w.day, seenDay: w.day, seenCash: b ? b.cash : undefined } as ExtPlayer : p)),
+  };
+}
+
+/** Игрок открыл экран: запомнить, что он был в мире. Версию не трогает — опрос view не должен «менять» мир. */
+export function markSeen(w: WorldState, playerId: string): WorldState {
+  const p = w.players.find((x) => x.id === playerId) as ExtPlayer | undefined;
+  if (!p || (p.lastSeenDay === w.day && p.seenDay === w.day)) return w;
+  return touchSeen(w, playerId);
+}
+
+function sanitizeEvent(w: WorldState, ev: GameEvent): GameEvent | null {
+  if (!isObj(ev) || typeof ev.title !== 'string' || !Array.isArray(ev.effects)) return null;
+  const [lo, hi] = ev.origin === 'ai' ? [0.7, 1.3] : [0.5, 1.5];
+  const effects = ev.effects
+    .filter((e) => isObj(e) && EFFECT_TARGETS.includes(e.target) && typeof e.mult === 'number' && Number.isFinite(e.mult))
+    .map((e) => ({ ...e, mult: round2(clamp(e.mult, lo, hi)) }));
+  if (effects.length === 0) return null;
+  const minStart = w.day + RULES.EVENT_NOTICE_DAYS;
+  const length = clamp(Math.floor((ev.endDay ?? ev.startDay) - (ev.startDay ?? minStart)), 0, 29);
+  const startDay = Math.max(minStart, Math.floor(ev.startDay ?? minStart));
+  let id = String(ev.id || `event_${startDay}`).slice(0, 80);
+  while (w.events.some((e) => e.id === id)) id = `${id}_x`;
+  return { ...ev, id, title: ev.title.slice(0, 120), text: String(ev.text ?? '').slice(0, 400), announcedDay: w.day, startDay, endDay: startDay + length, effects };
+}
+
+function addEvent(w: WorldState, ev: GameEvent): WorldState {
+  const e = sanitizeEvent(w, ev);
+  if (!e) return w;
+  let x: WorldState = { ...w, events: [...w.events, e] };
+  x = pushFeed(x, 'event', `${dateOf(e.startDay).label}: ${e.title}`);
+  for (const p of x.players.filter((pl) => !pl.isAi)) x = pushInbox(x, p.id, { kind: 'event', title: e.title, text: `${e.text} Starts ${dateOf(e.startDay).label}.` });
+  return x;
+}
+
+function residentsMove(w: WorldState, ctx: EngineCtx, deps: HostDeps): WorldState {
+  let x = w;
+  for (const p of w.players.filter((pl) => pl.isAi)) {
+    let actions: Action[] = [];
+    try {
+      actions = p.kind === 'owner' ? deps.bots.ownerActions(x, ctx, p.id) : deps.bots.officialActions(x, ctx, p.id);
+    } catch {
+      actions = [];
+    }
+    for (const a of actions.slice(0, MAX_BOT_ACTIONS_PER_DAY)) {
+      const r = actInternal(x, ctx, p.id, a);
+      if (!r.error) x = r.world;
     }
   }
-  return w;
+  return x;
 }
 
-export function join(w: WorldState, p: JoinInput): { world: WorldState; playerId: string } {
-  return addPlayer(w, p, false);
-}
-
-export function act(w: WorldState, ctx: EngineCtx, playerId: string, a: Action): ActionResult {
-  const r = applyAction(w, ctx, playerId, a);
-  if (r.error) return r;
-  const world = structuredClone(r.world);
-  const p = world.players.find((x) => x.id === playerId);
-  if (p) p.lastSeenDay = world.day;
-  return { world };
-}
-
-export function step(w0: WorldState, ctx: EngineCtx, deps: HostDeps): WorldState {
-  let w = w0;
-  for (const p of w.players.filter((x) => x.isAi)) {
-    const actions = p.kind === 'owner' ? deps.bots.ownerActions(w, ctx, p.id) : deps.bots.officialActions(w, ctx, p.id);
-    for (const a of actions) { const r = applyAction(w, ctx, p.id, a); if (!r.error) w = r.world; }
+function managersReview(w: WorldState, ctx: EngineCtx): WorldState {
+  let x = w;
+  for (const b of w.businesses.filter((bb) => bb.orders.autopilot === 'manager' && bb.status !== 'bankrupt')) {
+    const cur = x.businesses.find((bb) => bb.id === b.id);
+    if (!cur) continue;
+    const o: Partial<StandingOrders> = { ...engine.managerOrders(cur, x, ctx) };
+    delete o.autopilot;
+    if (o.shortcuts && o.shortcuts.length > 0) delete o.shortcuts;
+    if (Object.keys(o).length === 0) continue;
+    const r = actInternal(x, ctx, cur.managerPlayerId, { type: 'set_orders', orders: o });
+    if (r.error) continue;
+    x = pushInbox(r.world, cur.managerPlayerId, { kind: 'summary', title: 'Your manager adjusted the standing orders', text: describeOrders(cur.orders, o), ref: { type: 'business', id: cur.id } });
   }
-  const ev = deps.deckEvent(w, ctx);
-  if (ev && !w.events.some((e) => e.id === ev.id)) w = { ...w, events: [...w.events, ev] };
-  w = tickDay(w, ctx);
-  return { ...w, weather: deps.forecast(w.config.seed, w.day, RULES.FORECAST_DAYS + 1) };
+  return x;
 }
 
-function worldPublic(w: WorldState): WorldPublic {
-  return {
-    config: w.config, phase: w.phase, day: w.day, date: dateOf(w.day), version: w.version, bank: w.bank, msToNextDay: w.config.dayMs,
-    stats: {
-      owners: w.players.filter((p) => p.kind === 'owner' && !p.isAi).length, aiBusinesses: w.businesses.filter((b) => b.isAi).length,
-      officials: w.officials.length, open: w.businesses.filter((b) => b.status === 'open').length, bankrupt: w.businesses.filter((b) => b.status === 'bankrupt').length,
-    },
-  };
+function describeOrders(before: StandingOrders, o: Partial<StandingOrders>): string {
+  const parts: string[] = [];
+  if (o.price !== undefined && o.price !== before.price) parts.push(`price ${formatMoney(before.price)} → ${formatMoney(o.price)}`);
+  if (o.staff) parts.push(`staff ${sum(Object.values(before.staff))} → ${sum(Object.values(o.staff))}`);
+  if (o.shortcuts) parts.push('stopped every shortcut');
+  if (o.levers) parts.push('changed operations to safe options');
+  if (o.blockFund !== undefined) parts.push(o.blockFund ? 'joined the block fund' : 'left the block fund');
+  return parts.length ? `${parts.join('; ')}.` : 'Reviewed the business, no changes needed.';
 }
 
-function publicBusiness(w: WorldState, b: BusinessState): PublicBusiness {
-  const owner = w.players.find((p) => p.id === b.managerPlayerId);
-  const partners = w.deals.filter((d) => d.status === 'active' && (d.fromBusinessId === b.id || d.toBusinessId === b.id)).map((d) => (d.fromBusinessId === b.id ? d.toBusinessId : d.fromBusinessId));
-  return {
-    id: b.id, name: b.name, ownerName: owner?.name ?? '—', isAi: b.isAi, niche: b.niche, placeId: b.placeId, status: b.status,
-    price: b.orders.price, reputation: b.reputation, rankInNiche: w.standings.find((s) => s.businessId === b.id)?.rank ?? 0, trust: b.trust, partners,
-  };
+function summaries(w: WorldState): WorldState {
+  let x = w;
+  const humans = w.players.filter((p) => p.kind === 'owner' && !p.isAi);
+  const date = dateOf(w.day);
+  for (const p of humans) {
+    const b = managedBy(x, p.id);
+    if (!b) continue;
+    if (isMonthEnd(w.day)) {
+      const r = b.history[b.history.length - 1];
+      if (r && r.month === date.month) {
+        x = pushInbox(x, p.id, { kind: 'summary', title: `Month ${r.month} closed: ${r.profit >= 0 ? 'profit' : 'loss'} ${formatMoney(r.profit)}`, text: `Sales ${formatMoney(r.revenue)}, cash ${formatMoney(r.cashEnd)}, rank #${r.rankInNiche} in your niche.`, ref: { type: 'business', id: b.id } });
+      }
+    }
+    if (w.day % 7 === 0 && p.lastSeenDay < w.day - 1) {
+      const week = b.days.filter((d) => d.day > w.day - 7);
+      x = pushInbox(x, p.id, { kind: 'summary', title: `Week summary: sales ${formatMoney(sum(week.map((d) => d.revenue)))}`, text: `${Math.round(sum(week.map((d) => d.servedUnits)))} customers served, ${Math.round(sum(week.map((d) => d.lost.size + d.lost.staff)))} turned away. Cash ${formatMoney(b.cash)}.`, ref: { type: 'business', id: b.id } });
+    }
+  }
+  return x;
 }
 
-function leaderboards(w: WorldState): Partial<Record<NicheId, Standing[]>> {
+/** Один игровой день: прогноз, событие недели, ходы жителей, управляющие, tickDay, сводки. */
+export function step(w: WorldState, ctx: EngineCtx, deps: HostDeps): WorldState {
+  if (w.phase !== 'running') return w;
+  let x = withForecast(w, deps, w.day + 1);
+  if (w.day % 7 === 0) {
+    const ev = deps.takeQueuedEvent?.(x) ?? deps.deckEvent(x, ctx);
+    if (ev) x = addEvent(x, ev);
+  }
+  x = residentsMove(x, ctx, deps);
+  if (w.day % RULES.MANAGER_REVIEW_DAYS === 0) x = managersReview(x, ctx);
+  x = engine.tickDay(x, ctx);
+  x = withForecast(x, deps, x.day);
+  x = summaries(x);
+  x = { ...x, events: x.events.filter((e) => e.endDay >= x.day - 14) };
+  return bump(w, x);
+}
+
+// ───────────── что видит игрок ─────────────
+
+function leaderboards(w: WorldState, focusBusinessId?: string): Partial<Record<NicheId, Standing[]>> {
   const out: Partial<Record<NicheId, Standing[]>> = {};
-  for (const s of w.standings) (out[s.niche] ??= []).push(s);
+  for (const s of w.standings) {
+    const list = (out[s.niche] ??= []);
+    if (s.rank <= LEADERBOARD_SIZE || s.businessId === focusBusinessId) list.push({ ...s });
+  }
+  for (const k of Object.keys(out) as NicheId[]) out[k]!.sort((a, b) => a.rank - b.rank);
   return out;
 }
 
-function analyticsFor(b: BusinessState, w: WorldState, ctx: EngineCtx): Analytics {
-  const pack = ctx.packs.niches[b.niche];
-  const date = dateOf(w.day);
-  const lines = b.mtd.lines.filter((l) => l.kind !== 'setup');
-  const days = Math.max(1, date.dayOfMonth);
-  const scale = RULES.DAYS_PER_MONTH / days;
-  const revenue = round2(sum(lines.filter((l) => l.kind === 'revenue'), (l) => l.amount) * scale);
-  const last = b.history.at(-1);
-  const profit = round2(last ? last.profit : sum(lines, (l) => l.amount) * scale);
-  const pct = (kind: string) => (last && last.revenue > 0 ? round2(-sum(last.lines.filter((l) => l.kind === kind), (l) => l.amount) / last.revenue) : 0);
-  const price = b.orders.price;
-  const cogsUnit = pack?.unit.cogsPerUnit ?? 0;
-  const fixed = round2(sum(pack?.monthlyCosts.filter((c) => c.basis === 'fixed') ?? [], (c) => c.amount) + sum(pack?.staff ?? [], (r) => (b.orders.staff[r.id] ?? 0) * r.hourlyWage * r.hoursPerMonth));
-  const contribution = round2(price - cogsUnit);
-  const breakEvenUnits = contribution > 0 ? Math.ceil(fixed / contribution) : null;
-  const lost = b.mtd.lost.size + b.mtd.lost.staff + b.mtd.lost.closure;
+function publicPlayer(p: Player): Player {
+  const { strategy: _s, seenCash: _c, seenDay: _d, ...rest } = p as ExtPlayer;
+  return { ...rest, inbox: p.inbox.slice(-VIEW_INBOX) };
+}
+
+function cityParts(w: WorldState) {
   return {
-    month: date.month, daysIntoMonth: date.dayOfMonth, revenue, profit, cumulativeProfit: round2(sum(b.history, (h) => h.profit)), netWorth: netWorth(b, ctx),
-    cogsPct: pct('cogs'), laborPct: pct('payroll'), rentPct: pct('rent'), primeCostPct: round2(pct('cogs') + pct('payroll')),
-    netMarginPct: last && last.revenue > 0 ? round2(last.profit / last.revenue) : 0,
-    fixedCostsMonth: fixed, variableCostPerUnit: cogsUnit, contributionPerUnit: contribution,
-    breakEvenUnitsMonth: breakEvenUnits, breakEvenRevenueMonth: breakEvenUnits == null ? null : round2(breakEvenUnits * price), breakEvenPrice: null,
-    utilization: b.mtd.demandUnits > 0 ? round2(b.mtd.servedUnits / b.mtd.demandUnits) : 0, sizeUtilization: b.days.at(-1)?.sizeUtilization ?? 0,
-    lostSalesUnits: lost, lostSalesMoney: round2(lost * price),
-    cashRunwayMonths: profit < 0 ? round2(b.cash / -profit) : null, setupInvested: b.setupSpent, paybackMonths: profit > 0 ? round2(b.setupSpent / profit) : null,
-    taxDueNext: null, exposure: 0, benchmarks: [], nicheKpis: [],
+    weather: w.weather.filter((d) => d.day >= w.day).slice(0, RULES.FORECAST_DAYS + 1),
+    events: w.events.filter((e) => e.endDay >= w.day),
+    feed: w.feed.slice(-VIEW_FEED),
   };
 }
 
-function roadmapItems(niche: NicheId, b: BusinessState | null, w: WorldState, ctx: EngineCtx): RoadmapItem[] {
-  const steps = [...(ctx.packs.common?.roadmap ?? []), ...(ctx.packs.niches[niche]?.roadmap ?? [])];
-  return steps.map((s) => {
-    const permit = b?.permits.find((p) => p.itemId === s.setupItemId);
-    const status: RoadmapItem['status'] = permit ? (permit.readyDay <= w.day ? 'done' : 'waiting') : b && b.status !== 'setup' ? 'done' : 'todo';
-    return { ...s, status, readyDay: permit?.readyDay };
-  });
+function awayFor(w: WorldState, me: ExtPlayer, b: BusinessState | null): OwnerView['away'] {
+  const days = w.day - me.lastSeenDay;
+  if (days <= 1) return null;
+  const items: InboxItem[] = me.inbox.filter((i) => i.day > me.lastSeenDay);
+  if (b) {
+    for (const d of w.deals.filter((x) => x.toBusinessId === b.id && x.status === 'proposed')) {
+      if (items.some((i) => i.ref?.type === 'deal' && i.ref.id === d.id)) continue;
+      const from = w.businesses.find((x) => x.id === d.fromBusinessId);
+      items.push({ id: `pending_${d.id}`, day: d.proposedDay, kind: 'deal', title: `${from?.name ?? 'A neighbor'} is waiting for your answer`, text: `Offer expires on day ${d.expiresDay}.`, ref: { type: 'deal', id: d.id }, read: false });
+    }
+    for (const c of w.cases.filter((x) => x.businessId === b.id && x.status === 'notice')) {
+      if (items.some((i) => i.ref?.type === 'case' && i.ref.id === c.id && i.day >= (c.inspectDay ?? 0))) continue;
+      items.push({ id: `pending_${c.id}`, day: c.inspectDay ?? w.day, kind: 'case', title: `Fine notice waiting: ${formatMoney(c.fine ?? 0)}`, text: `Answer by day ${c.answerByDay}; silence means you pay.`, ref: { type: 'case', id: c.id }, read: false });
+    }
+  }
+  const profit = b ? round2(b.cash - (me.seenCash ?? b.cash)) : 0;
+  return { days, profit, items: items.sort((a, z) => a.day - z.day) };
 }
 
-export function viewFor(w: WorldState, ctx: EngineCtx, playerId: string | null): ClientView {
-  const me = playerId ? w.players.find((p) => p.id === playerId) : undefined;
-  const base = { world: worldPublic(w), weather: w.weather, events: w.events, feed: w.feed };
+export interface ViewOptions { msToNextDay?: number }
+
+export function viewFor(w: WorldState, ctx: EngineCtx, playerId: string | null, opts: ViewOptions = {}): ClientView {
+  const world = worldPublic(w, opts.msToNextDay);
+  const parts = cityParts(w);
+  const me = playerId ? (w.players.find((p) => p.id === playerId) as ExtPlayer | undefined) : undefined;
   if (!me) {
-    const city: CityView = { kind: 'city', ...base, businesses: w.businesses.map((b) => publicBusiness(w, b)), leaderboards: leaderboards(w) };
+    const city: CityView = {
+      kind: 'city', world,
+      businesses: w.businesses.map((b) => publicBusiness(w, ctx, b)),
+      ...parts, leaderboards: leaderboards(w),
+    };
     return city;
   }
   if (me.kind === 'official') {
     const official = w.officials.find((o) => o.playerId === me.id)!;
-    const card = (c: WorldState['cases'][number]): CaseCard => {
-      const b = w.businesses.find((x) => x.id === c.businessId)!;
-      return { caseId: c.id, business: publicBusiness(w, b), role: c.role, origin: c.origin, openedDay: c.openedDay, hints: c.hints, status: c.status, bribeAmount: c.bribeAmount, found: c.found };
-    };
+    const mine = w.cases
+      .filter((c) => c.officialId === official.id && (c.status !== 'closed' || (c.closedDay ?? 0) > w.day - 14))
+      .flatMap((c) => {
+        const b = w.businesses.find((x) => x.id === c.businessId);
+        return b ? [{ caseId: c.id, business: publicBusiness(w, ctx, b), role: c.role, origin: c.origin, openedDay: c.openedDay, hints: c.hints, status: c.status, ...(c.bribeAmount !== undefined ? { bribeAmount: c.bribeAmount } : {}), ...(c.found ? { found: c.found } : {}) }] : [];
+      });
     const view: OfficialView = {
-      kind: 'official', me, ...base, official,
-      queue: w.cases.filter((c) => c.status === 'open' && c.role === official.role).map(card),
-      mine: w.cases.filter((c) => c.officialId === official.id && c.status !== 'closed').map(card),
-      ranking: w.officials.map((o) => ({ name: o.name, points: o.points, isAi: o.isAi })).sort((a, b) => b.points - a.points),
+      kind: 'official', me: publicPlayer(me), world, official: { ...official },
+      queue: engine.queueFor(w, ctx, official.id), mine,
+      ranking: [...w.officials].sort((a, b) => b.points - a.points).map((o) => ({ name: o.name, points: o.points, isAi: o.isAi })),
+      ...parts,
     };
     return view;
   }
-  const business = w.businesses.find((b) => b.managerPlayerId === me.id) ?? null;
-  const notices: CaseNotice[] = business
-    ? w.cases.filter((c) => c.businessId === business.id && c.found?.length).map((c) => ({ caseId: c.id, role: c.role, found: c.found ?? [], fine: c.fine ?? 0, closureDays: c.closureDays ?? 0, answerByDay: c.answerByDay ?? w.day, status: c.status, outcome: c.outcome }))
-    : [];
+  const business = managedBy(w, me.id) ?? null;
+  const stakes = w.businesses
+    .filter((b) => b.id !== business?.id && b.owners.some((o) => o.playerId === me.id))
+    .map((b) => ({ businessId: b.id, share: b.owners.find((o) => o.playerId === me.id)!.share }));
+  const place = business ? ctx.places.find((p) => p.id === business.placeId) : undefined;
   const view: OwnerView = {
-    kind: 'owner', me, ...base, business,
-    stakes: w.businesses.flatMap((b) => b.owners.filter((o) => o.playerId === me.id).map((o) => ({ businessId: b.id, share: o.share }))),
-    neighbors: w.businesses.filter((b) => b.id !== business?.id).map((b) => publicBusiness(w, b)),
-    deals: business ? w.deals.filter((d) => d.fromBusinessId === business.id || d.toBusinessId === business.id) : [],
-    notices, blockFund: null,
-    analytics: business ? analyticsFor(business, w, ctx) : null, recommendations: [],
-    roadmap: business ? roadmapItems(business.niche, business, w, ctx) : [],
-    leaderboards: leaderboards(w), away: null,
+    kind: 'owner', me: publicPlayer(me), world,
+    business: business ? structuredClone(business) : null,
+    stakes,
+    neighbors: w.businesses.filter((b) => b.id !== business?.id).map((b) => publicBusiness(w, ctx, b)),
+    deals: business ? w.deals.filter((d) => d.fromBusinessId === business.id || d.toBusinessId === business.id).map((d) => ({ ...d })) : [],
+    notices: business ? engine.noticesFor(w, business.id) : [],
+    blockFund: place ? [...w.blockFunds].reverse().find((f) => f.block === place.block) ?? null : null,
+    ...parts,
+    analytics: business && business.status !== 'bankrupt' ? engine.analyze(business, w, ctx) : null,
+    recommendations: business && business.status !== 'bankrupt' ? engine.recommend(business, w, ctx) : [],
+    roadmap: business ? engine.roadmapFor(business.niche, business, w, ctx) : [],
+    leaderboards: leaderboards(w, business?.id),
+    away: awayFor(w, me, business),
   };
   return view;
 }
 
+// ───────────── запросы ─────────────
+
+/** Синхронные запросы. Ошибка ввода — HostError. advisor, idea и debrief обслуживает сервер через @ohh/ai. */
 export function answer(w: WorldState, ctx: EngineCtx, playerId: string, q: Query): unknown {
-  const business = w.businesses.find((b) => b.managerPlayerId === playerId) ?? null;
+  if (!isObj(q) || typeof q.type !== 'string') throw new HostError('Query must have a type');
+  const p = w.players.find((x) => x.id === playerId);
+  if (!p) throw new HostError('Unknown player');
+  const b = managedBy(w, playerId) ?? null;
+  const needNiche = (n: unknown): NicheId => {
+    if (typeof n !== 'string' || !ctx.packs.niches[n as NicheId]) throw new HostError('Unknown niche');
+    return n as NicheId;
+  };
   switch (q.type) {
     case 'recommend_opening': {
-      const pack = ctx.packs.niches[q.niche];
-      if (!pack) return { error: `niche ${q.niche} is not playable yet` };
-      return pack.kits.map((k): OpenRecommendation => {
-        const total = kitCost(pack, k.size, k.items);
-        const waits = k.items.map((i) => pack.setup.find((s) => s.id === i.id)?.waitDays ?? 0);
-        return { kitId: k.id, size: k.size, items: k.items, total, cashLeft: round2(pack.startCapital - total), orders: defaultOrders(pack), daysToOpen: Math.max(0, ...waits), why: [k.pitch] };
-      });
+      const niche = needNiche(q.niche);
+      if (typeof q.placeId !== 'string' || !ctx.places.some((pl) => pl.id === q.placeId)) throw new HostError('Unknown place');
+      return engine.recommendOpening(niche, q.placeId, w, ctx);
     }
     case 'what_if': {
-      if (!business) return { error: 'no business' };
-      const analytics = analyticsFor(business, w, ctx);
-      return { projected: business.history.at(-1) ?? null, analytics };
+      if (!b) throw new HostError('Open a business first');
+      if (!isObj(q.orders)) throw new HostError('orders must be an object');
+      const err = checkActionShape({ type: 'set_orders', orders: q.orders });
+      if (err) throw new HostError(err);
+      return engine.whatIf(w, ctx, b.id, q.orders);
     }
-    case 'roadmap':
-      return roadmapItems(q.niche, business, w, ctx);
+    case 'roadmap': {
+      const niche = needNiche(q.niche);
+      return engine.roadmapFor(niche, b && b.niche === niche ? b : null, w, ctx);
+    }
     case 'real_world_plan': {
-      if (!business) return { error: 'no business' };
-      const pack = ctx.packs.niches[business.niche];
-      const plan: RealWorldPlan = {
-        niche: business.niche, businessName: business.name,
-        startupBudget: [{ label: 'Opening costs', amount: business.setupSpent }], startupTotal: business.setupSpent,
-        monthlyCosts: (pack?.monthlyCosts ?? []).map((c) => ({ label: c.name, amount: c.amount })), monthlyTotal: round2(sum(pack?.monthlyCosts ?? [], (c) => c.amount)),
-        reserveAdvised: round2(3 * sum(pack?.monthlyCosts ?? [], (c) => c.amount)), breakEvenUnitsMonth: analyticsFor(business, w, ctx).breakEvenUnitsMonth, paybackMonths: null,
-        checklist: [...(ctx.packs.common?.roadmap ?? []), ...(pack?.roadmap ?? [])], suppliers: pack?.suppliers ?? [], lessons: [],
-        disclaimer: 'A game estimate, not financial or legal advice.',
-      };
-      return plan;
+      if (!b) throw new HostError('Open a business first');
+      return engine.realWorldPlan(b, w, ctx);
     }
+    case 'advisor': case 'idea': case 'debrief':
+      throw new HostError(`Query ${q.type} is answered by the AI service`);
     default:
-      return { error: `query '${q.type}' is answered by the server (@ohh/ai)` };
+      throw new HostError('Unknown query');
   }
+}
+
+export type AiRequest =
+  | { kind: 'advisor'; input: { question: string; business: BusinessState; analytics: Analytics; pack: Pack; common: CommonPack } }
+  | { kind: 'idea'; input: { text: string; packs: PackSet } }
+  | { kind: 'debrief'; input: { business: BusinessState; analytics: Analytics; plan: RealWorldPlan; rank: number } };
+
+/** Собирает вход для асинхронных запросов к @ohh/ai из мира. */
+export function aiRequest(w: WorldState, ctx: EngineCtx, playerId: string, q: Query): AiRequest {
+  const b = managedBy(w, playerId) ?? null;
+  if (q.type === 'idea') {
+    if (typeof q.text !== 'string' || !q.text.trim()) throw new HostError('Describe your idea');
+    return { kind: 'idea', input: { text: q.text.slice(0, 500), packs: ctx.packs } };
+  }
+  if (!b) throw new HostError('Open a business first');
+  const pack = ctx.packs.niches[b.niche];
+  if (!pack) throw new HostError('Unknown niche');
+  const analytics = engine.analyze(b, w, ctx);
+  if (q.type === 'advisor') {
+    if (typeof q.question !== 'string' || !q.question.trim()) throw new HostError('Ask a question');
+    return { kind: 'advisor', input: { question: q.question.slice(0, 500), business: b, analytics, pack, common: ctx.packs.common } };
+  }
+  if (q.type === 'debrief') {
+    const rank = w.standings.find((s) => s.businessId === b.id)?.rank ?? 0;
+    return { kind: 'debrief', input: { business: b, analytics, plan: engine.realWorldPlan(b, w, ctx), rank } };
+  }
+  throw new HostError('Not an AI query');
+}
+
+/** Улицы и ниши мира — вход для planEvents. */
+export function planInput(w: WorldState, ctx: EngineCtx) {
+  return {
+    date: dateOf(w.day), weather: w.weather, recent: w.events.slice(-6),
+    niches: Object.keys(ctx.packs.niches) as NicheId[],
+    blocks: [...new Set(ctx.places.map((p) => p.block))].sort(),
+  };
 }
