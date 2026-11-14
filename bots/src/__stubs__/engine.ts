@@ -9,7 +9,9 @@ import type {
 } from '../../../shared/src/types';
 import { RULES, dateOf, isMonthEnd } from '../../../shared/src/rules';
 
-export interface EngineCtx { packs: PackSet; places: Place[]; /** simulator-only knobs (stub engine) */ tuning?: { routineEveryMonths?: number } }
+/** Simulator-only knobs of the stub engine: what-if values for numbers that live in shared/src/rules.ts. */
+export interface Tuning { routineEveryMonths?: number; taxFlags?: boolean; jointCogsMult?: number; crossDemandMult?: number; crossPriceMult?: number; blockThreshold?: number; blockFee?: number; blockTrafficMult?: number }
+export interface EngineCtx { packs: PackSet; places: Place[]; tuning?: Tuning }
 
 // ───────────── lookups ─────────────
 const placeCache = new WeakMap<Place[], Map<string, Place>>();
@@ -545,13 +547,13 @@ function modsMap(w: WorldState, ctx: EngineCtx): Map<string, Mods> {
     if (dl.status !== 'active') continue;
     for (const id of [dl.fromBusinessId, dl.toBusinessId]) {
       const m = get(id);
-      if (dl.terms.type === 'joint_purchase') m.cogs = RULES.JOINT_PURCHASE_COGS_MULT;
-      if (dl.terms.type === 'cross_promo') { m.demand *= RULES.CROSS_PROMO_DEMAND_MULT; m.price *= RULES.CROSS_PROMO_PRICE_MULT; }
+      if (dl.terms.type === 'joint_purchase') m.cogs = ctx.tuning?.jointCogsMult ?? RULES.JOINT_PURCHASE_COGS_MULT;
+      if (dl.terms.type === 'cross_promo') { m.demand *= ctx.tuning?.crossDemandMult ?? RULES.CROSS_PROMO_DEMAND_MULT; m.price *= ctx.tuning?.crossPriceMult ?? RULES.CROSS_PROMO_PRICE_MULT; }
     }
   }
   const month = dateOf(w.day).month;
   const active = new Set(w.blockFunds.filter((f) => f.active && f.month === month).map((f) => f.block));
-  if (active.size) for (const b of w.businesses) if (active.has(placeOf(ctx, b.placeId)!.block)) get(b.id).traffic *= RULES.BLOCK_FUND_TRAFFIC_MULT;
+  if (active.size) for (const b of w.businesses) if (active.has(placeOf(ctx, b.placeId)!.block)) get(b.id).traffic *= ctx.tuning?.blockTrafficMult ?? RULES.BLOCK_FUND_TRAFFIC_MULT;
   return map;
 }
 const NO_MODS: Mods = { cogs: 1, demand: 1, price: 1, traffic: 1 };
@@ -657,7 +659,7 @@ function monthClose(d: Draft, ctx: EngineCtx, month: number) {
         const opt = lv.options.find((o) => o.id === b.orders.levers[lv.id]);
         if (opt) addLine(b, `lever_${lv.id}`, `${lv.name}: ${opt.label}`, 'opex', -opt.monthlyCost);
       }
-      if (b.orders.blockFund) addLine(b, 'block_fund', 'Block fund', 'deal', -RULES.BLOCK_FUND_FEE_MONTH);
+      if (b.orders.blockFund) addLine(b, 'block_fund', 'Block fund', 'deal', -(ctx.tuning?.blockFee ?? RULES.BLOCK_FUND_FEE_MONTH));
       // shortcuts → savings now, trails for later
       const grow = (violationId: string, saved: number) => {
         const t = b.trails.find((x) => x.violationId === violationId);
@@ -756,7 +758,7 @@ function dealsMonthClose(d: Draft, ctx: EngineCtx, month: number) {
     s.eligible += 1; if (b.orders.blockFund) s.contributors += 1;
     blocks.set(blk, s);
   }
-  w.blockFunds = [...blocks].map(([block, s]) => ({ block, month: month + 1, contributors: s.contributors, eligible: s.eligible, active: s.eligible > 0 && s.contributors / s.eligible >= RULES.BLOCK_FUND_THRESHOLD, feeMonth: RULES.BLOCK_FUND_FEE_MONTH }));
+  w.blockFunds = [...blocks].map(([block, s]) => ({ block, month: month + 1, contributors: s.contributors, eligible: s.eligible, active: s.eligible > 0 && s.contributors / s.eligible >= (ctx.tuning?.blockThreshold ?? RULES.BLOCK_FUND_THRESHOLD), feeMonth: ctx.tuning?.blockFee ?? RULES.BLOCK_FUND_FEE_MONTH }));
 }
 
 function lawDay(d: Draft, ctx: EngineCtx) {
@@ -816,7 +818,7 @@ function lawMonthClose(d: Draft, ctx: EngineCtx, month: number) {
     if (b.status !== 'open') return;
     const openTax = w.cases.some((c) => c.businessId === b.id && c.role === 'tax_auditor' && (c.status === 'open' || c.status === 'taken' || (c.closedDay ?? -999) > day - 90));
     const taxTrail = b.trails.find((t) => (t.violationId === 'off_books_payroll' || t.violationId === 'misclassification' || t.violationId === 'sales_tax_fraud') && t.months >= 2);
-    if (taxTrail && !openTax) {
+    if (taxTrail && !openTax && ctx.tuning?.taxFlags !== false) {
       const hint = taxTrail.violationId === 'sales_tax_fraud' ? 'Reported sales look low for this foot traffic' : `Payroll taxes look low for ${staffCount(b.orders)} staff`;
       w.cases.push({ id: `c${w.cases.length + 1}`, businessId: b.id, role: 'tax_auditor', origin: 'flag', openedDay: day, hints: [hint], status: 'open' });
     }

@@ -258,7 +258,7 @@ function initialOrders(ctx: EngineCtx, pack: Pack, profile: OwnerProfile, rec: S
     else levers[lv.id] = ids[0];
   }
   const all = [...pack.shortcuts, ...ctx.packs.common.shortcuts];
-  const shortcuts = profile.shortcuts === 'all' ? all.map((s) => s.id) : profile.shortcuts === 'taxes' ? all.filter((s) => TAX_VIOLATIONS.has(s.violation)).map((s) => s.id) : [];
+  const shortcuts = profile.shortcuts === 'all' ? all.map((s) => s.id) : profile.shortcuts === 'taxes' ? all.filter((s) => TAX_VIOLATIONS.has(s.violation)).map((s) => s.id) : profile.shortcuts === 'wages' ? all.filter((s) => s.violation === 'off_books_payroll').map((s) => s.id) : [];
   return { price: r2(clamp(price, pack.unit.priceMin, pack.unit.priceMax)), staff: { [role]: staff }, levers, shortcuts, blockFund: profile.blockFund, autopilot: profile.loginEvery > 1 ? 'manager' : 'hold' };
 }
 

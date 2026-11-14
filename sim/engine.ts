@@ -10,7 +10,8 @@ import * as stubHost from '../bots/src/__stubs__/host';
 import { stubPacks } from '../bots/src/__stubs__/packs';
 import { stubPlaces } from '../bots/src/__stubs__/places';
 
-export interface Ctx { packs: PackSet; places: Place[]; tuning?: { routineEveryMonths?: number } }
+import type { Tuning } from '../bots/src/__stubs__/engine';
+export interface Ctx { packs: PackSet; places: Place[]; tuning?: Tuning }
 
 export interface EngineApi {
   source: 'stub' | 'real';
