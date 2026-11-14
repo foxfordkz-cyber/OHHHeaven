@@ -7,7 +7,7 @@ import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { OwnerView } from '@ohh/shared';
 import { createApp, GameServer } from '../src/index';
-import { joinPage, lanBase, makeCode, normalizeCode, type PitchStatus } from '../src/pitch';
+import { joinBase, joinPage, lanBase, makeCode, normalizeCode, type PitchStatus } from '../src/pitch';
 import { qrMatrix, qrSvg } from '../src/qr';
 
 const quiet = () => {};
@@ -42,6 +42,12 @@ describe('codes and addresses', () => {
     expect(lanBase(8787, { PUBLIC_URL: 'http://show.local:8787/' })).toBe('http://show.local:8787');
     const base = lanBase(8787, {});
     expect(base).toMatch(/^http:\/\/\d+\.\d+\.\d+\.\d+:8787$/);
+    // на публичном адресе QR ведёт на домен, по которому пришли; с localhost — на адрес ноутбука в сети
+    expect(joinBase(8787, { host: 'first-year.up.railway.app', proto: 'https' }, {})).toBe('https://first-year.up.railway.app');
+    expect(joinBase(8787, { host: '192.168.1.5:8787', proto: 'http' }, {})).toBe('http://192.168.1.5:8787');
+    expect(joinBase(8787, { host: 'localhost:8787' }, {})).toBe(base);
+    expect(joinBase(8787, { host: '127.0.0.1:8787' }, {})).toBe(base);
+    expect(joinBase(8787, { host: 'evil.com/<x>' }, {})).toBe(base);
   });
   it('the join page stores the session where the client looks for it and escapes the payload', () => {
     const html = joinPage({ role: 'maya', worldId: 'pitch', playerId: 'p1', token: 'tok</script>', name: 'Maya' });
@@ -152,6 +158,22 @@ describe('pitch scenario', () => {
       expect((await request(locked).post('/api/worlds/pitch/pitch').set('x-clock-key', 'secret').send({ command: 'pause' })).status).toBe(200);
     } finally {
       if (prev === undefined) delete process.env.CLOCK_KEY; else process.env.CLOCK_KEY = prev;
+    }
+  });
+
+  it('on a production server without a clock key the pitch city cannot be controlled or entered as an owner', async () => {
+    const prevEnv = process.env.NODE_ENV;
+    const prevKey = process.env.CLOCK_KEY;
+    process.env.NODE_ENV = 'production';
+    delete process.env.CLOCK_KEY;
+    try {
+      const r = await request(app).post('/api/worlds/pitch/pitch').send({ command: 'reset' });
+      expect(r.status).toBe(403);
+      expect(r.body.error).toMatch(/CLOCK_KEY/);
+      expect((await request(app).get('/api/worlds/pitch/pitch')).body.data.join.maya).toBeNull();
+    } finally {
+      process.env.NODE_ENV = prevEnv;
+      if (prevKey !== undefined) process.env.CLOCK_KEY = prevKey;
     }
   });
 });

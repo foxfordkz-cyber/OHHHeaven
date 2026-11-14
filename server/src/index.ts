@@ -9,7 +9,7 @@ import { loadData, REPO_ROOT, SERVER_DIR, type GameData } from './data';
 import { ai as defaultAi, serverDeps, usingStubs } from './deps';
 import { RateLimiter } from './rate';
 import { WorldRuntime } from './runtime';
-import { PitchDirector, enterPage, joinPage, lanBase, type PitchCommand, type PitchHost } from './pitch';
+import { PitchDirector, enterPage, joinBase, joinPage, type PitchCommand, type PitchHost } from './pitch';
 import { qrSvg } from './qr';
 import { deskPage } from './desk';
 
@@ -140,10 +140,9 @@ export class GameServer {
       const n = Number(id.slice(5));
       this.open({ id, name: `Demo City ${n}`, demo: true, seed: 7 + n });
     }
-    // город показа: из снимка, если он есть; PITCH=1 собирает его при старте
+    // город показа: из снимка, если он есть (быстро); PITCH=1 собирает новый уже после старта — см. startServer
     try {
       this.pitch = PitchDirector.restore(this.pitchHost());
-      if (!this.pitch && process.env.PITCH === '1') this.createPitch();
     } catch (e) {
       this.log(`pitch: ${(e as Error).message}`);
     }
@@ -208,14 +207,20 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
     const key = game.clockKey;
     return !key || req.headers['x-clock-key'] === key || req.query.key === key;
   };
-  const portOf = (req: Request) => req.socket.localPort ?? Number(process.env.PORT ?? 8787);
+  // город показа на публичном адресе без ключа часов: любой из зала мог бы сбросить город или войти за Maya
+  const pitchKeyOk = (req: Request): boolean => (game.clockKey ? clockOk(req) : process.env.NODE_ENV !== 'production');
+  const pitchKeyError = () => (game.clockKey ? 'Wrong clock key' : 'Set CLOCK_KEY on the server to control the pitch city');
+  const baseOf = (req: Request) => joinBase(req.socket.localPort ?? Number(process.env.PORT ?? 8787), {
+    host: String(req.headers['x-forwarded-host'] ?? req.headers.host ?? '').split(',')[0]!.trim(),
+    proto: String(req.headers['x-forwarded-proto'] ?? req.protocol ?? 'http').split(',')[0]!.trim(),
+  });
 
   app.post('/api/worlds', (req, res) => {
     if (req.body?.scenario === 'pitch') {
-      if (!clockOk(req)) { res.status(403).json({ ok: false, error: 'Wrong clock key' }); return; }
+      if (!pitchKeyOk(req)) { res.status(403).json({ ok: false, error: pitchKeyError() }); return; }
       try {
         const d = game.createPitch(req.body?.fresh === true);
-        res.status(201).json({ ok: true, data: { id: d.id, pitch: d.status({ base: lanBase(portOf(req)), secrets: true }) } });
+        res.status(201).json({ ok: true, data: { id: d.id, pitch: d.status({ base: baseOf(req), secrets: true }) } });
       } catch (e) {
         game.log(`pitch: ${(e as Error).stack ?? e}`);
         res.status(500).json({ ok: false, error: `The pitch city could not be built: ${(e as Error).message}` });
@@ -291,15 +296,15 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
   };
   app.get('/api/worlds/:id/pitch', (req, res) => {
     const d = pitchOf(req, res);
-    if (d) res.json({ ok: true, data: d.status({ base: lanBase(portOf(req)), secrets: clockOk(req) }) });
+    if (d) res.json({ ok: true, data: d.status({ base: baseOf(req), secrets: pitchKeyOk(req) }) });
   });
   app.post('/api/worlds/:id/pitch', (req, res) => {
     const d = pitchOf(req, res);
     if (!d) return;
-    if (!clockOk(req)) { res.status(403).json({ ok: false, error: 'Wrong clock key' }); return; }
+    if (!pitchKeyOk(req)) { res.status(403).json({ ok: false, error: pitchKeyError() }); return; }
     const r = d.run((req.body ?? {}) as PitchCommand);
     if (!r.ok) { res.status(400).json(r); return; }
-    res.json({ ok: true, data: d.status({ base: lanBase(portOf(req)), secrets: true }) });
+    res.json({ ok: true, data: d.status({ base: baseOf(req), secrets: true }) });
   });
 
   app.use('/api', (_req, res) => { res.status(404).json({ ok: false, error: 'Not found' }); });
@@ -311,7 +316,7 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
   app.get('/p/:code/qr.svg', (req, res) => {
     const r = game.pitch?.resolve(String(req.params.code));
     if (!r) { res.status(404).type('text').send('Unknown code'); return; }
-    res.type('image/svg+xml').set('Cache-Control', 'no-store').send(qrSvg(`${lanBase(portOf(req))}/p/${String(req.params.code).toUpperCase()}`));
+    res.type('image/svg+xml').set('Cache-Control', 'no-store').send(qrSvg(`${baseOf(req)}/p/${String(req.params.code).toUpperCase()}`));
   });
   app.get('/p/:code', (req, res) => {
     const r = game.pitch?.resolve(String(req.params.code));
@@ -340,12 +345,20 @@ export function startServer(port = Number(process.env.PORT ?? 8787), host = proc
   const game = opts.game ?? new GameServer({ ...opts, snapshotDir }).boot();
   const app = createApp(game);
   return new Promise((ok) => {
-    const server = app.listen(port, host, () => ok(Object.assign(server, { game })));
+    const server = app.listen(port, host, () => {
+      ok(Object.assign(server, { game }));
+      // PITCH=1: собрать город показа уже после старта — сборка считает ~20–25 с и не должна задерживать проверку здоровья
+      if (process.env.PITCH === '1' && !game.pitch) {
+        setTimeout(() => {
+          try { game.createPitch(); } catch (e) { game.log(`pitch: ${(e as Error).message}`); }
+        }, 50).unref?.();
+      }
+    });
     server.on('close', () => game.stopAll());
   });
 }
 
 export { WorldRuntime } from './runtime';
-export { PitchDirector, lanBase } from './pitch';
+export { PitchDirector, joinBase, lanBase } from './pitch';
 export { loadData } from './data';
 export { RateLimiter } from './rate';

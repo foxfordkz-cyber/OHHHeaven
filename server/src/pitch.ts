@@ -56,6 +56,19 @@ export function lanBase(port: number, env: NodeJS.ProcessEnv = process.env): str
   return `http://${ip ?? '127.0.0.1'}:${port}`;
 }
 
+const LOOPBACK = /^(localhost|127\.\d+\.\d+\.\d+|\[::1\]|0\.0\.0\.0)(:\d+)?$/i;
+
+/**
+ * Адрес для QR и ссылок входа: PUBLIC_URL; иначе тот, по которому пришёл запрос, если это не localhost
+ * (публичный домен за прокси или адрес ноутбука в сети); иначе адрес ноутбука в локальной сети.
+ */
+export function joinBase(port: number, req: { host?: string; proto?: string } = {}, env: NodeJS.ProcessEnv = process.env): string {
+  if (env.PUBLIC_URL) return env.PUBLIC_URL.replace(/\/$/, '');
+  const host = (req.host ?? '').trim();
+  if (host && /^[a-z0-9.\-:[\]]+$/i.test(host) && !LOOPBACK.test(host)) return `${req.proto === 'https' ? 'https' : 'http'}://${host}`;
+  return lanBase(port, env);
+}
+
 export interface PitchHost {
   snapshotDir: string | null;
   log: (m: string) => void;
