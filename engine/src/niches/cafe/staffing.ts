@@ -134,21 +134,33 @@ export interface TeamCoverage {
   openHours: number;      // open hours a day
   neededHours: number;    // floor hours a month: open × minOnFloor × 30
   paidHours: number;      // owner + lever + every worker's hours
-  coveredShare: number;   // 0–1
-  /** Share of the day's customers who find the door closed or the floor without a full crew. */
-  lostDemandShare: number;
-  /** Open hours a day without a full crew. */
+  coveredShare: number;   // 0–1: paid against needed floor hours
+  /** Open hours a day with nobody on the floor: the door is shut. */
   darkHours: number;
+  /** Open hours a day with someone on the floor but fewer than minOnFloor. */
+  thinHours: number;
+  /** Orders one person makes in an hour on their own (in the engine's mixed orders). */
+  soloOrdersPerHour: number;
+  /** Share of the day's customers lost to dark hours and to thin hours busier than one person can serve. */
+  lostDemandShare: number;
 }
 
-const FULL_COVER = (open: number): TeamCoverage => ({ openHours: open, neededHours: 0, paidHours: 0, coveredShare: 1, lostDemandShare: 0, darkHours: 0 });
+const FULL_COVER = (open: number): TeamCoverage =>
+  ({ openHours: open, neededHours: 0, paidHours: 0, coveredShare: 1, darkHours: 0, thinHours: 0, soloOrdersPerHour: Infinity, lostDemandShare: 0 });
 
-/** Paid hours of a team against the hours the door is open. */
-export function coverageOf(staff: Record<string, number>, b: BusinessState, pack: Pack, cfg: StaffingCfg): TeamCoverage {
+/**
+ * Paid hours of a team against the hours the door is open, for a day with `demand` orders.
+ * Hours are filled one person per hour first, then the rest of the crew. An hour with nobody is dark: its customers
+ * are lost (FORMATS 4.3). An hour with one person short is thin (decision of B03, agents/r3-B03.md): its customers
+ * are lost only beyond what one person makes in an hour. Both kinds of hours are the slow ends of the day, so their
+ * customers are uncoveredHourWeight of an average hour's.
+ */
+export function coverageOf(staff: Record<string, number>, b: BusinessState, pack: Pack, cfg: StaffingCfg, demand = 0): TeamCoverage {
   const hoursOpt = optionOf(b, pack, HOURS_LEVER) ?? 'standard';
   const open = fin(cfg.openHoursPerDay?.[hoursOpt], fin(cfg.openHoursPerDay?.standard, 12));
   const onFloor = Math.max(1, fin(cfg.minOnFloor, 1));
-  const neededHours = open * onFloor * RULES.DAYS_PER_MONTH;
+  const D = RULES.DAYS_PER_MONTH;
+  const neededHours = open * onFloor * D;
   if (neededHours <= 0) return FULL_COVER(open);
   let paidHours = fin(cfg.ownerHoursPerMonth, 0);
   for (const [leverId, byOption] of Object.entries(cfg.leverPaidHours ?? {})) {
@@ -157,18 +169,25 @@ export function coverageOf(staff: Record<string, number>, b: BusinessState, pack
   }
   for (const [id, n] of Object.entries(staff)) paidHours += count(n) * roleDef(id, pack, cfg).hoursPerMonth;
   const coveredShare = clamp(paidHours / neededHours, 0, 1);
-  return {
-    openHours: open, neededHours, paidHours, coveredShare,
-    lostDemandShare: clamp((1 - coveredShare) * fin(cfg.uncoveredHourWeight, 1), 0, 1),
-    darkHours: ((1 - coveredShare) * neededHours) / RULES.DAYS_PER_MONTH / onFloor,
-  };
+  const lit = clamp(paidHours / D, 0, open);                                        // hours a day with at least one person
+  const full = onFloor > 1 ? clamp((paidHours / D - lit) / (onFloor - 1), 0, lit) : lit;  // hours with the whole crew
+  const darkHours = open - lit, thinHours = lit - full;
+  const t = teamPower(staff, b, pack, cfg);
+  const unit = ordersUnitMixed(pack, cfg);
+  const soloOrdersPerHour = Number.isFinite(unit) ? fin(cfg.ordersPerPaidHour, 0) * unit * (t.heads > 0 ? t.avgSpeed : 1) : Infinity;
+  const weight = fin(cfg.uncoveredHourWeight, 1);
+  const dem = Math.max(0, fin(demand, 0));
+  const darkLost = (darkHours / open) * weight;
+  const thinWant = dem * (thinHours / open) * weight;
+  const thinLost = dem > 0 ? Math.max(0, thinWant - thinHours * soloOrdersPerHour) / dem : 0;
+  return { openHours: open, neededHours, paidHours, coveredShare, darkHours, thinHours, soloOrdersPerHour, lostDemandShare: clamp(darkLost + thinLost, 0, 1) };
 }
 
 /** Open hours against people's hours. service.ts calls this to cut the day before it counts the rush and the seats. */
 export function coverage(d: CafeDay): TeamCoverage {
   const cfg = staffingCfg(d.pack);
   if (!cfg) return FULL_COVER(0);
-  return coverageOf(d.b.orders.staff, d.b, d.pack, cfg);
+  return coverageOf(d.b.orders.staff, d.b, d.pack, cfg, d.demand ?? 0);
 }
 
 // ───────────── what a change of team would do ─────────────
@@ -205,11 +224,15 @@ function serviceAnswers(pack: Pack): boolean {
 
 /**
  * Orders capacityDay speaks in. With the service part: takeaway orders (service converts seated work itself).
- * Alone: the engine's mixed orders, so a team of trained baristas without a lead-free penalty keeps the pack's
+ * Alone: the engine's mixed orders, so a team of trained baristas without the no-lead penalty keeps the pack's
  * unitsPerStaffMonth exactly: 1,700 / (160 h × 14.0) = 0.759 of a takeaway order.
  */
 function ordersUnit(pack: Pack, cfg: StaffingCfg): number {
-  if (serviceAnswers(pack)) return 1;
+  return serviceAnswers(pack) ? 1 : ordersUnitMixed(pack, cfg);
+}
+
+/** Engine (mixed) orders per takeaway order: the pack's unitsPerStaffMonth over a trained barista's month. */
+function ordersUnitMixed(pack: Pack, cfg: StaffingCfg): number {
   const per = pack.capacity.unitsPerStaffMonth;
   const refHours = fin(pack.staff[0]?.hoursPerMonth, 0);
   const perHour = fin(cfg.ordersPerPaidHour, 0);
@@ -232,10 +255,10 @@ function teamOrdersDay(b: BusinessState, pack: Pack, cfg: StaffingCfg): number {
 function capacityDay(d: CafeDay): number | null {
   const cfg = staffingCfg(d.pack);
   if (!cfg) return null;
-  const cov = coverageOf(d.b.orders.staff, d.b, d.pack, cfg);
+  const cov = coverageOf(d.b.orders.staff, d.b, d.pack, cfg, d.demand ?? 0);
   const open = d.demand == null ? Infinity : Math.max(0, d.demand) * (1 - cov.lostDemandShare);
   // with the service part: it calls coverage() itself, so this answer only repeats the cut for closed hours
-  if (serviceAnswers(d.pack)) return cov.coveredShare < 1 && Number.isFinite(open) ? open : null;
+  if (serviceAnswers(d.pack)) return cov.lostDemandShare > 0 && Number.isFinite(open) ? open : null;
   // alone: this part replaces the engine's people limit, so it answers every day and keeps the engine's room limit
   return Math.min(open, teamOrdersDay(d.b, d.pack, cfg), roomCap(d.b, d.pack));
 }
@@ -296,18 +319,20 @@ function notes(b: BusinessState, r: DayReport, pack: Pack): string[] {
   }
   const out: string[] = [];
   const t = teamPower(b.orders.staff, b, pack, cfg);
-  const cov = coverageOf(b.orders.staff, b, pack, cfg);
-  const darkToday = Math.min(lostStaff, Math.round(r.demandUnits * cov.lostDemandShare));
+  const cov = coverageOf(b.orders.staff, b, pack, cfg, r.demandUnits);
+  const hoursToday = Math.min(lostStaff, Math.round(r.demandUnits * cov.lostDemandShare));
 
-  // 1. what was lost today and why: closed hours first, then hands, then seats (seats only while service is silent)
-  if (cov.coveredShare < 1) {
+  // 1. what was lost today and why: short hours first, then hands, then seats (seats only while service is silent)
+  if (hoursToday > 0) {
     const hire = pack.staff[0] ? roleDef(pack.staff[0].id, pack, cfg) : null;
     const fix = hire ? ` One more ${pack.staff[0].name.toLowerCase()} costs ${usd(hire.hourlyWage * hire.hoursPerMonth)} a month` : '';
-    out.push(`Not enough people for ${cov.openHours} open hours: about ${round1(cov.darkHours)} hours a day run without a full crew, `
-      + `${Math.round(cov.lostDemandShare * 100)}% of customers find the door closed${darkToday > 0 ? ` (${darkToday} today)` : ''}.${fix}`);
+    const why = cov.darkHours >= 0.5
+      ? `the door is shut about ${round1(cov.darkHours)} of ${cov.openHours} open hours a day: nobody is paid to be there`
+      : `about ${round1(cov.thinHours)} of ${cov.openHours} open hours a day run with one person`;
+    out.push(`Not enough people: ${why}. ${plural(hoursToday, 'customer')} did not get served in those hours today.${fix}`);
   }
   if (!withService) {
-    const hands = lostStaff - darkToday;
+    const hands = lostStaff - hoursToday;
     if (hands > 0) out.push(`Short-staffed: ${hands} customers left unserved — the team makes ${Math.round(teamOrdersDay(b, pack, cfg))} orders a day`);
     if (lostSize > 0) out.push(`Line out the door: ${lostSize} customers walked away`);
   }

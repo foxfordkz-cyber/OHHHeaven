@@ -6,15 +6,22 @@ import type { BusinessState, CommonPack, DayReport, Pack, WorldState } from '@oh
 import { applyAction, createWorld, tickDay, type EngineCtx } from '../../src/index';
 import { hooks } from '../../src/niches/cafe';
 import { defaultStaffPower, type CafeDay } from '../../src/niches/cafe/contract';
+import { part as servicePart } from '../../src/niches/cafe/service';
 import { coverage, part, staffPower, staffingCfg, teamChange, teamKpis, teamPower, type StaffingCfg } from '../../src/niches/cafe/staffing';
 import { config, owner, place } from '../fixtures/world';
-import { plainCafePack } from './plain-cafe-pack';
 
 const file = (name: string) => new URL(`../../../packs/${name}`, import.meta.url);
 const load = <T>(url: URL): T => JSON.parse(readFileSync(url, 'utf8')) as T;
-const plain = plainCafePack(load<Pack>(file('cafe.json')));
+// the tests set the sections themselves, whatever the integrator has already put into packs/cafe.json
+const real = load<Pack>(file('cafe.json'));
+const { staffing: _s, service: _v, ...rest } = (real.extra ?? {}) as Record<string, unknown>;
+const plain: Pack = { ...real, extra: rest };
 const section = load<{ extra: { staffing: StaffingCfg } }>(file('parts/cafe/B03-staffing.json')).extra.staffing;
-const pack: Pack = { ...plain, extra: { ...(plain.extra ?? {}), staffing: section } };
+const pack: Pack = { ...plain, extra: { ...rest, staffing: section } };
+/** The service section of the spec (packs/parts/cafe/D20-formats.json): with it and a service part, that part counts the day. */
+const serviceSection = load<{ extra: { service: unknown } }>(file('parts/cafe/D20-formats.json')).extra.service;
+const withService: Pack = { ...pack, extra: { ...rest, staffing: section, service: serviceSection } };
+const serviceAnswers = typeof servicePart.capacityDay === 'function';
 const cfg = staffingCfg(pack)!;
 
 const shop = (staff: Record<string, number>, levers: Record<string, string> = {}, size = 18): BusinessState =>
@@ -99,14 +106,26 @@ describe('staffing: the team (FORMATS 4.5 table)', () => {
 });
 
 describe('staffing: cover of the open hours', () => {
-  it('check 5: two baristas cover two thirds of a 12-hour day; a 7am-3pm day is covered', () => {
-    const c = coverage(day(shop({ barista: 2 })));
-    expect(c.coveredShare).toBeCloseTo(0.667, 3);
-    expect(c.lostDemandShare).toBeCloseTo(0.23, 2);
-    expect(c.darkHours).toBeCloseTo(4, 6);
-    const short = coverage(day(shop({ barista: 2 }, { hours: 'short' })));
+  it('check 5: two baristas fill two thirds of the floor hours; quiet one-person hours lose nobody, busy ones lose the rest', () => {
+    const quiet = coverage(day(shop({ barista: 2 }), pack, 100));
+    expect(quiet.coveredShare).toBeCloseTo(0.667, 3);
+    expect(quiet.darkHours).toBe(0);
+    expect(quiet.thinHours).toBeCloseTo(8, 6);
+    expect(quiet.soloOrdersPerHour).toBeCloseTo(1700 / 160, 6);
+    expect(quiet.lostDemandShare).toBe(0);            // 46 orders over 8 one-person hours: 5.8 an hour, one person makes 10.6
+    const busy = coverage(day(shop({ barista: 2 }), pack, 300));
+    expect(busy.lostDemandShare).toBeCloseTo((300 * (8 / 12) * 0.69 - 8 * 10.625) / 300, 6);   // 138 want those hours, 85 served
+    const short = coverage(day(shop({ barista: 2 }, { hours: 'short' }), pack, 300));
     expect(short.coveredShare).toBe(1);
     expect(short.lostDemandShare).toBe(0);
+  });
+
+  it('nobody on the floor shuts the door: those hours lose their customers whatever the demand (FORMATS 4.3)', () => {
+    const solo: Pack = { ...pack, extra: { ...pack.extra, staffing: { ...cfg, ownerHoursPerMonth: 0 } } };
+    const c = coverage(day(shop({ barista: 2 }), solo, 50));   // 320 paid hours against 360 open hours
+    expect(c.darkHours).toBeCloseTo(12 - 320 / 30, 6);
+    expect(c.thinHours).toBeCloseTo(320 / 30, 6);
+    expect(c.lostDemandShare).toBeCloseTo(((12 - 320 / 30) / 12) * 0.69, 6);
   });
 
   it('check 6: long hours bring their paid hours with them', () => {
@@ -118,10 +137,10 @@ describe('staffing: cover of the open hours', () => {
 });
 
 describe('staffing: the day', () => {
-  it('alone it keeps the engine units: four trained baristas with a lead-free penalty off make the pack 1,700 a month each', () => {
-    // two baristas: no lead needed, so the engine's old limit is exact, and the dark hours cut the day
-    const two = part.capacityDay!(day(shop({ barista: 2 }), pack, 100))!;
-    expect(two).toBeCloseTo(100 * (1 - coverage(day(shop({ barista: 2 }))).lostDemandShare), 6);
+  it('alone it keeps the engine units: trained baristas without the no-lead penalty make the pack 1,700 orders a month each', () => {
+    // two baristas: no lead needed, so the engine's old limit is exact
+    expect(part.capacityDay!(day(shop({ barista: 2 }), pack, 100))).toBe(100);
+    expect(part.capacityDay!(day(shop({ barista: 4 }), pack, 100))).toBe(100);
     const busy = part.capacityDay!(day(shop({ barista: 2 }), pack, 1000))!;
     expect(busy).toBeCloseTo((2 * pack.capacity.unitsPerStaffMonth!) / 30, 6);
     // the lead earns their wage in capacity
@@ -150,8 +169,8 @@ describe('staffing: the day', () => {
     const n = part.notes!(shop({ barista: 4 }), report(), pack);
     expect(n.some((s) => /^No shift lead on a team of 4: the bar is 10% slower .*\+28 orders a day .*\$480 more a month/.test(s))).toBe(true);
     const dark = part.notes!(shop({ barista: 2 }), report({ demandUnits: 200, lost: { size: 0, staff: 60, closure: 0 } }), pack);
-    expect(dark[0]).toMatch(/^Not enough people for 12 open hours: about 4 hours a day .*23% of customers find the door closed \(46 today\)\. One more barista costs \$3,360 a month$/);
-    expect(dark[1]).toMatch(/^Short-staffed: 14 customers left unserved/);
+    expect(dark[0]).toBe('Not enough people: about 8 of 12 open hours a day run with one person. 7 customers did not get served in those hours today. One more barista costs $3,360 a month');
+    expect(dark[1]).toMatch(/^Short-staffed: 53 customers left unserved — the team makes 113 orders a day$/);
     const trainee = part.notes!(shop({ barista: 2, trainee_barista: 1 }), report(), pack);
     expect(trainee.some((s) => s.includes('55% speed: nobody on the team can train them — next to a shift lead they would work at 75%'))).toBe(true);
     expect(part.notes!(shop({ barista: 3, shift_lead: 1 }), report(), pack)).toEqual([]);
@@ -176,6 +195,25 @@ describe('staffing: the day', () => {
     const b = shop({ barista: 2, shift_lead: 1, trainee_barista: 1 });
     expect(staffPower(day(b))).toEqual(staffPower(day(b)));
     expect(part.notes!(b, report(), pack)).toEqual(part.notes!(b, report(), pack));
+  });
+});
+
+describe('staffing next to the service part', () => {
+  it.skipIf(!serviceAnswers)('with extra.service the service part counts the day: staffing only cuts the hours nobody covers', () => {
+    const b = shop({ barista: 3, shift_lead: 1 });
+    expect(part.capacityDay!(day(b, withService, 1000))).toBeNull();            // the crew covers the day
+    const two = shop({ barista: 2 });
+    const cut = coverage(day(two, withService, 300)).lostDemandShare;
+    expect(cut).toBeGreaterThan(0);
+    expect(part.capacityDay!(day(two, withService, 300))).toBeCloseTo(300 * (1 - cut), 6);
+    expect(teamKpis(b, withService).find((k) => k.id === 'rush_bar')?.value).toBe(77);   // to-go orders: the service part's units
+    expect(teamKpis(b, withService)[0].value).toBe(306);
+  });
+
+  it('without a service part (or its section) staffing keeps the engine units and limits', () => {
+    const b = shop({ barista: 3, shift_lead: 1 });
+    const alone = serviceAnswers ? pack : withService;   // a section without code, or no section: staffing counts alone
+    expect(part.capacityDay!(day(b, alone, 1000))).toBeCloseTo((4.1 * 1700) / 30, 6);
   });
 });
 
