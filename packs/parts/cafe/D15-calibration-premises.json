@@ -10980,9 +10980,654 @@
     "cashExampleUSD": -5000,
     "tier": "exotic",
     "name": "Lattes change the class of your cart"
+   },
+   {
+    "id": "roll_down_gate_deadline",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "revised",
+    "trigger": "none (repealed)",
+    "months": [
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "durationMonths": 0,
+    "effects": [
+     {
+      "field": "none",
+      "note": "requirement repealed: no effect"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "see_through_security_grille",
+      "label": "Replace the gate anyway (optional)",
+      "cost": {
+       "usd": 6500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Only as a security or look choice; no legal deadline any more."
+     }
+    ],
+    "source": "https://brooklyn.news12.com/2026/07/03/see-through-security-gate-requirement-repealed-for-businesses-as-part-of-city-budget/MkkqJRrsd0jocdLjctpIt",
+    "confidence": "estimate",
+    "note": "Revised to no effect: the City Council repealed the 2009 see-through gate requirement (Intro 910-A, passed 51-0 on June 30, 2026, the day before the July 1, 2026 deadline). Drop the event from the merged pack or keep it as history.",
+    "cashExampleUSD": 0,
+    "supportingSources": [
+     "https://secretnyc.co/nyc-solid-metal-storefront-gate-ban-july-1/"
+    ],
+    "previousEffects": [
+     {
+      "field": "cash",
+      "add": -6500,
+      "onlyIf": "the player buys the new grille"
+     }
+    ],
+    "tier": "exotic",
+    "name": "The roll-down gate deadline"
+   },
+   {
+    "id": "vestibule_must_come_down",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "April 15 (calendar)",
+    "months": [
+     4
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.1,
+      "onlyIf": "the vestibule is left up"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "entrance_winter",
+      "label": "Take the vestibule down by April 15",
+      "cost": {
+       "usd": 200,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Labor to dismantle (my estimate).",
+      "optionId": "nothing"
+     }
+    ],
+    "source": "https://www.diningoutnyc.info/enforcement",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -200,
+    "tier": "exotic",
+    "name": "April 15: the vestibule comes down"
+   },
+   {
+    "id": "line_on_the_neighbors_stoop",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "queue longer than the frontage (state)",
+    "months": [
+     4,
+     5,
+     6,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.2
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "queue_setup",
+      "label": "Organized line along your own frontage",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 40,
+       "days": 0
+      },
+      "result": "Complaints stop.",
+      "optionId": "organized"
+     }
+    ],
+    "source": "https://www.diningoutnyc.info/enforcement",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -40,
+    "tier": "exotic",
+    "name": "Your line is on the neighbors' stoop"
+   },
+   {
+    "id": "landmark_notice",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "unpermitted change at a designated building (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -2600,
+      "onlyIf": "the awning or sign has to be remade"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "lpc_permit_first",
+      "label": "Get the LPC permit before installing",
+      "cost": {
+       "usd": 95,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No notice."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -2600,
+    "tier": "exotic",
+    "name": "Warning from the Landmarks Commission"
+   },
+   {
+    "id": "peak_kw_bill_jump",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "demand-metered account (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "utilities",
+      "mult": 1.1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "stagger_equipment",
+      "label": "Stagger equipment start-up in the morning",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Demand charge falls back."
+     }
+    ],
+    "source": "https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -960.0,
+    "tier": "exotic",
+    "name": "The electric bill jumps without more use"
+   },
+   {
+    "id": "dim_bar_at_inspection",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "inspection (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -100
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "brighter_task_light",
+      "label": "Add task lighting behind the bar",
+      "cost": {
+       "usd": 150,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No violation."
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -100,
+    "tier": "exotic",
+    "name": "Too dark behind the bar"
+   },
+   {
+    "id": "candles_without_a_permit",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "inspection (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -210
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "led_candles",
+      "label": "Use LED candles",
+      "cost": {
+       "usd": 60,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No permit needed."
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -210,
+    "tier": "exotic",
+    "name": "Candles on every table"
+   },
+   {
+    "id": "backflow_penalty_bill",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced if the bill passes",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "fineBase",
+      "id": "backflow_not_tested",
+      "set": 1000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "shortcut",
+      "id": "skip_backflow_test",
+      "label": "Do the annual test",
+      "cost": {
+       "usd": 250,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No fine."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+    "confidence": "estimate",
+    "note": "Kept as a pending-bill scenario.",
+    "cashExampleUSD": 0,
+    "tier": "exotic",
+    "name": "Council bill: bigger fines for missing backflow devices"
+   },
+   {
+    "id": "cafe_fees_by_quarter",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced",
+    "months": [
+     5
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "cashTiming",
+      "set": "quarterly"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "outdoor_seating",
+      "label": "Pay outdoor fees by the quarter",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Smaller cash outflow at once.",
+      "optionId": "sidewalk_cafe"
+     }
+    ],
+    "source": "https://www.diningoutnyc.info/apply/fees",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "exotic",
+    "name": "Outdoor dining fees can be paid by the quarter"
+   },
+   {
+    "id": "restroom_occupied_for_an_hour",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "open restroom (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.98
+     },
+     {
+      "field": "quality",
+      "add": -0.01
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "restroom_access",
+      "label": "Customers only with a code",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Fewer incidents.",
+      "optionId": "customers_only"
+     }
+    ],
+    "source": "https://www.cnn.com/2025/01/14/food/starbucks-restroom-policy",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "exotic",
+    "name": "The restroom door stays locked"
    }
   ],
-  "mechanics": [],
-  "notCalibrated": []
+  "mechanics": [
+   {
+    "id": "d15_effect_field_registry",
+    "title": "Effect fields used by the premises calibration",
+    "tier": "core",
+    "playerDecision": "None: this is the vocabulary the engine needs to read the calibrated events.",
+    "engineMath": "Existing EffectTarget fields (demand, footTraffic, rent, utilities, inspections, staffAvailability, cogs, wages, deliveryShare) apply as today. New fields: openingDelayDays (add days before the first sale; each day costs rent/30 if rent is running plus about $30 of fixed overhead), buildoutCost (mult or add on the setup item 'buildout'), setupCost (one-off add to opening costs), cash (one-off add; negative = outflow), closureDays (days closed while trading: lost gross margin, fixed costs continue), seats (add or mult on sizing), seatTurns (mult on sizing.unitsServedPerSizeMonth), depositMonths (add to the security deposit), awareness (mult on the regular-customer ramp), closingDelayDays and permitWaitDays (add days), leaseSigningDelayDays, exitLiability (set the guaranty outcome), violation (an inspection finds this violation), violationExposure (the business is exposed to a named violation or suit wave while the condition lasts), fees (basis pct_revenue: a cost on revenue such as royalties), salePrice (mult on exit price), askingPrice (formula for takeover listings), rentFormula (max(minimum, share x revenue)), milestone (no money; unlocks the next step).",
+    "fieldsNeeded": [
+     "openingDelayDays",
+     "buildoutCost",
+     "setupCost",
+     "cash",
+     "closureDays",
+     "seats",
+     "seatTurns",
+     "depositMonths",
+     "awareness",
+     "closingDelayDays",
+     "permitWaitDays",
+     "leaseSigningDelayDays",
+     "exitLiability",
+     "violation",
+     "violationExposure",
+     "fees",
+     "salePrice",
+     "askingPrice",
+     "rentFormula",
+     "milestone"
+    ],
+    "numbers": [
+     {
+      "what": "Pre-opening carrying cost a day (rent $200 + overhead $30)",
+      "value": 230,
+      "source": "packs/cafe.json rent $6,000 a month",
+      "confidence": "estimate"
+     },
+     {
+      "what": "Gross margin lost per closed day on the reference shop",
+      "value": 1258,
+      "source": "D01 reference month $51,000, cost of goods 26%",
+      "confidence": "estimate"
+     }
+    ]
+   },
+   {
+    "id": "d15_one_off_vs_monthly",
+    "title": "Lump sums are cash, not rent multipliers",
+    "tier": "core",
+    "playerDecision": "None.",
+    "engineMath": "A bill that arrives once (tax catch-up, renewal fee, deposit top-up) is written as cash add. A rent multiplier changes every following month until another event resets it. Two source events (D10 tax_escalation_bill rent x1.3 for one month; D01 franchise_royalty_bite revenue x0.915) were rewritten in this form without changing their size.",
+    "fieldsNeeded": [
+     "cash",
+     "fees"
+    ],
+    "numbers": [
+     {
+      "what": "Tax catch-up bill on the reference lease (2.5% of yearly base rent)",
+      "value": 1800,
+      "source": "https://www.thelodownny.com/?p=111961",
+      "confidence": "estimate"
+     }
+    ]
+   },
+   {
+    "id": "d15_lease_renewal_model",
+    "title": "One renewal model for three fragments",
+    "tier": "core",
+    "playerDecision": "At signing: take a renewal option at a fixed step (rent +3% from day one) or not. At the end: renew, negotiate, or relocate.",
+    "engineMath": "Without an option the renewal offer is current rent x1.3 (central case), announced 6 months ahead; a 'hot block' variant x2.0 may be announced for districts whose asking rents rose fastest (case evidence only). With a recorded option the renewal is the lease's own step (x1.03). Holdover past expiry costs x1.5 (lease clauses of 150%-200%). D01 short_lease_left keeps x1.25 because the bought lease usually has a nearer, renegotiated term.",
+    "fieldsNeeded": [
+     "lease.renewalOption",
+     "lease.optionRecorded",
+     "lease.monthsLeft"
+    ],
+    "numbers": [
+     {
+      "what": "Central renewal multiplier (no option)",
+      "value": 1.3,
+      "source": "https://greenpointers.com/2025/08/21/greenpoint-coffee-shop-sippy-cafe-will-close-this-october/",
+      "confidence": "estimate"
+     },
+     {
+      "what": "Manhattan retail corridor asking rent change, year over year, Q1 2026",
+      "value": 0.03,
+      "source": "https://cbre.com/insights/figures/manhattan-retail-figures-q1-2026",
+      "confidence": "estimate"
+     },
+     {
+      "what": "Holdover multiplier",
+      "value": 1.5,
+      "source": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
+      "confidence": "estimate"
+     }
+    ]
+   },
+   {
+    "id": "d15_state_triggered_consequences",
+    "title": "Events that follow from the player's own state",
+    "tier": "core",
+    "playerDecision": "The levers and shortcuts named in each event's playerMoves.",
+    "engineMath": "Most premises events are not calendar events: they fire when a condition holds (rent clock running before opening, a gas appliance without confirmed gas, seats >= 20 without a patron restroom, grease trap uncleaned for 3 months, HVAC without service in July-August, a step at the door when a suit wave is announced). Each event's 'trigger' field names the condition. The game announces the consequence one month ahead where the real world gives notice (renewal letters, tax bills, building shutoffs, WARN-style closures), and fires immediately where reality does not (an inspector finding what is there).",
+    "fieldsNeeded": [
+     "event.trigger",
+     "event.announceMonthsAhead"
+    ],
+    "numbers": [
+     {
+      "what": "Months of skipped grease trap cleaning before a backup",
+      "value": 3,
+      "source": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page",
+      "confidence": "estimate"
+     }
+    ]
+   },
+   {
+    "id": "d15_preopening_clock",
+    "title": "The pre-opening clock: every delay has a daily price",
+    "tier": "core",
+    "playerDecision": "Lease clauses (rent starts at delivery or at permit), due diligence before signing, contractor choice, contingency, all-electric vs gas, after-hours construction.",
+    "engineMath": "Opening day = lease signing + sum of openingDelayDays from the build-out timeline and from fired events. Rent runs from max(lease start, delivery or permit, per clause) minus free months. Cost of a delay day = $200 rent (if running) + $30 overhead before opening; after opening, a closed day costs $1,258 of gross margin plus rent. Event examples in this file are computed on these numbers, so the engine can check them.",
+    "fieldsNeeded": [
+     "lease.rentStartsAt",
+     "lease.freeRentMonths",
+     "openingDelayDays"
+    ],
+    "numbers": [
+     {
+      "what": "Average wait for gas service (2017 survey)",
+      "value": 68,
+      "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+      "confidence": "estimate"
+     },
+     {
+      "what": "DOB stop work order violation, first offense",
+      "value": 6000,
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+      "confidence": "verified"
+     },
+     {
+      "what": "Health permit: days after application when a new applicant may open",
+      "value": 22,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "confidence": "verified"
+     },
+     {
+      "what": "Letter of No Objection fee",
+      "value": 130,
+      "source": "https://fontanarchitecture.com/?p=12518",
+      "confidence": "estimate"
+     },
+     {
+      "what": "TCO validity in days",
+      "value": 90,
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+      "confidence": "verified"
+     }
+    ]
+   },
+   {
+    "id": "d15_duplicate_clusters",
+    "title": "Same phenomenon, several ids: keep one per cluster in the merge",
+    "tier": "core",
+    "playerDecision": "None.",
+    "engineMath": "Clusters calibrated to the same numbers here: gas wait (D01 gas_turn_on_wait, D14 gas_connection_wait, D00 d00_premises_gas_sequence, D13 gas_turn_on_delay for gas formats); building gas shutoff (D01 gas_shut_off_in_building, D02 building_gas_shutoff, D13 building_gas_shutoff, D10 gas_red_tag); stop work order (D01 stop_work_order_served, D14 stop_work_order, D00 swo_partial and swo_rescission); bulk sale (D01 sellers_tax_claim, D14 bulk_sale_claim, D00 seller_tax_claim; D01 sellers_tax_debt_inherited, D14 seller_tax_debt_surfaces); rent step (D01 annual_rent_step, D08 rent_step_anniversary); tax escalation (D01, D08 and D10 tax_escalation_bill: same id, three different sizes before calibration, now $60 a month or a $1,800 catch-up); renewal (D10 lease_renewal_offer, D08 lease_renewal_reset, D01 short_lease_left); free rent (D01 free_rent_runs_out, D14 free_rent_ends, D00 lease_rent_start); crowding (D02 saturday_room_full, D14 no_seat_left); queue (D02 morning_line_out_the_door, D14 line_out_the_door); 20 seats (D02 seat_count_at_inspection, D14 seat_20_restroom_line); asbestos (D01 asbestos_found, D00 asbestos_scope); occupancy (D01 certificate_of_occupancy_mismatch and no_certificate_of_occupancy, D00 use_mismatch and old_legal_use); access (D02 accessibility_suit_wave and aisle_too_narrow, D00 entrance_step and access_route); vending sweep (D01 and D13 vending_enforcement_sweep: same id, different meanings).",
+    "fieldsNeeded": [],
+    "numbers": []
+   }
+  ],
+  "notCalibrated": [
+   {
+    "id": "machine_tariff",
+    "sourceFragment": "D01-entry-preopening",
+    "reason": "Equipment price event: belongs to D16 (equipment, products, suppliers)."
+   },
+   {
+    "id": "market_inspector_walks_the_stalls",
+    "sourceFragment": "D01-entry-preopening",
+    "reason": "Inspection and fine event: belongs to D19 (law, inspections, fines)."
+   },
+   {
+    "id": "first_graded_inspection",
+    "sourceFragment": "D01-entry-preopening",
+    "reason": "Letter-grade inspection: belongs to D19."
+   },
+   {
+    "id": "d00_world_event_business_park_access",
+    "sourceFragment": "D00-total-search",
+    "reason": "Street access and roadworks: belongs to D18 (street, weather, demand)."
+   },
+   {
+    "id": "d00_premises_* law items (inspector_arrives, poster_languages, penny_change, dog_papers, ombuds_not_appeal, platform_allergy, pfe_service_scope, pfe_tag, personal_playlist, live_music_license, medical_restroom, delivery_pests, pest_record, dinein_safety, alcohol_passed, biometric_camera)",
+    "sourceFragment": "D00-total-search",
+    "reason": "Shelved in D00's premises_law shard but about inspections, postings, licenses and payments: left to D19 and D17 to avoid two calibrations of one event."
+   },
+   {
+    "id": "D07 sidewalk and weather premises side (frozen_pipe, flash_flood_warning, sewer_backup, sidewalk_violation_notice, door_draft_tables)",
+    "sourceFragment": "D07-weather-street-city",
+    "reason": "Weather-driven: D18. The cellar side of flooding is calibrated here through D02 cloudburst_floods_cellar."
+   }
+  ]
  }
 }
