@@ -271,8 +271,13 @@ export function serviceNotes(d: CafeDay, s: ServiceDay, inputsFor?: (d: CafeDay)
   const role = mainRole(d.b, d.pack);
   const roleName = (d.pack.staff.find((x) => x.id === role)?.name ?? role).toLowerCase();
   const plusOne = dayFor(withOneMore(d.b, role));
-  const price = d.b.orders.price;
-  const money = (orders: number): string => `about $${r0(orders * price).toLocaleString('en-US')} a day`;
+  // what one more order leaves after ingredients, and what the extra person costs a day: the decision in one line
+  const perOrder = Math.max(0, d.b.orders.price - (d.pack.unit.cogsPerUnit ?? 0));
+  const usd = (x: number): string => `$${r0(x).toLocaleString('en-US')}`;
+  const roleDef = d.pack.staff.find((x) => x.id === role);
+  const wageDay = roleDef ? (roleDef.hourlyWage * roleDef.hoursPerMonth) / 30 : null;
+  const worth = (orders: number): string =>
+    `about ${usd(orders * perOrder)} a day after ingredients${wageDay ? ` for about ${usd(wageDay)} a day in wages` : ''}`;
 
   const first: string[] = [];
   if (s.rush.orders >= 1) {
@@ -294,7 +299,7 @@ export function serviceNotes(d: CafeDay, s: ServiceDay, inputsFor?: (d: CafeDay)
   const labor = r0(s.lost.labor);
   if (labor > 0) {
     const gain = r0(plusOne.served - base.served);
-    causes.push({ size: s.lost.labor, text: `Out of hands: ${plural(labor, 'order')} not made today — the team makes ${r0(s.teamPerDay)} a day.${gain > 0 ? ` One more ${roleName}: +${gain} orders (${money(gain)}).` : ''}` });
+    causes.push({ size: s.lost.labor, text: `Out of hands: ${plural(labor, 'order')} not made today — the team makes ${r0(s.teamPerDay)} a day.${gain > 0 ? ` One more ${roleName}: +${gain} orders, ${worth(gain)}.` : ''}` });
   }
   const left = r0(s.lost.seats);
   if (left > 0) {
@@ -364,7 +369,8 @@ export const part: CafePart = {
   },
 
   notes(b, r, pack, place?: Place) {
-    if (!serviceCfg(pack)) return engineNotes(r);
+    // without this section the engine's limits applied today; staffing.ts says so itself once it has notes (B03)
+    if (!serviceCfg(pack)) return typeof staffingPart.part?.notes === 'function' ? [] : engineNotes(r);
     if (b.status !== 'open' || r.demandUnits <= 0) return [];
     const d = dayOf(b, pack, r, place);
     const s = serviceDay(d);
