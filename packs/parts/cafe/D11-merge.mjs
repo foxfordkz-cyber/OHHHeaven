@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as D from './D11-decisions.mjs';
+import { mechanicsRanked } from './D11-mechanics-ranked.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '../../..');
@@ -345,9 +346,11 @@ for (const f of frags) for (const m of (f.p.extra && f.p.extra.mechanics) || [])
 const mechById = new Map();
 for (const m of mech) { if (!mechById.has(m.id)) mechById.set(m.id, m); else { const cur = mechById.get(m.id); cur.alsoFrom = [...new Set([...(cur.alsoFrom || []), m.from])]; } }
 ref.mechanics = [...mechById.values()];
+const clusterOf = Object.fromEntries(mechanicsRanked.flatMap((c) => c.members.map((m) => [m, c.id])));
+log.mechanicsUnclustered = ref.mechanics.filter((m) => !clusterOf[m.id]).map((m) => m.id);
 // в пакет — короткая карточка механики; полное описание (формулы, числа) — в справочнике и в MERGE.md
-extra.mechanics = ref.mechanics.map((m) => ({ id: m.id, title: m.title, tier: m.tier, from: m.from, ...(m.alsoFrom ? { alsoFrom: m.alsoFrom } : {}), ...(D.mechanicCluster && D.mechanicCluster[m.id] ? { cluster: D.mechanicCluster[m.id] } : {}) }));
-if (D.mechanicsRanked) extra.mechanicsRanked = D.mechanicsRanked;
+extra.mechanics = ref.mechanics.map((m) => ({ id: m.id, title: m.title, tier: m.tier, from: m.from, ...(m.alsoFrom ? { alsoFrom: m.alsoFrom } : {}), ...(clusterOf[m.id] ? { cluster: clusterOf[m.id] } : {}) }));
+extra.mechanicsRanked = mechanicsRanked;
 
 // неочевидное и истории закрытий — справочник (по ссылке и началу текста без повторов)
 const dedupeText = (arr, key) => { const seen = new Set(); return arr.filter((x) => { const k = (String(x[key] || x.text || x.what || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().slice(0, 80)) + '|' + (x.source || ''); if (seen.has(k)) return false; seen.add(k); return true; }); };
