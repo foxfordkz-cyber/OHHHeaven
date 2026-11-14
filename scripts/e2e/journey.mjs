@@ -17,7 +17,7 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const HERE = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 
@@ -25,8 +25,10 @@ const { chromium } = require('playwright');
 const argv = process.argv.slice(2);
 const opt = (name, dflt) => { const i = argv.indexOf(`--${name}`); return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : dflt; };
 const flag = (name) => argv.includes(`--${name}`);
+// --root <checkout>: the game (server + client) from another checkout, e.g. a worktree of the integrator branch.
+const ROOT = opt('root', HERE);
 const STAMP = new Date().toISOString().replace(/[-:]/g, '').slice(0, 13).replace('T', '-');
-const OUT = opt('out', join(ROOT, 'docs/qa/runs', STAMP));
+const OUT = opt('out', join(HERE, 'docs/qa/runs', STAMP));
 const SHOTS = opt('shots', null);
 const WIDTHS = opt('widths', '375,1440').split(',').map(Number).filter(Boolean);
 const WITH_END = !flag('no-end');
@@ -87,13 +89,18 @@ async function walk(browser, width) {
   const errors = [];
   page.on('pageerror', (e) => errors.push(`pageerror: ${String(e).slice(0, 200)}`));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(`console: ${m.text().slice(0, 200)}`); });
+  page.on('requestfailed', (r) => errors.push(`requestfailed: ${r.url().replace(BASE, '').slice(0, 160)} (${r.failure()?.errorText ?? ''})`));
   page.on('response', (r) => { if (r.url().includes('/api/') && r.status() >= 500) errors.push(`HTTP ${r.status()} ${r.url().replace(BASE, '')}`); });
 
   const results = [];
   let n = 0;
+  let took = false;
   const shot = async (name) => {
+    took = true;
     const file = join(dir, `${String(++n).padStart(2, '0')}-${name}.png`);
     await page.screenshot({ path: file, fullPage: true }).catch(() => {});
+    // Pitch screenshots: what the player sees on the screen (no full page), retina, stable names.
+    if (SHOTS) await page.screenshot({ path: join(SHOTS, `${phone ? 'phone' : 'desktop'}-${name}.png`) }).catch(() => {});
     return file;
   };
   const overflow = () => page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth).catch(() => 0);
@@ -106,6 +113,7 @@ async function walk(browser, width) {
     const t0 = Date.now();
     const before = errors.length;
     const r = { width, id, title, ok: false, ms: 0, note: '', shot: null, overflowPx: 0, errors: [], fallback: false };
+    took = false;
     try {
       r.note = (await ui()) ?? '';
       r.ok = true;
@@ -115,7 +123,8 @@ async function walk(browser, width) {
     r.ms = Date.now() - t0;
     await sleep(700); // screens fade in: a shot taken at once is blank
     r.overflowPx = await overflow();
-    r.shot = relative(OUT, await shot(id));
+    // A step shoots its screen itself once it is ready (before the click that leaves it); a failed step also shoots where it stopped.
+    if (!took || !r.ok) r.shot = relative(OUT, await shot(r.ok ? id : `${id}-FAIL`));
     r.errors = errors.slice(before);
     if (!r.ok && fallback) {
       try { await fallback(); r.fallback = true; } catch (e) { r.note += ` | API fallback failed too: ${String(e.message ?? e).slice(0, 160)}`; }
@@ -168,7 +177,7 @@ async function walk(browser, width) {
     await page.goto(`${BASE}/?world=${W}&mode=remote`, { waitUntil: 'domcontentloaded' });
     const idea = await visible(page.locator('#idea'), 15000);
     await sleep(800);
-    await shot('home-guest');
+    await shot('home');
     await idea.fill('A coffee shop near the subway with fresh pastries');
     await click(/See my plan|Показать план/);
     await page.waitForURL(/\/start/, { timeout: 8000 });
@@ -191,6 +200,7 @@ async function walk(browser, width) {
     if (await go.isDisabled()) throw new Error('"Choose a place" stays disabled after the idea, the niche and the name');
     const t = await text();
     const recognised = /Looks like a (cafe|coffee)/i.test(t);
+    await shot('idea');
     await go.click();
     return recognised ? 'idea recognised as a cafe' : 'idea NOT recognised: niche picked by hand';
   });
@@ -206,6 +216,8 @@ async function walk(browser, width) {
     const openHere = await visible(btn(/Open here/), 5000);
     if (await openHere.isDisabled()) throw new Error('"Open here" is disabled on an affordable place');
     const sub = (await page.locator('.card', { hasText: /Opening here costs/ }).first().innerText().catch(() => '')).replace(/\s+/g, ' ');
+    await sleep(500);
+    await shot('place');
     await openHere.click();
     return `${m ? `${m[1]} of ${m[2]} affordable; ` : ''}${(sub.match(/Opening here costs[^.]*\./) ?? [''])[0]}`;
   });
@@ -215,14 +227,18 @@ async function walk(browser, width) {
     const next = await visible(btn(/See what to buy/), 10000);
     const links = await page.getByRole('link', { name: /Official page/ }).count();
     const steps = await page.locator('main ol > li').count();
+    const head = (await text()).match(/Longest wait \S+ \S+/)?.[0] ?? '';
+    await sleep(500);
+    await shot('plan');
     await next.click();
-    return `${steps} steps, ${links} official links${steps && links < steps ? ` (${steps - links} without a link)` : ''}`;
+    return `${steps} steps, ${links} official links${steps && links < steps ? ` (${steps - links} without a link)` : ''}${head ? `; header "${head}"` : ''}`;
   });
 
   // 5. Join
   await step('join', 'Join: name and test payment after the plan', async () => {
     const name = await visible(page.getByPlaceholder('Jordan'), 10000);
     await name.fill(`QA Tester ${width}`);
+    await shot('join');
     await click(/and join|Join/);
     for (let i = 0; i < 40 && !(await readSession()); i++) await sleep(250);
     const s = await readSession();
@@ -238,10 +254,13 @@ async function walk(browser, width) {
     if (await all.count()) await all.first().click();
     const go = await visible(btn(/Open with recommended setup|Sign|Buy|Open my|Start construction/), 15000);
     if (await go.isDisabled()) throw new Error(`setup button disabled: "${await go.innerText()}"`);
+    const verdict = (await text()).match(/Even with[^—]*—[^.]*|this loses \$[\d,]+\/month[^.]*/)?.[0] ?? '';
+    await sleep(500);
+    await shot('setup');
     await go.click();
     for (let i = 0; i < 40; i++) { const v = await view(); if (v?.business) { state.biz = v.business; break; } await sleep(250); }
     if (!state.biz) throw new Error('no business in the view after setup');
-    return `${state.biz.name}: cash ${Math.round(state.biz.cash)}`;
+    return `${state.biz.name}: cash ${Math.round(state.biz.cash)}${verdict ? `; setup card says: "${verdict.slice(0, 120)}"` : ''}`;
   }, openApi);
 
   // 7. Permits → open. Days go by 5 at a time, like a player who comes back every few days.
@@ -251,7 +270,7 @@ async function walk(browser, width) {
     await visible(page.getByText(/Permits and licenses|Open doors|Open the doors|Ready to open/), 15000);
     await sleep(800);
     const waitText = await text();
-    await shot('permits-waiting');
+    await shot('permits');
     let opened = false;
     for (let i = 0; i < 40 && !opened; i++) {
       const open = btn(/^Open doors$|^Open the doors$/);
@@ -279,7 +298,9 @@ async function walk(browser, width) {
   // 8. Business tabs: each opens, has content, no horizontal scroll
   const dismissAway = async () => {
     const away = page.getByRole('dialog', { name: 'While you were away' });
-    if (await away.count()) { await away.getByRole('button', { name: /Got it/ }).click().catch(() => {}); await sleep(250); }
+    // The card comes a moment after the view loads; a click under it hangs until it is closed.
+    for (let i = 0; i < 8 && !(await away.count()); i++) await sleep(250);
+    if (await away.count()) { await away.getByRole('button', { name: /Got it/ }).click({ timeout: 5000 }).catch(() => {}); await sleep(250); }
   };
   await step('biz', 'My business opens after the doors open (first sales)', async () => {
     await page.goto(`${BASE}/biz?world=${W}`, { waitUntil: 'domcontentloaded' });
@@ -312,14 +333,14 @@ async function walk(browser, width) {
   // 9. Manage: change the price, see the forecast before saving, save, see it on the next day
   await step('whatif', 'Manage: price +$0.50 → forecast changes before saving → Save settings → next day uses it', async () => {
     await dismissAway();
-    await page.getByRole('tab', { name: /^Manage/ }).first().click();
+    await page.getByRole('tab', { name: /^Manage/ }).first().click({ timeout: 8000 });
     // The business screen draws cards with its own copy of the kit (section.bz-card > h3), the rest of the app with client/src/ui (.card__title).
     const fc = page.locator('section.bz-card, div.card').filter({ has: page.locator('h3, .card__title', { hasText: /^Projected month/ }) }).last();
     await visible(fc, 10000);
     for (let i = 0; i < 20 && /Counting/.test(await fc.innerText()); i++) await sleep(300);
     const before = (await fc.innerText()).replace(/\s+/g, ' ');
     const priceBefore = (await view()).business.orders.price;
-    const inc = page.getByRole('button', { name: 'Increase price' });
+    const inc = page.getByRole('button', { name: /^(More|Increase) price$/ }).first(); // business stub kit says "More", client/src/ui says "Increase"
     for (let i = 0; i < 5; i++) await inc.click();
     await visible(page.getByText(/Projected month with your changes/), 5000);
     let after = before;
@@ -328,16 +349,17 @@ async function walk(browser, width) {
     await shot('whatif-before-save');
     await click(/Save settings/);
     await sleep(800);
-    const banner = (await text()).match(/(Saved|saved|Changes start|start on)[^.]*\./)?.[0] ?? '';
+    const body = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+    const banner = body.match(/Saved\.[^.]*\./)?.[0] ?? '';
     const v1 = await view();
     const priceAfter = v1.business.orders.price;
     if (Math.abs(priceAfter - priceBefore - 0.5) > 0.01) throw new Error(`price in the engine ${priceBefore} → ${priceAfter}, expected +0.50`);
     ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 1 }), 'advance');
     await page.reload({ waitUntil: 'domcontentloaded' });
     await dismissAway();
-    await page.getByRole('tab', { name: /^Today/ }).first().click().catch(() => {});
+    await page.getByRole('tab', { name: /^Today/ }).first().click({ timeout: 8000 }).catch(() => {});
     await sleep(800);
-    const today = await text();
+    const today = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
     const shown = today.includes(priceAfter.toFixed(2));
     return `price ${priceBefore.toFixed(2)} → ${priceAfter.toFixed(2)}; forecast "${before.slice(0, 70)}" → "${after.slice(0, 70)}"; after save: "${banner.slice(0, 80)}"; next day Today ${shown ? 'shows' : 'does NOT show'} the new price`;
   }, async () => { await act({ type: 'set_orders', orders: { price: (await view()).business.orders.price + 0.5 } }); });
@@ -455,8 +477,9 @@ async function walk(browser, width) {
 // ───────────── main ─────────────
 (async () => {
   mkdirSync(OUT, { recursive: true });
+  if (SHOTS) mkdirSync(SHOTS, { recursive: true });
   if (!BASE) await startServer();
-  log(`E2E against ${BASE}; out ${relative(ROOT, OUT)}`);
+  log(`E2E against ${BASE}${ROOT !== HERE ? ` (game from ${ROOT})` : ''}; out ${relative(HERE, OUT)}`);
   const browser = await chromium.launch();
   for (const width of WIDTHS) {
     const w = await walk(browser, width);
@@ -468,9 +491,8 @@ async function walk(browser, width) {
   const md = ['# E2E run ' + STAMP, '', `Server: ${BASE}`, '', '| Width | Step | Result | ms | Note |', '|---|---|---|---|---|',
     ...ALL.map((r) => `| ${r.width} | ${r.id} | ${r.ok ? 'OK' : '**FAIL**'}${r.fallback ? ' (API)' : ''}${r.overflowPx > 0 ? ` · overflow ${r.overflowPx}px` : ''} | ${r.ms} | ${r.note.replace(/\|/g, '/')}${r.errors.length ? ` · errors: ${r.errors.join('; ').replace(/\|/g, '/').slice(0, 300)}` : ''} |`)];
   writeFileSync(join(OUT, 'RUN.md'), md.join('\n') + '\n');
-  if (SHOTS) mkdirSync(SHOTS, { recursive: true });
   const failed = ALL.filter((r) => !r.ok).length;
-  log(`\n${ALL.length - failed} of ${ALL.length} steps OK. ${relative(ROOT, join(OUT, 'RUN.md'))}`);
+  log(`\n${ALL.length - failed} of ${ALL.length} steps OK. ${relative(HERE, join(OUT, 'RUN.md'))}`);
   stopServer();
   process.exit(failed ? 1 : 0);
 })().catch((e) => { console.error(e); stopServer(); process.exit(2); });
