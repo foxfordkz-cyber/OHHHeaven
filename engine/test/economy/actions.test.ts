@@ -70,7 +70,7 @@ describe('standing orders', () => {
 
   it('more staff lifts a staff-bound shop, fewer staff loses customers', () => {
     const { w, ctx } = cafeCity(1);
-    const one = run(act(w, ctx, 'pl1', { type: 'set_orders', orders: { staff: { barista: 1 } } }), ctx, 3).businesses[0].days.at(-1)!;
+    const one = run(act(w, ctx, 'pl1', { type: 'set_orders', orders: { staff: { barista: 1, shift_lead: 0 } } }), ctx, 3).businesses[0].days.at(-1)!;
     expect(one.lost.staff).toBeGreaterThan(100);
     expect(one.notes.some((n) => n.startsWith('Short-staffed'))).toBe(true);
   });
@@ -100,6 +100,43 @@ describe('buying, selling, resizing, spending', () => {
     const down = act(w, ctx, 'pl1', { type: 'resize', size: 12 }).businesses[0];
     expect(down.cash).toBeCloseTo(cash + (s0 - 12) * 220 * RULES.RESALE_SHARE, 2);
     expect(applyAction(w, ctx, 'pl1', { type: 'resize', size: 27 }).error).toMatch(/fit in 800 sq ft/);
+  });
+
+  it('a seat threshold of the pack (a customer restroom from 20 seats) holds at opening, resizing and selling', () => {
+    // sellable here (kind equipment) so that selling it is refused by the seat rule, not by the kind
+    const restroom = { id: 'customer_restroom', name: 'Customer restroom', kind: 'equipment' as const, cost: 9_000, required: false, confidence: 'estimate' as const };
+    const pack = {
+      ...cafePack, setup: [...cafePack.setup, restroom],
+      extra: { ...cafePack.extra, seatThresholds: [{ seats: 20, rule: 'A customer bathroom is required at 20 or more seats', law: 'NYC Health Code §81.22', setupItemId: 'customer_restroom' }] },
+    };
+    const ctx = ctxWith([place(1), place(2)], { common: ctxWith([]).packs.common, niches: { cafe: pack } });
+    const w = { ...createWorld(config()), players: [owner(1), owner(2)] };
+    const kit = pack.kits.find((k) => k.id === 'standard')!;
+    expect(applyAction(w, ctx, 'pl1', { type: 'open_business', niche: 'cafe', placeId: 'p1', name: 'Big', kitId: 'standard', size: 22 }).error)
+      .toBe('20 or more seats need: Customer restroom (NYC Health Code §81.22). Add it or keep under 20 seats');
+    const withRoom = act(w, ctx, 'pl1', { type: 'open_business', niche: 'cafe', placeId: 'p1', name: 'Big', kitId: 'standard', size: 22, items: [...kit.items, { id: 'customer_restroom', qty: 1 }] });
+    expect(withRoom.businesses[0].size).toBe(22);
+    expect(applyAction(withRoom, ctx, 'pl1', { type: 'sell_item', itemId: 'customer_restroom', qty: 1 }).error).toMatch(/^20 or more seats need/);
+    const small = act(w, ctx, 'pl2', { type: 'open_business', niche: 'cafe', placeId: 'p2', name: 'Small', kitId: 'standard', size: 18 });
+    expect(applyAction(small, ctx, 'pl2', { type: 'resize', size: 21 }).error).toMatch(/^20 or more seats need/);
+    const bought = act(small, ctx, 'pl2', { type: 'buy_item', itemId: 'customer_restroom', qty: 1 });
+    expect(act(bought, ctx, 'pl2', { type: 'resize', size: 21 }).businesses[0].size).toBe(21);
+  });
+
+  it('shortcuts listed together in extra.exclusiveShortcuts cannot be on at the same time', () => {
+    const base = ctxWith([place(1)]);
+    const common = {
+      ...base.packs.common,
+      shortcuts: [...base.packs.common.shortcuts, { id: 'contractor_1099', name: 'Call workers contractors', what: 'No payroll taxes.', saves: { basis: 'pct_payroll' as const, amount: 0.1 }, violation: 'off_books_payroll' }],
+      extra: { ...base.packs.common.extra, exclusiveShortcuts: [['cash_wages', 'contractor_1099']] },
+    };
+    const ctx = ctxWith([place(1)], { common, niches: base.packs.niches });
+    let w = { ...createWorld(config()), players: [owner(1)] };
+    w = act(w, ctx, 'pl1', { type: 'open_business', niche: 'cafe', placeId: 'p1', name: 'X', kitId: 'standard', size: 18 });
+    const name = common.shortcuts.find((s) => s.id === 'cash_wages')!.name;
+    expect(applyAction(w, ctx, 'pl1', { type: 'set_orders', orders: { shortcuts: ['cash_wages', 'contractor_1099'] } }).error)
+      .toBe(`"${name}" and "Call workers contractors" skip the same costs: choose one`);
+    expect(act(w, ctx, 'pl1', { type: 'set_orders', orders: { shortcuts: ['contractor_1099'] } }).businesses[0].orders.shortcuts).toEqual(['contractor_1099']);
   });
 
   it('resizePlan tells what a resize would do without doing it (for what_if with a size)', () => {
