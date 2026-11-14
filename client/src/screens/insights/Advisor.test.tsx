@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import type { Query } from '@shared/types';
-import { advisorAnswer, cafeView } from './fixtures';
+import { advisorAnswer, cafeRiskyView, cafeView } from './fixtures';
 import { AdvisorCard, askAdvisor, TIMEOUT_TEXT } from './Advisor';
 
 afterEach(() => { cleanup(); vi.useRealTimers(); localStorage.clear(); });
@@ -28,9 +28,9 @@ describe('askAdvisor', () => {
 
 describe('Ask the advisor card', () => {
   it('a preset question shows the answer, its sources and who answered', async () => {
-    render(<AdvisorCard view={cafeView} ask={async (q: Query) => advisorAnswer((q as { question: string }).question)} />);
+    render(<AdvisorCard view={cafeRiskyView} ask={async (q: Query) => advisorAnswer((q as { question: string }).question)} />);
     fireEvent.click(screen.getByText('Is paying cash wages worth the risk?'));
-    expect(await screen.findByText(/You save about \$940 a month/)).toBeTruthy();
+    expect(await screen.findByText(/You keep about \$1,414 a month/)).toBeTruthy();
     expect(screen.getByRole('link', { name: /IRS: Trust Fund Recovery Penalty/ }).getAttribute('href')).toBe('https://www.irs.gov/TFRP');
     expect(screen.getByText('From the rule book')).toBeTruthy();
   });

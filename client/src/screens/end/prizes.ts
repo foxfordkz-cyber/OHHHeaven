@@ -1,7 +1,8 @@
 // Leaderboards and prizes. CONTRACT §4: the prize fund is bank × prizeShare; it is split between niches by the
 // number of paying owners, inside a niche by nichePrizeTable among human businesses that are not bankrupt.
-// AI businesses get no prize. OwnerView carries no prize amounts yet, so the table shows the projected prize by
-// these rules; when the season ends, final payouts from the server (if present) win.
+// AI businesses get no prize. While the season runs the table shows the prize each place would get today, by the
+// same rule as finalizeSeason (engine/src/deals/season.ts); Standing.prize from the server wins when it is sent,
+// and after the end OwnerView.payouts gives the money actually paid.
 import type { NicheId, OwnerView, Payout, PublicBusiness, Standing } from '@shared/types';
 
 export interface BoardRow {
@@ -10,6 +11,9 @@ export interface BoardRow {
 }
 
 export interface NicheBoard { niche: NicheId; pool: number; rows: BoardRow[]; mine: BoardRow | null }
+
+/** Niche order of the engine (engine/src/deals/standings.ts): leftover cents go to the first niches. */
+export const NICHE_ORDER: NicheId[] = ['cafe', 'barbershop', 'bodega', 'guesthouse', 'rentals'];
 
 const r2 = (v: number) => Math.round(v * 100) / 100;
 const toCents = (v: number) => Math.round(v * 100);
@@ -28,24 +32,41 @@ export function splitCents(totalCents: number, weights: number[]): number[] {
   return base;
 }
 
+type PoolView = Pick<OwnerView, 'world' | 'leaderboards'> & Partial<Pick<OwnerView, 'neighbors' | 'business'>>;
+
+/** Businesses of a niche seen by this player: the city list when there is one (the table holds only the top 20). */
+function nicheMembers(v: PoolView, niche: NicheId): { humans: number; humansAlive: number; total: number } {
+  const table = v.leaderboards[niche] ?? [];
+  const city: Pick<PublicBusiness, 'isAi' | 'status'>[] = (v.neighbors ?? []).filter((n) => n.niche === niche);
+  if (v.business && v.business.niche === niche) city.push({ isAi: v.business.isAi, status: v.business.status });
+  const tableHumans = table.filter((s) => !s.isAi);
+  return {
+    humans: Math.max(city.filter((b) => !b.isAi).length, tableHumans.length),
+    humansAlive: Math.max(city.filter((b) => !b.isAi && b.status !== 'bankrupt').length, tableHumans.filter((s) => !s.bankrupt).length),
+    total: Math.max(city.length, table.length),
+  };
+}
+
 /**
- * Prize fund of each niche, as finalizeSeason would split it today: the bank's prize share by paying human owners
- * in the niche (human businesses stand in for them), and a niche with nobody who can win hands its part to the others.
+ * Prize fund of each niche, as finalizeSeason would split it today: the bank's prize share by human owners in the
+ * niche (human businesses stand in for paying owners), and a niche with nobody who can win hands its part to the others.
  */
-export function nichePools(v: Pick<OwnerView, 'world' | 'leaderboards'>): Partial<Record<NicheId, number>> {
+export function nichePools(v: PoolView): Partial<Record<NicheId, number>> {
   const cfg = v.world.config;
   const [prizeC] = splitCents(toCents(v.world.bank), [cfg.prizeShare, cfg.officialsShare, cfg.platformShare]);
-  const entries = (Object.entries(v.leaderboards) as [NicheId, Standing[]][]).filter(([, s]) => s.some((x) => !x.isAi));
-  const weights = entries.map(([, s]) => s.filter((x) => !x.isAi).length);
+  const known = Object.keys(v.leaderboards) as NicheId[];
+  const niches = [...NICHE_ORDER.filter((n) => known.includes(n)), ...known.filter((n) => !NICHE_ORDER.includes(n))]
+    .filter((n) => nicheMembers(v, n).humans > 0);
+  const weights = niches.map((n) => nicheMembers(v, n).humans);
   const pools = splitCents(prizeC, weights);
-  const canWin = entries.map(([, s]) => s.some((x) => !x.isAi && !x.bankrupt));
+  const canWin = niches.map((n) => nicheMembers(v, n).humansAlive > 0);
   const orphan = pools.reduce((sum, c, i) => sum + (canWin[i] ? 0 : c), 0);
-  const winners = entries.map((_, i) => i).filter((i) => canWin[i]);
+  const winners = niches.map((_, i) => i).filter((i) => canWin[i]);
   const extra = orphan > 0 && winners.length ? splitCents(orphan, winners.map((i) => weights[i])) : [];
   const out: Partial<Record<NicheId, number>> = {};
-  entries.forEach(([n], i) => {
-    const plus = winners.indexOf(i) >= 0 && extra.length ? extra[winners.indexOf(i)] : 0;
-    out[n] = canWin[i] ? (pools[i] + plus) / 100 : 0;
+  niches.forEach((n, i) => {
+    const k = winners.indexOf(i);
+    out[n] = canWin[i] ? (pools[i] + (k >= 0 && extra.length ? extra[k] : 0)) / 100 : 0;
   });
   return out;
 }
@@ -60,27 +81,36 @@ export function placePrizes(pool: number, table: number[], eligible: number): nu
   return splitCents(toCents(pool), places).map((c) => c / 100);
 }
 
-export function nicheBoard(v: OwnerView & { extra?: { payouts?: Payout[] } }, niche: NicheId): NicheBoard {
-  const standings = [...(v.leaderboards[niche] ?? [])].sort((a, b) => a.rank - b.rank);
+/** Owner payouts of a niche after the end. OwnerView.payouts may hold only this player's own payouts. */
+function finalOwnerPayouts(v: OwnerView, niche: NicheId): Payout[] | null {
+  if (v.world.phase !== 'ended' || !v.payouts) return null;
+  return v.payouts.filter((p) => p.kind === 'owner' && p.niche === niche);
+}
+
+export function nicheBoard(v: OwnerView, niche: NicheId): NicheBoard {
+  const standings: Standing[] = [...(v.leaderboards[niche] ?? [])].sort((a, b) => a.rank - b.rank);
   const pool = nichePools(v)[niche] ?? 0;
   const eligible = standings.filter((s) => !s.isAi && !s.bankrupt);
   const prizes = placePrizes(pool, v.world.config.nichePrizeTable, eligible.length);
   const byId = new Map<string, PublicBusiness>(v.neighbors.map((n) => [n.id, n]));
   const myId = v.business?.id;
-  const final = v.world.phase === 'ended' ? v.extra?.payouts?.filter((p) => p.kind === 'owner' && p.niche === niche) : undefined;
+  const paid = finalOwnerPayouts(v, niche);
+  // The server sent everyone's payouts, not only mine: then every winner row shows the money actually paid
+  const everyone = !!paid && paid.some((p) => p.playerId !== v.me.id);
   const rows = standings.map((s) => {
     const place = eligible.findIndex((e) => e.businessId === s.businessId);
-    const projected = place >= 0 && place < prizes.length ? prizes[place] : null;
+    const winner = place >= 0 && place < prizes.length;
+    const projected = winner ? prizes[place] : null;
     // Payout.rank is the place among prize winners (1–3), not the row in the table; co-owners split one prize
-    const finalPrize = final && place >= 0 && place < 3 ? r2(final.filter((p) => p.rank === place + 1).reduce((sum, p) => sum + p.amount, 0)) || undefined : undefined;
+    const actual = everyone && winner ? r2(paid!.filter((p) => p.rank === place + 1).reduce((sum, p) => sum + p.amount, 0)) : null;
     const pub = byId.get(s.businessId);
     const mine = s.businessId === myId;
     return {
       businessId: s.businessId, rank: s.rank,
-      name: mine ? v.business!.name : pub?.name ?? `Business ${s.rank}`,
+      name: mine ? v.business!.name : s.name ?? pub?.name ?? `Business ${s.rank}`,
       owner: mine ? v.me.name : pub?.ownerName ?? '',
       isAi: s.isAi, bankrupt: s.bankrupt, mine, netWorth: s.netWorth,
-      prize: final ? (finalPrize ?? null) : projected,
+      prize: actual !== null ? actual : s.prize !== undefined && !s.isAi ? s.prize : projected,
       podium: (place >= 0 && place < 3 ? ((place + 1) as 1 | 2 | 3) : null),
     };
   });
@@ -88,7 +118,8 @@ export function nicheBoard(v: OwnerView & { extra?: { payouts?: Payout[] } }, ni
 }
 
 export function allBoards(v: OwnerView): NicheBoard[] {
-  return (Object.keys(v.leaderboards) as NicheId[]).filter((n) => (v.leaderboards[n]?.length ?? 0) > 0).map((n) => nicheBoard(v, n));
+  const known = (Object.keys(v.leaderboards) as NicheId[]).filter((n) => (v.leaderboards[n]?.length ?? 0) > 0);
+  return [...NICHE_ORDER.filter((n) => known.includes(n)), ...known.filter((n) => !NICHE_ORDER.includes(n))].map((n) => nicheBoard(v, n));
 }
 
 export interface OfficialRow { name: string; points: number; isAi: boolean; rank: number; prize: number | null }
@@ -107,15 +138,18 @@ export function officialsBoard(world: OwnerView['world'], ranking: { name: strin
   return { pool: officialsC / 100, rows };
 }
 
-/** My result at the end: place among all businesses of the niche and the payout (final if known). */
-export function myResult(v: OwnerView & { extra?: { payouts?: Payout[] } }): { niche: NicheId; rank: number; of: number; payout: number; final: boolean } | null {
+export interface MyResult { niche: NicheId; rank: number; of: number; payout: number; final: boolean }
+
+/** My result: place among all businesses of the niche and my payout (the money paid, once the season is over). */
+export function myResult(v: OwnerView): MyResult | null {
   const b = v.business;
   if (!b) return null;
   const board = nicheBoard(v, b.niche);
   const me = board.mine;
   if (!me) return null;
+  const of = Math.max(board.rows.length, nicheMembers(v, b.niche).total, me.rank);
+  const paid = v.world.phase === 'ended' && v.payouts ? v.payouts.filter((p) => p.playerId === v.me.id && p.kind === 'owner') : null;
+  if (paid) return { niche: b.niche, rank: me.rank, of, payout: r2(paid.reduce((s, p) => s + p.amount, 0)), final: true };
   const share = b.owners.find((o) => o.playerId === v.me.id)?.share ?? 1;
-  const finalPayout = v.extra?.payouts?.filter((p) => p.playerId === v.me.id && p.kind === 'owner').reduce((s, p) => s + p.amount, 0);
-  const final = v.world.phase === 'ended' && finalPayout !== undefined && v.extra?.payouts !== undefined;
-  return { niche: b.niche, rank: me.rank, of: board.rows.length, payout: final ? finalPayout! : r2((me.prize ?? 0) * share), final };
+  return { niche: b.niche, rank: me.rank, of, payout: r2((me.prize ?? 0) * share), final: false };
 }

@@ -21,7 +21,10 @@ export function headline(v: OwnerView): Stat[] {
       key: 'profit', label: 'Profit this month', value: money(a.profit, { sign: true }), tone: a.profit >= 0 ? 'good' : 'bad',
       sub: `forecast · day ${a.daysIntoMonth} of ${RULES.DAYS_PER_MONTH}`,
     },
-    { key: 'cash', label: 'Cash', value: money(b.cash), tone: b.cash > owed ? 'neutral' : 'bad', sub: owed > 0 ? `${money(owed)} of it is tax you owe` : undefined },
+    {
+      key: 'cash', label: 'Cash', value: money(b.cash), tone: b.cash > owed ? 'neutral' : 'bad',
+      sub: owed <= 0 ? undefined : owed > b.cash ? `you owe ${money(owed)} of tax: more than you have` : `${money(owed)} of it is tax you owe`,
+    },
     b.cash <= 0
       ? { key: 'runway', label: 'Cash runway', value: 'Out of cash', tone: 'bad', sub: 'bills are paid from the credit line now' }
       : a.cashRunwayMonths === null
@@ -79,15 +82,30 @@ const METRIC_LABELS: Record<string, string> = {
 };
 const HIGHER_IS_BETTER = new Set(['netMarginPct']);
 
+/** Benchmark.metric is a key (cogsPct) in samples and a label ('Labor, % of sales') in agent 04's analytics. */
+export function metricKey(metric: string): string {
+  if (METRIC_LABELS[metric]) return metric;
+  const m = metric.toLowerCase();
+  if (m.startsWith('prime')) return 'primeCostPct';
+  if (m.startsWith('cost of') || m.startsWith('cogs') || m.startsWith('food')) return 'cogsPct';
+  if (m.startsWith('labor') || m.startsWith('labour') || m.startsWith('payroll')) return 'laborPct';
+  if (m.startsWith('rent')) return 'rentPct';
+  if (m.includes('margin')) return 'netMarginPct';
+  return metric;
+}
+
 export interface BenchmarkRow { metric: string; text: string; short: string; you: string; industry: string; word: string; tone: Tone }
 
 export function benchmarkRow(bm: Benchmark): BenchmarkRow {
-  const better = HIGHER_IS_BETTER.has(bm.metric);
-  const word = bm.verdict === 'ok' ? 'normal' : (bm.verdict === 'good') === better ? 'high' : 'low';
+  const key = metricKey(bm.metric);
+  const better = HIGHER_IS_BETTER.has(key);
+  // The verdict is the engine's; the word only says which side of the norm you are on ("normal" when equal)
+  const same = pct(bm.you) === pct(bm.industry);
+  const word = bm.verdict === 'ok' || same ? 'normal' : (bm.verdict === 'good') === better ? 'high' : 'low';
   const tone: Tone = bm.verdict === 'good' ? 'good' : bm.verdict === 'bad' ? 'bad' : 'neutral';
-  const label = METRIC_LABELS[bm.metric] ?? bm.metric;
+  const label = METRIC_LABELS[key] ?? bm.metric.replace(/,\s*% of (sales|revenue)$/i, '');
   const short = `${label} ${pct(bm.you)} · industry ${pct(bm.industry)}`;
-  return { metric: bm.metric, you: pct(bm.you), industry: pct(bm.industry), word, tone, short, text: `${short} · ${word}` };
+  return { metric: key, you: pct(bm.you), industry: pct(bm.industry), word, tone, short, text: `${short} · ${word}` };
 }
 
 export interface CostModel { period: string; segments: Segment[]; total: number; rows: BenchmarkRow[] }
@@ -115,8 +133,11 @@ export function trendModel(v: OwnerView): { points: TrendPoint[]; marks: TrendMa
     points.push({ month: a.month, revenue: a.revenue, profit: a.profit, cash: b.cash, partial: true });
   }
   const monthOf = (day: number) => dateOf(day).month;
+  // The view keeps only current and coming events; past ones stay in the inbox as notices (host: kind 'event')
+  const current = new Set(v.events.map((e) => e.title));
   const marks: TrendMark[] = [
     ...v.events.map((e) => ({ month: monthOf(e.startDay), kind: 'event' as const, label: e.title })),
+    ...v.me.inbox.filter((i) => i.kind === 'event' && !current.has(i.title)).map((i) => ({ month: monthOf(i.day), kind: 'event' as const, label: i.title })),
     ...v.feed.filter((f) => f.kind === 'inspection' && f.businessId === b.id).map((f) => ({ month: monthOf(f.day), kind: 'inspection' as const, label: f.text })),
     ...b.history.filter((m) => m.fines > 0).map((m) => ({ month: m.month, kind: 'fine' as const, label: `Fine ${money(m.fines)}` })),
   ];
@@ -234,7 +255,7 @@ export function advisorPresets(v: OwnerView): string[] {
   const tax = taxModel(v);
   if (tax?.next && tax.enough === false) add(`How do I pay ${money(tax.next.amount)} of tax due ${tax.next.label}?`, 3);
   add(SUPPLIER_QUESTION[b.niche] ?? 'Where do I find suppliers in real life?', 2);
-  if (a?.benchmarks.some((bm) => bm.metric === 'rentPct' && bm.verdict === 'bad')) add('Is my rent too high for this space?', 1);
+  if (a?.benchmarks.some((bm) => metricKey(bm.metric) === 'rentPct' && bm.verdict === 'bad')) add('Is my rent too high for this space?', 1);
   add('How can I reach break-even faster?', 0);
   add('What permits do I need in real life?', 0);
   const seen = new Set<string>();

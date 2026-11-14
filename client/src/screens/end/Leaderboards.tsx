@@ -7,10 +7,9 @@ import './end.css';
 
 export type RankingRow = { name: string; points: number; isAi: boolean };
 
-/** Officials ranking is not in OwnerView yet: take it from `extra` (see agents/11.md, requests). */
+/** Officials ranking of the city (OwnerView.officialsRanking); empty until the server sends it. */
 export function rankingOf(view: OwnerView): RankingRow[] {
-  const extra = (view as OwnerView & { extra?: { officialsRanking?: RankingRow[] } }).extra;
-  return extra?.officialsRanking ?? [];
+  return view.officialsRanking ?? [];
 }
 
 function Row({ r, testMoney }: { r: BoardRow; testMoney: boolean }) {

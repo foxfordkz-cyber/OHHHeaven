@@ -25,6 +25,13 @@ function MoneyTable({ rows, total, totalLabel }: { rows: { label: string; amount
   );
 }
 
+/** The reserve in months of the monthly costs shown above it ("2.8 months", "6 months"); null if there is nothing to divide by. */
+export function reserveMonths(plan: Pick<RealWorldPlan, 'reserveAdvised' | 'monthlyTotal'>): string | null {
+  if (plan.monthlyTotal <= 0 || plan.reserveAdvised <= 0) return null;
+  const m = Math.round((plan.reserveAdvised / plan.monthlyTotal) * 10) / 10;
+  return `${Number.isInteger(m) ? m : m.toFixed(1)} ${m === 1 ? 'month' : 'months'}`;
+}
+
 /** The page a person takes home. Pure: everything comes from the RealWorldPlan. */
 export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards: Map<string, PackRuleCard>; actions?: ReactNode }) {
   const one = unitWord(plan.niche, 1);
@@ -47,7 +54,10 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
       <section className="plan-block plan-half" aria-labelledby="plan-monthly">
         <h2 id="plan-monthly" className="h3">Every month</h2>
         <MoneyTable rows={plan.monthlyCosts} total={plan.monthlyTotal} totalLabel="Monthly costs" />
-        <p className="plan-note"><strong>Keep {money(plan.reserveAdvised)} in reserve</strong> — six months of fixed costs, so one bad season does not close you.</p>
+        <p className="plan-note">
+          <strong>Keep {money(plan.reserveAdvised)} in reserve</strong>{reserveMonths(plan) ? ` — about ${reserveMonths(plan)} of these costs —` : ''} so one slow season does not close you.
+          All in, have <strong className="num">{money(plan.startupTotal + plan.reserveAdvised)}</strong> before you sign a lease.
+        </p>
       </section>
 
       <section className="plan-block plan-grid" aria-label="Break-even and payback">

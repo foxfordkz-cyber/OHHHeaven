@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import type { ScreenModule } from '../../app/screens';
 import { WithStore } from '../../app/dev';
 import { devStore } from './dev-store';
-import { cafeSetupView, cafeStrugglingView, cafeView } from './fixtures';
+import { cafeRiskyView, cafeSetupView, cafeStrugglingView, cafeView } from './fixtures';
 import { InsightsTabConnected } from './InsightsTab';
 import type { OwnerView } from '@shared/types';
 
@@ -23,8 +23,9 @@ function DevInsights({ view, hang }: { view: OwnerView; hang?: boolean }) {
 export const screen: ScreenModule = {
   bizTabs: [{ id: 'insights', label: 'Insights', order: 50, element: <InsightsTabConnected /> }],
   dev: [
-    { id: 'insights', title: 'Insights — healthy cafe, June', render: () => <DevInsights view={cafeView} /> },
-    { id: 'insights-loss', title: 'Insights — cafe losing money', render: () => <DevInsights view={cafeStrugglingView} /> },
+    { id: 'insights', title: 'Insights — cafe in profit, June', render: () => <DevInsights view={cafeView} /> },
+    { id: 'insights-loss', title: 'Insights — losing money, tax due in 5 days', render: () => <DevInsights view={cafeStrugglingView} /> },
+    { id: 'insights-risky', title: 'Insights — paying wages in cash', render: () => <DevInsights view={cafeRiskyView} /> },
     { id: 'insights-setup', title: 'Insights — before opening', render: () => <DevInsights view={cafeSetupView} /> },
     { id: 'insights-timeout', title: 'Insights — advisor does not answer', render: () => <DevInsights view={cafeView} hang /> },
   ],
