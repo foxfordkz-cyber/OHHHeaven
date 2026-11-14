@@ -1,1 +1,1583 @@
-{"extra":{"formats":[],"mechanics":[],"eventCatalog":[]},"setup":[],"events":[]}
+{
+  "setup": [
+    {
+      "id": "mfv_license",
+      "name": "Mobile Food Vending License (personal, 2 years)",
+      "kind": "license",
+      "cost": 50,
+      "required": false,
+      "waitDays": 30,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license",
+      "withoutItViolation": "vending_without_license",
+      "formats": [
+        "coffee_cart",
+        "food_truck"
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license",
+      "confidence": "verified",
+      "note": "NYC Business: $50 for the two-year full-term license; free for honorably discharged veterans. Every person who works the cart or truck needs one, not only the owner. The DOHMH renewal form asks $60. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy. waitDays is my estimate: the license needs the DOHMH food protection course for mobile vendors and a visit to the licensing center."
+    },
+    {
+      "id": "mfv_unit_permit",
+      "name": "Mobile Food Vending Unit Permit (cart or truck, 2 years)",
+      "kind": "permit",
+      "cost": 200,
+      "required": false,
+      "waitDays": 365,
+      "agency": "NYC DOHMH",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
+      "withoutItViolation": "vending_without_unit_permit",
+      "formats": [
+        "coffee_cart",
+        "food_truck"
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
+      "confidence": "verified",
+      "note": "NYC Business: $200 for a full-term two-year permit when food is prepared on the unit, $75 when it only sells pre-packaged food. The fee is tiny; the problem is the cap. You can apply only when DOHMH invites you from a waiting list. Local Law 18 of 2021 added 445 permits a year through fiscal 2026; the January 29, 2026 veto override adds 2,200 supervisory license applications a year from 2026 through 2031 (6sqft, Council press release). waitDays = 365 is my estimate of the wait after the list reopens; before 2026 the wait was measured in years and most vendors rented someone else's permit."
+    },
+    {
+      "id": "restricted_area_permit",
+      "name": "Restricted Area Mobile Food Vending Permit (private property or park, no cap)",
+      "kind": "permit",
+      "cost": 200,
+      "required": false,
+      "waitDays": 45,
+      "agency": "NYC DOHMH",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit",
+      "formats": [
+        "coffee_cart",
+        "food_truck",
+        "concession_kiosk"
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
+      "confidence": "estimate",
+      "note": "NYC311: the Restricted Area permit has no waiting list and no limit on the number of permits, but it only covers private property or park property under an agreement with the owner or the Parks Department, never a public street. The $200 fee is my assumption that it follows the full-term unit permit fee; the 311 excerpt did not show the amount. waitDays is my estimate."
+    },
+    {
+      "id": "food_cart_new",
+      "name": "New stainless coffee cart built to Health Department specs",
+      "kind": "equipment",
+      "cost": 15000,
+      "required": false,
+      "lifespanMonths": 120,
+      "formats": [
+        "coffee_cart"
+      ],
+      "source": "https://pos.toasttab.com/blog/on-the-line/how-much-does-a-food-cart-cost",
+      "confidence": "estimate",
+      "note": "Toast's 2025 guide puts a food cart at $5,000-$10,000 before equipment and permits. A NYC coffee cart also needs a DOHMH-approved hand sink and water tanks, an espresso or brewing setup on a generator or propane, and it must pass the pre-permit inspection at the DOHMH Bureau of Food Safety garage. $15,000 = $9,000 for the body + $6,000 for brewing equipment, generator and tanks: my estimate, no NYC fabricator price list was found."
+    },
+    {
+      "id": "food_truck_used",
+      "name": "Used food truck, fitted out and inspected",
+      "kind": "equipment",
+      "cost": 90000,
+      "required": false,
+      "lifespanMonths": 96,
+      "formats": [
+        "food_truck"
+      ],
+      "source": "https://startbusinessbystate.com/new-york/food-truck/",
+      "confidence": "estimate",
+      "note": "Start Business by State (2026) puts a new truck at $100,000-$175,000. A used, already-fitted truck is my estimate at $90,000. Trucks also need commercial auto insurance, a DOT visual inspection and an FDNY LPG permit when they cook on propane."
+    },
+    {
+      "id": "commissary_contract_deposit",
+      "name": "Commissary contract: first month and deposit",
+      "kind": "deposit",
+      "cost": 1500,
+      "required": false,
+      "formats": [
+        "coffee_cart",
+        "food_truck"
+      ],
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+      "confidence": "estimate",
+      "note": "DOHMH: every permitted cart or truck must be cleaned, serviced and stored at an approved commissary or depot, which holds its own non-retail permit; the commissary agreement is checked at the pre-permit inspection. Monthly prices seen: $250-$300 for garage space (Untapped Cities, 2013, old); vendor guides give $300-$3,000 a month. $1,500 = a $750 month + a $750 deposit, my estimate."
+    },
+    {
+      "id": "fdny_g23_cof",
+      "name": "FDNY Certificate of Fitness G-23 (propane for mobile cooking)",
+      "kind": "license",
+      "cost": 25,
+      "required": false,
+      "waitDays": 14,
+      "agency": "FDNY",
+      "link": "https://www.nyc.gov/site/fdny/business/all-certifications/cof-g23.page",
+      "withoutItViolation": "propane_without_cof",
+      "formats": [
+        "coffee_cart",
+        "food_truck",
+        "market_stall"
+      ],
+      "source": "https://www.nyc.gov/site/fdny/business/all-certifications/cof-g23.page",
+      "confidence": "estimate",
+      "note": "FDNY: a G-23 holder must connect and disconnect LPG containers over one pound on a food cart or truck; the certificate needs a written exam. The renewal fee is $15 (NYC Business). The $25 application fee is my assumption: the excerpt did not show it. Not needed if the cart runs on a battery or generator only."
+    },
+    {
+      "id": "fdny_lpg_truck_permit",
+      "name": "FDNY permit: LPG on a mobile food truck",
+      "kind": "permit",
+      "cost": 105,
+      "required": false,
+      "waitDays": 14,
+      "agency": "FDNY",
+      "link": "https://www.nyc.gov/site/fdny/business/all-certifications/per-liquefiedpetroleumgas.page",
+      "withoutItViolation": "propane_without_cof",
+      "formats": [
+        "food_truck"
+      ],
+      "source": "https://www.nyc.gov/site/fdny/business/all-certifications/per-liquefiedpetroleumgas.page",
+      "confidence": "verified",
+      "note": "FDNY LPG permit page: Transportation / Mobile Food Truck permit $105.00; a truck may carry at most two cylinders of no more than 100 lb each and needs a minimum 20:B-C extinguisher and a DOT visual inspection. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "vending_generator_battery",
+      "name": "Quiet inverter generator or battery pack for the cart",
+      "kind": "equipment",
+      "cost": 1800,
+      "required": false,
+      "lifespanMonths": 60,
+      "formats": [
+        "coffee_cart",
+        "market_stall"
+      ],
+      "source": "https://pos.toasttab.com/blog/on-the-line/how-much-does-a-food-cart-cost",
+      "confidence": "estimate",
+      "note": "My allowance for a 2-3 kW inverter generator or a lithium battery station; an espresso boiler draws 1.5-3 kW. Without power the cart sells batch brew from airpots only."
+    },
+    {
+      "id": "tfse_permit",
+      "name": "Temporary Food Service Establishment Permit (street fairs, markets; 1 year)",
+      "kind": "permit",
+      "cost": 70,
+      "required": false,
+      "waitDays": 14,
+      "agency": "NYC DOHMH",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishment-permit",
+      "withoutItViolation": "no_tfse_permit",
+      "formats": [
+        "market_stall"
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01825",
+      "confidence": "verified",
+      "note": "NYC311 and the DOHMH application packet: $70 a year (+$25 when making frozen desserts); it covers street fairs, flea markets and carnivals, expires one year after issue, and a supervisor with a Food Protection Certificate must be on site at all times. A cafe's own FSE permit covers only its own storefront. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "market_stall_gear",
+      "name": "10x10 tent, weights, folding tables, coolers, hand-wash station",
+      "kind": "equipment",
+      "cost": 2500,
+      "required": false,
+      "lifespanMonths": 36,
+      "formats": [
+        "market_stall"
+      ],
+      "source": "https://specialtyfoodmagazine.epubxp.com/i/123797/51",
+      "confidence": "estimate",
+      "note": "My allowance. Markets require a hand-wash station, a tent with weights and a fire extinguisher; electricity is extra (Appear Here listing for a Smorgasburg Saturday spot: $50 a day)."
+    },
+    {
+      "id": "kiosk_buildout",
+      "name": "Build-out of a 150-300 sq ft takeaway window or kiosk",
+      "kind": "buildout",
+      "cost": 45000,
+      "required": false,
+      "lifespanMonths": 120,
+      "formats": [
+        "takeaway_window",
+        "concession_kiosk"
+      ],
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "confidence": "estimate",
+      "note": "My estimate: 200 sq ft x $225 per sq ft (the standard food-space rate used in the cafe pack's extra.buildout). A window still needs a hand sink, a three-compartment sink, a mop sink and hot water; it drops the customer restroom (no seats), the dining furniture and most of the floor finish."
+    },
+    {
+      "id": "concession_fee_deposit",
+      "name": "Park or plaza concession: security deposit and first guaranteed fee",
+      "kind": "deposit",
+      "cost": 10000,
+      "required": false,
+      "formats": [
+        "concession_kiosk"
+      ],
+      "source": "https://static.nycgovparks.org/images/pagefiles/203/Harlem-Meer-Step-2-NPH-Final-approved-__676adfc6612a7.pdf",
+      "confidence": "estimate",
+      "note": "NYC Parks licenses pay the greater of a guaranteed annual minimum or a share of gross receipts: Harlem Meer snack bar $20,000 in year 1 vs 9%; Cadman Plaza cafe minimum vs 10%; a 2025 FCRC item 11%; a February 2026 item 6%. $10,000 = half of a $20,000 first-year minimum held as deposit, my estimate."
+    },
+    {
+      "id": "convection_oven_full",
+      "name": "Full-size electric convection oven",
+      "kind": "equipment",
+      "cost": 8086,
+      "required": false,
+      "lifespanMonths": 120,
+      "qualityBonus": 0.02,
+      "formats": [
+        "bakery_cafe",
+        "sandwich_bar"
+      ],
+      "source": "https://www.webstaurantstore.com/vulcan-vc6ed-208-3-single-deck-full-size-electric-deep-depth-convection-oven-with-solid-state-controls-208v-3-phase-12-5-kw/901VC6EDC.html",
+      "confidence": "verified",
+      "note": "Vulcan VC6ED single-deck full-size electric convection oven, 208V 3-phase, 12.5 kW: $8,086.00 at WebstaurantStore. Countertop half-size units start near $900 (Avantco). Three-phase power is often missing in old storefronts: check the panel before you buy. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "ventless_rapid_oven",
+      "name": "Ventless rapid-cook oven (hot sandwiches without a hood)",
+      "kind": "equipment",
+      "cost": 17190,
+      "required": false,
+      "lifespanMonths": 84,
+      "qualityBonus": 0.02,
+      "formats": [
+        "takeaway_window",
+        "sandwich_bar",
+        "cafe_wine_bar"
+      ],
+      "source": "https://www.webstaurantstore.com/turbochef-bullet-high-speed-accelerated-cooking-cooking-countertop-oven/532BULLETM.html",
+      "confidence": "verified",
+      "note": "TurboChef Bullet, 208/240V: $17,190.00 at WebstaurantStore (Middleby list $17,191). It cleans its own grease vapor with a catalytic converter, so many cafes heat food without a Type I hood, but TurboChef itself says the final allowance depends on the local authority; in NYC that is DOB and FDNY. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "type1_hood_suppression",
+      "name": "Type I exhaust hood, duct, fan and wet-chemical fire suppression",
+      "kind": "buildout",
+      "cost": 45000,
+      "required": false,
+      "lifespanMonths": 180,
+      "formats": [
+        "bakery_cafe",
+        "sandwich_bar",
+        "cafe_wine_bar",
+        "delivery_kitchen"
+      ],
+      "source": "https://sinra.ai/projects/permits/mechanical-systems-852-9-avenue-manhattan-622733663",
+      "confidence": "estimate",
+      "note": "One NYC data point: a 2025 DOB filing for a new Type I hood and exhaust at 852 Ninth Avenue lists $22,000 of work, without the suppression system, which is filed separately with FDNY and installed by a licensed master fire suppression piping contractor. $45,000 = $22,000 hood and duct + $8,000 suppression + $15,000 for the roof run, makeup air and the engineer's filing: my estimate. A long duct to the roof of a tall building costs far more."
+    },
+    {
+      "id": "fdny_cooking_permit",
+      "name": "FDNY Commercial Cooking System permit",
+      "kind": "permit",
+      "cost": 70,
+      "required": false,
+      "waitDays": 30,
+      "agency": "FDNY",
+      "link": "https://www.nyc.gov/site/fdny/business/all-certifications/per-commercialcookingsystem.page",
+      "withoutItViolation": "no_cooking_system_permit",
+      "formats": [
+        "bakery_cafe",
+        "sandwich_bar",
+        "cafe_wine_bar",
+        "delivery_kitchen"
+      ],
+      "source": "https://www.nyc.gov/site/fdny/business/all-certifications/per-commercialcookingsystem.page",
+      "confidence": "verified",
+      "note": "FDNY: $70.00 to maintain or operate a commercial cooking system, plus acceptance-test fees for the fire extinguishing system. Duct cleaning above the hood must be done by an FDNY-approved company whose workers hold a W-64/P-64 Certificate of Fitness. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "gas_authorization",
+      "name": "Gas authorization for restaurant equipment (DOB) and Con Edison turn-on",
+      "kind": "permit",
+      "cost": 3500,
+      "required": false,
+      "waitDays": 120,
+      "agency": "NYC Department of Buildings and Con Edison",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment",
+      "formats": [
+        "bakery_cafe",
+        "delivery_kitchen"
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment",
+      "confidence": "estimate",
+      "note": "NYC Business lists a separate DOB gas authorization for restaurant equipment, filed by a licensed master plumber. Cost: my allowance for the plumber's filing and pressure test. Wait: past NYC cases ran 3-6 months (Lucky Bee cooked on induction for three months; a 2017 State Senate survey found only 17% of businesses got gas service on time). Con Edison and the NYC Hospitality Alliance let you ask about gas availability before you sign a lease."
+    },
+    {
+      "id": "spiral_mixer",
+      "name": "Spiral dough mixer (60 qt class)",
+      "kind": "equipment",
+      "cost": 9000,
+      "required": false,
+      "lifespanMonths": 180,
+      "qualityBonus": 0.02,
+      "formats": [
+        "bakery_cafe"
+      ],
+      "source": "https://www.webstaurantstore.com/search/spiral-mixer.html",
+      "confidence": "estimate",
+      "note": "My estimate for a commercial spiral mixer that kneads about 60-80 lb of dough; small cafes that bake only muffins and cookies use a 20 qt planetary mixer at a fraction of the price."
+    },
+    {
+      "id": "proofer_retarder",
+      "name": "Proofing cabinet / retarder",
+      "kind": "equipment",
+      "cost": 4500,
+      "required": false,
+      "lifespanMonths": 144,
+      "formats": [
+        "bakery_cafe"
+      ],
+      "source": "https://www.webstaurantstore.com/search/proofer-cabinet.html",
+      "confidence": "estimate",
+      "note": "My estimate. A retarder lets a baker shape dough in the afternoon and bake at 5 a.m. without a 3 a.m. start: it trades equipment money for labor at night."
+    },
+    {
+      "id": "sandwich_prep_table",
+      "name": "48-inch refrigerated sandwich prep table",
+      "kind": "equipment",
+      "cost": 1329,
+      "required": false,
+      "lifespanMonths": 96,
+      "formats": [
+        "sandwich_bar",
+        "takeaway_window",
+        "delivery_kitchen"
+      ],
+      "source": "https://www.webstaurantstore.com/avantco-apt-48-hc-48-2-door-refrigerated-sandwich-prep-table/178APT48HC.html",
+      "confidence": "verified",
+      "note": "Avantco APT-48-HC 47-inch two-door refrigerated sandwich prep table: $1,329.00 at WebstaurantStore (a MainStreet 48-inch mega top is $1,079; Traulsen $5,172). Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "meat_slicer",
+      "name": "12-inch manual meat slicer",
+      "kind": "equipment",
+      "cost": 619,
+      "required": false,
+      "lifespanMonths": 96,
+      "formats": [
+        "sandwich_bar"
+      ],
+      "source": "https://www.webstaurantstore.com/avantco-sl512-12-manual-gravity-feed-meat-slicer-1-2-hp/177SL512.html",
+      "confidence": "verified",
+      "note": "Avantco SL512 12-inch gravity-feed slicer, 1/2 hp: $619.00 on sale at WebstaurantStore (heavy-duty Globe GC512 $2,976). Slicers are a top source of kitchen cuts and of Listeria findings when not taken apart and cleaned every 4 hours of use. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "cold_press_juicer",
+      "name": "Commercial cold-press juicer",
+      "kind": "equipment",
+      "cost": 11900,
+      "required": false,
+      "lifespanMonths": 96,
+      "qualityBonus": 0.03,
+      "formats": [
+        "juice_bar"
+      ],
+      "source": "https://www.goodnature.com/reseller",
+      "confidence": "estimate",
+      "note": "Goodnature X-1 Mini: about $11,900 on the Goodnature reseller page (more than 30 bottles an hour); the model has been replaced by the Hummingbird and a certified used unit sells for more in Australia. The page excerpt was ambiguous, so this stays an estimate."
+    },
+    {
+      "id": "commercial_blenders",
+      "name": "Two commercial drink blenders with sound enclosures",
+      "kind": "equipment",
+      "cost": 1900,
+      "required": false,
+      "lifespanMonths": 48,
+      "formats": [
+        "juice_bar",
+        "bubble_tea"
+      ],
+      "source": "https://www.katom.com/491-5085.html",
+      "confidence": "estimate",
+      "note": "Vitamix Drink Machine Advance: $474.96 on sale to $1,111.02 list at KaTom; quiet-enclosure models cost more. $1,900 = two machines at about $950, my estimate."
+    },
+    {
+      "id": "boba_sealer",
+      "name": "Automatic cup sealing machine",
+      "kind": "equipment",
+      "cost": 1800,
+      "required": false,
+      "lifespanMonths": 48,
+      "formats": [
+        "bubble_tea",
+        "juice_bar"
+      ],
+      "source": "https://pos.toasttab.com/blog/on-the-line/how-much-does-it-cost-to-open-a-boba-shop",
+      "confidence": "estimate",
+      "note": "Toast: bubble tea sealers $1,000 to $4,000+; another guide lists automatic sealers at $1,460-$1,799, 300-500 cups an hour. Sealed cups also cut spills on delivery orders."
+    },
+    {
+      "id": "boba_pearl_cooker",
+      "name": "Automatic tapioca pearl cooker, fructose dispenser, tea brewer",
+      "kind": "equipment",
+      "cost": 4500,
+      "required": false,
+      "lifespanMonths": 60,
+      "formats": [
+        "bubble_tea"
+      ],
+      "source": "https://pos.toasttab.com/blog/on-the-line/how-much-does-it-cost-to-open-a-boba-shop",
+      "confidence": "estimate",
+      "note": "Toast: automatic tapioca pearl cookers around $4,500 (simple 12 L pearl cookers sell for under $200 at Walmart). Fructose dispenser and tea brewer are inside this allowance, my estimate."
+    },
+    {
+      "id": "sla_restaurant_wine_license",
+      "name": "State Liquor Authority Restaurant Wine license (wine and beer, NYC, 2 years)",
+      "kind": "license",
+      "cost": 1060,
+      "required": false,
+      "waitDays": 180,
+      "agency": "New York State Liquor Authority (SLA)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/restaurant-wine-license",
+      "withoutItViolation": "unlicensed_alcohol_sale",
+      "formats": [
+        "cafe_wine_bar"
+      ],
+      "source": "https://sla.ny.gov/system/files/documents/2026/06/retail-fee-chart_6122026.pdf",
+      "confidence": "verified",
+      "note": "SLA retail fee chart revised June 12, 2026: Restaurant Wine, New York City tier, $960 license fee for two years + $100 filing fee. Eligibility: a restaurant with a kitchen and a menu of meals (NYC Business); a pastry-only coffee shop is usually pointed to the Tavern Wine class, which community boards resist more. Wait: the SLA's own notice estimated 24-26 weeks for new applications (Rodriguez Law), so 180 days. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "sla_temporary_retail_permit",
+      "name": "SLA Temporary Retail Permit (sell while the license is pending, 180 days)",
+      "kind": "permit",
+      "cost": 640,
+      "required": false,
+      "waitDays": 50,
+      "agency": "New York State Liquor Authority (SLA)",
+      "link": "https://sla.ny.gov/eligibility-temporary-retail-permits",
+      "formats": [
+        "cafe_wine_bar"
+      ],
+      "source": "https://sla.ny.gov/system/files/documents/2026/03/temporary-retail-st-permit_02262026_0.pdf",
+      "confidence": "verified",
+      "note": "SLA temporary retail permit form (February 2026): $640 per bar for the initial 180 days for wine/liquor on-premises applications ($128 for beer-only, grocery and drug stores); 30-day extensions available. A 2024 law doubled the term from 90 to 180 days and removed NYC's rule that the premises must have been licensed in the last two years. The permit itself took 6-8 weeks in 2023-2024 reports (Bond Schoeneck & King), so 50 days. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "community_board_notice",
+      "name": "30-day notice to the community board, questionnaire and hearing",
+      "kind": "other",
+      "cost": 0,
+      "required": false,
+      "waitDays": 30,
+      "agency": "NYC Community Board",
+      "link": "https://www.nyc.gov/site/communityboards/mandates/liquor-licenses.page",
+      "formats": [
+        "cafe_wine_bar"
+      ],
+      "source": "https://www.cb11m.org/liquor-licenses/",
+      "confidence": "verified",
+      "note": "Every on-premises applicant in NYC must notify the community board at least 30 days before filing with the SLA and attach proof of the notice. The board's vote is advisory, but boards attach stipulations (closing hours, no outdoor alcohol, no live music) that the SLA writes into the license. Fee: none; the cost is time and often a lawyer at the hearing."
+    },
+    {
+      "id": "wine_service_fitout",
+      "name": "Wine fridge, glassware, beer kegerator and point-of-sale alcohol setup",
+      "kind": "equipment",
+      "cost": 6000,
+      "required": false,
+      "lifespanMonths": 72,
+      "qualityBonus": 0.01,
+      "formats": [
+        "cafe_wine_bar"
+      ],
+      "source": "https://sla.ny.gov/restaurant-license-quick-reference-0",
+      "confidence": "estimate",
+      "note": "My allowance: a dual-zone wine refrigerator, a two-tap kegerator, 120 glasses and the till's age-check prompt. The SLA requires the licensed area to match the filed floor plan; moving the bar later needs an alteration application."
+    },
+    {
+      "id": "liquor_license_lawyer",
+      "name": "Liquor license attorney or expediter",
+      "kind": "other",
+      "cost": 5000,
+      "required": false,
+      "formats": [
+        "cafe_wine_bar"
+      ],
+      "source": "https://lawrodriguez.com/articles/what-is-the-difference-between-a-restaurant-wine-license-and-a-tavern-wine-license/",
+      "confidence": "estimate",
+      "note": "My estimate for preparing the SLA application, the community board questionnaire and the hearing. Many small owners file themselves; errors restart the SLA clock."
+    },
+    {
+      "id": "shared_kitchen_onboarding",
+      "name": "Shared or ghost kitchen onboarding: deposit, first month, insurance certificate",
+      "kind": "deposit",
+      "cost": 3500,
+      "required": false,
+      "formats": [
+        "delivery_kitchen"
+      ],
+      "source": "https://www.thekitchendoor.com/kitchen-rental/brooklyn-commerical-prep-kitchen",
+      "confidence": "estimate",
+      "note": "Seen on The Kitchen Door: a Brooklyn shared prep kitchen at $3,700 a month (insurance and ServSafe required); Ozone Park $28-$48 an hour with 20 hours a month minimum; Nimbus Downtown Brooklyn $25-$40 an hour with 32 hours a month for three months. $3,500 = one month plus a deposit at the hourly end, my estimate."
+    },
+    {
+      "id": "delivery_packaging_tablets",
+      "name": "Delivery tablets, label printer, tamper-evident bags and opening packaging",
+      "kind": "inventory",
+      "cost": 1500,
+      "required": false,
+      "lifespanMonths": 24,
+      "formats": [
+        "delivery_kitchen",
+        "takeaway_window"
+      ],
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+      "confidence": "estimate",
+      "note": "My allowance. Each delivery app ships its own tablet or integrates through one aggregator; tamper-evident bags cut 'missing item' refunds."
+    }
+  ],
+  "monthlyCosts": [
+    {
+      "id": "commissary_fee",
+      "name": "Commissary or depot (cart and truck storage, cleaning, water)",
+      "kind": "rent",
+      "basis": "fixed",
+      "amount": 750,
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+      "confidence": "estimate",
+      "note": "Required for every permitted cart or truck (DOHMH). $750 = middle of the $300-$1,500 range seen in vendor guides; old reporting found $250-$300 for garage space only (Untapped Cities)."
+    },
+    {
+      "id": "black_market_permit_rent",
+      "name": "Rented vending permit (illegal, see shortcut)",
+      "kind": "other",
+      "basis": "fixed",
+      "amount": 850,
+      "source": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+      "confidence": "estimate",
+      "note": "Queens Eagle, April 2025: vendors pay up to $25,000 every two years to rent a permit that costs its holder $200; one vendor paid $14,000; IBO cited $17,000+ a year. $850 a month = $20,000 / 24, the middle of those figures. Shown only so the shortcut has a real price."
+    },
+    {
+      "id": "delivery_app_commission",
+      "name": "Delivery app fees (basic plan)",
+      "kind": "fees",
+      "basis": "pct_revenue",
+      "amount": 0.23,
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+      "confidence": "verified",
+      "note": "NYC caps: 15% for delivery, 5% for the basic listing and 3% for card processing = 23% of each delivery order; Local Law 79 of 2025 lets apps sell an optional 'enhanced' package for up to 20% more (43% total). Applies to the delivery share of revenue only. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "shared_kitchen_hours",
+      "name": "Shared kitchen time (about 120 hours a month)",
+      "kind": "rent",
+      "basis": "fixed",
+      "amount": 4200,
+      "source": "https://thekitchendoor.com/kitchen-rental/ben-commissary-shared-kitchen",
+      "confidence": "estimate",
+      "note": "120 hours x $35 an hour (listings in Brooklyn and Queens ran $25-$48 an hour). A full-time private ghost-kitchen station costs more and is quoted only on request."
+    },
+    {
+      "id": "liquor_liability_insurance",
+      "name": "Liquor liability insurance",
+      "kind": "insurance",
+      "basis": "fixed",
+      "amount": 100,
+      "source": "https://www.insureon.com/insurance/liquor-liability/cost",
+      "confidence": "estimate",
+      "note": "Insureon: its small-business customers pay about $41 a month for liquor liability on average; New York's Dram Shop Act (General Obligations Law 11-101) makes the seller liable for injuries caused by a guest it served unlawfully, and NYC landlords usually demand the policy. $100 a month is my New York allowance for beer and wine."
+    },
+    {
+      "id": "hood_cleaning_suppression_service",
+      "name": "Hood and duct cleaning plus fire-suppression service",
+      "kind": "maintenance",
+      "basis": "fixed",
+      "amount": 250,
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/fire-safety-in-commercial-cooking-locations.pdf",
+      "confidence": "estimate",
+      "note": "FDNY: duct cleaning by an approved company; NFPA 96 tables set quarterly cleaning for high-volume cooking and longer intervals for light cooking; suppression systems are serviced every six months. $250 = about $1,800 a year of cleaning + $1,200 of suppression service, my estimate."
+    },
+    {
+      "id": "concession_share",
+      "name": "Concession fee to the park or landlord (share of sales)",
+      "kind": "rent",
+      "basis": "pct_revenue",
+      "amount": 0.1,
+      "source": "https://static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cadman-Plaza-Cafe-05122025__680bcae9c9b47.pdf",
+      "confidence": "estimate",
+      "note": "NYC Parks cafe and snack-bar licenses: the greater of a guaranteed minimum or 6%-11% of gross receipts (Cadman Plaza 10%, Harlem Meer 9%). The guaranteed minimum is a separate fixed floor."
+    },
+    {
+      "id": "propane_refills",
+      "name": "Propane refills for the truck or cart",
+      "kind": "utilities",
+      "basis": "fixed",
+      "amount": 200,
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/use-store-LPG-food-cart-commissaries.pdf",
+      "confidence": "estimate",
+      "note": "My allowance. FDNY rules limit how much LPG a commissary may store and who may swap cylinders (a G-23 holder)."
+    }
+  ],
+  "taxes": [
+    {
+      "id": "nyc_liquor_license_tax",
+      "name": "NYC retail beer, wine and liquor license tax",
+      "base": "fixed",
+      "rate": 120,
+      "due": "annual",
+      "appliesIf": "the business holds a State Liquor Authority retail license in NYC",
+      "source": "https://www.nyc.gov/site/finance/business/business-retail-beer-wine-and-liquor-license-tax.page",
+      "confidence": "estimate",
+      "note": "NYC Department of Finance: 25% of the annual state license fee, due June 25 each year (new licensees by the 25th of the month after issue). For a Restaurant Wine license, $960 for two years = $480 a year x 25% = $120 a year. rate holds the dollar amount because the base is fixed. The Council suspended the surcharge for one year from June 1, 2022; I found nothing showing a suspension in 2026."
+    }
+  ],
+  "levers": [
+    {
+      "id": "cart_spot",
+      "name": "Where the cart stands",
+      "options": [
+        {
+          "id": "legal_corner",
+          "label": "Legal spot: 10 ft from the crosswalk, 20 ft from doors, 12 ft sidewalk",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": 0.0
+          }
+        },
+        {
+          "id": "office_plaza_private",
+          "label": "Private plaza under a Restricted Area permit (fee to the owner)",
+          "monthlyCost": 600,
+          "effects": {
+            "demand": 0.1
+          }
+        },
+        {
+          "id": "park_concession",
+          "label": "Park concession (share of sales, fixed minimum)",
+          "monthlyCost": 1700,
+          "effects": {
+            "demand": 0.15,
+            "reputation": 0.02
+          }
+        }
+      ]
+    },
+    {
+      "id": "alcohol_program",
+      "name": "Evening alcohol",
+      "options": [
+        {
+          "id": "none",
+          "label": "Coffee only, close at 6 p.m.",
+          "monthlyCost": 0
+        },
+        {
+          "id": "wine_beer_evenings",
+          "label": "Wine and beer 5-10 p.m. (licensed)",
+          "monthlyCost": 2400,
+          "effects": {
+            "demand": 0.12
+          }
+        },
+        {
+          "id": "wine_beer_late",
+          "label": "Wine and beer until midnight",
+          "monthlyCost": 3600,
+          "effects": {
+            "demand": 0.16,
+            "reputation": -0.02
+          },
+          "causes": "excessive_noise"
+        }
+      ]
+    },
+    {
+      "id": "delivery_plan",
+      "name": "Delivery app plan",
+      "options": [
+        {
+          "id": "no_apps",
+          "label": "No delivery apps",
+          "monthlyCost": 0
+        },
+        {
+          "id": "basic_plan",
+          "label": "Basic plan: 23% of delivery sales, listed normally",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": 0.08
+          }
+        },
+        {
+          "id": "enhanced_plan",
+          "label": "Enhanced plan: up to 43%, promoted placement",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": 0.14
+          }
+        }
+      ]
+    },
+    {
+      "id": "hot_food",
+      "name": "Hot food",
+      "options": [
+        {
+          "id": "cold_only",
+          "label": "Cold food and pastries only",
+          "monthlyCost": 0
+        },
+        {
+          "id": "ventless_oven",
+          "label": "Ventless oven: toasted sandwiches, no hood",
+          "monthlyCost": 150,
+          "effects": {
+            "demand": 0.06,
+            "quality": 0.02
+          }
+        },
+        {
+          "id": "full_kitchen",
+          "label": "Full kitchen under a Type I hood",
+          "monthlyCost": 900,
+          "effects": {
+            "demand": 0.12,
+            "quality": 0.04
+          }
+        }
+      ]
+    },
+    {
+      "id": "bake_schedule",
+      "name": "Baking schedule",
+      "options": [
+        {
+          "id": "buy_in",
+          "label": "Buy pastries from a wholesale bakery",
+          "monthlyCost": 0
+        },
+        {
+          "id": "bake_overnight",
+          "label": "Baker starts at 3 a.m.",
+          "monthlyCost": 3400,
+          "effects": {
+            "quality": 0.05,
+            "demand": 0.05
+          }
+        },
+        {
+          "id": "retard_and_bake",
+          "label": "Shape in the afternoon, retard, bake at 6 a.m.",
+          "monthlyCost": 2600,
+          "effects": {
+            "quality": 0.04,
+            "demand": 0.04
+          }
+        }
+      ]
+    },
+    {
+      "id": "pearl_batches",
+      "name": "Tapioca pearl batches",
+      "options": [
+        {
+          "id": "every_4_hours",
+          "label": "Fresh batch every 4 hours, toss leftovers",
+          "monthlyCost": 450,
+          "effects": {
+            "quality": 0.03
+          }
+        },
+        {
+          "id": "one_morning_batch",
+          "label": "One big morning batch",
+          "monthlyCost": 150,
+          "effects": {
+            "quality": -0.04
+          },
+          "causes": "time_temp_abuse"
+        }
+      ]
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "rent_vending_permit",
+      "name": "Rent someone else's cart permit",
+      "what": "You skip the waiting list. The permit holder must be at the cart; if an inspector checks, the cart is seized and the permit can be revoked.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 0
+      },
+      "unlocks": "start vending now instead of waiting for the permit list; costs about $850 a month in rent to the permit holder (monthlyCosts.black_market_permit_rent)",
+      "violation": "permit_holder_absent"
+    },
+    {
+      "id": "vend_from_meter",
+      "name": "Sell from a metered parking spot",
+      "what": "The best curb on the block is a meter. Selling from it is barred; agents ticket and can tow.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.08
+      },
+      "violation": "vending_at_meter"
+    },
+    {
+      "id": "cart_too_close",
+      "name": "Park the cart by the subway stairs",
+      "what": "More people pass you, but you are within 10 ft of the entrance. Sanitation agents fine you and can break down the setup.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.1
+      },
+      "violation": "vending_siting"
+    },
+    {
+      "id": "pour_before_license",
+      "name": "Pour wine before the license arrives",
+      "what": "Evening sales start months early. It is a crime under state law and it can sink your pending application.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 0
+      },
+      "unlocks": "evening wine and beer sales during the 2-6 months before the temporary permit or license",
+      "violation": "unlicensed_alcohol_sale"
+    },
+    {
+      "id": "skip_id_checks",
+      "name": "Skip ID checks on busy nights",
+      "what": "Faster service at the counter. One sale to a minor in a sting costs thousands and puts the license at risk.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 40
+      },
+      "violation": "sale_to_minor"
+    },
+    {
+      "id": "bottle_juice_no_label",
+      "name": "Bottle juice without the warning label",
+      "what": "You sell bottles to go without the unpasteurized-juice warning. The Health inspector cites it.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 60
+      },
+      "violation": "unlabeled_raw_juice"
+    },
+    {
+      "id": "cook_without_hood",
+      "name": "Put a fryer or griddle in without a hood",
+      "what": "Hot food without a $45,000 hood. FDNY and the Health Department treat it as a fire hazard; a grease fire is uninsured.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 500
+      },
+      "violation": "cooking_without_hood"
+    },
+    {
+      "id": "skip_suppression_service",
+      "name": "Skip the fire-suppression and duct service",
+      "what": "Saves the contractor visit. Grease builds in the duct; FDNY writes it up and insurers refuse fire claims.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 250
+      },
+      "violation": "suppression_overdue"
+    },
+    {
+      "id": "swap_propane_yourself",
+      "name": "Swap propane tanks without a certificate",
+      "what": "No exam, no wait. FDNY can stop the truck on the spot.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 50
+      },
+      "violation": "propane_without_cof"
+    },
+    {
+      "id": "plastic_straws_default",
+      "name": "Hand out plastic straws with every drink",
+      "what": "Boba needs a wide straw and plastic is cheaper. Unrequested plastic straws break the city's straw law.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 90
+      },
+      "violation": "plastic_straw_unrequested"
+    }
+  ],
+  "violations": [
+    {
+      "id": "vending_without_license",
+      "name": "Vending without a Mobile Food Vending License",
+      "law": "NYC Admin Code 17-307; Health Code Article 89",
+      "official": "dsny_vendor_officer",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 1000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "criminal": "Until 2025 a misdemeanor (up to $500 and 30 days); the 2025 law made it a civil violation of up to $1,000.",
+      "source": "https://www.6sqft.com/new-legislation-ends-criminal-penalties-for-nyc-street-vendors/",
+      "confidence": "estimate",
+      "note": "6sqft and NY1 on the July 2025 bill (Intro 47), override in September 2025: unlicensed vending becomes a violation with fines up to $1,000. Exact schedule not seen."
+    },
+    {
+      "id": "vending_without_unit_permit",
+      "name": "Vending from a cart or truck without a unit permit",
+      "law": "NYC Admin Code 17-307; Health Code Article 89",
+      "official": "dsny_vendor_officer",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 1000
+      },
+      "closureDays": 30,
+      "reputationHit": 0.03,
+      "criminal": "Civil since the 2025 decriminalization law; DSNY can still remove the cart and discard food it considers unsafe.",
+      "source": "https://newyork.news12.com/street-vendors-react-to-decriminalization",
+      "confidence": "estimate",
+      "note": "News 12: DSNY keeps its civil powers to break down setups, fine and discard food. closureDays = 30 is my game value for getting the cart back and finding a legal permit."
+    },
+    {
+      "id": "permit_holder_absent",
+      "name": "Cart worked under someone else's permit",
+      "law": "NYC Admin Code 17-307 (supervisory license holder must be present, Local Law 18 of 2021)",
+      "official": "dsny_vendor_officer",
+      "foundBy": [
+        "inspection",
+        "sting"
+      ],
+      "fine": {
+        "base": 1000,
+        "pctOfSaved": 0
+      },
+      "closureDays": 30,
+      "reputationHit": 0.03,
+      "criminal": "Permit renting is the black market the 2021 and 2026 laws try to end; holders lose the permit.",
+      "source": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+      "confidence": "estimate",
+      "note": "Local Law 18 of 2021 created supervisory licenses so that the permit holder stands at the cart. Fine: my assumption of the $1,000 unlicensed-vending maximum."
+    },
+    {
+      "id": "vending_at_meter",
+      "name": "Selling from a vehicle at a metered parking space",
+      "law": "34 RCNY 4-08(h)(8); Monroy v. City of New York (2012)",
+      "official": "dsny_vendor_officer",
+      "foundBy": [
+        "inspection"
+      ],
+      "fine": {
+        "base": 65,
+        "perMonth": 65
+      },
+      "closureDays": 0,
+      "reputationHit": 0.0,
+      "source": "https://nycourts.gov/reporter/3dseries/2012/2012_03552.htm",
+      "confidence": "estimate",
+      "note": "Appellate Division 2012: the rule covers food trucks. NYC Finance lists a $65 fine for parking at a meter to sell goods; the table was garbled in the excerpt. Repeat tickets plus towing make it a monthly cost."
+    },
+    {
+      "id": "vending_siting",
+      "name": "Cart too close to a crosswalk, subway entrance or door",
+      "law": "NYC Admin Code 17-315",
+      "official": "dsny_vendor_officer",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 250
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://www.nyc.gov/assets/dsny/downloads/what-we-do/cleaning/street-vending-enforcement/mobile-food-vendor-educational-highlights-tips.pdf",
+      "confidence": "estimate",
+      "note": "DSNY: next to the curb, 20 ft from building entrances, 10 ft from crosswalks, subway entrances and driveways, on sidewalks at least 12 ft wide. Civil penalties up to $250 for time, place and manner violations after the 2025 law (6sqft); the January 2026 package raises some siting penalties."
+    },
+    {
+      "id": "unlicensed_alcohol_sale",
+      "name": "Selling alcohol without a license",
+      "law": "NY Alcoholic Beverage Control Law 130(1)",
+      "official": "sla_investigator",
+      "foundBy": [
+        "inspection",
+        "sting",
+        "complaint"
+      ],
+      "fine": {
+        "base": 2500,
+        "pctOfSaved": 1
+      },
+      "closureDays": 0,
+      "reputationHit": 0.05,
+      "criminal": "A misdemeanor with up to six months in jail; it also counts against the pending license application.",
+      "source": "https://nysenate.gov/legislation/laws/ABC/130",
+      "confidence": "estimate",
+      "note": "ABC Law 130(1): selling without an appropriate license is a misdemeanor punishable by up to six months. Fine amount not seen in the excerpt; $2,500 is my game value."
+    },
+    {
+      "id": "sale_to_minor",
+      "name": "Sale of alcohol to a person under 21",
+      "law": "NY Alcoholic Beverage Control Law 65",
+      "official": "sla_investigator",
+      "foundBy": [
+        "sting",
+        "complaint"
+      ],
+      "fine": {
+        "base": 3000,
+        "max": 10000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.05,
+      "criminal": "The server can be charged; repeat offenses lead to suspension or revocation.",
+      "source": "https://sla.ny.gov/news/04112024-sla-conducts-underage-drinking-operation-bethlehem",
+      "confidence": "verified",
+      "note": "SLA press release (April 2024): civil penalties up to $10,000 per violation, starting at $2,500-$4,000 for a first offense; the licensee is liable whether the owner or an employee served. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "unlabeled_raw_juice",
+      "name": "Unpasteurized juice bottled on site without the warning label",
+      "law": "NYC Health Code Article 81; 21 CFR 101.17(g)",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection"
+      ],
+      "fine": {
+        "base": 400,
+        "max": 600
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "confidence": "estimate",
+      "note": "NYC food service penalty schedule (Appendix 23-C) lists $400 and $600 for unlabeled unpasteurized juice packaged on premises, per the search excerpt."
+    },
+    {
+      "id": "cooking_without_hood",
+      "name": "Grease-producing cooking without an approved hood and suppression",
+      "law": "NYC Fire Code 609 and Mechanical Code 507",
+      "official": "fdny_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 500
+      },
+      "closureDays": 7,
+      "reputationHit": 0.03,
+      "criminal": "FDNY can order the equipment out of service; a fire with injuries can bring criminal charges.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems",
+      "confidence": "estimate",
+      "note": "FDNY inspects and regulates required range hoods (NYC Business). Fine amounts are my game values: no official schedule was readable."
+    },
+    {
+      "id": "suppression_overdue",
+      "name": "Overdue hood cleaning or fire-suppression service",
+      "law": "NYC Fire Code 609; 3 RCNY 115-02",
+      "official": "fdny_inspector",
+      "foundBy": [
+        "inspection"
+      ],
+      "fine": {
+        "base": 500,
+        "max": 1000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/codes/3-rcny-115-02.pdf",
+      "confidence": "estimate",
+      "note": "A contractor blog gives $500-$1,000 for a first overdue cleaning or suppression inspection; FDNY's own schedule not seen."
+    },
+    {
+      "id": "propane_without_cof",
+      "name": "Propane handled without a G-23 Certificate of Fitness or truck permit",
+      "law": "NYC Fire Code 6107; 3 RCNY 113-01",
+      "official": "fdny_inspector",
+      "foundBy": [
+        "inspection"
+      ],
+      "fine": {
+        "base": 1000
+      },
+      "closureDays": 3,
+      "reputationHit": 0.01,
+      "source": "https://www.nyc.gov/site/fdny/business/all-certifications/cof-g23.page",
+      "confidence": "estimate",
+      "note": "FDNY requires a G-23 holder to connect LPG over one pound on carts and trucks and a $105 truck permit. Fine is my game value."
+    },
+    {
+      "id": "no_tfse_permit",
+      "name": "Selling at a fair or market without a temporary food permit",
+      "law": "NYC Health Code 81.07 and Article 89",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection"
+      ],
+      "fine": {
+        "base": 1000
+      },
+      "closureDays": 1,
+      "reputationHit": 0.02,
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01825",
+      "confidence": "estimate",
+      "note": "Market organizers check permits before load-in; the Health Department can close the stand for the day. Fine is my game value."
+    },
+    {
+      "id": "no_cooking_system_permit",
+      "name": "Commercial cooking system operated without an FDNY permit",
+      "law": "NYC Fire Code 105.6",
+      "official": "fdny_inspector",
+      "foundBy": [
+        "inspection"
+      ],
+      "fine": {
+        "base": 1000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.0,
+      "source": "https://www.nyc.gov/site/fdny/business/all-certifications/per-commercialcookingsystem.page",
+      "confidence": "estimate",
+      "note": "The permit costs $70; the fine is my game value."
+    },
+    {
+      "id": "plastic_straw_unrequested",
+      "name": "Plastic straws given without a request",
+      "law": "NYC Local Law 64 of 2021; Admin Code 16-395",
+      "official": "dcwp_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 100,
+        "max": 400
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "confidence": "verified",
+      "note": "Since November 1, 2021 food service establishments may give plastic straws only on request, free and without asking why; self-serve stations need a sign. Civil penalties $100-$400 per violation. Number seen in the web-search excerpt of this page on 2026-11-14; a direct fetch of the page was blocked by the session's network policy."
+    },
+    {
+      "id": "excessive_noise",
+      "name": "Music or crowd noise from a commercial establishment",
+      "law": "NYC Admin Code 24-231 (commercial music); NYC Noise Code",
+      "official": "dep_inspector",
+      "foundBy": [
+        "complaint"
+      ],
+      "fine": {
+        "base": 1000,
+        "max": 8000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.nyc.gov/site/dep/environment/noise-code.page",
+      "confidence": "estimate",
+      "note": "Placeholder until checked: late wine service brings neighbour complaints to 311, DEP noise inspections and community board pressure at license renewal. Amounts to be verified."
+    },
+    {
+      "id": "time_temp_abuse",
+      "name": "Cooked tapioca or dairy held too long at room temperature",
+      "law": "NYC Health Code 81.09",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection"
+      ],
+      "fine": {
+        "base": 300
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "confidence": "estimate",
+      "note": "Time-as-a-control rules limit holding cooked starches outside temperature control to 4 hours; the fine is my game value from the general food-temperature range."
+    }
+  ],
+  "officials": [
+    {
+      "id": "dsny_vendor_officer",
+      "name": "Sanitation vending enforcement officer",
+      "agency": "NYC Department of Sanitation (DSNY) Street Vending Enforcement",
+      "role": "inspector",
+      "checks": [
+        "vending_without_license",
+        "vending_without_unit_permit",
+        "permit_holder_absent",
+        "vending_at_meter",
+        "vending_siting"
+      ],
+      "realProcess": "Since 2024 vending enforcement sits with Sanitation. Officers measure distances to crosswalks and doors, check the license on the vendor's chest and the permit decal on the cart, write civil summonses and can remove the setup and discard food.",
+      "source": "https://nyc.gov/VendorEnforcement"
+    },
+    {
+      "id": "sla_investigator",
+      "name": "Liquor Authority investigator",
+      "agency": "New York State Liquor Authority with NYPD",
+      "role": "inspector",
+      "checks": [
+        "unlicensed_alcohol_sale",
+        "sale_to_minor"
+      ],
+      "realProcess": "Underage operations send a decoy under 21 into licensed places; a sale brings disciplinary charges against the licensee and a summons for the server. Complaints from neighbours and the community board trigger visits.",
+      "source": "https://sla.ny.gov/frequent-violations-abc-law-retailers"
+    },
+    {
+      "id": "fdny_inspector",
+      "name": "Fire inspector",
+      "agency": "FDNY Bureau of Fire Prevention",
+      "role": "inspector",
+      "checks": [
+        "cooking_without_hood",
+        "suppression_overdue",
+        "propane_without_cof",
+        "no_cooking_system_permit"
+      ],
+      "realProcess": "FDNY inspects cooking exhaust and suppression systems, checks the tag from the last cleaning and service, and checks propane certificates on trucks and at commissaries. Violations come with a date to correct and fines when not corrected.",
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/fire-safety-in-commercial-cooking-locations.pdf"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_illegal_vendor",
+      "name": "Report an unlicensed or badly placed vendor (311)",
+      "text": "Sanitation sends vending enforcement. If the cart is legal and well placed, nothing happens.",
+      "role": "inspector",
+      "checks": [
+        "vending_without_license",
+        "vending_without_unit_permit",
+        "permit_holder_absent",
+        "vending_siting"
+      ]
+    },
+    {
+      "id": "report_underage_service",
+      "name": "Report alcohol served to minors",
+      "text": "The Liquor Authority may run an underage check. If they card properly, it ends there.",
+      "role": "inspector",
+      "checks": [
+        "sale_to_minor",
+        "unlicensed_alcohol_sale"
+      ]
+    },
+    {
+      "id": "report_grease_smoke",
+      "name": "Report smoke and grease from a kitchen (311)",
+      "text": "FDNY inspects the hood and suppression tags. Clean records mean no action.",
+      "role": "inspector",
+      "checks": [
+        "cooking_without_hood",
+        "suppression_overdue"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "vending_permit_window",
+      "name": "City opens new cart permit applications",
+      "text": "Thousands of new street vending permits come in from 2026 to 2031. More carts appear on busy corners.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 0.97
+      },
+      "months": 12,
+      "source": "https://www.6sqft.com/nyc-passes-landmark-street-vendor-reform-including-expanding-permit-cap/",
+      "confidence": "estimate",
+      "note": "2,200 supervisory license applications a year from 2026 through 2031 (Intro 431-B, enacted January 29, 2026). The 3% hit to a storefront cafe from new carts on its block is my estimate."
+    },
+    {
+      "id": "liquor_backlog",
+      "name": "Liquor Authority backlog",
+      "text": "New license applications take six months or more. Your temporary permit buys time, not certainty.",
+      "effect": {
+        "field": "demand",
+        "mult": 0.97
+      },
+      "months": 3,
+      "source": "https://lawrodriguez.com/articles/the-return-of-long-liquor-license-delays-in-nyc/",
+      "confidence": "estimate",
+      "note": "SLA notice: 24-26 weeks for new applications; some waited over a year. The demand effect applies only to a cafe waiting to add evening alcohol: my estimate."
+    },
+    {
+      "id": "delivery_enhanced_tier",
+      "name": "Delivery apps push the enhanced plan",
+      "text": "Apps offer top placement for up to 20% more commission. Restaurants that stay on the basic plan slide down the list.",
+      "effect": {
+        "field": "deliveryShare",
+        "mult": 0.9
+      },
+      "months": 3,
+      "source": "https://council.nyc.gov/press/2025/05/01/2859/",
+      "confidence": "estimate",
+      "note": "Local Law 79 of 2025 (Intro 762-B) keeps the 23% cap for the basic plan and allows an optional enhanced tier up to 20% more. The 10% loss of delivery orders on the basic plan is my estimate."
+    },
+    {
+      "id": "tapioca_tariff",
+      "name": "Tariffs raise tapioca and tea costs",
+      "text": "Pearls, tea and syrups come mostly from Taiwan and Southeast Asia. Import tariffs push your cost per drink up.",
+      "effect": {
+        "field": "cogs",
+        "mult": 1.08
+      },
+      "months": 6,
+      "source": "https://www.market-prospects.com/articles/from-trade-wars-to-bubble-tea-when-global-tariffs-impact-a-local-industry",
+      "confidence": "estimate",
+      "note": "Market analysis (August 2025): key bubble tea inputs come from Taiwan or Southeast Asia and tariffs raise costs; a US boba maker said up to $1 more per drink. The US imported 38 million pounds of tapioca from Taiwan in 2024 (USITC). +8% on cost of goods is my estimate."
+    },
+    {
+      "id": "gas_shutoff_building",
+      "name": "Con Edison shuts off gas to the building",
+      "text": "A leak test finds bad piping upstairs. Gas stays off until the landlord's plumber passes a new test.",
+      "effect": {
+        "field": "demand",
+        "mult": 0.85
+      },
+      "months": 2,
+      "source": "https://bronx.news12.com/con-ed-illegal-gas-plumbing-work-forces-service-shutdown-for-fordham-restaurant-tenants-41500504",
+      "confidence": "estimate",
+      "note": "News 12: Con Ed shut off gas to a Fordham building after finding illegal plumbing work; the restaurant was told 6-8 months. Hits gas kitchens and bakeries; electric-only cafes are spared. The 15% loss (cold menu only) is my estimate."
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "cart_permit_cap",
+      "title": "Cart permits are capped",
+      "text": "A NYC cart or truck permit costs $200 for two years but is capped. Since 2021, 445 new permits a year; from 2026 to 2031, 2,200 a year. Many vendors still rent a permit for up to $25,000.",
+      "source": "https://www.6sqft.com/nyc-passes-landmark-street-vendor-reform-including-expanding-permit-cap/"
+    },
+    {
+      "id": "cart_siting",
+      "title": "Where a cart may stand",
+      "text": "Next to the curb, at least 20 ft from a building entrance and 10 ft from a crosswalk, subway entrance or driveway, on a sidewalk at least 12 ft wide. Civil fines up to $250.",
+      "source": "https://www.nyc.gov/assets/dsny/downloads/what-we-do/cleaning/street-vending-enforcement/mobile-food-vendor-educational-highlights-tips.pdf"
+    },
+    {
+      "id": "commissary_rule",
+      "title": "Every cart sleeps at a commissary",
+      "text": "A permitted cart or truck must be cleaned, serviced and stored at a Health Department-approved commissary or depot. No commissary contract, no permit.",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page"
+    },
+    {
+      "id": "meter_rule",
+      "title": "No selling at a meter",
+      "text": "Food trucks may not sell while parked at a metered space (34 RCNY 4-08(h)(8)). Courts confirmed it in 2012. Expect tickets and tows.",
+      "source": "https://nycourts.gov/reporter/3dseries/2012/2012_03552.htm"
+    },
+    {
+      "id": "vending_decriminalized",
+      "title": "Street vending fines are civil now",
+      "text": "A 2025 law made most vending offenses civil: up to $250 for placement, up to $1,000 for vending without a license. Sanitation can still remove the setup.",
+      "source": "https://www.6sqft.com/new-legislation-ends-criminal-penalties-for-nyc-street-vendors/"
+    },
+    {
+      "id": "liquor_30_day",
+      "title": "Tell the community board first",
+      "text": "Any on-premises liquor application in NYC needs 30 days' notice to the community board first. The board's vote is advisory, but its stipulations often end up in your license.",
+      "source": "https://www.cb11m.org/liquor-licenses/"
+    },
+    {
+      "id": "liquor_500_foot",
+      "title": "The 500-foot rule",
+      "text": "A full liquor license near three or more bars within 500 ft needs a public-interest finding. Beer and wine only places are exempt.",
+      "source": "https://sla.ny.gov/500-foot-law"
+    },
+    {
+      "id": "liquor_trp",
+      "title": "Temporary permit while you wait",
+      "text": "The SLA can issue a 180-day temporary permit while your license is pending: $640 for wine and liquor, $128 for beer only. You may not sell a drop before it is in hand.",
+      "source": "https://sla.ny.gov/system/files/documents/2026/03/temporary-retail-st-permit_02262026_0.pdf"
+    },
+    {
+      "id": "restaurant_wine_needs_kitchen",
+      "title": "Wine needs food",
+      "text": "A Restaurant Wine license ($960 for two years in NYC plus $100 filing) requires a kitchen and a real menu. A pastry counter usually is not enough.",
+      "source": "https://sla.ny.gov/system/files/documents/2026/06/retail-fee-chart_6122026.pdf"
+    },
+    {
+      "id": "liquor_city_tax",
+      "title": "The city taxes your license too",
+      "text": "NYC adds a tax equal to 25% of your annual state license fee, billed by the Department of Finance and due June 25.",
+      "source": "https://www.nyc.gov/site/finance/business/business-retail-beer-wine-and-liquor-license-tax.page"
+    },
+    {
+      "id": "underage_penalty",
+      "title": "One sale to a minor",
+      "text": "First sale to a minor: $2,500-$4,000 civil penalty, up to $10,000. The licensee pays even if a new employee made the sale.",
+      "source": "https://sla.ny.gov/news/04112024-sla-conducts-underage-drinking-operation-bethlehem"
+    },
+    {
+      "id": "delivery_fee_cap",
+      "title": "NYC caps delivery app fees",
+      "text": "Apps may charge you 15% for delivery, 5% for listing and 3% for card processing. An optional enhanced plan adds up to 20% more.",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf"
+    },
+    {
+      "id": "temporary_food_permit",
+      "title": "Markets need their own permit",
+      "text": "Your cafe permit covers your storefront only. Street fairs and markets need a $70 Temporary Food Service Establishment Permit and a certified supervisor on site.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01825"
+    },
+    {
+      "id": "juice_warning",
+      "title": "Raw juice needs a warning",
+      "text": "Juice you press and bottle for later sale must carry the unpasteurized warning label. Missing labels are cited at $400-$600.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593"
+    },
+    {
+      "id": "straws_on_request",
+      "title": "Plastic straws on request",
+      "text": "Plastic straws only when a customer asks, free, no questions. Self-serve stations need a sign. Fines $100-$400 per violation.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page"
+    },
+    {
+      "id": "hood_and_fdny",
+      "title": "Hot food means a hood",
+      "text": "Grease-producing cooking needs a Type I hood, a duct to the roof and a wet-chemical system installed under FDNY inspection, plus a $70 FDNY cooking permit.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems"
+    },
+    {
+      "id": "ventless_needs_approval",
+      "title": "Ventless ovens are not automatic",
+      "text": "High-speed ventless ovens clean their own smoke, but NYC's DOB and FDNY decide whether one is allowed without a hood.",
+      "source": "https://turbochef.com/?p=1863"
+    },
+    {
+      "id": "bakery_two_agencies",
+      "title": "Bakeries can answer to the state",
+      "text": "A mostly wholesale bakery is licensed by the State Department of Agriculture and Markets; a mostly retail one by the city Health Department. Let the state permit lapse and the city can close you.",
+      "source": "https://tribecacitizen.com/2025/10/21/duane-park-patisserie-caught-in-bureaucratic-snafu/"
+    },
+    {
+      "id": "propane_g23",
+      "title": "Propane needs a certificate",
+      "text": "On a cart or truck, only a holder of the FDNY G-23 Certificate of Fitness may hook up propane over one pound. Trucks also need a $105 FDNY permit.",
+      "source": "https://www.nyc.gov/site/fdny/business/all-certifications/cof-g23.page"
+    },
+    {
+      "id": "park_concession_fee",
+      "title": "Park kiosks pay a share",
+      "text": "NYC Parks concessions pay the greater of a fixed annual minimum or 6%-11% of gross sales, under multi-year licenses won by proposal.",
+      "source": "https://static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cadman-Plaza-Cafe-05122025__680bcae9c9b47.pdf"
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "pick_format",
+      "title": "Pick a format before you pick a space",
+      "kind": "idea",
+      "text": "A cart, a window, a bakery, a wine cafe and a delivery kitchen need different permits, power and capital. The format decides the space, not the other way round."
+    },
+    {
+      "id": "join_vending_waitlist",
+      "title": "Get on the cart permit list",
+      "kind": "permit",
+      "text": "Take the mobile vendor food protection course, get your personal license, and register for the unit permit list. Check the Restricted Area option for private plazas.",
+      "setupItemId": "mfv_unit_permit",
+      "fee": 200,
+      "waitDays": 365,
+      "agency": "NYC DOHMH",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term"
+    },
+    {
+      "id": "sign_commissary",
+      "title": "Sign a commissary contract",
+      "kind": "supplier",
+      "text": "No commissary, no permit. Compare storage, water, cleaning and how early you can roll out.",
+      "setupItemId": "commissary_contract_deposit",
+      "agency": "Approved commissaries (DOHMH list)",
+      "link": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page"
+    },
+    {
+      "id": "check_power_and_gas",
+      "title": "Check power and gas before signing",
+      "kind": "space",
+      "text": "Ovens and kitchens need three-phase power or gas. Ask Con Edison about gas availability before you sign the lease.",
+      "link": "https://totalfood.com/getting-restaurant-open-easier-nyc-hospitality-alliance-con-edison/"
+    },
+    {
+      "id": "file_hood_and_suppression",
+      "title": "File the hood with DOB and the suppression with FDNY",
+      "kind": "permit",
+      "text": "An engineer files the hood and duct with Buildings; a licensed fire suppression contractor installs and tests the wet-chemical system with an FDNY inspector.",
+      "setupItemId": "type1_hood_suppression",
+      "agency": "DOB and FDNY",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems"
+    },
+    {
+      "id": "notify_community_board",
+      "title": "Notify the community board 30 days ahead",
+      "kind": "permit",
+      "text": "Send the 30-day notice, fill the board questionnaire and attend the hearing before you file with the SLA.",
+      "setupItemId": "community_board_notice",
+      "waitDays": 30,
+      "agency": "NYC Community Board",
+      "link": "https://www.nyc.gov/site/communityboards/mandates/liquor-licenses.page"
+    },
+    {
+      "id": "file_sla_and_trp",
+      "title": "File the liquor application and the temporary permit together",
+      "kind": "permit",
+      "text": "File the license and the 180-day temporary permit at the same time; the temporary permit lets you pour while the license waits.",
+      "setupItemId": "sla_temporary_retail_permit",
+      "fee": 640,
+      "waitDays": 50,
+      "agency": "NY State Liquor Authority",
+      "link": "https://sla.ny.gov/eligibility-temporary-retail-permits"
+    },
+    {
+      "id": "pick_delivery_plan",
+      "title": "Choose delivery apps and the fee plan",
+      "kind": "supplier",
+      "text": "Basic plans are capped at 23% in NYC; enhanced plans can reach 43%. Price delivery menus for it.",
+      "link": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "commissaries",
+      "category": "Cart commissary",
+      "what": "Overnight parking, water, cleaning and propane storage for carts and trucks",
+      "whereToFind": "DOHMH list of approved commissaries; ask vendors at the same corner",
+      "link": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+      "confidence": "estimate",
+      "note": "A DOHMH requirement for every permitted unit."
+    },
+    {
+      "id": "shared_kitchens",
+      "category": "Shared and ghost kitchens",
+      "what": "Hourly or monthly kitchen time with licensed space for delivery brands and wholesale baking",
+      "whereToFind": "Listing sites such as The Kitchen Door; incubators in Brooklyn and Queens",
+      "link": "https://thekitchendoor.com/kitchen-rental/ben-commissary-shared-kitchen",
+      "source": "https://thekitchendoor.com/kitchen-rental/ben-commissary-shared-kitchen",
+      "confidence": "estimate",
+      "note": "Listings ran $25-$48 an hour; check the operator's finances (Pilotworks closed overnight in 2019)."
+    },
+    {
+      "id": "boba_ingredients",
+      "category": "Bubble tea ingredients",
+      "what": "Tapioca pearls, tea leaves, syrups and wide straws",
+      "whereToFind": "US importers and distributors of Taiwanese ingredients",
+      "source": "https://www.market-prospects.com/articles/from-trade-wars-to-bubble-tea-when-global-tariffs-impact-a-local-industry",
+      "confidence": "estimate",
+      "note": "Most inputs are imported; order 4-8 weeks ahead and expect tariff surcharges."
+    },
+    {
+      "id": "wine_beer_wholesalers",
+      "category": "Wine and beer",
+      "what": "Licensed wholesalers and distributors; retailers must pay within the legal credit period or go cash-only",
+      "whereToFind": "SLA-licensed wholesalers; distributor reps in your borough",
+      "link": "https://sla.ny.gov/frequent-violations-abc-law-retailers",
+      "source": "https://sla.ny.gov/frequent-violations-abc-law-retailers",
+      "confidence": "estimate",
+      "note": "New York's credit law puts late payers on a delinquent list; wholesalers then sell to them only for cash."
+    },
+    {
+      "id": "fire_suppression_contractors",
+      "category": "Hood cleaning and fire suppression",
+      "what": "FDNY-approved duct cleaners and licensed fire suppression contractors",
+      "whereToFind": "FDNY lists of approved companies; ask the building's other restaurants",
+      "link": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/fire-safety-in-commercial-cooking-locations.pdf",
+      "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/fire-safety-in-commercial-cooking-locations.pdf",
+      "confidence": "estimate",
+      "note": "Duct cleaning workers need a W-64/P-64 Certificate of Fitness."
+    }
+  ],
+  "extra": {
+    "formats": [],
+    "mechanics": [],
+    "eventCatalog": [],
+    "transitions": []
+  },
+  "sources": []
+}
