@@ -135,9 +135,12 @@ export function canFit(p: Place, specs: Spec[], established = false): boolean {
 export function metadata(extra: Record<string, unknown> = {}) {
   const hash = (p: string) => createHash('sha256').update(readFileSync(resolve(p))).digest('hex');
   const git = (...args: string[]) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' }).trim();
+  const inputs = [packPath, commonPath, 'data/places.json'];
+  if (existsSync(resolve('packs/parts/cafe/D20-formats.json'))) inputs.push('packs/parts/cafe/D20-formats.json');
   return {
     schemaVersion: 1, commit: git('rev-parse', 'HEAD'),
-    inputs: Object.fromEntries([packPath, commonPath, 'data/places.json'].map(p => [relative(ROOT, resolve(p)), hash(p)])),
+    inputs: Object.fromEntries(inputs.map(p => [relative(ROOT, resolve(p)), hash(p)])),
+    auditor: Object.fromEntries(['harness', 'profiles', 'probes', 'sweep', 'diversity'].map(p => [`sim/audit/${p}.ts`, hash(`sim/audit/${p}.ts`)])),
     engineTree: git('rev-parse', 'HEAD:engine'), sharedTree: git('rev-parse', 'HEAD:shared'),
     days: DAYS, source: 'Engine simulation; not real-world outcome frequencies', confidence: 'estimate',
     note: 'Deterministic seed 1; no host bots, external events, weather shocks, prize money or human officials. Built-in law runs. Fixed legal orders; exceptions explicitly described per probe. Monetary outputs are model calculations, not researched prices.',

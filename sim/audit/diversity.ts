@@ -58,6 +58,7 @@ main(() => {
       pass: months.length > 0 && copiedProfit < baselineProfit - CENT,
       note: 'Separate 90-day operating competition probe: both shops are established via the public openEstablished API. The baseline original is identically established. Each pays the engine resident setup cost; no manual capital injection. Compare matching full calendar months through the first bankruptcy close. Month 1 contains 29 ticks in both worlds.',
       neighbor, distanceM: round(distanceM(location.place, neighbor)), months, baselineProfit, copiedProfit,
+      daySamples: copyRun.w.businesses.map(b => ({ business: b.name, days: b.days.slice(-3) })),
       solo, original, copy,
     } };
   });
