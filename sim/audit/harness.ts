@@ -16,11 +16,18 @@ export const CENT = 0.011; // One rounded cent plus floating point tolerance; no
 export const round = (n: number): number => Math.round((n + Number.EPSILON) * 100) / 100;
 export function resolve(p: string): string { return isAbsolute(p) ? p : join(ROOT, p); }
 export function readJson<T>(p: string): T { return JSON.parse(readFileSync(resolve(p), 'utf8')) as T; }
+function requiredInput<T>(p: string): T {
+  // These imports run before main(). Preserve the documented distinction from an economic FAIL.
+  try { return readJson<T>(p); } catch (error) {
+    console.error(`ERROR: cannot load ${p}: ${error instanceof Error ? error.message : String(error)}`);
+    process.exit(2);
+  }
+}
 export const packPath = process.env.CAFE_AUDIT_PACK ?? 'packs/cafe.json';
 export const commonPath = process.env.CAFE_AUDIT_COMMON ?? 'packs/_common.json';
-export const cafe = readJson<Pack>(packPath);
-export const packs: PackSet = { common: readJson(commonPath), niches: { cafe } };
-export const places = readJson<Place[]>('data/places.json');
+export const cafe = requiredInput<Pack>(packPath);
+export const packs: PackSet = { common: requiredInput(commonPath), niches: { cafe } };
+export const places = requiredInput<Place[]>('data/places.json');
 export interface Spec {
   label: string; kit?: PackKit['id']; size?: number; price?: number;
   staff?: Record<string, number>; levers?: Record<string, string>; place?: Place;
