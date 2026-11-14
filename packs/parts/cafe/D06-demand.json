@@ -392,6 +392,15 @@
           "source": "https://keyt.com/stacker-food-drink/2026/09/23/top-local-coffee-shops-for-national-coffee-day-according-to-doordash-data/",
           "confidence": "estimate",
           "evidence": "industry_via_search"
+        },
+        {
+          "what": "Hybrid workers who 'coffee badge': show up at the office for a coffee and a hello, then leave",
+          "value": 0.43,
+          "unit": "share of US hybrid workers, 2025",
+          "note": "Owl Labs surveys: 58% in 2023, 44% in 2024, 43% in 2025 (the 2025 figure read in secondary reports). It is one reason office-district demand is so morning-heavy: part of the crowd is gone by lunch",
+          "source": "https://www.cfo.com/news/workplace-trend-58-of-hybrid-employees-are-coffee-badging/696635/",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
         }
       ],
       "confidence": "estimate",
@@ -625,7 +634,12 @@
           "C": 0.88
         },
         "source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091",
-        "evidence": "study_via_search"
+        "evidence": "study_via_search",
+        "onlineToo": {
+          "what": "The grade is not only in the window: Yelp has shown New York City inspection results on restaurant pages since 2013 and health scores nationwide since 2018, under the price range, with the list of violations one click away. The city's own lookup shows them too",
+          "source": "https://skift.com/2018/07/24/yelp-adds-health-code-ratings-to-restaurant-pages-nationwide/",
+          "evidence": "industry_via_search"
+        }
       },
       "confidence": "estimate",
       "typicalRatings": {
@@ -2987,6 +3001,49 @@
         "source": "https://www.emarketer.com/content/starbucks-afternoon-daypart-protein-turnaround-strategy",
         "confidence": "estimate",
         "note": "1% of the day is my estimate of what an independent with no afternoon offer gives up; a shop with the wide menu or a seasonal drink should gain the same amount instead. The afternoon hours are where a neighborhood cafe has spare bar capacity."
+      },
+      {
+        "id": "map_reviews_vanish",
+        "name": "Reviews vanish from the map listing",
+        "text": "A fault at the map platform hides a quarter of everyone's reviews for weeks. Old shops barely notice; a young shop's rating jumps around.",
+        "scale": "world",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Platform status notices and reports from local-search trackers",
+        "effects": [
+          {
+            "field": "reputation",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "reviews"
+          },
+          {
+            "kind": "lever",
+            "id": "loyalty"
+          }
+        ],
+        "realFrequency": "Google confirmed display bugs in February 2025 and October 2025; one business fell from about 600 reviews to 460 and back; reports continued in early 2026, and some reviews never returned",
+        "tier": "exotic",
+        "source": "https://www.seroundtable.com/google-reviews-disappearing-bug-40327.html",
+        "confidence": "estimate",
+        "note": "Applies to shops with fewer than about 100 reviews, where losing a quarter changes the displayed average. 2% of reputation for two months is my estimate. The practical advice from the trackers: keep screenshots of the count and rating, and do not ask customers to repost."
       }
     ],
     "mechanics": [
@@ -3172,7 +3229,7 @@
         "id": "letter_grade_demand",
         "title": "The letter in the window sells or repels",
         "playerDecision": "After a re-inspection that ends in a B or C: post the grade; or post 'Grade Pending' and contest the violations at the city tribunal; or (shortcut) take the card down.",
-        "engineMath": "Compute the letter from the open violation trails with the pack's extra.inspectionPoints (under 14 points A, 14-27 B, 28 or more C). Demand multiplier while the card hangs: A 1.00, Grade Pending 0.98, B 0.95, C 0.88 (extra.ratingModel.letterGrade), applied to newcomers and halved for regulars. Contesting: the shop posts Grade Pending until the hearing (about a month in the game); at the hearing each violation the player has actually fixed is dismissed and the points are recounted; if the score drops under 14 the shop gets its A, otherwise the B or C goes up and the fines stand. Hiding the card: no demand loss, but the next inspection or a neighbor's complaint adds grade_card_not_posted ($500). The grade is redone at the next cycle: 150-210 days after a B, 90-150 after a C.",
+        "engineMath": "Compute the letter from the open violation trails with the pack's extra.inspectionPoints (under 14 points A, 14-27 B, 28 or more C). Demand multiplier while the card hangs: A 1.00, Grade Pending 0.98, B 0.95, C 0.88 (extra.ratingModel.letterGrade), applied to newcomers and halved for regulars. Contesting: the shop posts Grade Pending until the hearing (about a month in the game); at the hearing each violation the player has actually fixed is dismissed and the points are recounted; if the score drops under 14 the shop gets its A, otherwise the B or C goes up and the fines stand. Hiding the card: the loss from passers-by stops but about a third of it remains, because the grade also shows on review sites and the city's lookup (the third is a planning value), but the next inspection or a neighbor's complaint adds grade_card_not_posted ($500). The grade is redone at the next cycle: 150-210 days after a B, 90-150 after a C.",
         "fieldsNeeded": [
           "business.letterGrade: A | B | C | pending",
           "action: contest_at_tribunal",
@@ -3208,6 +3265,12 @@
             "what": "Fine for not posting the grade card, USD",
             "value": 500,
             "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Year Yelp began showing health inspection scores on restaurant pages nationwide (New York City results since 2013)",
+            "value": 2018,
+            "source": "https://skift.com/2018/07/24/yelp-adds-health-code-ratings-to-restaurant-pages-nationwide/",
             "confidence": "estimate"
           }
         ],
@@ -3769,6 +3832,24 @@
         "why": "A sample of 500 US cafe profiles averaged 4.26 stars and 15% of restaurants sat under 4.0. Two in three customers filter at four stars, so 'four stars' is the floor, not a good score.",
         "source": "https://recensio-ai.lovable.app/benchmark/cafes",
         "tier": "core"
+      },
+      {
+        "text": "Taking the grade card down hides very little.",
+        "why": "Review sites have shown New York inspection results on restaurant pages since 2013, and the city publishes every inspection. The card in the window is only the most visible copy.",
+        "source": "https://skift.com/2018/07/24/yelp-adds-health-code-ratings-to-restaurant-pages-nationwide/",
+        "tier": "deep"
+      },
+      {
+        "text": "Four in ten hybrid workers come to the office for a coffee and leave.",
+        "why": "'Coffee badging' was 58% of hybrid workers in 2023 and 43% in 2025. The office crowd an owner counts at 8:30 is thinner by lunch, which is why office-district cafes sell more than half their day before 11am.",
+        "source": "https://www.cfo.com/news/workplace-trend-58-of-hybrid-employees-are-coffee-badging/696635/",
+        "tier": "deep"
+      },
+      {
+        "text": "Your reviews can disappear through no fault of yours.",
+        "why": "Display faults at the largest map platform hid reviews for weeks in February and October 2025; one business dropped from about 600 reviews to 460 before they came back. A shop with 40 reviews feels that; a shop with 800 does not.",
+        "source": "https://www.seroundtable.com/google-reviews-disappearing-bug-40327.html",
+        "tier": "exotic"
       }
     ],
     "cityFacts": {
@@ -4319,7 +4400,7 @@
     {
       "id": "hide_grade_card",
       "name": "Take the B out of the window",
-      "what": "A B or C in the window costs customers every day it hangs there. The card must be posted where passersby can see it; hiding it is a fine at the next visit, and neighbors do report it.",
+      "what": "A B or C in the window costs customers every day it hangs there. The card must be posted where passersby can see it; hiding it is a fine at the next visit, neighbors do report it, and the grade still shows on review sites and the city's lookup.",
       "saves": {
         "basis": "pct_revenue",
         "amount": 0.04
@@ -5092,6 +5173,11 @@
       "how": "search result, page not opened"
     },
     {
+      "url": "https://skift.com/2018/07/24/yelp-adds-health-code-ratings-to-restaurant-pages-nationwide/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
       "url": "https://square.com/help/us/en/article/6382",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
@@ -5183,6 +5269,11 @@
     },
     {
       "url": "https://www.cbsnews.com/news/rex-coffee-shop-owner-faced-down-starbucks",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.cfo.com/news/workplace-trend-58-of-hybrid-employees-are-coffee-badging/696635/",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
     },
@@ -5408,6 +5499,11 @@
     },
     {
       "url": "https://www.restolabs.com/blog/cafe-industry-statistics",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.seroundtable.com/google-reviews-disappearing-bug-40327.html",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
     },
