@@ -1,106 +1,257 @@
-# D02 — Помещение и физика зала (кафе). ЧЕРНОВИК: сырые находки, отчёт будет переписан
+# D02 — Помещение и физика зала (кафе, Нью-Йорк, 2026)
 
-## Toilets
-- HC §81.22(b): seating capacity of 20 or more -> patron toilets, except premises where a permitted FSE operated on or before Dec 5, 1977; grandfathered must add if renovation needs DOB construction permit. Shared ok, but patrons may not walk through kitchen/prep/storage/utensil washing (81.22(d)).
-  src: https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264 ; 311: https://portal.311.nyc.gov/article/?kanumber=KA-01351 (incl. shared seating in common space)
-- Penalty App 23-C: 05E 81.22(a) no employee toilets $300/$350 default; 81.22(b) no patron toilets $300/$350; 81.22(d) shared via kitchen $300/$350. 10A 81.22(c) toilet not properly supplied $200.
-  src: https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593
+Исследователь D02. Дата: 14 ноября 2026. Фрагмент пакета: `packs/parts/cafe/D02-premises.json`.
 
-## Occupancy
-- NYC BC 2022 §303.1.2: assembly use, occupant load < 75 -> Group B. §303.1.3 accessory. https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-3-use-and-occupancy-classification
-- Table 1006.2.1: Group B one exit max OL 74 (amlegal 0-0-0-173045); two exits when exceeded.
-- PACO: C of O allows 75+ indoors or 200+ outdoors. https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page ; old guide fee $235 ($200+$35). FDNY PA permit within 1 year, annual. TPA $250 + $100/day late.
-- IBC/NYS Table 1004.5: tables&chairs 15 net; chairs only 7 net; standing 5 net (NYC 2022 values NOT confirmed; NYC ch10 pdf https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf)
-- App 23-C facility codes: 10B (81.20(a)) backflow/anti-siphonage $0 first / $100; 10C (81.19(a)) lighting $0/$100; 10D (81.19(c)) ventilation $200 flat; 10F (81.17(e)) floors walls ceilings $0/$100; 08A (81.23) harborage w/ pests $200. "conditions conducive" alone cited as 10F (2020 notice).
-- ADA 226.1: >=5% of seating and standing spaces at dining surfaces accessible (902): top 28-34 in, knee clearance 27 in high 30 wide; route 36 in min (32 in for <=24 in). https://www.corada.com/documents/2010ADAStandards/226
-- ADA Title III federal filings 2025: 8,667 (Seyfarth, -2% vs 2024); website suits 3,117; NY website 1,021. https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/
+**Важное ограничение этой сессии.** Веб-поиск работал, а открывать страницы напрямую сессия не могла: сетевая политика отклоняла любой запрос к сайтам (nyc.gov, amlegal, ada.gov и остальным). Поэтому пометка `verified` в этом фрагменте уже, чем в основном пакете: число показано поисковым инструментом в выдержке из самого первоисточника (текст закона или правила, страница nyc.gov или 311, отчёт Совета города, прайс продавца). У каждой такой записи стоит поле `"checkedVia": "search_excerpt"`: сборщик может одной командой понизить их до `estimate`. Целиком страницы я не читал. Всё остальное — `estimate` с расчётом в `note`.
 
-## Facade
-- LL75/2009, Admin Code §28-315.7.1(?): security grilles facing sidewalk >=70% visibility; deadline July 1, 2026; Group B and M; exempt: landmarks, historic districts, Group S. DOB service notice Feb 17, 2026 https://www.nyc.gov/assets/buildings/pdf/security_grille-sn.pdf ; 311 https://portal.311.nyc.gov/article/?kanumber=KA-03709 ; penalty >= $250 first, >= $1,000 subsequent, after 90-day correction window. Intro 0910-2026 (Stevens) to repeal retroactive part - STATUS? CBS: https://www.cbsnews.com/newyork/news/nyc-storefront-roll-down-gate-transparency/
-- AC door law Admin Code §20-910 (LL92/2015): all businesses; $250 per open door/window, $500 subsequent (DNAinfo 2015); exceptions deliveries, serving outdoor customers. 2024: ~6,300 inspections, 89 violations (DCWP Apr 2025) https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and ; checklist https://www.nyc.gov/assets/dca/downloads/pdf/businesses/DCAInspectionChecklist_AirConditionersAndOpenDoors.pdf
-- Awning: lettering <= 12 in high, <= 12 sq ft, name+address only (LISC guide; LPC rules 63 RCNY §2-12). DOB PW1; licensed sign hanger; signs > 6 sq ft or illuminated need permit.
-- Dining Out NYC: license $1,050 (4 yr) sidewalk or roadway, $2,100 both (311 KA-03604). Year-round roadway: Intro 655 (Restler), signed Aug 31 2026; year-round roadway applications from early Sept 2026; service ends 11pm(?). https://portal.311.nyc.gov/article/?kanumber=KA-03604 ; https://www.visiontimes.com/2026/08/31/nyc-restaurants-win-year-round-roadway-dining-under-new-law.html
+Пробное слияние фрагмента с `packs/cafe.json` проходит `node build/validate-pack.mjs` с нулём ошибок и нулём предупреждений.
 
-## ADA
-- Big Wong 2015 step no ramp (Fordham L Rev vol 91 Diu); Rancho Vegano 8-inch step (NY1 2019) - suits seek up to $1,000 damages + attorney fees + fixes; Guardian 2025: No More Cafe East Village, 35 violations. Costello v Flatman $14.31 default. https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny
-- IRS Form 8826: eligible small biz <= $1M receipts or <= 30 FT employees; credit max $5,000 (50% of $250..$10,250 - from memory of IRC §44, not in excerpt); §190 deduction $15,000 (memory).
+## 1. Вердикт
 
-## Dining Out NYC (cont.)
-- Clear path: min 8 ft or 50% of sidewalk width, whichever greater (cafe mapper; rules 34 RCNY §5-11). Corner: 9 ft clear. 15 ft from large obstruction (bus shelter, subway stair). 36-inch service aisle separate from clear path. Nothing in the furnishing zone. Same prices outside as inside. https://www.diningoutnyc.info/rules/sidewalk/siting-clearances ; https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-145865
-## Utilities
-- Con Ed: SC9 Rate I demand delivery ~$44.05/kW summer, $34.50 winter (third-party nectarclimate); Con Ed EV phase-in page top tier $36.50/kW summer. SC2 = small non-demand (<=10 kW). NOT primary.
-- DEP water FY2026 (from Jul 1 2025): water $5.05/100 cf; combined water+sewer $13.07/100 cf (sewer 159% of water). FY2027 proposal +6% effective Jul 1 2026 -> ~$5.35 / ~$13.86 (arithmetic; adoption not confirmed). min charge $0.49/day. https://www.nyc.gov/site/dep/pay-my-bills/how-we-bill-you.page ; https://www.nyc.gov/assets/nycwaterboard/downloads/pdf/rates/fy2027_rates.pdf
-- Backflow: DEP FAQ: required for businesses that pose a risk; test every 12 months by certified tester; failure -> fines or water disconnection. https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page ; vendor: test $150-$350; install $2,000-$5,000; plan review $350 (unverified); GEN215B within 30 days. Int 0768-2026 would raise penalties to $1,000-$10,000 for not installing (status unknown).
-- Espresso: 2-group ~30A dedicated 208-240V; 3-group 40A; grinders separate 110V circuits; adding 220V circuit $500-$2,000 (vendor).
-- Grease: DEP: every business that disposes of grease should have interceptor; 15 RCNY 19-11; food waste disposers not allowed in commercial; licensed master plumber; fine $100-$1,500 (vendor + NYC Business). https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page
+1. В пакете не было физики зала: ни распределения площади, ни очереди, ни «сидельцев», ни входа, ни инженерных систем. Теперь это 18 статей стартовых затрат, 9 рычагов, 10 срезанных углов, 12 нарушений, 40 событий и 12 механик.
+2. Главное исправление: формула «60% площади — зал» неверна для малых помещений. Около 400 sq ft занимает неизменное ядро (стойка, очередь, туалет, мойки и склад, вход). В 500 sq ft помещается примерно 6 мест, а не 16.
+3. В законе две ступени, и обе считаются не так, как думает новичок. Двадцатое место (вместе с уличными) требует туалета для гостей. Порог в 75 — это люди, а не стулья: стоящий в очереди считается за 5 sq ft.
+4. Вместимость определяют столы, а не стулья: один гость с ноутбуком занимает 2–4 места. Правила про ноутбуки, рассадка и музыка меняют оборот места на 10–40%, и на это есть исследования и рассказы владельцев.
+5. Слабое место работы: из 35 чисел в `setup`, `monthlyCosts` и `violations` подтверждены по выдержкам первоисточников только 8. Цены подрядчиков (вентиляция, электрика, жироуловитель, пандус) в Нью-Йорке публично не публикуются, они остались оценками.
 
-## Crowding / spacing / queue / campers
-- Robson & Kimes 2009 field study (fine dining NYC): tables <= 20 in apart -> lower satisfaction in almost every category; 2-tops spent more per minute (left sooner) but significantly less likely to return; happiest >= 1 m apart. https://www.hospitalitynet.org/news/4039649.html
-- Robson, Kimes, Becker, Evans 2011 CHQ 52(3) 253-264: web survey >1,000 Americans, tables 6/12/24 in apart; strong objection to close tables; women less comfortable; "tight arrangement shortens dining cycle without affecting spending". https://journals.sagepub.com/doi/10.1177/1938965511410310
-- Lu, Musalem, Olivares, Schilkrut 2013 Mgmt Sci 59(8) 1743-1763: queue length (not wait time) drives purchase incidence; nonlinear. NEED numbers (10->15 customers: 30%->27%?). https://pubsonline.informs.org/doi/abs/10.1287/mnsc.1120.1686
-- Seating norms (NAFEM chart, vendor-published): fast food 11-14 sq ft/seat; full service 12-15; fine dining 18-20; coffee shop/general menu ~15; 60/40 FOH/BOH rule of thumb. https://www.gofoodservice.com/guides/designing-your-restaurant-seating-layout ; https://www.oakstreetmfg.com/the-ultimate-restaurant-seating-layout-guide-with-real-numbers/
-- Starbucks: >3 in 10 drink orders via app (Q2 FY2024); "mid-teens percent" of mobile orders uncompleted in Q2 2024; Technomic: 8% waited 15-30 min; targets: in-person 4 min; mobile orders 32% of transactions 2026; >80% of cafes hit 4-min. https://www.customerexperiencedive.com/news/4-takeaways-starbucks-customer-experience/756355/ ; https://www.modernretail.co/technology/what-went-wrong-with-starbuckss-mobile-ordering-strategy/ ; https://www.geekwire.com/2026/tech-overhaul-helps-starbucks-post-first-u-s-transaction-growth-in-two-years/
-- Dwell: Bloom Intelligence WiFi presence, 25 US coffee shops Jun-Sep 2026: 32 min one-time visitor -> ~2 h most frequent. https://bloomintelligence.com/coffee-shop-marketing/ ; Klatch Coffee CEO: $6 drink buys ~90 min; solo worker takes 2-4 seats (Yahoo). 
-- Laptop bans NYC: Pause Cafe LES Dec 2024 (EV Grieve) https://evgrieve.com/2024/12/lower-east-side-cafe-puts-pause-on.html ; Cafe Grumpy. NPR: owner Whalen "we actually saw our sales increase".
-- Lu et al. working paper 2011: "moderate increases in the number of customers in queue can generate sales reduction equivalent to a 5% price increase" (working paper; check published). Abstract (published): nonlinear impact; customers focus on queue length not speed; pooling into single queue may lower revenue. https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf
-## DOB penalties
-- 1 RCNY 102-01: 28-105.1 Class 2 "Outdoor sign on display structure without a permit"; Class 1 work w/o permit standard penalty $2,500 (2020 filing; was $1,600 in 2016). Outdoor Ad Co sign w/o permit $10,000. Amounts for 28-118.3.2 and 28-117.1 NOT found. https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf
-## Sidewalk
-- A-frame: 311 (KA-01980): sandwich/A-frame signs must not extend more than 3 ft into the sidewalk from the building or be higher than 5 ft. DSNY penalty schedule §16-118(2)(a) sidewalk obstruction: $50 first, $100 second/third, max $300. https://portal.311.nyc.gov/article/?kanumber=KA-01980 ; https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-99532
-- Cellar doors: 311 KA-02292: may be open during a delivery as long as a person guards; DOT inspects damaged doors and openings left open/unprotected. Owner responsible (Admin Code 7-210, vendor). Dining Out: cafe elements may cover a cellar door only if not egress, closed and reinforced, certified by RDP. https://portal.311.nyc.gov/article/?kanumber=KA-02292
-## Plumbing
-- NYC PC 2022 §403.1: occupant load divided in half per sex, ratios from Table 403.1, round up. Bars <=150: one men's + one women's WC or two single-occupant toilet rooms. Seasonal outdoor seating included in occupant load for fixtures. Restaurant ratio 1 per 75 (IPC, not NYC-confirmed). https://codes.iccsafe.org/s/NYNYCPC2022P2/chapter-4-fixtures-faucets-and-fixture-fittings/NYNYCPC2022P2-Ch04-Sec403.1
-## HVAC
-- 4-5 ton RTU $9,000-$14,500 installed (generic); NYC 5-10 ton rooftop replacement w/ curb adapter & rigging $18,000-$45,000; NYC small commercial split/RTU $8,000-$40,000 (vincomechanical); rule 1 ton per 300-350 sq ft restaurant (calculator, unverified). https://www.vincomechanical.com/hvac-replacement-cost-nyc
-## DOB penalties (cont.)
-- 28-118.3.2 occupancy contrary to C of O: Class 1 standard $2,400 / default $12,000 (no cure, no stipulation); Class 2 $1,200 / $6,000 (cure eligible) [official schedule copies: https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf ; cityland 2018 copy]. Law firm pages: $2,500/$12,500 Class 1 (B103), $1,250/$6,250 Class 2 (B203) - newer? https://nacmiaslaw.com/resources/oath-infraction-codes/dob-violations/b203-occupancy-contrary-to-that-allowed-by-the-certific
-- Signs: 2018: 1,046 illegal-signage complaints YTD vs 310 in all 2017 (DOB via Brooklyn Reporter); owners faced $6,000 fines (CBS). LL28/2019: moratorium Feb 9 2019 - Feb 9 2021; waiver of penalties for violations since Dec 28 2017; 75% off sign permit fees. LL29/2021 extended to Jan 1 2023. After: unknown. https://www.nyc.gov/assets/buildings/pdf/ll28_temp_biz_accessory_sign_program.pdf ; https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings ; https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/
-- LPC: any exterior storefront change in historic district needs LPC permit (awnings, signs, lighting); planters & A-frames not attached need none; staff permits within 10 business days (FasTrack) or 15 (2018 fact sheet); max 3 types of signage; Business Express. https://www.nyc.gov/site/lpc/applications/storefronts.page
-- Storm enclosure (winter vestibule): Nov 15 - Apr 15; <= 18 in beyond street line (311 KA-02227); restaurants: BC 3202.3.2.1(?) up to 25 sq ft beyond street line with 5 ft clear sidewalk path (vendor signsny). https://portal.311.nyc.gov/article/?kanumber=KA-02227
-- Heaters: DOB/FDNY bulletin 2024-005: propane heaters not permitted in sidewalk/roadway cafes(?garbled); electric radiant OK if listed for outdoor use; gas-fired radiant maybe for sidewalk, not roadway; FDNY permits & Certificate of Fitness. https://www.nyc.gov/assets/buildings/bldgs_bulletins/bb_2024-005.pdf
-- Noise: Admin Code §24-231 commercial music 42 dB(A) inside dwelling; §24-227 circulation device 42 dB(A) single / 45 aggregate inside residence; first commercial music violation $2,000 mitigable to $0 if compliance shown (DEP). https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf
-## Health Code physical
-- §81.19 lighting: >= 540 lux (50 fc) at food prep surfaces (knives, slicers, grinders); >= 215 lux (20 fc) at self-service, inside reach-ins, hand-washing & ware-washing; >= 108 lux (10 fc) walk-ins, dry storage, during cleaning. Bulbs shatterproof/shielded. §81.19(c) mechanical vent in bathrooms. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238
-## Gas
-- Sesamo (Hell's Kitchen): 6+ weeks without gas after Con Ed inspection found leak; landlord fixed in days but not enough gas capacity for restaurant + 8 apts; 16 burners -> 3 hot plates. https://w42st.com/post/gas-shutoff-drags-on-at-sesamo-leaving-restaurant-in-limbo-for-over-a-month/ ; https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/
-- The Clam (2014) 4 months without gas before opening; Chop Shop II months; NY Senate report "Cooking Without Gas" https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf
-## Empty / signage
-- Sustainability 2025 (MDPI 17(18) 8400): crowdedness as social proof -> positive effect on pleasure/arousal (survey). https://www.mdpi.com/2071-1050/17/18/8400
-- UC Economics Center for Signage Foundation, Aug 2012: ~60% of businesses reported sign changes raised sales/transactions/profits, average ~10%. https://federalheath.com/company/news-insights/how-important-are-signs-anyway (secondary; original at signresearch.org)
-## ADA restroom
-- Access Board: no minimum room size; WC clearance 60 in wide x 56 in deep; sample single-user plan 7' x 5' (35 sq ft) (Plan-1B); typical 48 sq ft (7'4" x 6'6"). https://www.access-board.gov/ada/guides/chapter-6-toilet-rooms/
-## Music / dwell
-- Milliman 1986 JCR 13(2) 286-289: slow music -> patrons stay longer, more drinks; food spend same; (figures 56 vs 45 min not confirmed). 2024 Tel Aviv field experiment: slow music 80 min vs 57 min; total bill not different. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/
-## Dining Out NYC fees
-- Consent fee per sq ft per year: sidewalk $6 / $10 / $18 / $31; roadway $5 / (8) / (14) / $25; lowest tier covers ~80% of city; top = parts of Manhattan. License $1,050 per 4 years each (both $2,100). Public hearing notice fee up to $1,000 (all roadway; sidewalk only if CB recommends disapproval). Deposit $1,500 sidewalk, $2,500 roadway. https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf ; https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants ; https://rules.cityofnewyork.us/wp-content/uploads/2024/02/DOT-Notice-of-Adoption-DOT-Dining-Out-NYC-Rules-Accessible.pdf
-- 6sqft: outdoor dining shrank by over 80% under new rules.
-## Restroom policy
-- Starbucks Coffeehouse Code of Conduct effective Jan 27, 2025: purchase required to stay or use restroom; reverses 2018 open-door policy; will comply with local laws. https://www.cnn.com/2025/01/14/food/starbucks-restroom-policy ; NYC: <= 19 seats not required to provide bathroom access to public (city site quoted by CBS).
-## Queue tolerance
-- Waitwhile 2024 survey, 1,202 US adults: 70% will wait at most 15 min in a physical line; 61% have left a line before their turn; ~1 in 7 leave more than half the time; 5% will wait > 30 min. https://waitwhile.com/blog/consumer-survey-waiting-in-line-2024/
-## To-go share
-- NRA: nearly 75% of restaurant traffic is off-premises (all restaurants). NCA 2025: drive-thru 59% of out-of-home coffee buyers. No clean cafe to-go split. https://restaurant.org/research-and-media/media/press-releases/from-trend-to-transformation-off-premises-dining-now-essential-for-restaurant-consumers,-operators/
-## Energy
-- CBECS 2018 (secondary): food service 43.8 kWh/sq ft/yr (fast food 62.8; other food service 29.0); all commercial 12.6. 800 sq ft x 43.8 = 35,040 kWh/yr = 2,920 kWh/mo; x 29.0 = 1,933/mo; x 62.8 = 4,187/mo.
-## Gate law outcome
-- Int 0910-2026 (910-A) passed Council June 30, 2026, 51-0: repeals retroactive July 1, 2026 requirement; 70% visibility only when a grille is newly installed or replaced. Awaiting/enacted (intro.nyc says enacted). https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates ; https://intro.nyc/0910-2026 ; https://brooklyneagle.com/399396/city-council-repeals-july-1-mandate-for-replacing-security-gates/
-- Cost quotes: bakery owner quoted $6,000-$7,000 per gate (Gothamist); $5,000-$20,000+ (political.org); >$10,000 some. https://gothamist.com/news/nyc-council-scrambles-to-reverse-impending-ban-on-metal-storefront-security-gates
-- Storefront glass: single storefront window $500-$3,000; 4x6 ft fixed panel $800-$1,500 installed (not NYC). https://www.insightglass.com/how-much-do-storefront-windows-cost/
-## ADA costs
-- Threshold ramp: AlumiRamp 6-inch rise $112.99; 12-inch rise $156.99 (reliableramps.com). ADA slope 1:12 max new; existing: 1:10 for rise <= 6 in, 1:8 for rise <= 3 in; max rise per run 30 in. So a 7-in step needs 7 ft of ramp at 1:12.
-- NYC: ramp beyond property line needs DOT revocable consent; buildings before Dec 6, 1969: ramp may project <= 44 in beyond street line with DOT approval; consent ~10 years, annual fee + insurance. DOB "Storefront Accessibility" presentation https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf ; https://www.nyc.gov/html/dot/html/infrastructure/revconif.shtml
-- Auto door operator: low-energy swing $2,000-$5,000 installed; full power $2,500-$6,000 (ufiredoors); NY/NJ vendor $7,500-$15,000 per opening all-in (doorautomation.com).
-## Basement
-- DEP: ~60% of NYC sewers are combined; backups when stormwater overwhelms pipes, via basement fixtures. 311: discard any food that touched sewage water; items not dried in 24-48 h discarded. Sewer backup needs separate insurance endorsement. https://portal.311.nyc.gov/article/?kanumber=KA-02997 ; https://www.nyc.gov/assets/dep/downloads/pdf/water/wastewater/sbu-report.pdf
-## FDNY
-- Egress violation VC9(?): standard first $950, mitigated $475, max $1,000; repeat $2,375/$1,185/$5,000 (third-party tfp1.com). Not primary.
-## Con Ed
-- Service upgrade: 4-12 weeks from load letter (contractor) vs 12-24 weeks (guide): 6-10 wk layout drawings + 3-5 wk inspections; ~20 days initial capacity review. Gas: utility portion ~9 weeks after inspections; 33+ weeks from drawings to open (builtbetter substack). https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/ ; https://builtbetter.substack.com/p/stop-blaming-coned
-## Misc (batch 9)
-- LL145/2026 (Int 0918-2026) enacted 9/12/2026: cafe fees payable in quarterly installments; effective 240 days later. Package: weatherproof/winterize; clean trash, keep out pests. Charter commission (COGE) 2026 final report: sidewalk cafe applications take 6-8 months, roadway 3-5 months. https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html ; https://www.thecityreporter.nyc/2026/08/13/nyc-outdoor-dining-roadside-sheds-new-laws-restaraunts/
-- Old Comptroller audit (DCA era): 24 of 183 (13%) sidewalk cafes unlicensed.
-- LL79/2016: single-occupant toilet rooms open to all genders; sign on wall next to door; Admin Code §28-315.9; since Jan 1 2017; no physical alteration needed. https://www.nyc.gov/site/buildings/property-or-business-owner/single-occupant-toilet-signage.page
-- Blogs on cafe floor plans: 15-20 sq ft per seated guest (AIA 15-18 cited by one); 40-60% of floor to seating; BOH 15-25%; >= 8 linear ft of counter; typical shop 1,000-1,750 sq ft (others 1,200-2,200; or 540-750). https://pos.toasttab.com/blog/on-the-line/coffee-shop-floor-plans ; https://therestaurantwarehouse.com/blogs/restaurant-equipment/coffee-shop-layout
-- FDNY Restaurant Fire Safety Guide: PA permit renewed annually, fee rises with occupancy; F-03 Certificate of Fitness (indoor PA safety personnel); open flame permit $210 per set-up. https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf ; https://www.nyc.gov/site/fdny/business/all-certifications/per-openflames.page
-- Lines: Radio Bakery (135 India St, Greenpoint) 2024: weekend line spilled onto neighbors' stoops, 20+ min wait; neighbors held stoop sale. https://greenpointers.com/2024/04/01/radio-bakery-stoop-sale/ (real venue: do not use as target; use as source only)
-- Restroom & opioids: NPR/WBUR 2017 (1369 Coffee House Cambridge: key code from staff); Starbucks LA closed bathrooms. https://www.npr.org/sections/health-shots/2017/05/08/526523520/public-restrooms-become-ground-zero-in-the-opioid-epidemic
+## 2. Что добавлено
+
+| Раздел | Записей | Что это |
+|---|---|---|
+| `sizing` | пересмотрен целиком | `sqftPerUnit` 18 → 21, пороги тесноты и пустоты, расчёты и источники в `note` |
+| `setup` | 18 (17 новых, 1 исправлена) | пандус, автоматическая дверь, линия 220 В, усиление электроввода, обратный клапан, жироуловитель, замена кондиционера, прозрачная роллета, навес, зимний тамбур, воздушная завеса, лицензия и конструкция кафе на проезжей части, сертификат Place of Assembly, временный сертификат на одно мероприятие, разрешение Комиссии по памятникам, витринное стекло |
+| `monthlyCosts` | 5 | плата городу за уличную посадку (тротуар и проезжая часть), ежегодная проверка обратного клапана, договор на обслуживание кондиционера, сбор за световую вывеску |
+| `levers` | 9 | ноутбуки и Wi-Fi; рассадка; очередь и выдача; доступ в туалет; обслуживание вентиляции; вход зимой; уличные места; музыка; ступень у входа |
+| `shortcuts` | 10 | лишние стулья сверх 19 мест; туалет без присмотра; открытая дверь при кондиционере; вывеска без разрешения; штендер и скамья на тротуаре; товар на пути эвакуации; пропуск проверки клапана; концерты сверх вместимости; столы в подвале; громкая музыка под квартирами |
+| `violations` | 12 | у каждого закон, ведомство, штраф, источник |
+| `officials` | 6 (4 новых, 2 расширены) | инспекторы DOB, FDNY, DSNY, Комиссии по правам человека; у DOHMH и DEP дополнен список проверок |
+| `reports` | 7 | жалобы на конкурента по каждому новому нарушению |
+| `events` | 3 | в стандартном формате: рейд по открытым дверям, волна жалоб на вывески, рост тарифа на воду |
+| `ruleCards` | 26 | все не длиннее 280 знаков |
+| `roadmap` | 6 | замер зала, выбор числа мест, проверка щитка, воды и вентиляции, проверка входа, статус памятника, заявка на проезжую часть |
+| `suppliers` | 5 | вентиляция, вывески и навесы, сантехник с лицензией, консультант по доступности, стекло и роллеты |
+| `extra.eventCatalog` | 40 | core 14, deep 17, exotic 9; точка 22, квартал 7, город 11 |
+| `extra.mechanics` | 12 | core 6, deep 6; 61 число с источником |
+| `extra.floorPlan` | 1 | зоны зала с площадями и таблица «площадь → места» |
+| `extra.seatThresholds` | 2 (исправлены) | 20 мест и 75 человек |
+| `extra.nonObvious` | 35 | в формате D00: `text`, `why`, `source` |
+| `sources` | 93 | 41 из них — законы, правила и страницы города (nyc.gov, 311, свод правил, Dining Out NYC) |
+
+Минимумы задания: `setup` 18 при пороге 12, `levers` 9 при 6, `violations` 12 при 8, событий 43 при 20, механик 12 при 4.
+
+У каждого события каталога есть поле `trigger`: событие либо объявлено заранее и действует на всех, у кого есть уязвимость, либо наступает по календарю, либо следует из решения игрока через заданное число месяцев. Вероятностей нет.
+
+## 3. Пятнадцать самых неочевидных находок
+
+1. **Порог в 75 считает людей, а не стулья.** Строительный кодекс берёт 15 sq ft на человека в зоне столов и 5 sq ft на стоящего. Зона очереди в 70 sq ft — это 14 человек на бумаге. Зал на 48 мест уже даёт 75. Выше порога помещение становится «местом собраний»: второй выход, сертификат DOB и ежегодное разрешение FDNY.
+2. **Двадцатое место — самое дорогое.** С 20 мест нужен туалет для гостей (Health Code §81.22(b)), и уличные места входят в счёт. Два столика на тротуаре превращают законный зал на 18 мест в нарушение: $300 на каждой проверке.
+3. **Льгота 1977 года.** Помещение, где заведение с разрешением работало 5 декабря 1977 года или раньше, от туалета для гостей освобождено. Льгота пропадает при ремонте, для которого нужно разрешение DOB.
+4. **Около 400 sq ft никогда не занимает стул.** Стойка 120, очередь и выдача 70, доступный туалет 60, мойки и склад 120, зона двери 25. Поэтому маленькое помещение теряет на ядро гораздо большую долю, чем крупное.
+5. **Один гость с ноутбуком занимает 2–4 места.** Зал из столов на двоих и четверых полон, когда занято меньше половины стульев. Владелец считает 20 мест, человек в дверях не видит свободного стола.
+6. **Запрет ноутбуков поднял продажи.** Владелица пекарни-кафе в Вермонте отключила Wi-Fi и запретила экраны в обед. Её слова: люди заходили, не находили стола и уходили — «деньги утекали за дверь». Потерянных гостей не видно, они не доходят до кассы.
+7. **Люди смотрят на длину очереди, а не на её скорость.** Это вывод исследования в журнале Management Science (2013). Объединить две короткие очереди в одну длинную и быструю — значит потерять продажи. Умеренно более длинная очередь в черновике статьи приравнена к росту цены на 5%.
+8. **Заказ с телефона может уменьшить мощность.** У Starbucks весной 2024 года около 15% мобильных заказов («mid-teens percent») остались невыполненными: бар не справлялся. Приложение добавляет напитки тем же двум рукам в ту же минуту.
+9. **Открытая дверь при работающем кондиционере незаконна для любого бизнеса.** Штраф $250 за каждую дверь или окно. В 2024 году город провёл почти 6 300 таких проверок.
+10. **Вывеску проще всего «сдать».** В 2018 году анонимные жалобы в 311 на вывески выросли с 310 до 1 046 за год. Мелкие магазины получили штрафы по $6 000 за вывески, висевшие годами. Совет города потом заморозил такие штрафы до 2023 года.
+11. **Закон о роллетах отменили за день до срока.** Закон 2009 года требовал к 1 июля 2026 года заменить глухие роллеты на прозрачные на 70%. Владельцам называли $6 000–7 000 за штуку. 30 июня 2026 года Совет отменил срок 51 голосом против нуля. Часть владельцев уже заплатила.
+12. **Газ отключают всему зданию.** Если Con Edison находит утечку в трубах дома, счётчик запирают, и арендатор ждёт сантехника арендодателя. В одном случае из прессы ресторан ждал больше шести недель, в другом — четыре месяца. Кафе без газа этой угрозе не подвержено, а решение принимается на ремонте.
+13. **Свет записан в санитарном кодексе.** 50 фут-кандел над столом приготовления, 20 у раковины для рук. Модный полутёмный бар не проходит проверку.
+14. **Музыку меряют в спальне соседа.** Предел — 42 дБ внутри чужой квартиры. Первый штраф $2 000, и он снижается до нуля только после доказанного исправления.
+15. **Подвал — склад с условиями.** Около 60% канализации города общесплавная, в ливень она идёт обратно через подвальные сливы. Продукты, которых коснулась эта вода, выбрасывают. Обычная страховка обратный подпор канализации не покрывает. Столы для гостей в подвале — нарушение сертификата здания.
+
+Остальные 20 пунктов — в `extra.nonObvious`.
+
+## 4. Исправления существующего пакета
+
+| Запись | Было | Стало | Почему |
+|---|---|---|---|
+| `sizing.sqftPerUnit` | 18 | 21 | Исправляю, потому что 18 давало 26 мест в 800 sq ft. Это выше собственного диапазона заметок пользователя (15–25). Расчёт по зонам даёт 22 места: 480 / 22 = 21. |
+| `sizing.crowdPenaltyAbove` | 0.9 | 0.85 | Исправляю, потому что одиночные гости занимают столы на двоих, и зал полон раньше, чем заняты все стулья. Значение игровое. |
+| `sizing.emptyPenaltyBelow` | 0.4 | 0.3 | Исправляю, потому что доказательств, что пустой зал отпугивает покупателя кофе, почти нет: одно опросное исследование 2025 года. 60% покупателей не ищут место. Значение игровое. |
+| `sizing.unitsServedPerSizeMonth` | 170 | 170 | Число оставлено. Добавлен расчёт: 12 часов, занятость 47%, среднее пребывание 60 минут. |
+| `sizing.takeawayShare` | 0.6 | 0.6 | Число оставлено. Публичной доли «с собой» для независимых кофеен нет, это сказано в `note`. |
+| `extra.seatThresholds[1]` | «75 мест» | 75 человек, около 48 мест | Исправляю, потому что закон считает людей по площади, а не стулья. Добавлен `setupItemId`. |
+| `extra.seatThresholds[0]` | 20 мест | 20 мест, плюс льгота 1977 года и штраф | Уточнение по тексту §81.22(b). |
+| `setup.customer_restroom` | без нарушения | `withoutItViolation: no_patron_toilet` | Исправляю, потому что у предмета не было последствия. Цена $12 000 осталась оценкой: публичной цены нет. |
+| `officials.health_inspector` | 6 проверок | 9 | Добавлены три нарушения D02. Список в фрагменте полный, старые проверки сохранены. |
+| `officials.dep_inspector` | жироуловитель | плюс обратный клапан и шум | То же. |
+
+Что сборщику нужно свести вручную:
+
+- **Срок лицензии на уличную посадку.** В пакете карточка `outdoor_dining_wait` говорит о 19 месяцах (Контролёр города, октябрь 2026). Отчёт Комиссии по пересмотру Хартии 2026 года даёт 6–8 месяцев для тротуара и 3–5 для проезжей части. Первое — факт по уже выданным, второе — оценка срока рассмотрения. Я поставил `waitDays: 120` для проезжей части и не менял 240 для тротуара.
+- **Проверка обратного клапана.** Она уже упомянута в существующей строке `maintenance`. Моя строка `backflow_annual_test` ($21 в месяц) с ней пересекается: оставить одну.
+- **Расход электричества.** В пакете допущение 3 000–5 000 кВт·ч в месяц. Данные CBECS (по вторичным пересказам) дают для 800 sq ft от 1 930 до 4 190 кВт·ч. Нижняя граница пакета выглядит верной, верхняя завышена.
+- **Карточки про 20 мест.** В пакете есть `seats_20`, я добавил `no_patron_toilet` с льготой 1977 года и запретом вести гостей через кухню. Можно объединить.
+- **Пересечения с другими исследователями.** Отказ кондиционера и неотложенное обслуживание — с D03. Газ и ожидание Con Edison — с D01. Ливень и подвал, уличный сезон — с D07. Иски о доступности и шум — с D08. Очередь и пропускная способность бариста — с D06.
+
+## 5. Просьбы к ведущему
+
+Механики по важности. Полные формулы и числа — в `extra.mechanics`.
+
+1. **`floor_plan_budget` — площадь как бюджет.** Заменить `floor(sqft × 0.6 / sqftPerUnit)` на `floor((sqft − fixedCoreSqft) / netSqftPerSeat)`. Нужны поля `sizing.fixedCoreSqft` (395; 335 со складом в подвале) и `sizing.netSqftPerSeat` (15, 18 или 22). Пока движок не изменён, `sqftPerUnit: 21` сводит обе формулы при 800 sq ft. Это прямой ответ на слова пользователя «когда прям забито и места мало, это очень плохо».
+2. **`effective_seats_and_table_mix` — столы, а не стулья.** Эффективные места = места × доля использования столов (0.75 для столов на двоих и четверых, 0.9 с общим столом и стойкой у окна).
+3. **`crowding_curve` — теснота и пустота как наклон.** Вместо двух флагов — плавный рост ухода гостей от загрузки 0.7 до 1.0.
+4. **`queue_balking` — видимая очередь.** Один пиковый час в день: приход против выработки бара, место под очередь, потери за каждые пять человек сверх вместимости зоны. Нужны числа D06: доля пикового часа и напитков на бариста в час.
+5. **`seat_camping_dwell_mix` — кто сколько сидит.** Оборот места считается из смеси длительностей пребывания. Рычаги меняют её через новое поле варианта `seatTurnsMult`.
+6. **`occupancy_thresholds` — две ступени закона.** Уличные места входят в счёт двадцати. Переход через 20 забирает 60 sq ft под туалет.
+7. **`outdoor_seating_season`** — геометрия тротуара, лицензия с ожиданием, сезон, плата за квадратный фут по сектору.
+8. **`utility_capacity_budget`** — амперы щитка против суммы оборудования, ожидание Con Edison, газ или полностью электрическое помещение.
+9. **`accessibility_exposure`** — ступень у входа как висящий риск до объявленной волны исков.
+10. **`deferred_building_maintenance`** — у каждого пропущенного обслуживания свой запал в месяцах. Тот же приём годится для оборудования из D03.
+11. **`frontage_visibility`** — вывеска, навес и штендер как множитель доли зашедших.
+12. **`cellar_storage`** — склад в подвале: плюс три места, минус 3% мощности, риск ливня.
+
+Чего не выражает формат:
+
+- **Поля вариантов рычага:** `seatTurnsMult`, `seatsFitMult`, `outdoorSeats`, `monthsActive`. Сейчас `effects` знает только `quality`, `reputation`, `demand`, `capacity`. Без поля для оборота места рычаги про ноутбуки, рассадку и музыку в движке почти ничего не делают.
+- **Эффекты событий вне белого списка:** `seats`, `seatTurns`, разовые деньги (`cash` с `add`), `closureDays`, запуск нарушения (`violation`), `waitDays`. Плюс условие `onlyIf` и поле `trigger`.
+- **Ходы игрока в событии:** кроме `lever` и `shortcut` нужны `setup` (купить предмет), `staff` (нанять) и `choice` — разовое решение, которого нет среди рычагов. Пример: «перенести товар наверх перед ливнем».
+- **Свойства места на карте:** высота ступени у входа, ширина тротуара и длина фасада, тип коридора или сектор уличной посадки, мощность щитка в амперах, площадь подвала, исторический район.
+- **Законность варианта по условию.** Вариант «туалет только для персонала» законен до 19 мест и становится нарушением с 20.
+- **Сезонный предмет.** Зимний тамбур покупается каждый год. Я поставил `lifespanMonths: 5`, нужен признак ежегодной покупки.
+- **Иск вместо проверки.** Нарушение `accessibility_barrier` находит не инспектор, а истец. Чиновник в записи — заглушка, а главный расход — юристы, для них нет поля.
+- **Первое нарушение за $0.** У шума и у части санитарных пунктов первый штраф снимается, если нарушение исправлено. Формула `base + perMonth` этого не выражает.
+- **Разовый налоговый кредит** (форма IRS 8826, до $5 000 в год за расходы на доступность).
+
+## 6. Не найдено
+
+Нормы и штрафы:
+
+- Таблица 1004.5 именно в редакции кодекса Нью-Йорка 2022 года. Значения 15 и 5 sq ft взяты из кодекса штата и модельного кодекса.
+- Плата за ежегодное разрешение FDNY Place of Assembly и действующая плата DOB за сертификат ($235 — из старого руководства). Штраф за работу без сертификата (§28-117.1).
+- Действующая сумма штрафа за вывеску без разрешения. Статус моратория после 1 января 2023 года.
+- Действующая шкала штрафов за открытую дверь при кондиционере: суммы $250 и $500 взяты из прессы 2015 года.
+- Официальная шкала FDNY за загромождённый выход: $950 взяты из обзора частной компании.
+- Официальный штраф DEP за непроверенный обратный клапан. Статус законопроекта Int 0768-2026.
+- Штрафы за тамбур вне сезона, за открытый люк подвала, за нарушение правил Комиссии по памятникам.
+- Штрафы для лицензированной уличной посадки, вышедшей за границы. Число действующих лицензий на 2026 год. Ширина зоны у бордюра. Промежуточные ставки для проезжей части ($8 и $14 не подтверждены).
+- Норма числа унитазов для ресторанов в таблице 403.1 сантехнического кодекса города. Текст §81.21 о раковинах для рук.
+- Принят ли тариф на воду на 2027 финансовый год (+6% было предложением).
+
+Цены:
+
+- Строительство туалета для гостей, постоянный пандус, плата за согласие DOT на пандус на тротуаре.
+- Официальные цены и сроки Con Edison на усиление ввода. Тарифы SC2 и SC9 из первоисточника.
+- Нью-йоркские цены на установку жироуловителя и витринное стекло: взяты национальные справочники.
+- Типичная сумма мирового соглашения по иску о доступности к магазину или кафе.
+
+Поведение гостей:
+
+- Доля заказов «с собой» у независимой кофейни. Наблюдательные исследования занятости мест и длительности пребывания именно в кофейнях. Данные Bloom — это устройства в Wi-Fi, а не люди на стульях.
+- Точные числа из опубликованной версии исследования очередей и из статьи Миллимана 1986 года о темпе музыки.
+- Влияние сквозняка у двери на занятость мест.
+- Частота взломов витрин на одно кафе.
+
+Рассказы владельцев: Reddit и форумы поисковый инструмент не отдал. Истории взяты из прессы (NPR, NY1, Gothamist, Streetsblog, местные издания). Этот пробел закрывают D00 и D10.
+
+## 7. Источники
+
+Все 93 ссылки с названиями лежат в `sources` фрагмента. Ниже они сгруппированы по темам.
+
+**Законы, правила и страницы города** (41)
+
+- [NYC Health Code §81.22 Employee and Patron Toilets (American Legal Publishing)](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264)
+- [24 RCNY Chapter 23, Appendix 23-C: Food Service Establishment Penalty Schedule](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593)
+- [NYC Health Code §81.19 Lighting and Ventilation](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238)
+- [NYC Health Department, Chapter 23: Food Service Establishment Sanitary Inspection Procedures and Letter Grading](https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf)
+- [NYC311: Restaurant Bathroom Rules](https://portal.311.nyc.gov/article/?kanumber=KA-01351)
+- [2022 NYC Building Code, Chapter 3: Use and Occupancy Classification (ICC)](https://codes.iccsafe.org/content/NYNYCBC2022P1/chapter-3-use-and-occupancy-classification)
+- [2022 NYC Building Code, Chapter 10: Means of Egress (NYC Buildings)](https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf)
+- [NYC Building Code §1006.2.1 and Table 1006.2.1: spaces with one exit](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-173045)
+- [New York State Building Code 2020, Chapter 10, Table 1004.5 (UpCodes)](https://up.codes/viewer/new_york/ibc-2018/chapter/10/means-of-egress)
+- [NYC Buildings: Place of Assembly Certificate of Operation](https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page)
+- [NYC Buildings: Place of Assembly guide (older edition)](https://www.nyc.gov/assets/buildings/pdf/pa_guide.pdf)
+- [NYC Business: Temporary Place of Assembly Certificate of Operation](https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation)
+- [FDNY Restaurant Fire Safety Guide](https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf)
+- [OATH/ECB Buildings Penalty Schedule](https://www.nyc.gov/html/ecb/downloads/pdf/BuildingsPenaltySchedule.pdf)
+- [1 RCNY §102-01: Buildings violation classification and penalties](https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-01.pdf)
+- [NYC Buildings: Storefront Accessibility (presentation)](https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf)
+- [NYC DCWP press release, April 2025: Shut the Front Door](https://www.nyc.gov/site/dca/news/012-25/in-honor-earth-day-city-reminds-local-businesses-shut-front-door-keep-doors-and)
+- [NYC Buildings: project requirements for signs](https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page)
+- [NYC Administrative Code Table 28-112.2: Buildings fees (from the research notes)](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650)
+- [NYC Landmarks Preservation Commission: storefront applications](https://www.nyc.gov/site/lpc/applications/storefronts.page)
+- [NYC Buildings service notice, February 17, 2026: security grille visibility](https://www.nyc.gov/assets/buildings/pdf/security_grille-sn.pdf)
+- [NYC311: Blocked Sidewalk or Street](https://portal.311.nyc.gov/article/?kanumber=KA-01980)
+- [16 RCNY §19-103: Sanitation Penalty Schedule](https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-99532)
+- [NYC311: Awning, Canopy, Marquee or Storm Enclosure Complaint](https://portal.311.nyc.gov/article/?kanumber=KA-02227)
+- [Dining Out NYC: sidewalk cafe siting clearances](https://www.diningoutnyc.info/rules/sidewalk/siting-clearances)
+- [Dining Out NYC: sidewalk cafe setup area](https://www.diningoutnyc.info/rules/sidewalk/siting-setup-area)
+- [Dining Out NYC: eligibility and application](https://www.diningoutnyc.info/apply)
+- [Dining Out NYC: enforcement (already in the pack)](https://www.diningoutnyc.info/enforcement)
+- [NYC DOT Street Design Manual: Clear Path](https://www.nycstreetdesign.info/furniture/clear-path)
+- [Dining Out NYC: sidewalk cafe site plan form (corridor types and clearances)](https://www.diningoutnyc.info/sites/default/files/2024-03/sidewalk-cafe-site-plan-form.pdf)
+- [NYC Council report: Understanding Delays in New York City's Permanent Outdoor Dining Program (April 2025)](https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf)
+- [NYC Charter Revision Commission: adopted final report, 2026](https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html)
+- [NYC311: Outdoor Dining Information and Application](https://portal.311.nyc.gov/article/?kanumber=KA-03604)
+- [NYC DEP: Backflow Prevention Frequently Asked Questions](https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page)
+- [NYC DEP: Disposing of Grease as a Business](https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page)
+- [NYC DEP: How We Bill You (water and sewer rates)](https://www.nyc.gov/site/dep/pay-my-bills/how-we-bill-you.page)
+- [NYC DEP: sewer backup report](https://www.nyc.gov/assets/dep/downloads/pdf/water/wastewater/sbu-report.pdf)
+- [NYC311: Sewage or Flood Clean-Up](https://portal.311.nyc.gov/article/?kanumber=KA-02997)
+- [NYC311: Sidewalk Cellar Door Complaint](https://portal.311.nyc.gov/article/?kanumber=KA-02292)
+- [NYC DEP: commercial music noise violation, zero penalty for a first offense](https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf)
+- [NYC Buildings: Single-Occupant Toilet Signage (Local Law 79 of 2016)](https://www.nyc.gov/site/buildings/property-or-business-owner/single-occupant-toilet-signage.page)
+
+**Федеральные нормы и налоги** (5)
+
+- [2010 ADA Standards §226: Dining Surfaces and Work Surfaces](https://www.corada.com/documents/2010ADAStandards/226)
+- [U.S. Access Board: Guide to the ADA Standards, Chapter 6: Toilet Rooms](https://www.access-board.gov/ada/guides/chapter-6-toilet-rooms/)
+- [ADA requirements for ramps (secondary summary)](https://www.accessibilitychecker.org/blog/ada-requirements-for-ramps/)
+- [IRS Form 8826: Disabled Access Credit](https://www.irs.gov/pub/irs-pdf/f8826.pdf)
+- [Seyfarth Shaw ADA Title III blog: 2025 federal filing counts](https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/)
+
+**Исследования** (10)
+
+- [Secondary summary of CBECS electricity intensity by building type](https://commercialenergyadvisors.com/resources/how-much-commercial-electricity-cost-2026/)
+- [Cornell restaurant research: diners are dissatisfied with close-set tables (2009)](https://www.hospitalitynet.org/news/4039649.html)
+- [Robson, Kimes, Becker, Evans: Consumers' Responses to Table Spacing in Restaurants, Cornell Hospitality Quarterly 52(3), 2011](https://journals.sagepub.com/doi/10.1177/1938965511410310)
+- [Lu, Musalem, Olivares, Schilkrut: Measuring the Effect of Queues on Customer Purchases, Management Science 59(8), 2013](https://pubsonline.informs.org/doi/abs/10.1287/mnsc.1120.1686)
+- [Working paper version of the queue study (Columbia Business School, 2011)](https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf)
+- [Waitwhile consumer survey: the state of waiting in line, 2024](https://waitwhile.com/blog/consumer-survey-waiting-in-line-2024/)
+- [Bloom Intelligence: coffee shop data, Wi-Fi presence at 25 US coffee shops (2026)](https://bloomintelligence.com/coffee-shop-marketing/)
+- [How does background music affect dining duration, tips and bill amounts? A field experiment (2024)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/)
+- [Revisiting crowded restaurants in the post-pandemic era, Sustainability 17(18), 2025](https://www.mdpi.com/2071-1050/17/18/8400)
+- [Secondary summary of the University of Cincinnati signage study (2012)](https://federalheath.com/company/news-insights/how-important-are-signs-anyway)
+
+**Пресса и рассказы владельцев** (17)
+
+- [NY1: Surge in lawsuits by a small group of plaintiffs with disabilities draws scrutiny (2019)](https://ny1.com/nyc/all-boroughs/news/2019/10/25/surge-in-lawsuits-by-small-group-of-with-disabilities-draws-scrutiny)
+- [CBS New York: City Council approves moratorium on fines for awnings and signs](https://www.cbsnews.com/amp/newyork/news/moratorium-on-fines-for-awnings)
+- [The Brooklyn Home Reporter: Hard stop on signage fees as Council secures new Awning Act (2018)](https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/)
+- [NY1: City Council votes to repeal deadline for new roll-down security gates (July 2026)](https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates)
+- [Gothamist: Council scrambles to reverse impending ban on metal storefront security gates (2026)](https://gothamist.com/news/nyc-council-scrambles-to-reverse-impending-ban-on-metal-storefront-security-gates)
+- [Streetsblog NYC: Here's how much outdoor dining costs restaurants (April 2025)](https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants)
+- [Streetsblog NYC: Year-round outdoor dining poised to return under Council bill (August 2026)](https://nyc.streetsblog.org/2026/08/13/year-round-outdoor-dining-poised-to-return-under-council-bill)
+- [The City Reporter: year-round roadside dining set to return under newly passed bills (August 2026)](https://www.thecityreporter.nyc/2026/08/13/nyc-outdoor-dining-roadside-sheds-new-laws-restaraunts/)
+- [W42ST: gas shutoff leaves a Hell's Kitchen restaurant in limbo for over a month](https://w42st.com/post/gas-shutoff-drags-on-at-sesamo-leaving-restaurant-in-limbo-for-over-a-month/)
+- [ABC7 New York: restaurant cooking without gas for over a month after an inspection found a leak](https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/)
+- [Customer Experience Dive: takeaways from Starbucks' customer experience plans](https://www.customerexperiencedive.com/news/4-takeaways-starbucks-customer-experience/756355/)
+- [GeekWire: Starbucks CEO on bringing order to mobile ordering (2024)](https://www.geekwire.com/2024/on-his-first-earnings-call-starbucks-ceo-lays-out-plan-to-bring-order-to-mobile-ordering/)
+- [CNN: Starbucks ends its open-door policies (January 2025)](https://www.cnn.com/2025/01/14/food/starbucks-restroom-policy)
+- [NPR: No laptops, no Wi-Fi: how one cafe fired up sales (2014)](https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales)
+- [NPR: public restrooms and business owners (2017)](https://www.npr.org/sections/health-shots/2017/05/08/526523520/public-restrooms-become-ground-zero-in-the-opioid-epidemic)
+- [Syndicated article: how long you can sit in a coffee shop (cafe chief executive quoted)](https://www.yahoo.com/lifestyle/heres-exactly-long-sit-coffee-070007503.html)
+- [Greenpointers: a bakery line blocked neighbors' homes (2024)](https://greenpointers.com/2024/04/01/radio-bakery-stoop-sale/)
+
+**Цены, подрядчики, отраслевые справочники** (20)
+
+- [Reliable Ramps: AlumiRamp threshold ramp price list](https://reliableramps.com/products/alumiramp-threshold-ramp-tr06n)
+- [ADA door operator cost guide (vendor)](https://ufiredoors.com/blog/ada-door-operator-cost/)
+- [LISC NYC Commercial Corridor Challenge: storefront improvement design guidelines](https://www.lisc.org/media/filer_public/1b/91/1b916163-0300-4298-9439-4981884e9abd/corridor_challenge_storefront_improvement_design_guidelines_-___final.pdf)
+- [Permit aggregator: storefront awning filing, East Village (declared job cost)](https://sinra.ai/projects/permits/general-construction-153-second-avenue-manhattan-850583358)
+- [Glazier guide: storefront window cost](https://www.insightglass.com/how-much-do-storefront-windows-cost/)
+- [NYC fabricator: winter vestibules, prices](https://www.signsny.com/outdoor/winter-vestibules)
+- [Cost guide: air curtains](https://www.pickcomfort.com/cost-air-curtain-typical-prices-what-affects-quote/)
+- [ACHR News: eatery eliminates cold complaints with air curtains](https://achrnews.com/articles/159663-michigan-eatery-eliminates-cold-complaints-with-air-curtains)
+- [1st-line Equipment: commercial espresso machine basic requirements](https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/)
+- [Commercial espresso machine buyer's guide (circuit sizes)](https://foodservicenerd.com/guides/how-to-choose-a-commercial-espresso-machine/)
+- [NYC electrical contractor: Con Edison service upgrade guide, 2026](https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/)
+- [Third-party summary of Con Edison commercial rates](https://nectarclimate.com/rates/consolidated-edison-coned)
+- [NYC contractor: commercial HVAC replacement cost, 2026](https://www.vincomechanical.com/hvac-replacement-cost-nyc)
+- [HVAC maintenance budget guide (vendor)](https://oxmaint.com/industries/hvac/hvac-maintenance-budget-planning-optimizing-spend)
+- [Vendor guide: restaurant seating layout, square feet per seat](https://www.gofoodservice.com/guides/designing-your-restaurant-seating-layout)
+- [Toast: how to design a coffee shop floor plan](https://pos.toasttab.com/blog/on-the-line/coffee-shop-floor-plans)
+- [Coffee shop layout guide (vendor)](https://therestaurantwarehouse.com/blogs/restaurant-equipment/coffee-shop-layout)
+- [Sber: preparing to open a coffee shop (in Russian; 1.6 sq m per guest)](https://www.sberbank.ru/start/articles/coffee/prepare_to_open)
+- [Seven principles of designing a coffee bar (in Russian)](https://alataucitybank.kz/business/osim/articles/sem-fundamentalnykh-printsipov-proektirovki-kofeynogo-bara)
+- [Fire protection company summary of Fire Department violation categories and penalties (2026)](https://www.tfp1.com/blog/fdny-violation-codes/)
