@@ -212,7 +212,9 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     const phase = hashStr(playerId) % 7;
     if (profile.loginEvery > 1 && (w.day - sight.me.joinedDay) % profile.loginEvery !== 0 && sight.business) return [];
     const b = sight.business;
-    if (!b) return sight.hadBusiness ? [] : openingActions(w, ctx, sight, strategy);
+    // no business yet: look through the listings on the day of joining and then every two weeks, not every day
+    // (each look prices up to 40 doors; a careful newcomer may find none it would sign for)
+    if (!b) return sight.hadBusiness || (w.day - sight.me.joinedDay) % 14 !== 0 ? [] : openingActions(w, ctx, sight, strategy);
     const pack = ctx.packs.niches[b.niche]!;
     const place = placeOf(ctx, b.placeId)!;
     const acts: Action[] = [];
