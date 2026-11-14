@@ -10,7 +10,7 @@ import { loadProgress, personalOf, progressKey, saveProgress, type ReserveMonths
 import { NextRealStep, PlanPlaceBlock, PlanRisks, PlanSummaryBlock, SavingsCheck, StepMine } from './PlanPersonal';
 import './plan.css';
 
-type AskFn = (q: Query) => Promise<unknown>;
+export type AskFn = (q: Query) => Promise<unknown>;
 const unwrap = (res: unknown): RealWorldPlan | null => {
   const v = res && typeof res === 'object' && 'ok' in (res as object) ? (res as { data?: unknown }).data : res;
   return v && typeof v === 'object' && 'startupBudget' in (v as object) ? (v as RealWorldPlan) : null;
