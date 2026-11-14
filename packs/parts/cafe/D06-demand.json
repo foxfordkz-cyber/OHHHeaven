@@ -3044,6 +3044,104 @@
         "source": "https://www.seroundtable.com/google-reviews-disappearing-bug-40327.html",
         "confidence": "estimate",
         "note": "Applies to shops with fewer than about 100 reviews, where losing a quarter changes the displayed average. 2% of reputation for two months is my estimate. The practical advice from the trackers: keep screenshots of the count and rating, and do not ask customers to repost."
+      },
+      {
+        "id": "anchor_store_closes",
+        "name": "The drugstore on the corner closes for good",
+        "text": "A national chain went bankrupt and its corner store is papered over. It was not your rival: it was the reason hundreds of people walked down this block every day.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Chain bankruptcies and closure lists; the city's storefront vacancy registry",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "loyalty"
+          },
+          {
+            "kind": "lever",
+            "id": "delivery_apps"
+          },
+          {
+            "kind": "lever",
+            "id": "community_nights"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Rite Aid closed every store in 2025 after a second bankruptcy: about 180 in New York State, 33 of them in the city by one count. A Kellogg study of chain bankruptcies: stores within 50 meters of a closing national chain store were 17-22% more likely to close themselves when their owner was financially weak",
+        "tier": "core",
+        "source": "https://www.kellogg.northwestern.edu/faculty/benmelech/html/BenmelechPapers/BBMM36_for_submission_2017.pdf",
+        "confidence": "estimate",
+        "note": "5% for a year is my estimate. Owners' accounts after a grocery anchor closed elsewhere: a clothing shop lost about 10% of foot traffic, a salon up to 75% of walk-ins. The opposite of chain_closes_within_250m: a rival's exit frees customers, a neighbor's exit removes them. In the game the block fund deal is the collective answer."
+      },
+      {
+        "id": "empty_storefronts_spread",
+        "name": "A third papered-over window on the block",
+        "text": "Empty storefronts make a block feel closed. People cross the street or take the avenue instead.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Storefront vacancy by community district: the Comptroller's and City Planning's trackers",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "reviews"
+          },
+          {
+            "kind": "lever",
+            "id": "community_nights"
+          },
+          {
+            "kind": "lever",
+            "id": "delivery_apps"
+          }
+        ],
+        "realFrequency": "April 2026: 11.0% of the city's storefronts are vacant, about 15,700; Manhattan 12.9% (15.8% at the late-2023 peak); the Financial District and Battery Park City 21.1%; the Lower East Side and East Village district 15.3% in the first quarter of 2026, second highest in Manhattan",
+        "tier": "deep",
+        "source": "https://comptroller.nyc.gov/newsroom/press-releases/new-report-citywide-storefront-vacancies-decline-but-some-neighborhoods-still-face-20-empty-retail-spaces/",
+        "confidence": "estimate",
+        "note": "3% is my estimate for a block whose vacancy rises above the district's 15%. No measurement of foot traffic against vacancy was found. For a tenant the same numbers are bargaining power at the next lease."
       }
     ],
     "mechanics": [
@@ -3850,6 +3948,18 @@
         "why": "Display faults at the largest map platform hid reviews for weeks in February and October 2025; one business dropped from about 600 reviews to 460 before they came back. A shop with 40 reviews feels that; a shop with 800 does not.",
         "source": "https://www.seroundtable.com/google-reviews-disappearing-bug-40327.html",
         "tier": "exotic"
+      },
+      {
+        "text": "A closed neighbor is bad news unless it sold coffee.",
+        "why": "A rival's closure frees its customers; a drugstore's or grocer's closure removes the reason people walked past you. Shops within 50 meters of a closing chain store were 17-22% more likely to close themselves when their owner was financially weak.",
+        "source": "https://www.kellogg.northwestern.edu/faculty/benmelech/html/BenmelechPapers/BBMM36_for_submission_2017.pdf",
+        "tier": "core"
+      },
+      {
+        "text": "One storefront in seven is empty in the East Village and Lower East Side.",
+        "why": "15.3% vacancy in early 2026, second highest in Manhattan, against 11% citywide. An empty block sells less coffee, and it also means landlords there are negotiating.",
+        "source": "https://www.manhattancc.org/storefront-tracker/",
+        "tier": "deep"
       }
     ],
     "cityFacts": {
@@ -3877,6 +3987,17 @@
         "value": 0.69,
         "unit": "share of consumers who leave a review when asked (review-software vendor survey); 28% say they are likely to review after a good experience and 34% after a bad one",
         "source": "https://reviewtrackers.com/reports/customer-reviews-stats",
+        "confidence": "estimate"
+      },
+      "storefrontVacancy": {
+        "citywide": 0.11,
+        "vacantStorefronts": 15700,
+        "manhattan": 0.129,
+        "manhattanPeakLate2023": 0.158,
+        "financialDistrict": 0.211,
+        "lowerEastSideAndEastVillage": 0.1533,
+        "asOf": "April 2026 (Comptroller); first quarter of 2026 (Manhattan Chamber of Commerce, community district 3); City Planning gives 11.06% citywide for the first quarter of 2026",
+        "source": "https://comptroller.nyc.gov/newsroom/press-releases/new-report-citywide-storefront-vacancies-decline-but-some-neighborhoods-still-face-20-empty-retail-spaces/",
         "confidence": "estimate"
       }
     },
@@ -4973,6 +5094,11 @@
       "how": "search result, page not opened"
     },
     {
+      "url": "https://comptroller.nyc.gov/newsroom/press-releases/new-report-citywide-storefront-vacancies-decline-but-some-neighborhoods-still-face-20-empty-retail-spaces/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
       "url": "https://comptroller.nyc.gov/reports/office-to-residential-conversions/",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
@@ -5374,6 +5500,16 @@
     },
     {
       "url": "https://www.kastle.com/safety-wellness/getting-america-back-to-work/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.kellogg.northwestern.edu/faculty/benmelech/html/BenmelechPapers/BBMM36_for_submission_2017.pdf",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.manhattancc.org/storefront-tracker/",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
     },
