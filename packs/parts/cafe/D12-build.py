@@ -87,6 +87,8 @@ if common_sc:
 cafe_frag['sources'] = [dict(s, checked=CHECKED) for s in NEW_SOURCES]
 cafe_frag['extra'] = cafe_frag.get('extra', {})
 cafe_frag['extra']['d12CheckedUnchanged'] = CHECKED_ONLY
+cafe_frag['extra']['eventCatalog'] = D12_patches.EXTRA_EVENTS
+cafe_frag['extra']['mechanics'] = D12_patches.EXTRA_MECHANICS
 for name, frag in (('D12-number-check.json', cafe_frag), ('D12-number-check.common.json', common_frag)):
     with open(os.path.join(HERE, name), 'w') as f:
         json.dump(frag, f, ensure_ascii=False, indent=2)

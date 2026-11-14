@@ -481,6 +481,176 @@
         "source": "https://paidfamilyleave.ny.gov/2026",
         "seen": "NYSIF statutory $17.68 per person a year; PFL 2026 0.432% capped at $411.91"
       }
+    ],
+    "eventCatalog": [
+      {
+        "id": "min_wage_march_2027_proposal",
+        "name": "Minimum wage may rise to $17.60 on March 1, 2027",
+        "text": "The minimum wage stays $17.00 on January 1, 2027, but the Governor proposes $17.60 in New York City from March 1 if the Legislature agrees. Every hourly worker would cost 3.5% more.",
+        "scale": "country",
+        "months": [
+          3
+        ],
+        "realSignal": "State budget passes the off-ramp change; NY DOL publishes the March 1, 2027 rate",
+        "effects": [
+          {
+            "field": "minimumWage",
+            "value": 17.6
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "shortcut",
+            "id": "off_the_clock"
+          }
+        ],
+        "realFrequency": "Increases every January 2024-2026; none on January 1, 2027 because an off-ramp was met",
+        "tier": "core",
+        "source": "https://www.governor.ny.gov/new-york-state-minimum-wage-2027",
+        "confidence": "verified",
+        "note": "Seen November 14, 2026: proposal, not law. Announce it as possible in January; apply only if the real budget passes."
+      },
+      {
+        "id": "sidewalk_shed_rules_2026",
+        "name": "Shed rules tighten: 90-day permits",
+        "text": "Since January 2026 a sidewalk shed permit lasts 90 days and owners pay monthly penalties after 180 days. A shed over your door now comes down sooner.",
+        "scale": "city",
+        "months": [
+          1
+        ],
+        "realSignal": "Local Laws 48 and 51 of 2025 in force January 2026; DOB penalties after 180 days (August 2026)",
+        "effects": [
+          {
+            "field": "sidewalk_shed.months",
+            "value": 6
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "report",
+            "id": "report_shed_to_dob"
+          }
+        ],
+        "realFrequency": "one rule change",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/mayors-office/news/2026/08/mamdani-administration-taking-down-sidewalk-sheds-and-improving-",
+        "confidence": "estimate",
+        "note": "Seen through search (nyc.gov refuses this session). A report to 311 about an expired shed is the player's move; the report id is a proposal for the lead."
+      },
+      {
+        "id": "workers_comp_loss_cost_cut_2026",
+        "name": "Workers' comp costs fall about a fifth",
+        "text": "New York cut workers' compensation loss costs 21.9% from October 1, 2026. Policies renewing after that date get cheaper.",
+        "scale": "country",
+        "months": [
+          10
+        ],
+        "realSignal": "NYCIRB loss cost filing approved by DFS, effective October 1, 2026",
+        "effects": [
+          {
+            "field": "tax.workers_comp.rate",
+            "mult": 0.8
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "no_workers_comp"
+          }
+        ],
+        "realFrequency": "yearly filing; direction varies",
+        "tier": "deep",
+        "source": "https://www.insurancejournal.com/news/east/2026/07/17/877978.htm",
+        "confidence": "estimate",
+        "note": "Seen through search. The overall level, not the restaurant class; insurers apply their own multipliers. Makes skipping coverage even less worth it."
+      }
+    ],
+    "mechanics": [
+      {
+        "id": "per_worker_payroll_caps",
+        "title": "Payroll taxes with per-worker caps",
+        "playerDecision": "How many people to hire and at what wage (more part-timers cost more unemployment tax per dollar of wages)",
+        "engineMath": "NY UI = 4.1% of each worker's first $17,600 a year; FUTA = 0.6% of the first $7,000; disability = $17.68 per worker a year with a $60 minimum per employer. Accrue per worker from the start of the calendar year instead of one flat rate on payroll.",
+        "fieldsNeeded": [
+          "taxes[].wageBase",
+          "taxes[].perWorkerAnnual",
+          "taxes[].minAnnualPerEmployer"
+        ],
+        "numbers": [
+          {
+            "what": "NY UI new employer rate 2026",
+            "value": 0.041,
+            "source": "https://dol.ny.gov/bizserve/ui/prg/rate",
+            "confidence": "verified"
+          },
+          {
+            "what": "NY UI wage base 2026",
+            "value": 17600,
+            "source": "https://dol.ny.gov/bizserve/ui/prg/rate/wbarchive",
+            "confidence": "verified"
+          },
+          {
+            "what": "NYSIF disability minimum annual premium",
+            "value": 60,
+            "source": "https://ww3.nysif.com/-/media/Files/DISABILITY_BENEFITS/PDF/UDB-SOC_2026.pdf",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "taxable_share_by_item",
+        "title": "Not every cafe sale is taxable",
+        "playerDecision": "What to sell to go: whole pastries and bags of beans in grocery form are exempt; hot drinks, anything heated, sandwiches and anything eaten in the shop are taxed",
+        "engineMath": "taxableShare = 1 - share of sales that are unheated, to go and in grocery form. For a coffee shop about 0.95-1.0; keep 1.0 until menu data exists.",
+        "fieldsNeeded": [
+          "extra.taxableShare per menu category"
+        ],
+        "numbers": [
+          {
+            "what": "NYC sales tax rate",
+            "value": 0.08875,
+            "source": "https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "exotic"
+      },
+      {
+        "id": "llc_publication_county",
+        "title": "Where the LLC publishes its notice",
+        "playerDecision": "The LLC publishes in the county of the office named in its articles. A Brooklyn package is $1,475; Manhattan $1,795; Albany $395.",
+        "engineMath": "setup[llc_and_publication].cost = $200 + package price of the chosen county. Only a real office address in that county is lawful; the game should not offer a fake address.",
+        "fieldsNeeded": [
+          "extra.llcPublicationByCounty"
+        ],
+        "numbers": [
+          {
+            "what": "Kings County package",
+            "value": 1475,
+            "source": "https://www.llcpublishers.com/pricing",
+            "confidence": "verified"
+          },
+          {
+            "what": "Albany County package",
+            "value": 395,
+            "source": "https://www.llcpublishers.com/pricing",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "exotic"
+      }
     ]
   },
   "unit": {
