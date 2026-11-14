@@ -28,14 +28,19 @@
 
 <!-- 1. Title and the pain in one line -->
 <section class="page title-page" id="title">
-  <svg class="mark" viewBox="0 0 32 32"><use href="#mark"/></svg>
-  <div class="kicker">First Year</div>
-  <h1>Would you risk your family’s savings on a coffee shop?</h1>
-  <p class="lead">Live the first year of your own coffee shop on real New York rent, permits, wages and taxes — before you sign a lease. Leave with a plan that is yours.</p>
-  <div class="meta">
-    <span class="badge accent">Web, B2C</span>
-    <span class="badge">Live city: one game month per real day</span>
-    <span class="badge">Public URL: <span class="tbd">deploy URL</span></span>
+  <div class="split">
+    <div class="text" style="justify-content: center">
+      <svg class="mark" viewBox="0 0 32 32"><use href="#mark"/></svg>
+      <div class="kicker">First Year</div>
+      <h1>Would you risk your family’s savings on a coffee shop?</h1>
+      <p class="lead">Live the first year of your own coffee shop on real New York rent, permits, wages and taxes — before you sign a lease. Leave with a plan that is yours.</p>
+      <div class="meta">
+        <span class="badge accent">Web, B2C</span>
+        <span class="badge">One game month per real day</span>
+        <span class="badge">Play: <span class="tbd">public URL</span></span>
+      </div>
+    </div>
+    <figure class="shot hero"><img src="img/home.jpg" alt="Home screen: the city map and the question “What would you open?”"></figure>
   </div>
   <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>1 / 10</span></div>
 </section>
@@ -181,43 +186,43 @@
     <div class="step"><b>First month free</b>open and run your shop</div><span class="arrow">→</span>
     <div class="step paid"><b>$19 / month</b>the year and your plan</div>
   </div>
-  <p class="small">Drafts from real screens of one test run; none has run yet. Assumed: free → paid <span class="tbd" data-model="inputs.freeToPaid" data-format="pct">B16</span>, cost per payer <span class="tbd" data-model="inputs.cacPaid" data-format="usd0">B16</span> (docs/pitch/model.mjs).</p>
+  <p class="small">Drafts from real screens; none has run yet. Assumed: <span class="tbd" data-model="inputs.freeToPaid" data-format="pct">B16</span> of free players pay; ads test the message, 90% of payers come organically — friends next door, the plan shown to family (MONEY.md).</p>
   <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>7 / 10</span></div>
 </section>
 
 <section class="page" id="money">
   <div class="kicker">Why it makes money</div>
-  <h2>Subscription only, sold to the person. Coffee shops → every small business → every city.</h2>
+  <h2>Subscription only: <span class="tbd" data-model="inputs.priceMonthly" data-format="usd0">$19</span> a month or <span class="tbd" data-model="inputs.priceAnnual" data-format="usd0">annual</span> a year.</h2>
   <div class="cols-4">
-    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.ltv" data-format="usd0">LTV</span></b><span>lifetime value of a payer</span><span class="src">model.mjs, from assumptions</span></div>
-    <div class="kpi"><b class="num"><span class="tbd" data-model="inputs.cacPaid" data-format="usd0">CAC</span></b><span>cost to acquire a payer</span><span class="src">assumption</span></div>
-    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.ltvToCac" data-format="x">LTV/CAC</span></b><span>LTV to CAC</span><span class="src">model.mjs</span></div>
-    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.payersForTarget" data-format="count">payers</span></b><span>paying members for $100M ARR</span><span class="src">model.mjs</span></div>
+    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.ltv" data-format="usd0">LTV</span></b><span>lifetime value of a payer, net of fees and serving cost</span><span class="src">RevenueCat retention benchmarks</span></div>
+    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.cac" data-format="usd0">CAC</span></b><span>blended cost per payer (ads alone <span data-model="outputs.cacPaidAds" data-format="usd0">?</span>)</span><span class="src">Meta CPC, Unbounce conversion</span></div>
+    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.ltvToCac" data-format="x">LTV/CAC</span></b><span>LTV / CAC · payback in <span data-model="outputs.paybackMonths" data-format="months">?</span> months</span><span class="src">model.mjs</span></div>
+    <div class="kpi"><b class="num"><span class="tbd" data-model="outputs.payersForTarget" data-format="count">payers</span></b><span>payers for $100M ARR: <span data-model="outputs.penetrationForTarget" data-format="pct">?</span> of city dwellers 21–45 considering a business</span><span class="src">NORC, Census</span></div>
   </div>
-  <div class="cols-3 fill">
-    <div class="card"><span class="badge accent">1 · now</span><h3>Coffee shops, New York</h3><p>One city’s sourced numbers. About 300,000 food and lodging business applications a year in the US.</p></div>
-    <div class="card"><span class="badge">2</span><h3>Every small business</h3><p>Same engine, a new data pack. The barbershop already runs on the same code.</p></div>
-    <div class="card"><span class="badge">3</span><h3>Every city</h3><p>A city is a data pack: rents, wages, permits, taxes — checked by the same validator.</p></div>
+  <div class="cols-3">
+    <div class="card tint"><h3>1 · Coffee &amp; food, NYC — now</h3><p><strong><span data-model="outputs.steps.0.payers" data-format="count">?</span></strong> payers · <strong><span data-model="outputs.steps.0.arr" data-format="usdM">?</span></strong> ARR</p><p class="small">Sourced numbers; running today.</p></div>
+    <div class="card"><h3>2 · Every small business, NYC</h3><p><strong><span data-model="outputs.steps.1.payers" data-format="count">?</span></strong> payers · <strong><span data-model="outputs.steps.1.arr" data-format="usdM">?</span></strong> ARR</p><p class="small">Same engine; the barbershop runs on it.</p></div>
+    <div class="card"><h3>3 · Every US metro</h3><p><strong><span data-model="outputs.steps.2.payers" data-format="count">?</span></strong> payers · <strong><span data-model="outputs.steps.2.arr" data-format="usdM">?</span></strong> ARR</p><p class="small">A city is a new data pack.</p></div>
   </div>
-  <p class="small">Price <span class="tbd" data-model="inputs.priceMonthly" data-format="usd0">$19</span>/month or <span class="tbd" data-model="inputs.priceAnnual" data-format="usd0">annual</span>/year. Every number on this page is printed by node docs/pitch/model.mjs; each input is marked fact or assumption there. Price, retention and acquisition are not yet tested with users.</p>
+  <p class="small">Ads alone: LTV/CAC <span data-model="outputs.ltvToCacPaidOnly" data-format="x">?</span>, so 90% of payers must come organically (assumption). Each step: <span data-model="inputs.penetration" data-format="pct">?</span> of its pool pays. All numbers: node docs/pitch/model.mjs. Our own conversion is not measured yet.</p>
   <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>8 / 10</span></div>
 </section>
 
 <section class="page" id="new">
   <div class="kicker">Is it new</div>
-  <h2>Games: fun without truth. Courses: truth without practice. Templates: a document without consequences.</h2>
-  <div class="card fill">
+  <h2>Games lack truth. Courses lack practice. Templates lack consequences.</h2>
+  <div class="card">
     <table>
       <tr><th>What people use today</th><th>Price</th><th>What is missing</th></tr>
       <tr><td>Café tycoon games</td><td class="num">$5–$20</td><td>Invented economy: no real rent, no permits, no laws</td></tr>
       <tr><td>Courses, city workshops</td><td class="num">free–$80</td><td>Lectures, not practice; not your block</td></tr>
-      <tr><td>Plan templates, Excel models</td><td class="num">$20/mo; $99–$149</td><td>Your own guesses in; no neighbours, no time, no consequences</td></tr>
+      <tr><td>Plan templates, Excel</td><td class="num">$20/mo, $99+</td><td>Your own guesses in; no time, no consequences</td></tr>
       <tr><td>ChatGPT</td><td class="num">$20/mo</td><td>Plausible numbers without sources; does not live the year</td></tr>
       <tr><td>Consultant</td><td class="num">$3,000–$15,000+</td><td>Expensive before the lease; decides for you</td></tr>
-      <tr class="us"><td>First Year</td><td class="num">$19/mo</td><td>Live the year on sourced NYC numbers, in a shared city, and leave with your plan</td></tr>
+      <tr class="us"><td>First Year</td><td class="num">$19/mo</td><td>Live the year on sourced NYC numbers, with neighbours; keep your plan</td></tr>
     </table>
   </div>
-  <p class="small">We found no simulator of a real first year for future owners (search, 14 Nov 2026). That is not proof none exists. Products, prices and links: docs/pitch/COMPETITORS.md</p>
+  <p class="small">No first-year simulator for future owners found (search, 14 Nov 2026). Sources: docs/pitch/COMPETITORS.md</p>
   <div class="foot"><span class="brand"><svg viewBox="0 0 32 32"><use href="#mark"/></svg>First Year</span><span>9 / 10</span></div>
 </section>
 
