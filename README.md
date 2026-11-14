@@ -49,3 +49,12 @@ Files that start with `// @ohh-stub` are placeholders written by agent 01 with t
 `build/CONTRACT.md`; their owners replace them. `scripts/smoke.mjs` reports which steps ran on real code.
 
 Requires Node 20+.
+
+## Contributors
+
+| GitHub | Role |
+|---|---|
+| [diiaanns07-droid](https://github.com/diiaanns07-droid) | build: skeleton, integration, deploy (agent 01 tab), research |
+| [foxfordkz-cyber](https://github.com/foxfordkz-cyber) | lead, game design, contract |
+
+Code is written together with Claude (Anthropic) agents; their commits carry a `Co-Authored-By` line.
