@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import type { BusinessState, DayReport, GameDate, Pack, Place } from '@ohh/shared';
 import type { CafeDay, StaffPower } from '../../src/niches/cafe/contract';
 import {
-  crowdDrop, engineQualityTake, part, seatsThatFit, serviceCfg, serviceDay, serviceDayWith, serviceKpis, serviceNotes, walkAway,
+  crowdDrop, engineQualityTake, part, seatHint, seatsThatFit, serviceCfg, serviceDay, serviceDayWith, serviceKpis, serviceNotes, walkAway,
   type Group, type ServiceCfg, type ServiceInputs,
 } from '../../src/niches/cafe/service';
 import { hooks as cafeHooks } from '../../src/niches/cafe';
@@ -113,6 +113,13 @@ describe('cafe service: seats and takeaway', () => {
     expect(s.seats.count).toBe(5);
     expect(serviceNotes(d, s).some((n) => n.startsWith('Only 5 seats fit in 500 sq ft'))).toBe(true);
     expect(seatsThatFit(undefined, B01, 24)).toBe(24);
+  });
+
+  it('the seats slider says how many seats the door holds and what a seat costs in work', () => {
+    expect(seatHint({ id: 'a', sqft: 610 } as Place, pack)).toBe('Fits 11 seats in 610 sq ft · a seated guest takes 1.8 times the work of a to-go order');
+    expect(seatHint({ id: 'b', sqft: 380 } as Place, pack)).toBe('No room for seats in 380 sq ft: to-go only · a seated guest takes 1.8 times the work of a to-go order');
+    expect(seatHint(undefined, pack)).toBeNull();
+    expect(seatHint({ id: 'a', sqft: 610 } as Place, cafePack)).toBeNull();
   });
 
   it('8. the same input gives the same day; the file has no clock and no randomness', () => {

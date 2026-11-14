@@ -112,6 +112,19 @@ export function seatsThatFit(place: Place | undefined, cfg: ServiceCfg, size = I
   return Math.max(0, Math.floor((place.sqft - cfg.fixedCoreSqft) / cfg.sqftPerSeat));
 }
 
+/**
+ * The line under the seats slider (build/FORMATS.md 3.7), for the opening and the Manage screens: how many seats this
+ * door holds and what a seat costs in work. null without the pack section or a place.
+ */
+export function seatHint(place: Place | undefined, pack: Pack): string | null {
+  const cfg = serviceCfg(pack);
+  if (!cfg || !place || !(place.sqft > 0)) return null;
+  const fit = seatsThatFit(place, cfg);
+  const work = Math.round(cfg.sitInLaborMult * 10) / 10;
+  const room = fit > 0 ? `Fits ${fit} seat${fit === 1 ? '' : 's'} in ${Math.round(place.sqft)} sq ft` : `No room for seats in ${Math.round(place.sqft)} sq ft: to-go only`;
+  return `${room} · a seated guest takes ${work} times the work of a to-go order`;
+}
+
 /** Share of arriving guests who walk on at this many people in line: straight lines between the pack's points. */
 export function walkAway(line: number, pts: readonly WalkAwayPoint[]): number {
   if (!pts.length) return 0;
