@@ -1,102 +1,178 @@
-# CONTRACT — как 13 кусков складываются в одну игру
+# CONTRACT — как куски складываются в одну игру (версия 5, «медленный город»)
 
-Ведущий, 14 ноября 2026. Обязателен для всех агентов сборки. Формы данных — `shared/src/types.ts` (единственный источник правды; меняет только ведущий). Формат данных ниши — `build/PACK.md`. Правила работы — `build/PROTOCOL.md`.
+Ведущий, 14 ноября 2026, 11:30 UTC. Обязателен для всех агентов сборки. Игра описана в `context/08-game-v5.md` — прочитай её первой. Формы данных — `shared/src/types.ts`, числа правил — `shared/src/rules.ts` (оба файла меняет только ведущий). Формат данных ниши — `build/PACK.md`. Правила работы — `build/PROTOCOL.md`.
 
-## 1. Что строим
+## 1. Три идеи, на которых всё держится
 
-Сайт-игра под телефон, на английском, для взрослых 21–45 лет из США. Нью-Йорк, настоящая карта, пять ниш малого бизнеса, сезон из 12 месяцев-раундов. Владелец открывает бизнес и каждый месяц принимает до шести решений; система сама рекомендует комплект для открытия и решения, показывает аналитику как у настоящего бизнеса; ИИ ведёт события города (погода, пробки, буря, цены) и отвечает на вопросы игрока; бесплатные игроки-госслужащие проверяют бизнесы. Деньги и исход считает код, ИИ — только тексты и выбор событий из белого списка.
+1. **Мир идёт сам.** Сервер раз в `dayMs` считает один игровой день для всех бизнесов по их постоянным распоряжениям (`StandingOrders`). Игроков никто не ждёт.
+2. **Любой ввод — это `Action`.** Человек, бизнес под управлением ИИ и госслужащий меняют мир только через `applyAction`. Чтение — через `ClientView` и `Query`.
+3. **Движок — чистые функции.** Одинаково работает на сервере и в браузере: без сети, файлов, `Date` и `Math.random`. Поэтому игра показывается и без сервера (режим «Practice» в браузере).
 
 ## 2. Стек и папки
 
-Node 20+, TypeScript (ESM, strict), npm workspaces, тесты — vitest, запуск TS — tsx. Без баз данных: состояние в памяти и снимок в JSON.
+Node 20+, TypeScript (ESM, strict), npm workspaces, тесты — vitest, запуск TS — tsx. Без баз данных: мир в памяти и снимок в JSON. Клиент ходит на сервер обычными HTTP-запросами и опрашивает `view`; сокетов нет.
 
-| Папка | Пакет | Что | Владелец |
+| Папка | Пакет | Что | Агент |
 |---|---|---|---|
-| корень: `package.json`, `tsconfig.base.json`, `README.md`, `.github/`, `scripts/` | — | workspaces, общие скрипты, деплой, склейка | 01 |
-| `shared/` | `@ohh/shared` | типы (`src/types.ts` — ведущий), константы и мелкие чистые утилиты (`src/util/`) | 01 |
-| `engine/src/economy/`, `engine/src/index.ts` | `@ohh/engine` | расчёт месяца: спрос, мощность, деньги, налоги, банкротство | 02 |
-| `engine/src/compliance/` | `@ohh/engine` | нарушения, проверки, штрафы, взятки, атаки, призы | 03 |
-| `engine/src/analytics/` | `@ohh/engine` | аналитика, рекомендации, what-if | 04 |
-| `engine/src/niches/<id>.ts` | `@ohh/engine` | особенности ниши | 12, 13, 14 |
-| `ai/` | `@ohh/ai` | события, погода, советник, разбор | 05 |
-| `server/` | `@ohh/server` | комнаты-сезоны, сокеты, таймер | 06 |
-| `bots/`, `sim/` | `@ohh/bots` | боты и симулятор баланса | 07 |
-| `client/src/app/`, `client/src/ui/`, `client/src/screens/onboarding/` | `@ohh/client` | оболочка, дизайн-система, вход и открытие | 08 |
-| `client/src/map/`, `client/src/screens/projector/`, `data/` | `@ohh/client` | карта, данные мест, экран проектора | 09 |
-| `client/src/screens/turn/` | `@ohh/client` | ход месяца, итог, атаки, проверка | 10 |
-| `client/src/screens/insights/`, `client/src/screens/official/`, `client/src/screens/end/` | `@ohh/client` | аналитика, советник, госслужащий, конец сезона | 11 |
-| `packs/` | — | данные ниш и общий пакет | 12, 13, 14, 03 |
+| корень, `scripts/`, `shared/` (кроме `types.ts` и `rules.ts`), `engine/src/niches/index.ts` | `@ohh/shared` | каркас, утилиты, склейка, деплой | 01 |
+| `engine/src/economy/`, `engine/src/index.ts` | `@ohh/engine` | день и месяц бизнеса: спрос, зал, деньги, налоги | 02 |
+| `engine/src/law/` | `@ohh/engine` | нарушения, жалобы, дела, проверки, взятки | 03 |
+| `engine/src/analytics/` | `@ohh/engine` | аналитика, советы, план открытия, личный план | 04 |
+| `engine/src/deals/` | `@ohh/engine` | сделки, фонд квартала, доли, места и призы | 13 |
+| `ai/` | `@ohh/ai` | погода, события, советник, подбор ниши, разбор | 05 |
+| `host/`, `server/` | `@ohh/host`, `@ohh/server` | мир, часы, вход, картина для каждого, HTTP | 06 |
+| `bots/`, `sim/` | `@ohh/bots` | жители под управлением ИИ и проверка баланса | 07 |
+| `client/` (корень), `src/app/`, `src/ui/`, `src/screens/home/`, `src/screens/start/` | `@ohh/client` | оболочка, базовый интерфейс, главная, вход, открытие | 08 |
+| `data/`, `client/src/map/`, `client/src/screens/city/` | | карта, данные мест, экран города | 09 |
+| `client/src/screens/business/` | | мой бизнес: сегодня, управление, книги, уведомления | 10 |
+| `client/src/screens/insights/`, `client/src/screens/end/` | | аналитика, советник, таблицы, конец сезона и личный план | 11 |
+| `client/src/screens/network/`, `client/src/screens/desk/` | | соседи и сделки, жалоба, стол госслужащего | 12 |
+| `packs/cafe.json`, `packs/_common.json`, `engine/src/niches/cafe.ts` | | данные кафе и общие законы | 14 |
+| `packs/barbershop.json`, `engine/src/niches/barbershop.ts` | | данные барбершопа | 15 |
+| `packs/bodega.json`, `guesthouse.json`, `rentals.json` | | данные трёх ниш-карточек | 16 |
 
-Пока каркаса агента 01 нет в основной ветке, каждый создаёт в своей папке минимальный `package.json` и работает автономно; типы импортирует из `shared/src/types.ts` относительным путём. Когда каркас появится — влей основную ветку и перейди на импорт `@ohh/shared`.
+Пока каркаса агента 01 нет в основной ветке, каждый создаёт в своей папке минимальный `package.json` и работает автономно; типы импортирует из `shared/src/types.ts` относительным путём.
 
-## 3. Движок: одна чистая функция на месяц
+## 3. Движок
 
 ```ts
-// engine/src/index.ts — агент 02
 export interface EngineCtx { packs: PackSet; places: Place[] }
-export function createSeason(config: SeasonConfig): SeasonState
-export function openBusiness(s: SeasonState, ctx: EngineCtx, p: { ownerId: string; name: string; isBot: boolean; niche: NicheId; placeId: string; size: number; items: { id: string; qty: number }[] }): SeasonState
-export function resolveMonth(s: SeasonState, ctx: EngineCtx, decisions: Record<string, MonthDecisions>, official: Record<string, OfficialDecisions>): SeasonState
-// engine/src/compliance/index.ts — агент 03
-export function accrueShortcuts(b: BusinessState, d: MonthDecisions, ctx: EngineCtx, base: { payroll: Money; revenue: Money; rent: Money; staffCount: number }, month: number): { lines: PnlLine[]; trails: ViolationTrail[] }
-export function resolveCompliance(s: SeasonState, ctx: EngineCtx, decisions: Record<string, MonthDecisions>, official: Record<string, OfficialDecisions>): SeasonState
-export function finalizeSeason(s: SeasonState): SeasonState            // standings → payouts
-// engine/src/analytics/index.ts — агент 04
-export function analyze(b: BusinessState, s: SeasonState, ctx: EngineCtx): Analytics
-export function recommend(b: BusinessState, s: SeasonState, ctx: EngineCtx): Recommendation[]
-export function recommendOpening(niche: NicheId, placeId: string, s: SeasonState, ctx: EngineCtx): OpenRecommendation[]   // lean, standard, premium
-export function whatIf(s: SeasonState, ctx: EngineCtx, businessId: string, d: MonthDecisions): { report: MonthReport; analytics: Analytics }
-// engine/src/niches/<id>.ts — агенты 12–14
-export interface NicheHooks { demandMult?(b: BusinessState, month: number, pack: Pack): number; capacity?(b: BusinessState, pack: Pack): number | null; extraLines?(b: BusinessState, pack: Pack, month: number): PnlLine[]; kpis?(b: BusinessState, pack: Pack): NicheKpi[]; feed?(b: BusinessState, r: MonthReport, pack: Pack): string[] }
+
+// engine/src/index.ts — агент 02: собирает модули в фиксированном порядке
+export function createWorld(config: WorldConfig): WorldState
+export function applyAction(w: WorldState, ctx: EngineCtx, playerId: string, a: Action): ActionResult
+export function tickDay(w: WorldState, ctx: EngineCtx): WorldState          // один игровой день
+export function netWorth(b: BusinessState, ctx: EngineCtx): Money
+
+// каждый модуль экспортирует одинаковую четвёрку; чужое действие — вернуть null
+// engine/src/economy/index.ts — 02
+export function economyActions(w, ctx, playerId, a): ActionResult | null     // open_business, launch, set_orders, buy_item, sell_item, resize, spend(marketing|training), read_inbox
+export function economyDay(w, ctx): WorldState
+export function economyMonthClose(w, ctx): WorldState
+// engine/src/law/index.ts — 03
+export function lawActions(w, ctx, playerId, a): ActionResult | null         // report, answer_notice, take_case, dismiss_case, answer_bribe, spend(deep_clean|accountant)
+export function lawDay(w, ctx): WorldState
+export function lawMonthClose(w, ctx): WorldState
+export function shortcutSavings(b: BusinessState, ctx: EngineCtx, base: { payroll: Money; revenue: Money; rent: Money; staffCount: number }, month: number): { lines: PnlLine[]; trails: ViolationTrail[] }
+// engine/src/deals/index.ts — 13
+export function dealActions(w, ctx, playerId, a): ActionResult | null        // propose_deal, answer_deal, cancel_deal; set_orders.blockFund проверяет экономика
+export function dealModifiers(w, ctx, businessId): { cogsMult: number; demandMult: number; priceMult: number; footTrafficMult: number }
+export function dealsDay(w, ctx): WorldState
+export function dealsMonthClose(w, ctx): WorldState
+export function computeStandings(w, ctx): Standing[]
+export function finalizeSeason(w, ctx): WorldState                           // payouts, phase = 'ended'
+// engine/src/analytics/index.ts — 04 (ничего не меняет в мире)
+export function analyze(b, w, ctx): Analytics
+export function recommend(b, w, ctx): Recommendation[]
+export function recommendOpening(niche, placeId, w, ctx): OpenRecommendation[]
+export function whatIf(w, ctx, businessId, orders: Partial<StandingOrders>): { projected: MonthReport; analytics: Analytics }
+export function roadmapFor(niche, b: BusinessState | null, w, ctx): RoadmapItem[]
+export function realWorldPlan(b, w, ctx): RealWorldPlan
+export function managerOrders(b, w, ctx): Partial<StandingOrders>            // что сделал бы нанятый управляющий: безопасные советы, без нарушений
+// engine/src/niches/<id>.ts — 14, 15
+export interface NicheHooks { demandMult?(b, date: GameDate, pack): number; capacityDay?(b, pack): number | null; extraLines?(b, pack, month): PnlLine[]; kpis?(b, pack): NicheKpi[]; notes?(b, r: DayReport, pack): string[] }
 export const hooks: NicheHooks
 ```
 
-Все функции чистые и детерминированные: без `Math.random`, `Date`, сети и файлов. Вход не мутируется. Реестр `engine/src/niches/index.ts` ведёт агент 01: добавляет импорт, когда вливает ветку ниши.
+Все функции детерминированы и не мутируют вход. Чужого модуля ещё нет — заглушка по сигнатуре в `__stubs__/` своего модуля.
 
-### Порядок расчёта месяца (`resolveMonth`)
+### Порядок одного игрового дня (`tickDay`)
 
-1. **Решения.** Нет решения — берётся прошлое. Цена обрезается до `priceMin…priceMax`, штат — до `minStaff…maxStaff`.
-2. **События.** Активные `GameEvent` дают множители по `target`; каждый обрезается до 0,5–1,5.
-3. **Качество** (0–1) = 0,5 + эффекты рычагов + `qualityBonus` купленных предметов − штраф за очередь − штраф за нехватку людей.
-4. **Спрос.** Формула привлекательности — из отчёта `research/reports/43-economy-sim.md`, раздел 1, с весами `pack.market.weights` и `place.footTraffic`. Обязательные свойства (это тесты): одинаковые бизнесы получают равные доли; рост своей цены на 1% при равных долях снижает свой спрос примерно на `|priceElasticity|`%; если цены подняли все, рынок сжимается; бизнесы конкурируют только внутри своей ниши.
-5. **Мощность.** `staffCap = Σ работников × unitsPerStaffMonth × staffAvailability`. `sizeCap = size × unitsServedPerSizeMonth ÷ (1 − takeawayShare)`. `capacity = min(staffCap, sizeCap, hardCapUnits) × (1 − closedDays ÷ 30)`. `served = min(demand, capacity)`. Потерянный спрос записывается в `lost.size`, `lost.staff` или `lost.closure` — по тому ограничению, которое сработало.
-6. **Размер зала — не бесплатный.** `size` не больше `floor(place.sqft × 0,6 ÷ sqftPerUnit)`. Мало мест: `sizeUtilization > crowdPenaltyAbove` → очередь, качество следующего месяца −0,05, часть потерянных клиентов уходит к конкурентам, в ленте событие. Много мест: больше мебели (`scalesWithSize`), уборки (`cleaningCostPerSizeMonth`, строки `per_size`); `sizeUtilization < emptyPenaltyBelow` → «пустой зал», репутация −0,02.
-7. **Деньги.** Выручка = `served × price`. Себестоимость = `served × cogsPerUnit × cogs-множитель`. Зарплата = Σ работников × ставка × часы. Аренда = `place.rentPerSqftYear × place.sqft ÷ 12`. Остальное — строки `monthlyCosts` по `basis`, рычаги, действие игрока. Каждая сумма — отдельная строка `PnlLine`.
-8. **Налоги.** Налоги на зарплату — сразу. Sales tax: цена указана без налога; собранный налог приходит в кассу и одновременно ложится в `liabilities` со сроком по `due` — это не деньги владельца. Налог на прибыль начисляется на положительную прибыль и платится раз в квартал. В месяц срока долг списывается с кассы.
-9. **Срезанные углы** (агент 03, `accrueShortcuts`): экономия — строка `saving` с плюсом; след `ViolationTrail` растёт: `months += 1`, `saved += экономия`.
-10. **Проверки, атаки, взятки, штрафы, репутация** (агент 03, `resolveCompliance`). Проверка находит все следы, которые по `official → role` и `foundBy` относятся к проверяющему: случая нет. Штраф = `base + perMonth × months + pctOfSaved × saved`, не больше `max`. `closureDays` действует в следующем месяце. След гаснет через 6 месяцев после последнего нарушения.
-11. **Касса и банкротство.** `cashEnd = cashStart + Σ строк`. `cashEnd < 0` → банкрот: бизнес выбывает, рынок делят оставшиеся.
-12. **Места.** Счёт = касса + 50% стоимости мебели и оборудования − неоплаченные `liabilities`. Банкроты — внизу, по месяцу банкротства.
+1. `day += 1`; сдвиг прогноза погоды (сам прогноз кладёт в мир хост).
+2. `dealsDay` — просроченные предложения.
+3. `lawDay` — движение дел (раздел 5).
+4. `economyDay` для каждого открытого бизнеса:
+   - **Спрос дня** = месячный спрос ÷ 30 × множитель дня недели × `weather.footTrafficMult` × события × `dealModifiers`. Формула привлекательности — из `research/reports/43-economy-sim.md`, раздел 1, с весами `pack.market.weights` и `place.footTraffic`. Свойства (тесты): одинаковые бизнесы получают равные доли; рост своей цены на 1% снижает свой спрос примерно на `|priceElasticity|`%; если цены подняли все, рынок сжимается; бизнесы конкурируют только внутри ниши.
+   - **Мощность дня.** `staffCap = Σ работников × unitsPerStaffMonth ÷ 30 × staffAvailability`. `sizeCap = size × unitsServedPerSizeMonth ÷ 30 ÷ (1 − takeawayShare)`. `served = min(спрос, staffCap, sizeCap, hardCap ÷ 30)`; закрытый по проверке бизнес не продаёт. Потери — в `lost.size`, `lost.staff`, `lost.closure`.
+   - **Зал.** `size ≤ floor(place.sqft × USABLE_FLOOR_SHARE ÷ sqftPerUnit)`. Загрузка выше `crowdPenaltyAbove` — очередь: качество падает, запись в `notes`. Ниже `emptyPenaltyBelow` — пустой зал: репутация падает.
+   - **Деньги дня:** выручка `served × price × priceMult`, себестоимость `served × cogsPerUnit × cogs-множители`. Собранный sales tax приходит в кассу и ложится в `liabilities`.
+   - Запись `DayReport`, накопление `mtd`.
+   - Бизнес в статусе `setup` не продаёт, но платит аренду с первого дня.
+5. **Закрытие месяца** (день кратен 30), по порядку: `economyMonthClose` (зарплата, налоги на зарплату, аренда, строки `monthlyCosts`, рычаги, взнос в фонд квартала, зарплата управляющего, экономия от срезанных углов через `shortcutSavings`, налог на прибыль в `liabilities`, уплата долгов с наступившим сроком, `MonthReport`) → `dealsMonthClose` (платежи по займам, доля прибыли партнёрам, фонд квартала на следующий месяц, счёт надёжности) → `lawMonthClose` (давность следов, плановые проверки, внутренние расследования) → банкротство (`cash < 0`) → `computeStandings`.
+6. Последний день сезона → `finalizeSeason`.
 
-Конец сезона (`finalizeSeason`): `bank × prizeShare` делится по `prizeTable` между небанкротами; `bank × officialsShare` — между госслужащими по очкам (разоблачённый взяточник получает 0); `bank × platformShare` — платформе.
+Каждый доллар — строка `PnlLine`; сумма строк месяца равна изменению кассы за месяц.
 
-## 4. Госслужащие и взятка
+## 4. Сделки (агент 13)
 
-Роли: `inspector` (городские инспекции: санитария, лицензии, жильё), `tax_auditor` (налоги и труд), `journalist`. У каждого `inspectionsPerMonth` проверок. До проверки он видит только открытое: жалобы, цену, оценку, подсказки вида «payroll taxes look low for 5 staff». Очки: +10 за найденное нарушение, −5 за пустую проверку. Владелец заранее ставит `bribeOffer`; если пришли с проверкой и чиновник ответил `accept`, штрафа нет, след остаётся, деньги уходят чиновнику в `bribesTaken` (игровые). Журналист может опубликовать материал о взятке: если она была — чиновник `exposed`, его очки обнуляются, владелец платит штраф по `_common` (взятка) и теряет репутацию; если её не было — журналист теряет очки.
+Предложение живёт `DEAL_OFFER_DAYS`. Бизнесы под управлением ИИ отвечают по своим правилам (агент 07).
 
-## 5. ИИ (`@ohh/ai`, агент 05)
+- **joint_purchase** — только одна ниша; пока активна, `cogsMult = JOINT_PURCHASE_COGS_MULT` у обоих.
+- **cross_promo** — только разные ниши и расстояние до 400 м; `demandMult = CROSS_PROMO_DEMAND_MULT`, `priceMult = CROSS_PROMO_PRICE_MULT` у обоих.
+- **loan** — деньги переходят сразу; равные платежи при закрытии месяца; нечем платить — сделка `broken`, у должника `trust.broken += 1`; банкротство должника — остаток пропал.
+- **partnership** — деньги переходят в кассу бизнеса, вкладчик получает долю в `owners`; при закрытии месяца доля положительной прибыли уходит в бизнес вкладчика; доля участвует в призе.
+- **Фонд квартала** — `orders.blockFund`; при закрытии месяца со всех согласных списывается `BLOCK_FUND_FEE_MONTH`; если их доля на улице (`place.block`) не меньше `BLOCK_FUND_THRESHOLD`, в следующем месяце `footTrafficMult = BLOCK_FUND_TRAFFIC_MULT` у всех на улице.
+- Досрочный выход из сделки — `trust.broken += 1`; сделка, дошедшая до конца, — `trust.kept += 1` обоим.
+
+**Места и призы.** Счёт бизнеса — `netWorth` = касса + `NET_WORTH_ITEMS_SHARE` × стоимость мебели и оборудования − неоплаченные `liabilities` − остаток долга. Места считаются внутри ниши. Призовой фонд `bank × prizeShare` делится между нишами по числу оплативших владельцев, внутри ниши — по `nichePrizeTable` между бизнесами людей (не ИИ, не банкроты); приз бизнеса делится между его владельцами по долям. `bank × officialsShare` — госслужащим-людям по очкам; разоблачённый получает 0.
+
+## 5. Закон, жалобы и дела (агент 03)
+
+- **След нарушения.** Включённый `shortcut`, вариант рычага с `causes`, работа без разрешения (`withoutItViolation`) каждый месяц растят `ViolationTrail`. След гаснет через `TRAIL_EXPIRY_MONTHS` после последнего нарушения.
+- **Откуда берутся дела:** жалоба игрока (`report`, не чаще `REPORTS_PER_WEEK`), подозрительные цифры (налоги на зарплату малы для такого штата, выручка мала для такого потока), плановая проверка раз в `ROUTINE_INSPECTION_EVERY_MONTHS`.
+- **Жизнь дела:** `open` → госслужащий берёт (`take_case`) или через `CASE_GRACE_DAYS` его берёт госслужащий под управлением ИИ → `taken`, проверка длится `INSPECTION_DAYS` → найдены все следы, которые относятся к роли проверяющего: случая нет.
+  - Ничего не найдено: `closed`, `outcome: 'clean'`, очки `POINTS_EMPTY_INSPECTION`; если дело было по жалобе — жалобщику предупреждение, со второй ложной жалобы штраф `FALSE_REPORT_FINE`, и цель узнаёт его имя.
+  - Найдено: `notice` владельцу — штраф `base + perMonth × months + pctOfSaved × saved` (не больше `max`) и `closureDays`. Ответ за `NOTICE_ANSWER_DAYS`: `pay`; `contest` (платит `CONTEST_FEE`, штраф × `CONTEST_FINE_MULT`); `bribe` с суммой. Молчание — `pay`.
+  - Взятка: госслужащий отвечает за `BRIBE_ANSWER_DAYS`. Принял — штрафа нет, след остаётся, очки `POINTS_PER_BRIBE` за нарушение, `bribesThisMonth += 1`. Отказал или промолчал — штраф × `REFUSED_BRIBE_FINE_MULT`.
+- **Очки:** `POINTS_PER_VIOLATION` за каждое найденное нарушение.
+- **Внутренние расследования** при закрытии месяца: госслужащий с наибольшим числом взяток за месяц (если оно больше нуля) разоблачён — очки обнуляются, месяц без дел; каждый, кто дал ему взятку в этом месяце, платит штраф за взятку из `_common`.
+- **Защита владельца:** `spend: deep_clean` гасит санитарные следы; `spend: accountant` гасит один налоговый след с доплатой сэкономленного без штрафа.
+- Один госслужащий не берёт дело на один и тот же бизнес чаще, чем раз в `SAME_TARGET_COOLDOWN_DAYS`.
+
+## 6. Хост и сервер (агент 06)
 
 ```ts
-export function planEvents(input: { month: number; rounds: number; niches: NicheId[]; weather: WeatherMonth; recent: GameEvent[]; deck: PackEvent[] }): Promise<GameEvent[]>   // 1–2 события на месяц вперёд
-export function getWeather(month: number): Promise<WeatherMonth>
-export function askAdvisor(input: { question: string; business: BusinessState; analytics: Analytics; pack: Pack; common: CommonPack }): Promise<AdvisorAnswer>
-export function writeDebrief(input: { business: BusinessState; analytics: Analytics; pack: Pack; common: CommonPack; rank: number }): Promise<Debrief>
+// host/src/index.ts — чистый TypeScript, работает и в браузере
+export interface HostDeps { bots: BotBrain; forecast(seed: number, fromDay: number, days: number): DayWeather[]; deckEvent(w: WorldState, ctx: EngineCtx): GameEvent | null }
+export function newWorld(config: WorldConfig, ctx: EngineCtx, deps: HostDeps): WorldState   // создаёт мир и заселяет бизнесами и госслужащими под управлением ИИ
+export function join(w, p: { name: string; kind: 'owner' | 'official'; role?: OfficialRole }): { world: WorldState; playerId: string }
+export function act(w, ctx, playerId, a: Action): ActionResult
+export function step(w, ctx, deps: HostDeps): WorldState     // один игровой день: прогноз, события, ходы ИИ-жителей, управляющие, tickDay, сводки во входящие
+export function viewFor(w, ctx, playerId: string | null): ClientView   // null → CityView
+export function answer(w, ctx, playerId, q: Query): unknown   // синхронные запросы: recommend_opening, what_if, roadmap, real_world_plan
 ```
 
-Правила: функции никогда не бросают исключение и отвечают не дольше 8 секунд — иначе запасной путь без ИИ (`origin: 'deck'` или `'rules'`). ИИ выбирает события и пишет тексты; числа эффектов проходят проверку схемы и обрезаются движком. Событие объявляется минимум за месяц и действует на всех одинаково. Ключ API — только в переменной окружения сервера; в репозиторий и в клиент не попадает. Без ключа игра работает на запасном пути.
+`viewFor` — единственное место, где решается, кто что видит: владелец получает свой бизнес целиком и только `PublicBusiness` соседей; госслужащий — `CaseCard` без чужих касс.
 
-## 6. Сервер (`@ohh/server`, агент 06)
+HTTP (`@ohh/server`, Express): `GET /api/health`; `GET /api/packs`; `GET /api/places`; `GET /api/worlds`; `POST /api/worlds` (демо-город); `POST /api/worlds/:id/join`; `GET /api/worlds/:id/view?v=<version>` (с токеном — вид игрока, без — `CityView`; версия та же — `{ "unchanged": true }`); `POST /api/worlds/:id/action`; `POST /api/worlds/:id/query` (`advisor`, `idea`, `debrief` идут в `@ohh/ai`); `POST /api/worlds/:id/clock` (пауза и скорость, только демо). Токен — заголовок `Authorization: Bearer`. При старте сервер держит два мира: живой `nyc` (48 минут на день) и `demo` (2 секунды на день). Снимок мира в JSON после каждого игрового дня, восстановление при перезапуске. В продакшене сервер раздаёт `client/dist`.
 
-Express + Socket.IO на одном порту (`PORT`, по умолчанию 3000); в продакшене он же раздаёт `client/dist`. События сокета и их типы — `ClientToServer` и `ServerToClient` в `shared/src/types.ts`. После каждого изменения сервер шлёт каждому клиенту его `ClientView` целиком — клиент ничего не считает сам. HTTP: `GET /api/health`, `GET /api/packs` (PackSet), `GET /api/places` (Place[]), `POST /api/season` (создать сезон), `GET /api/season/:id` (SpectatorView).
+## 7. Жители под управлением ИИ (агент 07)
 
-Фазы: `lobby` → `setup` (выбор ниши, места и комплекта) → 12 × (`decide` на `roundSeconds` → `resolve`) → `ended`. Кто не успел — за него ходит автопилот: прошлое решение, в первый месяц — `OpenRecommendation.firstDecisions`. События на месяц N+1 запрашиваются у ИИ во время `decide` месяца N.
+```ts
+export interface BotBrain {
+  populate(w: WorldState, ctx: EngineCtx, seed: number): { name: string; kind: 'owner' | 'official'; role?: OfficialRole; niche?: NicheId; placeId?: string; strategy: string }[]
+  ownerActions(w: WorldState, ctx: EngineCtx, playerId: string): Action[]      // раз в игровой день
+  officialActions(w: WorldState, ctx: EngineCtx, playerId: string): Action[]
+}
+```
 
-## 7. Клиент (`@ohh/client`, агенты 08–11)
+Жители действуют только через `Action` и видят только то, что видел бы человек. Случайность — через сид.
 
-Vite + React + TypeScript, сначала ширина 390. Состояние — один стор с последним `ClientView` (`client/src/app/store.ts`, агент 08) и хук `useView()`; экраны только читают его и шлют события через `client/src/app/socket.ts`. Маршруты: `/` вход, `/play` владелец (экран по `phase`), `/official` госслужащий, `/screen/:id` проектор. Стили — CSS-переменные из `client/src/ui/tokens.css`; готовые компоненты — из `client/src/ui/`. Экран, которому не хватает данных, делает у себя `fixtures.ts` с примером `ClientView` и работает на нём до склейки — так каждый экран открывается отдельно: `/dev/<screen>`.
+## 8. ИИ (агент 05)
 
-## 8. Готово — это когда
+```ts
+export function forecast(seed: number, fromDay: number, days: number): DayWeather[]      // чистая функция по климату Нью-Йорка, без сети
+export function deckEvent(w: WorldState, ctx: EngineCtx): GameEvent | null               // запасное событие без ИИ
+export function planEvents(input: { date: GameDate; weather: DayWeather[]; recent: GameEvent[]; niches: NicheId[]; blocks: string[] }): Promise<GameEvent[]>
+export function askAdvisor(input: { question: string; business: BusinessState; analytics: Analytics; pack: Pack; common: CommonPack }): Promise<AdvisorAnswer>
+export function interpretIdea(input: { text: string; packs: PackSet }): Promise<IdeaMatch>
+export function writeDebrief(input: { business: BusinessState; analytics: Analytics; plan: RealWorldPlan; rank: number }): Promise<Debrief>
+```
+
+Функции с ИИ никогда не бросают исключение и отвечают не дольше 8 секунд; иначе — запасной путь (`origin: 'deck'` или `'rules'`). Событие объявляется не позже чем за `EVENT_NOTICE_DAYS` до начала и действует на всех одинаково; эффекты — только `EffectTarget` с множителем 0,7–1,3. Ключ API — только в окружении сервера. Без ключа игра работает полностью.
+
+## 9. Клиент (агенты 08–12)
+
+Vite + React + TypeScript, сначала ширина 390. Все обращения к игре — через интерфейс `GameClient` (`shared/src/types.ts`); его две реализации делает агент 08 в `client/src/app/`: `remote` (HTTP) и `local` (игра в браузере на `@ohh/host`). Стор хранит последний `ClientView` и опрашивает `view` раз в 2 секунды в демо и раз в 15 секунд в живом городе; хук `useView()`. Экраны ничего не считают сами.
+
+Маршруты: `/` главная (`CityView`); `/start` идея → ниша → место → план открытия; `/biz` мой бизнес с вкладками Today, Manage, Books, Network, Insights; `/desk` стол госслужащего; `/city/:id` экран города для проектора; `/end` конец сезона и личный план; `/dev/<screen>` — любой экран на примерах данных без сервера. Каждый агент клиента держит свои примеры `ClientView` в `fixtures.ts` своей папки.
+
+## 10. Готово — это когда
 
 - `npm test` в твоём пакете зелёный, и в журнале записано, какой командой проверить.
 - Публичные функции совпадают с сигнатурами этого файла.
 - Чужие папки не тронуты.
+
+## 11. Порядок вырезания
+
+Если не успеваешь — режь в порядке раздела 9 файла `context/08-game-v5.md` и пиши об этом в журнал. Первая общая цель — проверка из его раздела 10: два человека в демо-городе открыли кафе, прошёл месяц, жалоба, проверка, штраф, кросс-промо, аналитика.

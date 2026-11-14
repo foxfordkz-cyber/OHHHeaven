@@ -51,6 +51,11 @@
     { "id": "espresso_machine", "name": "Espresso machine", "kind": "equipment",   // equipment | furniture | buildout | deposit | permit | license | inventory | other
       "cost": 9000, "required": true, "lifespanMonths": 84, "qualityBonus": 0.03,
       "source": "…", "confidence": "estimate", "note": "…" },
+    { "id": "fse_permit", "name": "Food Service Establishment Permit", "kind": "permit", "cost": 280, "required": true,
+      "waitDays": 21,                               // настоящий срок получения в днях; игровой день = день
+      "agency": "NYC DOHMH", "link": "https://…",   // кто выдаёт и официальная страница
+      "withoutItViolation": "no_fse_permit",        // нарушение, если открыться раньше
+      "source": "…", "confidence": "verified" },
     { "id": "chair", "name": "Dining chair", "kind": "furniture", "cost": 85, "required": true,
       "scalesWithSize": true,                     // цена за одну единицу размера: движок умножит на size
       "lifespanMonths": 60, "source": "…", "confidence": "verified" }
@@ -105,7 +110,7 @@
     { "id": "off_books_payroll", "name": "Unreported cash payroll",
       "law": "NY Tax Law §…; 26 U.S.C. §…",
       "official": "tax_inspector",                  // id из officials этого файла или _common
-      "foundBy": ["audit", "complaint"],            // inspection | audit | complaint | sting | journalist
+      "foundBy": ["audit", "complaint"],            // inspection | audit | complaint | sting
       "fine": { "base": 0, "perMonth": 0, "pctOfSaved": 1.5, "max": null },   // штраф = base + perMonth × месяцев + pctOfSaved × сэкономленное
       "closureDays": 0, "reputationHit": 0.1, "criminal": "текстом: когда это уже уголовное дело",
       "source": "…", "confidence": "verified", "note": "…" }
@@ -118,10 +123,11 @@
       "checks": ["dirty_surfaces"], "realProcess": "Как проверка идёт в жизни, 2–3 фразы", "source": "…" }
   ],
 
-  // Атаки игрока на конкурента в этой нише.
-  "attacks": [
-    { "id": "report_to_311", "name": "File a 311 complaint", "cost": 0,
-      "triggers": "health_inspector", "worksIf": "цель действительно нарушает", "backfire": "ложная жалоба: штраф и раскрытие имени" }
+  // «Сообщить городу»: жалобы, которые игрок может подать на конкурента. Единственное нападение в игре.
+  "reports": [
+    { "id": "report_dirty_kitchen", "name": "Report unsanitary conditions (311)",
+      "text": "The Health Department sends an inspector. If you are wrong, you get a warning.",
+      "role": "inspector", "checks": ["dirty_surfaces"] }      // checks — id нарушений, на которые указывает жалоба
   ],
 
   // События из жизни ниши, объявляются за месяц.
@@ -133,6 +139,24 @@
   "ruleCards": [
     { "id": "letter_grade", "title": "Letter grades", "text": "До 280 знаков, по-английски, с числом.", "source": "…" }
   ],
+
+  // План открытия, как в жизни, по порядку. Общие шаги (LLC, EIN, sales tax, страховки) лежат в _common.roadmap — здесь шаги ниши.
+  // kind: idea | legal | permit | space | money | supplier | people | launch
+  "roadmap": [
+    { "id": "get_fse_permit", "title": "Get your Food Service Establishment Permit", "kind": "permit",
+      "text": "Apply online before you build out. An inspector visits before you open.",
+      "setupItemId": "fse_permit", "fee": 280, "waitDays": 21, "agency": "NYC DOHMH", "link": "https://…" }
+  ],
+
+  // Где в жизни искать поставщиков. Справка для игрока: категории, где ищут, известные примеры.
+  "suppliers": [
+    { "id": "coffee_beans", "category": "Coffee", "what": "Wholesale roasted beans, usually with free equipment service",
+      "whereToFind": "Local wholesale roasters; ask cafes you like who supplies them", "examples": "…", "link": "https://…",
+      "source": "…", "confidence": "estimate", "note": "…" }
+  ],
+
+  // Зарплата нанятого управляющего, который ведёт бизнес, пока владельца нет.
+  "manager": { "monthlySalary": 4800, "source": "…", "confidence": "verified" },
 
   // Нормы отрасли для аналитики игрока: доли от выручки.
   "benchmarks": { "cogsPct": 0.30, "laborPct": 0.30, "rentPct": 0.08, "netMarginPct": 0.06, "source": "…", "confidence": "verified" },
@@ -156,7 +180,10 @@
 | `shortcuts` | 8, каждый с нарушением |
 | `violations` | 10 |
 | `officials` | 2 |
-| `attacks` | 4 |
+| `reports` | 3 |
+| `roadmap` | 10 шагов по порядку |
+| `suppliers` | 6 категорий |
+| `manager` | заполнен |
 | `events` | 5 |
 | `ruleCards` | 12 |
 

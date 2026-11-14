@@ -78,7 +78,7 @@ function checkList(key, fn, { needSource = true } = {}) {
     else if (ids.has(`${key}:${it.id}`)) err(`${at}: повтор id`);
     else ids.set(`${key}:${it.id}`, true);
     if (!str(it.name) && !str(it.title)) err(`${at}: нет name/title`);
-    for (const k of ['name', 'title', 'label', 'what', 'text']) if (str(it[k]) && cyr.test(it[k])) err(`${at}.${k}: текст для игрока должен быть на английском`);
+    for (const k of ['name', 'title', 'label', 'what', 'text', 'category', 'whereToFind']) if (str(it[k]) && cyr.test(it[k])) err(`${at}.${k}: текст для игрока должен быть на английском`);
     if (needSource) {
       if (!str(it.source) || !/^https?:\/\//.test(it.source)) (it.confidence === 'estimate' && str(it.note) ? warn : err)(`${at}: нет ссылки source`);
       if (it.confidence !== undefined && !['verified', 'estimate'].includes(it.confidence)) err(`${at}: confidence — verified или estimate`);
@@ -136,7 +136,7 @@ checkList('violations', (it, at) => {
   if (!str(it.law)) err(`${at}.law: нужна ссылка на норму закона`);
   if (!officialIds.has(it.official)) err(`${at}.official: чиновника «${it.official}» нет ни здесь, ни в _common`);
   if (!Array.isArray(it.foundBy) || !it.foundBy.length) err(`${at}.foundBy: пусто`);
-  else it.foundBy.forEach((f) => oneOf(f, ['inspection', 'audit', 'complaint', 'sting', 'journalist'], at, 'foundBy'));
+  else it.foundBy.forEach((f) => oneOf(f, ['inspection', 'audit', 'complaint', 'sting'], at, 'foundBy'));
   const f = it.fine || {};
   if (![f.base, f.perMonth, f.pctOfSaved].some((v) => num(v) && v > 0) && !(num(it.closureDays) && it.closureDays > 0)) err(`${at}: нет ни штрафа, ни закрытия`);
   if (!num(it.reputationHit)) warn(`${at}.reputationHit: не задан`);
@@ -147,10 +147,30 @@ checkList('officials', (it, at) => {
   if (!Array.isArray(it.checks) || !it.checks.length) warn(`${at}.checks: чиновник ничего не проверяет`);
   else it.checks.forEach((c) => { if (!violationIds.has(c)) err(`${at}.checks: нарушения «${c}» нет`); });
 });
-checkList('attacks', (it, at) => {
-  if (!num(it.cost)) err(`${at}.cost: нужно число`);
-  if (!str(it.backfire)) warn(`${at}.backfire: у атаки нет обратного удара`);
+checkList('reports', (it, at) => {
+  if (!str(it.text)) err(`${at}.text: нужен текст для игрока`);
+  oneOf(it.role, ['inspector', 'tax_auditor'], at, 'role');
+  if (!Array.isArray(it.checks) || !it.checks.length) err(`${at}.checks: пусто`);
+  else it.checks.forEach((c) => { if (!violationIds.has(c)) err(`${at}.checks: нарушения «${c}» нет`); });
 }, { needSource: false });
+checkList('roadmap', (it, at) => {
+  if (!str(it.text)) err(`${at}.text: пусто`);
+  oneOf(it.kind, ['idea', 'legal', 'permit', 'space', 'money', 'supplier', 'people', 'launch'], at, 'kind');
+  if (['legal', 'permit'].includes(it.kind) && (!str(it.link) || !/^https?:\/\//.test(it.link))) warn(`${at}.link: у шага с документом нужна официальная ссылка`);
+  if (it.setupItemId && !isCommon && !arr('setup').some((x) => x && x.id === it.setupItemId)) err(`${at}.setupItemId: предмета «${it.setupItemId}» нет в setup`);
+}, { needSource: false });
+checkList('suppliers', (it, at) => {
+  for (const k of ['category', 'what', 'whereToFind']) if (!str(it[k])) err(`${at}.${k}: пусто`);
+}, { needSource: false });
+arr('setup').forEach((it, i) => {
+  if (!it || !['permit', 'license'].includes(it.kind)) return;
+  const at = `setup[${i}] (${it.id})`;
+  if (!num(it.waitDays)) warn(`${at}.waitDays: у разрешения нужен срок ожидания в днях`);
+  if (!str(it.agency)) warn(`${at}.agency: кто выдаёт`);
+  if (it.withoutItViolation && !violationIds.has(it.withoutItViolation)) err(`${at}.withoutItViolation: нарушения «${it.withoutItViolation}» нет`);
+  if (it.required && !it.withoutItViolation) warn(`${at}.withoutItViolation: что будет, если открыться без этого`);
+});
+if (!isCommon && !(pack.manager && num(pack.manager.monthlySalary))) err('manager.monthlySalary: нужно число');
 checkList('events', (it, at) => {
   const e = it.effect || {};
   if (!str(e.field) || !num(e.mult)) err(`${at}.effect: нужны field и mult`);
@@ -167,8 +187,8 @@ arr('violations').forEach((v) => { if (v && v.id && !reachable.has(v.id)) warn(`
 
 // Минимальный объём
 const min = isCommon
-  ? { taxes: 5, shortcuts: 5, violations: 6, officials: 2, ruleCards: 8 }
-  : { setup: 12, monthlyCosts: 10, staff: 2, levers: 4, shortcuts: 8, violations: 10, officials: 2, attacks: 4, events: 5, ruleCards: 12 };
+  ? { taxes: 5, shortcuts: 5, violations: 6, officials: 2, reports: 2, roadmap: 8, ruleCards: 8 }
+  : { setup: 12, monthlyCosts: 10, staff: 2, levers: 4, shortcuts: 8, violations: 10, officials: 2, reports: 3, events: 5, ruleCards: 12, roadmap: 10, suppliers: 6 };
 for (const [k, n] of Object.entries(min)) if (arr(k).length < n) warn(`${k}: ${arr(k).length}, нужно не меньше ${n}`);
 if (!arr('sources').length) warn('sources: список источников пуст');
 

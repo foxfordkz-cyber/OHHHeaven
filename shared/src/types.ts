@@ -1,7 +1,7 @@
-// КОНТРАКТ ПРОЕКТА. Единственный источник правды о форме данных.
-// Меняет этот файл только ведущий. Нужна правка — запиши в свой журнал agents/NN.md, раздел «Просьбы к ведущему»,
+// КОНТРАКТ ПРОЕКТА, версия 5 («медленный город»). Единственный источник правды о форме данных.
+// Меняет этот файл только ведущий. Нужна правка — запиши в журнал agents/NN.md, раздел «Просьбы к ведущему»,
 // и до ответа держи недостающее поле у себя под ключом `extra`.
-// Описание словами — build/CONTRACT.md. Формат пакета ниши — build/PACK.md.
+// Описание словами — build/CONTRACT.md. Игра — context/08-game-v5.md. Формат пакета ниши — build/PACK.md.
 
 export type NicheId = 'cafe' | 'barbershop' | 'bodega' | 'guesthouse' | 'rentals';
 export type Money = number; // доллары США, игровые; не центы
@@ -14,7 +14,7 @@ export interface Sourced { source?: string; confidence?: 'verified' | 'estimate'
 export interface PackUnit extends Sourced { name: string; refPrice: Money; priceMin: Money; priceMax: Money; cogsPerUnit: Money }
 
 export interface PackMarket extends Sourced {
-  unitsPerSlotMonth: number;      // спрос на одно место при refPrice и среднем качестве
+  unitsPerSlotMonth: number;      // спрос на одно место в месяц при refPrice и среднем качестве
   priceElasticity: number;        // отрицательное
   weights: { price: number; quality: number; reputation: number; location: number }; // сумма 1
 }
@@ -23,25 +23,28 @@ export interface PackCapacity { unitsPerStaffMonth: number | null; minStaff: num
 
 /** Физический размер бизнеса: места в кафе, кресла, метры полок, комнаты, квартиры. */
 export interface PackSizing extends Sourced {
-  unitName: string;               // 'seat' | 'chair' | 'shelf_ft' | 'room' | 'apartment'
+  unitName: string;
   min: number; max: number; default: number;
-  sqftPerUnit: number;            // сколько площади занимает одна единица размера
-  unitsServedPerSizeMonth: number;// сколько единиц продажи в месяц пропускает одна единица размера
-  takeawayShare?: number;         // доля спроса, которой место не нужно (кофе с собой); 0 если нет
+  sqftPerUnit: number;
+  unitsServedPerSizeMonth: number;
+  takeawayShare?: number;
   cleaningCostPerSizeMonth: Money;
-  emptyPenaltyBelow?: number;     // загрузка, ниже которой зал «пустой» и репутация падает (0–1)
-  crowdPenaltyAbove?: number;     // загрузка, выше которой очередь и качество падает (0–1)
+  emptyPenaltyBelow?: number;
+  crowdPenaltyAbove?: number;
 }
 
 export type SetupKind = 'equipment' | 'furniture' | 'buildout' | 'deposit' | 'permit' | 'license' | 'inventory' | 'other';
 export interface PackSetupItem extends Sourced {
   id: string; name: string; kind: SetupKind; cost: Money; required: boolean;
-  scalesWithSize?: boolean;       // true: цена за одну единицу размера (стул, стол, кресло, кровать)
-  lifespanMonths?: number;        // срок службы для амортизации в аналитике
-  qualityBonus?: number;          // вклад в качество (0–0.1)
+  scalesWithSize?: boolean;       // цена за одну единицу размера
+  lifespanMonths?: number;
+  qualityBonus?: number;
+  waitDays?: number;              // сколько игровых дней ждать (разрешения и лицензии); нет поля — сразу
+  agency?: string;                // кто выдаёт
+  link?: string;                  // официальная страница
+  withoutItViolation?: string;    // id нарушения, если работать без этого
 }
 
-/** Готовый набор для открытия: система рекомендует, игрок соглашается одним нажатием. */
 export interface PackKit { id: 'lean' | 'standard' | 'premium'; name: string; size: number; items: { id: string; qty: number }[]; pitch: string }
 
 export type CostKind = 'rent' | 'utilities' | 'insurance' | 'supplies' | 'cleaning' | 'marketing' | 'fees' | 'maintenance' | 'debt' | 'other';
@@ -59,18 +62,19 @@ export interface PackLever { id: string; name: string; options: PackLeverOption[
 export type SavesBasis = 'fixed' | 'pct_payroll' | 'pct_revenue' | 'pct_rent' | 'per_staff';
 export interface PackShortcut { id: string; name: string; what: string; saves: { basis: SavesBasis; amount: number }; violation: string }
 
-export type FoundBy = 'inspection' | 'audit' | 'complaint' | 'sting' | 'journalist';
+export type FoundBy = 'inspection' | 'audit' | 'complaint' | 'sting';
 export interface PackViolation extends Sourced {
   id: string; name: string; law: string; official: string; foundBy: FoundBy[];
   fine: { base?: Money; perMonth?: Money; pctOfSaved?: number; max?: Money | null };
   closureDays?: number; reputationHit?: number; criminal?: string;
 }
 
-/** Играбельные роли госслужащих. Чиновник пакета относится к одной из них. */
-export type OfficialRole = 'inspector' | 'tax_auditor' | 'journalist';
-export interface PackOfficial extends Sourced { id: string; name: string; agency: string; role: Exclude<OfficialRole, 'journalist'>; checks: string[]; realProcess?: string }
+/** Играбельные роли госслужащих. */
+export type OfficialRole = 'inspector' | 'tax_auditor';
+export interface PackOfficial extends Sourced { id: string; name: string; agency: string; role: OfficialRole; checks: string[]; realProcess?: string }
 
-export interface PackAttack { id: string; name: string; cost: Money; triggers: string; worksIf: string; backfire: string }
+/** «Сообщить городу»: жалоба на конкурента. Единственное нападение в игре. */
+export interface PackReport { id: string; name: string; text: string; role: OfficialRole; checks: string[] }
 
 export type EffectTarget = 'demand' | 'cogs' | 'staffAvailability' | 'footTraffic' | 'utilities' | 'deliveryShare' | 'rent';
 /** Множитель из белого списка. Движок обрезает mult до диапазона 0.5–1.5. */
@@ -80,20 +84,31 @@ export interface PackEvent extends Sourced { id: string; name: string; text?: st
 export interface PackRuleCard { id: string; title: string; text: string; source: string }
 export interface PackBenchmarks extends Sourced { cogsPct: number; laborPct: number; rentPct: number; netMarginPct: number }
 
+/** Где в жизни искать поставщика. Только справка для игрока, не игровой объект. */
+export interface PackSupplier extends Sourced { id: string; category: string; what: string; whereToFind: string; examples?: string; link?: string }
+
+export type RoadmapKind = 'idea' | 'legal' | 'permit' | 'space' | 'money' | 'supplier' | 'people' | 'launch';
+/** Шаг плана открытия — как в жизни, по порядку. */
+export interface PackRoadmapStep { id: string; title: string; text: string; kind: RoadmapKind; setupItemId?: string; fee?: Money; waitDays?: number; agency?: string; link?: string }
+
+export interface PackManager extends Sourced { monthlySalary: Money }
+
 export interface Pack {
   id: NicheId; version: number; name: string; tagline: string; startCapital: Money;
   unit: PackUnit; market: PackMarket; capacity: PackCapacity; sizing: PackSizing;
   setup: PackSetupItem[]; kits: PackKit[]; monthlyCosts: PackMonthlyCost[]; staff: PackStaffRole[]; taxes: PackTax[];
   levers: PackLever[]; shortcuts: PackShortcut[]; violations: PackViolation[]; officials: PackOfficial[];
-  attacks: PackAttack[]; events: PackEvent[]; ruleCards: PackRuleCard[]; benchmarks: PackBenchmarks;
+  reports: PackReport[]; events: PackEvent[]; ruleCards: PackRuleCard[]; benchmarks: PackBenchmarks;
+  suppliers: PackSupplier[]; roadmap: PackRoadmapStep[]; manager: PackManager;
   sources: { url: string; title: string; checked: string }[]; extra?: Record<string, unknown>;
 }
 
-/** packs/_common.json — общие для всех ниш налоги, нарушения и чиновники. */
+/** packs/_common.json — общие для всех ниш налоги, нарушения, чиновники, жалобы и шаги плана. */
 export interface CommonPack {
   id: '_common'; version: number; name: string;
   taxes: PackTax[]; shortcuts: PackShortcut[]; violations: PackViolation[]; officials: PackOfficial[];
-  ruleCards: PackRuleCard[]; sources: { url: string; title: string; checked: string }[]; extra?: Record<string, unknown>;
+  reports: PackReport[]; ruleCards: PackRuleCard[]; roadmap: PackRoadmapStep[];
+  sources: { url: string; title: string; checked: string }[]; extra?: Record<string, unknown>;
 }
 
 export interface PackSet { common: CommonPack; niches: Partial<Record<NicheId, Pack>> }
@@ -101,183 +116,284 @@ export interface PackSet { common: CommonPack; niches: Partial<Record<NicheId, P
 // ───────────────────────── Карта (data/places.json) ─────────────────────────
 
 export interface Place {
-  id: string; address: string; lat: number; lng: number; kind: 'storefront' | 'building';
+  id: string; address: string; block: string;            // block — улица-квартал для фонда квартала
+  lat: number; lng: number; kind: 'storefront' | 'building';
   sqft: number; tier: PlaceTier; rentPerSqftYear: Money; footTraffic: number; // 0–1
   suitableFor: NicheId[]; sourceDataset?: string; note?: string;
 }
 
-// ───────────────────────── Сезон ─────────────────────────
+// ───────────────────────── Мир ─────────────────────────
 
-export interface SeasonConfig {
-  id: string; city: 'nyc'; seats: number; officialSeats: number;
-  entryFee: Money;            // настоящие (в демо — тестовые) доллары, не игровые
-  rounds: number;             // 12
-  roundSeconds: number;       // 40 в демо
-  prizeTable: number[];       // доли призового фонда по местам, сумма 1
-  prizeShare: number;         // 0.90 банка
-  officialsShare: number;     // 0.05
-  platformShare: number;      // 0.05
-  demo: boolean;
+export interface WorldConfig {
+  id: string; name: string; city: 'nyc';
+  seasonMonths: number;          // 12
+  dayMs: number;                 // настоящих миллисекунд на игровой день: живой город 2_880_000, демо 2_000
+  paused: boolean;
+  maxOwners: number;             // 100
+  aiBusinessesTarget: number;    // сколько бизнесов под управлением ИИ держать в городе
+  entryFee: Money;               // настоящие (в демо — тестовые) доллары
+  prizeShare: number; officialsShare: number; platformShare: number;   // 0.90, 0.05, 0.05
+  nichePrizeTable: number[];     // доли призов ниши по местам: [0.5, 0.3, 0.2]
+  demo: boolean; seed: number;
 }
 
-export type Phase = 'lobby' | 'setup' | 'decide' | 'resolve' | 'ended';
+export interface GameDate { day: number; month: number; dayOfMonth: number; weekday: number; label: string }
 
-export interface PlayerInfo { id: string; name: string; kind: 'owner' | 'official'; isBot: boolean; paid: boolean; connected: boolean }
+export type WeatherCondition = 'clear' | 'cloudy' | 'rain' | 'snow' | 'heat' | 'storm';
+export interface DayWeather { day: number; tempF: number; condition: WeatherCondition; footTrafficMult: number; label: string }
+
+export interface InboxItem { id: string; day: number; kind: 'summary' | 'deal' | 'case' | 'event' | 'money' | 'system'; title: string; text: string; ref?: { type: 'deal' | 'case' | 'business'; id: string }; read: boolean }
+
+export interface Player {
+  id: string; name: string; kind: 'owner' | 'official'; isAi: boolean; paid: boolean;
+  role?: OfficialRole; joinedDay: number; lastSeenDay: number; inbox: InboxItem[];
+}
 
 export interface ViolationTrail { violationId: string; months: number; saved: Money; lastActiveMonth: number; discovered: boolean }
-export interface TaxLiability { taxId: string; amount: Money; dueMonth: number; paid: boolean }
+export interface TaxLiability { taxId: string; amount: Money; dueDay: number; paid: boolean }
 
-export type PnlKind = 'revenue' | 'cogs' | 'payroll' | 'payroll_tax' | 'rent' | 'opex' | 'tax' | 'fine' | 'saving' | 'attack' | 'setup' | 'other';
+export type PnlKind = 'revenue' | 'cogs' | 'payroll' | 'payroll_tax' | 'rent' | 'opex' | 'tax' | 'fine' | 'saving' | 'deal' | 'setup' | 'other';
 /** amount > 0 — деньги пришли, amount < 0 — ушли. */
 export interface PnlLine { id: string; label: string; kind: PnlKind; amount: Money }
 
-export interface InspectionResult {
-  month: number; officialId: string; businessId: string; role: OfficialRole;
-  found: { violationId: string; months: number; fine: Money; closureDays: number }[];
-  bribe?: { offered: Money; accepted: boolean; exposed: boolean };
-}
-
-export type FeedKind = 'event' | 'inspection' | 'attack' | 'bankruptcy' | 'bribe' | 'story' | 'system';
-export interface FeedItem { id: string; month: number; kind: FeedKind; text: string; businessId?: string; public: boolean }
-
-export interface MonthReport {
-  month: number; price: Money;
-  demandUnits: number; servedUnits: number;
-  lost: { size: number; staff: number; closure: number };   // сколько единиц спроса потеряно и почему
-  capacityUnits: number; sizeUtilization: number;           // 0–1+
-  lines: PnlLine[]; revenue: Money; profit: Money; cashStart: Money; cashEnd: Money;
-  taxesAccrued: Money; taxesPaid: Money; fines: Money;
-  quality: number; reputation: number; rank: number;
-  inspections: InspectionResult[]; feed: FeedItem[];
-}
-
-export type PlayerAction =
-  | { type: 'attack'; attackId: string; targetId: string }
-  | { type: 'invest'; kind: 'marketing' | 'training' | 'equipment'; amount: Money }
-  | { type: 'defend'; kind: 'lawyer' | 'deep_clean' | 'accountant' }
-  | { type: 'resize'; size: number };
-
-/** Всё, что владелец решает за месяц. Не больше шести решений. */
-export interface MonthDecisions {
+/** Постоянные распоряжения: действуют каждый день, пока владелец их не сменит. */
+export interface StandingOrders {
   price: Money;
   staff: Record<string, number>;        // id роли → число работников
   levers: Record<string, string>;       // id рычага → id варианта
   shortcuts: string[];                  // включённые способы срезать угол
-  action?: PlayerAction | null;
-  bribeOffer?: Money | null;            // сколько предложить, если в этом месяце придут с проверкой
+  blockFund: boolean;                   // платить взнос в фонд квартала
+  autopilot: 'hold' | 'manager';        // hold — держать распоряжения; manager — нанятый управляющий следует безопасным советам
 }
+
+export interface PermitState { itemId: string; appliedDay: number; readyDay: number }
+
+export interface DayReport {
+  day: number; demandUnits: number; servedUnits: number;
+  lost: { size: number; staff: number; closure: number };
+  revenue: Money; variableCosts: Money; sizeUtilization: number;
+  weather: WeatherCondition; notes: string[];
+}
+
+export interface MonthReport {
+  month: number; avgPrice: Money;
+  demandUnits: number; servedUnits: number; lost: { size: number; staff: number; closure: number };
+  capacityUnits: number; sizeUtilization: number;
+  lines: PnlLine[]; revenue: Money; profit: Money; cashStart: Money; cashEnd: Money;
+  taxesAccrued: Money; taxesPaid: Money; fines: Money;
+  quality: number; reputation: number; netWorth: Money; rankInNiche: number;
+}
+
+export interface Owner { playerId: string; share: number }   // сумма долей = 1
 
 export interface BusinessState {
-  id: string; ownerId: string; name: string; isBot: boolean; niche: NicheId; placeId: string; openedMonth: number;
-  cash: Money; size: number; items: { id: string; qty: number }[]; setupSpent: Money;
-  quality: number; reputation: number;          // 0–1
-  closedDaysNext: number;                       // закрытие по итогам проверки, действует в следующем месяце
+  id: string; name: string; niche: NicheId; placeId: string; isAi: boolean;
+  owners: Owner[]; managerPlayerId: string;                 // кто управляет (основатель)
+  status: 'setup' | 'open' | 'closed' | 'bankrupt';         // setup — до открытия дверей; closed — закрыт по проверке до closedUntilDay
+  createdDay: number; openedDay?: number; closedUntilDay?: number; bankruptDay?: number;
+  cash: Money; size: number; items: { id: string; qty: number }[]; setupSpent: Money; permits: PermitState[];
+  quality: number; reputation: number;                      // 0–1
+  trust: { kept: number; broken: number };                  // выполненные и сорванные сделки
+  orders: StandingOrders;
   trails: ViolationTrail[]; liabilities: TaxLiability[];
-  decisions: MonthDecisions; history: MonthReport[];
-  bankrupt: boolean; bankruptMonth?: number;
+  mtd: { lines: PnlLine[]; demandUnits: number; servedUnits: number; lost: { size: number; staff: number; closure: number } }; // с начала месяца
+  days: DayReport[];                                        // последние 30 дней
+  history: MonthReport[];
 }
 
-export interface OfficialDecisions {
-  inspect: string[];                                     // id бизнесов; не больше inspectionsPerMonth
-  bribes?: Record<string, 'accept' | 'refuse'>;          // id бизнеса → ответ на предложенную взятку
-  publish?: { targetId: string; about: 'bribe' | 'violation' } | null;   // только журналист
+// ───────────────────────── Сделки ─────────────────────────
+
+export type DealTerms =
+  | { type: 'joint_purchase'; months: number }
+  | { type: 'cross_promo'; months: number }
+  | { type: 'loan'; amount: Money; monthlyRatePct: number; months: number }       // from даёт в долг, to возвращает равными платежами
+  | { type: 'partnership'; amount: Money; sharePct: number };                     // from вкладывает amount в бизнес to за долю
+
+export interface Deal {
+  id: string; fromBusinessId: string; toBusinessId: string; terms: DealTerms;
+  status: 'proposed' | 'active' | 'declined' | 'expired' | 'completed' | 'broken' | 'cancelled';
+  proposedDay: number; expiresDay: number; startDay?: number; endDay?: number;
+  paidBack?: Money;                                         // для займа
+}
+
+export interface BlockFundStatus { block: string; month: number; contributors: number; eligible: number; active: boolean; feeMonth: Money }
+
+// ───────────────────────── Дела госслужащих ─────────────────────────
+
+export interface FoundViolation { violationId: string; months: number; fine: Money; closureDays: number }
+
+export interface Case {
+  id: string; businessId: string; role: OfficialRole;
+  origin: 'report' | 'flag' | 'routine'; reportId?: string; reporterBusinessId?: string;
+  openedDay: number; hints: string[];
+  status: 'open' | 'taken' | 'notice' | 'bribe_offered' | 'closed';
+  officialId?: string; takenDay?: number; inspectDay?: number;
+  found?: FoundViolation[]; fine?: Money; closureDays?: number; answerByDay?: number;
+  response?: 'pay' | 'contest' | 'bribe'; bribeAmount?: Money;
+  outcome?: 'clean' | 'fined' | 'bribed' | 'dismissed'; closedDay?: number;
 }
 
 export interface OfficialState {
-  id: string; playerId: string; name: string; isBot: boolean; role: OfficialRole;
-  points: number; inspectionsPerMonth: number; bribesTaken: Money; exposed: boolean;
-  history: InspectionResult[];
+  id: string; playerId: string; name: string; isAi: boolean; role: OfficialRole;
+  points: number; casesClosed: number; bribesTaken: Money; bribesThisMonth: number; exposed: boolean; suspendedUntilDay?: number;
 }
+
+// ───────────────────────── События и лента ─────────────────────────
 
 export interface GameEvent {
   id: string; kind: 'weather' | 'traffic' | 'supply' | 'city' | 'regulation' | 'demand' | 'staff';
   title: string; text: string;
-  announcedMonth: number; startMonth: number; months: number;   // объявляется минимум за месяц до начала
+  announcedDay: number; startDay: number; endDay: number;
   effects: EventEffect[];
-  origin: 'ai' | 'deck' | 'real_data'; realData?: { provider: string; summary: string };
+  origin: 'ai' | 'deck'; block?: string;                    // block — если событие касается одной улицы
 }
 
-export interface Standing { businessId: string; rank: number; score: Money; bankrupt: boolean }
-export interface Payout { playerId: string; kind: 'owner' | 'official' | 'platform'; amount: Money; rank?: number }
+export type FeedKind = 'event' | 'inspection' | 'report' | 'bankruptcy' | 'deal' | 'opening' | 'bribe' | 'system';
+export interface FeedItem { id: string; day: number; kind: FeedKind; text: string; businessId?: string }
 
-export interface SeasonState {
-  config: SeasonConfig; phase: Phase; month: number;       // 0 до старта, затем 1…rounds
-  bank: Money; players: PlayerInfo[]; businesses: BusinessState[]; officials: OfficialState[];
-  events: GameEvent[]; feed: FeedItem[]; standings: Standing[]; payouts?: Payout[];
+export interface Standing { businessId: string; niche: NicheId; rank: number; netWorth: Money; isAi: boolean; bankrupt: boolean }
+export interface Payout { playerId: string; kind: 'owner' | 'official' | 'platform'; amount: Money; niche?: NicheId; rank?: number }
+
+export interface WorldState {
+  config: WorldConfig;
+  phase: 'running' | 'ended';
+  day: number;                   // игровой день с начала сезона, с 1
+  version: number;               // растёт при каждом изменении; клиент по нему понимает, что нужно перерисовать
+  bank: Money;
+  players: Player[]; businesses: BusinessState[]; officials: OfficialState[];
+  deals: Deal[]; cases: Case[]; blockFunds: BlockFundStatus[];
+  weather: DayWeather[];         // сегодня и прогноз на 7 дней
+  events: GameEvent[]; feed: FeedItem[];
+  standings: Standing[]; payouts?: Payout[];
 }
 
-// ───────────────────────── Аналитика и советы ─────────────────────────
+// ───────────────────────── Действия: всё, что может сделать игрок ─────────────────────────
+
+export type Action =
+  // владелец: открытие
+  | { type: 'open_business'; niche: NicheId; placeId: string; name: string; kitId: PackKit['id']; size: number; items?: { id: string; qty: number }[] }
+  | { type: 'launch' }                                   // открыть двери; без готовых разрешений — нарушение
+  // владелец: управление
+  | { type: 'set_orders'; orders: Partial<StandingOrders> }
+  | { type: 'buy_item'; itemId: string; qty: number }
+  | { type: 'sell_item'; itemId: string; qty: number }
+  | { type: 'resize'; size: number }
+  | { type: 'spend'; kind: 'marketing' | 'training' | 'deep_clean' | 'accountant'; amount?: Money }
+  // владелец: соседи
+  | { type: 'propose_deal'; toBusinessId: string; terms: DealTerms }
+  | { type: 'answer_deal'; dealId: string; accept: boolean }
+  | { type: 'cancel_deal'; dealId: string }
+  | { type: 'report'; targetBusinessId: string; reportId: string }
+  | { type: 'answer_notice'; caseId: string; response: 'pay' | 'contest' | 'bribe'; bribeAmount?: Money }
+  | { type: 'read_inbox'; ids: string[] }
+  // госслужащий
+  | { type: 'take_case'; caseId: string }
+  | { type: 'dismiss_case'; caseId: string }
+  | { type: 'answer_bribe'; caseId: string; accept: boolean };
+
+export interface ActionResult { world: WorldState; error?: string }
+
+// ───────────────────────── Аналитика, советы, план ─────────────────────────
 
 export interface Benchmark { metric: string; you: number; industry: number; verdict: 'good' | 'ok' | 'bad' }
 export interface NicheKpi { id: string; label: string; value: number; unit: string }
 
 export interface Analytics {
-  month: number;
-  revenue: Money; profit: Money; cumulativeProfit: Money;
+  month: number; daysIntoMonth: number;
+  revenue: Money; profit: Money; cumulativeProfit: Money; netWorth: Money;   // revenue и profit — прогноз на полный месяц по текущим дням
   cogsPct: number; laborPct: number; rentPct: number; primeCostPct: number; netMarginPct: number;
   fixedCostsMonth: Money; variableCostPerUnit: Money; contributionPerUnit: Money;
   breakEvenUnitsMonth: number | null; breakEvenRevenueMonth: Money | null; breakEvenPrice: Money | null;
   utilization: number; sizeUtilization: number; lostSalesUnits: number; lostSalesMoney: Money;
   cashRunwayMonths: number | null;             // null — бизнес в плюсе
-  setupInvested: Money; paybackMonths: number | null;   // через сколько месяцев вернутся вложения при текущей прибыли
-  taxDueNext: { amount: Money; month: number } | null;
+  setupInvested: Money; paybackMonths: number | null;
+  taxDueNext: { amount: Money; day: number } | null;
   exposure: Money;                             // сколько штрафов придёт, если найдут все текущие нарушения
   benchmarks: Benchmark[]; nicheKpis: NicheKpi[];
 }
 
 export interface Recommendation {
   id: string; severity: 'info' | 'warn' | 'critical'; title: string; text: string;
-  suggested?: Partial<MonthDecisions>;         // что система предлагает нажать
-  impact?: { profitDelta: Money };             // оценка эффекта по whatIf
+  suggested?: Action;                          // что система предлагает сделать одним нажатием
+  impact?: { profitDeltaMonth: Money };
   ruleCardId?: string;
 }
 
-export interface OpenRecommendation { kitId: PackKit['id']; size: number; items: { id: string; qty: number }[]; total: Money; cashLeft: Money; firstDecisions: MonthDecisions; why: string[] }
+export interface OpenRecommendation { kitId: PackKit['id']; size: number; items: { id: string; qty: number }[]; total: Money; cashLeft: Money; orders: StandingOrders; daysToOpen: number; why: string[] }
+
+export interface RoadmapItem extends PackRoadmapStep { status: 'todo' | 'waiting' | 'done'; readyDay?: number }
+
+/** Личный план для жизни: главный результат игры для человека, который боится начинать. */
+export interface RealWorldPlan {
+  niche: NicheId; businessName: string;
+  startupBudget: { label: string; amount: Money }[]; startupTotal: Money;
+  monthlyCosts: { label: string; amount: Money }[]; monthlyTotal: Money;
+  reserveAdvised: Money; breakEvenUnitsMonth: number | null; paybackMonths: number | null;
+  checklist: PackRoadmapStep[]; suppliers: PackSupplier[];
+  lessons: { title: string; amount: Money; lesson: string; ruleCardId?: string }[];
+  disclaimer: string;
+}
+
+export interface AdvisorAnswer { answer: string; sources: { title: string; url: string }[]; origin: 'ai' | 'rules' }
+export interface IdeaMatch { niche: NicheId; businessName: string; tier: PlaceTier; kitId: PackKit['id']; notes: string[]; origin: 'ai' | 'rules' }
+export interface Debrief { headline: string; lostMoneyOn: { title: string; amount: Money; lesson: string; ruleCardId?: string }[]; didWell: string[]; nextTime: string[]; origin: 'ai' | 'rules' }
 
 // ───────────────────────── Что видит клиент ─────────────────────────
 
-export interface PublicBusiness { id: string; name: string; ownerName: string; isBot: boolean; niche: NicheId; placeId: string; price: Money; reputation: number; rank: number; bankrupt: boolean; grade?: string }
+export interface PublicBusiness {
+  id: string; name: string; ownerName: string; isAi: boolean; niche: NicheId; placeId: string;
+  status: BusinessState['status']; price: Money; reputation: number; rankInNiche: number;
+  trust: { kept: number; broken: number }; grade?: string; partners: string[];   // id бизнесов с активными сделками
+}
+
+export interface WorldPublic { config: WorldConfig; phase: WorldState['phase']; day: number; date: GameDate; version: number; bank: Money; msToNextDay: number; stats: { owners: number; aiBusinesses: number; officials: number; open: number; bankrupt: number } }
+
+export interface CaseNotice { caseId: string; role: OfficialRole; found: FoundViolation[]; fine: Money; closureDays: number; answerByDay: number; status: Case['status']; outcome?: Case['outcome'] }
 
 export interface OwnerView {
-  kind: 'owner'; me: PlayerInfo; season: Pick<SeasonState, 'config' | 'phase' | 'month' | 'bank' | 'standings' | 'payouts'>;
-  secondsLeft: number; business: BusinessState | null; others: PublicBusiness[];
-  events: GameEvent[]; feed: FeedItem[]; analytics: Analytics | null; recommendations: Recommendation[]; submitted: boolean;
+  kind: 'owner'; me: Player; world: WorldPublic;
+  business: BusinessState | null; stakes: { businessId: string; share: number }[];
+  neighbors: PublicBusiness[]; deals: Deal[]; notices: CaseNotice[]; blockFund: BlockFundStatus | null;
+  weather: DayWeather[]; events: GameEvent[]; feed: FeedItem[];
+  analytics: Analytics | null; recommendations: Recommendation[]; roadmap: RoadmapItem[];
+  leaderboards: Partial<Record<NicheId, Standing[]>>; away: { days: number; profit: Money; items: InboxItem[] } | null;
 }
 
-export interface OfficialCase { business: PublicBusiness; complaints: number; hints: string[]; bribeOffer?: Money }
+export interface CaseCard { caseId: string; business: PublicBusiness; role: OfficialRole; origin: Case['origin']; openedDay: number; hints: string[]; status: Case['status']; bribeAmount?: Money; found?: FoundViolation[] }
+
 export interface OfficialView {
-  kind: 'official'; me: PlayerInfo; season: OwnerView['season']; secondsLeft: number;
-  official: OfficialState; cases: OfficialCase[]; events: GameEvent[]; feed: FeedItem[]; submitted: boolean;
+  kind: 'official'; me: Player; world: WorldPublic; official: OfficialState;
+  queue: CaseCard[]; mine: CaseCard[]; ranking: { name: string; points: number; isAi: boolean }[];
+  weather: DayWeather[]; events: GameEvent[]; feed: FeedItem[];
 }
 
-export interface SpectatorView { kind: 'spectator'; season: OwnerView['season']; secondsLeft: number; businesses: PublicBusiness[]; events: GameEvent[]; feed: FeedItem[] }
+/** Главная страница и экран проектора: открытая картина города. */
+export interface CityView {
+  kind: 'city'; world: WorldPublic; businesses: PublicBusiness[];
+  weather: DayWeather[]; events: GameEvent[]; feed: FeedItem[];
+  leaderboards: Partial<Record<NicheId, Standing[]>>;
+}
 
-export type ClientView = OwnerView | OfficialView | SpectatorView;
+export type ClientView = OwnerView | OfficialView | CityView;
 
-// ───────────────────────── События сокета ─────────────────────────
+// ───────────────────────── Запросы без изменения мира ─────────────────────────
+
+export type Query =
+  | { type: 'recommend_opening'; niche: NicheId; placeId: string }      // → OpenRecommendation[]
+  | { type: 'what_if'; orders: Partial<StandingOrders> }                // → { projected: MonthReport; analytics: Analytics }
+  | { type: 'roadmap'; niche: NicheId }                                 // → RoadmapItem[]
+  | { type: 'real_world_plan' }                                         // → RealWorldPlan
+  | { type: 'advisor'; question: string }                               // → AdvisorAnswer
+  | { type: 'idea'; text: string }                                      // → IdeaMatch
+  | { type: 'debrief' };                                                // → Debrief
 
 export interface Ack<T = undefined> { ok: boolean; error?: string; data?: T }
 
-export interface ClientToServer {
-  'season:join': (p: { seasonId?: string; name: string; kind: 'owner' | 'official' | 'spectator'; role?: OfficialRole; token?: string }, ack: (r: Ack<{ playerId: string; token: string; seasonId: string }>) => void) => void;
-  'season:pay': (ack: (r: Ack) => void) => void;                                   // тестовый взнос
-  'business:recommend': (p: { niche: NicheId; placeId: string }, ack: (r: Ack<OpenRecommendation[]>) => void) => void;
-  'business:open': (p: { niche: NicheId; placeId: string; name: string; kitId: PackKit['id']; size: number; items?: { id: string; qty: number }[] }, ack: (r: Ack) => void) => void;
-  'turn:submit': (p: MonthDecisions, ack: (r: Ack) => void) => void;
-  'turn:whatif': (p: MonthDecisions, ack: (r: Ack<{ report: MonthReport; analytics: Analytics }>) => void) => void;
-  'official:submit': (p: OfficialDecisions, ack: (r: Ack) => void) => void;
-  'advisor:ask': (p: { question: string }, ack: (r: Ack<AdvisorAnswer>) => void) => void;
-  'season:start': (ack: (r: Ack) => void) => void;                                 // хост заполняет пустые места ботами и запускает
+/** Один интерфейс для игры по сети и для игры в браузере без сервера. */
+export interface GameClient {
+  listWorlds(): Promise<{ id: string; name: string; demo: boolean; owners: number; day: number }[]>;
+  join(worldId: string, p: { name: string; kind: 'owner' | 'official'; role?: OfficialRole }): Promise<Ack<{ playerId: string; token: string }>>;
+  view(worldId: string, knownVersion?: number): Promise<ClientView | { unchanged: true }>;
+  act(worldId: string, action: Action): Promise<Ack>;
+  query<T>(worldId: string, q: Query): Promise<Ack<T>>;
 }
-
-export interface ServerToClient {
-  'view': (v: ClientView) => void;            // полное состояние для этого клиента; шлётся при каждом изменении
-  'tick': (p: { secondsLeft: number }) => void;
-  'debrief': (d: Debrief) => void;
-}
-
-// ───────────────────────── ИИ ─────────────────────────
-
-export interface AdvisorAnswer { answer: string; sources: { title: string; url: string }[]; origin: 'ai' | 'rules' }
-export interface Debrief { headline: string; lostMoneyOn: { title: string; amount: Money; lesson: string; ruleCardId?: string }[]; didWell: string[]; nextTime: string[]; origin: 'ai' | 'rules' }
-export interface WeatherMonth { month: number; avgHighF: number; avgLowF: number; precipDays: number; snowIn: number; summary: string; provider: string }
