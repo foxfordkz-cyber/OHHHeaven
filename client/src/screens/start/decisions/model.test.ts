@@ -3,7 +3,8 @@ import type { Pack, Place } from '@ohh/shared/types';
 import { openingCost } from '@ohh/shared/place';
 import { realCtx } from '../../../app/local-host';
 import { fixtureOpenRecommendations, fixturePacks, fixturePlaces } from '../../../app/fixtures';
-import { applyRecommended, baseChoices, buildDecisions, choose, forcedExtras, itemsOf, monthlyBills, pickedOption, receipt, recommendedChoices, setSize, setStaff, summarize } from './model';
+import { RULES } from '@ohh/shared/rules';
+import { afterSigning, applyRecommended, baseChoices, baselineOf, buildDecisions, choose, forcedExtras, itemsOf, monthlyBills, pickedOption, receipt, recommendedChoices, setSize, setStaff, signingItems, summarize } from './model';
 import { textsFor } from './texts';
 
 const ctx = realCtx();
@@ -94,6 +95,52 @@ describe('opening decisions on the real cafe pack', () => {
     expect(bills.find((l) => l.id === 'rent')!.amount).toBeCloseTo((place.sqft * place.rentPerSqftYear) / 12, 1);
     expect(bills.find((l) => l.id === 'payroll_barista')!.amount).toBe(pack.capacity.minStaff * 21 * 160);
     expect(bills.find((l) => l.id === 'payroll_tax')!.amount).toBeGreaterThan(0);
+  });
+});
+
+describe('buying an operating shop', () => {
+  const shop = ctx.places.find((p) => p.forSale?.niche === 'cafe') as Place;
+  const base = baseChoices(pack, shop);
+  const ds = buildDecisions(pack, common, shop, null, textsFor('cafe'));
+  const cost = (id: string) => pack.setup.find((s) => s.id === id)!.cost;
+
+  it('comes with its seats and the standard equipment, and as it stands costs what the engine charges', () => {
+    const b = baselineOf(pack, shop);
+    expect(b.takeover).toBe(true);
+    expect(base.size).toBe(shop.forSale!.size);
+    expect(b.included.sort()).toEqual(['batch_brewer', 'ice_machine', 'signage']);
+    const signing = signingItems(pack, shop, base);
+    expect(summarize(pack, common, shop, base).paid).toBe(openingCost(pack, signing.items, signing.size, shop));
+    expect(afterSigning(pack, shop, base).map((a) => a.type)).toEqual(['set_orders']);
+  });
+
+  it('still offers every decision: what stands there is marked, adding costs list price, selling returns the resale share', () => {
+    expect(ds.map((d) => d.id)).toContain('size');
+    const menu = ds.find((d) => d.id === 'menu')!;
+    expect(menu.options.find((o) => o.id === 'drip_ice')).toMatchObject({ standing: true, upfront: 0 });
+    expect(menu.options.find((o) => o.id === 'espresso_only')!.upfront).toBeCloseTo(-(cost('batch_brewer') + cost('ice_machine')) * RULES.RESALE_SHARE, 2);
+    expect(ds.find((d) => d.id === 'espresso')!.options.find((o) => o.id === 'three')!.upfront).toBe(cost('premium_espresso_machine'));
+    expect(pickedOption(menu, base)).toBe('drip_ice');
+  });
+
+  it('turns the changes into purchases, then seats, then sales, then the standing orders', () => {
+    let c = choose(ds.find((d) => d.id === 'espresso')!, 'three', base);
+    c = choose(ds.find((d) => d.id === 'menu')!, 'drip', c);
+    c = setSize(pack, shop, c, base.size + 2);
+    const steps = afterSigning(pack, shop, c);
+    expect(steps).toEqual([
+      { type: 'buy_item', itemId: 'premium_espresso_machine', qty: 1 },
+      { type: 'buy_item', itemId: 'customer_restroom', qty: 1 },
+      { type: 'resize', size: base.size + 2 },
+      { type: 'sell_item', itemId: 'ice_machine', qty: 1 },
+      { type: 'set_orders', orders: { price: c.price, staff: c.staff, levers: c.levers } },
+    ]);
+    const perSeat = pack.setup.filter((s) => s.scalesWithSize).reduce((a, s) => a + s.cost, 0);
+    const delta = cost('premium_espresso_machine') + cost('customer_restroom') + 2 * perSeat - cost('ice_machine') * RULES.RESALE_SHARE;
+    expect(summarize(pack, common, shop, c).paid - summarize(pack, common, shop, base).paid).toBeCloseTo(delta, 2);
+    expect(receipt(pack, shop, c).reduce((a, l) => a + l.amount, 0)).toBeCloseTo(summarize(pack, common, shop, c).paid, 2);
+    // the lease itself is signed for the shop as it stands
+    expect(signingItems(pack, shop, c).size).toBe(base.size);
   });
 });
 

@@ -57,7 +57,8 @@
 .dx-dot--done::after { background: var(--accent-fill); }
 .dx-dot--here::after { background: var(--primary); }
 
-.dx-actions { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-2); align-items: stretch; }
+/* the main action floats above the page so "Next" is always under the thumb */
+.dx-actions { position: sticky; bottom: calc(var(--s-3) + var(--safe-bottom)); z-index: 5; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-2); align-items: stretch; padding: var(--s-2); border-radius: var(--r-3); background: var(--glass-thick); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur); border: 1px solid var(--glass-stroke); box-shadow: var(--glass-shadow); }
 .dx-actions > .btn:first-child { min-width: 52px; }
 
 /* the list of decisions on the result screen */
@@ -67,5 +68,6 @@
 .dx-list__title { font-weight: 500; }
 .dx-list__value { font-size: var(--fs-sm); color: var(--text-2); text-align: right; }
 .dx-list__value.warn { color: var(--warn); }
+.dx-list__value.loss { color: var(--loss); }
 
 @media (prefers-reduced-motion: reduce) { .dx-bar__delta { animation: none; } }
