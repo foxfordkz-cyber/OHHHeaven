@@ -466,18 +466,28 @@ async function walk(browser, width) {
     await sleep(1000);
     await dismissAway();
     await page.getByRole('button', { name: new RegExp(rival.name) }).first().click({ timeout: 10000 });
-    await click(/Propose a deal|Team up/, 5000);
-    const sheet = page.getByRole('dialog', { name: new RegExp(`Deal with ${rival.name}|${rival.name}`) }).last();
-    await sheet.getByRole('radio', { name: /Cross-promo/ }).first().click({ timeout: 5000 });
-    await shot('deal-sheet');
-    await sheet.getByRole('button', { name: /Send offer|Send|Propose/ }).first().click();
+    // The neighbour's sheet. Its own "Team up" / "Propose a deal": the list under the sheet has buttons with the same name.
+    const nb = page.getByRole('dialog', { name: new RegExp(rival.name) }).last();
+    await nb.waitFor({ timeout: 8000 });
+    const offerLine = ((await nb.innerText()).replace(/\s+/g, ' ').match(/Cross-promo[^.]*?guests|Cross-promo[^.]{0,60}/) ?? [''])[0];
+    await nb.getByRole('button', { name: /Propose a deal|Team up/ }).first().click({ timeout: 5000 });
     await sleep(800);
-    const deal = ((await view()).deals ?? []).find((d) => d.toBusinessId === rival.biz.id && d.status === 'proposed');
+    const proposed = async () => ((await view()).deals ?? []).find((d) => d.toBusinessId === rival.biz.id && d.status === 'proposed');
+    if (!(await proposed())) {
+      // A sheet with the kinds of deal (agent 12's first version); after B18 "Team up" may send the suggested deal at once.
+      const sheet = page.getByRole('dialog').last();
+      const cross = sheet.getByRole('radio', { name: /Cross-promo/ });
+      if (await cross.count()) await cross.first().click({ timeout: 5000 });
+      await shot('deal-sheet');
+      await sheet.getByRole('button', { name: /Send offer|Send|Propose|Team up/ }).last().click({ timeout: 5000 });
+      await sleep(800);
+    } else await shot('deal-sheet');
+    const deal = await proposed();
     if (!deal) throw new Error('the offer did not reach the engine');
     const acc = await call('POST', `/api/worlds/${W}/action`, { type: 'answer_deal', dealId: deal.id, accept: true }, rival.token);
     await page.keyboard.press('Escape').catch(() => {});
     const st = ((await view()).deals ?? []).find((d) => d.id === deal.id)?.status;
-    return `deal ${deal.id} ${JSON.stringify(deal.terms).slice(0, 80)}; neighbour answer ${acc.ok ? 'ok' : acc.error}; status ${st}`;
+    return `${offerLine ? `sheet says "${offerLine}"; ` : ''}deal ${deal.id} ${JSON.stringify(deal.terms).slice(0, 80)}; neighbour answer ${acc.ok ? 'ok' : acc.error}; status ${st}`;
   });
   await step('report', 'Network: report the neighbour to the city, the case reaches an inspector', async () => {
     if (!rival.biz) throw new Error('no neighbour to report');
@@ -542,10 +552,10 @@ async function walk(browser, width) {
     const t = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
     if (/page not found|on its way/i.test(t)) return 'no /brief on this build (before B13): skipped';
     const found = {
-      cash: /\$[\d,]+\s*(→|->|to)\s*\$[\d,]+/.test(t),
+      cash: /\$[\d,]+\s*(→|->|to)\s*\$[\d,]+|Cash then \$[\d,]+.{0,20}Cash now \$[\d,]+/.test(t),
       decision: (await page.locator('main button:not([disabled])').count()) > 1,
       rival: /above you|ahead of you|behind you|rival/i.test(t),
-      next: /next report|report (on|in)/i.test(t),
+      next: /next report|report (on|in|comes|arrives)|month closes|closes on/i.test(t),
     };
     await shot('brief');
     const missing = Object.entries(found).filter(([, v]) => !v).map(([k]) => k);
