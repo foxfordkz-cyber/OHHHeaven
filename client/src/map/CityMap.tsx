@@ -39,6 +39,8 @@ export interface CityMapProps {
   onExpand?: () => void;
   /** Open this business's card right away (full-screen map opened from a tap elsewhere). */
   initialBusinessId?: string;
+  /** Pick mode: open this place's card right away (a link to one storefront). */
+  initialPlaceId?: string;
   /** The map sits inside a scrolling page: scroll and one finger move the page, ctrl+scroll or two fingers move the map. */
   embedded?: boolean;
   /** Today's game day: filters events and weather. Without it every event passed in is shown. */
@@ -62,6 +64,12 @@ export interface CityMapProps {
 const LAYERS_PICK = ['ohh-places-halo', 'ohh-places-dot', 'ohh-places-hit'];
 const TILE_TIMEOUT_MS = 8000;
 const FINAL_VIEW = { pitch: 55, bearing: 29 };
+/** Phones: less tilt loads fewer far tiles, fewer pixels to draw, no fly-over on open (see mapBudget). */
+export function mapBudget(small: boolean, dpr: number): { pitch: number; pixelRatio: number; intro: boolean; antialias: boolean } {
+  return small
+    ? { pitch: 45, pixelRatio: Math.min(dpr || 1, 1.5), intro: false, antialias: false }
+    : { pitch: FINAL_VIEW.pitch, pixelRatio: Math.min(dpr || 1, 2), intro: true, antialias: true };
+}
 const MAX_BOUNDS: [LngLat, LngLat] = [[-74.014, 40.705], [-73.952, 40.748]];
 const EMPTY = { type: 'FeatureCollection', features: [] };
 
@@ -182,7 +190,7 @@ function declutter(map: MapLibreMap, pins: Map<string, Marker>, markers: BizMark
 
 export function CityMap(props: CityMapProps) {
   const {
-    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness, businessCta, onExpand, embedded = false, initialBusinessId,
+    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness, businessCta, onExpand, embedded = false, initialBusinessId, initialPlaceId,
     blockFunds, packs, realBusinesses, offline: forceOffline = false, intro = true, orbit = false, className, style,
   } = props;
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -201,10 +209,12 @@ export function CityMap(props: CityMapProps) {
   const shownThemeRef = useRef<MapTheme>(theme);
   themeRef.current = theme;
   const [offline, setOffline] = useState(forceOffline || (typeof navigator !== 'undefined' && navigator.onLine === false));
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(initialPlaceId ?? null);
   const [openBiz, setOpenBiz] = useState<string | null>(initialBusinessId ?? null);
   const [zoomedOut, setZoomedOut] = useState(true);
   const [near, setNear] = useState(false);
+  // a short frame (a step of a longer page) gets the one-line place card; the page around it shows the details
+  const [short, setShort] = useState(false);
 
   const segments = useMemo(() => blockSegments(places), [places]);
   const realFC = useMemo(() => realFeatures(realBusinesses), [realBusinesses]);
@@ -225,7 +235,8 @@ export function CityMap(props: CityMapProps) {
     const el = containerRef.current;
     if (!el) return;
     const center = centerOf(places.length ? places : [{ lat: 40.7265, lng: -73.9845 }]);
-    const calm = reducedMotion() || !intro;
+    const budget = mapBudget(isSmallScreen(), window.devicePixelRatio);
+    const calm = reducedMotion() || !intro || !budget.intro;
     const finalZoom = isSmallScreen() ? 15.1 : 15.55;
     const startOffline = forceOffline || (typeof navigator !== 'undefined' && navigator.onLine === false);
     const map = new MapLibreMap({
@@ -233,15 +244,16 @@ export function CityMap(props: CityMapProps) {
       style: (startOffline ? offlineAssets(getTheme()) : cityStyle(getTheme())) as StyleSpecification,
       center,
       zoom: calm ? finalZoom : 13.7,
-      pitch: calm ? FINAL_VIEW.pitch : 0,
+      pitch: calm ? budget.pitch : 0,
       bearing: calm ? FINAL_VIEW.bearing : -35,
       maxPitch: 65, minZoom: 12.8, maxZoom: 19,
       maxBounds: MAX_BOUNDS,
       attributionControl: { compact: true },
       cooperativeGestures: embedded,
-      pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+      pixelRatio: budget.pixelRatio,
+      refreshExpiredTiles: false,
       fadeDuration: 0,
-      canvasContextAttributes: { antialias: !isSmallScreen() },
+      canvasContextAttributes: { antialias: budget.antialias },
     });
     mapRef.current = map;
     let isOffline = startOffline;
@@ -295,11 +307,11 @@ export function CityMap(props: CityMapProps) {
     for (const ev of ['mousedown', 'touchstart', 'wheel'] as const) map.on(ev, pauseOrbit);
     map.once('load', () => {
       if (calm) { startOrbit(); return; }
-      map.flyTo({ center, zoom: finalZoom, pitch: FINAL_VIEW.pitch, bearing: FINAL_VIEW.bearing, duration: 4200, curve: 1.15, essential: false });
+      map.flyTo({ center, zoom: finalZoom, pitch: budget.pitch, bearing: FINAL_VIEW.bearing, duration: 4200, curve: 1.15, essential: false });
       map.once('moveend', startOrbit);
     });
 
-    const ro = new ResizeObserver(() => map.resize());
+    const ro = new ResizeObserver(() => { map.resize(); setShort(el.clientHeight > 0 && el.clientHeight < 420); });
     ro.observe(el);
     return () => {
       window.clearTimeout(timer);
@@ -448,12 +460,13 @@ export function CityMap(props: CityMapProps) {
         <BusinessCard
           business={openBizItem} place={places.find((p) => p.id === openBizItem.placeId)} mine={openBizItem.id === myBusinessId}
           cta={businessCta} onClose={() => setOpenBiz(null)}
+          me={myBusinessId ? businesses.find((x) => x.id === myBusinessId) : undefined} places={places}
         />
       )}
       {mode === 'pick' && selectedPlace && (
         <PlaceCard
           place={selectedPlace} places={places} businesses={businesses} niche={niche} packs={packs}
-          onOpen={onPick} onClose={() => setSelected(null)}
+          onOpen={onPick} onClose={() => setSelected(null)} compact={short} myBusinessId={myBusinessId}
         />
       )}
     </div>
