@@ -241,3 +241,14 @@
 .home-nav > .theme-toggle { margin-left: 0; }
 @media (min-width: 768px) { .home-nav > .lang-toggle { margin-left: 0; } }
 @media (max-width: 420px) { .home-nav .logo__name { display: none; } .home-nav { gap: 8px; } }
+
+/* ───────── one dark button on the first screen: “See my plan” next to the idea field ───────── */
+.idea-box__go { min-width: 0; padding: 0 18px; gap: 8px; white-space: nowrap; flex: none; }
+.idea-box__row .input { flex: 1 1 0; min-width: 0; }
+@media (max-width: 420px) {
+  .idea-box__row { flex-direction: column; }
+  .idea-box__go { width: 100%; }
+}
+.home-alt { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--hairline); font-size: var(--fs-sm); color: var(--text-2); }
+.home-alt .btn { min-height: 44px; }
+.home-nav .btn--sm, .home-nav__link { min-height: 44px; }

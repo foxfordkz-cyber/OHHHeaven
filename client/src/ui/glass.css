@@ -640,3 +640,19 @@ button.list-row:active { background: var(--press); }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   :root, :root[data-theme='light'] { --glass-thick: var(--glass-solid); }
 }
+
+/* ───────── the opened business on the map: a ring, its name always shown, above its neighbours ───────── */
+.cm-pin[data-sel] { display: inline-flex !important; opacity: 1 !important; pointer-events: auto !important; filter: none; z-index: 5; outline: 2px solid var(--primary); outline-offset: 2px; }
+.cm-pin[data-sel] .cm-pin__name { display: inline; text-decoration: none; }
+
+/* ───────── /biz on a phone: nothing wider than the screen, all five tabs visible, 44px to tap ───────── */
+.bz-root .bz-hint { margin: 14px 20px 12px; }
+.bz-pad > *, .bz-card > *, .bz-between > * { min-width: 0; }
+.bz-root .bz-small, .bz-root .bz-li-sub, .bz-root .bz-note { overflow-wrap: anywhere; }
+.bz-root .bz-tab { min-height: 44px; }
+.bz-root .bz-btn { min-height: 44px; flex: none; }
+@media (max-width: 520px) {
+  .bz-tabs { gap: 2px; }
+  .bz-root .bz-tab { flex: 1 1 0; padding: 8px 4px; font-size: 14px; text-align: center; white-space: nowrap; }
+  .bz-root .bz-tab[aria-selected='true'] { padding: 8px 10px; flex: 1.25 1 0; }
+}
