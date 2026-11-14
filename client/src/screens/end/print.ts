@@ -51,6 +51,10 @@ export const PLAN_PRINT_CSS = `
   .plan .rule-card * { color: #111 !important; }
   .plan .rule-card__title { font-size: 8pt !important; }
   .plan .rule-card__text { font-size: 7.5pt !important; }
+  .plan .rule-card { gap: 1.5pt !important; }
+  .plan .rule-card__tag { font-size: 6.5pt !important; }
+  .plan .rule-card__link { font-size: 7pt !important; }
+  .plan .rule-card__link svg { display: none; }
   .plan svg { color: #333; }
 }
 `;

@@ -24,8 +24,25 @@ async function pipe(bytes: Uint8Array, stream: CompressionStream | Decompression
   return new Uint8Array(await new Response(source.pipeThrough(stream)).arrayBuffer());
 }
 
+/**
+ * Only what the plan page shows: the packs' provenance fields (source, confidence, note) stay behind.
+ * A real cafe plan still makes a link of about 10,000 characters: browsers open it, chat apps may not preview it.
+ */
+export function slimPlan(plan: RealWorldPlan): RealWorldPlan {
+  const pick = <T extends object, K extends keyof T>(o: T, keys: K[]): Pick<T, K> => {
+    const out = {} as Pick<T, K>;
+    for (const k of keys) if (o[k] !== undefined) out[k] = o[k];
+    return out;
+  };
+  return {
+    ...plan,
+    checklist: plan.checklist.map((s) => pick(s, ['id', 'title', 'kind', 'text', 'agency', 'fee', 'waitDays', 'link'])) as RealWorldPlan['checklist'],
+    suppliers: plan.suppliers.map((s) => pick(s, ['id', 'category', 'what', 'whereToFind', 'examples', 'link'])) as RealWorldPlan['suppliers'],
+  };
+}
+
 export async function encodePlan(plan: RealWorldPlan): Promise<string> {
-  const json = new TextEncoder().encode(JSON.stringify(plan));
+  const json = new TextEncoder().encode(JSON.stringify(slimPlan(plan)));
   if (typeof CompressionStream === 'function') return PREFIX_DEFLATE + toBase64Url(await pipe(json, new CompressionStream('deflate-raw')));
   return PREFIX_PLAIN + toBase64Url(json);
 }
