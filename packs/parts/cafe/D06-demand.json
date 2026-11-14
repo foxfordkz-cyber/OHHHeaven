@@ -18,7 +18,7 @@
     "note": "D06 revision. (1) unitsPerSlotMonth stays 6,000 (200 orders a day): still a planning point, not a statistic. Cross-checks found: Joe Coffee, an ordering app for independent shops, reports an average ticket of $8.47 across its shops (was $7.82 a year earlier; its method is not stated), which matches the pack's $8.50; BizBuySell's median coffee shop sold in the US takes $375,000 a year = $1,027 a day = about 121 orders a day at that ticket, so 200 a day is a good New York block, not the national middle. (2) priceElasticity stays -1.3 and now has an anchor: Starbucks North America, second quarter of fiscal 2025, transactions fell 4% while prices rose about 3% (-4 / 3 = -1.3). Range: -1.0 (USDA ERS report ERR-139, Okrent and Alston: own-price elasticity of all food away from home -1.02, limited service less elastic than full service) to -2.5 (Starbucks US, fourth quarter of fiscal 2024: ticket +4%, transactions -10%, a quarter with other troubles mixed in). (3) weights: reputation cut from 0.20 to 0.09, the other three keep their old ratios to each other (35 : 25 : 20). Reason: Luca (Harvard Business School working paper 12-016) measured +5-9% revenue per Yelp star for independent restaurants. In the engine one star = 0.25 of the 0-1 reputation scale, and the demand change is |elasticity| x (reputation weight / price weight) x 0.25 x (1 - own share). Old weights: 1.3 x (0.20 / 0.35) x 0.25 x 0.9 = 16.7% per star, twice the top of the measured range. New weights: 1.3 x (0.09 / 0.40) x 0.25 x 0.9 = 6.6% per star. The letter grade and word of mouth act on top of this through events and mechanics (extra.mechanics: star_rating, letter_grade_demand). Toast's 2025 survey of 650 US coffee drinkers supports keeping quality close to price: taste 53%, price 20%, convenience 17%, atmosphere 8% as the main reason to pick one shop over another (stated, not measured). All numbers were read in search results; the pages themselves could not be opened from this session."
   },
   "extra": {
-    "d06HowNumbersWereChecked": "This session could run web searches but could not open pages: the environment's network policy blocked direct requests to every site tried (www.nyc.gov, square.com, www.placer.ai). So nothing in this fragment is marked verified. Every number carries the page it was reported from and an 'evidence' tag: primary_via_search (the search tool quoted it from the primary page: a city or state agency, a company's own filing or price page, a statute), study_via_search (a published study, quoted from its abstract or the authors' pages), industry_via_search (a company's report on its own customers, a trade publication or a news report), anecdote (owners' words), assumption (my arithmetic or a planning value; the note shows it). A reader with network access should open the 'source' and upgrade primary_via_search items to verified.",
+    "d06HowNumbersWereChecked": "Two passes. First pass: web search only; the session's network blocked every site, so numbers were read in search results. Second pass, after the owner approved a network environment with twenty primary-source hosts: pages were downloaded through the session proxy and read. confidence 'verified' now means exactly that: the page, PDF or data set was opened in this session on November 14, 2026 and the number was seen or computed from it; such entries also carry evidence 'opened' or 'computed_from_open_data'. Everything else stays 'estimate' with an evidence tag: primary_via_search (quoted by the search tool from the primary page, page not opened), study_via_search, industry_via_search, anecdote, assumption (my arithmetic or a planning value; the note shows it). Opened and read: the city's delivery-app pages and two press releases; Health Code Chapter 23 with its scoring sheet and penalty schedule; the Health Department's grade-posting guide and pet guidance; the state's surcharge notice and the text of General Business Law section 518; the State Comptroller's ridership release; two Governor's releases on subway records and one on CUNY enrollment; the City Comptroller's storefront release; the full text of Rothbart and others (2019) on letter grades; the working paper of Lu and others on queues; DoorDash's pricing page; Toast's coffee price report; Placer.ai's December 2025 office index. Computed from open data: restaurant inspection results (data.cityofnewyork.us, data set 43nn-pn8j, records dated November 13, 2026) and MTA daily ridership (data.ny.gov, data set sayj-mze2, November 1, 2025 to November 12, 2026). Not reachable with a plain client even after approval: the FTC page (404), FRED (empty reply), intro.nyc (redirects to a host outside the list), ezCater's help page (same), Square's press page (429).",
     "weekdayMult": [
       0.9,
       0.93,
@@ -59,16 +59,19 @@
       },
       "transit": {
         "mult": [
-          1.08,
-          1.17,
-          1.17,
-          1.16,
-          1.1,
-          0.74,
-          0.58
+          1.017,
+          1.167,
+          1.186,
+          1.161,
+          1.085,
+          0.778,
+          0.606
         ],
         "use": "Next to a busy subway entrance",
-        "basis": "MTA, October 2026: Tuesday-Thursday above 4.4 million rides, record Thursday 4.72 million, record Friday 4.51 million, record Saturday 3.59 million, record Sunday 3.14 million; Streetsblog: Mondays about 7% under Tuesday-Friday. Ordinary weekend days are well under the records, so Saturday 0.70 and Sunday 0.55 of midweek are my estimates."
+        "basis": "Computed from MTA daily subway ridership, November 1, 2025 to November 12, 2026 (377 days). Average rides: Monday 3.67 million, Tuesday 4.21, Wednesday 4.28, Thursday 4.19, Friday 3.91, Saturday 2.80, Sunday 2.18. Against an average weekday: Monday 0.91, Friday 0.97, Saturday 0.69, Sunday 0.54. Weekends are 19.7% of the week, which matches the State Comptroller's 20% for 2025.",
+        "source": "https://data.ny.gov/resource/sayj-mze2.json",
+        "confidence": "verified",
+        "evidence": "computed_from_open_data"
       },
       "tourist": {
         "mult": [
@@ -177,19 +180,19 @@
       }
     },
     "monthCurve": {
-      "note": "Demand by calendar month for a New York neighborhood cafe, Jan..Dec, per day (game months have 30 days), averaging 1 and summing to 12. My estimate; no monthly sales series for New York cafes was found. What it leans on: (a) Census Monthly Retail Trade, food services and drinking places, not seasonally adjusted, 2025, $ million: August 104,429; September 97,102; October 100,802; November 96,332; December 99,612 (read on FRED, series MRTSSM722USN; January-July 2025 were not shown in the search results); (b) Placer.ai office index: visits slump from late July to Labor Day and again, harder, from Thanksgiving through the first weeks of January (July 2025: 21.8% under 2019; December 2025: 33.1% under 2019); (c) trade press: cafe customers 'disappear at the beginning of every year' (Fresh Cup); (d) autumn drink launches lift coffee visits (Placer.ai: Starbucks +3.4% in October and +14.7% in November 2021 month over month). New York differs from the national series in August: residents leave and offices thin out, so August is below average here although it is the national peak.",
+      "note": "Demand by calendar month, Jan..Dec, per day (game months have 30 days), averaging 1 and summing to 12. The measured spine is the city's own movement: subway rides per day by month (subwayIndex, computed from MTA data): January is the low at 0.90, August 0.93, October the high at 1.10. The neighborhood curve follows that index, with November and December lifted by 0.02 for the seasonal-drink weeks and the difference taken evenly from spring: my adjustment, not a measurement. The office and tourist curves stay estimates. Other anchors: Census Monthly Retail Trade, food services and drinking places, not seasonally adjusted, 2025, $ million: August 104,429; September 97,102; October 100,802; November 96,332; December 99,612 (read in search results; FRED would not serve the series to this session); Placer.ai office index: December 2025 was 33.1% under 2019 (36.2% per working day; page opened), July 2025 21.8% under; trade press: cafe customers 'disappear at the beginning of every year' (Fresh Cup). New York differs from the national series in August: residents leave and offices thin out, so August is below average here although it is the national peak; the subway data confirm it.",
       "neighborhood": [
         0.9,
-        0.93,
-        0.99,
+        0.94,
         1.02,
-        1.05,
-        1.03,
-        0.98,
-        0.95,
         1.04,
-        1.07,
         1.03,
+        1.04,
+        0.97,
+        0.93,
+        1.03,
+        1.08,
+        1.01,
         1.01
       ],
       "office": [
@@ -229,7 +232,27 @@
       ],
       "source": "https://fred.stlouisfed.org/series/MRTSSM722USN",
       "confidence": "estimate",
-      "evidence": "assumption"
+      "evidence": "computed_from_open_data for subwayIndex; assumption for the three curves",
+      "subwayIndex": {
+        "months": [
+          0.898,
+          0.945,
+          1.032,
+          1.046,
+          1.025,
+          1.051,
+          0.97,
+          0.931,
+          1.024,
+          1.097,
+          0.988,
+          0.993
+        ],
+        "what": "Average subway rides per day by month, each month against the mean of the twelve, Jan..Dec. January to October are 2026, November and December are 2025. Computed from MTA daily ridership.",
+        "source": "https://data.ny.gov/resource/sayj-mze2.json",
+        "confidence": "verified",
+        "evidence": "computed_from_open_data"
+      }
     },
     "guestSegments": {
       "note": "Who buys, by kind of block. Shares of orders are my estimates: nobody publishes this split, and every guide says the same thing, count the people yourself at 8am, 1pm and 5pm on a weekday and on a Saturday. The sizes of the groups are real: see 'facts'. The engine treats all customers as one crowd; extra.mechanics guest_segments describes the split.",
@@ -352,10 +375,10 @@
           "what": "CUNY enrollment, fall 2025",
           "value": 247000,
           "unit": "students",
-          "note": "NYU has about 56,800 students in New York, Columbia about 35,200",
+          "note": "The Governor's release gives about 247,000 students and a 3.8% rise in a year. NYU has about 56,800 students in New York and Columbia about 35,200 (search results, not opened)",
           "source": "https://www.governor.ny.gov/news/governor-hochul-announces-third-consecutive-rise-student-enrollment-city-university-new-york",
-          "confidence": "estimate",
-          "evidence": "primary_via_search"
+          "confidence": "verified",
+          "evidence": "opened"
         },
         {
           "what": "Americans who drank coffee yesterday, January 2026",
@@ -401,13 +424,31 @@
           "source": "https://www.cfo.com/news/workplace-trend-58-of-hybrid-employees-are-coffee-badging/696635/",
           "confidence": "estimate",
           "evidence": "industry_via_search"
+        },
+        {
+          "what": "Average subway rides on a weekday against a Saturday and a Sunday, November 2025 - November 2026",
+          "value": 4050000,
+          "unit": "rides on an average weekday; Saturday 2.80 million, Sunday 2.18 million",
+          "note": "Computed from MTA daily ridership. Record days: Thursday October 29, 2026 with 4.72 million, Friday October 30 with 4.51 million, Saturday October 31 with 3.59 million, Sunday November 1 with 3.14 million (Governor's release, opened)",
+          "source": "https://data.ny.gov/resource/sayj-mze2.json",
+          "confidence": "verified",
+          "evidence": "computed_from_open_data"
+        },
+        {
+          "what": "Subway ridership against 2019, year 2025",
+          "value": 0.74,
+          "unit": "weekdays; weekends 0.89",
+          "note": "State Comptroller, April 16, 2026: weekdays 74% of 2019 (68% in 2024), weekends 89% (80% in 2024); weekends are 20% of all rides, up from 17% in 2019; Manhattan weekends 92%",
+          "source": "https://www.osc.ny.gov/press/releases/2026/04/dinapoli-mta-weekend-ridership-recovery-outpaces-weekdays-across-board",
+          "confidence": "verified",
+          "evidence": "opened"
         }
       ],
       "confidence": "estimate",
       "evidence": "assumption"
     },
     "channels": {
-      "note": "Where an order comes from and what is left of each dollar. Contribution = 1 - cost of goods 28% - what the channel takes; labor and rent are not in it. In-store card costs are the pack's own (2.55% + $0.135 an order = 4.1% of an $8.50 ticket). Shares are planning ranges, not statistics for New York cafes.",
+      "note": "Where an order comes from and what is left of each dollar. Contribution = 1 - cost of goods 28% - what the channel takes; labor and rent are not in it. In-store card costs are the pack's own (2.55% + $0.135 an order = 4.1% of an $8.50 ticket). Shares are planning ranges, not statistics for New York cafes. The four city caps and DoorDash's rates were read on the pages themselves (opened); the shares of sales are estimates.",
       "list": [
         {
           "id": "counter",
@@ -440,7 +481,9 @@
             0,
             0.03
           ],
-          "basis": "DoorDash pickup commission 6% on every plan plus card processing about 3%"
+          "basis": "DoorDash pickup commission 6% on every plan plus card processing about 3%",
+          "confidence": "verified",
+          "evidence": "opened"
         },
         {
           "id": "marketplace_delivery_basic",
@@ -451,7 +494,9 @@
             0.03,
             0.06
           ],
-          "basis": "New York City caps: 15% delivery + 5% basic service + 3% card processing. Limited-service delivery was 9% of traffic in 2024 (4% in 2019); a cafe's small tickets put it under that"
+          "basis": "New York City caps: 15% delivery + 5% basic service + 3% card processing. Limited-service delivery was 9% of traffic in 2024 (4% in 2019); a cafe's small tickets put it under that",
+          "confidence": "verified",
+          "evidence": "opened"
         },
         {
           "id": "marketplace_delivery_enhanced",
@@ -462,7 +507,9 @@
             0.05,
             0.1
           ],
-          "basis": "Since Local Law 79 of 2025 an app may add up to 20% for optional enhanced services if it also offers the basic plan: 15 + 5 + 3 + 20 = 43%. DoorDash's national plans are 15%, 25% and 30% delivery commission"
+          "basis": "Since Local Law 79 of 2025 an app may add up to 20% for optional enhanced services if it also offers the basic plan: 15 + 5 + 3 + 20 = 43%. DoorDash's national plans are 15%, 25% and 30% delivery commission",
+          "confidence": "verified",
+          "evidence": "opened"
         },
         {
           "id": "catering_marketplace",
@@ -487,12 +534,12 @@
           "basis": "Margin depends on how often holders come. Panera: $14.99 a month, capped at 30 drinks a month from August 19, 2026 after years as 'unlimited'"
         }
       ],
-      "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
       "confidence": "estimate",
       "evidence": "primary_via_search"
     },
     "queue": {
-      "note": "What limits a rush and when people leave. Service times are trade figures; the walk-away curve is my estimate tied to two measurements: people judge a line by its length, and patience for a coffee is about six minutes.",
+      "note": "What limits a rush and when people leave. Service times are trade figures. The walk-away table is my conversion of the measured price equivalents: a line of 10 costs like a 3.2% price rise and a line of 15 like 11.5% in all; with demand elasticity between the pack's -1.3 and the deli counter's own -4.7 that is 4-15% of buyers lost at ten people and 15-54% at fifteen; the table takes 10% and 30%. Up to five people in line nobody leaves: a short line reads as a recommendation.",
       "drinksPerHour": {
         "oneBarista": 30,
         "twoBaristasTwoGroupMachine": 60,
@@ -516,34 +563,27 @@
         {
           "peopleAhead": [
             0,
-            3
+            5
           ],
           "walkAway": 0
         },
         {
           "peopleAhead": [
-            4,
-            5
-          ],
-          "walkAway": 0.05
-        },
-        {
-          "peopleAhead": [
             6,
-            8
+            10
           ],
-          "walkAway": 0.15
+          "walkAway": 0.1
         },
         {
           "peopleAhead": [
-            9,
-            12
+            11,
+            15
           ],
           "walkAway": 0.3
         },
         {
           "peopleAhead": [
-            13,
+            16,
             99
           ],
           "walkAway": 0.5
@@ -566,9 +606,9 @@
           "evidence": "industry_via_search"
         },
         {
-          "what": "Lu, Musalem, Olivares and Schilkrut, Management Science 59(8), 2013, a supermarket deli counter: customers react to the length of the queue, not to how fast it moves; a moderate rise in the number of people in line cuts sales like a 5% price increase; the effect is significant above about five people",
+          "what": "Lu, Musalem, Olivares and Schilkrut, a supermarket deli counter: customers react to the length of the queue, not to its speed; 5 to 10 people in line equals a 3.22% price increase, 10 to 15 equals 8.26%; up to 5 people the effect is slightly positive (paper opened)",
           "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
-          "evidence": "study_via_search"
+          "evidence": "opened"
         },
         {
           "what": "UK survey of 5,000 consumers, 2014: people wait 6 minutes 2 seconds on average for a coffee before leaving",
@@ -588,7 +628,16 @@
       ],
       "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
       "confidence": "estimate",
-      "evidence": "assumption"
+      "evidence": "assumption",
+      "priceEquivalent": {
+        "from5To10People": 0.0322,
+        "from10To15People": 0.0826,
+        "upTo5People": "slightly positive",
+        "what": "Lu, Musalem, Olivares and Schilkrut (working paper of May 24, 2011, opened; published in Management Science 59(8), 2013), a supermarket deli counter: going from 5 to 10 customers in line is equivalent to a 3.22% price increase, from 10 to 15 to an 8.26% increase; between 0 and 5 the purchase probability rises slightly; purchases depend on the number of people in line and not on how many servers work it, so pooling several lines into one long line can make more customers walk away; customers who mind waiting most are the least price-sensitive.",
+        "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+        "confidence": "verified",
+        "evidence": "opened"
+      }
     },
     "ratingModel": {
       "note": "How reviews and the window grade move sales. Effects are from published studies; the mapping to the engine's 0-1 reputation is mine: 4.25 stars = 0.5 (the average US cafe profile is rated 4.26), one star = 0.25.",
@@ -626,20 +675,32 @@
       },
       "letterGrade": {
         "considerGrades": 0.88,
-        "what": "88% of New Yorkers said they considered the letter grade when choosing where to eat (2012 survey, Wong and others, American Journal of Public Health 105(3), 2015). Rothbart, Schwartz and others, Public Administration Review 79, 2019, 28 months of sales-tax data on more than 15,000 restaurants: an A raises revenue and lowers the chance of closing relative to a B; a C lowers revenue and raises the chance of closing relative to a B. The sizes were not shown in what I could read, so the multipliers below are my planning values.",
+        "what": "Rothbart, Schwartz, Calabrese, Papper, Mijanovich, Meltzer and Silver, Public Administration Review 79, 2019 (full text opened): sales-tax records of New York City restaurants after grading began. Against a B, a posted A adds $145 to mean daily sales (provisional grades: $78-$83 a day, about $28,000-$30,000 a year); a C takes $104-$144 a day (about $45,000-$53,000 a year; the posted-grade estimate is not statistically significant). 'Grade Pending' is not different from a posted B, and while it hangs there is no difference between Bs and Cs. Mean sales in the sample were $175,000-$200,000 a quarter, about $2,100 a day. Closing within a year: A-graded restaurants are 2.6 to 4.9 percentage points less likely than Bs, C-graded 2.1 to 4.9 points more likely, against a yearly closure rate of 12%. An A also means about $518 less in fines per inspection. The 88% who 'consider grades' is from a 2012 survey (Wong and others, 2015; read in search results).",
         "demandMult": {
           "A": 1,
-          "gradePending": 0.98,
+          "gradePending": 0.95,
           "B": 0.95,
-          "C": 0.88
+          "C": 0.89
         },
-        "source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091",
-        "evidence": "study_via_search",
+        "calc": "B against A: $78 to $145 a day on about $2,100 = 3.7% to 6.9%, so 0.95. C against A: that plus $104 to $144 = 8.7% to 13.8%, so 0.89. Grade Pending sells like a B.",
+        "sharesAmongCoffeeShops": {
+          "A": 0.9548,
+          "B": 0.033,
+          "C": 0.0122,
+          "gradedShops": 1967,
+          "what": "Latest letter grade of each Coffee/Tea establishment from inspections since November 1, 2024, computed from the city's inspection data (records dated November 13, 2026). East Village ZIP codes 10003 and 10009: 86 A, 2 B, 2 C. First cycle inspections of coffee shops in that period: 2,665, of which 28.8% scored 14 points or more and 10.7% scored 28 or more; median score 12. Re-inspections: 697, of which 74.8% ended in an A, 15.6% in a B, 9.6% in a C.",
+          "source": "https://data.cityofnewyork.us/resource/43nn-pn8j.json",
+          "confidence": "verified",
+          "evidence": "computed_from_open_data"
+        },
         "onlineToo": {
           "what": "The grade is not only in the window: Yelp has shown New York City inspection results on restaurant pages since 2013 and health scores nationwide since 2018, under the price range, with the list of violations one click away. The city's own lookup shows them too",
           "source": "https://skift.com/2018/07/24/yelp-adds-health-code-ratings-to-restaurant-pages-nationwide/",
           "evidence": "industry_via_search"
-        }
+        },
+        "source": "https://www.rachelmeltzer.com/uploads/1/4/5/3/14532900/what_a_difference_a_grade_makes_par.pdf",
+        "confidence": "verified",
+        "evidence": "opened"
       },
       "confidence": "estimate",
       "typicalRatings": {
@@ -710,7 +771,32 @@
       ],
       "source": "https://therealdeal.com/new-york/2025/12/23/chain-stores-keep-shrinking-across-nyc/",
       "confidence": "estimate",
-      "evidence": "industry_via_search"
+      "evidence": "industry_via_search",
+      "coffeeShopsInTheCity": {
+        "total": 2215,
+        "manhattan": 1109,
+        "brooklyn": 608,
+        "queens": 347,
+        "bronx": 90,
+        "statenIsland": 56,
+        "allFoodEstablishments": 31502,
+        "byZip": {
+          "10002": 45,
+          "10003": 77,
+          "10009": 27,
+          "10011": 48,
+          "10012": 74,
+          "10014": 41,
+          "10017": 40,
+          "10036": 47,
+          "11201": 58,
+          "11211": 42
+        },
+        "what": "Establishments the Health Department classifies as Coffee/Tea in its inspection data, counted by distinct permit id on November 14, 2026 (records dated November 13). ZIP 10003 and 10009 together are the East Village and Union Square: 104 coffee shops.",
+        "source": "https://data.cityofnewyork.us/resource/43nn-pn8j.json",
+        "confidence": "verified",
+        "evidence": "computed_from_open_data"
+      }
     },
     "demandEvidence": {
       "note": "Every demand number the engine or the keen-cray branch assumes, against what could be found. status: confirmed (evidence supports the value), corrected (this fragment changes it), range_only (evidence gives a range, the value is inside or outside it as noted), not_found.",
@@ -791,7 +877,7 @@
           ],
           "unit": "Mon..Sun multipliers",
           "evidence": "industry_via_search",
-          "basis": "See extra.weekdayMultNote",
+          "basis": "See extra.weekdayMultNote. The transit profile is now measured from MTA daily ridership: Monday 0.91, Friday 0.97, Saturday 0.69, Sunday 0.54 of an average weekday",
           "source": "https://www.businesswire.com/news/home/20231207135338/en"
         },
         {
@@ -808,11 +894,11 @@
           "id": "month_curve",
           "where": "not in the engine",
           "current": null,
-          "status": "range_only",
+          "status": "corrected",
           "unit": "12 multipliers",
-          "evidence": "assumption",
-          "basis": "See extra.monthCurve",
-          "source": "https://fred.stlouisfed.org/series/MRTSSM722USN"
+          "evidence": "computed_from_open_data",
+          "basis": "Subway rides per day by month, computed from MTA data: January 0.90, February 0.95, March 1.03, April 1.05, May 1.03, June 1.05, July 0.97, August 0.93, September 1.02, October 1.10, November 0.99, December 0.99. The neighborhood curve follows it",
+          "source": "https://data.ny.gov/resource/sayj-mze2.json"
         },
         {
           "id": "orders_per_labor_hour",
@@ -831,10 +917,14 @@
           "id": "queue_walkaway",
           "where": "engine: SPILL = 0.5 of turned-away buyers try a neighbor",
           "current": 0.5,
-          "status": "not_found",
-          "evidence": "assumption",
-          "basis": "No measurement of where a person who leaves a coffee line goes. What is measured: patience about six minutes; people judge the line by its length. See extra.queue",
-          "source": "https://www.gs1uk.org/insights/news/technology-and-growing-customer-impatience"
+          "status": "range_only",
+          "evidence": "opened",
+          "basis": "Lu and others: 5 to 10 people in line equals a 3.22% price increase, 10 to 15 equals 8.26%; converted with elasticity -1.3 to -4.7. Where the leavers go (the engine's 0.5 to a neighbor) is still unmeasured",
+          "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+          "low": 0.04,
+          "typical": 0.1,
+          "high": 0.15,
+          "unit": "share of buyers lost when the line grows from 5 to 10 people"
         },
         {
           "id": "review_effect",
@@ -853,14 +943,15 @@
           "id": "grade_effect",
           "where": "weak in the engine",
           "current": null,
-          "status": "range_only",
-          "low": 0.9,
+          "status": "confirmed",
+          "low": 0.93,
           "typical": 0.95,
-          "high": 0.98,
+          "high": 0.96,
           "unit": "demand multiplier with a B in the window",
-          "evidence": "study_via_search",
-          "basis": "Direction measured (A above B above C in revenue and survival), size not seen. The city's own 2012 figure, restaurant sales up 9.3% in the nine months after grading began, is a before-and-after comparison; the controlled studies found no gain for the average restaurant",
-          "source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091"
+          "evidence": "opened",
+          "basis": "Full text of Rothbart and others (2019): A against B is worth $78-$145 a day on mean daily sales of about $2,100, 3.7-6.9%; C against B costs $104-$144 a day. Grade Pending equals a B. Among New York coffee shops 95.5% hold an A, 3.3% a B, 1.2% a C (computed from city data)",
+          "source": "https://www.rachelmeltzer.com/uploads/1/4/5/3/14532900/what_a_difference_a_grade_makes_par.pdf",
+          "confidence": "verified"
         },
         {
           "id": "competitor_effect",
@@ -907,7 +998,7 @@
           "high": 0.09,
           "unit": "share of sales",
           "evidence": "industry_via_search",
-          "basis": "Delivery was 9% of limited-service traffic in 2024, 4% in 2019. New York apps carried 3.3 million orders a week in mid-2026, 700,000 more than in December 2023",
+          "basis": "Delivery was 9% of limited-service traffic in 2024, 4% in 2019 (search). New York restaurant deliveries rose from 2.63 million a week in the third quarter of 2023 to 3.39 million in the second quarter of 2026, +29%, and weekly spending from $102.5 million to $149.6 million, +46% (city release, opened)",
           "source": "https://www.ncrla.org/wp-content/uploads/2025/08/Restaurant-OffPremises-Report.pdf"
         },
         {
@@ -4164,10 +4255,10 @@
         }
       ],
       "tier": "core",
-      "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
       "confidence": "estimate",
-      "evidence": "primary_via_search",
-      "note": "A fixed monthly cost stands in for a commission the format cannot express (extra.mechanics channel_margins has the real math). Basic: delivery sales of 5% of $51,000 = $2,550 a month; the app keeps 15% + 3% processing = $459, plus about $70 of bags and carriers = $530. Promoted: 9% = $4,590; 28% = $1,285, plus $135 of packaging = $1,420. New York City caps: 15% for delivery, 5% for basic service, 3% for card processing, and up to 20% more for optional enhanced services only if the app also offers the basic plan (Local Laws 103 of 2021 and 79 of 2025). DoorDash's own plans: 15%, 25%, 30% for delivery; 6% for pickup; orders through the restaurant's own page carry no commission. Sales shares are estimates under the 9% that delivery holds in limited-service traffic nationally."
+      "evidence": "opened",
+      "note": "A fixed monthly cost stands in for a commission the format cannot express (extra.mechanics channel_margins has the real math). Basic: delivery sales of 5% of $51,000 = $2,550 a month; the app keeps 15% + 3% processing = $459, plus about $70 of bags and carriers = $530. Promoted: 9% = $4,590; 28% = $1,285, plus $135 of packaging = $1,420. New York City caps, read on the city's page: delivery fees 15% of each online order, transaction fees 3%, basic service fees 5%, enhanced service fees 20%, and 'the enhanced service fee can only be charged if the app offers a plan at a basic service fee amount'; apps cannot charge for phone orders that do not end in a sale. DoorDash's own page: 15% on delivery for Basic, 25% for Plus, 30% for Premier, 6% on pickup, no monthly fee and no contract, and a commission refund for a month with fewer than 20 accepted orders. Sales shares are estimates under the 9% that delivery holds in limited-service traffic nationally."
     },
     {
       "id": "loyalty",
@@ -4521,14 +4612,14 @@
     {
       "id": "hide_grade_card",
       "name": "Take the B out of the window",
-      "what": "A B or C in the window costs customers every day it hangs there. The card must be posted where passersby can see it; hiding it is a fine at the next visit, neighbors do report it, and the grade still shows on review sites and the city's lookup.",
+      "what": "A B or C in the window costs customers every day it hangs there. Removing or covering the card is a $1,000 fine at the next visit, neighbors do report it, and the grade still shows on review sites and the city's lookup.",
       "saves": {
         "basis": "pct_revenue",
         "amount": 0.04
       },
       "violation": "grade_card_not_posted",
       "availableIf": "The shop's posted grade is B or C (extra.mechanics letter_grade_demand). With an A there is nothing to hide and the shortcut must not be offered: its saving is the lost demand it avoids, not a cost.",
-      "note": "saves 4% of revenue is my estimate of the B effect avoided (5%) less the third of it that remains because the grade is also shown online."
+      "note": "saves 4% of revenue is the B effect avoided (about 5%, from the 2019 study) less the part that remains because the grade is also shown online (my estimate)."
     },
     {
       "id": "hidden_card_surcharge",
@@ -4597,25 +4688,25 @@
     },
     {
       "id": "grade_card_not_posted",
-      "name": "Letter grade card hidden or not posted",
-      "law": "NYC Health Code § 81.51; 24 RCNY Chapter 23",
+      "name": "Letter grade card removed, covered or not posted",
+      "law": "24 RCNY § 23-07; NYC Health Code § 81.51",
       "official": "health_inspector",
       "foundBy": [
         "inspection",
         "complaint"
       ],
       "fine": {
-        "base": 500,
+        "base": 1000,
         "perMonth": 0,
         "pctOfSaved": 0,
-        "max": 1000
+        "max": 2000
       },
       "closureDays": 0,
       "reputationHit": 0.05,
-      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/rii-grade-posting-faq.pdf",
-      "confidence": "estimate",
-      "evidence": "primary_via_search",
-      "note": "The pack's own rule card (from the Chapter 23 penalty schedule, opened by its author): $500 for not posting, $1,000 for tampering. The Health Department's grade-posting guide (2011) says up to $1,000 for not posting and $200 for posting it wrongly, and that repeat offenders can lose the permit. The card goes on the front window, door or outside wall. After a B or C at re-inspection the owner may post 'Grade Pending' until the hearing: that is legal; an empty window is not."
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "evidence": "opened",
+      "note": "Penalty schedule of Chapter 23 (opened): 'Grade card removed, destroyed, modified, obscured or otherwise tampered with' $1,000, $2,000 if the owner does not answer the summons; 'Current letter grade or Grade Pending card not posted' $500, $1,000 on default. Taking a posted card out of the window is the first case, so the game charges $1,000. The Health Department's posting guide (October 2011, opened): the card goes on a front window, door or outside wall within five feet of the entrance and four to six feet off the ground; an operator who receives both a grade card and a 'Grade Pending' card may post either one until the hearing at the Health Tribunal; repeated violations may cost the permit."
     },
     {
       "id": "card_surcharge_not_disclosed",
@@ -4635,9 +4726,9 @@
       "closureDays": 0,
       "reputationHit": 0.03,
       "source": "https://content.govdelivery.com/accounts/NYSDOS/bulletins/38661fe",
-      "confidence": "estimate",
-      "evidence": "primary_via_search",
-      "note": "New York Department of State notice on the law in force since February 11, 2024: the seller must post the total price for paying by credit card, the surcharge cannot be more than the processor charges, a sign saying 'a fee applies' is not enough; civil penalty up to $500 per violation, enforced by the Attorney General and local governments. The game charges one $500 penalty per citation."
+      "confidence": "verified",
+      "evidence": "opened",
+      "note": "New York Department of State notice of January 23, 2024 and the statute's text (both opened): since February 11, 2024 a seller that charges more for credit cards must clearly and conspicuously post the total price for paying by credit card, the surcharge may not exceed what the card company charges the business, and the final price may not exceed the posted one; two-tier pricing, a cash price next to a card price, is expressly allowed. Civil penalty up to $500 for each violation, enforceable by a municipal consumer affairs office. The state says shoppers reported surcharges of 3% to 5%. The game charges one $500 penalty per citation."
     },
     {
       "id": "illegal_posting",
@@ -4678,10 +4769,10 @@
       },
       "closureDays": 0,
       "reputationHit": 0.02,
-      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/pet-cafes.pdf",
-      "confidence": "estimate",
-      "evidence": "primary_via_search",
-      "note": "The Health Department's pet guidance and the city's 311 page: a dog that is not a service animal inside a food establishment is a Health Code violation (item 04O, 'live animals other than fish in tank or service animal'); dogs are allowed in outdoor seating if the shop posts the sign and keeps them leashed. The fine and the points for item 04O were not seen: $200 to $350 is assumed from the pack's other Chapter 23 violations of similar weight, and the points should be read from the scoring sheet before use."
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "confidence": "verified",
+      "evidence": "opened",
+      "note": "Chapter 23 (opened): item 4O, 'live animals other than fish in tank or service animal in establishment's food or non-food areas', a critical violation worth 5 points for one animal and up to 8 for four or more; penalty $200 for one or two animals, $250, $300 and $350 for worse conditions. The scoring sheet's own example of the mildest case is 'one companion dog on chair in outdoor dining area'. The Health Department's pet guidance (opened): live animals other than service animals are prohibited in all indoor and most outdoor areas; dogs are allowed in outdoor dining only under the 'Outdoor Dining With Dogs' rule with the required sign ($200 if the sign is missing). Computed from city inspection data: 118 citations of item 04O at 110 coffee shops between November 2023 and November 2026, about one coffee shop in twenty."
     },
     {
       "id": "deceptive_menu_claims",
@@ -4766,7 +4857,7 @@
       "id": "delivery_fee_caps",
       "title": "Delivery app fees are capped",
       "text": "NYC caps what an app may charge a restaurant: 15% for delivery, 5% for basic service, 3% for card processing. Optional 'enhanced' services may add up to 20%, and only if the app also offers the basic plan. Overcharged? The city has won refunds for restaurants.",
-      "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page"
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page"
     },
     {
       "id": "fake_reviews",
@@ -4777,8 +4868,8 @@
     {
       "id": "grade_card_not_posted",
       "title": "The grade stays in the window",
-      "text": "A, B or C must hang where passersby can see it. After a bad re-inspection you may post 'Grade Pending' until your hearing. An empty window is a $500 fine; 88% of New Yorkers say they look at the grade before eating.",
-      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/rii-grade-posting-faq.pdf"
+      "text": "A, B or C must hang within five feet of the door where passersby can see it. After a bad re-inspection you may post 'Grade Pending' until your hearing. A missing card costs $500; a removed or covered one costs $1,000.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
     },
     {
       "id": "card_surcharge_not_disclosed",
@@ -4795,8 +4886,8 @@
     {
       "id": "live_animals_inside",
       "title": "Dogs",
-      "text": "Only service dogs may come inside a food establishment in NYC. Pet dogs are allowed in outdoor seating if you post the sign and they stay leashed. A dog inside is a Health Department violation with points toward your grade.",
-      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/pet-cafes.pdf"
+      "text": "Only service dogs may come inside a food establishment in NYC. Pet dogs are allowed in outdoor seating if you post the sign and they stay leashed. A dog inside is a critical violation: 5 to 8 points toward your grade and a $200 to $350 fine.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf"
     },
     {
       "id": "deceptive_menu_claims",
@@ -4844,8 +4935,8 @@
       "examples": "DoorDash, Uber Eats, Grubhub",
       "link": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
       "source": "https://merchants.doordash.com/en-us/products/pricing",
-      "confidence": "estimate",
-      "note": "DoorDash plans: 15%, 25% or 30% of each delivery order, 6% on pickup, no monthly fee, for businesses with 75 or fewer locations. New York City caps apply on top: see rule card delivery_fee_caps. Read on DoorDash's pricing page through search results."
+      "confidence": "verified",
+      "note": "DoorDash's pricing page (opened): 15%, 25% or 30% of each delivery order, 6% on pickup, no monthly fee, no contract. New York City caps apply on top: see rule card delivery_fee_caps."
     },
     {
       "id": "online_ordering_loyalty",
@@ -5117,6 +5208,16 @@
     },
     {
       "url": "https://dailycoffeenews.com/2026/08/25/blank-street-raises-105-million-expands-to-la/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://data.cityofnewyork.us/resource/43nn-pn8j.json",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://data.ny.gov/resource/sayj-mze2.json",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
     },
@@ -5627,6 +5728,11 @@
     },
     {
       "url": "https://www.pymnts.com/news/2013/study-queue-lengths-more-important-than-wait-times/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.rachelmeltzer.com/uploads/1/4/5/3/14532900/what_a_difference_a_grade_makes_par.pdf",
       "checked": "2026-11-14",
       "how": "search result, page not opened"
     },
