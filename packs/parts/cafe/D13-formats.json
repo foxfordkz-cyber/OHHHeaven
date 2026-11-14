@@ -4859,6 +4859,86 @@
           "bubble_tea",
           "juice_bar"
         ]
+      },
+      {
+        "id": "delivery_worker_pay_rise",
+        "name": "Delivery worker pay floor rises",
+        "text": "The city's minimum pay for app delivery workers rises again. Apps pass part of it to customers as higher fees, and some orders disappear.",
+        "scale": "city",
+        "months": [
+          4
+        ],
+        "realSignal": "DCWP minimum pay rate for app delivery workers: $21.44 an hour before tips, $22.13 from April 1, 2026, indexed every April",
+        "effects": [
+          {
+            "field": "deliveryShare",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "delivery_plan"
+          }
+        ],
+        "realFrequency": "Every April",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/dca/workers/Delivery-Worker-Public-Hearing-Minimum-Pay-Rate.page",
+        "confidence": "verified",
+        "note": "The pay figures are DCWP's; the 3% loss of delivery orders through higher customer fees is my estimate. DCWP plans a minimum pay rate for all delivery apps in early 2027.",
+        "formats": [
+          "delivery_kitchen",
+          "cafe",
+          "bubble_tea",
+          "sandwich_bar"
+        ]
+      },
+      {
+        "id": "liquor_license_renewal",
+        "name": "Liquor license up for renewal",
+        "text": "Your two-year license renews next month. You must notify the community board 30 days ahead; neighbours can ask the board to recommend denial.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "SLA renewal cycle (two-year term) and the 30-day community board notice for renewals in NYC",
+        "effects": [
+          {
+            "field": "cash",
+            "mult": 1.0
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "alcohol_program"
+          },
+          {
+            "kind": "lever",
+            "id": "id_checks"
+          }
+        ],
+        "realFrequency": "Every two years per license",
+        "tier": "deep",
+        "source": "https://sla.ny.gov/community-input",
+        "confidence": "estimate",
+        "note": "SLA: renewal is nearly always granted when complete and on time; breaking the community board stipulations can lead the board to recommend rejection at renewal. Renewal fee equals the license fee.",
+        "formats": [
+          "cafe_wine_bar"
+        ]
       }
     ]
   },
@@ -5491,6 +5571,16 @@
     {
       "url": "https://abc7ny.com/post/starbucks-close-dozens-nyc-coffee-shop-locations-amid-restructure/17918006/",
       "title": "abc7ny.com/post/starbucks-close-dozens-nyc-coffee-shop-locations-amid-",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dca/workers/Delivery-Worker-Public-Hearing-Minimum-Pay-Rate.page",
+      "title": "www.nyc.gov/site/dca/workers/Delivery-Worker-Public-Hearing-Minimum-Pay",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sla.ny.gov/community-input",
+      "title": "sla.ny.gov/community-input",
       "checked": "2026-11-14"
     }
   ]
