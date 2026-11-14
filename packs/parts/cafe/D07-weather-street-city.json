@@ -3741,6 +3741,148 @@
         "confidence": "estimate",
         "evidence": "calc",
         "note": "The deck's holiday-market card gives prime locations +8% foot traffic; the catch is competition from the stalls, the same logic as the street fair. The -3% without a seasonal drink is my estimate. A warm room with seats is the one thing the stalls do not have."
+      },
+      {
+        "id": "door_draft_tables",
+        "name": "The tables by the door are empty",
+        "text": "Every customer who walks in brings a blast of 25-degree air with them. Nobody sits at the three tables nearest the door, and the heater runs all day to replace what the door lets out.",
+        "scale": "point",
+        "months": [
+          12,
+          1,
+          2
+        ],
+        "realSignal": "Daily high at or below 40°F (normal highs: December 44.4°F, January 39.5°F, February 42.2°F); place data: door opens directly into the seating area",
+        "effects": [
+          {
+            "field": "seats",
+            "mult": 0.85,
+            "onlyIf": "winter_proofing is not vestibule"
+          },
+          {
+            "field": "utilities",
+            "mult": 1.06,
+            "onlyIf": "winter_proofing is not vestibule"
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "winter_proofing"
+          },
+          {
+            "kind": "builtin",
+            "id": "size"
+          }
+        ],
+        "realFrequency": "Every winter in a storefront with a single door and no lobby.",
+        "tier": "deep",
+        "source": "https://signsny.com/blog/restaurant-vestibule-25-sqft-rule-explanation/",
+        "moreSources": [
+          "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMaxTNormals.pdf"
+        ],
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "No measurement found: 15% of seats lost on cold days and 6% more heating are design values. The legal fix is the seasonal storm enclosure (see the lever note for the rule as a vendor describes it). An air curtain is the other option and a D03 equipment item."
+      },
+      {
+        "id": "sidewalk_violation_notice",
+        "name": "The city marks your sidewalk",
+        "text": "An inspector spray-painted the cracked flags in front of your door and mailed the owner a violation. The owner forwarded it to you with one line: see clause 14 of your lease.",
+        "scale": "point",
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "realSignal": "NYC DOT sidewalk inspections and violations (open data: 'Sidewalk Management Database - Violations'); 311 sidewalk condition complaints for the address",
+        "effects": [
+          {
+            "field": "cashOneTime",
+            "add": -2400,
+            "onlyIf": "lease makes the tenant repair the sidewalk"
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sidewalk_care"
+          },
+          {
+            "kind": "lever",
+            "id": "delivery_hatch_rule"
+          }
+        ],
+        "realFrequency": "Reference only: DOT inspects after complaints and before its own repair contracts; the yearly count of violations was not confirmed in this session.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+        "moreSources": [
+          "https://www.nyc.gov/html/dot/downloads/pdf/nyc-sidewalks-a-property-owners-guide-to-address-sidewalk-defects.pdf"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "DOT, as quoted by web search: the owner has 75 days from receipt to repair; there is no fine; after that the city may send a contractor and the Department of Finance bills the owner. $2,400 = four concrete flags (100 square feet) at about $24 a square foot with permit, my planning value from contractor price guides I could not open. The cost lands on the tenant only where the lease says so: it is a clause to read before signing. A marked defect that nobody fixed is also evidence in a trip-and-fall claim."
+      },
+      {
+        "id": "park_weather_weekend",
+        "name": "A perfect Saturday",
+        "text": "Seventy-two degrees and not a cloud. The whole neighborhood is in the park with a blanket. If you are on the way to the park gate you sell out of cold brew by noon. If you are four blocks the other way, your room is empty.",
+        "scale": "block",
+        "months": [
+          4,
+          5,
+          6,
+          9,
+          10
+        ],
+        "realSignal": "NWS forecast: dry weekend day with a high between 65°F and 82°F; place data: distance to a large park entrance",
+        "effects": [],
+        "daily": {
+          "days": 4,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 1.15,
+              "onlyIf": "place is within two blocks of a large park entrance"
+            },
+            {
+              "field": "footTraffic",
+              "mult": 0.95,
+              "onlyIf": "place is residential and not near a park"
+            },
+            {
+              "field": "seatUse",
+              "mult": 0.8
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          }
+        ],
+        "realFrequency": "About four such weekend days a month in May, June, September and October.",
+        "tier": "deep",
+        "source": "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMaxTNormals.pdf",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "The engine's place model already gives a shop near a park +10% on warm weekends; this adds the other side (people leave the indoor rooms) and the takeaway shift: fewer seats used, more cups carried out. All values are estimates."
       }
     ],
     "mechanics": [
@@ -4054,7 +4196,7 @@
         "id": "trash_and_rodent_pressure",
         "title": "Trash, season and neighbors add up to a rodent score",
         "playerDecision": "Three standing orders that interact: trash_setup (bins and pickups), rodent_proofing, and the existing pest_control lever.",
-        "engineMath": "pressure = season (1 in June-September, 1 in October-November for mice, else 0) + neighbors (1 while demolition_next_door or trash_piles_after_snow is active) + trash (1 for bags_on_curb, 1 for three pickups in June-September, 0 for daily pickup) + proofing (1 if rodent_proofing = none) + extermination (1 if pest_control = none). At pressure >= 3 the existing violation pest_activity is open from the first day of the next month and stays open until pressure has been below 3 for a full month. No dice. The player sees the score and its parts in the risk panel, so the fix is always visible.",
+        "engineMath": "pressure = season (1 in June-September, 1 in October-November for mice, else 0) + neighbors (1 while demolition_next_door or trash_piles_after_snow is active) + trash (1 if the shortcut bags_on_curb is on, 1 for three pickups in June-September, 0 for daily pickup) + proofing (1 if rodent_proofing = none) + extermination (1 if pest_control = none). At pressure >= 3 the existing violation pest_activity is open from the first day of the next month and stays open until pressure has been below 3 for a full month. No dice. The player sees the score and its parts in the risk panel, so the fix is always visible.",
         "fieldsNeeded": [
           "business.rodentPressure (derived, shown in analytics)",
           "levers[].options[].pressure (integer contribution)",
@@ -4301,7 +4443,8 @@
         "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
         "confidence": "estimate",
         "evidence": "secondary",
-        "note": "Average claim $45,000: The Hartford 2025 review of small-business claims (slip, fall or customer injury; $20,000 in 2015). $2,500 (deductible and legal time) and the 25% premium increase are planning values: no public rate table was found. Under Cruz v Heights Broadway (First Department, 2023) the Administrative Code makes a tenant clear snow but does not make it liable in tort; the tenant pays through the indemnity clause of the lease, or directly if its own shoveling made the ice worse."
+        "note": "Average claim $45,000: The Hartford 2025 review of small-business claims (slip, fall or customer injury; $20,000 in 2015). $2,500 (deductible and legal time) and the 25% premium increase are planning values: no public rate table was found. Under Cruz v Heights Broadway (First Department, 2023) the Administrative Code makes a tenant clear snow but does not make it liable in tort; the tenant pays through the indemnity clause of the lease, or directly if its own shoveling made the ice worse.",
+        "tier": "core"
       },
       {
         "id": "wet_floor_fall_claim",
@@ -4321,7 +4464,8 @@
         "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
         "confidence": "estimate",
         "evidence": "secondary",
-        "note": "Not a government penalty: the record models a lawsuit so the engine can price the risk. Max $45,000 is the average slip, fall or customer injury claim of a small business in The Hartford's 2025 review (Insurance Journal, December 10, 2025); it was $20,000 in 2015. Base $2,500 is my planning value for what an insured owner pays: a $1,000-$2,500 deductible plus a premium increase at renewal. The claim arrives months after the fall: the New York deadline to sue for personal injury is three years (CPLR §214)."
+        "note": "Not a government penalty: the record models a lawsuit so the engine can price the risk. Max $45,000 is the average slip, fall or customer injury claim of a small business in The Hartford's 2025 review (Insurance Journal, December 10, 2025); it was $20,000 in 2015. Base $2,500 is my planning value for what an insured owner pays: a $1,000-$2,500 deductible plus a premium increase at renewal. The claim arrives months after the fall: the New York deadline to sue for personal injury is three years (CPLR §214).",
+        "tier": "core"
       },
       {
         "id": "cellar_hatch_fall_claim",
@@ -4341,7 +4485,8 @@
         "source": "https://www.nycourts.gov/reporter/3dseries/2020/2020_07275.htm",
         "confidence": "estimate",
         "evidence": "secondary",
-        "note": "Courts treat cellar doors as part of the sidewalk an owner must keep safe; in a 2020-21 Appellate Division case the owner escaped liability because the doors were sound and it was the ground-floor tenant who had opened them unsafely, which points the claim at the shop. Cost fields reuse the fall-claim planning values."
+        "note": "Courts treat cellar doors as part of the sidewalk an owner must keep safe; in a 2020-21 Appellate Division case the owner escaped liability because the doors were sound and it was the ground-floor tenant who had opened them unsafely, which points the claim at the shop. Cost fields reuse the fall-claim planning values.",
+        "tier": "exotic"
       }
     ],
     "fixesExistingIds": [
@@ -4596,7 +4741,304 @@
         "lesson": "The single New York figure (10-15% on West 10th Street) is at the mild end; a cafe whose own sidewalk is closed can lose half its trade.",
         "source": "https://king5.com/article/news/west-seattle-coffeeshop-concerned-by-construction-impact/281-c99589c4-ef19-438c-8396-3794ef4e67d5"
       }
-    ]
+    ],
+    "nonObvious": [
+      {
+        "text": "The snow deadline is counted from the minute the snow stops, and the shortest window (4 hours) falls exactly on your business hours.",
+        "why": "A storm that ends at 10 AM must be cleared by 2 PM, in the lunch rush, by the same two people who run the bar.",
+        "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page"
+      },
+      {
+        "text": "The building owner is liable for a fall on the sidewalk, but the tenant usually pays.",
+        "why": "Administrative Code §7-210 names the owner; the lease has an indemnity clause; courts hold the tenant itself liable only if its own shoveling made things worse.",
+        "source": "https://www.nycourts.gov/REPORTER/3dseries/2012/2012_02424.htm"
+      },
+      {
+        "text": "Shoveling badly can be worse in court than not shoveling.",
+        "why": "A tenant who piles snow that melts and refreezes across the walk has created the hazard, which is the one case where the tenant is liable in its own right.",
+        "source": "https://www.nycourts.gov/REPORTER/3dseries/2012/2012_02424.htm"
+      },
+      {
+        "text": "Closing early for a storm still costs wages.",
+        "why": "Call-in pay: three hours at the minimum wage for everyone who reported. Decide the evening before.",
+        "source": "https://ag.ny.gov/resources/individuals/workers-rights/wages-pay"
+      },
+      {
+        "text": "Ice melt sells out two days before the storm, every time.",
+        "why": "January and February 2026: stores from Yonkers to the Hudson Valley were out; buy in November.",
+        "source": "https://longisland.news12.com/2026/01/22/hudson-valley-customers-face-ice-melt-shortage-ahead-of-major-snowstorm/1mt40tbth8IHiDHAC6zw1E"
+      },
+      {
+        "text": "Heat does not empty a coffee shop; it changes what the shop sells.",
+        "why": "Coffee brands gain a little traffic on very hot days while restaurants lose it; cold drinks gain 2.2 points of share per degree Celsius.",
+        "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/"
+      },
+      {
+        "text": "A missed coffee on a rainy day is never bought later.",
+        "why": "The retail federation's weather report: daily coffee runs rebound within days, but the missed transactions are not made up.",
+        "source": "https://cdn.nrf.com/sites/default/files/2024-06/ClimateProofingRetail_2024.pdf"
+      },
+      {
+        "text": "The average sidewalk shed stays up for a year and a half, and you can know it is coming before you sign.",
+        "why": "Facade inspections run on a public five-year cycle for every building over six stories; shed permits are open data.",
+        "source": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag"
+      },
+      {
+        "text": "You may hang a sign on the shed that hides your sign.",
+        "why": "The Buildings Department bans advertising on sheds but allows a temporary sign directly in front of a storefront whose lawful sign is blocked.",
+        "source": "https://www.nyc.gov/site/buildings/safety/construction-site-signage-requirements.page"
+      },
+      {
+        "text": "The city pays nothing when its own construction empties your street.",
+        "why": "Small Business Services' FAQ says there is no program or grant to reimburse lost revenue.",
+        "source": "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf"
+      },
+      {
+        "text": "A street fair on your block can be a bad day.",
+        "why": "The stalls stand between the crowd and your door and sell drinks; deliveries cannot reach you.",
+        "source": "https://www.dnainfo.com/new-york/20160609/chelsea/heres-what-future-of-citys-street-fairs-could-look-like"
+      },
+      {
+        "text": "Being on the marathon course can cut you off from your own customers.",
+        "why": "In 2026 the race changed its Bronx route for the first time in 15 years to restore access to local businesses.",
+        "source": "https://marathonhandbook.com/nyc-marathon-bronx-course-change/"
+      },
+      {
+        "text": "A weekend subway shutdown costs a fifth of weekend sales, and it can last two years.",
+        "why": "Greenpoint: the G train was out on about 40% of weekends from 2024; surveyed shops lost 20-24% on those weekends.",
+        "source": "https://brooklyn.news12.com/greenpoint-sales-slump-during-g-train-shutdown"
+      },
+      {
+        "text": "A bike lane that removes parking has not been shown to hurt sales.",
+        "why": "On Ninth Avenue, local business sales rose up to 49% in three years against 3% for Manhattan (the city's own sales-tax study).",
+        "source": "https://nyc.gov/html/dot/downloads/pdf/dot-economic-benefits-of-sustainable-streets.pdf"
+      },
+      {
+        "text": "You must clean 18 inches of the street, not just the sidewalk, and it does not matter who dropped the litter.",
+        "why": "DSNY rule for owners and tenants; agents come at fixed hours for each block.",
+        "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page"
+      },
+      {
+        "text": "A coffee cup with your logo in the corner basket is evidence against you.",
+        "why": "The code presumes that the business named on garbage found in a public litter basket put it there: $100, $250, $350.",
+        "source": "https://dsny.cityofnewyork.us/?p=1198"
+      },
+      {
+        "text": "Ten flyers on lampposts are ten tickets.",
+        "why": "Each poster is a separate violation at $75-$150; a new shop was fined almost $9,000.",
+        "source": "https://www.dnainfo.com/new-york/20120625/fort-greene/illegal-posters-could-pin-fine-on-hakeem-jeffries-campaign"
+      },
+      {
+        "text": "A sandwich board is legal only within 3 feet of your wall.",
+        "why": "Beyond that it is a sidewalk obstruction; under a shed or on a narrow sidewalk there may be no legal place for it.",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+      },
+      {
+        "text": "Cooling the sidewalk through an open door is illegal for every store, but almost never ticketed.",
+        "why": "About 2,300 inspections and 58 open-door violations in 2023.",
+        "source": "https://www.nyc.gov/site/dca/news/023-24/shut-front-door-city-reminds-local-businesses-keep-doors-windows-closed-when-running"
+      },
+      {
+        "text": "Your insurance does not cover the two ways rain ruins a basement.",
+        "why": "A business owner's policy excludes flood and sewer backup; the backup rider is cheap and separate.",
+        "source": "https://www.nerdwallet.com/insurance/homeowners/learn/water-backup-coverage"
+      },
+      {
+        "text": "The sewers are built for 1.75 inches of rain an hour, and that now happens several times a year.",
+        "why": "Five storms exceeded it in 2023; July 14, 2025 brought 2.07 inches in an hour.",
+        "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection"
+      },
+      {
+        "text": "Con Edison pays for spoiled food only if its own equipment failed, for more than 12 hours, and you file within 30 days with a list.",
+        "why": "Storm outages are excluded; the business cap is $12,900.",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02283"
+      },
+      {
+        "text": "Snow brings power cuts a week later.",
+        "why": "Road salt and meltwater corrode underground cables: 68% of the manhole events of 2014 came in January and February.",
+        "source": "https://www.cbsnews.com/newyork/news/winter-weather-to-blame-for-many-manhole-fires"
+      },
+      {
+        "text": "When the building next door is demolished, its rats move to you.",
+        "why": "The law requires an exterminator before a demolition permit, which treats the site, not your basement.",
+        "source": "https://www.nyc.gov/assets/buildings/pdf/ll109of22-sn.pdf"
+      },
+      {
+        "text": "After a blizzard nobody collects trash for days, in the same week the rats are hungriest.",
+        "why": "February 2026: collection ran days behind while crews plowed.",
+        "source": "https://abc7ny.com/post/mamdani-defends-dsny-trash-piles-snowbanks-parts-nyc/18529761/"
+      },
+      {
+        "text": "A cafe that lives on office workers has a three-day week and a ten-month year.",
+        "why": "Fridays are 12% of weekday office visits; August and December run a third below 2019.",
+        "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/"
+      },
+      {
+        "text": "The hour change in November costs afternoon sales for weeks.",
+        "why": "Card spending falls 3.5% in the month after the clocks go back.",
+        "source": "https://about.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/institute/pdf/jpmc-institute-daylight-savings-report.pdf"
+      },
+      {
+        "text": "A world event in town is not a windfall for a shop that is not part of it.",
+        "why": "After the 2026 World Cup only 29% of small businesses with a strong summer credited the tournament; those not showing matches more often lost sales to closures.",
+        "source": "https://www.pymnts.com/study_posts/host-cities-score-local-customers-drive-a-strong-smb-summer/"
+      },
+      {
+        "text": "Nothing in New York law makes you pay extra on Christmas, and nothing stops your baristas from quitting if you do not.",
+        "why": "Holiday premium pay is custom or contract, not statute.",
+        "source": "https://www.daeryunlaw.com/us/insights/holiday-pay-new-york"
+      },
+      {
+        "text": "Outdoor seats count toward the 20-seat bathroom rule and exist only on dry days between about 55 and 88 degrees.",
+        "why": "The license fee is paid all year; the seats work perhaps half the days of the season.",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604"
+      },
+      {
+        "text": "A corner shop pays for its second window every time it snows.",
+        "why": "Two frontages, the curb ramps and the hydrant are all yours to clear on the same clock.",
+        "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page"
+      },
+      {
+        "text": "The city can change the taste of your espresso.",
+        "why": "In a drought or during aqueduct repairs the reservoir blend changes; in November 2024 the city paused an aqueduct repair to bring more water in. The effect on hardness and taste is from owner lore and was not confirmed in this session.",
+        "source": "https://amp.insurancejournal.com/news/east/2024/11/19/801851.htm"
+      }
+    ],
+    "fixesToExistingData": [
+      {
+        "where": "packs/cafe.json events.sidewalk_shed",
+        "was": "footTraffic x0.90 for 3 months, both estimates",
+        "now": "x0.93 for 12 months",
+        "why": "The city's 2024 study with Mastercard measured 3.5-9.7% fewer weekly transactions at restaurants and bars; the average shed permit is 557 days old."
+      },
+      {
+        "where": "ai/src/data/nyc-climate.json footTrafficMult.heat and deck card heat_advisory",
+        "was": "0.95",
+        "now": "1.0 for cafes, with the drink mix moving to iced",
+        "why": "Foursquare with AccuWeather: restaurants lose visits on unusually hot days, coffee shop brands gain slightly."
+      },
+      {
+        "where": "deck card street_fair",
+        "was": "footTraffic +20% on the block",
+        "now": "+60% people but -30% conversion unless the shop sells from its door; no deliveries",
+        "why": "Store owners report fairs put stalls between the crowd and their doors."
+      },
+      {
+        "where": "deck card marathon_sunday",
+        "was": "+10% citywide",
+        "now": "on the course: +50% at the door on the spectator side, deliveries x0.2",
+        "why": "The 2026 route was changed to restore access to businesses cut off inside the course."
+      },
+      {
+        "where": "deck card world_cup_crowds",
+        "was": "footTraffic +8% in prime and mid locations, +5% demand for cafes",
+        "now": "+2% in prime locations only, deliveries x0.97",
+        "why": "Measured after the event: sports bars +16%; most small businesses did not credit the tournament."
+      },
+      {
+        "where": "deck card congestion_zone_deliveries",
+        "was": "cost of goods +2% in prime locations",
+        "now": "+1%, and only south of 60th Street in Manhattan",
+        "why": "Truck tolls are $14.40 and $21.60 per entry; spread over a route they are cents per drop."
+      },
+      {
+        "where": "deck card con_ed_rates",
+        "was": "utilities +5% in January-February",
+        "now": "+3.5% for the whole of 2026",
+        "why": "The Public Service Commission approved the three-year plan on January 22, 2026."
+      },
+      {
+        "where": "deck card outdoor_dining_season",
+        "was": "every cafe +4% demand from April 1",
+        "now": "only shops with licensed outdoor seats; roadway cafes may now stay all year",
+        "why": "Intro 655-A, signed August 31, 2026."
+      },
+      {
+        "where": "packs/cafe.json extra.weekdayMult",
+        "was": "[1, 1, 1, 1, 1.05, 1.05, 0.9] for every place",
+        "now": "keep for residential blocks; office districts need [0.95, 1.2, 1.2, 1.15, 0.6, 0.25, 0.2]",
+        "why": "Fridays are 11.9% of weekday office visits in New York."
+      }
+    ],
+    "kitAdditions": {
+      "note": "The validator requires every required setup item to be in all three kits, so these two are sent with required: false. Bins with lids are required by law for every business that sets trash at the curb; the snow kit is needed unless the contractor option of snow_ice_plan is chosen. Suggested: add both to lean, standard and premium with qty 1 and then set required: true.",
+      "items": [
+        {
+          "id": "lidded_trash_bins",
+          "qty": 1,
+          "kits": [
+            "lean",
+            "standard",
+            "premium"
+          ]
+        },
+        {
+          "id": "snow_kit",
+          "qty": 1,
+          "kits": [
+            "lean",
+            "standard",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "summary": {
+      "part": "D07",
+      "theme": "Weather, season, street, city",
+      "checked": "2026-11-14",
+      "counts": {
+        "eventCatalog": 83,
+        "mechanics": 7,
+        "claims": 3,
+        "nonObvious": 32,
+        "levers": 19,
+        "shortcuts": 9,
+        "violations": 10,
+        "ruleCards": 25,
+        "officials": 1,
+        "reports": 2,
+        "events": 8,
+        "setup": 4,
+        "sources": 119
+      },
+      "eventsByTier": {
+        "core": 25,
+        "deep": 46,
+        "exotic": 12
+      },
+      "eventsByScale": {
+        "point": 22,
+        "block": 26,
+        "city": 27,
+        "country": 7,
+        "world": 1
+      },
+      "eventsByEvidence": {
+        "official_excerpt": 26,
+        "secondary": 34,
+        "calc": 23
+      },
+      "newEffectFields": [
+        "capacity",
+        "cashOneTime",
+        "closureDays",
+        "cogs",
+        "deliveryShare",
+        "demand",
+        "footTraffic",
+        "icedShare",
+        "inspections",
+        "insurance",
+        "outdoorSeats",
+        "quality",
+        "seatTurnover",
+        "seatUse",
+        "seats",
+        "staffAvailability",
+        "utilities"
+      ]
+    }
   },
   "officials": [
     {
@@ -4616,7 +5058,8 @@
       "realProcess": "Uniformed enforcement agents and sanitation police walk commercial blocks during set 'routing times' and after every snowfall. They write a summons on the spot to the business or the owner; no warning is required. The summons is answered at the Office of Administrative Trials and Hearings (OATH) or paid.",
       "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/street-sidewalk-rules-businesses.page",
       "confidence": "estimate",
-      "evidence": "official_excerpt"
+      "evidence": "official_excerpt",
+      "note": "Process described from DSNY's business rule pages as quoted by web search; the pages were not opened in this session. No numbers in this record."
     }
   ],
   "levers": [
@@ -4658,7 +5101,8 @@
       "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Charged only in December-March (activeMonths is a new field). Staff option: Central Park averages about 11 days a season with measurable snow (1991-2020 normals in ai/src/data/nyc-climate.json: Dec 2.1, Jan 3.7, Feb 3.2, Mar 2.0), about 2.75 a month; one hour of a $17.00 worker each time plus a second pass for refreeze = 2.75 x 1.5 h x $17 = $70, plus about $20 of ice melt. Contractor: no New York storefront price was found; vendor guides quote $350-$1,500 per visit for commercial lots in Brooklyn and $2,000-$10,000 a season nationally, which is plowing, not a 20-foot sidewalk. $400 a month ($1,600 a season) is my planning value for a shovel-only sidewalk contract: get three local quotes. The -3% demand of 'none' applies only on days with snow or ice on the ground (see extra.mechanics.sidewalk_clock)."
+      "note": "Charged only in December-March (activeMonths is a new field). Staff option: Central Park averages about 11 days a season with measurable snow (1991-2020 normals in ai/src/data/nyc-climate.json: Dec 2.1, Jan 3.7, Feb 3.2, Mar 2.0), about 2.75 a month; one hour of a $17.00 worker each time plus a second pass for refreeze = 2.75 x 1.5 h x $17 = $70, plus about $20 of ice melt. Contractor: no New York storefront price was found; vendor guides quote $350-$1,500 per visit for commercial lots in Brooklyn and $2,000-$10,000 a season nationally, which is plowing, not a 20-foot sidewalk. $400 a month ($1,600 a season) is my planning value for a shovel-only sidewalk contract: get three local quotes. The -3% demand of 'none' applies only on days with snow or ice on the ground (see extra.mechanics.sidewalk_clock).",
+      "tier": "core"
     },
     {
       "id": "entrance_floor_safety",
@@ -4683,7 +5127,8 @@
       "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "No price list for mat rental in New York was found; $80 a month (two mats, weekly swap) is my planning value from uniform-service quotes I could not open. The reason the lever exists is the insurer's number: The Hartford's 2025 ten-year review puts the average slip, fall or customer injury claim of a small business at $45,000, up from $20,000 in 2015, and one in five small-business liability claims is now a fall."
+      "note": "No price list for mat rental in New York was found; $80 a month (two mats, weekly swap) is my planning value from uniform-service quotes I could not open. The reason the lever exists is the insurer's number: The Hartford's 2025 ten-year review puts the average slip, fall or customer injury claim of a small business at $45,000, up from $20,000 in 2015, and one in five small-business liability claims is now a fall.",
+      "tier": "core"
     },
     {
       "id": "storm_day_policy",
@@ -4715,7 +5160,8 @@
       "source": "https://dol.ny.gov/hospitality-wage-order-faq",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Applies only on days with a National Weather Service warning (blizzard, winter storm, flash flood, tropical storm). open_as_usual: full wages against 40% of normal traffic, and workers who cannot get in are simply absent. skeleton_crew: wages for half the staff; shifts cancelled the night before cost nothing. close_for_the_day: no sales and no wages if staff were told before they reported; anyone who already reported is owed call-in pay of 3 hours at the minimum wage (12 NYCRR §146-1.5; the State Labor Department applies it to weather closings). The effects written here are month-level placeholders: 1-2 warning days a month in winter. The shortcut storm_day_no_call_in_pay is the illegal variant."
+      "note": "Applies only on days with a National Weather Service warning (blizzard, winter storm, flash flood, tropical storm). open_as_usual: full wages against 40% of normal traffic, and workers who cannot get in are simply absent. skeleton_crew: wages for half the staff; shifts cancelled the night before cost nothing. close_for_the_day: no sales and no wages if staff were told before they reported; anyone who already reported is owed call-in pay of 3 hours at the minimum wage (12 NYCRR §146-1.5; the State Labor Department applies it to weather closings). The effects written here are month-level placeholders: 1-2 warning days a month in winter. The shortcut storm_day_no_call_in_pay is the illegal variant.",
+      "tier": "core"
     },
     {
       "id": "trash_setup",
@@ -4734,21 +5180,13 @@
           "effects": {
             "quality": 0.01
           }
-        },
-        {
-          "id": "bags_on_curb",
-          "label": "Black bags on the curb, no bins",
-          "monthlyCost": -15,
-          "effects": {
-            "quality": -0.01
-          },
-          "causes": "improper_trash_setout"
         }
       ],
       "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "The pack already charges $250 a month for the carter (monthlyCosts.waste); the costs here are differences from it. Six pickups instead of three: no published New York price was found (each waste zone has its own maximum-rate table); +$180 is my planning value, about 70% more for twice the stops. Bags instead of bins saves only the bins: two 44-gallon rigid lidded bins at about $90 each replaced every year = $15 a month. Three pickups a week means food waste sits two nights: in June-September that feeds the rodent events (see extra.mechanics.trash_and_rodent_pressure)."
+      "note": "The pack already charges $250 a month for the carter (monthlyCosts.waste); the costs here are differences from it. Six pickups instead of three: no published New York price was found (each waste zone has its own maximum-rate table); +$180 is my planning value, about 70% more for twice the stops. Three pickups a week means food waste sits two nights: in June-September that feeds the rodent score (extra.mechanics.trash_and_rodent_pressure). Putting bags on the curb without bins is the shortcut bags_on_curb.",
+      "tier": "core"
     },
     {
       "id": "sidewalk_care",
@@ -4781,7 +5219,8 @@
       "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Sweeping: 10 minutes a day of a $17.00 worker x 30 days = $85. Power wash: $150 a visit is my planning value for a 20-foot storefront; no New York price list was found. The duty is real: DSNY makes owners and tenants clean the sidewalk and the gutter 18 inches into the street, even when someone else dropped the litter."
+      "note": "Sweeping: 10 minutes a day of a $17.00 worker x 30 days = $85. Power wash: $150 a visit is my planning value for a 20-foot storefront; no New York price list was found. The duty is real: DSNY makes owners and tenants clean the sidewalk and the gutter 18 inches into the street, even when someone else dropped the litter.",
+      "tier": "core"
     },
     {
       "id": "cooling_plan",
@@ -4811,7 +5250,8 @@
       "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Charged May-September. $60 a month = one spring service visit of about $300 spread over five months (planning value). 'unserviced' has no fine; it decides whether the heat_wave_ac_failure event hits this shop (rule 4: the breakdown follows from the choice, not from dice). Propping the door open with the air conditioning on is the shortcut ac_with_open_door."
+      "note": "Charged May-September. $60 a month = one spring service visit of about $300 spread over five months (planning value). 'unserviced' has no fine; it decides whether the heat_wave_ac_failure event hits this shop (rule 4: the breakdown follows from the choice, not from dice). Propping the door open with the air conditioning on is the shortcut ac_with_open_door.",
+      "tier": "core"
     },
     {
       "id": "shed_response",
@@ -4843,7 +5283,8 @@
       "source": "https://www.nyc.gov/site/buildings/safety/construction-site-signage-requirements.page",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Only shown while a shed covers the storefront. Sign: the Buildings Department lets a business whose lawful sign is blocked put a temporary sign on the face of the shed directly in front of the storefront; $150 a month = a $1,200 banner and LED strip written off over 8 months (planning value). The +3% recovers about half of the measured loss (3.5-9.7% of weekly transactions). Rent credit: nothing in the law gives a tenant a credit for a shed; it is whatever the lease says. -5% of rent for a $250-a-month lawyer retainer is my estimate of a negotiated outcome, not a right. Local Law 48 of 2025 fines the building owner for months with no work, which is the tenant's leverage."
+      "note": "Only shown while a shed covers the storefront. Sign: the Buildings Department lets a business whose lawful sign is blocked put a temporary sign on the face of the shed directly in front of the storefront; $150 a month = a $1,200 banner and LED strip written off over 8 months (planning value). The +3% recovers about half of the measured loss (3.5-9.7% of weekly transactions). Rent credit: nothing in the law gives a tenant a credit for a shed; it is whatever the lease says. -5% of rent for a $250-a-month lawyer retainer is my estimate of a negotiated outcome, not a right. Local Law 48 of 2025 fines the building owner for months with no work, which is the tenant's leverage.",
+      "tier": "deep"
     },
     {
       "id": "disruption_playbook",
@@ -4875,7 +5316,8 @@
       "source": "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Only shown during a street, subway or utility disruption. The city pays nothing for lost sales (Small Business Services FAQ, 2022), so the owner pays for any mitigation. $200 = printed signs and a 10th-drink-free card at about 1% of sales; +3% is my estimate of what it wins back out of a 10-22% loss. Delivery: $100 of listing promotion; delivery orders also pay the platform commission that the pack models elsewhere."
+      "note": "Only shown during a street, subway or utility disruption. The city pays nothing for lost sales (Small Business Services FAQ, 2022), so the owner pays for any mitigation. $200 = printed signs and a 10th-drink-free card at about 1% of sales; +3% is my estimate of what it wins back out of a 10-22% loss. Delivery: $100 of listing promotion; delivery orders also pay the platform commission that the pack models elsewhere.",
+      "tier": "deep"
     },
     {
       "id": "event_day_plan",
@@ -4908,7 +5350,8 @@
       "source": "https://www.nyc.gov/html/dot/html/pr2026/nyc-dot-kicks-off-2026-open-streets-season.shtml",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Applies on announced event days only. $120 = one extra 7-hour shift at $17.00. Deliveries cannot reach a closed street, so stock arrives the day before. The capacity gains are month-level placeholders; on the day itself the window menu roughly doubles orders per hour (design value). The crowd is only worth what you can serve."
+      "note": "Applies on announced event days only. $120 = one extra 7-hour shift at $17.00. Deliveries cannot reach a closed street, so stock arrives the day before. The capacity gains are month-level placeholders; on the day itself the window menu roughly doubles orders per hour (design value). The crowd is only worth what you can serve.",
+      "tier": "deep"
     },
     {
       "id": "outdoor_seating",
@@ -4962,7 +5405,8 @@
       "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Sidewalk: license $1,050 for four years ($22 a month) plus the yearly consent fee, $6 a square foot in about 80% of the city (up to $31 in Manhattan below 125th Street): 100 sq ft x $6 / 12 = $50; furniture $1,100 written off over four years = $23. Total $95 at the $6 rate; at $31 the fee alone is $258 a month. Roadway: license $22 a month; consent fee $5-$25 a square foot (160 sq ft x $8 / 12 = $107); a code-compliant platform and barriers of about $7,000 over two years = $290. The roadway numbers other than the fee range are my planning values. Seats count only on dry days between about 55°F and 88°F (extra.mechanics.outdoor_seat_days). The existing rule card says approval took most applicants over 19 months, and outdoor seats count toward the 20-seat bathroom line. Since August 31, 2026 roadway cafes may stay up all year under a separate license; the winter rules are still being written."
+      "note": "Sidewalk: license $1,050 for four years ($22 a month) plus the yearly consent fee, $6 a square foot in about 80% of the city (up to $31 in Manhattan below 125th Street): 100 sq ft x $6 / 12 = $50; furniture $1,100 written off over four years = $23. Total $95 at the $6 rate; at $31 the fee alone is $258 a month. Roadway: license $22 a month; consent fee $5-$25 a square foot (160 sq ft x $8 / 12 = $107); a code-compliant platform and barriers of about $7,000 over two years = $290. The roadway numbers other than the fee range are my planning values. Seats count only on dry days between about 55°F and 88°F (extra.mechanics.outdoor_seat_days). The existing rule card says approval took most applicants over 19 months, and outdoor seats count toward the 20-seat bathroom line. Since August 31, 2026 roadway cafes may stay up all year under a separate license; the winter rules are still being written.",
+      "tier": "core"
     },
     {
       "id": "flood_protection",
@@ -4990,7 +5434,8 @@
       "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "basic: water-backup endorsement $50-$250 a year on consumer policies ($15 a month at the middle; no commercial quote was found) + four dunnage racks and a door barrier, about $480 over two years = $20. full: backwater valve installed for about $3,000 and a sump pump for $1,500, written off over five years = $75, plus a commercial flood policy at a planning value of $1,400 a year = $115. A standard business owner's policy covers neither flood nor sewer backup. The lever decides how much the flash_flood_warning and sewer_backup events cost: none = full loss, basic = stock saved and cleanup insured, full = no water."
+      "note": "basic: water-backup endorsement $50-$250 a year on consumer policies ($15 a month at the middle; no commercial quote was found) + four dunnage racks and a door barrier, about $480 over two years = $20. full: backwater valve installed for about $3,000 and a sump pump for $1,500, written off over five years = $75, plus a commercial flood policy at a planning value of $1,400 a year = $115. A standard business owner's policy covers neither flood nor sewer backup. The lever decides how much the flash_flood_warning and sewer_backup events cost: none = full loss, basic = stock saved and cleanup insured, full = no water.",
+      "tier": "core"
     },
     {
       "id": "seasonal_menu",
@@ -5014,7 +5459,8 @@
       "source": "https://pos.toasttab.com/blog/data/coffee-prices-trends-by-state",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "$150 = menu printing, syrups and a second cold-brew keg (planning value). +3% demand is my estimate: Toast's 2025 data shows cold brew orders peaking in July at 35% above the yearly average and regular coffee peaking in December and March; Placer.ai measured Starbucks' pumpkin-menu launch day on August 25, 2026 at 25.7% above its daily average for the year. A small shop gets a fraction of that, and only if the special exists."
+      "note": "$150 = menu printing, syrups and a second cold-brew keg (planning value). +3% demand is my estimate: Toast's 2025 data shows cold brew orders peaking in July at 35% above the yearly average and regular coffee peaking in December and March; Placer.ai measured Starbucks' pumpkin-menu launch day on August 25, 2026 at 25.7% above its daily average for the year. A small shop gets a fraction of that, and only if the special exists.",
+      "tier": "core"
     },
     {
       "id": "air_quality_plan",
@@ -5036,7 +5482,8 @@
       "source": "https://www.nyc.gov/site/em/about/press-releases/20260719_pr_NYCEM-Thanks-New-Yorkers-as-Wildfire-Smoke-Response-Concludes.page",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "$40 = a MERV-13 filter changed quarterly, a $300 HEPA unit over three years and a box of KN95 masks (planning value). On a smoke day the option keeps the room usable: the shop loses street traffic but not the customers already inside, and staff are not sent home. Effects are applied by the wildfire_smoke_day event."
+      "note": "$40 = a MERV-13 filter changed quarterly, a $300 HEPA unit over three years and a box of KN95 masks (planning value). On a smoke day the option keeps the room usable: the shop loses street traffic but not the customers already inside, and staff are not sent home. Effects are applied by the wildfire_smoke_day event.",
+      "tier": "deep"
     },
     {
       "id": "rodent_proofing",
@@ -5060,7 +5507,8 @@
       "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "$60 = $700 of door sweeps, steel wool, sealant and two steel bins over two years, plus ten minutes of closing labor a day. Works with the existing pest_control lever: an exterminator treats, sealing keeps them out. It decides whether the seasonal pressure events (construction next door, summer peak, first cold week) turn into the existing pest_activity violation."
+      "note": "$60 = $700 of door sweeps, steel wool, sealant and two steel bins over two years, plus ten minutes of closing labor a day. Works with the existing pest_control lever: an exterminator treats, sealing keeps them out. It decides whether the seasonal pressure events (construction next door, summer peak, first cold week) turn into the existing pest_activity violation.",
+      "tier": "deep"
     },
     {
       "id": "holiday_hours",
@@ -5098,7 +5546,8 @@
       "source": "https://www.daeryunlaw.com/us/insights/holiday-pay-new-york",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "New York has no rule that makes a private employer pay a premium for work on a holiday; holiday pay exists only where a contract or the shop's own policy promises it (law-firm guide; the State Labor Department text was not opened). Time-and-a-half is a custom, and the price of keeping a crew: $110 = two baristas x 6 hours x $8.50 premium, once in the month. A holiday morning on a residential block is one of the busiest of the year because everything else is closed; in an office district it is dead. +1% of the month is my estimate for one strong day. Regular pay on Christmas costs goodwill: the quality effect is a design value that should feed turnover in D05."
+      "note": "New York has no rule that makes a private employer pay a premium for work on a holiday; holiday pay exists only where a contract or the shop's own policy promises it (law-firm guide; the State Labor Department text was not opened). Time-and-a-half is a custom, and the price of keeping a crew: $110 = two baristas x 6 hours x $8.50 premium, once in the month. A holiday morning on a residential block is one of the busiest of the year because everything else is closed; in an office district it is dead. +1% of the month is my estimate for one strong day. Regular pay on Christmas costs goodwill: the quality effect is a design value that should feed turnover in D05.",
+      "tier": "deep"
     },
     {
       "id": "winter_proofing",
@@ -5120,17 +5569,27 @@
         },
         {
           "id": "pipes_and_door",
-          "label": "Insulated pipes, heat held at 55°F overnight, door closer and draft strip, heater at the entrance",
+          "label": "Insulated pipes, heat held at 55°F overnight, door closer and draft strip",
           "monthlyCost": 70,
           "effects": {
             "quality": 0.01
           }
+        },
+        {
+          "id": "vestibule",
+          "label": "All of that plus a temporary winter vestibule at the door, November 15 to April 15",
+          "monthlyCost": 520,
+          "effects": {
+            "quality": 0.02,
+            "capacity": 0.02
+          }
         }
       ],
-      "source": "https://www.businesswire.com/news/home/20251209433403/en/Water-And-Freezing-Damage-Burglary-Lead-The-Hartfords-Top-Five-Small-Business-Claims",
+      "source": "https://signsny.com/blog/nyc-vestibule-enclosures-permits-requirements/",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "$70 a month over five cold months = $150 of pipe insulation and weather-stripping, a $120 door closer, and about $40 a month of extra heat (planning values). 'none' decides whether the frozen_pipe event hits the shop. The Hartford's 2025 review: water and freezing damage is 20% of small-business claims and averages $34,600."
+      "note": "pipes_and_door: $150 of pipe insulation and weather-stripping and a $120 door closer over five cold months, plus about $40 a month of extra heat = $70 (planning values). vestibule: a sign maker's guide says a temporary storm enclosure may stand from November 15 to April 15, may project 18 inches for most businesses and up to 25 square feet for restaurants if 5 feet of sidewalk stay clear (Building Code §3202.3.2.1), and needs no Buildings Department permit inside those limits; the official text was not opened. $450 a month = a made-to-measure vinyl and aluminum vestibule with installation, removal and storage at about $2,250 a season (my planning value; get quotes), plus the $70. It keeps the tables by the door usable (door_draft_tables) and gives the queue a place out of the wind. 'none' decides whether frozen_pipe hits the shop: water and freezing damage is 20% of small-business claims and averages $34,600 (The Hartford, 2025).",
+      "tier": "deep"
     },
     {
       "id": "outage_kit",
@@ -5152,7 +5611,8 @@
       "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02283",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "$15 a month = about $350 of coolers, thermometers and lanterns over two years (planning value). With basic, an outage of up to 8 hours loses no stock and the shop can sell batch coffee and pastries for cash or offline card; with none, milk above 41°F for more than two hours is discarded (the existing spoiled_food rule) and the Con Edison claim fails for lack of an itemized list. D03 owns generators and equipment protection."
+      "note": "$15 a month = about $350 of coolers, thermometers and lanterns over two years (planning value). With basic, an outage of up to 8 hours loses no stock and the shop can sell batch coffee and pastries for cash or offline card; with none, milk above 41°F for more than two hours is discarded (the existing spoiled_food rule) and the Con Edison claim fails for lack of an itemized list. D03 owns generators and equipment protection.",
+      "tier": "deep"
     },
     {
       "id": "delivery_hatch_rule",
@@ -5177,7 +5637,8 @@
       "source": "https://totalfood.com/how-restaurants-can-help-avoid-sidewalk-law-related-claims-and-litigation/",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Only for places with a sidewalk hatch. $45 = 10 minutes of a second worker on 16 delivery days. Practitioner summaries of the Administrative Code: when cellar doors are open someone must stay there to steer people around the opening; doors must sit flush and bear weight. A fall is a claim under §7-210, the same route as the icy sidewalk."
+      "note": "Only for places with a sidewalk hatch. $45 = 10 minutes of a second worker on 16 delivery days. Practitioner summaries of the Administrative Code: when cellar doors are open someone must stay there to steer people around the opening; doors must sit flush and bear weight. A fall is a claim under §7-210, the same route as the icy sidewalk.",
+      "tier": "exotic"
     },
     {
       "id": "night_security",
@@ -5199,7 +5660,8 @@
       "source": "https://www.businesswire.com/news/home/20251209433403/en/Water-And-Freezing-Damage-Burglary-Lead-The-Hartfords-Top-Five-Small-Business-Claims",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "$55 = alarm monitoring at about $40 and a camera subscription at $15 (planning values; a roll-down gate, where the landlord allows one, is a setup cost for D03). Burglary and theft are 20% of small-business claims in The Hartford's 2025 review. The option decides the break_in event."
+      "note": "$55 = alarm monitoring at about $40 and a camera subscription at $15 (planning values; a roll-down gate, where the landlord allows one, is a setup cost for D03). Burglary and theft are 20% of small-business claims in The Hartford's 2025 review. The option decides the break_in event.",
+      "tier": "deep"
     }
   ],
   "shortcuts": [
@@ -5211,7 +5673,8 @@
         "basis": "fixed",
         "amount": 90
       },
-      "violation": "snow_ice_not_cleared"
+      "violation": "snow_ice_not_cleared",
+      "tier": "core"
     },
     {
       "id": "storm_day_no_call_in_pay",
@@ -5221,7 +5684,8 @@
         "basis": "per_staff",
         "amount": 35
       },
-      "violation": "call_in_pay_unpaid"
+      "violation": "call_in_pay_unpaid",
+      "tier": "deep"
     },
     {
       "id": "bags_on_curb",
@@ -5231,7 +5695,8 @@
         "basis": "fixed",
         "amount": 15
       },
-      "violation": "improper_trash_setout"
+      "violation": "improper_trash_setout",
+      "tier": "core"
     },
     {
       "id": "dump_in_litter_basket",
@@ -5241,7 +5706,8 @@
         "basis": "fixed",
         "amount": 250
       },
-      "violation": "commercial_waste_in_litter_basket"
+      "violation": "commercial_waste_in_litter_basket",
+      "tier": "core"
     },
     {
       "id": "skip_recycling",
@@ -5251,7 +5717,8 @@
         "basis": "fixed",
         "amount": 40
       },
-      "violation": "recycling_not_separated"
+      "violation": "recycling_not_separated",
+      "tier": "deep"
     },
     {
       "id": "flyers_on_poles",
@@ -5261,7 +5728,8 @@
         "basis": "fixed",
         "amount": 150
       },
-      "violation": "illegal_posting"
+      "violation": "illegal_posting",
+      "tier": "deep"
     },
     {
       "id": "sign_in_the_walkway",
@@ -5271,7 +5739,8 @@
         "basis": "pct_revenue",
         "amount": 0.01
       },
-      "violation": "sidewalk_obstruction"
+      "violation": "sidewalk_obstruction",
+      "tier": "core"
     },
     {
       "id": "ac_with_open_door",
@@ -5281,7 +5750,8 @@
         "basis": "pct_revenue",
         "amount": 0.01
       },
-      "violation": "open_door_ac"
+      "violation": "open_door_ac",
+      "tier": "core"
     },
     {
       "id": "speaker_on_sidewalk",
@@ -5291,7 +5761,8 @@
         "basis": "pct_revenue",
         "amount": 0.005
       },
-      "violation": "commercial_music_noise"
+      "violation": "commercial_music_noise",
+      "tier": "deep"
     }
   ],
   "violations": [
@@ -5316,7 +5787,8 @@
       "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
       "confidence": "estimate",
       "evidence": "official_excerpt",
-      "note": "DSNY snow laws page as quoted by web search: snow that stops between 7:00 AM and 4:59 PM must be cleared within 4 hours; between 5:00 PM and 8:59 PM within 14 hours; between 9:00 PM and 6:59 AM by 11:00 AM. A path at least 4 feet wide where possible; snow may not be pushed into the street or crosswalk. Fines on that page: $100 first offense, $150 second, $250 third and later; a DSNY flyer and news reports give $100-$150, $150-$350 and $250-$350. The 2014 DSNY rules digest names 'every owner, lessee, tenant, occupant, or other person having charge of any lot or building'. Each uncleared snowfall is a new offense. After the January 25, 2026 storm (11.4 inches in Central Park) the city wrote more than 4,000 such summonses."
+      "note": "DSNY snow laws page as quoted by web search: snow that stops between 7:00 AM and 4:59 PM must be cleared within 4 hours; between 5:00 PM and 8:59 PM within 14 hours; between 9:00 PM and 6:59 AM by 11:00 AM. A path at least 4 feet wide where possible; snow may not be pushed into the street or crosswalk. Fines on that page: $100 first offense, $150 second, $250 third and later; a DSNY flyer and news reports give $100-$150, $150-$350 and $250-$350. The 2014 DSNY rules digest names 'every owner, lessee, tenant, occupant, or other person having charge of any lot or building'. Each uncleared snowfall is a new offense. After the January 25, 2026 storm (11.4 inches in Central Park) the city wrote more than 4,000 such summonses.",
+      "tier": "core"
     },
     {
       "id": "call_in_pay_unpaid",
@@ -5339,7 +5811,8 @@
       "source": "https://ag.ny.gov/resources/individuals/workers-rights/wages-pay",
       "confidence": "estimate",
       "evidence": "official_excerpt",
-      "note": "Attorney General wage page as quoted by web search: in most cases restaurant or hotel workers should receive three hours of pay at the applicable minimum wage when they report and are sent home. Law firms report the State Labor Department applies call-in pay to closings for bad weather. Saved amount: one sent-home shift per worker per winter month, 3 h x $17.00 = $51, less about an hour actually paid = $35. Unpaid wages are owed back with 100% liquidated damages (Labor Law §198(1-a)), hence pctOfSaved 2, as for the other wage violations in the pack."
+      "note": "Attorney General wage page as quoted by web search: in most cases restaurant or hotel workers should receive three hours of pay at the applicable minimum wage when they report and are sent home. Law firms report the State Labor Department applies call-in pay to closings for bad weather. Saved amount: one sent-home shift per worker per winter month, 3 h x $17.00 = $51, less about an hour actually paid = $35. Unpaid wages are owed back with 100% liquidated damages (Labor Law §198(1-a)), hence pctOfSaved 2, as for the other wage violations in the pack.",
+      "tier": "deep"
     },
     {
       "id": "dirty_sidewalk",
@@ -5361,7 +5834,8 @@
       "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
       "confidence": "estimate",
       "evidence": "official_excerpt",
-      "note": "DSNY cleaning rules for businesses, as quoted by web search: owners and tenants must clean the sidewalk along the building and the gutter 18 inches from the curb into the street, including tree pits; $50 for the first offense. The Sanitation Foundation gives $100 for each later one; the penalty schedule caps the violation at $300. 311 adds that the rule applies even if someone else caused the mess. Agents ticket commercial blocks during fixed routing hours."
+      "note": "DSNY cleaning rules for businesses, as quoted by web search: owners and tenants must clean the sidewalk along the building and the gutter 18 inches from the curb into the street, including tree pits; $50 for the first offense. The Sanitation Foundation gives $100 for each later one; the penalty schedule caps the violation at $300. 311 adds that the rule applies even if someone else caused the mess. Agents ticket commercial blocks during fixed routing hours.",
+      "tier": "core"
     },
     {
       "id": "improper_trash_setout",
@@ -5383,7 +5857,8 @@
       "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
       "confidence": "estimate",
       "evidence": "official_excerpt",
-      "note": "DSNY, March 2024, as quoted by web search: starting March 1, 2024 all businesses must put trash in bins with secure lids; fines start at $50 for a first offense, $100 for a second and $200 for every one after. The business set-out page: bins go out one hour before closing or after 8:00 PM, come off the curb by the time the business reopens, and may be stored within 3 feet of the building line. Recycling in bags or bundles may go out after 8 PM. The exact rule section number was not confirmed."
+      "note": "DSNY, March 2024, as quoted by web search: starting March 1, 2024 all businesses must put trash in bins with secure lids; fines start at $50 for a first offense, $100 for a second and $200 for every one after. The business set-out page: bins go out one hour before closing or after 8:00 PM, come off the curb by the time the business reopens, and may be stored within 3 feet of the building line. Recycling in bags or bundles may go out after 8 PM. The exact rule section number was not confirmed.",
+      "tier": "core"
     },
     {
       "id": "commercial_waste_in_litter_basket",
@@ -5405,7 +5880,8 @@
       "source": "https://dsny.cityofnewyork.us/?p=1198",
       "confidence": "estimate",
       "evidence": "official_excerpt",
-      "note": "DSNY collection and set-out laws for businesses, as quoted by web search: 'Under no circumstances can a merchant dispose of any garbage or recyclable materials in a DSNY litter basket'; $100 first offense, $250 second, $350 third and later. The code presumes that the person whose name appears on garbage found in the basket put it there."
+      "note": "DSNY collection and set-out laws for businesses, as quoted by web search: 'Under no circumstances can a merchant dispose of any garbage or recyclable materials in a DSNY litter basket'; $100 first offense, $250 second, $350 third and later. The code presumes that the person whose name appears on garbage found in the basket put it there.",
+      "tier": "core"
     },
     {
       "id": "recycling_not_separated",
@@ -5426,7 +5902,8 @@
       "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
       "confidence": "estimate",
       "evidence": "official_excerpt",
-      "note": "DSNY business pages as quoted by web search: $100 first offense, $200 second, $400 third and later for failing to separate recyclables. The section numbers are from memory and need a check against the code."
+      "note": "DSNY business pages as quoted by web search: $100 first offense, $200 second, $400 third and later for failing to separate recyclables. The section numbers are from memory and need a check against the code.",
+      "tier": "deep"
     },
     {
       "id": "illegal_posting",
@@ -5448,7 +5925,8 @@
       "source": "https://intro.nyc/0302-2024",
       "confidence": "estimate",
       "evidence": "secondary",
-      "note": "Each flyer is a separate violation: $75-$150 for a first offense and $150-$250 for later ones within 12 months (§10-121 as summarized in City Council Introduction 302 of 2024). Base $750 = ten flyers at $75. Max $9,000: a new pet shop in Clinton Hill was fined almost $9,000 for flyers announcing its opening (DNAinfo). The law presumes the business named on the flyer posted it."
+      "note": "Each flyer is a separate violation: $75-$150 for a first offense and $150-$250 for later ones within 12 months (§10-121 as summarized in City Council Introduction 302 of 2024). Base $750 = ten flyers at $75. Max $9,000: a new pet shop in Clinton Hill was fined almost $9,000 for flyers announcing its opening (DNAinfo). The law presumes the business named on the flyer posted it.",
+      "tier": "deep"
     },
     {
       "id": "sidewalk_obstruction",
@@ -5470,7 +5948,8 @@
       "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
       "confidence": "estimate",
       "evidence": "secondary",
-      "note": "311, as quoted by web search: sandwich and A-frame signs must not extend more than 3 feet into the sidewalk from the building. Fine amounts are from press reports, not a current schedule: $100 for a first sign violation and up to $300 after (DSNY to the Midtown Gazette, 2015); a Brooklyn coffee shop was fined $300 by the Sanitation Department for a sidewalk sign (Fox News). The section numbers need a check."
+      "note": "311, as quoted by web search: sandwich and A-frame signs must not extend more than 3 feet into the sidewalk from the building. Fine amounts are from press reports, not a current schedule: $100 for a first sign violation and up to $300 after (DSNY to the Midtown Gazette, 2015); a Brooklyn coffee shop was fined $300 by the Sanitation Department for a sidewalk sign (Fox News). The section numbers need a check.",
+      "tier": "core"
     },
     {
       "id": "open_door_ac",
@@ -5492,7 +5971,8 @@
       "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf",
       "confidence": "estimate",
       "evidence": "official_excerpt",
-      "note": "DCWP business flyer as quoted by web search: 'The law prohibiting stores from leaving doors or windows open while air conditioning is running now applies to all stores regardless of size'; the only exception on the inspection checklist is a door open for deliveries. Press reports of the law give $250 for a first offense and up to $1,000. Enforcement is light: in 2023 DCWP made nearly 2,300 inspections and wrote 58 violations for open doors."
+      "note": "DCWP business flyer as quoted by web search: 'The law prohibiting stores from leaving doors or windows open while air conditioning is running now applies to all stores regardless of size'; the only exception on the inspection checklist is a door open for deliveries. Press reports of the law give $250 for a first offense and up to $1,000. Enforcement is light: in 2023 DCWP made nearly 2,300 inspections and wrote 58 violations for open doors.",
+      "tier": "core"
     },
     {
       "id": "commercial_music_noise",
@@ -5514,7 +5994,8 @@
       "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
       "confidence": "estimate",
       "evidence": "official_excerpt",
-      "note": "DEP's notice on commercial music, as quoted by web search: a first §24-231 violation carries $2,000, which is reduced to $0 if the business fixes the problem and certifies it; that is why base is 0 and each further month costs $2,000. The $8,000 ceiling is from memory of the penalty schedule and was not confirmed. §24-244(b) needs no meter: a state court upheld a summons against a clothing store whose music could be heard on the sidewalk through propped-open doors."
+      "note": "DEP's notice on commercial music, as quoted by web search: a first §24-231 violation carries $2,000, which is reduced to $0 if the business fixes the problem and certifies it; that is why base is 0 and each further month costs $2,000. The $8,000 ceiling is from memory of the penalty schedule and was not confirmed. §24-244(b) needs no meter: a state court upheld a summons against a clothing store whose music could be heard on the sidewalk through propped-open doors.",
+      "tier": "deep"
     }
   ],
   "ruleCards": [
@@ -5522,139 +6003,176 @@
       "id": "snow_clock",
       "title": "The snow clock",
       "text": "When snow stops between 7 AM and 4:59 PM you have 4 hours to clear your sidewalk; 5 PM to 8:59 PM, 14 hours; overnight, until 11 AM. A 4-foot path, nothing pushed into the street. Fines run $100 to $350 per snowfall.",
-      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page"
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "tier": "core"
     },
     {
       "id": "sidewalk_liability",
       "title": "Who pays when someone falls",
       "text": "In New York City the building owner, not the city, is liable when someone is hurt on the sidewalk in front (Administrative Code §7-210). Read your lease: most make the store clear the snow and pay the owner back. The average fall claim is $45,000.",
-      "source": "https://www.nycourts.gov/REPORTER/3dseries/2012/2012_02424.htm"
+      "source": "https://www.nycourts.gov/REPORTER/3dseries/2012/2012_02424.htm",
+      "tier": "core"
     },
     {
       "id": "storm_day_pay",
       "title": "Sending staff home in a storm",
       "text": "Close early for weather and you still owe pay: under New York's hospitality wage order a worker who reports for a shift is owed at least 3 hours at the minimum wage, or the scheduled shift if shorter. Decide before they travel, not after.",
-      "source": "https://dol.ny.gov/hospitality-wage-order-faq"
+      "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+      "tier": "core"
     },
     {
       "id": "trash_bins",
       "title": "Bins with lids",
       "text": "Since March 1, 2024 every NYC business must set out trash in bins with secure lids: out one hour before closing or after 8 PM, back in before you reopen. Bags on the curb cost $50, then $100, then $200 each time.",
-      "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-"
+      "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
+      "tier": "core"
     },
     {
       "id": "clean_18_inches",
       "title": "18 inches into the street",
       "text": "You must keep your sidewalk clean and the gutter too, 18 inches out from the curb, even if someone else dropped the litter. $50 the first time, $100 after that. Agents come during fixed hours for your block.",
-      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page"
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
+      "tier": "core"
     },
     {
       "id": "litter_basket",
       "title": "The corner basket is not yours",
       "text": "City litter baskets are for pedestrians. Shop trash in a basket costs $100, then $250, then $350, and a cup with your name on it is treated as proof. Every business must hire a licensed private carter.",
-      "source": "https://dsny.cityofnewyork.us/?p=1198"
+      "source": "https://dsny.cityofnewyork.us/?p=1198",
+      "tier": "core"
     },
     {
       "id": "open_door_ac",
       "title": "Shut the door",
       "text": "No store in New York City may run air conditioning with its doors or windows open (Local Law 92 of 2015). The only exception is a door open for deliveries. Fines start at $250 and reach $1,000.",
-      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf"
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf",
+      "tier": "deep"
     },
     {
       "id": "sidewalk_shed_rules",
       "title": "Sidewalk sheds",
       "text": "A shed over your door cuts restaurant and bar transactions by 3.5-9.7% a week. Since 2025 shed permits last 90 days, not a year, and owners pay monthly penalties when no work is done. You may hang a temporary sign on the shed in front of your store.",
-      "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses"
+      "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
+      "tier": "core"
     },
     {
       "id": "no_pay_for_construction",
       "title": "Nobody pays for the dig",
       "text": "When the city tears up your street, your sales are your problem. The City's own FAQ: it 'does not have any programs or grants to reimburse a business for lost revenue because of construction.' Ask about the project before you sign a lease.",
-      "source": "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf"
+      "source": "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf",
+      "tier": "core"
     },
     {
       "id": "sidewalk_sign_3_feet",
       "title": "A-frame signs",
       "text": "A sandwich board is tolerated only close to your wall: no more than 3 feet out from the building. Further out it is a sidewalk obstruction. Fines run $100 to $300, and a shed or a narrow sidewalk leaves you no legal spot at all.",
-      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
+      "tier": "deep"
     },
     {
       "id": "flyers_are_tickets",
       "title": "Flyers on poles",
       "text": "Taping flyers to lampposts, mailboxes or fences is illegal posting: $75 to $150 for each flyer the first time, $150 to $250 after. Ten flyers is ten tickets. One new Brooklyn shop was fined almost $9,000.",
-      "source": "https://intro.nyc/0302-2024"
+      "source": "https://intro.nyc/0302-2024",
+      "tier": "deep"
     },
     {
       "id": "congestion_zone",
       "title": "Congestion Relief Zone",
       "text": "Below 60th Street in Manhattan cars pay $9 a day at peak hours; delivery trucks pay $14.40 or $21.60 every time they enter. Suppliers pass it on. In year one foot traffic in the zone rose 3.4% against 1.4% for the borough.",
-      "source": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational"
+      "source": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational",
+      "tier": "deep"
     },
     {
       "id": "flood_not_insured",
       "title": "Rain is not in the policy",
       "text": "A standard business owner's policy pays for neither flood nor sewer backup. City sewers handle at most 1.75 inches of rain an hour; in 2023 five storms exceeded that. A water-backup rider costs roughly $50-$250 a year. Keep stock off the basement floor.",
-      "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection"
+      "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+      "tier": "core"
     },
     {
       "id": "power_outage_claim",
       "title": "When the power goes out",
       "text": "If a failure in Con Edison's local grid leaves you dark for more than 12 hours in a 24-hour period, a business can claim spoiled perishables, up to $12,900, within 30 days. Storm outages are excluded.",
-      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02283"
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02283",
+      "tier": "deep"
     },
     {
       "id": "roadway_cafe_all_year",
       "title": "Outdoor dining, all year",
       "text": "Since August 31, 2026 a licensed roadway cafe may stay up all year instead of coming down from November 30 to March 31. A license costs $1,050 for four years, plus a yearly fee of $5-$31 per square foot. Cafes close by 11 PM.",
-      "source": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm"
+      "source": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm",
+      "tier": "deep"
     },
     {
       "id": "smoke_day",
       "title": "Smoke days",
       "text": "An Air Quality Index above 150 is unhealthy for everyone. In July 2026 Canadian wildfire smoke pushed New York City to 289, second only to June 2023. No law makes you close, but outdoor seats are useless and staff should not work outside.",
-      "source": "https://www.nyc.gov/site/em/about/press-releases/20260719_pr_NYCEM-Thanks-New-Yorkers-as-Wildfire-Smoke-Response-Concludes.page"
+      "source": "https://www.nyc.gov/site/em/about/press-releases/20260719_pr_NYCEM-Thanks-New-Yorkers-as-Wildfire-Smoke-Response-Concludes.page",
+      "tier": "deep"
     },
     {
       "id": "holiday_pay_custom",
       "title": "Holiday pay",
       "text": "New York law does not require a private employer to pay extra for work on Thanksgiving or Christmas. Time-and-a-half is a custom, not a rule, unless your own handbook promises it. Overtime after 40 hours and the spread-of-hours hour still apply.",
-      "source": "https://www.daeryunlaw.com/us/insights/holiday-pay-new-york"
+      "source": "https://www.daeryunlaw.com/us/insights/holiday-pay-new-york",
+      "tier": "deep"
     },
     {
       "id": "office_week",
       "title": "The office week",
       "text": "Offices fill on Tuesday to Thursday. From January to October 2025 only 12.4% of weekday office visits fell on a Friday, and August and December run about a third below 2019. A cafe that lives on office workers has a three-day week.",
-      "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/"
+      "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+      "tier": "core"
     },
     {
       "id": "corner_lot_snow",
       "title": "A corner means two sidewalks",
       "text": "On a corner you clear both frontages, the curb ramps and the path to the crosswalk, and the city asks you to dig out the hydrant and the catch basin. Same clock: 4 hours after daytime snow. A corner shop shovels twice as much.",
-      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page"
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "tier": "deep"
     },
     {
       "id": "cellar_doors",
       "title": "Sidewalk cellar doors",
       "text": "While your sidewalk hatch is open, someone must stand by it and steer people around the hole. Closed, the doors must sit flush and hold weight. A fall into an open hatch is a lawsuit against the building, and your lease sends the bill to you.",
-      "source": "https://totalfood.com/how-restaurants-can-help-avoid-sidewalk-law-related-claims-and-litigation/"
+      "source": "https://totalfood.com/how-restaurants-can-help-avoid-sidewalk-law-related-claims-and-litigation/",
+      "tier": "deep"
     },
     {
       "id": "music_on_the_sidewalk",
       "title": "Music and the neighbors",
       "text": "You may not use a speaker to draw customers on the sidewalk. Music from a business may not exceed 42 dB(A) inside a neighbor's apartment. A first violation is $2,000, cut to $0 if you fix it and certify the fix.",
-      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf"
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
+      "tier": "deep"
     },
     {
       "id": "fines_under_review",
       "title": "Fines are under review",
       "text": "Executive Order 11 (January 2026) told city agencies to list more than 6,000 rules and fines on small businesses and propose cuts, warnings and cure periods. Until a fine is actually changed, the old amount stands.",
-      "source": "https://www.nyc.gov/mayors-office/news/2026/01/mayor-mamdani-signs-executive-order-to-inventory-and-cut-fines-a.html"
+      "source": "https://www.nyc.gov/mayors-office/news/2026/01/mayor-mamdani-signs-executive-order-to-inventory-and-cut-fines-a.html",
+      "tier": "deep"
     },
     {
       "id": "water_damage_claims",
       "title": "The most common claim",
       "text": "Water and freezing damage is one of the three most common small-business insurance claims, 20% of the total, and costs $34,600 on average. A burst pipe on one cold night can cost more than a year of profit.",
-      "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm"
+      "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+      "tier": "deep"
+    },
+    {
+      "id": "winter_vestibule",
+      "title": "Winter vestibule",
+      "text": "A temporary storm enclosure may stand at your door from November 15 to April 15. For most stores it may stick out 18 inches; for an eating place up to 25 square feet, with 5 feet of sidewalk left clear. Inside those limits no building permit is needed.",
+      "source": "https://signsny.com/blog/restaurant-vestibule-25-sqft-rule-explanation/",
+      "tier": "deep"
+    },
+    {
+      "id": "sidewalk_violation_75_days",
+      "title": "A broken sidewalk is the owner's to fix",
+      "text": "When the city marks a sidewalk defect, the property owner has 75 days to repair it. There is no fine, but after 75 days the city may do the work and bill the owner. Most store leases pass sidewalk repairs to the tenant.",
+      "source": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+      "tier": "deep"
     }
   ],
   "sources": [
@@ -6227,6 +6745,31 @@
       "url": "https://alataucitybank.kz/business/osim/articles/kak-zavedeniyu-zarabotat-letom",
       "title": "Alatau City Bank: how a cafe can earn in summer (Kazakhstan)",
       "checked": "2026-11-14"
+    },
+    {
+      "url": "https://signsny.com/blog/nyc-vestibule-enclosures-permits-requirements/",
+      "title": "Signs NY: NYC vestibule enclosures, permits and requirements (vendor guide)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://signsny.com/blog/restaurant-vestibule-25-sqft-rule-explanation/",
+      "title": "Signs NY: winter vestibules for restaurants, the 25 square foot allowance (vendor guide)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+      "title": "NYC DOT: sidewalk repair and violations",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/html/dot/downloads/pdf/nyc-sidewalks-a-property-owners-guide-to-address-sidewalk-defects.pdf",
+      "title": "NYC DOT: a property owner's guide to address sidewalk defects",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nerdwallet.com/insurance/homeowners/learn/water-backup-coverage",
+      "title": "NerdWallet: water backup coverage (cost range)",
+      "checked": "2026-11-14"
     }
   ],
   "reports": [
@@ -6374,20 +6917,21 @@
       "name": "Two rigid trash bins with secure lids",
       "kind": "equipment",
       "cost": 180,
-      "required": true,
+      "required": false,
       "lifespanMonths": 24,
       "withoutItViolation": "improper_trash_setout",
       "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Required since March 1, 2024 for every business that sets trash at the curb (DSNY). Price is my planning value: two 44-gallon rigid bins with locking lids at about $90 each from a restaurant supplier; no price list was opened. They live inside or within 3 feet of the building line and take about 8 square feet of floor."
+      "note": "Required since March 1, 2024 for every business that sets trash at the curb (DSNY). Price is my planning value: two 44-gallon rigid bins with locking lids at about $90 each from a restaurant supplier; no price list was opened. They live inside or within 3 feet of the building line and take about 8 square feet of floor.",
+      "legallyRequired": true
     },
     {
       "id": "snow_kit",
       "name": "Snow shovel, ice scraper, salt spreader, four bags of ice melt",
       "kind": "equipment",
       "cost": 160,
-      "required": true,
+      "required": false,
       "lifespanMonths": 36,
       "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
       "confidence": "estimate",
