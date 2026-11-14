@@ -65,8 +65,8 @@
       "defaultMorningNote": "Used only while segments.ts gives the plain one-group mix (morningShare 0). D14 hourProfile: 12%, 15% and 12% of the day's orders at 7, 8 and 9 am, 0.39 in all. Once guestSegments is in the pack, each group's own morningShare is used instead.",
       "defaultDwellHours": 0.85,
       "defaultDwellNote": "Used only when no group gives its own dwellHours. Seat-weighted dwell of the residential mix in guestSegments (mixByBlock.residential × sitShare × dwellHours): residents 0.75 h, students 1.5 h, tourists 0.5 h, office 0.25 h -> 0.449 / 0.525 = 0.855 h, rounded to 0.85. An estimate built on D20 estimates.",
-      "offsetEngineCrowd": true,
-      "offsetEngineCrowdNote": "day.ts still calls a cafe 'packed' when served / (size x 170 / 30 / 0.4) > 0.9 and takes 0.08 off quality: an 8-seat to-go counter with 250 orders is 'packed' every day. While true, the service part gives the 0.08 back on days its own busiest-hour seat count says the room is not packed, and does not take a second 0.08 when both agree. Set to false when day.ts reads seat use from the part (build/FORMATS.md, request 5)."
+      "offsetEngineRoomTests": true,
+      "offsetEngineRoomTestsNote": "day.ts still judges the room by its old limit, served / (size x 170 / 30 / 0.4): an 8-seat to-go counter with 250 orders is 'packed' every day (-0.08 quality), and guests lost to seats or to the morning line are filed as 'short-staffed' (-0.04). While true, the service part gives back what the engine takes for the wrong reason and takes what the day deserves by its own count: -0.08 when seats in use at the busiest hour are above crowdAbove, -0.04 when orders were lost for lack of hands. Set to false when day.ts reads both from the part (build/FORMATS.md, requests 5 and 6)."
     }
   },
   "sources": [

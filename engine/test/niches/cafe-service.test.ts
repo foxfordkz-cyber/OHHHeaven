@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import type { BusinessState, DayReport, GameDate, Pack, Place } from '@ohh/shared';
 import type { CafeDay, StaffPower } from '../../src/niches/cafe/contract';
 import {
-  part, seatsThatFit, serviceCfg, serviceDay, serviceDayWith, serviceKpis, serviceNotes, walkAway,
+  engineQualityTake, part, seatsThatFit, serviceCfg, serviceDay, serviceDayWith, serviceKpis, serviceNotes, walkAway,
   type Group, type ServiceCfg, type ServiceInputs,
 } from '../../src/niches/cafe/service';
 import { cafePack } from '../fixtures/cafe';
@@ -150,13 +150,25 @@ describe('cafe service: the line and what the player is told', () => {
     expect(part.capacityDay!(busy)).toBeCloseTo(serviceDay(busy)!.served, 9);
   });
 
-  it('a lost rush names the fix and its price: one more barista keeps orders, in dollars', () => {
+  it('a lost rush and a short team name the fix and its size: one more barista keeps guests, in orders and dollars', () => {
     const d = day(shop(18, { barista: 2 }), 550);
     const s = serviceDayWith(d, B01, inputs('office', { barista: 2 }));
     expect(s.rush.walked).toBeGreaterThan(0);
-    const n = serviceNotes(d, s);
-    expect(n.length).toBeGreaterThan(0);
-    expect(n.some((x) => /^Morning rush: served \d+% of \d+: \d+ in line at \d+ am, \d+-minute wait, \d+ walked on\./.test(x))).toBe(true);
+    const n = serviceNotes(d, s, (x) => inputs('office', x.b.orders.staff));
+    expect(n[0]).toMatch(/^Morning rush: served \d+% of \d+: \d+ in line at 8 am, \d+-minute wait, \d+ walked on\. One more barista in the rush would keep about \d+ of them\.$/);
+    expect(n.some((x) => /^Out of hands: \d+ orders not made today — the team makes \d+ a day\. One more barista: \+\d+ orders \(about \$[\d,]+ a day\)\.$/.test(x))).toBe(true);
+    // the promise is the same arithmetic as the day: one more barista really serves that many more
+    const gain = Number(/\+(\d+) orders/.exec(n.find((x) => x.startsWith('Out of hands'))!)![1]);
+    const more = serviceDayWith(day(shop(18, { barista: 3 }), 550), B01, inputs('office', { barista: 3 }));
+    expect(gain).toBe(Math.round(more.served - s.served));
+  });
+
+  it('when the espresso machine is the limit, the note says hands will not help', () => {
+    const big = { barista: 6, shift_lead: 1 };
+    const d = day(shop(18, big), 900);
+    const s = serviceDayWith(d, B01, inputs('office', big));
+    expect(s.rush.capPerHour * s.labor).toBeCloseTo(B01.machineOrdersPerHour, 9);
+    expect(serviceNotes(d, s, (x) => inputs('office', x.b.orders.staff))[0]).toMatch(/espresso machine is at its ceiling \(90 orders an hour\)/);
   });
 
   it('a calm morning still reports its result, so every day has a score to beat', () => {
@@ -165,9 +177,35 @@ describe('cafe service: the line and what the player is told', () => {
     expect(serviceNotes(d, s)[0]).toMatch(/^Morning rush: served 100% of \d+, no line\. The bar makes \d+ orders an hour\.$/);
   });
 
-  it('a crowded room costs quality only once: the engine\'s own "packed" is not counted twice', () => {
-    const d = day(shop(6), 250);
-    expect(part.qualityDelta!(d)).toBeGreaterThanOrEqual(0);   // a to-go counter is not "packed" by the old room limit
+  it('quality ends where the day deserves: the engine\'s old room tests are given back, the part\'s own are taken', () => {
+    // 14 seats, 250 orders: the old room limit (14 × 170 / 30 / 0.4 = 198) calls it "packed"; at the busiest hour
+    // 85% of the seats are in use, so it is not; six people make every order: nothing is deserved, 0.08 comes back
+    const calm = day(shop(14, { barista: 5, shift_lead: 1 }), 250);
+    const s = serviceDay(calm)!;
+    expect(s.seats.crowded).toBe(false);
+    expect(s.lost.labor).toBeLessThan(0.5);
+    expect(part.qualityDelta!(calm)).toBeCloseTo(0.08, 10);
+    // everywhere: what the engine takes + what the part adds = what the part says the day deserves
+    for (const size of [0, 6, 14, 24, 40]) {
+      for (const dem of [60, 250, 500]) {
+        for (const staff of [{ barista: 1 }, four, { barista: 5, shift_lead: 1 }]) {
+          const d = day(shop(size, staff), dem);
+          const x = serviceDay(d)!;
+          const cap = part.capacityDay!(d)!;
+          const took = engineQualityTake(d, x, cap);
+          const due = (x.seats.crowded ? B01.crowdQualityDrop : 0) + (x.lost.labor >= 0.5 ? 0.04 : 0);
+          expect(-(took.crowd + took.staff) + part.qualityDelta!(d)).toBeCloseTo(-due, 10);
+        }
+      }
+    }
+  });
+
+  it('with the offset off, the part only adds a packed room the engine did not see, and never doubles it', () => {
+    const off: Pack = { ...pack, extra: { ...pack.extra, service: { ...B01, offsetEngineRoomTests: false } } };
+    const counter = { ...day(shop(6), 250), pack: off };       // packed by both counts: the engine already took 0.08
+    expect(part.qualityDelta!(counter)).toBe(0);
+    const hall = { ...day(shop(40), 250), pack: off };          // neither count calls it packed
+    expect(part.qualityDelta!(hall)).toBe(0);
   });
 });
 

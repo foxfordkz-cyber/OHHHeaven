@@ -7,6 +7,7 @@ import { dateOf } from '@ohh/shared';
 import type { CafeDay, CafePart, GuestGroup, StaffPower } from './contract';
 import { guestMix } from './segments';
 import * as staffingPart from './staffing';
+import { leverEffects } from '../../economy/effects';
 
 // ───────────── pack section ─────────────
 
@@ -32,11 +33,12 @@ export interface ServiceCfg {
   defaultMorningShare?: number;
   defaultDwellHours?: number;
   /**
-   * The engine still judges "packed" by its old room limit (served ÷ size × 170 / 30 / 0.4), so a to-go counter with
-   * 8 seats and 250 orders is always "packed" and loses 0.08 quality. While true, this part gives those 0.08 back
-   * on days its own seat count says the room is not packed. Turn off when day.ts reads seat use from the part.
+   * day.ts still judges the room by its old limit (size × 170 / 30 / 0.4 orders a day): a to-go counter with 8 seats
+   * and 250 orders is "packed" every day (−0.08 quality), and guests lost to seats or to the line are filed under
+   * staff (−0.04). While true, this part gives back what the engine takes for the wrong reason and takes what the
+   * day deserves by its own count (engineQualityTake, deservedTake). Turn off when day.ts reads both from the part.
    */
-  offsetEngineCrowd?: boolean;
+  offsetEngineRoomTests?: boolean;
 }
 
 export function serviceCfg(pack: Pack): ServiceCfg | null {
@@ -72,8 +74,18 @@ function hoursLostShare(d: CafeDay): number {
   return typeof s === 'number' && Number.isFinite(s) ? Math.min(1, Math.max(0, s)) : 0;
 }
 
-function teamOf(d: CafeDay): StaffPower {
-  return staffingPart.staffPower(d);
+/**
+ * The team as staffing.ts gives it. staffing.ts counts work in to-go orders once its pack section is in. Until then
+ * its fallback is the engine's 1,700 orders a person a month: average orders at the pack's takeaway share, seated
+ * work already inside. Those are turned into to-go orders here, and the lever on pay speeds them up as the engine's
+ * old staff limit did, so the day is not counted short twice.
+ */
+function teamOf(d: CafeDay, cfg: ServiceCfg): StaffPower {
+  const t = staffingPart.staffPower(d);
+  if ((d.pack.extra as { staffing?: unknown } | undefined)?.staffing) return t;
+  const sitRef = 1 - Math.min(0.95, Math.max(0, d.pack.sizing.takeawayShare ?? 0));
+  const toGo = 1 + sitRef * (cfg.sitInLaborMult - 1);
+  return { ...t, ordersPerDay: t.ordersPerDay * toGo * leverEffects(d.b, d.pack).capacityMult };
 }
 
 // ───────────── the day ─────────────
@@ -116,7 +128,7 @@ export interface ServiceInputs { groups: Group[]; team: StaffPower; hoursLostSha
 
 /** The inputs as the other parts give them today. */
 export function serviceInputs(d: CafeDay, cfg: ServiceCfg): ServiceInputs {
-  return { groups: groupsOf(d, cfg), team: teamOf(d), hoursLostShare: hoursLostShare(d) };
+  return { groups: groupsOf(d, cfg), team: teamOf(d, cfg), hoursLostShare: hoursLostShare(d) };
 }
 
 /** The whole day step by step: rush and its line, seats, the day's labor. null — no extra.service in the pack. */
@@ -195,11 +207,34 @@ export function serviceDayWith(d: CafeDay, cfg: ServiceCfg, inputs: ServiceInput
   };
 }
 
-/** The engine's old room limit and its "packed" test, to know when it would take 0.08 off for no reason. */
-function engineWouldCrowd(b: BusinessState, pack: Pack, served: number): boolean {
+/** The engine's old room limit: size × 170 / 30 / (1 − takeaway) orders a day. */
+function engineRoomCap(b: BusinessState, pack: Pack): number {
   const takeaway = Math.min(0.95, Math.max(0, pack.sizing.takeawayShare ?? 0));
-  const sizeCap = (b.size * pack.sizing.unitsServedPerSizeMonth / 30) / (1 - takeaway);
-  return sizeCap > 0 && Number.isFinite(sizeCap) && served / sizeCap > (pack.sizing.crowdPenaltyAbove ?? 0.9);
+  return (b.size * pack.sizing.unitsServedPerSizeMonth / 30) / (1 - takeaway);
+}
+
+/**
+ * What day.ts will take off quality on its own for this day, judged by its old room limit: 0.08 when served ÷ room
+ * limit is above crowdPenaltyAbove ("Packed"), 0.04 when it files lost guests under staff ("Short-staffed"), which it
+ * does whenever the part's capacity is below the old room limit, whatever the real cause.
+ */
+export function engineQualityTake(d: CafeDay, s: ServiceDay, capacity: number): { crowd: number; staff: number } {
+  const room = engineRoomCap(d.b, d.pack);
+  const dem = Math.max(0, d.demand ?? 0);
+  const served = Math.floor(Math.min(dem, capacity));
+  const crowd = room > 0 && Number.isFinite(room) && served / room > (d.pack.sizing.crowdPenaltyAbove ?? 0.9) ? 0.08 : 0;
+  const staff = dem - served > 0 && !(capacity >= room - 0.5) ? 0.04 : 0;
+  return { crowd, staff };
+}
+
+/** What quality this part says the day deserves: the packed room by the busiest hour, short hands by the day's work. */
+function deservedTake(cfg: ServiceCfg, s: ServiceDay): { crowd: number; staff: number } {
+  return { crowd: s.seats.crowded ? cfg.crowdQualityDrop : 0, staff: s.lost.labor >= 0.5 ? 0.04 : 0 };
+}
+
+function capacityOf(s: ServiceDay): number {
+  const lostAny = s.lost.queue + s.lost.seats + s.lost.labor + s.lost.hours >= 0.5;
+  return lostAny ? s.served : s.served + s.spare;
 }
 
 // ───────────── what the player sees ─────────────
@@ -208,15 +243,10 @@ const r0 = (x: number): number => Math.round(x);
 const hourLabel = (h: number): string => (h === 0 ? '12 am' : h < 12 ? `${h} am` : h === 12 ? '12 pm' : `${h - 12} pm`);
 const plural = (n: number, one: string, many = `${one}s`): string => `${n} ${n === 1 ? one : many}`;
 
-/** The same day with one more person of this role: how many more orders it would serve. */
-function withOneMore(d: CafeDay, role: string): number {
-  const staff = { ...d.b.orders.staff, [role]: (d.b.orders.staff[role] ?? 0) + 1 };
-  const b = { ...d.b, orders: { ...d.b.orders, staff } };
-  return serviceDay({ ...d, b })?.served ?? 0;
-}
-/** The same day with more seats (up to what fits): how many more orders it would serve. */
-function withSeats(d: CafeDay, size: number): number {
-  return serviceDay({ ...d, b: { ...d.b, size } })?.served ?? 0;
+/** The same business with one more person of this role. */
+function withOneMore(b: BusinessState, role: string): BusinessState {
+  const staff = { ...b.orders.staff, [role]: (b.orders.staff[role] ?? 0) + 1 };
+  return { ...b, orders: { ...b.orders, staff } };
 }
 /** The role a cafe hires most: the one with the most people now, else the first in the pack. */
 function mainRole(b: BusinessState, pack: Pack): string {
@@ -224,44 +254,61 @@ function mainRole(b: BusinessState, pack: Pack): string {
   return own ?? pack.staff[0]?.id ?? 'barista';
 }
 
-/** Sentences for the day report, the biggest cause first. The first line is the morning's result, every open day. */
-export function serviceNotes(d: CafeDay, s: ServiceDay): string[] {
-  const out: { size: number; text: string }[] = [];
-  const price = d.b.orders.price;
-  const money = (orders: number): string => `about $${r0(orders * price).toLocaleString('en-US')} a day`;
+/**
+ * Sentences for the day report. The first line is the morning rush, every open day: its share served is the day's
+ * score. Then one line per cause of lost guests, the biggest first, each with the move that fixes it and its size.
+ * `inputsFor` gives the other parts' answers for a changed business (one more person, more seats); by default the
+ * parts themselves, so the "what if" and the day are counted the same way.
+ */
+export function serviceNotes(d: CafeDay, s: ServiceDay, inputsFor?: (d: CafeDay) => ServiceInputs): string[] {
+  const cfg = serviceCfg(d.pack);
+  if (!cfg) return [];
+  const dayFor = (b: BusinessState): ServiceDay => {
+    const x = { ...d, b };
+    return serviceDayWith(x, cfg, inputsFor ? inputsFor(x) : serviceInputs(x, cfg));
+  };
+  const base = dayFor(d.b);
   const role = mainRole(d.b, d.pack);
   const roleName = (d.pack.staff.find((x) => x.id === role)?.name ?? role).toLowerCase();
+  const plusOne = dayFor(withOneMore(d.b, role));
+  const price = d.b.orders.price;
+  const money = (orders: number): string => `about $${r0(orders * price).toLocaleString('en-US')} a day`;
 
+  const first: string[] = [];
   if (s.rush.orders >= 1) {
     const walked = r0(s.rush.walked);
     const head = `Morning rush: served ${Math.round(s.rush.servedShare * 100)}% of ${r0(s.rush.orders)}`;
     if (walked > 0) {
-      const gain = r0(withOneMore(d, role) - s.served);
-      const fix = gain > 0 ? ` One more ${roleName} would keep about ${gain} (${money(gain)}).` : ' The bar is at its ceiling: a faster line, not more hands, would help.';
-      out.push({ size: s.lost.queue, text: `${head}: ${r0(s.rush.line)} in line at ${hourLabel(s.rush.lineHour)}, ${r0(s.rush.waitMin)}-minute wait, ${walked} walked on.${fix}` });
+      const keep = r0(base.rush.walked - plusOne.rush.walked);
+      const atMachine = s.rush.capPerHour * s.labor >= cfg.machineOrdersPerHour - 1e-9;
+      const fix = keep > 0 ? ` One more ${roleName} in the rush would keep about ${keep} of them.`
+        : atMachine ? ` The espresso machine is at its ceiling (${r0(cfg.machineOrdersPerHour)} orders an hour): more hands will not shorten this line.` : '';
+      first.push(`${head}: ${r0(s.rush.line)} in line at ${hourLabel(s.rush.lineHour)}, ${r0(s.rush.waitMin)}-minute wait, ${walked} walked on.${fix}`);
     } else {
       const wait = r0(s.rush.waitMin);
-      out.push({ size: 0.1, text: `${head}, ${wait > 0 ? `longest wait ${wait} min at ${hourLabel(s.rush.lineHour)}` : 'no line'}. The bar makes ${r0(s.rush.capPerHour)} orders an hour.` });
+      first.push(`${head}, ${wait > 0 ? `longest wait ${wait} min at ${hourLabel(s.rush.lineHour)}` : 'no line'}. The bar makes ${r0(s.rush.capPerHour)} orders an hour.`);
     }
   }
+
+  const causes: { size: number; text: string }[] = [];
   const labor = r0(s.lost.labor);
   if (labor > 0) {
-    const gain = r0(withOneMore(d, role) - s.served);
-    out.push({ size: s.lost.labor, text: `Out of hands: ${plural(labor, 'order')} not made today — the team makes ${r0(s.teamPerDay)} a day.${gain > 0 ? ` One more ${roleName}: +${gain} (${money(gain)}).` : ''}` });
+    const gain = r0(plusOne.served - base.served);
+    causes.push({ size: s.lost.labor, text: `Out of hands: ${plural(labor, 'order')} not made today — the team makes ${r0(s.teamPerDay)} a day.${gain > 0 ? ` One more ${roleName}: +${gain} orders (${money(gain)}).` : ''}` });
   }
   const left = r0(s.lost.seats);
   if (left > 0) {
     const room = s.seats.fit - s.seats.count;
     const more = Math.min(room, Math.max(2, Math.round(s.seats.count * 0.25)));
-    const gain = more > 0 ? r0(withSeats(d, s.seats.count + more) - s.served) : 0;
+    const gain = more > 0 ? r0(dayFor({ ...d.b, size: s.seats.count + more }).served - base.served) : 0;
     const fix = gain > 0 ? ` ${more} more seats would keep about ${gain}.` : room <= 0 ? ' The floor is full: these guests are the price of a small room.' : '';
-    out.push({ size: s.lost.seats, text: `No free seat: ${plural(left, 'guest')} left, ${r0(s.seats.tookAway)} took it to go.${fix}` });
+    causes.push({ size: s.lost.seats, text: `No free seat: ${plural(left, 'guest')} left, ${r0(s.seats.tookAway)} took it to go.${fix}` });
   }
   if (d.place && s.seats.fit < d.b.size) {
     const none = d.b.size - s.seats.fit;
-    out.push({ size: none, text: `Only ${plural(s.seats.fit, 'seat')} fit in ${r0(d.place.sqft)} sq ft: ${none} of your ${d.b.size} seats have no floor.` });
+    causes.push({ size: none, text: `Only ${plural(s.seats.fit, 'seat')} fit in ${r0(d.place.sqft)} sq ft: ${none} of your ${d.b.size} seats have no floor.` });
   }
-  return out.sort((a, z) => z.size - a.size).map((x) => x.text);
+  return [...first, ...causes.sort((a, z) => z.size - a.size).map((x) => x.text)];
 }
 
 /** The engine's own notes on lost guests, said the same way while the pack has no extra.service. */
@@ -302,17 +349,18 @@ export function serviceKpis(b: BusinessState, pack: Pack): NicheKpi[] {
 export const part: CafePart = {
   capacityDay(d) {
     const s = serviceDay(d);
-    if (!s) return null;
-    const lostAny = s.lost.queue + s.lost.seats + s.lost.labor + s.lost.hours >= 0.5;
-    return lostAny ? s.served : s.served + s.spare;
+    return s ? capacityOf(s) : null;
   },
 
   qualityDelta(d) {
     const cfg = serviceCfg(d.pack);
     const s = serviceDay(d);
     if (!cfg || !s) return 0;
-    if (s.seats.crowded) return engineWouldCrowd(d.b, d.pack, Math.floor(s.served)) ? 0 : -cfg.crowdQualityDrop;
-    return cfg.offsetEngineCrowd && engineWouldCrowd(d.b, d.pack, Math.floor(s.served)) ? 0.08 : 0;
+    const took = engineQualityTake(d, s, capacityOf(s));
+    const due = deservedTake(cfg, s);
+    // with the offset on, the day ends with exactly what this part says it deserves; off, the part never doubles a drop
+    if (cfg.offsetEngineRoomTests) return took.crowd + took.staff - due.crowd - due.staff;
+    return took.crowd > 0 || due.crowd === 0 ? 0 : -due.crowd;
   },
 
   notes(b, r, pack, place?: Place) {
