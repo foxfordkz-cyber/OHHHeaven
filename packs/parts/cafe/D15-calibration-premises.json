@@ -11040,6 +11040,266 @@
     "confidence": "verified",
     "note": "DOB service notice (opened): subsequent filings on an Alt-CO with existing elements to remain are charged on reported cost: below 7 floors $280 for the first $3,000 plus $10.30 per $1,000; example $20,000 -> $455.10; before, a flat $130.",
     "newInD15": true
+   },
+   {
+    "id": "restroom_out_of_order",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "\"Restroom out of order\"",
+    "text": "The only toilet is clogged again. With 20 or more seats, a cafe without a working customer toilet is in violation the moment an inspector walks in.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: restroom upkeep skipped; 20+ seats",
+    "realSignal": "Days per month with the sign on the door",
+    "effects": [
+     {
+      "field": "reputation",
+      "add": -0.02
+     },
+     {
+      "field": "fine",
+      "add": 300,
+      "appliesIf": "inspection while the only toilet is out of order",
+      "note": "by analogy with code 5E"
+     },
+     {
+      "field": "cash",
+      "add": -250,
+      "note": "plumber's call, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "restroom_access",
+      "optionId": "customers_only",
+      "label": "Customers only, checked hourly",
+      "cost": {
+       "monthly": 150
+      },
+      "result": "clogs rare"
+     }
+    ],
+    "realFrequency": "Small single-toilet shops",
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 values plus a $250 plumber call (estimate)."
+   },
+   {
+    "id": "restroom_line_of_passers_by",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Everybody's restroom",
+    "text": "The big chain down the block now asks for a purchase. Tourists and delivery riders ask at your counter instead.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: the chain down the block makes its toilet purchase-only",
+    "realSignal": "Starbucks code of conduct in force from January 27, 2025: a purchase is required to stay or use the restroom",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -150,
+      "unit": "$/month",
+      "appliesIf": "restroom open to all"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "restroom_access",
+      "optionId": "customers_only",
+      "label": "Code on the receipt",
+      "cost": {
+       "reputation": -0.01
+      },
+      "result": "upkeep back to normal"
+     }
+    ],
+    "realFrequency": "Busy corridors",
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 values; GBL §492 still requires access for eligible medical conditions (d00_premises_medical_restroom)."
+   },
+   {
+    "id": "restroom_occupied_for_an_hour",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "The restroom door stays locked",
+    "text": "Someone has been in the restroom for forty minutes. Guests are asking, and a barista has to knock.",
+    "tier": "exotic",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: restroom open to all, no time check",
+    "realSignal": "Minutes the restroom is unavailable during open hours",
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.98
+     },
+     {
+      "field": "quality",
+      "add": -0.01
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "restroom_access",
+      "optionId": "customers_only",
+      "label": "Key at the counter",
+      "cost": {
+       "staffMinutesPerDay": 10
+      },
+      "result": "no long stays"
+     }
+    ],
+    "realFrequency": "Some corridors",
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 values."
+   },
+   {
+    "id": "order_ahead_flood",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Phone orders bury the bar",
+    "text": "Twenty tickets print at 8:15. The people standing in front of you wait while cups for people who are not here yet line the counter.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: order-ahead open without throttling at the morning peak",
+    "realSignal": "Share of orders placed by phone at peak; minutes from order to handoff",
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.95
+     },
+     {
+      "field": "quality",
+      "add": -0.02
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "order_ahead",
+      "optionId": "throttled",
+      "label": "Cap app orders per 15 minutes",
+      "cost": {
+       "monthly": 140
+      },
+      "result": "bar keeps up"
+     }
+    ],
+    "realFrequency": "Shops with order-ahead",
+    "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 values; D06 lever order_ahead (throttled $140 a month)."
+   },
+   {
+    "id": "line_on_the_neighbors_stoop",
+    "sourceFragment": "D02",
+    "group": "room",
+    "name": "Your line is on the neighbors' stoop",
+    "text": "The weekend queue runs past three buildings. Residents call 311 about a blocked sidewalk and the landlord gets letters.",
+    "tier": "exotic",
+    "scale": "block",
+    "months": [
+     4,
+     5,
+     6,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: weekend line longer than the frontage",
+    "realSignal": "311 complaints of a blocked sidewalk at your address",
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.2
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "line_inside",
+      "label": "Rope the line along the wall inside",
+      "cost": {
+       "seats": -2
+      },
+      "result": "no complaints"
+     }
+    ],
+    "realFrequency": "Successful shops",
+    "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 value."
    }
   ],
   "effectFields": {
