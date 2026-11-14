@@ -169,14 +169,17 @@ function tradeDay(c: Calc, ctx: EngineCtx, day: number, month: number, eventTitl
   const reputation = clamp(b.reputation + REPUTATION_INERTIA * (rTarget - b.reputation), 0, 1);
 
   const unit = pack.sizing.unitName;
+  const hooks = hooksFor(b.niche);
+  // a niche that sets its own capacity and writes its own notes explains its own limits (who was busy, what was full)
+  const nicheExplainsCapacity = typeof hooks.capacityDay === 'function' && typeof hooks.notes === 'function';
   const notes: string[] = [];
   if (weather && Math.abs(weather.footTrafficMult - 1) >= 0.05) {
     const pct = Math.round((weather.footTrafficMult - 1) * 100);
     notes.push(`${weather.label}: foot traffic ${pct > 0 ? '+' : ''}${pct}%`);
   }
   for (const t of eventTitles) notes.push(`Event: ${t}`);
-  if (c.lost.size > 0) notes.push(`Line out the door: ${c.lost.size} customers walked away`);
-  if (c.lost.staff > 0) notes.push(`Short-staffed: ${c.lost.staff} customers left unserved`);
+  if (c.lost.size > 0 && !nicheExplainsCapacity) notes.push(`Line out the door: ${c.lost.size} customers walked away`);
+  if (c.lost.staff > 0 && !nicheExplainsCapacity) notes.push(`Short-staffed: ${c.lost.staff} customers left unserved`);
   if (c.lost.closure > 0) notes.push(`Closed by the city: ${c.lost.closure} customers turned away`);
   if (crowded && c.lost.size === 0) notes.push(`Packed: ${Math.round(util * 100)}% of ${unit}s in use, service slows down`);
   if (empty) notes.push(`Empty room: only ${Math.round(util * 100)}% of ${unit}s in use`);
@@ -186,7 +189,7 @@ function tradeDay(c: Calc, ctx: EngineCtx, day: number, month: number, eventTitl
     day, demandUnits: c.demand, servedUnits: c.served, lost: c.lost, revenue, variableCosts: cogs,
     sizeUtilization: Math.round(util * 1000) / 1000, weather: weather?.condition ?? 'clear', notes,
   };
-  const extraNotes = hooksFor(b.niche).notes?.(b, report, pack) ?? [];
+  const extraNotes = hooks.notes?.(b, report, pack) ?? [];
   if (extraNotes.length) report.notes = [...notes, ...extraNotes];
 
   const m = econ.mtd;

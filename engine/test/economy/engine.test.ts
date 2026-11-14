@@ -166,6 +166,12 @@ describe('niche hooks: who owns the week and the capacity', () => {
       expect(satDefault / sat.demandUnits).toBeCloseTo(1.15, 1);
       expect(sat.servedUnits).toBe(100);
       expect(sat.lost.staff).toBe(sat.demandUnits - 100);   // the hook limit is below the room: not a seat problem
+      expect(sat.notes.some((n) => n.startsWith('Short-staffed'))).toBe(true);
+      // a niche with its own capacity and its own notes explains the limit itself: the engine does not say it twice
+      NICHE_HOOKS.cafe = { capacityDay: () => 100, notes: (_b, r) => (r.lost.staff > 0 ? [`${r.lost.staff} guests left: every barista was busy`] : []) };
+      const told = tickDay(x, ctx).businesses[1].days.at(-1)!;
+      expect(told.notes.some((n) => n.startsWith('Short-staffed'))).toBe(false);
+      expect(told.notes).toContain(`${told.lost.staff} guests left: every barista was busy`);
       NICHE_HOOKS.cafe = { capacityDay: () => 10_000 };
       const roomy = tickDay(x, ctx).businesses[1].days.at(-1)!;
       expect(roomy.lost.size + roomy.lost.staff).toBe(0);
