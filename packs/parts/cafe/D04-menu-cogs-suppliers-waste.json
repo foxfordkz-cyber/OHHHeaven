@@ -1,0 +1,322 @@
+{
+  "id": "cafe",
+  "part": "D04",
+  "theme": "Menu, cost of goods, suppliers, waste",
+  "extra": {
+    "howNumbersWereChecked": "Session of November 14, 2026. Direct page fetches were blocked by the session's network policy (the proxy answered 403), so every number was read through web search. verified = the search was restricted to the primary source's own domain (fred.stlouisfed.org, bls.gov, tax.ny.gov, nyc.gov, dec.ny.gov, webstaurantstore.com and so on) and returned the number from that page. estimate = seen only in a secondary source, or my own arithmetic; the note gives the calculation. Recipes (grams of coffee, ounces of milk) are industry practice, not statistics: they are marked estimate and the note says where the practice is described. Effects of events and levers on demand, quality and reputation are design values for the lead to balance.",
+    "signals": [
+      {
+        "id": "ice_coffee_c",
+        "name": "ICE Coffee C futures (arabica), cents per lb, front month",
+        "drives": [
+          "roasted_coffee"
+        ],
+        "latest": {
+          "value": 2.8,
+          "unit": "USD per lb",
+          "asOf": "2026-11-06"
+        },
+        "history": [
+          {
+            "when": "1977",
+            "value": 3.39,
+            "what": "the record that stood for 47 years"
+          },
+          {
+            "when": "2024-12-10",
+            "value": 3.4835,
+            "what": "first new record since 1977"
+          },
+          {
+            "when": "2025-02",
+            "value": 4.2995,
+            "what": "record after the Brazil drought; broken again in October 2025"
+          },
+          {
+            "when": "2025-11 (early)",
+            "value": 3.9255,
+            "what": "StoneX daily report"
+          },
+          {
+            "when": "2026-01 to 2026-02",
+            "value": null,
+            "what": "futures fell 20% in three weeks"
+          },
+          {
+            "when": "2026-11-06",
+            "value": 2.8,
+            "what": "lowest since late September on a record Brazil crop forecast (71.9 million bags for 2026/27)"
+          }
+        ],
+        "passThrough": "A roaster buys green coffee months ahead, so the wholesale price list follows the exchange with a lag of one to two quarters and falls more slowly than it rises. A roaster's rule of thumb: $1 per lb on the wholesale price is about 5 cents per cup or double shot.",
+        "source": "https://tradingeconomics.com/commodity/coffee/news/599144",
+        "sourcesMore": [
+          "https://www.barchart.com/story/news/30692797/is-coffee-moving-to-even-higher-highs",
+          "https://www.bloomberg.com/news/articles/2025-10-23/coffee-prices-reach-record-as-trade-and-supply-concerns-mount",
+          "https://freshcup.com/we-asked-13-roasters-how-theyre-navigating-green-coffee-costs-heres-what-they-said/"
+        ],
+        "confidence": "estimate",
+        "note": "Read through search summaries of Trading Economics (Nov 6, 2026: about $2.80 per lb; Nov 2: above $2.90), Barchart ($4.2995 in February 2025; $3.4835 on December 10, 2024) and Bloomberg (October 2025: the February record was surpassed). I could not open the exchange's own page."
+      },
+      {
+        "id": "bls_coffee_retail",
+        "name": "BLS average price, 100% ground roast coffee, per lb, US city average (APU0000717311)",
+        "drives": [
+          "roasted_coffee"
+        ],
+        "latest": {
+          "value": 9.249,
+          "unit": "USD per lb",
+          "asOf": "2026-10"
+        },
+        "history": [
+          {
+            "when": "2025-09",
+            "value": 9.139
+          },
+          {
+            "when": "2026-02",
+            "value": 9.459
+          },
+          {
+            "when": "2026-04",
+            "value": 9.72,
+            "what": "2026 peak (secondary tracker)"
+          },
+          {
+            "when": "2026-08",
+            "value": 9.299
+          },
+          {
+            "when": "2026-09",
+            "value": 9.332
+          },
+          {
+            "when": "2026-10",
+            "value": 9.249
+          }
+        ],
+        "source": "https://fred.stlouisfed.org/series/APU0000717311",
+        "confidence": "verified",
+        "note": "FRED page updated November 10, 2026: September 2026 $9.332, October 2026 $9.249, September 2025 $9.139. Supermarket shelf price, not a cafe's wholesale price: it shows direction, not level. Retail stayed high in 2026 while futures fell by about a third."
+      },
+      {
+        "id": "usda_class_i",
+        "name": "USDA advanced base Class I (fluid milk) price, per cwt, announced around the 20th for the next month",
+        "drives": [
+          "milk"
+        ],
+        "latest": {
+          "value": 20.27,
+          "unit": "USD per cwt",
+          "asOf": "2026-11"
+        },
+        "history": [
+          {
+            "when": "2026-07",
+            "value": 21.33,
+            "what": "down $0.85 from June"
+          },
+          {
+            "when": "2026-10",
+            "value": 18.88
+          },
+          {
+            "when": "2026-11",
+            "value": 20.27,
+            "what": "up $1.39 in one month; $3.52 above November 2025"
+          }
+        ],
+        "passThrough": "One cwt is about 11.6 gallons, so $1.39 per cwt is about 12 cents a gallon at the farm-to-plant level. New Jersey's milk regulator publishes the same price with a monthly fuel adjuster ($1.49 per cwt for November 2026). Dairies re-price their list monthly from this announcement, so a cafe sees the change in the next invoice.",
+        "source": "https://www.agproud.com/articles/64305-november-class-i-base-price-up-to-2027-per-cwt",
+        "sourcesMore": [
+          "https://mymarketnews.ams.usda.gov/filerepo/sites/default/files/2998/2026-10-23/1360985/ams_2998_00354_01.pdf",
+          "https://nj.gov/agriculture/divisions/md/pdf/NOVEMBER-2026-CLASS-I-MILK-PRICES.pdf"
+        ],
+        "confidence": "estimate",
+        "note": "Read through search: USDA Dairy Market News for the week of October 19, 2026 cites the Announcement of Advanced Prices released October 21, 2026: base Class I for November 2026 is $20.27 per cwt, up $1.39 from October. 100 lb / 8.6 lb per gallon = 11.6 gallons. The Northeast order adds a location differential on top of the base."
+      },
+      {
+        "id": "bls_milk_retail",
+        "name": "BLS average price, whole milk, per gallon, US city average (APU0000709112)",
+        "drives": [
+          "milk"
+        ],
+        "latest": {
+          "value": 4.101,
+          "unit": "USD per gallon",
+          "asOf": "2026-10"
+        },
+        "history": [
+          {
+            "when": "2026-01",
+            "value": 4.1
+          },
+          {
+            "when": "2026-02",
+            "value": 4.026
+          },
+          {
+            "when": "2026-06",
+            "value": 4.317
+          },
+          {
+            "when": "2026-07",
+            "value": 4.313
+          },
+          {
+            "when": "2026-08",
+            "value": 4.229
+          },
+          {
+            "when": "2026-09",
+            "value": 4.106
+          },
+          {
+            "when": "2026-10",
+            "value": 4.101
+          }
+        ],
+        "source": "https://fred.stlouisfed.org/series/APU0000709112",
+        "confidence": "verified",
+        "note": "FRED page updated November 10, 2026. Range inside 2026: $4.026 to $4.317, a swing of 7%."
+      },
+      {
+        "id": "bls_eggs",
+        "name": "BLS average price, Grade A large eggs, per dozen, US city average (APU0000708111)",
+        "drives": [
+          "eggs",
+          "pastry"
+        ],
+        "latest": {
+          "value": 2.32,
+          "unit": "USD per dozen",
+          "asOf": "2026-10"
+        },
+        "history": [
+          {
+            "when": "2025-03",
+            "value": 6.227,
+            "what": "record, bird flu"
+          },
+          {
+            "when": "2026-01",
+            "value": 2.577
+          },
+          {
+            "when": "2026-06",
+            "value": 2.141
+          },
+          {
+            "when": "2026-10",
+            "value": 2.32
+          }
+        ],
+        "source": "https://fred.stlouisfed.org/series/APU0000708111",
+        "confidence": "verified",
+        "note": "FRED page updated November 10, 2026. From record to October 2026 the price fell 63%: an egg sandwich that cost 52 cents of egg in March 2025 costs 19 cents now (one egg = 1/12 dozen)."
+      },
+      {
+        "id": "kyoto_tencha_auction",
+        "name": "Kyoto spring tencha auction (the leaf matcha is ground from), yen per kg, machine-picked average",
+        "drives": [
+          "matcha"
+        ],
+        "latest": {
+          "value": 13972,
+          "unit": "JPY per kg",
+          "asOf": "2026-05-13"
+        },
+        "history": [
+          {
+            "when": "2024-05",
+            "value": 4862,
+            "what": "implied: the 2025 price was a 170% rise"
+          },
+          {
+            "when": "2025-05",
+            "value": 8235,
+            "what": "record at the time"
+          },
+          {
+            "when": "2026-05-13",
+            "value": 13972,
+            "what": "about 1.7 times the 2025 record"
+          }
+        ],
+        "passThrough": "US wholesalers re-priced in June 2025 and March 2026 and set purchase limits; cafe owners reported waits growing from one or two months to six.",
+        "source": "https://gjtea.org/japanese-tea-report-may-2026/",
+        "sourcesMore": [
+          "https://global.ippodo-tea.co.jp/blogs/news/pricelist202603",
+          "https://wholesale.sugimotousa.com/pages/notice-of-price-adjustment",
+          "https://supplychaindive.com/news/matcha-shortage-social-medias-latest-obsession/761258",
+          "https://abc7ny.com/post/how-matcha-prices-popular-powdered-tea-soar-due-global-demand/17827300/"
+        ],
+        "confidence": "estimate",
+        "note": "Read through search: Global Japanese Tea Association report for May 2026 (secondary; I did not find the market's own release). 8,235 / 2.7 = about 4,862 yen for 2024 is my arithmetic from 'a 170% increase'."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "url": "https://fred.stlouisfed.org/series/APU0000717311",
+      "title": "FRED / BLS: average price, ground roast coffee, per lb",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/series/APU0000709112",
+      "title": "FRED / BLS: average price, whole milk, per gallon",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/series/APU0000708111",
+      "title": "FRED / BLS: average price, Grade A large eggs, per dozen",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://tradingeconomics.com/commodity/coffee/news/599144",
+      "title": "Trading Economics: arabica futures near $2.80, November 6, 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.barchart.com/story/news/30692797/is-coffee-moving-to-even-higher-highs",
+      "title": "Barchart: arabica record $4.2995 in February 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bloomberg.com/news/articles/2025-10-23/coffee-prices-reach-record-as-trade-and-supply-concerns-mount",
+      "title": "Bloomberg: coffee tops its record, October 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.agproud.com/articles/64305-november-class-i-base-price-up-to-2027-per-cwt",
+      "title": "Progressive Dairy: November 2026 Class I base price $20.27 per cwt",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://mymarketnews.ams.usda.gov/filerepo/sites/default/files/2998/2026-10-23/1360985/ams_2998_00354_01.pdf",
+      "title": "USDA Dairy Market News, week of October 19, 2026",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nj.gov/agriculture/divisions/md/pdf/NOVEMBER-2026-CLASS-I-MILK-PRICES.pdf",
+      "title": "New Jersey Department of Agriculture: November 2026 Class I milk prices, fuel adjuster",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://gjtea.org/japanese-tea-report-may-2026/",
+      "title": "Global Japanese Tea Association: Japanese tea report, May 2026 (Kyoto tencha auction)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://freshcup.com/we-asked-13-roasters-how-theyre-navigating-green-coffee-costs-heres-what-they-said/",
+      "title": "Fresh Cup: 13 roasters on green coffee costs and wholesale price increases",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cafeimports.com/north-america/blog/?p=60459",
+      "title": "Cafe Imports: most newly imported coffee is exempt from US tariffs",
+      "checked": "2026-11-14"
+    }
+  ]
+}
