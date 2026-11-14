@@ -531,7 +531,8 @@
         {
           "id": "none",
           "label": "Wait until it breaks",
-          "monthlyCost": 0
+          "monthlyCost": 0,
+          "causes": "equipment_noise"
         }
       ]
     },
@@ -805,6 +806,26 @@
       "note": "FDNY summons schedule, violation category 1 \"Portable Fire Extinguishers and Fire Hoses\" (OATH code BF01): the figures 600, 300, 1,000 and 1,500, 750, 5,000 were quoted by the search tool; read as penalty, mitigated penalty and maximum for a first violation, then the same three for repeats. The column reading is mine, hence an estimate. FDNY guide: violations are issued for extinguishers without a proper tag."
     },
     {
+      "id": "equipment_noise",
+      "name": "Air conditioner or exhaust fan too loud for the neighbors",
+      "law": "NYC Administrative Code §24-227 (Noise Code, circulation devices); 15 RCNY §47-02",
+      "official": "noise_inspector",
+      "foundBy": [
+        "complaint"
+      ],
+      "fine": {
+        "base": 220,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 600
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf",
+      "confidence": "verified",
+      "note": "Seen in the DEP guide to the Noise Code: a single circulating device may not produce more than 42 decibels, measured three feet from the source at an open door or window of a nearby residence; several devices together, 45 decibels. NYC Business lists the fine at $220-$600; the penalty schedule shows $220 for a first offense, and a first offense can be waived when the business proves it fixed the condition. Whether a refrigeration compressor counts as a circulation device was not confirmed; exhaust systems do. Game rule: a unit that is never serviced gets loud (worn bearings, loose panels) and is found only when a neighbor complains."
+    },
+    {
       "id": "work_without_permit",
       "name": "Plumbing, gas or electrical work without a permit",
       "law": "NYC Administrative Code §28-213.1.2; 1 RCNY §102-04",
@@ -873,6 +894,17 @@
       "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf"
     },
     {
+      "id": "noise_inspector",
+      "name": "Noise inspector",
+      "agency": "NYC Department of Environmental Protection (DEP), noise enforcement",
+      "role": "inspector",
+      "checks": [
+        "equipment_noise"
+      ],
+      "realProcess": "After a 311 complaint an inspector measures the sound inside the neighbor's home, three feet from an open window, with your equipment running and then switched off. Over 42 decibels means a summons; a first offense can be waived if you prove you fixed it.",
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf"
+    },
+    {
       "id": "buildings_inspector",
       "name": "Buildings inspector",
       "agency": "NYC Department of Buildings (DOB)",
@@ -913,6 +945,15 @@
       "role": "inspector",
       "checks": [
         "extinguisher_not_serviced"
+      ]
+    },
+    {
+      "id": "report_equipment_noise",
+      "name": "Report a noisy air conditioner or exhaust fan (311)",
+      "text": "The Department of Environmental Protection measures the noise from inside your home or your building. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "equipment_noise"
       ]
     }
   ],
@@ -1140,6 +1181,30 @@
       "title": "The free espresso machine",
       "text": "A roaster may lend or discount the machine if you buy its coffee: typically 20-40 lb a week. The rent is built into the bean price. Fall below the minimum or leave early and the machine is no longer free. Read the exit terms.",
       "source": "https://mycoffeeexplorer.com/blog/lease-vs-buy-coffee-equipment-guide"
+    },
+    {
+      "id": "equipment_noise",
+      "title": "Noisy equipment",
+      "text": "An air conditioner or exhaust fan may not be louder than 42 decibels inside a neighbor's home, measured three feet from an open window. A complaint brings an inspector with a meter: $220-$600, waived the first time if you prove you fixed it.",
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf"
+    },
+    {
+      "id": "repair_sales_tax",
+      "title": "Sales tax on repairs",
+      "text": "In New York, installing, servicing and repairing equipment is a taxable service: add 8.875% to every repair bill in the city. A true capital improvement to the building is not taxed, but the contractor needs a signed certificate (Form ST-124).",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/publications/sales/contractors.htm"
+    },
+    {
+      "id": "dedicated_circuits",
+      "title": "One machine, one circuit",
+      "text": "A two-group espresso machine needs its own 20-amp, 208-240 volt circuit; a three-group needs 30 amps. Grinders go on separate circuits. Plugging an oven or a second machine into a shared line trips the breaker at the rush.",
+      "source": "https://1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/"
+    },
+    {
+      "id": "water_damage_claims",
+      "title": "Water is the most common insurance claim",
+      "text": "Water and freezing damage is the most common small-business claim: 22% of claims in 2020-2024, $34,600 on average. Burglary and theft is 20%. An insurer can refuse a leak caused by neglect or unlicensed work.",
+      "source": "https://www.businesswire.com/news/home/20251209433403/en/Water-And-Freezing-Damage-Burglary-Lead-The-Hartfords-Top-Five-Small-Business-Claims"
     }
   ],
   "roadmap": [
@@ -1791,6 +1856,31 @@
       "url": "https://www.seattlecoffeegear.com/collections/everpure",
       "title": "Seattle Coffee Gear: Everpure cartridges",
       "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.businesswire.com/news/home/20251209433403/en/Water-And-Freezing-Damage-Burglary-Lead-The-Hartfords-Top-Five-Small-Business-Claims",
+      "title": "The Hartford, December 2025: water and freezing damage 22% of small-business claims, $34,600 on average; burglary and theft 20%; fire $80,000",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf",
+      "title": "NYC DEP: guide to the Noise Code (a circulating device may not exceed 42 decibels inside a neighbor's home)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/publications/sales/contractors.htm",
+      "title": "NYS Tax Department: contractors and repair persons (repair and installation services are taxable)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
+      "title": "1st-line Equipment: commercial espresso machine installation requirements (dedicated 20-amp and 30-amp circuits)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.manualsdir.com/manuals/48075/bunn-b10.html?page=9",
+      "title": "Bunn brewer manual: delime at least every 3 months",
+      "checked": "2026-11-14"
     }
   ],
   "extra": {
@@ -2182,6 +2272,27 @@
         "source": "https://www.webstaurantstore.com/pratica-fit-101-1-bo-fit-express-electric-ventless-burnt-orange-stainless-steel-high-speed-oven-208-240v-1-phase/72AFITBOH.html",
         "confidence": "estimate",
         "note": "criticalShare is my assumption for hot food."
+      },
+      {
+        "id": "batch_brewer",
+        "what": "Batch brewer and airpots",
+        "newCost": 1780,
+        "lifespanMonths": 84,
+        "care": "Spray head daily; delime at least every 3 months, more often on hard water.",
+        "criticalShare": 0.2,
+        "backup": "americanos from the espresso machine",
+        "failures": [
+          {
+            "what": "Limed-up tank and spray head",
+            "cause": "no deliming",
+            "repairCost": 16,
+            "downtimeDays": 0,
+            "source": "https://www.manualsdir.com/manuals/48075/bunn-b10.html?page=9"
+          }
+        ],
+        "source": "https://www.manualsdir.com/manuals/48075/bunn-b10.html?page=9",
+        "confidence": "estimate",
+        "note": "Price and lifespan are the pack figures. criticalShare is my assumption for drip coffee."
       },
       {
         "id": "safety_kit",
@@ -4391,6 +4502,171 @@
         "source": "https://www.irs.gov/publications/p946",
         "confidence": "verified",
         "note": "For a cafe the limit never binds; the deduction cannot exceed the profit of the business."
+      },
+      {
+        "id": "neighbor_noise_complaint",
+        "name": "The neighbor upstairs calls 311 about the noise",
+        "text": "The rooftop unit has developed a rattle that carries into the apartment above. An inspector arrives with a sound meter.",
+        "scale": "point",
+        "months": [
+          6,
+          7,
+          8
+        ],
+        "cause": {
+          "kind": "decision",
+          "when": "hvac_service is none for 12 months in a building with apartments above or behind"
+        },
+        "realSignal": "311 noise complaints at the address; decibels inside the nearest residence",
+        "effects": [],
+        "durationMonths": 1,
+        "oneTimeCost": 265,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hvac_service:seasonal"
+          }
+        ],
+        "realFrequency": "No frequency found. The limit for a circulating device is 42 decibels inside the neighbor's home.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf",
+        "confidence": "estimate",
+        "note": "One service visit to fix the rattle: $135 on-site fee + one hour at $130. The fine ($220-$600) comes through this fragment's equipment_noise violation and can be waived the first time on proof of repair."
+      },
+      {
+        "id": "supply_line_burst",
+        "name": "A water line lets go overnight",
+        "text": "The hose behind the ice machine splits at 2 a.m. By opening time the floor is under water and it is raining in the cellar below.",
+        "scale": "point",
+        "months": [
+          12,
+          1,
+          2
+        ],
+        "cause": {
+          "kind": "decision",
+          "when": "shortcut unlicensed_hookup held for 6 months"
+        },
+        "realSignal": "Who installed the water connections; age of the supply hoses",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 1,
+        "downtimeDays": 3,
+        "oneTimeCost": 34600,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "unlicensed_hookup"
+          },
+          {
+            "kind": "roadmap",
+            "id": "plan_for_outages"
+          }
+        ],
+        "realFrequency": "The Hartford, 2020-2024: water and freezing damage is the most common small-business claim, about 22% of claims, $34,600 on average. Restaurant water claims peak from December to February (NEXT Insurance).",
+        "tier": "core",
+        "source": "https://www.businesswire.com/news/home/20251209433403/en/Water-And-Freezing-Damage-Burglary-Lead-The-Hartfords-Top-Five-Small-Business-Claims",
+        "confidence": "estimate",
+        "note": "The average claim is used as the damage. The business owner's policy in this pack pays a sudden, accidental leak less the deductible; an insurer may refuse when the cause is lack of maintenance or unlicensed work, and then the whole bill is the owner's. Three days closed is my estimate. Know where the shut-off valve is."
+      },
+      {
+        "id": "breaker_trips_at_rush",
+        "name": "The breaker trips at 8:15 every morning",
+        "text": "The new oven shares a circuit with the grinder and the milk fridge. At the morning peak the breaker gives up and half the bar goes dark.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cause": {
+          "kind": "decision",
+          "when": "a 1,500W or larger appliance (convection_oven, panini_grill, hot_water_dispenser, ventless_speed_oven) was added while shortcut unlicensed_hookup is on or without an electrician"
+        },
+        "realSignal": "Amps on each circuit against the breaker rating",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "roadmap",
+            "id": "check_water_and_power"
+          },
+          {
+            "kind": "shortcut",
+            "id": "unlicensed_hookup"
+          }
+        ],
+        "realFrequency": "Installers require a dedicated circuit for the espresso machine (20 amps for two groups, 30 for three) and separate circuits for grinders.",
+        "tier": "deep",
+        "source": "https://1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
+        "confidence": "estimate",
+        "note": "The effect lasts until a licensed electrician adds a circuit; a New York price for that was not found. A fridge on the tripped circuit warms up unnoticed: see fridge_warm_overnight. The 3% loss of capacity is my estimate."
+      },
+      {
+        "id": "brewer_limed_up",
+        "name": "The batch brewer slows to a trickle",
+        "text": "Lime has narrowed the spray head and the tank. A pot that took four minutes takes nine, and the line at the door notices.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cause": {
+          "kind": "decision",
+          "when": "espresso_service is none for 6 months, or 3 months on Croton-blend water"
+        },
+        "realSignal": "Months since the brewer was delimed; hardness of the water",
+        "effects": [
+          {
+            "field": "capacity",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 1,
+        "oneTimeCost": 16,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "espresso_service:in_house"
+          },
+          {
+            "kind": "lever",
+            "id": "water_treatment:by_meter"
+          }
+        ],
+        "realFrequency": "A Bunn manual asks for deliming at least every 3 months, more often where the water carries more minerals; a chain maintenance plan lists spray head cleaning as a daily task.",
+        "tier": "deep",
+        "source": "https://www.manualsdir.com/manuals/48075/bunn-b10.html?page=9",
+        "confidence": "estimate",
+        "note": "A liter of descaler is $15.99. Drip coffee is the fastest item at the morning peak, so a slow brewer costs capacity: 3% is my estimate."
       }
     ],
     "mechanics": [
@@ -4990,6 +5266,31 @@
         "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02965"
       },
       {
+        "text": "Every repair bill in the city carries 8.875% sales tax.",
+        "why": "Installing, servicing and repairing equipment is a taxable service in New York; only a true capital improvement with Form ST-124 is exempt.",
+        "source": "https://www.tax.ny.gov/pubs_and_bulls/publications/sales/contractors.htm"
+      },
+      {
+        "text": "Your air conditioner can be fined for what it sounds like in somebody else's bedroom.",
+        "why": "The Noise Code limit is 42 decibels measured inside the neighbor's home; the fine is $220-$600.",
+        "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf"
+      },
+      {
+        "text": "The most likely insurance claim is not fire or theft but water.",
+        "why": "Water and freezing damage is 22% of small-business claims and averages $34,600; fire is 10% and averages $80,000.",
+        "source": "https://www.businesswire.com/news/home/20251209433403/en/Water-And-Freezing-Damage-Burglary-Lead-The-Hartfords-Top-Five-Small-Business-Claims"
+      },
+      {
+        "text": "Each big machine needs its own circuit, and the panel may not have room.",
+        "why": "A two-group espresso machine takes a dedicated 20-amp line, a three-group 30 amps; grinders are separate.",
+        "source": "https://1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/"
+      },
+      {
+        "text": "The drip brewer scales up too.",
+        "why": "Its maker asks for deliming at least every 3 months; nobody remembers until it trickles.",
+        "source": "https://www.manualsdir.com/manuals/48075/bunn-b10.html?page=9"
+      },
+      {
         "text": "Water main breaks are a winter event, and 2025 was the worst year in a decade.",
         "why": "552 breaks in fiscal 2025, the most since 2015.",
         "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2025/dep.pdf"
@@ -5029,6 +5330,8 @@
       "FDNY rules for nitrogen and small carbon dioxide cylinders in a cafe; FDNY approval status of specific ventless ovens.",
       "Service life of grinders, batch brewers, registers and blenders: IRS depreciation periods are used as a fallback.",
       "The size of 2025-2026 tariffs on imported espresso machines and parts.",
+      "The New York price of adding a dedicated electrical circuit or upgrading a panel.",
+      "The deductible and the exact water-damage terms of a typical cafe policy.",
       "First-person New York City owner accounts of equipment failures (Reddit is closed to the search tool)."
     ]
   }
