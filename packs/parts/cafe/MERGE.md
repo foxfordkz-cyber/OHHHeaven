@@ -64,7 +64,8 @@
 <!-- D11:auto:extraSummary -->
 Сверх разделов: `extra.eventCatalog` — 698 событий с числами (в main 0), из них 533 откалиброваны в D15–D19 (применено калибровок: 767, файлы: D15-calibration-premises.sharp.json, D15-calibration-premises.json, D16-calibration-equipment-food.json, D17-calibration-people-money.json); `extra.mechanics` — 145 предложенных механик; `extra.mechanicsRanked` — 23 механик по важности; `extra.effectFields` — словарь 108 полей эффектов. Справочник `D11-reference.json`: 640 неочевидных фактов, 177 историй закрытий, 152 событий без чисел, полные записи всех событий и механик, 110 записей других форматов.
 
-Наборы (с новыми обязательными предметами): lean — <!-- D11:auto:extraSummary -->36 496 (main <!-- D11:auto:extraSummary -->33 882); standard — <!-- D11:auto:extraSummary -->43 780 (main <!-- D11:auto:extraSummary -->41 166); premium — <!-- D11:auto:extraSummary -->73 831 (main <!-- D11:auto:extraSummary -->70 217); стартовый капитал <!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 005 КБ, в gzip 585 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 672.
+Наборы (с новыми обязательными предметами): lean — <!-- D11:auto:extraSummary -->36 496 (main <!-- D11:auto:extraSummary -->33 882); standard — <!-- D11:auto:extraSummary -->43 780 (main <!-- D11:auto:extraSummary -->41 166); premium — <!-- D11:auto:extraSummary -->73 831 (main <!-- D11:auto:extraSummary -->70 217); стартовый капитал <!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 006 КБ, в gzip 585 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 672.
+<!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 005 КБ, в gzip 585 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 672.
 <!-- /D11:auto:extraSummary -->24 000. Цена рычагов по умолчанию — $732 в месяц (раздел 5.2). Вес пакета: 2 005 КБ, в gzip 585 КБ (main — 94 КБ). Источников в пакете 1 038, всего 1 672.
 <!-- /D11:auto:extraSummary -->
 
@@ -163,6 +164,8 @@
 | `setup.sba_guaranty_fee` | D01 $2 550 против D09 $1 700 на $100 000 | **D09** | SBA, уведомление 5000-872051, 2026 ф. г.: займ до $150 000 — 2% от гарантированной части (85%). $2 550 — ставка 3% для займов от $150 001. |
 | `setup.landmarks_storefront_permit` | D01 $320 против D02 $0 | **D01 $320** | LPC: $95 за первые $25 000 работ и $5 за каждую следующую $1 000. Разрешение на мелкие работы бесплатно, отсюда $0 у D02. Для ремонта на $70 000 выходит $320. |
 | `events.minimum_wage_march_2027` | D09: 1 марта против D10: 1 января | **D09/D12** | Ставка 2027 года на 1 января не выросла: сработало условие закона. Предложено $17,60 с 1 марта — при согласии Законодательного собрания. |
+| `setup.con_ed_security_deposit` | D01 $1 600 против D09 $1 800 | **D01 $1 600**, правило дописано в `note` | Брошюра Con Edison о правах небытовых клиентов: депозит не больше двух средних месячных счетов (или двух в пиковый сезон) и возвращается при закрытии счёта без долга. При коммунальных $1 100 в месяц потолок около $2 200 — подходят обе оценки. |
+| `extra.conditionalMonthlyCosts.delivery_app_commission` | D13: 23% | **23% — сумма потолков NYC** | DCWP: доставка до 15%, прочие услуги до 5%, приём оплаты до 3%; потолки бессрочные. В апреле 2026 года DCWP взыскал с HungryPanda более $875 000 за нарушение потолков. Платный «расширенный» тариф сверх потолка источники описывают по-разному, подтвердить не удалось. |
 | `levers.scheduling` | D05: по умолчанию график на две недели за $400 | **по умолчанию — на неделю, $0** | Закон Fair Workweek касается только сетей от 30 точек по стране (FAQ DCWP). Одиночное кафе под него не подпадает. |
 
 ### 5.2. Цена рычагов по умолчанию
@@ -196,7 +199,7 @@
 | `setup.dob_alteration_filing_fee` | cost | D01 915; D14 (dob_alteration_permit) 970 | **915** |
 | `setup.dob_alteration_filing_fee` | waitDays | D01 21; D14 (dob_alteration_permit) 20 | **21** |
 | `setup.landmarks_storefront_permit` | cost | D01 (lpc_storefront_permit) 320; D02 0 | **320** |
-| `setup.con_ed_security_deposit` | cost | D01 1600; D09 (utility_deposit) 1800 | **1600** |
+| `setup.con_ed_security_deposit` | cost | D01 1600; D09 (utility_deposit) 1800 | **1600** (D11) |
 | `setup.electrical_service_upgrade` | cost | D01 9000; D02 8000 | **9000** |
 | `setup.mfv_unit_permit` | cost | D01 (mobile_food_unit_permit) 75 ✓; D13 200 ✓ | **вынесено в extra** |
 | `setup.mfv_unit_permit` | waitDays | D01 (mobile_food_unit_permit) 180 ✓; D13 365 ✓ | **вынесено в extra** |
