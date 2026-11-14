@@ -191,7 +191,13 @@ export const alias = {
     test_backflow_device: 'backflow_and_extinguishers',
     tag_fire_extinguishers: 'backflow_and_extinguishers',
   },
-  suppliers: {},
+  suppliers: {
+    plumber_backflow: 'master_plumber',
+    backflow_tester: 'master_plumber',
+    fire_extinguisher_service: 'fire_safety_service',
+    hvac_contractor: 'refrigeration_hvac_service',
+    sign_hanger: 'sign_hanger_awning',
+  },
   staff: {},
   taxes: {},
 };
@@ -203,6 +209,7 @@ export const prefer = {
   setup: { ac_replacement: 'D03', dob_alteration_filing_fee: 'D01', takeover_due_diligence: 'D14', sba_guaranty_fee: 'D09', con_ed_security_deposit: 'D01', convection_oven: 'D03', snow_kit: 'D07' },
   events: { january_slump: 'D06', chain_opens_nearby: 'D06', street_dig_long: 'D07', sidewalk_shed: 'D07', minimum_wage_march_2027: 'D09' },
   monthlyCosts: { turnover_replacement: 'D05', backflow_test: 'D03' },
+  suppliers: { master_plumber: 'D02', fire_safety_service: 'D03', refrigeration_hvac_service: 'D03', sign_hanger_awning: 'D02' },
   shortcuts: {},
 };
 
@@ -219,7 +226,7 @@ export const toFormats = {
   staff: [],
   events: ['vending_permit_window', 'liquor_backlog', 'tapioca_tariff'],
   roadmap: [],
-  suppliers: [],
+  suppliers: ['commissaries', 'shared_kitchens', 'boba_ingredients', 'wine_beer_wholesalers', 'fire_suppression_contractors', 'cart_builders_commissaries', 'markets_and_concessions', 'franchisors'],
   ruleCards: [],
 };
 
@@ -325,3 +332,25 @@ export const leverOptions = {
   entrance_floor_safety: { cost: { mats_and_signs: 43 }, why: 'D07 had $80 without a price list; D14 found about $5 a mat a week (2 mats x 5 x 52 / 12 = $43, chainstoreage.com vendor estimate).' },
 };
 
+
+// Синонимы полей эффектов событий: одно явление — одно поле. valueToAdd: { value: N } -> { add: sign * N }.
+export const effectFieldSynonyms = {
+  cashOneTime: { field: 'cash' },
+  oneOffCost: { field: 'cash', valueToAdd: true, sign: -1 },
+  daysClosed: { field: 'closureDays' },
+  seatTurns: { field: 'seatTurnover' },
+  fineBase: { field: 'fines' },
+};
+
+// Что значит поле эффекта (для ведущего). engine в extra.effectFields: EventEffect target — движок уже умеет; lever effect only — есть только у рычагов; new — нужно добавить.
+export const effectFieldMeaning = {
+  demand: 'multiplier on the shop demand', footTraffic: 'multiplier on people walking the block', cogs: 'multiplier on cost of goods',
+  staffAvailability: 'multiplier on staff hours available', wages: 'multiplier on hourly wages', utilities: 'multiplier on the utilities line',
+  rent: 'multiplier or added dollars on rent', deliveryShare: 'multiplier on the delivery share of orders', inspections: 'multiplier on inspection pressure',
+  quality: 'added to quality (0-1)', reputation: 'added to reputation (0-1)', capacity: 'multiplier or added orders on capacity',
+  cash: 'one-time dollars in (+) or out (-) this month', cashOut: 'a payment computed by formula on its due date (tax, payroll, audit)', cashIn: 'one-time money in (refund, claim, grant)',
+  openingDelayDays: 'days added before the first sale (rent keeps running)', closureDays: 'days the shop is closed this month', violation: 'opens the named violation (id)',
+  violationAccrual: 'a violation whose fine grows per day or per worker until fixed', ownerHours: 'hours the owner must work this month', setupCost: 'multiplier or dollars on opening costs',
+  buildoutCost: 'multiplier on the build-out cost', permitWaitDays: 'days added to a permit wait', seats: 'multiplier or added seats', salePrice: 'multiplier on the price a buyer pays for the shop',
+  fines: 'multiplier on fines', insurance: 'multiplier on the insurance line', ticket: 'multiplier on the average ticket', icedShare: 'multiplier on the share of iced drinks',
+};

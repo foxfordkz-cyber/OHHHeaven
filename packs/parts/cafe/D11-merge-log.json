@@ -119,10 +119,10 @@
   "suppliers": {
    "base": 12,
    "candidates": 79,
-   "unique": 73,
+   "unique": 68,
    "fixesOfBase": 5,
-   "newRecords": 61,
-   "multiSource": 1
+   "newRecords": 56,
+   "multiSource": 5
   }
  },
  "contradictions": [
@@ -3958,6 +3958,36 @@
    "from": "takeover_landlord_consent",
    "to": "takeover_lease_assignment",
    "fragment": "D14"
+  },
+  {
+   "section": "suppliers",
+   "from": "hvac_contractor",
+   "to": "refrigeration_hvac_service",
+   "fragment": "D02"
+  },
+  {
+   "section": "suppliers",
+   "from": "plumber_backflow",
+   "to": "master_plumber",
+   "fragment": "D03"
+  },
+  {
+   "section": "suppliers",
+   "from": "backflow_tester",
+   "to": "master_plumber",
+   "fragment": "D08"
+  },
+  {
+   "section": "suppliers",
+   "from": "fire_extinguisher_service",
+   "to": "fire_safety_service",
+   "fragment": "D08"
+  },
+  {
+   "section": "suppliers",
+   "from": "sign_hanger",
+   "to": "sign_hanger_awning",
+   "fragment": "D08"
   }
  ],
  "moved": [
@@ -4798,6 +4828,54 @@
   {
    "section": "events",
    "id": "tapioca_tariff",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "suppliers",
+   "id": "franchisors",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "suppliers",
+   "id": "cart_builders_commissaries",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "suppliers",
+   "id": "markets_and_concessions",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "suppliers",
+   "id": "commissaries",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "suppliers",
+   "id": "shared_kitchens",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "suppliers",
+   "id": "boba_ingredients",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "suppliers",
+   "id": "wine_beer_wholesalers",
+   "to": "extra.formatRecords",
+   "why": "another format or entry mode"
+  },
+  {
+   "section": "suppliers",
+   "id": "fire_suppression_contractors",
    "to": "extra.formatRecords",
    "why": "another format or entry mode"
   }
@@ -11881,41 +11959,40 @@
     ],
     "chosen": "D01"
    },
-   "franchisors": {
+   "refrigeration_hvac_service": {
     "from": [
-     "D01"
+     "D02",
+     "D03"
     ],
-    "chosen": "D01"
-   },
-   "cart_builders_commissaries": {
-    "from": [
-     "D01"
-    ],
-    "chosen": "D01"
-   },
-   "markets_and_concessions": {
-    "from": [
-     "D01"
-    ],
-    "chosen": "D01"
-   },
-   "hvac_contractor": {
-    "from": [
-     "D02"
-    ],
-    "chosen": "D02"
+    "chosen": "D03",
+    "mergedIds": [
+     "hvac_contractor",
+     "refrigeration_hvac_service"
+    ]
    },
    "sign_hanger_awning": {
     "from": [
-     "D02"
+     "D02",
+     "D08"
     ],
-    "chosen": "D02"
+    "chosen": "D02",
+    "mergedIds": [
+     "sign_hanger_awning",
+     "sign_hanger"
+    ]
    },
    "master_plumber": {
     "from": [
-     "D02"
+     "D02",
+     "D03",
+     "D08"
     ],
-    "chosen": "D02"
+    "chosen": "D02",
+    "mergedIds": [
+     "master_plumber",
+     "plumber_backflow",
+     "backflow_tester"
+    ]
    },
    "accessibility_help": {
     "from": [
@@ -11936,23 +12013,16 @@
     ],
     "chosen": "D03"
    },
-   "refrigeration_hvac_service": {
-    "from": [
-     "D03"
-    ],
-    "chosen": "D03"
-   },
-   "plumber_backflow": {
-    "from": [
-     "D03"
-    ],
-    "chosen": "D03"
-   },
    "fire_safety_service": {
     "from": [
-     "D03"
+     "D03",
+     "D08"
     ],
-    "chosen": "D03"
+    "chosen": "D03",
+    "mergedIds": [
+     "fire_safety_service",
+     "fire_extinguisher_service"
+    ]
    },
    "ice_machine_rental": {
     "from": [
@@ -12116,18 +12186,6 @@
     ],
     "chosen": "D06"
    },
-   "backflow_tester": {
-    "from": [
-     "D08"
-    ],
-    "chosen": "D08"
-   },
-   "fire_extinguisher_service": {
-    "from": [
-     "D08"
-    ],
-    "chosen": "D08"
-   },
    "business_music": {
     "from": [
      "D08"
@@ -12141,12 +12199,6 @@
     "chosen": "D08"
    },
    "food_safety_consultant": {
-    "from": [
-     "D08"
-    ],
-    "chosen": "D08"
-   },
-   "sign_hanger": {
     "from": [
      "D08"
     ],
@@ -12193,36 +12245,6 @@
      "D09"
     ],
     "chosen": "D09"
-   },
-   "commissaries": {
-    "from": [
-     "D13"
-    ],
-    "chosen": "D13"
-   },
-   "shared_kitchens": {
-    "from": [
-     "D13"
-    ],
-    "chosen": "D13"
-   },
-   "boba_ingredients": {
-    "from": [
-     "D13"
-    ],
-    "chosen": "D13"
-   },
-   "wine_beer_wholesalers": {
-    "from": [
-     "D13"
-    ],
-    "chosen": "D13"
-   },
-   "fire_suppression_contractors": {
-    "from": [
-     "D13"
-    ],
-    "chosen": "D13"
    }
   }
  },
@@ -12239,7 +12261,7 @@
   "events": 55,
   "ruleCards": 352,
   "roadmap": 76,
-  "suppliers": 73,
+  "suppliers": 60,
   "eventCatalog": 695,
   "mechanics": 138,
   "formatRecords": {
@@ -12252,7 +12274,8 @@
    "violations": 14,
    "officials": 2,
    "reports": 3,
-   "events": 3
+   "events": 3,
+   "suppliers": 8
   },
   "conditionalMonthlyCosts": 22,
   "preOpeningChoices": 16,

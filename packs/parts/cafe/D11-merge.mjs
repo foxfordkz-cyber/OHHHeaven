@@ -319,6 +319,7 @@ for (const e of catalog) {
     const syn = FIELD_SYN[ef.field];
     let out = ef;
     if (syn) { out = { ...ef, field: syn.field }; if (syn.valueToAdd && typeof ef.value === 'number') { out.add = syn.sign * ef.value; delete out.value; } }
+    if (typeof out.amount === 'number' && out.add === undefined && out.mult === undefined) { out = { ...out, add: out.amount }; delete out.amount; }
     if (out.field === 'violation' && out.id) out.id = violationAlias(out.id);
     (fieldStat[out.field] ||= { count: 0, ops: new Set() }).count++;
     for (const op of ['mult', 'add', 'value', 'formula', 'id']) if (out[op] !== undefined) fieldStat[out.field].ops.add(op);
