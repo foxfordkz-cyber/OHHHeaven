@@ -81,6 +81,8 @@ function clean(node: unknown, loose: boolean): unknown {
   for (const [k, v] of Object.entries(node as Json)) {
     if (k === '$schema') continue;
     if (loose && LOOSE_KEYWORDS.includes(k)) continue;
+    // z.number().int() adds ±2^53 bounds: noise for a model, and not a real limit of any game field.
+    if ((k === 'minimum' || k === 'maximum') && typeof v === 'number' && Math.abs(v) >= Number.MAX_SAFE_INTEGER) continue;
     if (k === 'const') {
       out.enum = [v];
       continue;
@@ -88,6 +90,18 @@ function clean(node: unknown, loose: boolean): unknown {
     out[k] = k === 'properties' || k === '$defs' || k === 'definitions'
       ? Object.fromEntries(Object.entries(v as Json).map(([name, def]) => [name, clean(def, loose)]))
       : clean(v, loose);
+  }
+  // { type: ['string', 'null'] } → anyOf of two plain types: the same form zod uses for nullable arrays and objects,
+  // so a provider only has to understand one way of saying "or null".
+  if (Array.isArray(out.type) && out.type.length > 1) {
+    const { type, ...rest } = out;
+    const types = type as string[];
+    const nonNull = types.filter(t => t !== 'null');
+    if (nonNull.length === 1 && types.includes('null')) {
+      const { enum: en, ...restNoEnum } = rest;
+      const withEnum = Array.isArray(en) ? { enum: en.filter(x => x !== null) } : {};
+      return { anyOf: [{ type: nonNull[0], ...restNoEnum, ...withEnum }, { type: 'null' }] };
+    }
   }
   return out;
 }

@@ -72,7 +72,7 @@ function cardsOf(pack: Pack, common: CommonPack): Card[] {
   for (const v of violations) out.push({ id: `law:${v.id}`, title: v.name, text: `${v.name}. Law: ${v.law}. Found by ${v.foundBy.join(', ')}. Fine: ${fineText(v)}.${v.closureDays ? ` Closure ${v.closureDays} days.` : ''}${v.criminal ? ` ${v.criminal}` : ''}`, url: url(v.source) });
   for (const s of [...pack.shortcuts, ...common.shortcuts]) out.push({ id: `shortcut:${s.id}`, title: s.name, text: `${s.name}. ${s.what} Violation: ${violations.find(v => v.id === s.violation)?.name ?? s.violation}.`, url: '' });
   for (const r of [...pack.roadmap, ...common.roadmap]) out.push({ id: `step:${r.id}`, title: r.title, text: `${r.title}. ${r.text}${r.agency ? ` Agency: ${r.agency}.` : ''}${r.fee ? ` Fee ${money(r.fee)}.` : ''}${r.waitDays ? ` About ${r.waitDays} days.` : ''}`, url: url(r.link) });
-  for (const s of pack.suppliers) out.push({ id: `supplier:${s.id}`, title: s.category, text: `${s.category}: ${s.what}. Where to find: ${s.whereToFind}.${s.examples ? ` Examples: ${s.examples}.` : ''}`, url: url(s.link) });
+  for (const s of pack.suppliers) out.push({ id: `supplier:${s.id}`, title: s.category, text: `${s.category}: ${stop(s.what)} Where to find: ${stop(s.whereToFind)}${s.examples ? ` Examples: ${stop(s.examples)}` : ''}`, url: url(s.link) });
   for (const r of roles(pack)) out.push({ id: `staff:${r.id}`, title: r.name, text: `${r.name}: ${money(r.hourlyWage)} an hour, ${r.hoursPerMonth} hours a month${r.tipped ? `, tipped, cash wage ${money(r.cashWage ?? r.hourlyWage)}` : ''}${r.licenseRequired ? `, needs ${r.licenseRequired}` : ''}.`, url: url(r.source) });
   for (const t of [...pack.taxes, ...common.taxes]) out.push({ id: `tax:${t.id}`, title: t.name, text: `${t.name}: ${(t.rate * 100).toFixed(3).replace(/\.?0+$/, '')}% of ${t.base.replace('_', ' ')}, paid ${t.due}${t.appliesIf ? ` (${t.appliesIf})` : ''}.`, url: url(t.source) });
   for (const s of pack.setup.filter(x => x.kind === 'permit' || x.kind === 'license')) out.push({ id: `setup:${s.id}`, title: s.name, text: `${s.name}${s.agency ? ` from ${s.agency}` : ''}: ${money(s.cost)}${s.waitDays ? `, about ${s.waitDays} days` : ''}.`, url: url(s.link ?? s.source) });
@@ -153,6 +153,12 @@ function shortcutAnswer(input: AdvisorInput, cards: Card[]): Calc {
   return { text, used: [`shortcut:${sc.id}`, `law:${v.id}`], facts };
 }
 
+/** Ends a pack sentence with one full stop: pack texts sometimes carry their own ("…across the city."). */
+function stop(t: string): string {
+  const s = t.trim();
+  return /[.!?]["')\]]?$/.test(s) ? s : `${s}.`;
+}
+
 function supplierAnswer(input: AdvisorInput, cards: Card[]): Calc {
   const { question, analytics: a, pack } = input;
   const q = expand(tokens(question));
@@ -160,7 +166,7 @@ function supplierAnswer(input: AdvisorInput, cards: Card[]): Calc {
   const top = ranked.filter((s, i) => i === 0 || overlap(q, `${s.category} ${s.what}`) > 0).slice(0, 2);
   if (top.length === 0) return generalAnswer(input, cards);
   const industry = bench(a, 'cogsPct') ?? pack.benchmarks.cogsPct;
-  const lines = top.map(s => `${s.category}: ${s.whereToFind}.`).join(' ');
+  const lines = top.map(s => `${s.category}: ${stop(s.whereToFind)}`).join(' ');
   return { text: `${lines} Ingredients and supplies are ${pct(a.cogsPct)} of your revenue against ${pct(industry)} for the industry, so ask at least three suppliers for prices.`, used: top.map(s => `supplier:${s.id}`), facts: [a.cogsPct, industry] };
 }
 

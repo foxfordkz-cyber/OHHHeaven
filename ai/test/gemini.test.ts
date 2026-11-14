@@ -116,4 +116,14 @@ describe('jsonSchemaOf', () => {
     expect(loose.properties.tags).not.toHaveProperty('maxItems');
     expect(loose.required).toEqual(['kind', 'name', 'tags', 'note']);
   });
+
+  it('says "or null" one way and drops the safe-integer bounds of int()', () => {
+    const s = z.object({ block: z.string().nullable(), days: z.number().int(), share: z.number().min(0).max(1), list: z.array(z.string()).nullable() });
+    const j = jsonSchemaOf(s) as Record<string, any>;
+    expect(j.properties.block).toEqual({ anyOf: [{ type: 'string' }, { type: 'null' }] });
+    expect(j.properties.days).toEqual({ type: 'integer' });
+    expect(j.properties.share).toEqual({ type: 'number', minimum: 0, maximum: 1 });
+    expect(j.properties.list.anyOf[1]).toEqual({ type: 'null' });
+    expect(j.additionalProperties).toBe(false);
+  });
 });
