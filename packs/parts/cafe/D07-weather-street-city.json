@@ -2135,6 +2135,1118 @@
         "confidence": "estimate",
         "evidence": "official_excerpt",
         "note": "Winter use of 20% of the seats and +3% utilities for electric heaters are my estimates. Propane heaters are not allowed: the Fire Department's pandemic exception ended in 2021; electric heaters are allowed on sidewalks and roadways. The alternative is the seasonal license: take the platform down (removal and storage were reported at several thousand dollars a year under the old rule; no figure was confirmed here)."
+      },
+      {
+        "id": "january_slump",
+        "name": "January",
+        "text": "The holidays are over, the credit card bills are in, half your regulars gave up sugar and the other half are working from home because it is 28 degrees. This is the slowest month of the coffee year.",
+        "scale": "country",
+        "months": [
+          1
+        ],
+        "realSignal": "Calendar; card-spending panels for coffee chains (Bloomberg Second Measure); office-visit indexes in the first two weeks of January",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.92
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          },
+          {
+            "kind": "builtin",
+            "id": "price"
+          }
+        ],
+        "realFrequency": "Every year.",
+        "tier": "core",
+        "source": "https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Card-panel analysis of Starbucks: January is its lowest-sales month of the year; in 2016 its December sales ran 58% above January's and 14% above November's. A neighborhood shop does not have Starbucks' holiday gift-card peak, so I take a much smaller swing: -8% against an average month. Plan cash for it in December: January also brings the minimum-wage step and annual renewals."
+      },
+      {
+        "id": "august_office_slump",
+        "name": "August: the offices empty out",
+        "text": "Half of every team is on vacation and the other half has Summer Fridays. The lunch line at the towers is short, and on Friday afternoon you could close at two.",
+        "scale": "city",
+        "months": [
+          8
+        ],
+        "realSignal": "Placer.ai monthly office index and Kastle Back to Work Barometer for the New York metro; MTA weekday subway ridership (data.ny.gov)",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.84,
+            "onlyIf": "place depends on office workers"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          }
+        ],
+        "realFrequency": "Every year. Nationwide office visits were 34.3% below 2019 in August 2025 against 21.8% below in July.",
+        "tier": "core",
+        "source": "https://www.placer.ai/anchor/articles/august-2025-placer-ai-office-index-an-end-of-summer-slump",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "(1 - 0.343) / (1 - 0.218) = 0.84 of July. National index; New York recovers better than most cities (June 2025: 5.3% below 2019) but follows the same season. Applies to places whose footfall is mostly office workers; a residential or tourist block uses the other August events."
+      },
+      {
+        "id": "summer_weekend_exodus",
+        "name": "Summer weekends: the neighborhood leaves town",
+        "text": "From Memorial Day to Labor Day your Saturday regulars are at the beach, upstate or at their in-laws'. The brunch line that carried your spring is a third shorter.",
+        "scale": "city",
+        "months": [
+          7,
+          8
+        ],
+        "realSignal": "Calendar (Memorial Day to Labor Day); weekend subway entries at the nearest stations; school recess dates",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.95,
+            "onlyIf": "place is residential"
+          }
+        ],
+        "daily": {
+          "days": 8,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.82,
+              "onlyIf": "place is residential, weekend day"
+            }
+          ]
+        },
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Every summer. NYC Hospitality Alliance survey: 72% of restaurants reported lower sales in June-August 2024 than a year before; of those, 43% were down 1-10%, 29% down 11-20% and 24% down 21-30%.",
+        "tier": "core",
+        "source": "https://thenycalliance.org/news-item/summer-fall-2024-survey-results",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "The survey compares one summer with the previous one, not summer with spring, so it shows how common a weak summer is, not the size of the seasonal dip. No published monthly index for independent New York cafes was found. -18% on weekend days in July-August for a residential block is my estimate; month value 8 days x 18% / 30 = 5%."
+      },
+      {
+        "id": "school_year_starts",
+        "name": "School is back",
+        "text": "September 10: nine hundred thousand children go back to school. The 8 AM drop-off crowd returns to your door, offices fill up again, and the city remembers its routine.",
+        "scale": "city",
+        "months": [
+          9
+        ],
+        "realSignal": "NYC Public Schools calendar: first day Thursday, September 10, 2026; office-visit indexes after Labor Day",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.05
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          }
+        ],
+        "realFrequency": "Every year.",
+        "tier": "core",
+        "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+        "moreSources": [
+          "https://www.globest.com/amp/2025/10/21/office-foot-traffic-rebounds-as-rto-mandates-fall-routines-drive-recovery/"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "The date is official. +5% for September-October against the yearly average is my estimate: Placer.ai describes fall routines and return-to-office mandates lifting office visits each autumn, and chains post their best months in October-December."
+      },
+      {
+        "id": "school_recess_week",
+        "name": "School recess week",
+        "text": "No school this week. The stroller parade is gone, families with money are away, and the teenagers who are left sit for three hours over one hot chocolate.",
+        "scale": "city",
+        "months": [
+          2,
+          4,
+          12
+        ],
+        "realSignal": "NYC Public Schools calendar: December 24-January 1, February 15-19 and April 22-30 in the 2026-27 year",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.98,
+            "onlyIf": "place is residential"
+          }
+        ],
+        "daily": {
+          "days": 5,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.9,
+              "onlyIf": "place is residential"
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Three recess weeks a year plus the summer.",
+        "tier": "deep",
+        "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Dates are official; the 10% drop on recess weekdays is my estimate. Tourist districts move the other way in the same weeks (out-of-town families)."
+      },
+      {
+        "id": "holiday_dead_week",
+        "name": "The week between Christmas and New Year's",
+        "text": "Offices are dark from the 24th to the 2nd. Midtown belongs to tourists, the residential blocks to people in sweatpants at eleven in the morning, and the towers to nobody.",
+        "scale": "city",
+        "months": [
+          12
+        ],
+        "realSignal": "Calendar; December office index (33.1% below 2019 in December 2025); hotel occupancy",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.9,
+            "onlyIf": "place depends on office workers"
+          },
+          {
+            "field": "footTraffic",
+            "mult": 1.05,
+            "tiers": [
+              "prime"
+            ],
+            "onlyIf": "place is in a tourist district"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "holiday_hours"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Every year.",
+        "tier": "core",
+        "source": "https://www.placer.ai/anchor/articles/placer-ai-december-2025-office-index-tis-the-season-to-wfh",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Placer.ai's December 2025 index: office visits 33.1% below 2019, 'tis the season to work from home'. Month values: office district -10% (the last third of the month nearly empty), tourist district +5% (estimate; monthly hotel occupancy for New York was not found). Schools are closed December 24, 2026-January 1, 2027."
+      },
+      {
+        "id": "campus_summer",
+        "name": "The students go home",
+        "text": "Commencement was last week. The laptops, the group projects and the 11 PM study crowd are gone until September, and with them a third of your sales.",
+        "scale": "block",
+        "months": [
+          6,
+          7,
+          8
+        ],
+        "realSignal": "Academic calendars of the nearest university (last day of exams, commencement, first day of fall classes)",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.75,
+            "onlyIf": "place is near a campus"
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          }
+        ],
+        "realFrequency": "Every summer, and a shorter dip from mid-December to late January.",
+        "tier": "deep",
+        "source": "https://www.bisnow.com/news/new-york/economy/morningside-heights-look-at-a-fall-without-a-key-economic-driver-many-of-columbia-universitys-students-105624-105625",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Qualitative only: coverage of Morningside Heights describes bars and coffee shops that 'work in an ecosystem with the university community'; owners in other college towns say trade 'drops drastically' when students leave. No New York figure was found. The engine's place model already takes 12% off a campus block in summer; -25% is my estimate for a shop whose customers are mostly students. The right number is a calibration question for D06."
+      },
+      {
+        "id": "finals_weeks",
+        "name": "Finals",
+        "text": "Every seat is taken by nine in the morning and nobody leaves. Sales per seat fall while the room looks full: one cold brew buys four hours of table.",
+        "scale": "block",
+        "months": [
+          5,
+          12
+        ],
+        "realSignal": "University exam calendars (first half of May, mid-December)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.05,
+            "onlyIf": "place is near a campus"
+          },
+          {
+            "field": "seatTurnover",
+            "mult": 0.7,
+            "onlyIf": "place is near a campus"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "size"
+          }
+        ],
+        "realFrequency": "Twice a year.",
+        "tier": "exotic",
+        "source": "https://www.bisnow.com/news/new-york/economy/morningside-heights-look-at-a-fall-without-a-key-economic-driver-many-of-columbia-universitys-students-105624-105625",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "Design values, no measurement. The point for the sizing model: demand rises but seats turn over more slowly, so a small room hits the crowd penalty. Time limits and laptop-free tables are D02 levers."
+      },
+      {
+        "id": "tourist_high_season",
+        "name": "Tourist high season",
+        "text": "Hotel rooms are full and the sidewalks near the sights are shoulder to shoulder. Visitors do not know your shop: they walk into the first door with a line or a logo they recognize.",
+        "scale": "city",
+        "months": [
+          6,
+          7,
+          8,
+          11,
+          12
+        ],
+        "realSignal": "NYC Tourism + Conventions visitor counts and forecasts; hotel occupancy reports",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.08,
+            "tiers": [
+              "prime"
+            ],
+            "onlyIf": "place is in a tourist district"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "shortcut",
+            "id": "sign_in_the_walkway"
+          },
+          {
+            "kind": "builtin",
+            "id": "price"
+          }
+        ],
+        "realFrequency": "About 65 million visitors in 2025 (+0.7%); the forecast for 2026 was 66.3 million. International visitors fell 3.2% in 2025 to 12.5 million, still below 13.5 million in 2019.",
+        "tier": "deep",
+        "source": "https://business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "The deck's value (+8% in prime locations in June-August). Visitor totals are NYC Tourism + Conventions figures quoted by web search. A month-by-month occupancy series was not found, so the choice of months is my reading: summer and the weeks from Thanksgiving to New Year's."
+      },
+      {
+        "id": "tourist_low_season",
+        "name": "January and February: no visitors",
+        "text": "The tree is down and the hotels are half price. Blocks that live on visitors feel it first.",
+        "scale": "city",
+        "months": [
+          1,
+          2
+        ],
+        "realSignal": "Hotel occupancy and average room rates for New York City; NYC Tourism winter promotions (Restaurant Week, Broadway Week, Hotel Week)",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.9,
+            "tiers": [
+              "prime"
+            ],
+            "onlyIf": "place is in a tourist district"
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          }
+        ],
+        "realFrequency": "Every year; the city schedules its discount weeks in exactly these months.",
+        "tier": "deep",
+        "source": "https://www.nyctourism.com/restaurant-week/",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "The existence of Restaurant Week (January 19-February 11 in 2027) is the evidence that these are the slow weeks; the -10% is my estimate, no occupancy series was found."
+      },
+      {
+        "id": "pumpkin_launch_day",
+        "name": "Pumpkin spice comes back",
+        "text": "The chains launched their fall menus today, in August heat. Starbucks just had its biggest Tuesday of the year, and some of that line would have been yours.",
+        "scale": "country",
+        "months": [
+          8,
+          9
+        ],
+        "realSignal": "Chain menu launch dates (Starbucks: August 25, 2026; Dunkin': August 19, 2026); Placer.ai visit counts",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.99,
+            "onlyIf": "seasonal_menu = same_all_year"
+          },
+          {
+            "field": "demand",
+            "mult": 1.02,
+            "onlyIf": "seasonal_menu = seasonal_program"
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "builtin",
+            "id": "price"
+          }
+        ],
+        "realFrequency": "Every year, a little earlier each time.",
+        "tier": "deep",
+        "source": "https://www.placer.ai/anchor/articles/psl-day-2026-gives-starbucks-its-biggest-tuesday-of-the-year",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Placer.ai: Starbucks visits on August 25, 2026 were 25.7% above its daily average for the year and 35.1% above an average Tuesday; in 2025 the pumpkin menu lifted its traffic 11.3-15.9% in the three days after launch. For an independent the effect is small and its sign depends on the menu: -1% with nothing seasonal, +2% with a fall special of its own (my estimates)."
+      },
+      {
+        "id": "small_business_saturday",
+        "name": "Small Business Saturday",
+        "text": "The Saturday after Thanksgiving. The neighborhood association hands out maps, and people who usually order online make a point of walking the block.",
+        "scale": "country",
+        "months": [
+          11
+        ],
+        "realSignal": "Calendar: the Saturday after Thanksgiving (November 28, 2026); the local business improvement district's program",
+        "effects": [],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 1.1
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          }
+        ],
+        "realFrequency": "Every year since 2010. Shoppers reported spending about $22 billion at small businesses on the day in 2024 (American Express survey cited by the Small Business Administration).",
+        "tier": "exotic",
+        "source": "https://www.sba.gov/article/2025/11/25/sba-encourages-americans-shop-small-small-business-saturdayr-november-29th",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "The $22 billion is self-reported by consumers, not receipts. +10% on the day for a cafe on a shopping block is my estimate; over the month it is a third of a percent, so no month effect is set. Bags of beans and gift cards sell that day."
+      },
+      {
+        "id": "thanksgiving_parade_morning",
+        "name": "Thanksgiving parade at your corner",
+        "text": "People have been standing on the avenue since 6 AM in the cold. They want coffee, cocoa and a bathroom. You are behind a police barrier, and your delivery is not coming.",
+        "scale": "block",
+        "months": [
+          11
+        ],
+        "realSignal": "Parade route and NYPD street closures for Thanksgiving morning (November 26, 2026): Central Park West, Sixth Avenue, 34th Street",
+        "effects": [],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 2
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0
+            },
+            {
+              "field": "icedShare",
+              "mult": 0.6
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "holiday_hours"
+          }
+        ],
+        "realFrequency": "Once a year, on the route only.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/cecm/permitting/permitting.page",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "All multipliers are my estimates. Double traffic for about five hours; a shop that chose holiday_hours = closed gets nothing. Capacity, not demand, is the limit: the window menu option is the move. The seats_20 bathroom rule matters on this day more than any other."
+      },
+      {
+        "id": "pride_sunday",
+        "name": "Pride Sunday",
+        "text": "Two million people between Chelsea and the Village. If you are on the route, it is the biggest day of your year and the hardest to staff: nobody can get across Fifth Avenue.",
+        "scale": "block",
+        "months": [
+          6
+        ],
+        "realSignal": "NYC Pride March route and NYPD closures, last Sunday of June (June 28, 2026)",
+        "effects": [],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 1.8
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.2
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.85
+            },
+            {
+              "field": "icedShare",
+              "mult": 1.1
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "lever",
+            "id": "trash_setup"
+          }
+        ],
+        "realFrequency": "Once a year; Fifth Avenue, Greenwich Village and Chelsea.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/cecm/permitting/permitting.page",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "The deck has +10% in prime locations citywide; on the route the day is different. Multipliers are my estimates; the crowd figure is the organizers' usual claim and was not checked. Trash doubles: the sidewalk in front is still yours to clean by the next routing hour."
+      },
+      {
+        "id": "avenue_parade_day",
+        "name": "A parade closes your avenue",
+        "text": "Barriers line the curb from nine to four. Your regulars from across the avenue cannot cross. The people on your side are here for the parade, not for you.",
+        "scale": "block",
+        "months": [
+          3,
+          6,
+          9,
+          10
+        ],
+        "realSignal": "NYC Street Activity Permit Office parade permits ('NYC Permitted Event Information' open data): St. Patrick's Day (March 17), Puerto Rican Day (June 14, 2026), West Indian Day (September 7, 2026), Columbus Day (October 12)",
+        "effects": [],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 1.3
+            },
+            {
+              "field": "demand",
+              "mult": 0.85,
+              "onlyIf": "event_day_plan = normal_day"
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.2
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "sidewalk_care"
+          }
+        ],
+        "realFrequency": "Fifth Avenue hosts a dozen parades a year; Eastern Parkway one very large one.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/cecm/permitting/permitting.page",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "Estimates. The logic is the same as the street fair and the marathon: more people, lower conversion, no deliveries. Which side of the barrier your regulars live on decides the day."
+      },
+      {
+        "id": "bike_tour_and_half_marathon",
+        "name": "Sunday race: streets closed until noon",
+        "text": "Thirty thousand cyclists come through at 8 AM. The avenue is closed from 6 to 12, right through your Sunday rush, and the staff who drive in are stuck on the wrong side.",
+        "scale": "block",
+        "months": [
+          3,
+          5
+        ],
+        "realSignal": "City street-closure notices for the NYC Half (March 15, 2026) and the Five Boro Bike Tour (first Sunday of May)",
+        "effects": [],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.85
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.9
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.3
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "storm_day_policy"
+          }
+        ],
+        "realFrequency": "Two Sunday mornings a year on the routes.",
+        "tier": "exotic",
+        "source": "https://www.nyc.gov/assets/bic/downloads/pdf/notices/notice-street-closures-united-airlines-nyc-half-marathon-3-15-26.pdf",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "Riders and runners do not stop; spectators are few. -15% on the morning is my estimate. The bike tour date is from memory."
+      },
+      {
+        "id": "unga_week",
+        "name": "UN General Assembly week",
+        "text": "Motorcades, concrete blocks and checkpoints from 42nd to 57th Street. Cars move at walking speed. Your regulars work from home this week, and the delegates are fed inside their hotels.",
+        "scale": "city",
+        "months": [
+          9
+        ],
+        "realSignal": "NYPD street closures for the General Assembly's high-level week (late September); DOT Gridlock Alert Days",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.97,
+            "onlyIf": "place is in East Midtown"
+          },
+          {
+            "field": "cogs",
+            "mult": 1
+          }
+        ],
+        "daily": {
+          "days": 5,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.8,
+              "onlyIf": "place is in East Midtown"
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.7
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Every September. In 2025 Midtown traffic ran below 5 mph, the slowest of the year.",
+        "tier": "deep",
+        "source": "https://www.aljazeera.com/news/2025/9/24/how-new-york-deals-with-the-influx-of-leaders-at-the-un-general-assembly",
+        "moreSources": [
+          "https://www.bloomberg.com/news/features/2025-09-21/un-week-brings-midtown-gridlock-snipers-and-secret-service",
+          "https://www.fox5ny.com/news/un-general-assembly-nyc-gridlock-road-closures-midtown-manhattan-2026.amp"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "A corner-store owner near the UN in 2025: 'When there is a road closure, I lose business... My regular customers, they avoid coming outside', and visitors did not make up for it. Local reports in 2026 again describe fewer customers near the blockades. No figure exists; -20% on five days inside the security zone is my estimate. The deck models only delivery and staffing."
+      },
+      {
+        "id": "new_years_eve_frozen_zone",
+        "name": "New Year's Eve: inside the frozen zone",
+        "text": "From four in the afternoon the blocks from Sixth to Eighth Avenue, 42nd to 57th Street, are closed to everyone but emergency vehicles. Anyone coming to your door needs a police officer to let them through.",
+        "scale": "block",
+        "months": [
+          12
+        ],
+        "realSignal": "NYPD and Times Square Alliance New Year's Eve closure plan and business guidance, published each December",
+        "effects": [],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.5,
+              "onlyIf": "place is in the Times Square zone"
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.7
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "holiday_hours"
+          },
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          }
+        ],
+        "realFrequency": "Once a year, Times Square area only.",
+        "tier": "exotic",
+        "source": "https://timessquarenyc.org/nye/nye-business-resource",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "The Times Square Alliance's guidance for businesses, as quoted by web search: police may freeze blocks, guests should arrive early, and a business needs a representative at the nearest corner on Sixth or Eighth Avenue to identify its guests to the officer. The 2025 closure began at 4:00 PM. Multipliers are my estimates: the morning is normal, the afternoon and night are lost unless you sell to the people already penned in."
+      },
+      {
+        "id": "world_cup_summer",
+        "name": "World Cup summer",
+        "text": "Eight matches across the river and a million visitors in the region. The bars with screens are full. A cafe without one gets the traffic warnings, the closed streets and the late deliveries.",
+        "scale": "world",
+        "months": [
+          6,
+          7
+        ],
+        "realSignal": "FIFA match schedule for the New York New Jersey stadium (June 13-July 19, 2026); city fan-zone street closures; gridlock alerts",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.02,
+            "tiers": [
+              "prime"
+            ]
+          },
+          {
+            "field": "deliveryShare",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          }
+        ],
+        "realFrequency": "Once: summer 2026.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/mayors-office/news/2026/09/mayor-mamdani-announces-world-cup-delivered--2-billion-economic-.html",
+        "moreSources": [
+          "https://www.pymnts.com/study_posts/host-cities-score-local-customers-drive-a-strong-smb-summer/",
+          "https://www.6sqft.com/world-cup-brought-billions-to-nyc-region/"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Correction to the deck (+8% foot traffic and +5% demand for cafes). What was measured afterwards: the city estimated a $2 billion impact and said foot traffic at sports bars rose 16% over the year before, part of it from the Knicks' Finals run. A PYMNTS survey of small businesses in host cities: 43% reported higher summer sales, and only 29% of those credited the tournament; venues that did not show matches were more likely to report lower sales, citing street closures and delivery problems. +2% in prime locations is my reading for a cafe."
+      },
+      {
+        "id": "commuter_rail_strike",
+        "name": "Commuter rail strike",
+        "text": "The Long Island Rail Road is shut. A quarter of a million daily riders are told to work from home, and the concourse where your morning line forms is empty.",
+        "scale": "city",
+        "months": [
+          5
+        ],
+        "realSignal": "Union strike deadlines under the Railway Labor Act; MTA and NJ Transit service notices",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.97,
+            "onlyIf": "place is near Penn Station, Grand Central or Atlantic Terminal"
+          }
+        ],
+        "daily": {
+          "days": 4,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.6,
+              "onlyIf": "place is near a commuter rail terminal"
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.9
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          },
+          {
+            "kind": "lever",
+            "id": "storm_day_policy"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "May 16, 2026: about 3,500 Long Island Rail Road workers walked out, the first strike there in 32 years, on a system with 250,000 daily commuters. NJ Transit engineers struck for three days in May 2025.",
+        "tier": "deep",
+        "source": "https://abc7ny.com/post/lirr-workers-go-strike-halting-busiest-us-commuter-rail-system/19111461/",
+        "moreSources": [
+          "https://www.wsls.com/news/politics/2026/05/15/strike-deadline-nears-for-new-york-area-train-system-with-250000-daily-commuters/"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "The strike deadline is public weeks ahead, which fits the no-dice rule: the event is announced. On the first Saturday reporters counted a few dozen people in the main concourse of Penn Station. -40% on strike weekdays for a terminal-dependent shop is my estimate; how long the 2026 strike lasted was not confirmed in this session, four working days is a placeholder."
+      },
+      {
+        "id": "ramadan_nights",
+        "name": "Ramadan: the day goes quiet, the night comes alive",
+        "text": "For a month your neighbors do not eat or drink until sunset. Lunch is slow. After the evening prayer the block fills up, and the cafes that stay open until three have a line out the door.",
+        "scale": "block",
+        "months": [
+          2,
+          3
+        ],
+        "realSignal": "The Islamic calendar: Ramadan ran from about February 18 to March 19 in 2026 and moves about 11 days earlier each year; sunset times",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1,
+            "onlyIf": "place is in a neighborhood with many Muslim residents"
+          }
+        ],
+        "daily": {
+          "days": 29,
+          "effects": [
+            {
+              "field": "demand",
+              "mult": 0.8,
+              "onlyIf": "neighborhood, daytime, hours = standard"
+            },
+            {
+              "field": "demand",
+              "mult": 1.1,
+              "onlyIf": "neighborhood, hours = long"
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Every year; strongest in Bay Ridge, Astoria, Jackson Heights and parts of the Bronx.",
+        "tier": "deep",
+        "source": "https://www.wamc.org/news/2026-03-17/yemeni-coffeehouses-community-ramadan",
+        "moreSources": [
+          "https://www.thestar.com.my/lifestyle/living/2026/05/07/yemen-introduced-the-world-to-coffee-now-its-coffeehouse-culture-is-booming-in-the-us"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Reporting on Yemeni coffeehouses (public radio, March 2026; Associated Press, May 2026): they stay open past 3 AM during Ramadan and fill after the night prayers; a Bay Ridge branch was 'overflowing well past 11 p.m.' No sales figures. -20% for a shop that keeps daytime hours and +10% for one that opens late are my estimates. The existing long-hours option ends at 9 PM; this event needs a later one."
+      },
+      {
+        "id": "high_holidays_and_passover",
+        "name": "The Jewish holidays",
+        "text": "On Yom Kippur the avenue is silent. In Passover week the regulars who keep the holiday do not buy your croissants, and many families are away.",
+        "scale": "block",
+        "months": [
+          4,
+          9,
+          10
+        ],
+        "realSignal": "The Hebrew calendar: Rosh Hashanah September 11-13 and Yom Kippur September 20-21 in 2026 (public schools closed September 21); Passover in April",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.97,
+            "onlyIf": "place is in a neighborhood with many observant Jewish residents"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Every year; strongest in parts of Brooklyn, the Upper West Side and Riverdale.",
+        "tier": "exotic",
+        "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "Only the school closure is sourced. The -3% of a month is my estimate (two or three near-empty days, a slow pastry week). Included because an owner new to a neighborhood finds it out in the first September."
+      },
+      {
+        "id": "lunar_new_year",
+        "name": "Lunar New Year",
+        "text": "Firecrackers, a lion dance going shop to shop, and a parade that fills the street for a day. Family-run suppliers close for the week, so order early.",
+        "scale": "block",
+        "months": [
+          1,
+          2
+        ],
+        "realSignal": "The lunar calendar (February 17, 2026; February 6, 2027); parade permits for Chinatown, Flushing and Sunset Park; public schools close for the day",
+        "effects": [],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 1.4,
+              "onlyIf": "place is in Chinatown, Flushing or Sunset Park"
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.5
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          }
+        ],
+        "realFrequency": "Every year.",
+        "tier": "exotic",
+        "source": "https://www.nyc.gov/site/cecm/permitting/permitting.page",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "Estimates; the 2027 date is from memory. The non-obvious part is supply: small produce and bakery wholesalers in those neighborhoods close for several days."
+      },
+      {
+        "id": "immigration_enforcement_chill",
+        "name": "People stay home",
+        "text": "After a week of immigration arrests in the news, the avenue is half empty. Customers send one person to shop for three families. Two of your staff ask to change their shifts.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Federal enforcement operations reported in the city; surveys by local merchant associations and business improvement districts; mobile-phone foot-traffic panels",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.95,
+            "onlyIf": "place is in a neighborhood with many immigrant residents"
+          },
+          {
+            "field": "staffAvailability",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "2025-2026. A survey of 30 businesses in Flatbush (August 2026): 70% reported a drop in foot traffic and 90% higher costs; the group itself says the survey does not prove the cause. A working paper on the first year of the current administration measured 2.9% less foot traffic and 6.9% less spending in affected areas.",
+        "tier": "deep",
+        "source": "https://bronx.news12.com/2026/08/21/flatbush-businesses-say-fewer-customers-higher-costs-are-squeezing-their-bottom-line/6DCqS40HPKdqklRHGkExuh",
+        "moreSources": [
+          "https://api-prod.gothamist.com/news/deportation-fears-play-out-in-queens-theres-an-economic-cost-to-that",
+          "https://www.cityandstateny.com/politics/2025/10/migrant-vendors-fear-returning-after-canal-street-ice-raid/409037/"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Stated neutrally and scoped to what was measured. -5% of foot traffic sits between the working paper (2.9% traffic, 6.9% spending) and owner reports of much larger drops on single avenues. Staff effect is my estimate. The event carries no judgement and no enforcement mechanic for the player; it is a demand shock like a closed station."
       }
     ],
     "mechanics": [
@@ -2549,6 +3661,130 @@
           }
         ],
         "tier": "deep"
+      },
+      {
+        "id": "district_calendar",
+        "title": "The same month is three different months: office, residential, tourist, campus",
+        "playerDecision": "Chosen once, with the address: the place card shows what kind of block it is and the twelve-month shape that comes with it. Each month: hours, staffing, holiday hours and the seasonal menu.",
+        "engineMath": "Each place gets shares that sum to 1: office, residential, tourist, campus (derived from the open data already loaded: office floor area, housing units, hotel rooms and university facilities within 400 m). Monthly footfall multiplier = sum(share_k x monthIndex_k[month]) and the weekday multiplier the same way with weekdayIndex_k. Calendar events in this catalog are then conditions on a share ('place depends on office workers' = office share above 0.5). The four index rows are below; only the office row rests on measured data.",
+        "fieldsNeeded": [
+          "place.districtShares {office, residential, tourist, campus}",
+          "extra.monthIndex by district kind (12 numbers each)",
+          "extra.weekdayIndex by district kind (7 numbers each)",
+          "events[].onlyIf with a district condition"
+        ],
+        "numbers": [
+          {
+            "what": "Office-district month index, Jan-Dec (my construction from the Placer.ai national index: August 0.84 of July, December about the same; other months interpolated)",
+            "value": [
+              0.95,
+              1,
+              1.02,
+              1.02,
+              1.02,
+              1,
+              0.97,
+              0.84,
+              1.05,
+              1.07,
+              1.02,
+              0.86
+            ],
+            "source": "https://www.placer.ai/anchor/articles/august-2025-placer-ai-office-index-an-end-of-summer-slump",
+            "confidence": "estimate",
+            "evidence": "calc"
+          },
+          {
+            "what": "Residential-block month index, Jan-Dec (estimate: January slump, summer weekend exodus, strong autumn)",
+            "value": [
+              0.92,
+              0.96,
+              1,
+              1.04,
+              1.05,
+              1.02,
+              0.95,
+              0.93,
+              1.04,
+              1.06,
+              1.02,
+              1.01
+            ],
+            "source": "https://thenycalliance.org/news-item/summer-fall-2024-survey-results",
+            "confidence": "estimate",
+            "evidence": "calc"
+          },
+          {
+            "what": "Tourist-district month index, Jan-Dec (estimate: winter trough, summer and December peaks)",
+            "value": [
+              0.88,
+              0.9,
+              0.97,
+              1.02,
+              1.04,
+              1.06,
+              1.08,
+              1.08,
+              1.02,
+              1.03,
+              1.02,
+              1.1
+            ],
+            "source": "https://business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+            "confidence": "estimate",
+            "evidence": "calc"
+          },
+          {
+            "what": "Campus-block month index, Jan-Dec (estimate: breaks in January and June-August)",
+            "value": [
+              0.85,
+              1.08,
+              1.08,
+              1.1,
+              1.05,
+              0.78,
+              0.75,
+              0.8,
+              1.1,
+              1.12,
+              1.1,
+              0.95
+            ],
+            "source": "https://www.bisnow.com/news/new-york/economy/morningside-heights-look-at-a-fall-without-a-key-economic-driver-many-of-columbia-universitys-students-105624-105625",
+            "confidence": "estimate",
+            "evidence": "calc"
+          },
+          {
+            "what": "Office-district weekday index, Mon-Sun (from Friday = 11.9% of weekday visits in New York; Tuesday peak per Kastle; weekend my estimate)",
+            "value": [
+              0.95,
+              1.2,
+              1.2,
+              1.15,
+              0.6,
+              0.25,
+              0.2
+            ],
+            "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+            "confidence": "estimate",
+            "evidence": "calc"
+          },
+          {
+            "what": "Share of weekday office visits that fall on a Friday, United States, January-October 2025",
+            "value": 0.124,
+            "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Starbucks December sales against January, 2016",
+            "value": 1.58,
+            "source": "https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          }
+        ],
+        "tier": "core"
       }
     ],
     "howNumbersWereChecked": "This session could run web searches but could not open pages: the cloud environment's network policy refused www.nyc.gov, codelibrary.amlegal.com and every other outside host. So no number here is 'verified' in the strict sense of PACK.md (opened the primary source myself). Every record is 'estimate' and carries an 'evidence' field: 'official_excerpt' = the search tool quoted the number from the official page named in 'source' (agency page, law text, court decision); 'secondary' = news, trade press, insurer or vendor report; 'calc' = my arithmetic or a game-design value, with the calculation in 'note'. A person or an agent with open network access can turn every 'official_excerpt' into 'verified' by opening the link.",
@@ -2755,6 +3991,65 @@
       "source": "https://foursquare.com/resources/blog/data/fair-weather-foodies/",
       "confidence": "estimate",
       "evidence": "secondary"
+    },
+    "officeWeek": {
+      "fridayShareOfWeekdayVisits": {
+        "national2025": 0.124,
+        "newYork2026": 0.119,
+        "evenShare": 0.2
+      },
+      "newYorkPeakDayOccupancy": {
+        "value": 0.873,
+        "date": "2026-10-27",
+        "weekday": "Tuesday"
+      },
+      "newYorkWeeklyAverageOccupancy": {
+        "value": 0.66,
+        "week": "a September 2026 week"
+      },
+      "officeVisitsVs2019": {
+        "july2025": -0.218,
+        "august2025": -0.343,
+        "december2025": -0.331,
+        "newYorkJune2025": -0.053
+      },
+      "impliedFridayMultForOfficeDistrict": 0.6,
+      "impliedAugustMultForOfficeDistrict": 0.84,
+      "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+      "moreSources": [
+        "https://www.placer.ai/anchor/articles/august-2025-placer-ai-office-index-an-end-of-summer-slump",
+        "https://www.placer.ai/anchor/articles/placer-ai-december-2025-office-index-tis-the-season-to-wfh",
+        "https://www.placer.ai/anchor/reports/2026-office-recovery-trends-across-major-u-s-markets",
+        "https://www.kastle.com/safety-wellness/getting-america-back-to-work/"
+      ],
+      "confidence": "estimate",
+      "evidence": "secondary",
+      "note": "Placer.ai (phone-location visits to office buildings) and Kastle (key-card swipes, mostly in buildings it serves) as quoted by web search and trade press. Friday multiplier for a cafe that depends on office workers: 11.9% / 20% = 0.6 of an average weekday. August: (1 - 0.343) / (1 - 0.218) = 0.84 of July (national index). For D06: the pack's weekdayMult [1,1,1,1,1.05,1.05,0.9] fits a residential block, not an office district."
+    },
+    "schoolCalendar2026_27": {
+      "firstDay": "2026-09-10",
+      "thanksgivingRecess": [
+        "2026-11-26",
+        "2026-11-27"
+      ],
+      "winterRecess": [
+        "2026-12-24",
+        "2027-01-01"
+      ],
+      "midwinterRecess": [
+        "2027-02-15",
+        "2027-02-19"
+      ],
+      "springRecess": [
+        "2027-04-22",
+        "2027-04-30"
+      ],
+      "lastDay": "2027-06-28",
+      "yomKippurClosed": "2026-09-21",
+      "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "confidence": "estimate",
+      "evidence": "official_excerpt",
+      "note": "NYC Public Schools 2026-27 calendar as quoted by web search. About 900,000 students: on school days parents pass at drop-off (around 8 AM) and pick-up (around 3 PM); on recess weeks families with children leave town or sleep in."
     }
   },
   "officials": [
@@ -3220,6 +4515,44 @@
       "confidence": "estimate",
       "evidence": "calc",
       "note": "$60 = $700 of door sweeps, steel wool, sealant and two steel bins over two years, plus ten minutes of closing labor a day. Works with the existing pest_control lever: an exterminator treats, sealing keeps them out. It decides whether the seasonal pressure events (construction next door, summer peak, first cold week) turn into the existing pest_activity violation."
+    },
+    {
+      "id": "holiday_hours",
+      "name": "Thanksgiving, Christmas and New Year's Day",
+      "options": [
+        {
+          "id": "closed",
+          "label": "Closed on the three big holidays",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "short_day",
+          "label": "Open 8 to 2 with volunteers at time-and-a-half",
+          "monthlyCost": 110,
+          "effects": {
+            "demand": 0.01
+          }
+        },
+        {
+          "id": "open_as_usual",
+          "label": "Open all day at regular pay",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": 0.01,
+            "quality": -0.01
+          }
+        }
+      ],
+      "activeMonths": [
+        11,
+        12,
+        1
+      ],
+      "source": "https://www.daeryunlaw.com/us/insights/holiday-pay-new-york",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "New York has no rule that makes a private employer pay a premium for work on a holiday; holiday pay exists only where a contract or the shop's own policy promises it (law-firm guide; the State Labor Department text was not opened). Time-and-a-half is a custom, and the price of keeping a crew: $110 = two baristas x 6 hours x $8.50 premium, once in the month. A holiday morning on a residential block is one of the busiest of the year because everything else is closed; in an office district it is dead. +1% of the month is my estimate for one strong day. Regular pay on Christmas costs goodwill: the quality effect is a design value that should feed turnover in D05."
     }
   ],
   "shortcuts": [
@@ -3601,6 +4934,18 @@
       "title": "Smoke days",
       "text": "An Air Quality Index above 150 is unhealthy for everyone. In July 2026 Canadian wildfire smoke pushed New York City to 289, second only to June 2023. No law makes you close, but outdoor seats are useless and staff should not work outside.",
       "source": "https://www.nyc.gov/site/em/about/press-releases/20260719_pr_NYCEM-Thanks-New-Yorkers-as-Wildfire-Smoke-Response-Concludes.page"
+    },
+    {
+      "id": "holiday_pay_custom",
+      "title": "Holiday pay",
+      "text": "New York law does not require a private employer to pay extra for work on Thanksgiving or Christmas. Time-and-a-half is a custom, not a rule, unless your own handbook promises it. Overtime after 40 hours and the spread-of-hours hour still apply.",
+      "source": "https://www.daeryunlaw.com/us/insights/holiday-pay-new-york"
+    },
+    {
+      "id": "office_week",
+      "title": "The office week",
+      "text": "Offices fill on Tuesday to Thursday. From January to October 2025 only 12.4% of weekday office visits fell on a Friday, and August and December run about a third below 2019. A cafe that lives on office workers has a three-day week.",
+      "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/"
     }
   ],
   "sources": [
@@ -3866,7 +5211,7 @@
     },
     {
       "url": "https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/",
-      "title": "Bloomberg Second Measure: does pumpkin spice drive Starbucks sales (January is the lowest month)",
+      "title": "Bloomberg Second Measure: does pumpkin spice drive Starbucks sales",
       "checked": "2026-11-14"
     },
     {
@@ -3972,6 +5317,111 @@
     {
       "url": "https://about.doordash.com/en-us/news/winter-storm-fern",
       "title": "DoorDash: severe weather protocol and weather impact fee (January 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.placer.ai/anchor/articles/august-2025-placer-ai-office-index-an-end-of-summer-slump",
+      "title": "Placer.ai: August 2025 office index, an end-of-summer slump",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.placer.ai/anchor/articles/placer-ai-december-2025-office-index-tis-the-season-to-wfh",
+      "title": "Placer.ai: December 2025 office index, 'tis the season to WFH",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+      "title": "GlobeSt: hybrid habits hold firm as Friday office visits lag (Placer.ai, November 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.placer.ai/anchor/reports/2026-office-recovery-trends-across-major-u-s-markets",
+      "title": "Placer.ai: 2026 office recovery trends across major US markets",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.kastle.com/safety-wellness/getting-america-back-to-work/",
+      "title": "Kastle: Back to Work Barometer",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "title": "NYC Public Schools: 2026-2027 school year calendar",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://thenycalliance.org/news-item/summer-fall-2024-survey-results",
+      "title": "NYC Hospitality Alliance: summer and fall 2024 survey results",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+      "title": "NYC Tourism + Conventions: annual report press release (March 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/mayors-office/news/2026/09/mayor-mamdani-announces-world-cup-delivered--2-billion-economic-.html",
+      "title": "NYC Mayor's Office: World Cup delivered $2 billion economic impact (September 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.pymnts.com/study_posts/host-cities-score-local-customers-drive-a-strong-smb-summer/",
+      "title": "PYMNTS Intelligence: host cities score, local customers drive a strong small-business summer (September 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.aljazeera.com/news/2025/9/24/how-new-york-deals-with-the-influx-of-leaders-at-the-un-general-assembly",
+      "title": "Al Jazeera: how New York deals with the influx of leaders at the UN General Assembly (September 24, 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bloomberg.com/news/features/2025-09-21/un-week-brings-midtown-gridlock-snipers-and-secret-service",
+      "title": "Bloomberg: UN week brings Midtown gridlock (September 21, 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://abc7ny.com/post/lirr-workers-go-strike-halting-busiest-us-commuter-rail-system/19111461/",
+      "title": "ABC7: LIRR workers go on strike, halting the busiest US commuter rail system (May 16, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.wamc.org/news/2026-03-17/yemeni-coffeehouses-community-ramadan",
+      "title": "WAMC: Yemeni coffeehouses, community and Ramadan (March 17, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://bronx.news12.com/2026/08/21/flatbush-businesses-say-fewer-customers-higher-costs-are-squeezing-their-bottom-line/6DCqS40HPKdqklRHGkExuh",
+      "title": "News 12: Flatbush businesses say fewer customers, higher costs are squeezing their bottom line (August 21, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://api-prod.gothamist.com/news/deportation-fears-play-out-in-queens-theres-an-economic-cost-to-that",
+      "title": "Gothamist: deportation fears play out in Queens, with an economic cost",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://timessquarenyc.org/nye/nye-business-resource",
+      "title": "Times Square Alliance: New Year's Eve and NYPD information for businesses",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.daeryunlaw.com/us/insights/holiday-pay-new-york",
+      "title": "Daeryun Law: holiday pay in New York and when it becomes legally owed",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bisnow.com/news/new-york/economy/morningside-heights-look-at-a-fall-without-a-key-economic-driver-many-of-columbia-universitys-students-105624-105625",
+      "title": "Bisnow: Morningside Heights faces fall without thousands of Columbia students",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.sba.gov/article/2025/11/25/sba-encourages-americans-shop-small-small-business-saturdayr-november-29th",
+      "title": "US Small Business Administration: Small Business Saturday, November 29, 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/cecm/permitting/permitting.page",
+      "title": "NYC Citywide Event Coordination and Management: street activity permits (parades, fairs)",
       "checked": "2026-11-14"
     }
   ],
