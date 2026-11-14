@@ -2,7 +2,7 @@ import cafe from '../../server/fixtures/cafe.json';
 import barbershop from '../../server/fixtures/barbershop.json';
 import common from '../../server/fixtures/_common.json';
 import places from '../../server/fixtures/places.json';
-import type { CommonPack, Pack, Place, WorldState } from '../../shared/src/types';
+import type { CommonPack, Pack, Place, WorldState } from '@ohh/shared';
 import { defaultConfig, defaultDeps, newWorld, step, type EngineCtx, type HostDeps } from '../src/index';
 
 export const ctx: EngineCtx = {

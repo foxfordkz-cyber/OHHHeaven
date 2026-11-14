@@ -1,5 +1,5 @@
 // Проверка формы действия, роли и прав. Движок проверяет правила игры; здесь — кто и что вообще может прислать.
-import type { Action, DealTerms, NicheId, Player, StandingOrders, WorldState } from '../../shared/src/types';
+import type { Action, DealTerms, NicheId, Player, StandingOrders, WorldState } from '@ohh/shared';
 import type { EngineCtx } from './types';
 import { isObj } from './util';
 

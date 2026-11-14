@@ -1,6 +1,6 @@
 // Что о бизнесе и мире видно всем. Единственный источник PublicBusiness и WorldPublic.
-import type { BusinessState, PublicBusiness, WorldPublic, WorldState } from '../../shared/src/types';
-import { dateOf } from '../../shared/src/rules';
+import type { BusinessState, PublicBusiness, WorldPublic, WorldState } from '@ohh/shared';
+import { dateOf } from '@ohh/shared';
 import type { EngineCtx } from './types';
 
 export function publicBusiness(w: WorldState, _ctx: EngineCtx, b: BusinessState): PublicBusiness {

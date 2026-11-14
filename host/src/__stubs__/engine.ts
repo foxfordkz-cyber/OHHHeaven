@@ -6,8 +6,8 @@ import type {
   GameEvent, InboxItem, MonthReport, NicheId, OfficialRole, OpenRecommendation, Pack, PackSetupItem, PackViolation, PnlLine,
   Place, RealWorldPlan, Recommendation, RoadmapItem, Standing, StandingOrders, ViolationTrail, WorldConfig, WorldState, Money,
   Benchmark, EffectTarget,
-} from '../../../shared/src/types';
-import { RULES, dateOf, isMonthEnd } from '../../../shared/src/rules';
+} from '@ohh/shared';
+import { RULES, dateOf, isMonthEnd } from '@ohh/shared';
 import type { EngineApi, EngineCtx } from '../types';
 import { clamp, distanceM, formatMoney, round2, sum } from '../util';
 import { publicBusiness } from '../public';

@@ -1,6 +1,6 @@
 // ЗАГЛУШКА @ohh/bots (агент 07): простые жители по характерам. Только через Action, только по открытым данным.
-import type { Action, BusinessState, NicheId, Player, WorldState } from '../../../shared/src/types';
-import { RULES } from '../../../shared/src/rules';
+import type { Action, BusinessState, NicheId, Player, WorldState } from '@ohh/shared';
+import { RULES } from '@ohh/shared';
 import type { BotBrain, BotResident, EngineCtx, PlayerExtra } from '../types';
 import { distanceM, hash32, mulberry32, sum } from '../util';
 

@@ -3,8 +3,8 @@
 import type {
   AdvisorAnswer, Analytics, BusinessState, CommonPack, DayWeather, Debrief, GameDate, GameEvent, IdeaMatch, NicheId,
   Pack, PackSet, RealWorldPlan, WeatherCondition, WorldState,
-} from '../../../shared/src/types';
-import { RULES, dateOf } from '../../../shared/src/rules';
+} from '@ohh/shared';
+import { RULES, dateOf } from '@ohh/shared';
 import type { AiApi, EngineCtx } from '../types';
 import { formatMoney, hash32, rand01 } from '../util';
 

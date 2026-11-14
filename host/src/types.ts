@@ -1,23 +1,16 @@
-// Интерфейсы из build/CONTRACT.md, которых нет в shared/src/types.ts.
-// Держу их здесь, пока ведущий не перенесёт их в shared (просьба в agents/06.md).
+// Интерфейсы хоста из build/CONTRACT.md. EngineCtx и BotBrain берём из пакетов-владельцев (только типы:
+// в браузерную сборку хоста они не тянут кода). EngineApi и AiApi — то, что хост и сервер берут у движка и ИИ.
 import type {
   Action, ActionResult, Analytics, BusinessState, CaseCard, CaseNotice, DayWeather, GameEvent, MonthReport,
-  NicheId, OfficialRole, OpenRecommendation, PackSet, Place, RealWorldPlan, Recommendation, RoadmapItem,
+  NicheId, OpenRecommendation, PackSet, RealWorldPlan, Recommendation, RoadmapItem,
   Standing, StandingOrders, WorldConfig, WorldState, Money,
   AdvisorAnswer, IdeaMatch, Debrief, GameDate, Pack, CommonPack,
-} from '../../shared/src/types';
+} from '@ohh/shared';
+import type { EngineCtx } from '@ohh/engine';
+import type { BotBrain } from '@ohh/bots';
 
-export interface EngineCtx { packs: PackSet; places: Place[] }
-
-export interface BotResident {
-  name: string; kind: 'owner' | 'official'; role?: OfficialRole; niche?: NicheId; placeId?: string; strategy: string;
-}
-
-export interface BotBrain {
-  populate(w: WorldState, ctx: EngineCtx, seed: number): BotResident[];
-  ownerActions(w: WorldState, ctx: EngineCtx, playerId: string): Action[];
-  officialActions(w: WorldState, ctx: EngineCtx, playerId: string): Action[];
-}
+export type { EngineCtx, BotBrain };
+export type BotResident = ReturnType<BotBrain['populate']>[number];
 
 /** CONTRACT §6. `takeQueuedEvent` — моё необязательное расширение: очередь событий от ИИ, которую держит сервер. */
 export interface HostDeps {

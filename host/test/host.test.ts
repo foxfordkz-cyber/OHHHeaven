@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { Action, ClientView, GameEvent, OwnerView, OfficialView, WorldState } from '../../shared/src/types';
-import { RULES, dateOf } from '../../shared/src/rules';
+import type { Action, ClientView, GameEvent, OwnerView, OfficialView, WorldState } from '@ohh/shared';
+import { RULES, dateOf } from '@ohh/shared';
 import { act, answer, defaultDeps, HostError, join, markSeen, step, viewFor, usingStubs } from '../src/index';
 import { ctx, freePlace, makeWorld, pathsOf, run } from './helpers';
 

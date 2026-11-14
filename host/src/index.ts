@@ -4,8 +4,8 @@ import type {
   Action, ActionResult, BusinessState, CityView, ClientView, GameEvent, InboxItem, NicheId, OfficialRole, OfficialState,
   OfficialView, OwnerView, Player, Query, Standing, StandingOrders, WorldConfig, WorldState, EffectTarget, Analytics,
   RealWorldPlan, Pack, CommonPack, PackSet,
-} from '../../shared/src/types';
-import { RULES, dateOf, isMonthEnd } from '../../shared/src/rules';
+} from '@ohh/shared';
+import { RULES, dateOf, isMonthEnd } from '@ohh/shared';
 import { engine } from './deps';
 import type { BotResident, EngineCtx, HostDeps, PlayerExtra } from './types';
 import { publicBusiness, worldPublic } from './public';
