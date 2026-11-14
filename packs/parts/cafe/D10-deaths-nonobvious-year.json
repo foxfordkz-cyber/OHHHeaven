@@ -2913,6 +2913,1008 @@
         "confidence": "estimate",
         "note": "10% of card sales held for 90 days is my estimate; reports from 2020 mention up to 30% for 120 days."
       }
+    ],
+    "mechanics": [
+      {
+        "id": "closed_but_paying",
+        "title": "Closed, and the rent still runs",
+        "tier": "core",
+        "playerDecision": "Before: all-electric or gas kitchen, a second certificate holder, labor shortcuts on or off, sales tax paid or spent. During: wait, or (water only) stay open illegally.",
+        "engineMath": "A business can be closed by an event or by its own decisions, not only by an inspector. While closed: served = 0, rent and fixed monthlyCosts are charged in full, hourly staff are not paid after day 3 (they leave: staff count resets to minStaff and training is paid again on reopening), demand on reopening is multiplied by (1 - 0.01 x closed days), floor 0.6, and recovers through the awareness ramp. Sources of closure: gas_red_tag (months), water_off (days), staff_walkout (16 days), flu_takes_the_only_supervisor (5 days), sales_tax_warrant (30 days).",
+        "fieldsNeeded": [
+          "events[].closure { days, appliesIf }",
+          "business.closedUntilDay with reason",
+          "lever option exposesTo: eventId",
+          "MonthReport.lost.closure already exists - reuse it"
+        ],
+        "numbers": [
+          {
+            "what": "Months without gas after a leak in the building (Vanka Cafe, Brooklyn, 2019)",
+            "value": 8,
+            "source": "https://www.brooklynpaper.com/two-sheepshead-bay-businesses-closed-for-months-after-nearby-gas-leak",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Cost of the pipe repair itself, USD",
+            "value": 3000,
+            "source": "https://www.brooklynpaper.com/two-sheepshead-bay-businesses-closed-for-months-after-nearby-gas-leak",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Days closed after the whole staff resigned (Gorilla Coffee, 2010)",
+            "value": 16,
+            "source": "https://consumerist.com/2010/04/28/coffee-shop-reopens-after-entire-staff-quit-but-business-is-tepid/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Rent per closed day at a SoHo cat cafe, USD",
+            "value": 600,
+            "source": "https://manhattan.institute/article/the-citys-war-on-small-business-slams-cat-cafes",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "lease_clock",
+        "title": "The lease has an end date",
+        "tier": "core",
+        "playerDecision": "At signing: term and renewal option (lever lease_terms), with or without the free lease review. At the renewal letter: accept the new rent, move (pay a new build-out and lose most regulars), or close.",
+        "engineMath": "Every business stores leaseEndMonth. Six months before it the engine sends the renewal offer: newRent = max(contract rent x 1.03^years, market asking rent of the place tier x sqft / 12) without an option; contract rent x 1.03 with an option. A sold building (block event) removes the offer for businesses without an option. Leaving early: the owner owes rent until the landlord re-lets, capped by the deposit plus the guaranty months. In a 12-month season the clock matters for (a) takeovers of the tail of an existing lease - cheaper entry, renewal inside the season - and (b) the personal plan at season end, which prints the renewal risk in dollars.",
+        "fieldsNeeded": [
+          "business.lease { startMonth, termMonths, option: bool, escalationPct, guarantyMonths }",
+          "place.marketRentPerSqftYear (exists as rentPerSqftYear)",
+          "extra.takeover.remainingLeaseMonths"
+        ],
+        "numbers": [
+          {
+            "what": "Renewal rent as a multiple of old rent (Sippy Cafe, Bushwick Public House, 2025)",
+            "value": 3,
+            "source": "https://greenpointers.com/2025/08/21/greenpoint-coffee-shop-sippy-cafe-will-close-this-october/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Renewal rent, Cup & Saucer 2017: from $8,200 to about $15,800 a month",
+            "value": 1.93,
+            "source": "https://www.thelodownny.com/?p=111961",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Rent as a share of sales at The Coffee Shop, Union Square, when it closed",
+            "value": 0.27,
+            "source": "https://evgrieve.com/2018/10/the-coffee-shop-closed-on-union-square.html",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Notice given to 20+ Greenpoint tenants in October 2025, months",
+            "value": 1,
+            "source": "https://greenpointers.com/2025/10/24/multiple-greenpoint-businesses-face-closure-threat-after-notorious-landlord-sends-last-minute-lease-terminations",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "reserve_fund",
+        "title": "Reserve and one-off bills",
+        "tier": "core",
+        "playerDecision": "How much of each month's sales to set aside (lever cash_reserve), and whether to buy insurance add-ons.",
+        "engineMath": "Events and decisions can now carry an absolute bill (oneOffCost) instead of a multiplier: repair, audit premium, tax escalation, settlement, licence back-fees. A bill is paid from the reserve first, then from cash; if cash goes negative the business is bankrupt as today. The reserve counts toward net worth at 100%. Analytics shows \"largest bill you could pay today\" next to the cash runway.",
+        "fieldsNeeded": [
+          "EffectTarget or event field oneOffCost { amount | pctOfPayroll | pctOfRent | monthsOfRent }",
+          "business.reserve",
+          "PnlLine kind \"one_off\""
+        ],
+        "numbers": [
+          {
+            "what": "Loss over four years before a broken espresso machine closed a cafe (Tucson), USD",
+            "value": 250000,
+            "source": "https://tucson.com/life-entertainment/local/food-drink/article_21b69e75-5d55-49b2-9846-c39246a599d7.html",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Grease trap replacement a cafe had to crowdfund, USD",
+            "value": 2000,
+            "source": "https://www.sage.com/en-us/blog/small-business-survival-skills-one-st-petersburg-cafe-became-community-haven-local-residents/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Typical utility-services insurance sublimit, USD (low end)",
+            "value": 2500,
+            "source": "https://roughnotes.com/utility-services-coverage-often-overlooked-endorsement/",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "owner_hours",
+        "title": "The owner is also a worker",
+        "tier": "core",
+        "playerDecision": "How many bar shifts the owner works (lever owner_schedule) and whether there is a second keyholder (lever cross_training) or a hired manager.",
+        "engineMath": "The owner adds capacity like a barista for the shifts worked and saves that wage. A counter ownerLoad rises by 1 for each month at \"every shift\" and by 0.5 at \"half shifts\" with no second keyholder; it falls by 1 for each month at \"manage only\" or with a manager. At ownerLoad >= 9: event owner_burnout (quality -0.05, reputation -0.03 for 3 months, autopilot switches to \"hold\"). At >= 12 the owner must choose: hire a manager, cut opening hours, or sell. Analytics shows profit before and after an honest wage for the owner's hours.",
+        "fieldsNeeded": [
+          "orders.ownerSchedule",
+          "business.ownerLoad",
+          "analytics.profitAfterOwnerWage"
+        ],
+        "numbers": [
+          {
+            "what": "Average pay of a US coffee shop owner, USD a year (survey of 155 owners, 2023)",
+            "value": 48234,
+            "source": "https://freshcup.com/survey-results-the-2023-coffee-business-owner-salary-report/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Months an owner ran a cafe from cancer treatment before closing (Chicago)",
+            "value": 10,
+            "source": "https://www.dnainfo.com/chicago/20140103/west-town/swim-cafe-closes-as-owner-battles-cancer-looks-for-someone-take-over",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Monthly wage of the hired manager already in the pack, USD",
+            "value": 4800,
+            "source": "https://dol.ny.gov/minimum-wage-0",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "private_claims",
+        "title": "Private claims: lawsuits and demand letters",
+        "tier": "core",
+        "playerDecision": "Remove the cause before it is found (ramp, music licence, weekly pay), or after the letter: settle, or contest.",
+        "engineMath": "A third channel next to inspections and audits. Each claim type has a fixed month after the cause appears (no chance: a tester finds what exists): access_barrier month 8, unlicensed_music month 6, pay_frequency month 6. Settle = the listed amount. Contest = pay CONTEST_FEE x 5 now; the claim returns after three months at x1.5 if the cause is still there, and is dropped if it was removed within 30 days. Human officials do not handle these; no bribe is possible.",
+        "fieldsNeeded": [
+          "violations[].channel: \"private\"",
+          "violations[].foundAfterMonths",
+          "officials entry without a playable role, or a new list privateClaims"
+        ],
+        "numbers": [
+          {
+            "what": "Accessibility suits filed in New York federal courts by one plaintiffs' firm",
+            "value": 600,
+            "source": "https://www.barclaydamon.com/alerts/accessibility-lawsuits-several-tester-plaintiffsalfred-trippett-patrick-austin-kai-hunte-and-jeffery-williamstargeting-businesses-in-recent-flurry-of-lawsuits",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Statutory damages ceiling for willful copyright infringement, USD per work",
+            "value": 150000,
+            "source": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Liquidated damages for a repeat pay-frequency violation, share of late wages",
+            "value": 1,
+            "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "financing",
+        "title": "Fast money: the cash advance",
+        "tier": "core",
+        "playerDecision": "When cash is short: take the advance, borrow from a neighbor (existing loan deal), cut costs, or close.",
+        "engineMath": "Offer appears (event cash_advance_offer) when cash < 2 months of fixed costs. Advance A is paid at once; the lender takes h% of each day's card sales (cardShare x revenue) until A x factor is collected; the holdback is a PnlLine of kind debt and cannot be paused. A second advance may be stacked on the first (holdbacks add up). Analytics shows the true annual cost and the day the holdback ends at current sales.",
+        "fieldsNeeded": [
+          "business.advances[] { amount, factor, holdbackPct, collected }",
+          "extra.cardShare (share of sales paid by card)"
+        ],
+        "numbers": [
+          {
+            "what": "Daily holdback in a court-recorded restaurant advance, share of card receipts",
+            "value": 0.35,
+            "source": "https://www.nycourts.gov/reporter/pdfs/2020/2020_30413.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Total collected in that agreement, USD",
+            "value": 145000,
+            "source": "https://www.nycourts.gov/reporter/pdfs/2020/2020_30413.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Typical payback factor quoted for a $100,000 advance (low end)",
+            "value": 1.4,
+            "source": "https://www.thecity.nyc/2022/09/21/merchant-cash-advance-new-york-threats-courts/",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "autopsy",
+        "title": "Autopsy: what killed this business",
+        "tier": "core",
+        "playerDecision": "None; it is shown at bankruptcy, at sale and at season end.",
+        "engineMath": "The engine ranks causes by their dollar weight over the business's life: rent share above the norm, labor share above the norm, months of rent paid before the first sale, closure days x daily fixed costs, fines and claims, debt holdbacks, lost sales to queue (size) and to short staff, demand lost to events by event id. The top two causes map to cause tags (rent_share, pre_opening_burn, gas_shutoff, street_construction, staff_walkout, debt_spiral, tax_seizure, slow_ramp, competitor_next_door, owner_burnout...) and the screen shows one real story with the same tag from extra.failureStories: what happened, why, the lesson, the link.",
+        "fieldsNeeded": [
+          "extra.failureStories[].causeTags (delivered here: 58 stories)",
+          "analytics.autopsy { causes: [{ tag, dollars }], storyId }"
+        ],
+        "numbers": [
+          {
+            "what": "First-year failure rate of independent full-service restaurants (81,000 establishments)",
+            "value": 0.17,
+            "source": "https://news.osu.edu/restaurant-failure-rate-much-lower-than-commonly-assumed-study-finds/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Cumulative three-year failure rate (Columbus, Ohio study)",
+            "value": 0.59,
+            "source": "https://news.osu.edu/restaurant-failure-rate-much-lower-than-commonly-assumed-study-finds/",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "compliance_calendar",
+        "title": "The calendar of things that are due",
+        "tier": "core",
+        "playerDecision": "Pay and file on time (default, and what a hired bookkeeper does), or let a date slip.",
+        "engineMath": "extra.ownerYear lists, month by month, what is due: sales tax (March 20, June 20, September 20, December 20), payroll returns (April 30, July 31, October 31, January 31), wage statements (January 31), permit renewal, the wage step (January 1), snow clearing, the first graded inspection. The Today screen shows the next three dates with amounts. A missed filing uses the penalties already in _common (returns_not_filed, sales_tax_not_remitted); a missed permit renewal re-opens no_fse_permit. Filing sales tax on time earns the vendor credit: 5% of the tax, up to $200 a quarter.",
+        "fieldsNeeded": [
+          "extra.ownerYear[].due[] { id, day, what, amountRule, ifMissed: violationId }",
+          "PnlLine for the vendor collection credit"
+        ],
+        "numbers": [
+          {
+            "what": "Vendor collection credit for filing sales tax on time, USD per quarter (maximum)",
+            "value": 200,
+            "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/vendor_collection_credit.htm",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Consultative inspection before the first graded one, USD",
+            "value": 100,
+            "source": "https://www.nyc.gov/assets/doh/downloads/pdf/environmental/fse-application-packet.pdf",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "cash_timing",
+        "title": "Sales are not cash",
+        "tier": "deep",
+        "playerDecision": "Gift cards, catering on invoice, refund policy, reacting to a payout hold.",
+        "engineMath": "Three timing shifts between revenue and cash: (1) gift cards: cash in December, drinks in January-February (6% of December sales); (2) catering and wholesale on invoice: cash one month after the sale; (3) processor hold: a month with card volume more than 50% above the three-month average is paid out one month late; a reserve keeps 10% of card sales for 90 days after two chargeback months. The MonthReport shows revenue and cash received separately.",
+        "fieldsNeeded": [
+          "business.receivables",
+          "business.giftCardLiability",
+          "MonthReport.cashReceived"
+        ],
+        "numbers": [
+          {
+            "what": "Years before a New York gift card may expire",
+            "value": 9,
+            "source": "https://www.governor.ny.gov/news/governor-hochul-signs-package-legislation-protect-credit-and-gift-card-holders",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "rescue_campaign",
+        "title": "The fundraiser",
+        "tier": "exotic",
+        "playerDecision": "Once per business, when cash is under one month of fixed costs: ask the neighborhood for money.",
+        "engineMath": "Income = 0.5 month of revenue x reputation / 0.6 (capped at 1 month). Demand x1.15 for 30 days (the queue of supporters). If the business is bankrupt or sold within six months, the owner's trust.broken += 2 and the next business they open starts at reputation 0.4. Rent, lease and debts do not change.",
+        "fieldsNeeded": [
+          "business.campaignUsed",
+          "trust effects across businesses of one player"
+        ],
+        "numbers": [
+          {
+            "what": "Raised by Boris & Horton in February 2024, USD",
+            "value": 250000,
+            "source": "https://www.brooklynpaper.com/boris-horton-dog-cafe-williamsburg-closure",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Views of Buddies Coffee's plea, millions",
+            "value": 7,
+            "source": "https://secretnyc.co/buddies-coffee-closing-williamsburg/",
+            "confidence": "estimate"
+          }
+        ]
+      }
+    ],
+    "ownerYear": {
+      "note": "A shop that opens in January 2026 in New York City, month by month. \"always\" = happens to every shop; \"due\" = a date with money or a filing on it; \"goesWrong\" = what owners report in that month; \"events\" = ids in this fragment, in packs/cafe.json or in _common. Dates of quarterly returns were seen in search results from tax.ny.gov and dol.ny.gov; federal dates are the standard IRS calendar and were not re-checked in this session.",
+      "preOpening": [
+        {
+          "phase": "Month -6 to -4: idea and money",
+          "always": [
+            "Count people at your corner at 8am on a Tuesday and on a Saturday",
+            "Work shifts in someone else's shop",
+            "Hire the accountant before the first dollar moves",
+            "Form the LLC, get the EIN, open the bank account"
+          ],
+          "goesWrong": [
+            "Budget written from equipment price lists: owners underestimate start-up costs by about two thirds",
+            "Counting on a neighbor's customers: 70 a day planned, 20 came"
+          ],
+          "source": "https://www.fundingcircle.com/us/resources/?p=8657"
+        },
+        {
+          "phase": "Month -4 to -3: the lease",
+          "always": [
+            "Check the Certificate of Occupancy, open violations, the landmark map, the electrical service and the step at the door before signing",
+            "Rent starts on the lease date, or after the free months if you negotiated any",
+            "Deposit of two to three months and usually a personal guaranty"
+          ],
+          "goesWrong": [
+            "No renewal option, no cap on tax escalations, no abatement for a sidewalk shed, no exclusive-use clause",
+            "Historic district: Landmarks approval before the Buildings filing; eight months closed at 75 Second Avenue",
+            "Utility will not connect: eleven months of rent without gas in Brooklyn, 2019"
+          ],
+          "source": "https://evgrieve.com/2022/04/owner-citys-bureaucratic-red-tape.html"
+        },
+        {
+          "phase": "Month -3 to -1: build-out with no sales",
+          "always": [
+            "Plans approved by the Health Department before equipment is bought",
+            "Rent, insurance and utilities deposits paid every month with nothing coming in",
+            "Food Protection Course; a second person takes it too",
+            "Permit application: you may open 22 days after filing"
+          ],
+          "goesWrong": [
+            "Build-out runs longer than the free rent",
+            "Only $5,000 of all this is deductible in year one",
+            "Used equipment bought before the plan was approved does not fit the approved layout"
+          ],
+          "source": "https://www.dripos.com/counter-talk/what-coffee-shop-owners-wish-they-knew-before-opening"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "name": "January",
+          "always": [
+            "Slowest month of the coffee year; a new shop opens at a fraction of its eventual crowd",
+            "January 1: minimum wage step for every worker at or near the floor",
+            "January 1: each worker's bank of 32 unpaid protected hours refills",
+            "Snow: sidewalk cleared within 4 hours of the snow stopping in daytime, by 11am after a night storm",
+            "Restaurant Week pulls diners to the neighborhood (January 19 - February 11, 2027)"
+          ],
+          "due": [
+            {
+              "day": 15,
+              "what": "Owner's fourth-quarter estimated income tax (from the second year)"
+            },
+            {
+              "day": 31,
+              "what": "Quarterly payroll returns: NYS-45 and federal Form 941; annual FUTA return; W-2 forms to every worker (from the second year)",
+              "source": "https://dol.ny.gov/annual-calendar"
+            }
+          ],
+          "goesWrong": [
+            "Half the team has the flu in the same fortnight",
+            "Laptop campers fill the room and buy one drink",
+            "Brokers call with cash advances",
+            "Pipes freeze; the door lets the cold in and the heating bill doubles"
+          ],
+          "events": [
+            "january_trough",
+            "wage_step_january",
+            "flu_season",
+            "flu_takes_the_only_supervisor",
+            "laptop_winter",
+            "cash_advance_offer",
+            "restaurant_week"
+          ]
+        },
+        {
+          "month": 2,
+          "name": "February",
+          "always": [
+            "Still winter trade; the first full payroll month shows the real labor share",
+            "An unannounced Health Department visit can come any day once you are open; ask for the $100 consultative visit first",
+            "February 22, 2026: the new protected-time-off rules took effect"
+          ],
+          "due": [
+            {
+              "day": 28,
+              "what": "End of the sales tax quarter (December 1 - February 28): the money collected is owed in three weeks"
+            }
+          ],
+          "goesWrong": [
+            "Opening buzz fades; friends and family have all visited once",
+            "First no-show at 5:45am: the owner opens",
+            "Ice at the door: a fall is a claim against your liability policy"
+          ],
+          "events": [
+            "flu_season",
+            "laptop_winter",
+            "rating_slide"
+          ]
+        },
+        {
+          "month": 3,
+          "name": "March",
+          "always": [
+            "First sales tax return",
+            "Annual LLC filing fee to the state",
+            "Days get longer; iced drinks start to climb"
+          ],
+          "due": [
+            {
+              "day": 15,
+              "what": "NYS LLC filing fee, Form IT-204-LL (see _common nys_llc_filing_fee)"
+            },
+            {
+              "day": 20,
+              "what": "Sales tax return and payment for December-February; on-time filing earns a credit of 5% of the tax, up to $200",
+              "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm"
+            }
+          ],
+          "goesWrong": [
+            "The sales tax was spent on payroll in February",
+            "First equipment service call: nobody budgeted $150 an hour"
+          ],
+          "events": [
+            "sales_tax_warrant"
+          ]
+        },
+        {
+          "month": 4,
+          "name": "April",
+          "always": [
+            "Outdoor seating season begins for those who hold a Dining Out NYC license",
+            "Air conditioning must be serviced before the first hot day",
+            "First quarterly payroll returns"
+          ],
+          "due": [
+            {
+              "day": 15,
+              "what": "Owner's income tax return and first estimated payment; the cafe's profit or loss lands on the owner's own return"
+            },
+            {
+              "day": 30,
+              "what": "NYS-45 and Form 941 for January-March",
+              "source": "https://dol.ny.gov/annual-calendar"
+            }
+          ],
+          "goesWrong": [
+            "Sidewalk tables put out without the license: fined on the first complaint",
+            "The first hire of January gives notice"
+          ],
+          "events": [
+            "key_barista_leaves"
+          ]
+        },
+        {
+          "month": 5,
+          "name": "May",
+          "always": [
+            "Cold drinks pass half of the orders: more ice, more plastic cups, slower bar",
+            "The city's final property assessment roll comes out: next year's tax escalation is now knowable"
+          ],
+          "due": [
+            {
+              "day": 31,
+              "what": "End of the sales tax quarter (March 1 - May 31)"
+            }
+          ],
+          "goesWrong": [
+            "Ice machine cannot keep up; a second one or bagged ice",
+            "Fruit flies at the drains and the syrup rack: a common violation"
+          ],
+          "events": [
+            "milk_price_up"
+          ]
+        },
+        {
+          "month": 6,
+          "name": "June",
+          "always": [
+            "Second sales tax return",
+            "Schools let out at the end of the month; morning commuter trade thins on residential blocks",
+            "World Cup, June 11 - July 19, 2026: hotels full, effect concentrated near fan zones"
+          ],
+          "due": [
+            {
+              "day": 15,
+              "what": "Owner's second estimated tax payment"
+            },
+            {
+              "day": 20,
+              "what": "Sales tax return and payment for March-May",
+              "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm"
+            },
+            {
+              "day": 20,
+              "what": "Commercial Rent Tax annual return, for shops in Manhattan below 96th Street with base rent of $250,000 or more (see _common commercial_rent_tax)"
+            }
+          ],
+          "goesWrong": [
+            "Students who worked the spring leave town",
+            "Con Edison bill jumps with the air conditioning"
+          ],
+          "events": [
+            "world_cup_2026",
+            "summer_power_peak"
+          ]
+        },
+        {
+          "month": 7,
+          "name": "July",
+          "always": [
+            "Hottest month and the highest electricity price",
+            "The landlord's bill for your share of the property tax increase",
+            "Regulars leave town on weekends and for weeks at a time"
+          ],
+          "due": [
+            {
+              "day": 31,
+              "what": "NYS-45 and Form 941 for April-June",
+              "source": "https://dol.ny.gov/annual-calendar"
+            }
+          ],
+          "goesWrong": [
+            "Heat-wave outage: fridges warm, milk and pastry discarded",
+            "Air conditioning fails on the hottest day and the room empties",
+            "Staff ask for the same vacation weeks"
+          ],
+          "events": [
+            "summer_outage",
+            "summer_power_peak",
+            "tax_escalation_bill",
+            "world_cup_2026"
+          ]
+        },
+        {
+          "month": 8,
+          "name": "August",
+          "always": [
+            "Slowest summer month in residential neighborhoods; offices are half empty",
+            "Six months open: a first graded inspection has usually happened; an A means the next comes in about a year, a B or C means inspectors return within months",
+            "Time to renew the first annual things: insurance quotes, permit renewal notice"
+          ],
+          "due": [
+            {
+              "day": 31,
+              "what": "End of the sales tax quarter (June 1 - August 31)"
+            }
+          ],
+          "goesWrong": [
+            "Opening capital is gone and the shop is not yet at break-even: the month shops like Dandy Espresso and Upperz closed",
+            "Flash-flood rain: basement storage under water"
+          ],
+          "events": [
+            "access_claim",
+            "rating_slide"
+          ]
+        },
+        {
+          "month": 9,
+          "name": "September",
+          "always": [
+            "Schools and offices return: the best weekday mornings since opening",
+            "Third sales tax return",
+            "Pumpkin drinks: the first seasonal menu that customers ask for by name"
+          ],
+          "due": [
+            {
+              "day": 15,
+              "what": "Owner's third estimated tax payment"
+            },
+            {
+              "day": 20,
+              "what": "Sales tax return and payment for June-August",
+              "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm"
+            }
+          ],
+          "goesWrong": [
+            "Your best barista, hired at opening, reaches the median tenure and leaves",
+            "A competitor that built out over the summer opens on the block"
+          ],
+          "events": [
+            "key_barista_leaves",
+            "chain_opens_next_door",
+            "office_days_up"
+          ]
+        },
+        {
+          "month": 10,
+          "name": "October",
+          "always": [
+            "By October 1 the state announces next January's minimum wage",
+            "Heating season begins; the door problem returns",
+            "Third quarterly payroll returns"
+          ],
+          "due": [
+            {
+              "day": 31,
+              "what": "NYS-45 and Form 941 for July-September",
+              "source": "https://dol.ny.gov/annual-calendar"
+            }
+          ],
+          "goesWrong": [
+            "Nine months of opening shifts: the owner is exhausted",
+            "Mice come indoors with the cold; the neighbor's renovation sends more"
+          ],
+          "events": [
+            "owner_burnout",
+            "wage_step_january"
+          ]
+        },
+        {
+          "month": 11,
+          "name": "November",
+          "always": [
+            "Marathon Sunday, November 1, 2026: route blocks closed to cars and lined with spectators",
+            "Thanksgiving week: office districts empty from Wednesday",
+            "Holiday cups, gift cards and catering orders start",
+            "End of the sales tax quarter on November 30"
+          ],
+          "due": [
+            {
+              "day": 30,
+              "what": "End of the sales tax quarter (September 1 - November 30)"
+            }
+          ],
+          "goesWrong": [
+            "A sidewalk shed goes up for facade work before winter",
+            "First snow: the clock for clearing the sidewalk starts when it stops"
+          ],
+          "events": [
+            "marathon_sunday",
+            "sidewalk_shed",
+            "gift_card_hangover"
+          ]
+        },
+        {
+          "month": 12,
+          "name": "December",
+          "always": [
+            "Best sales month of the year for chains; the last ten days are dead in office districts",
+            "Fourth sales tax return, five days before Christmas",
+            "One year of sales: the workers' compensation audit and the first full tax year follow",
+            "Staff expect a holiday bonus and time off in the same week"
+          ],
+          "due": [
+            {
+              "day": 20,
+              "what": "Sales tax return and payment for September-November",
+              "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm"
+            },
+            {
+              "day": 31,
+              "what": "Permit, insurance and licence renewals fall on their anniversaries (Food Service Establishment Permit: $280 a year)"
+            }
+          ],
+          "goesWrong": [
+            "Gift cards sold now are drinks owed in January",
+            "Year-end: only now the owner sees a full-year profit, after twelve months without a salary"
+          ],
+          "events": [
+            "gift_card_hangover",
+            "comp_audit_bill",
+            "january_trough"
+          ]
+        }
+      ],
+      "sources": [
+        "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm",
+        "https://dol.ny.gov/annual-calendar",
+        "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/vendor_collection_credit.htm",
+        "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+        "https://www.ny.gov/programs/minimum-wage",
+        "https://www.nyctourism.com/restaurant-week/",
+        "https://home4.nyc.gov/assets/doh/downloads/pdf/rii/inspection-cycle-overview.pdf",
+        "https://www.findtherun.com/race/130698/2026-tcs-new-york-city-marathon"
+      ],
+      "confidence": "estimate"
+    },
+    "gameWalkthrough": {
+      "how": "Server started with \"tsx server/src/main.ts\" (the README's npm start without the client build), a private demo city created over HTTP, one owner joined, the standard kit opened at the first free cafe address (ev-001, 1st Ave & E 1st St, 2,280 sq ft, prime tier, $119 per sq ft a year), launched on day 1, clock run for 41 game days. Raw log: scratchpad/play.json (not committed). Main branch at commit 0dd297b plus NICHE-DEEP, before the keen-cray branch is merged.",
+      "observed": {
+        "setupTotal": 141166,
+        "cashAfterSetup": 82834,
+        "daysToOpenRecommended": 21,
+        "launchedOnDay": 1,
+        "month1": {
+          "demandUnits": 10221,
+          "servedUnits": 6515,
+          "lostToStaff": 3706,
+          "lostToSize": 0,
+          "revenue": 55377.5,
+          "profit": -3826.66,
+          "rent": 22610,
+          "payroll": 13456,
+          "cogs": 14398,
+          "salesTaxCollected": 4915,
+          "sizeUtilization": 0.881,
+          "reputationEnd": 0.394,
+          "qualityEnd": 0.462
+        },
+        "fineForOpeningWithoutPermit": 1400,
+        "closureDays": 5,
+        "foundOnDay": 31,
+        "inboxMessagesInMonth1": 24,
+        "jointPurchaseOffersInMonth1": 16,
+        "staffAtLaunch": {
+          "barista": 3,
+          "shift_lead": 1
+        },
+        "note": "I sent open_business without orders, so the engine staffed 3 baristas and 1 shift lead (the recommendation was 4 and 1); part of the 3,706 orders lost to short staff is my own under-staffing."
+      },
+      "missingFromLife": [
+        {
+          "n": 1,
+          "gap": "The shop sells at full demand on day 1",
+          "seen": "10,221 orders of demand in the first month (341 a day) for a shop nobody has heard of; served orders identical every day (226).",
+          "life": "A new shop climbs for months; Dandy Espresso closed in month 5 with \"a loyal following\" still too small.",
+          "fix": "Awareness ramp from the keen-cray branch (starts at 35%); mechanic autopsy tag slow_ramp."
+        },
+        {
+          "n": 2,
+          "gap": "Build-out takes zero days",
+          "seen": "A $70,000 build-out, equipment and hiring were complete at once; the only wait was the permit (21 days), and I could launch on day 1 anyway.",
+          "life": "Two to six months of rent with no sales; eleven months in one Brooklyn case.",
+          "fix": "Build-out days from keen-cray (60/90/180); launch must be blocked until the room is built."
+        },
+        {
+          "n": 3,
+          "gap": "Opening without a permit pays",
+          "seen": "Thirty days of illegal trading brought $55,378 of sales; the fine found on day 31 was $1,400 and 5 closed days.",
+          "life": "An unpermitted food business is ordered closed on the first visit; the Health Department visits new establishments unannounced after opening.",
+          "fix": "Routine first inspection within the first 30 days for every new food business; closure until the permit is ready, not a fixed 5 days."
+        },
+        {
+          "n": 4,
+          "gap": "No staff lives",
+          "seen": "Staff are a number: hired instantly, never late, never quit, no training time; only a blanket flu multiplier exists.",
+          "life": "Median barista tenure 8-14 months; whole teams walk out; the only certificate holder falls ill.",
+          "fix": "Events key_barista_leaves, staff_walkout, flu_takes_the_only_supervisor; lever cross_training; cost staff_replacement."
+        },
+        {
+          "n": 5,
+          "gap": "The owner costs nothing and never tires",
+          "seen": "No owner wage, no owner hours, no household. A month with a $3,827 loss is shown as almost break-even.",
+          "life": "Owners average $48,234 a year when the shop survives and nothing in year one; burnout closes profitable shops.",
+          "fix": "Mechanic owner_hours; analytics line \"profit after an honest wage for your hours\"."
+        },
+        {
+          "n": 6,
+          "gap": "The lease is a monthly price, not a contract",
+          "seen": "Rent $22,610 a month for 2,280 sq ft with 18 seats; no term, no option, no escalation, no landlord, no exit cost. The game let me rent three times the space the kit can use.",
+          "life": "Renewal at 2-3x, sale of the building, tax pass-through, 30-day terminations: the first cause of death in the 58 stories.",
+          "fix": "Mechanic lease_clock; lever lease_terms; events lease_renewal_offer, building_sold, tax_escalation_bill; a warning when sqft is far above what the kit needs."
+        },
+        {
+          "n": 7,
+          "gap": "Nothing breaks and nothing spoils",
+          "seen": "Maintenance is a flat $290; no repair bill, no outage, no discarded stock in 41 days.",
+          "life": "The first big repair kills a shop with no reserve; a heat-wave outage costs a day of milk and pastry.",
+          "fix": "Mechanic reserve_fund with one-off bills; event summer_outage; lever insurance_endorsements. Equipment itself is D03."
+        },
+        {
+          "n": 8,
+          "gap": "January is like any month",
+          "seen": "Forecast \"Sunny, 43°F\" with foot traffic x1.0 every day; demand above the reference in the weakest month of the real year; Restaurant Week and a farmers market were the only events.",
+          "life": "January is the bottom: Starbucks' December runs 58% above it; snow, flu, laptops, wage step and tax due dates pile up.",
+          "fix": "Event january_trough and the month-by-month calendar in extra.ownerYear."
+        },
+        {
+          "n": 9,
+          "gap": "Cash equals sales",
+          "seen": "Every sale is cash the same day; sales tax collected sits in the same balance and is shown as cash; no payouts, holds, gift cards or invoices.",
+          "life": "Owners spend the sales tax in a bad month; processors hold payouts after a spike.",
+          "fix": "Mechanics cash_timing and compliance_calendar; show \"cash that is yours\" net of sales tax owed on the Today screen."
+        },
+        {
+          "n": 10,
+          "gap": "No private claims, no neighbors, no street",
+          "seen": "The only attacker is another player's 311 report. No lawsuits, no landlord repairs, no shed, no dig in 41 days.",
+          "life": "ADA suits, music licence letters, pay-frequency claims; a neighbor's complaint closed a 30-year garden.",
+          "fix": "Mechanic private_claims; reports report_illegal_seating and report_sidewalk_sign; events street_dig, barricades, gas_red_tag."
+        },
+        {
+          "n": 11,
+          "gap": "Deal spam",
+          "seen": "16 identical joint-purchase offers from three AI shops in the first 30 days (24 inbox messages in all).",
+          "life": "Not a life gap: an interface problem that buries the one message that matters (the violation notice arrived among them).",
+          "fix": "Ask the lead to throttle AI offers to one per neighbor per month."
+        },
+        {
+          "n": 12,
+          "gap": "The advisor recommends a price rise with \"0% of orders lost\"",
+          "seen": "Recommendation price_up: $8.50 to $9.25 \"adds about $4,320 a month: you lose 0% of orders\".",
+          "life": "True only while the shop is capacity-capped; a new owner will read it as \"price does not matter\".",
+          "fix": "Wording: \"you are turning people away, so a higher price costs you no orders today\"."
+        }
+      ]
+    },
+    "topGaps": [
+      {
+        "rank": 1,
+        "gap": "The lease has no end, no terms and no landlord",
+        "why": "Rent at renewal, non-renewal, sale of the building and landlord disputes are the cause in 20 of the 58 stories. The pack has one number: monthly rent.",
+        "fill": [
+          "lease_terms",
+          "lease_clock",
+          "lease_renewal_offer",
+          "building_sold",
+          "tax_escalation_bill",
+          "no_right_to_renew"
+        ]
+      },
+      {
+        "rank": 2,
+        "gap": "Months before the first sale and the slow climb after it",
+        "why": "Shops die in months 5-8 when the opening money runs out (Dandy Espresso, Upperz) or never open (75 Second Avenue, the gas moratorium). The main branch opens at full demand on day 1.",
+        "fill": [
+          "keen-cray footfall ramp and build-out days",
+          "closed_but_paying",
+          "loyal_following_is_not_break_even"
+        ]
+      },
+      {
+        "rank": 3,
+        "gap": "Closures that are not inspections",
+        "why": "Gas shut-offs (four stories, up to 8 months), water, walkouts and tax seizures close a shop while rent runs. The pack closes a shop only by a health or permit violation.",
+        "fill": [
+          "closed_but_paying",
+          "gas_red_tag",
+          "water_off",
+          "staff_walkout",
+          "sales_tax_warrant",
+          "kitchen_energy"
+        ]
+      },
+      {
+        "rank": 4,
+        "gap": "People are a headcount",
+        "why": "No turnover, no key person, no walkout, no owner. The pack has two roles and a flu multiplier; real shops close for lack of hands and from exhaustion.",
+        "fill": [
+          "key_barista_leaves",
+          "cross_training",
+          "staff_replacement",
+          "owner_hours",
+          "owner_burnout",
+          "flu_takes_the_only_supervisor"
+        ]
+      },
+      {
+        "rank": 5,
+        "gap": "No reserve and no one-off bills",
+        "why": "Every cost in the pack is a smooth monthly line. Real shops are killed by a lump: a repair, the tax escalation, an audit premium, a settlement.",
+        "fill": [
+          "reserve_fund",
+          "cash_reserve",
+          "comp_audit_bill",
+          "insurance_endorsements"
+        ]
+      },
+      {
+        "rank": 6,
+        "gap": "Debt and fast money",
+        "why": "The City Bakery, Brooklyn Roasting, FIKA and Vox Pop died of debt, not of empty rooms. The pack has no lender except a neighbor.",
+        "fill": [
+          "financing",
+          "cash_advance_offer",
+          "cash_advance"
+        ]
+      },
+      {
+        "rank": 7,
+        "gap": "The street outside the door",
+        "why": "The pack has one street event (a 3-month shed at -10%). Real sheds average 557 days; street works and barricades cut sales 20-50%; chains and carts arrive and leave.",
+        "fill": [
+          "sidewalk_shed (corrected to 12 months)",
+          "street_dig",
+          "barricades",
+          "chain_opens_next_door",
+          "chain_leaves",
+          "coffee_carts_2027"
+        ]
+      },
+      {
+        "rank": 8,
+        "gap": "The calendar",
+        "why": "The pack has no January, no due dates on the screen, no wage step. An owner's year is a sequence of dates: four sales tax returns, four payroll returns, the wage step, renewals.",
+        "fill": [
+          "extra.ownerYear",
+          "compliance_calendar",
+          "january_trough",
+          "wage_step_january"
+        ]
+      },
+      {
+        "rank": 9,
+        "gap": "Claims from private parties",
+        "why": "Accessibility suits, music licences and pay-frequency claims are among the most common surprises in New York and none is an inspection.",
+        "fill": [
+          "private_claims",
+          "access_claim",
+          "music_letter",
+          "pay_frequency_claim",
+          "portable_ramp"
+        ]
+      },
+      {
+        "rank": 10,
+        "gap": "What death looks like",
+        "why": "A bankrupt player sees \"cash below zero\". A real owner wants to know what killed the shop and who it has happened to before.",
+        "fill": [
+          "autopsy",
+          "extra.failureStories with causeTags"
+        ]
+      }
+    ],
+    "corrections": [
+      {
+        "id": "sidewalk_shed",
+        "section": "events",
+        "was": "months: 3",
+        "now": "months: 12",
+        "because": "The average sidewalk shed in the city was 509 days old in May 2025 and 557 days in March 2026. Three months teaches the wrong lesson; twelve is the cap of a season.",
+        "source": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag"
+      },
+      {
+        "id": "sidewalk_cafe_license",
+        "section": "setup",
+        "was": "cost 2,550; roadway season April 1 - November 29 implied by the pack's rule cards",
+        "now": "check: licence fee reported as $1,050 for a four-year term (sidewalk or roadway), $2,100 for both; roadway dining made year-round by a law signed in September 2026",
+        "because": "Search results (AIA New York, September 9, 2026; 311 article) report the year-round law (Int 655) and the fee per four-year term. I could not open diningoutnyc.info to reconcile this with the $2,550 in the pack (which may include the consent fee and deposit). For D12 to verify.",
+        "source": "https://www.aiany.org/news/mamdani-enacts-year-round-outdoor-dining-program/"
+      },
+      {
+        "id": "flu_season",
+        "section": "events",
+        "was": "staffAvailability x0.92 for 2 months for everyone",
+        "now": "keep the multiplier; add: a shop with a single Food Protection Certificate holder is closed 5 days (event flu_takes_the_only_supervisor)",
+        "because": "The event had no player move. With lever cross_training it has one.",
+        "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page"
+      },
+      {
+        "id": "sick_leave_cover",
+        "section": "monthlyCosts",
+        "was": "$70 per worker a month for 40 paid hours",
+        "now": "same amount; note must add the 32 unpaid hours (from February 22, 2026) and 20 paid prenatal hours",
+        "because": "Unpaid hours cost no wages but remove hands: 32 / 1,680 yearly hours = 1.9% of each worker's time on top of the 2.4% already paid.",
+        "source": "https://www.mayerbrown.com/en/insights/publications/2026/07/new-york-city-adopts-amended-sick-and-safe-leave-rules"
+      },
+      {
+        "id": "fair_workweek",
+        "section": "ruleCards",
+        "was": "present in the cafe pack",
+        "now": "keep, but next to it the card wage_index_2027",
+        "because": "The pack says the $17.00 minimum is \"unchanged for 2027\" (_common source list). From January 1, 2027 it is indexed to inflation; the number was due by October 1, 2026 and was not found in search.",
+        "source": "https://www.ny.gov/programs/minimum-wage"
+      },
+      {
+        "id": "coffee_price_spike",
+        "section": "events",
+        "was": "only a +20% spike",
+        "now": "add the mirror event coffee_price_slide",
+        "because": "Arabica fell from about $4.23 (November 2025) to about $2.80 a pound (November 2026); a 2026 game year would more truthfully start with a slide than a spike.",
+        "source": "https://tradingeconomics.com/commodity/coffee/news/599144"
+      },
+      {
+        "id": "no_fse_permit",
+        "section": "violations",
+        "was": "fine $1,000, 5 closure days, found by inspection or complaint",
+        "now": "same fine; closure should last until the permit is ready, and a first routine visit should fall within 30 days of opening",
+        "because": "In my play-through 30 days of unpermitted trading earned $55,378 against a $1,400 fine: the corner pays. In life the Department visits a new establishment unannounced after it opens and can order an unpermitted one closed.",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+      }
+    ],
+    "howNumbersWereChecked": "This session could not open web pages: the environment's network policy blocks every outbound host (WebFetch and curl both failed), and only the web search tool worked. Every number here was therefore seen in a search result summary of the cited page, not on the page itself, and every confidence is \"estimate\" even when the cited page is a primary source (nyc.gov, tax.ny.gov, dol.ny.gov, court records). The note says what was seen and what is my own arithmetic. Effect sizes (multipliers, reputation and quality changes) are game-balance choices unless the note cites a figure. Stories: each has the link the search returned; names, dates and quotes are as the search summary gave them. For D12: the entries whose notes say \"NOT found\" are placeholders, not facts.",
+    "notFound": [
+      "The 2027 minimum wage for New York City (due from the Labor Department by October 1, 2026): not in search results.",
+      "Current penalty for using space contrary to the Certificate of Occupancy (Admin Code §28-118.3.2): only an outdated schedule surfaced.",
+      "Dollar penalty and points for operating without hot and cold running water in 24 RCNY Chapter 23, Appendix 23-C.",
+      "Current Sanitation fine for an A-frame sign: only 2015 figures ($100-$300).",
+      "A measured month-by-month sales index for independent coffee shops (Square or Toast data): only Starbucks card data and trade commentary.",
+      "A measured ramp of a new cafe's sales over its first year.",
+      "Dwell time and seat turnover for laptop users.",
+      "Authoritative settlement amounts for physical-access ADA suits against New York restaurants.",
+      "Con Edison's deposit formula for a new commercial account.",
+      "The MIT Living Wage figure for a New York County family (wanted for an \"owner's household\" number).",
+      "A full timeline, in months, of a commercial nonpayment eviction in New York City.",
+      "Price of utility-interruption and spoilage endorsements for a small cafe policy.",
+      "A New York City coffee shop that closed permanently after a Health Department closure with the owner saying so (only reopenings were found).",
+      "A New York cafe closure caused by a wage lawsuit, and one caused by a break-in series (found only outside New York).",
+      "Whether the Dining Out NYC fee in the pack ($2,550) is still right after the September 2026 year-round law."
     ]
   },
   "levers": [
@@ -3822,6 +4824,902 @@
       "title": "The first year is not the dangerous one",
       "text": "A study of 81,000 independent restaurants found 17% failed in year one - not 90%. An Ohio study found 26% in year one and 59% within three years: shops die when the opening money is gone.",
       "source": "https://news.osu.edu/restaurant-failure-rate-much-lower-than-commonly-assumed-study-finds/"
+    }
+  ],
+  "version": 1,
+  "checked": "2026-11-14",
+  "author": "researcher D10",
+  "counts": {
+    "failureStories": 58,
+    "nonObvious": 104,
+    "eventCatalog": 36,
+    "mechanics": 10,
+    "events": 7,
+    "levers": 14,
+    "shortcuts": 6,
+    "violations": 7,
+    "officials": 3,
+    "reports": 3,
+    "ruleCards": 21,
+    "setup": 3,
+    "monthlyCosts": 3
+  },
+  "sources": [
+    {
+      "url": "https://greenpointers.com/2025/08/21/greenpoint-coffee-shop-sippy-cafe-will-close-this-october/",
+      "usedFor": "failureStories:fs_sippy_greenpoint, nonObvious:renewal_rent_can_triple, eventCatalog:lease_renewal_offer, mechanics:lease_clock, ruleCards:no_right_to_renew",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://newyork.news12.com/greenpoint-coffee-shop-sippy-caf-closing-after-rent-nearly-triples",
+      "usedFor": "failureStories:fs_sippy_greenpoint",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://multisite.nycnewsnetwork.com/clintonhill/?p=1349",
+      "usedFor": "failureStories:fs_connecticut_muffin_clinton_hill, nonObvious:rent_hike_in_orders",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.westsiderag.com/2026/04/02/upper-west-side-cafe-set-to-close-after-38-years-it-breaks-our-hearts",
+      "usedFor": "failureStories:fs_edgars_cafe_uws",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.thelodownny.com/?p=111961",
+      "usedFor": "failureStories:fs_cup_and_saucer, nonObvious:real_estate_tax_passthrough, eventCatalog:tax_escalation_bill, mechanics:lease_clock",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://bedfordandbowery.com/2017/07/les-stalwart-cup-saucer-to-shutter-after-75-years/",
+      "usedFor": "failureStories:fs_cup_and_saucer",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://evgrieve.com/2018/10/the-coffee-shop-closed-on-union-square.html",
+      "usedFor": "failureStories:fs_coffee_shop_union_square, nonObvious:rent_27_percent, mechanics:lease_clock",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.metro.us/news/local-news/new-york/union-square-coffee-shop-last-day",
+      "usedFor": "failureStories:fs_coffee_shop_union_square",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.brooklynpaper.com/two-sheepshead-bay-businesses-closed-for-months-after-nearby-gas-leak",
+      "usedFor": "failureStories:fs_vanka_cafe_gas, nonObvious:gas_restore_takes_months, eventCatalog:gas_red_tag, mechanics:closed_but_paying, levers:kitchen_energy, ruleCards:gas_restore",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.norwoodnews.org/national-restaurant-coffee-shop-closes-after-43-years/",
+      "usedFor": "failureStories:fs_national_restaurant_bronx",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://evgrieve.com/2024/01/ongoing-building-issues-force-caffe.html",
+      "usedFor": "failureStories:fs_caffe_corretto_ev",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.westsiderag.com/2017/02/03/four-restaurants-close-because-of-gas-problem-in-amsterdam-avenue-building",
+      "usedFor": "failureStories:fs_amsterdam_ave_gas_four, nonObvious:all_electric_menu_is_insurance",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://therealdeal.com/new-york/2011/09/19/famed-ev-eatery-closes-doors-over-landlord-construction-dispute-between-bob-perl-and-abraham-noy/",
+      "usedFor": "failureStories:fs_life_cafe_ev",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://kottke.org/19/10/what-killed-city-bakery",
+      "usedFor": "failureStories:fs_city_bakery, nonObvious:debt_like_quicksand",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/The_City_Bakery",
+      "usedFor": "failureStories:fs_city_bakery",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.brooklynpaper.com/gorilla-warfare-as-entire-staff-quits-fifth-ave-coffee-bar",
+      "usedFor": "failureStories:fs_gorilla_coffee_walkout, nonObvious:whole_staff_can_leave_together, eventCatalog:staff_walkout",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://consumerist.com/2010/04/28/coffee-shop-reopens-after-entire-staff-quit-but-business-is-tepid/",
+      "usedFor": "failureStories:fs_gorilla_coffee_walkout, nonObvious:staff_drama_is_public, mechanics:closed_but_paying",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.brooklynpaper.com/vox-popped-outlaw-coffeeshop-closed-down-by-taxman-again",
+      "usedFor": "failureStories:fs_vox_pop_seized, nonObvious:sales_tax_warrant_padlock, eventCatalog:sales_tax_warrant, ruleCards:sales_tax_seizure",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.brownstoner.com/brooklyn-life/closing-bell-looking-back-at-vox-pop",
+      "usedFor": "failureStories:fs_vox_pop_seized",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://dailycoffeenews.com/2019/01/23/the-rise-decline-and-section-363-sale-of-the-new-york-coffee-chain-fika",
+      "usedFor": "failureStories:fs_fika_chain, nonObvious:second_shop_doubles_leases",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://tribecacitizen.com/2019/09/25/the-swedish-coffee-spot-fika-has-closed/",
+      "usedFor": "failureStories:fs_fika_chain",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.westsiderag.com/2024/10/31/cafe-lalo-will-not-reopen-in-its-longtime-uws-home-building-owner",
+      "usedFor": "failureStories:fs_cafe_lalo",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.ilovetheupperwestside.com/youve-got-a-lawsuit-cafe-lalo-faces-eviction/",
+      "usedFor": "failureStories:fs_cafe_lalo, nonObvious:repairs_dispute_keeps_room_dark",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://dailycoffeenews.com/2024/06/11/philadelphias-ocf-coffee-closing-all-shops-after-union-push",
+      "usedFor": "failureStories:fs_ocf_coffee_philadelphia, nonObvious:indie_baristas_unionize, eventCatalog:union_petition",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://urbanmilwaukee.com/?p=1084521",
+      "usedFor": "failureStories:fs_daily_bird_milwaukee, nonObvious:burnout_closes_profitable_shops, eventCatalog:owner_burnout, levers:owner_schedule",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.baristamagazine.com/los-angeles-kindness-mischief-has-closed-its-doors-but-something-new-is-on-the-horizon/",
+      "usedFor": "failureStories:fs_kindness_mischief_la",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://tucson.com/life-entertainment/local/food-drink/article_21b69e75-5d55-49b2-9846-c39246a599d7.html",
+      "usedFor": "failureStories:fs_cafe_maggie_tucson, nonObvious:cash_reserve_for_first_repair, mechanics:reserve_fund, levers:cash_reserve",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://secretnyc.co/buddies-coffee-closing-williamsburg/",
+      "usedFor": "failureStories:fs_buddies_coffee, nonObvious:no_exclusivity, nonObvious:viral_rescue_does_not_fix_lease, eventCatalog:chain_opens_next_door, mechanics:rescue_campaign, events:chain_opens_next_door",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://evgrieve.com/2025/07/buddies-coffee-forced-out-of.html",
+      "usedFor": "failureStories:fs_buddies_coffee",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://brooklyn.news12.com/bushwick-public-house-venue-closes-after-landlord-tripled-rent",
+      "usedFor": "failureStories:fs_bushwick_public_house",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://bushwickdaily.com/news/6197-bushwick-mainstay-and-community-hub-little-skips-is-closing-its-doors-due-to-rent-increase",
+      "usedFor": "failureStories:fs_little_skips",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://greenpointers.com/2025/08/02/franklin-corner-cafe-is-closing-after-17-years",
+      "usedFor": "failureStories:fs_franklin_corner_cafe, nonObvious:no_right_to_renew",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://greenpointers.com/2025/10/24/multiple-greenpoint-businesses-face-closure-threat-after-notorious-landlord-sends-last-minute-lease-terminations",
+      "usedFor": "failureStories:fs_greenpoint_mass_terminations, nonObvious:termination_clause_month, mechanics:lease_clock",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://brooklyn.news12.com/2025/10/29/over-20-greenpoint-businesses-given-last-minute-lease-termination/6RVH66SjcKhEkTZIzqTXr5",
+      "usedFor": "failureStories:fs_greenpoint_mass_terminations",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://brooklyn.news12.com/2025/12/10/popular-juice-shop-in-crown-heights-closes-its-doors/1nmkac7r25b71vtq38DmnB",
+      "usedFor": "failureStories:fs_jenny_on_the_greens, nonObvious:building_sale_resets_everything, eventCatalog:building_sold",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.brownstoner.com/brooklyn-life/cafe-tucum-evicted-210-patchen-bed-stuy",
+      "usedFor": "failureStories:fs_cafe_tucum, nonObvious:unpaid_wages_follow_owner",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://patch.com/new-york/bed-stuy/priests-cafe-closes-when-nycs-worst-landlords-refuses-repairs",
+      "usedFor": "failureStories:fs_reconnect_cafe, nonObvious:check_landlord_record",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20140701/upper-east-side/coffee-shop-on-madison-ave-shutters-after-just-5-months",
+      "usedFor": "failureStories:fs_dandy_espresso, nonObvious:loyal_following_is_not_break_even",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://columbianewsservice.com/2025/12/10/the-cafe-must-go-on-the-cingir-brothers-fight-to-save-park-cafe/",
+      "usedFor": "failureStories:fs_park_cafe_manhattan_ave, nonObvious:arrears_block_renewal",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://greenpointers.com/2021/12/08/champion-coffee-closes-in-greenpoint",
+      "usedFor": "failureStories:fs_champion_coffee",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://queenspost.com/sunnyside-staple-alpha-donuts-abruptly-closes-after-nearly-50-years",
+      "usedFor": "failureStories:fs_alpha_donuts, nonObvious:deferred_capex_kills_old_shops",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://dailycoffeenews.com/2020/10/23/brooklyn-roasting-company-files-for-chapter-11-bankruptcy",
+      "usedFor": "failureStories:fs_brooklyn_roasting",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.brooklynpaper.com/brooklyn-roasting-company-files-bankruptcy-plans-to-close-two-remaining-cafe-locations",
+      "usedFor": "failureStories:fs_brooklyn_roasting, nonObvious:wholesale_outlives_cafes, levers:catering_wholesale",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://therealdeal.com/2010/08/24/second-avenue-merchants-subway-construction-cutting-business-by-up-to-40/",
+      "usedFor": "failureStories:fs_second_avenue_subway, eventCatalog:street_dig, events:street_dig",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.gothamgazette.com/government/5585-throughout-2nd-avenue-subway-build-local-businesses-see-fewer-customers-no-aid-mta",
+      "usedFor": "failureStories:fs_second_avenue_subway, nonObvious:public_works_no_compensation",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://evgrieve.com/search/label/closings%202025",
+      "usedFor": "failureStories:fs_poco_avenue_b, nonObvious:leaving_at_lease_end_is_success",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.westsidespirit.com/home/boris-horton-dog-cafe-in-east-village-goes-belly-up-are-talks-afoot-with-new-owner-HA3983108",
+      "usedFor": "failureStories:fs_boris_horton, nonObvious:crowdfunding_buys_months, eventCatalog:rescue_campaign",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.brooklynpaper.com/boris-horton-dog-cafe-williamsburg-closure",
+      "usedFor": "failureStories:fs_boris_horton, mechanics:rescue_campaign",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://bushwickdaily.com/?p=17425",
+      "usedFor": "failureStories:fs_walters_coffee_bushwick, nonObvious:partners_need_exit_rules",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20150107/bushwick/coffee-shop-where-owner-called-jews-greedy-closes",
+      "usedFor": "failureStories:fs_coffee_shop_bushwick_rant, nonObvious:owners_post_is_the_shops_post",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.yahoo.com/news/york-city-cafe-bar-closes-191257939.html",
+      "usedFor": "failureStories:fs_upperz_cafe, nonObvious:all_day_concept_burns_cash",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://tribecacitizen.com/?p=109936",
+      "usedFor": "failureStories:fs_pakistan_tea_house, nonObvious:building_violations_block_your_permits",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://bklyner.com/no-new-gas-national-grid-holds-brooklyn-restaurants-hostage",
+      "usedFor": "failureStories:fs_national_grid_moratorium, nonObvious:utility_can_refuse_new_service",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://brooklyn.news12.com/prospect-lefferts-gardens-restaurant-unable-to-open-due-to-national-grid-standoff-40948244",
+      "usedFor": "failureStories:fs_national_grid_moratorium",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nycourts.gov/reporter/pdfs/2020/2020_30413.pdf",
+      "usedFor": "failureStories:fs_hurleys_mca, nonObvious:mca_is_paid_from_sales, eventCatalog:cash_advance_offer, mechanics:financing, ruleCards:cash_advance",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.thecity.nyc/2022/09/21/merchant-cash-advance-new-york-threats-courts/",
+      "usedFor": "failureStories:fs_hurleys_mca, mechanics:financing",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://billypenn.com/2023/01/11/good-karma-cafe-closes-wash-west-theft-embezzlement/",
+      "usedFor": "failureStories:fs_good_karma_philadelphia, levers:cash_controls",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.odt.co.nz/regions/central-otago/theft-lockdown-lead-cafe-owners-close-business",
+      "usedFor": "failureStories:fs_nz_cafe_manager_theft, nonObvious:trusted_manager_theft, nonObvious:bought_business_inherits_people, eventCatalog:theft_discovered",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.dnainfo.com/chicago/20140103/west-town/swim-cafe-closes-as-owner-battles-cancer-looks-for-someone-take-over",
+      "usedFor": "failureStories:fs_swim_cafe_chicago, nonObvious:owner_is_single_point_of_failure, mechanics:owner_hours",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://thecoastnews.com/a-little-moore-friction-between-owners-closes-leucadia-cafe/",
+      "usedFor": "failureStories:fs_little_moore_cafe",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20111213/downtown/milk-street-cafe-closing-thursday-after-struggle-with-nypd-barricades",
+      "usedFor": "failureStories:fs_milk_street_cafe, nonObvious:street_can_be_fenced, eventCatalog:barricades",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.cbsnews.com/newyork/news/milk-street-cafe-closes-after-losing-business-during-occupy-wall-street-protests/",
+      "usedFor": "failureStories:fs_milk_street_cafe",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://evgrieve.com/2022/04/owner-citys-bureaucratic-red-tape.html",
+      "usedFor": "failureStories:fs_75_second_ave_never_opened, nonObvious:landmark_district_adds_agency, preOpening",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20141006/east-village/city-waited-3-decades-rule-yaffa-cafes-back-patio-illegal-manager-says",
+      "usedFor": "failureStories:fs_yaffa_cafe, nonObvious:unpermitted_space_is_borrowed_revenue, eventCatalog:garden_complaint, ruleCards:illegal_occupancy",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://bedfordandbowery.com/2014/10/heres-why-yaffa-cafe-had-to-close-and-one-last-look-inside/",
+      "usedFor": "failureStories:fs_yaffa_cafe",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://manhattan.institute/article/the-citys-war-on-small-business-slams-cat-cafes",
+      "usedFor": "failureStories:fs_little_lions_cat_cafe, nonObvious:closure_costs_rent_per_day, mechanics:closed_but_paying",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.westsiderag.com/2022/09/27/the-mermaid-inn-closing-current-spot-but-plans-to-reopen-in-neighborhood",
+      "usedFor": "failureStories:fs_mermaid_inn_uws, nonObvious:shed_is_not_your_decision",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20151221/upper-west-side/ocean-grill-suing-landlord-for-63m-claiming-construction-led-closure",
+      "usedFor": "failureStories:fs_ocean_grill_uws, nonObvious:scaffold_abatement_clause",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://washingtonian.com/2024/05/15/the-wydown-abruptly-shuts-down-dc-coffee-shops-amid-unionization-fight/",
+      "usedFor": "failureStories:fs_wydown_dc",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://dailycoffeenews.com/2026/10/30/popular-san-francisco-coffee-company-closes-both-cafes-after-landlord-disputes/",
+      "usedFor": "failureStories:fs_outset_coffee_sf, nonObvious:back_rent_doubles_in_court",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://t-j.ru/kofe-i-knigi/",
+      "usedFor": "failureStories:fs_tj_gorshenin_books_coffee, nonObvious:dream_vs_business",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://t-j.ru/93gradusa/",
+      "usedFor": "failureStories:fs_tj_93_gradusa, nonObvious:shared_air",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://t-j.ru/list/biz-fails-2022/",
+      "usedFor": "failureStories:fs_tj_20_instead_of_70, nonObvious:neighbors_traffic_is_not_yours",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.infranken.de/lk/ansbach/gastronomie/schillingsfuerst-schlosscafe-muss-nach-fast-29-jahren-schliessen-trotz-zahlreicher-kunden-art-5837450",
+      "usedFor": "failureStories:fs_schlosscafe_schillingsfuerst, nonObvious:staff_shortage_closes_full_rooms",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.infranken.de/lk/nuernberg/gastronomie/nuernberger-cafe-geschlossen-niu-asian-cafe-schliessung-andrang-schlange-art-6324224,PRINT",
+      "usedFor": "failureStories:fs_niu_cafe_nuernberg",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+      "usedFor": "nonObvious:tax_debt_follows_the_business, ruleCards:bulk_sale_notice",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+      "usedFor": "nonObvious:weekly_pay_for_manual_workers, eventCatalog:pay_frequency_claim, mechanics:private_claims, violations:pay_frequency_violation, ruleCards:pay_frequency_violation",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.crowell.com/en/insights/client-alerts/effective-date-of-the-new-york-city-pay-transparency-law-extended-to-november-1-2022",
+      "usedFor": "nonObvious:job_ad_needs_pay_range",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.venable.com/insights/publications/2026/04/deadlines-for-the-new-york-state-secure-choice",
+      "usedFor": "nonObvious:secure_choice_ira",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/oath/downloads/pdf/Small-Business-DOHMH.pdf",
+      "usedFor": "nonObvious:reinspection_a_waives_fines, ruleCards:reinspection_relief",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf",
+      "usedFor": "nonObvious:free_consultative_inspection, setup:consultative_inspection",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/businesses/setup-operations/setout.page",
+      "usedFor": "nonObvious:bins_with_lids, ruleCards:lidded_bins",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
+      "usedFor": "nonObvious:sweep_18_inches, officials:sanitation_agent",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "usedFor": "nonObvious:snow_clock, ownerYear",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://themidtowngazette.com/?p=10092",
+      "usedFor": "nonObvious:a_frame_sign_ticket, levers:street_presence, violations:sidewalk_obstruction, ruleCards:sidewalk_obstruction",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/safety/sign.page",
+      "usedFor": "nonObvious:awning_sign_trap",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nfib.com/news/news/understanding-new-york-state-credit-card-surcharge-guidelines/",
+      "usedFor": "nonObvious:card_surcharge_rules, violations:illegal_surcharge, ruleCards:illegal_surcharge",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.governor.ny.gov/news/governor-hochul-signs-package-legislation-protect-credit-and-gift-card-holders",
+      "usedFor": "nonObvious:gift_cards_nine_years, eventCatalog:gift_card_hangover, mechanics:cash_timing, levers:gift_cards",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.everycrsreport.com/files/2025-04-16_IF12970_089de047373b3b37f31f7c8b286333da57803926.html",
+      "usedFor": "nonObvious:startup_costs_not_deductible_at_once, ruleCards:startup_costs_tax",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://roughnotes.com/utility-services-coverage-often-overlooked-endorsement/",
+      "usedFor": "nonObvious:outage_not_insured_by_default, mechanics:reserve_fund, levers:insurance_endorsements, ruleCards:outage_insurance",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://nationalcoffee.blog/2017/06/21/what-i-wish-i-knew-advice-from-coffee-shop-owners/",
+      "usedFor": "nonObvious:lease_equipment_with_service, nonObvious:accountant_before_first_dollar",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.dripos.com/counter-talk/what-coffee-shop-owners-wish-they-knew-before-opening",
+      "usedFor": "nonObvious:plan_approval_before_equipment, nonObvious:seats_cap_revenue, nonObvious:owner_is_plumber, preOpening",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.fundingcircle.com/us/resources/?p=8657",
+      "usedFor": "nonObvious:budget_two_thirds_short, preOpening",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://community.squareup.com/t5/Food-and-Beverage/4-Learnings-from-a-new-coffee-shop-owner/m-p/761899",
+      "usedFor": "nonObvious:oat_decaf_matcha",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nerdwallet.com/business/software/learn/square-concern",
+      "usedFor": "nonObvious:processor_hold_on_spike, eventCatalog:feature_and_flood, eventCatalog:processor_reserve, levers:refund_policy",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://fordhamiplj.org/2018/11/21/royalties-unpaid-small-businesses-unknowingly-break-the-law/",
+      "usedFor": "nonObvious:music_needs_licenses, eventCatalog:music_letter, mechanics:private_claims, levers:music, violations:unlicensed_music, monthlyCosts:music_license",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.mondaq.com/unitedstates/discrimination-disability-sexual-harassment/1763220/ada-lawsuits-against-coffee-shops-and-breweries-on-the-rise-how-small-businesses-can-avoid-costly-accessibility-claims-about-architectural-barriers-and-websites",
+      "usedFor": "nonObvious:ada_drive_by_suits, eventCatalog:access_claim, violations:access_barrier, officials:private_plaintiff, setup:portable_ramp, ruleCards:access_barrier",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://council.nyc.gov/press/2025/05/01/2859/",
+      "usedFor": "nonObvious:delivery_cap_has_tiers",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag",
+      "usedFor": "nonObvious:shed_average_500_days, corrections:sidewalk_shed, events:sidewalk_shed",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://commercialobserver.com/2025/03/ny-city-council-approves-reforms-sidewalk-shed-laws/",
+      "usedFor": "nonObvious:shed_reform_2025, ruleCards:shed_duration",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.ny.gov/programs/minimum-wage",
+      "usedFor": "nonObvious:min_wage_indexed_2027, eventCatalog:wage_step_january, ownerYear, corrections:fair_workweek, events:wage_step_january, ruleCards:wage_index_2027",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.mayerbrown.com/en/insights/publications/2026/07/new-york-city-adopts-amended-sick-and-safe-leave-rules",
+      "usedFor": "nonObvious:unpaid_sick_bank_2026, corrections:sick_leave_cover, ruleCards:unpaid_time_off_2026",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.rts.com/blog/rollout-schedule-dsny-cwz/",
+      "usedFor": "nonObvious:waste_zone_carter",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://immresearch.org/reports/street-vendor-victory-reshaping-the-way-nyc-authorizes-vending/",
+      "usedFor": "nonObvious:more_street_vendors_2027, eventCatalog:coffee_carts_2027",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://news.osu.edu/restaurant-failure-rate-much-lower-than-commonly-assumed-study-finds/",
+      "usedFor": "nonObvious:first_year_failure_is_17_not_90, mechanics:autopsy, ruleCards:first_year_myth",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.governor.ny.gov/news/governor-hochul-highlights-statewide-fifa-world-cup-impacts",
+      "usedFor": "nonObvious:world_cup_was_uneven, eventCatalog:world_cup_2026",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational",
+      "usedFor": "nonObvious:congestion_zone_foot_traffic_up",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://finance.yahoo.com/news/starbucks-cold-business-made-up-75-of-us-beverage-sales--bring-on-the-ice-nuggets-201812097.html",
+      "usedFor": "nonObvious:cold_drinks_three_quarters",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.dripos.com/counter-talk/how-to-keep-your-best-baristas----and-actually-reduce-turnover",
+      "usedFor": "nonObvious:barista_tenure_under_a_year, eventCatalog:key_barista_leaves, monthlyCosts:staff_replacement",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://tradingeconomics.com/commodity/coffee/news/599144",
+      "usedFor": "nonObvious:coffee_price_swings_third, eventCatalog:coffee_price_slide, corrections:coffee_price_spike",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://abc7ny.com/post/starbucks-close-dozens-nyc-coffee-shop-locations-amid-restructure/17918006/",
+      "usedFor": "nonObvious:starbucks_retreat_2025, eventCatalog:chain_leaves",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://themidtowngazette.com/2022/10/amid-remote-work-trend-coffee-shops-struggle-to-lure-customers-back",
+      "usedFor": "nonObvious:office_district_never_fully_returned",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
+      "usedFor": "nonObvious:skip_the_stuff, ruleCards:skip_the_stuff",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.axios.com/2025/05/09/coffee-shops-no-wifi-laptops-remote-work",
+      "usedFor": "nonObvious:laptop_campers, eventCatalog:laptop_winter, levers:wifi_policy",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_by_restaurants.htm",
+      "usedFor": "nonObvious:bagel_tax",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/cof-g82-noe-study-materials.pdf",
+      "usedFor": "nonObvious:co2_tanks_fire_rules",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.toogoodtogo.com/en-us/blog/what-too-good-to-go-partners-recover",
+      "usedFor": "nonObvious:too_good_to_go, levers:surplus_app",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://law.justia.com/codes/new-york/2017/pbh/article-19/1901/",
+      "usedFor": "nonObvious:restroom_access_act",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.craneagency.com/why-workers-compensation-premiums-increase-at-audit/",
+      "usedFor": "nonObvious:workers_comp_audit_bill, eventCatalog:comp_audit_bill",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.coned.com/en/accounts-billing/your-bill/how-to-read-your-bill/understanding-your-bill-faq",
+      "usedFor": "nonObvious:demand_charge",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://regs.health.ny.gov/node/48391",
+      "usedFor": "nonObvious:no_water_means_closed, eventCatalog:water_off, ruleCards:no_running_water",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/",
+      "usedFor": "nonObvious:january_is_the_bottom, eventCatalog:january_trough, events:january_trough",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://freshcup.com/survey-results-the-2023-coffee-business-owner-salary-report/",
+      "usedFor": "nonObvious:owner_pay_48k, mechanics:owner_hours",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.fox10phoenix.com/news/list-jobs-eligible-no-tax-tips-deduction",
+      "usedFor": "nonObvious:no_tax_on_tips",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.restaurantonline.co.uk/Article/2026/06/11/not-joe-friday-saturday-is-the-biggest-day-for-coffee-consumption-data-reveals/",
+      "usedFor": "nonObvious:saturday_peak",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.londoncoffeefestival.com/journal-1/how-to-open-a-coffee-shop",
+      "usedFor": "nonObvious:work_a_full_day_first",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.sage.com/en-us/blog/small-business-survival-skills-one-st-petersburg-cafe-became-community-haven-local-residents/",
+      "usedFor": "nonObvious:grease_trap_bill, mechanics:reserve_fund",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Manhattan_blackout_of_July_2019",
+      "usedFor": "eventCatalog:summer_outage",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+      "usedFor": "eventCatalog:flu_takes_the_only_supervisor, corrections:flu_season, levers:cross_training",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.hbs.edu/faculty/Pages/item.aspx?num=41233",
+      "usedFor": "eventCatalog:rating_slide, events:rating_slide",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.kastle.com/safety-wellness/getting-america-back-to-work/",
+      "usedFor": "eventCatalog:office_days_up, events:office_days_up",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.findtherun.com/race/130698/2026-tcs-new-york-city-marathon",
+      "usedFor": "eventCatalog:marathon_sunday, ownerYear",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://dol.ny.gov/minimum-wage-0",
+      "usedFor": "mechanics:owner_hours",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.barclaydamon.com/alerts/accessibility-lawsuits-several-tester-plaintiffsalfred-trippett-patrick-austin-kai-hunte-and-jeffery-williamstargeting-businesses-in-recent-flurry-of-lawsuits",
+      "usedFor": "mechanics:private_claims",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/vendor_collection_credit.htm",
+      "usedFor": "mechanics:compliance_calendar, ownerYear",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/environmental/fse-application-packet.pdf",
+      "usedFor": "mechanics:compliance_calendar, setup:consultative_inspection",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://dol.ny.gov/annual-calendar",
+      "usedFor": "due, ownerYear",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm",
+      "usedFor": "due, ownerYear",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyctourism.com/restaurant-week/",
+      "usedFor": "ownerYear",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://home4.nyc.gov/assets/doh/downloads/pdf/rii/inspection-cycle-overview.pdf",
+      "usedFor": "ownerYear",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.aiany.org/news/mamdani-enacts-year-round-outdoor-dining-program/",
+      "usedFor": "corrections:sidewalk_cafe_license",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "usedFor": "corrections:no_fse_permit",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "usedFor": "levers:lease_terms, setup:lease_review",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://nycadmincode.readthedocs.io/t28/c01/art118/",
+      "usedFor": "violations:illegal_occupancy, officials:buildings_inspector",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "usedFor": "violations:no_running_water",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
+    },
+    {
+      "url": "https://www.toogoodtogo.com/en-us/b2b/what-cafes-do-with-surplus-food",
+      "usedFor": "monthlyCosts:pastry_waste",
+      "checked": "2026-11-14",
+      "how": "seen in web search results; page not opened (network policy)"
     }
   ]
 }
