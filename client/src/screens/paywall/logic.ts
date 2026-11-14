@@ -6,35 +6,50 @@ import type { BillingStatus, Stage } from './billing';
 
 export type Tr = (en: string, ru: string) => string;
 
+/** English count with its noun: 1 day, 2 days. */
+export const plural = (n: number, one: string, many: string): string => `${n} ${n === 1 ? one : many}`;
+
 export const PRO_NAME = 'First Year Pro';
 
-export interface Row { id: string; label: string; free: string | null; pro: string }
+export interface Row { id: string; label: string; free: string | null; pro: string; /** closed for this player right now */ lockedNow: boolean }
 
 /** Free vs Pro. `free: null` means not in the free plan. */
-export function compareRows(tr: Tr, s: Pick<BillingStatus, 'advisorLeft'> | null, monthsLeft: number): Row[] {
-  return [
-    { id: 'city', label: tr('City, idea, place and your opening plan', 'Город, идея, место и план открытия'), free: tr('Yes', 'Да'), pro: tr('Yes', 'Да') },
-    { id: 'month', label: tr('Your cafe: the first full month after you open', 'Своя кофейня: первый полный месяц после открытия'), free: tr('Yes', 'Да'), pro: tr('Yes', 'Да') },
+const LOCK_OF: Record<string, BillingStatus['locked'][number]> = { year: 'decisions', plan: 'plan', advisor: 'advisor', niches: 'niches' };
+
+export function compareRows(tr: Tr, s: Pick<BillingStatus, 'advisorLeft'> & Partial<Pick<BillingStatus, 'locked' | 'plan'>> | null, monthsLeft: number): Row[] {
+  const yes = tr('Yes', 'Да');
+  const rows: Omit<Row, 'lockedNow'>[] = [
+    { id: 'city', label: tr('City, idea, place and your opening plan', 'Город, идея, место и план открытия'), free: yes, pro: yes },
+    { id: 'month', label: tr('Your cafe: the first full month after you open', 'Своя кофейня: первый полный месяц после открытия'), free: yes, pro: yes },
     {
       id: 'year',
       label: tr('Change price, staff, hours and equipment for the rest of the year', 'Менять цену, штат, часы и оборудование весь оставшийся год'),
       free: null,
-      pro: monthsLeft > 0 ? tr(`${monthsLeft} more months`, `ещё ${monthsLeft} мес.`) : tr('All year', 'Весь год'),
+      pro: monthsLeft > 0 ? tr(`${monthsLeft} months`, `${monthsLeft} мес.`) : yes,
     },
-    { id: 'plan', label: tr('Personal plan: your costs, every permit step with its official link', 'Личный план: ваши суммы, каждое разрешение со ссылкой на ведомство'), free: tr('During the free month', 'В бесплатный месяц'), pro: tr('All year, and you keep it', 'Весь год, и он остаётся у вас') },
+    { id: 'plan', label: tr('Personal plan: your costs, every permit step with its official link', 'Личный план: ваши суммы, каждое разрешение со ссылкой на ведомство'), free: tr('first month', 'первый месяц'), pro: tr('Keep it', 'Навсегда') },
     {
       id: 'advisor',
       label: tr('Advisor on your own numbers', 'Советник по вашим цифрам'),
-      free: s?.advisorLeft === null || s?.advisorLeft === undefined ? tr('3 questions', '3 вопроса') : tr(`${s.advisorLeft} of 3 left`, `осталось ${s.advisorLeft} из 3`),
+      free: s?.advisorLeft === null || s?.advisorLeft === undefined ? tr('3 questions', '3 вопроса') : tr(`${s.advisorLeft} of 3 questions left`, `осталось ${s.advisorLeft} из 3 вопросов`),
       pro: tr('Unlimited', 'Без лимита'),
     },
-    { id: 'niches', label: tr('Every kind of business, not only coffee', 'Все виды бизнеса, не только кофейня'), free: null, pro: tr('Yes', 'Да') },
+    { id: 'niches', label: tr('Every kind of business, not only coffee', 'Все виды бизнеса, не только кофейня'), free: null, pro: yes },
   ];
+  return rows.map((r) => ({
+    ...r,
+    lockedNow: s?.plan === 'pro' ? false : r.free === null || (LOCK_OF[r.id] !== undefined && (s?.locked ?? []).includes(LOCK_OF[r.id])),
+  }));
 }
 
 export function priceLabel(cents: number, interval: 'month' | 'year', tr: Tr): string {
   const amount = `$${(cents / 100).toFixed(cents % 100 === 0 ? 0 : 2)}`;
   return interval === 'month' ? tr(`${amount} / month`, `${amount} в месяц`) : tr(`${amount} / year`, `${amount} в год`);
+}
+
+/** Share saved by the yearly plan against twelve monthly payments, in whole percent. */
+export function yearlySaving(month: number, year: number): number {
+  return Math.max(0, Math.round((1 - year / (month * 12)) * 100));
 }
 
 /** Months of the season still ahead, counting the current one. */
@@ -63,13 +78,15 @@ export function humanTime(ms: number, tr: Tr): string {
 }
 
 /** The business right above me in my niche, and the gap in net worth. */
-export function rivalAbove(view: Pick<OwnerView, 'business' | 'leaderboards'>): { me: Standing; above: Standing | null; gap: number } | null {
+export function rivalAbove(view: Pick<OwnerView, 'business' | 'leaderboards'> & Partial<Pick<OwnerView, 'neighbors'>>): { me: Standing; above: Standing | null; gap: number } | null {
   const b = view.business;
   if (!b) return null;
   const list = view.leaderboards[b.niche] ?? [];
   const me = list.find((s) => s.businessId === b.id);
   if (!me) return null;
-  const above = list.filter((s) => s.rank < me.rank && !s.bankrupt).sort((x, y) => y.rank - x.rank)[0] ?? null;
+  const found = list.filter((s) => s.rank < me.rank && !s.bankrupt).sort((x, y) => y.rank - x.rank)[0] ?? null;
+  const name = found ? found.name ?? view.neighbors?.find((n) => n.id === found.businessId)?.name : undefined;
+  const above = found ? { ...found, name } : null;
   return { me, above, gap: above ? Math.max(0, above.netWorth - me.netWorth) : 0 };
 }
 
@@ -107,11 +124,18 @@ export function heroFor(stage: Stage, s: Pick<BillingStatus, 'freeEndsDay' | 'da
         ),
       };
     case 'free_month':
+      if (s?.daysLeft === null || s?.daysLeft === undefined) {
+        return {
+          tone: 'info',
+          title: tr('Your first full month is free', 'Первый полный месяц — бесплатно'),
+          text: tr('After it, the cafe keeps running on your last orders unless you take Pro.', 'После него кофейня работает по последним распоряжениям, если не взять Pro.'),
+        };
+      }
       return {
         tone: 'warn',
         title: s?.daysLeft === 0
           ? tr('Your free month ends today', 'Бесплатный месяц заканчивается сегодня')
-          : tr(`Free month: ${s?.daysLeft} days left`, `Бесплатный месяц: осталось ${s?.daysLeft} дн.`),
+          : tr(`Free until day ${s?.freeEndsDay}: ${plural(s?.daysLeft ?? 0, 'day', 'days')} left`, `Бесплатно до ${s?.freeEndsDay}-го дня: осталось ${s?.daysLeft} дн.`),
         text: tr(
           `On day ${s?.freeEndsDay} your controls lock. The cafe keeps running on your last orders${orders ? ` (${orders})` : ''} while the neighbours keep moving.`,
           `На ${s?.freeEndsDay}-й день решения закроются. Кофейня продолжит работать по последним распоряжениям${orders ? ` (${orders})` : ''}, а соседи — двигаться.`,
