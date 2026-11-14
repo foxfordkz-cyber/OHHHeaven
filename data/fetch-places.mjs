@@ -242,7 +242,8 @@ export function stationsFromRidership(rows) {
 export function blockOf(lat, lng) {
   const { s, a } = toGrid(lat, lng);
   const toAve = Math.abs(a - Math.round(a)) * 217, toStreet = Math.abs(s - Math.round(s)) * 77.5;
-  if (toAve < toStreet) {
+  // storefronts sit ~15 m off the centerline; corners count as avenue frontage
+  if (toAve <= 25 || toAve < toStreet) {
     const ave = avenueName(a);
     const cuts = [0, 4, 7, 10, 14.5];
     let lo = 0; while (lo < cuts.length - 2 && s >= cuts[lo + 1]) lo += 1;
@@ -292,17 +293,22 @@ export function buildFromData(inputs) {
     g.push({ ...c, ...where });
     groups.set(where.block, g);
   }
-  let picked = [];
-  const buildings = [];
+  const stores = [], buildings = [];
   for (const [, g] of [...groups].sort()) {
-    const stores = g.filter((c) => c.kind === 'storefront').sort((x, y) => Number(y.vacant) - Number(x.vacant));
     buildings.push(...g.filter((c) => c.kind === 'building'));
-    if (stores.length >= 4) picked.push(...stores.slice(0, 10));
+    const st = g.filter((c) => c.kind === 'storefront').sort((x, y) => Number(y.vacant) - Number(x.vacant));
+    if (st.length >= 4) stores.push(st.slice(0, 10));
   }
+  // buildings first: up to 4 per block on the 4 blocks with the most walk-ups
   const bByBlock = new Map();
   for (const b of buildings) { const l = bByBlock.get(b.block) ?? []; l.push(b); bByBlock.set(b.block, l); }
-  for (const [, l] of [...bByBlock].sort((x, y) => y[1].length - x[1].length).slice(0, 4)) if (l.length >= 4) picked.push(...l.slice(0, 4));
-  if (picked.length > 140) picked = picked.slice(0, 140);
+  const pickedBuildings = [...bByBlock.values()].filter((l) => l.length >= 4).sort((x, y) => y.length - x.length).slice(0, 4).flatMap((l) => l.slice(0, 4));
+  // storefront blocks, biggest first, until the 140 cap
+  let picked = [...pickedBuildings];
+  for (const block of stores.sort((x, y) => y.length - x.length)) {
+    if (picked.length + 4 > 140) break;
+    picked.push(...block.slice(0, Math.min(block.length, 140 - picked.length)));
+  }
   let n = 0;
   const places = picked.map((c) => {
     n += 1;
@@ -340,7 +346,7 @@ export function buildRealBusinesses(inputs) {
     const lat = num(pick(r, /^lat/i)), lng = num(pick(r, /^(lon|lng)/i));
     const name = pick(r, /dba|trade/i) || pick(r, /business_name/i);
     if (!name || !Number.isFinite(lat) || !insideDistrict(lat, lng)) continue;
-    if (!/active/i.test(String(pick(r, /status/i) ?? 'active'))) continue;
+    if (!/^active/i.test(String(pick(r, /status/i) ?? 'active'))) continue;
     out.push({ id: `dcwp-${pick(r, /license_n/i) ?? out.length}`, name: titleCase(String(name)), type: 'shop', lat, lng, address: titleCase(`${pick(r, /address_building/i) ?? ''} ${pick(r, /address_street/i) ?? ''}`.trim()), grade: null, source: SOURCES.businesses.id, category: String(pick(r, /categor|industry/i) ?? '') });
   }
   const dedup = new Map();
