@@ -47,7 +47,7 @@ export function TodayTab({ deps, onRule, onGo }: { deps: BizDeps; onRule(id: str
         ? <Recommendations deps={deps} onRule={onRule} onPromise={setPromise} waiting />
         : <DecisionCard decision={decision} deps={deps} onGo={onGo} />)}
       {open && (
-        <Card title="Last 30 days" aside={<span className="bz-legend"><span><i className="bz-swatch" style={{ background: 'var(--bz-accent)' }} />sold</span><span><i className="bz-swatch" style={{ background: 'var(--bz-bad)' }} />walked away</span></span>}>
+        <Card title={pick('Last 30 days', 'Последние 30 дней')} aside={<span className="bz-legend"><span><i className="bz-swatch" style={{ background: 'var(--bz-accent)' }} />sold</span><span><i className="bz-swatch" style={{ background: 'var(--bz-bad)' }} />walked away</span></span>}>
           <Chart30 days={b.days} />
         </Card>
       )}
@@ -70,7 +70,7 @@ function NextUp({ deps }: { deps: BizDeps }) {
   return (
     <p className="bz-small bz-muted">
       {running && w.msToNextDay > 0 ? pick(`Next game day ${realWait(w.msToNextDay)}. `, `Следующий игровой день ${realWait(w.msToNextDay).replace('in ', 'через ')}. `) : ''}
-      {pick(`Month report on ${shortDate(monthEnd)} (${relDay(monthEnd, w.day)}).`, `Отчёт месяца ${shortDate(monthEnd)} (${relDay(monthEnd, w.day)}).`)}
+      {pick(`Month report on ${shortDate(monthEnd)} (${relDay(monthEnd, w.day)}).`, `Отчёт месяца ${shortDate(monthEnd)} (${monthEnd === w.day ? 'сегодня' : `через ${monthEnd - w.day} дн.`}).`)}
     </p>
   );
 }
@@ -85,10 +85,10 @@ function DayCard({ deps, kpis }: { deps: BizDeps; kpis: NicheKpi[] }) {
   const main = today ?? yesterday;
   const reasons = main ? lostReasons(main.lost, { unitName }) : [];
   return (
-    <Card title={today ? 'Today' : 'Latest day'} aside={main ? dayLabel(main.day) : undefined}>
+    <Card title={today ? pick('Today', 'Сегодня') : pick('Latest day', 'Последний день')} aside={main ? dayLabel(main.day) : undefined}>
       {main ? dayStats(main, unit) : <p className="bz-muted">{pick('No sales yet. The first day shows up here.', 'Продаж пока нет. Первый день появится здесь.')}</p>}
       {reasons.map((r) => (
-        <p key={r.key} className="bz-bad-text"><b>{num(r.units)}</b> walked away: {r.text}</p>
+        <p key={r.key} className="bz-bad-text"><b>{num(r.units)}</b> {pick('walked away', 'ушли')}: {r.text}</p>
       ))}
       {main?.notes.map((n, i) => <p key={i} className="bz-note">{n}</p>)}
       {kpis.length > 0 && (
@@ -193,9 +193,9 @@ function dayStats(d: DayReport | null, unit: string) {
   if (!d) return null;
   return (
     <div className="bz-stats">
-      <Stat label={`${unit[0].toUpperCase()}${unit.slice(1)}s sold`} value={num(d.servedUnits)} />
-      <Stat label="Sales" value={usd(d.revenue)} />
-      <Stat label="Walked away" value={num(lostTotal(d.lost))} tone={lostTotal(d.lost) > 0 ? 'bad' : 'neutral'} />
+      <Stat label={pick(`${unit[0].toUpperCase()}${unit.slice(1)}s sold`, 'Продано')} value={num(d.servedUnits)} />
+      <Stat label={pick('Sales', 'Выручка')} value={usd(d.revenue)} />
+      <Stat label={pick('Walked away', 'Ушли')} value={num(lostTotal(d.lost))} tone={lostTotal(d.lost) > 0 ? 'bad' : 'neutral'} />
     </div>
   );
 }
@@ -254,7 +254,7 @@ function Recommendations({ deps, onRule, onPromise, waiting = false }: { deps: B
   const all = () => run(pending, () => applyAll(deps, pending));
 
   return (
-    <Card title={waiting ? pick('What to change — waiting for you', 'Что поменять — ждёт тебя') : 'What to change'} aside={pending.length > 1 ? <Button variant="primary" disabled={busy || !deps.online} onClick={all}>Apply all</Button> : undefined}>
+    <Card title={waiting ? pick('What to change — waiting for you', 'Что поменять — ждёт тебя') : pick('What to change', 'Что поменять')} aside={pending.length > 1 ? <Button variant="primary" disabled={busy || !deps.online} onClick={all}>Apply all</Button> : undefined}>
       {recs.map((r) => {
         const res = results[r.id];
         return (
@@ -285,7 +285,7 @@ function Ahead({ deps }: { deps: BizDeps }) {
   const week = v.weather.filter((w) => w.day > today).slice(0, 7);
   const events = upcomingEvents(v.events, b.niche, today);
   return (
-    <Card title="What's ahead">
+    <Card title={pick('What\'s ahead', 'Что впереди')}>
       {week.length > 0 && (
         <div className="bz-week" aria-label="Weather this week">
           {week.map((w) => (
@@ -299,7 +299,7 @@ function Ahead({ deps }: { deps: BizDeps }) {
         </div>
       )}
       {week.length > 0 && <p className="bz-small bz-muted">% — people walking by compared with a normal day.</p>}
-      {events.length === 0 && <p className="bz-muted">No city events announced.</p>}
+      {events.length === 0 && <p className="bz-muted">{pick('No city events announced.', 'Событий в городе не объявлено.')}</p>}
       <div className="bz-list">
         {events.map((e) => (
           <div className="bz-li" key={e.id}>

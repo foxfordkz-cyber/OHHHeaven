@@ -55,11 +55,11 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule, pair }: ManageP
     <div className="bz-pad">
       <OutlookCard pair={pair} deps={deps} />
 
-      <Card title="Price" aside={pack ? `per ${pack.unit.name}` : undefined}>
+      <Card title={pick('Price', 'Цена')} aside={pack ? pick(`per ${pack.unit.name}`, 'за заказ') : undefined}>
         <div className="bz-between">
           <Stepper label="price" value={draft.price} step={0.1} min={pack?.unit.priceMin ?? 0} max={pack?.unit.priceMax ?? 999}
             format={usd2} onChange={(p) => edit('price', setPrice(draft, p, pack))} />
-          <span className="bz-small bz-muted">{avg !== null ? `niche average ${usd2(avg)}` : ''}{lastAvg !== null ? `${avg !== null ? ' · ' : ''}last month ${usd2(lastAvg)}` : ''}</span>
+          <span className="bz-small bz-muted">{avg !== null ? pick(`niche average ${usd2(avg)}`, `в среднем у соседей ${usd2(avg)}`) : ''}{lastAvg !== null ? `${avg !== null ? ' · ' : ''}${pick('last month', 'прошлый месяц')} ${usd2(lastAvg)}` : ''}</span>
         </div>
         {pack && (
           <input className="bz-range" type="range" aria-label="Price slider" min={pack.unit.priceMin} max={pack.unit.priceMax} step={0.05}
@@ -68,20 +68,20 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule, pair }: ManageP
         {impact('price')}
       </Card>
 
-      <Card title="Staff" aside={pack ? `${totalStaff(draft.staff)} of max ${pack.capacity.maxStaff}` : undefined}>
+      <Card title={pick('Staff', 'Персонал')} aside={pack ? pick(`${totalStaff(draft.staff)} of max ${pack.capacity.maxStaff}`, `${totalStaff(draft.staff)} из ${pack.capacity.maxStaff}`) : undefined}>
         {roles.map((r) => (
           <div key={r.id}>
           <div className="bz-between">
             <div className="bz-li-main">
               <span className="bz-li-title">{r.name}</span>
-              {r.hourlyWage > 0 && <span className="bz-li-sub">{usd2(r.hourlyWage)}/hr · {r.hoursPerMonth} h a month</span>}
+              {r.hourlyWage > 0 && <span className="bz-li-sub">{usd2(r.hourlyWage)}{pick('/hr', ' в час')} · {r.hoursPerMonth} {pick('h a month', 'ч в месяц')}</span>}
             </div>
             <Stepper label={r.name} value={draft.staff[r.id] ?? 0} min={0} max={pack?.capacity.maxStaff ?? 99} onChange={(n) => edit(`staff:${r.id}`, setStaff(draft, r.id, n, pack))} />
           </div>
           {impact(`staff:${r.id}`)}
           </div>
         ))}
-        {b.mtd.lost.staff > 0 && <p className="bz-small bz-bad-text">This month {num(b.mtd.lost.staff)} customers left because nobody could serve them.</p>}
+        {b.mtd.lost.staff > 0 && <p className="bz-small bz-bad-text">{pick(`This month ${num(b.mtd.lost.staff)} customers left because nobody could serve them.`, `В этом месяце ушли ${num(b.mtd.lost.staff)} гостей: некому было обслужить.`)}</p>}
       </Card>
 
       {(pack?.levers ?? []).map((l) => (
@@ -93,7 +93,7 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule, pair }: ManageP
           {impact(`lever:${l.id}`)}
           {leverViol.get(`${l.id}:${draft.levers[l.id]}`) && (
             <button type="button" className="bz-linkbtn bz-small bz-bad-text" onClick={() => onRule(leverViol.get(`${l.id}:${draft.levers[l.id]}`)!)}>
-              Why this breaks a rule
+              {pick('Why this breaks a rule', 'Почему это нарушает правило')}
             </button>
           )}
         </Card>
@@ -102,8 +102,8 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule, pair }: ManageP
       <SizeCard deps={deps} />
 
       {shortcuts.length > 0 && (
-        <Card tone="warn" title="Cut corners" aside="saves money now">
-          <p className="bz-small">Each of these saves money now and breaks a real rule. If someone catches it, the fine grows with every month.</p>
+        <Card tone="warn" title={pick('Cut corners', 'Срезать углы')} aside={pick('saves money now', 'экономит сейчас')}>
+          <p className="bz-small">{pick('Each of these saves money now and breaks a real rule. If someone catches it, the fine grows with every month.', 'Каждое экономит деньги сейчас и нарушает настоящее правило. Если поймают, штраф растёт с каждым месяцем.')}</p>
           <div className="bz-list">
             {shortcuts.map((s) => {
               const viol = violationById(packs, s.violation);
@@ -127,7 +127,7 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule, pair }: ManageP
 
       <OneOffs deps={deps} />
 
-      <Card title="While you're away">
+      <Card title={pick('While you\'re away', 'Пока тебя нет')}>
         <Segmented<StandingOrders['autopilot']> label="Autopilot" value={draft.autopilot} onChange={(m) => setDraft(setAutopilot(draft, m))}
           options={[
             { id: 'hold', label: 'Hold my settings', hint: 'Nothing changes until you come back' },
@@ -173,7 +173,7 @@ function SizeCard({ deps }: { deps: BizDeps }) {
   };
 
   return (
-    <Card title="Room size" aside={plural(b.size, unit)}>
+    <Card title={pick('Room size', 'Размер зала')} aside={plural(b.size, unit)}>
       <p className="bz-small">
         {lostSeats > 0 ? <><b className="bz-bad-text">{num(lostSeats)}</b> customers walked away in 30 days: not enough {unit}s. </> : null}
         {util !== undefined ? <>Room is full {Math.round(util * 100)}% of the time.</> : null}
@@ -235,7 +235,7 @@ function OneOffs({ deps }: { deps: BizDeps }) {
   };
 
   return (
-    <Card title="One-off actions" aside="paid today">
+    <Card title={pick('One-off actions', 'Разовые действия')} aside={pick('paid today', 'оплата сегодня')}>
       <div className="bz-list">
         {SPEND.map((s) => (
           <div className="bz-li bz-li-col" key={s.kind}>
