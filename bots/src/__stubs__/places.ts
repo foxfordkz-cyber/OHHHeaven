@@ -5,8 +5,8 @@ import type { Place, PlaceTier } from '../../../shared/src/types';
 interface BlockSpec { block: string; tier: PlaceTier; rent: number; foot: number; from: [number, number]; to: [number, number] }
 
 const BLOCKS: BlockSpec[] = [
-  { block: 'St Marks Pl, 2nd–3rd Ave', tier: 'prime', rent: 130, foot: 0.85, from: [40.7294, -73.9894], to: [40.7286, -73.9876] },
-  { block: 'St Marks Pl, 1st–2nd Ave', tier: 'prime', rent: 120, foot: 0.8, from: [40.7280, -73.9870], to: [40.7270, -73.9846] },
+  { block: 'St Marks Pl, 2nd–3rd Ave', tier: 'prime', rent: 160, foot: 0.85, from: [40.7294, -73.9894], to: [40.7286, -73.9876] },
+  { block: 'St Marks Pl, 1st–2nd Ave', tier: 'prime', rent: 150, foot: 0.8, from: [40.7280, -73.9870], to: [40.7270, -73.9846] },
   { block: '1st Ave, E 4th–E 7th St', tier: 'mid', rent: 95, foot: 0.6, from: [40.7238, -73.9878], to: [40.7262, -73.9861] },
   { block: 'Avenue A, E 7th–E 10th St', tier: 'mid', rent: 100, foot: 0.65, from: [40.7254, -73.9836], to: [40.7280, -73.9817] },
   { block: 'E 7th St, 1st Ave–Ave A', tier: 'mid', rent: 90, foot: 0.55, from: [40.7262, -73.9858], to: [40.7254, -73.9838] },

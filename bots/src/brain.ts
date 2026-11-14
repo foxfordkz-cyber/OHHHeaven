@@ -7,7 +7,7 @@ import { officialSight, ownerSight, type OwnerSight } from './observe';
 import { hashStr, mulberry32, rngFor, shuffle } from './rng';
 import { OFFICIAL_PROFILES, OWNER_STRATEGIES, PROFILES, officialStrategyFromName, ownerStrategyFromName, type OfficialStrategy, type OwnerProfile, type OwnerStrategy } from './strategies';
 import type { EngineCtx } from './__stubs__/engine';
-import { recommendOpening as stubRecommendOpening } from './__stubs__/engine';
+import { recommendOpening as stubRecommendOpening, recommendedPrice as stubRecommendedPrice } from './__stubs__/engine';
 
 export interface PopulateEntry { name: string; kind: 'owner' | 'official'; role?: OfficialRole; niche?: NicheId; placeId?: string; strategy: string }
 
@@ -24,6 +24,8 @@ export interface BrainOptions {
   nicheOf?: (p: Player) => NicheId | undefined;
   /** Agent 04's recommendOpening when available; the stub picks the pack's standard kit. */
   recommendOpening?: (niche: NicheId, placeId: string, w: WorldState, ctx: EngineCtx) => OpenRecommendation[];
+  /** Price the analytics screen suggests (agent 04's recommend → set_orders.price). Default: stub Lerner-rule advice. */
+  priceAdvice?: (b: BusinessState, w: WorldState, ctx: EngineCtx) => number | null;
   /** Experiment: complainers report the niche leader every week, suspicious or not. */
   harassLeader?: boolean;
   /** Days between complaints of a complainer (default 7). */
@@ -175,6 +177,7 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     if (b.status !== 'open') return acts;
     // 2. weekly review of standing orders
     if (profile.reviewEvery > 0 && w.day % profile.reviewEvery === phase) {
+      adviceOf = (x) => (opts.priceAdvice ?? stubRecommendedPrice)(x, w, ctx);
       const o = reviewOrders(sight, ctx, b, pack, place, profile);
       if (o) acts.push({ type: 'set_orders', orders: o });
     }
@@ -223,7 +226,7 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
 
 function initialOrders(ctx: EngineCtx, pack: Pack, profile: OwnerProfile, rec: StandingOrders, rng: () => number): Partial<StandingOrders> {
   const ref = pack.unit.refPrice;
-  const price = profile.price === 'dump' ? ref * 0.85 : profile.price === 'premium' ? ref * 1.25 : profile.price === 'fixed_random' ? ref * (0.8 + 0.45 * rng()) : ref;
+  const price = profile.price === 'dump' ? ref * 0.85 : profile.price === 'premium' ? ref * 1.3 : profile.price === 'fixed_random' ? ref * (0.8 + 0.45 * rng()) : ref;
   const role = pack.staff[0].id;
   let staff = Object.values(rec.staff).reduce((s, n) => s + n, 0);
   if (profile.price === 'fixed_random') staff = clamp(staff + Math.floor(rng() * 3) - 1, pack.capacity.minStaff, pack.capacity.maxStaff);
@@ -240,6 +243,7 @@ function initialOrders(ctx: EngineCtx, pack: Pack, profile: OwnerProfile, rec: S
   return { price: r2(clamp(price, pack.unit.priceMin, pack.unit.priceMax)), staff: { [role]: staff }, levers, shortcuts, blockFund: profile.blockFund, autopilot: profile.loginEvery > 1 ? 'manager' : 'hold' };
 }
 
+let adviceOf: (b: BusinessState) => number | null = () => null;
 function reviewOrders(sight: OwnerSight, ctx: EngineCtx, b: BusinessState, pack: Pack, place: Place, profile: OwnerProfile): Partial<StandingOrders> | null {
   const days = b.days.slice(-7).filter((d) => d.demandUnits > 0);
   if (days.length < 3) return null;
@@ -254,8 +258,25 @@ function reviewOrders(sight: OwnerSight, ctx: EngineCtx, b: BusinessState, pack:
     const med = median(peers);
     price = Math.max(pack.unit.cogsPerUnit * 2.2, Math.min(Number.isFinite(med) ? med * 0.87 : ref * 0.87, ref * 0.9));
   } else {
-    const lo = profile.price === 'premium' ? ref * 1.1 : ref * 0.85, hi = profile.price === 'premium' ? ref * 1.45 : ref * 1.2;
-    if (lost / Math.max(1, demand) > 0.08) price *= 1.04; else if (util < 0.55) price *= 0.97;
+    // A human would compare the last two weeks of their own books: did the last price move raise the margin?
+    const lo = profile.price === 'premium' ? ref * 1.1 : ref * 0.85, hi = ref * 1.6;
+    const wk = (from: number, to: number) => {
+      const xs = b.days.slice(from, to).filter((d) => d.servedUnits > 0);
+      const served = xs.reduce((s, d) => s + d.servedUnits, 0), rev = xs.reduce((s, d) => s + d.revenue, 0);
+      return { n: xs.length, price: served ? rev / served : 0, margin: xs.length ? xs.reduce((s, d) => s + d.revenue - d.variableCosts, 0) / xs.length : 0 };
+    };
+    const A = wk(-14, -7), B = wk(-7, b.days.length);
+    const advice = adviceOf(b);
+    let step = 0;
+    if (A.n >= 4 && B.n >= 4 && Math.abs(B.price - A.price) / Math.max(0.01, A.price) > 0.01) {
+      const dir = Math.sign(B.price - A.price);
+      step = (B.margin - A.margin) * dir > 0 ? 0.03 * dir : -0.02 * dir;
+    } else if (lost / Math.max(1, demand) > 0.05) step = 0.03;
+    else if (util < 0.35) step = -0.03;
+    else step = 0.02;
+    price = price * (1 + step);
+    // the analytics screen suggests a price; a reasonable owner moves halfway toward it
+    if (advice) price = price + 0.5 * (advice - price);
     price = clamp(price, lo, hi);
   }
   const per = (pack.capacity.unitsPerStaffMonth ?? 1e9) / 30;
@@ -324,17 +345,17 @@ function complaint(sight: OwnerSight, ctx: EngineCtx, b: BusinessState, harass: 
 function proposals(w: WorldState, sight: OwnerSight, ctx: EngineCtx, b: BusinessState, place: Place, strategy: OwnerStrategy): Action[] {
   const live = sight.myDeals;
   if (live.length >= RULES.MAX_ACTIVE_DEALS - 1) return [];
-  const partners = new Set(live.flatMap((d) => [d.fromBusinessId, d.toBusinessId]));
-  const ok = (n: PublicBusiness) => n.status === 'open' && !partners.has(n.id) && (strategy === 'unreliable' || n.trust.broken === 0 || n.trust.kept >= 2 * n.trust.broken);
+  const partners = new Set(live.flatMap((d) => [d.fromBusinessId, d.toBusinessId])); // grows as we propose below
+  const ok = (n: PublicBusiness) => n.status === 'open' && !partners.has(n.id) && n.partners.length < RULES.MAX_ACTIVE_DEALS && (strategy === 'unreliable' || n.trust.broken === 0 || n.trust.kept >= 2 * n.trust.broken);
   const neighbors = sight.neighbors();
   const acts: Action[] = [];
   if (!live.some((d) => d.terms.type === 'joint_purchase')) {
     const same = neighbors.filter((n) => n.niche === b.niche && ok(n)).sort((x, y) => (y.trust.kept - y.trust.broken) - (x.trust.kept - x.trust.broken) || x.rankInNiche - y.rankInNiche);
-    if (same[0]) acts.push({ type: 'propose_deal', toBusinessId: same[0].id, terms: { type: 'joint_purchase', months: 3 } });
+    if (same[0]) { acts.push({ type: 'propose_deal', toBusinessId: same[0].id, terms: { type: 'joint_purchase', months: 3 } }); partners.add(same[0].id); }
   }
   if (!live.some((d) => d.terms.type === 'cross_promo') && acts.length + live.length < RULES.MAX_ACTIVE_DEALS - 1) {
     const near = neighbors.filter((n) => n.niche !== b.niche && ok(n) && distanceM(place, placeOf(ctx, n.placeId)!) <= 400).sort((x, y) => distanceM(place, placeOf(ctx, x.placeId)!) - distanceM(place, placeOf(ctx, y.placeId)!));
-    if (near[0]) acts.push({ type: 'propose_deal', toBusinessId: near[0].id, terms: { type: 'cross_promo', months: 3 } });
+    if (near[0]) { acts.push({ type: 'propose_deal', toBusinessId: near[0].id, terms: { type: 'cross_promo', months: 3 } }); partners.add(near[0].id); }
   }
   if (strategy === 'social' && b.cash > 40000 && w.day < 300 && !live.some((d) => d.terms.type === 'loan' && d.fromBusinessId === b.id) && acts.length + live.length < RULES.MAX_ACTIVE_DEALS - 1) {
     const blockmates = neighbors.filter((n) => ok(n) && placeOf(ctx, n.placeId)!.block === place.block);

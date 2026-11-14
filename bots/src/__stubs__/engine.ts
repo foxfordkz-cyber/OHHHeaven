@@ -9,7 +9,7 @@ import type {
 } from '../../../shared/src/types';
 import { RULES, dateOf, isMonthEnd } from '../../../shared/src/rules';
 
-export interface EngineCtx { packs: PackSet; places: Place[] }
+export interface EngineCtx { packs: PackSet; places: Place[]; /** simulator-only knobs (stub engine) */ tuning?: { routineEveryMonths?: number } }
 
 // ───────────── lookups ─────────────
 const placeCache = new WeakMap<Place[], Map<string, Place>>();
@@ -190,6 +190,20 @@ export function managerOrders(b: BusinessState, w: WorldState, ctx: EngineCtx): 
   return { price: clamp(b.orders.price, pack.unit.refPrice * 0.9, pack.unit.refPrice * 1.15), staff: { [pack.staff[0].id]: staff }, levers, shortcuts: [] };
 }
 
+/** Stub of agent 04's price advice ("price below/above the optimum"): Lerner rule on the business's own books.
+ *  p* = c / (1 - 1/e), e = |elasticity| × (1 - share of the niche); c = variable cost per unit incl. card fees. */
+export function recommendedPrice(b: BusinessState, w: WorldState, ctx: EngineCtx): number {
+  const pack = packOf(ctx, b.niche);
+  const open = w.businesses.filter((x) => x.niche === b.niche && x.status === 'open').length || 1;
+  const e = Math.abs(pack.market.priceElasticity) * (1 - 1 / (open + 0.4286 * open));
+  const pctRev = pack.monthlyCosts.filter((c) => c.basis === 'pct_revenue').reduce((s, c) => s + c.amount, 0);
+  const perUnit = pack.monthlyCosts.filter((c) => c.basis === 'per_unit').reduce((s, c) => s + c.amount, 0);
+  const c = pack.unit.cogsPerUnit + perUnit;
+  if (e <= 1.05) return pack.unit.priceMax;
+  const p = c / Math.max(0.05, 1 - 1 / e - pctRev);
+  return r2(clamp(p, pack.unit.priceMin, pack.unit.priceMax));
+}
+
 // ───────────── actions ─────────────
 const err = (w: WorldState, error: string): ActionResult => ({ world: w, error });
 
@@ -326,6 +340,8 @@ export function applyAction(w: WorldState, ctx: EngineCtx, playerId: string, a: 
       if (deal.toBusinessId !== b0.id || deal.status !== 'proposed') return err(w, 'cannot answer');
       const dd = d.deal(di);
       if (!a.accept) { dd.status = 'declined'; return { world: d.done() }; }
+      const activeOf = (id: string) => w.deals.filter((x) => x.status === 'active' && (x.fromBusinessId === id || x.toBusinessId === id)).length;
+      if (activeOf(deal.fromBusinessId) >= RULES.MAX_ACTIVE_DEALS || activeOf(deal.toBusinessId) >= RULES.MAX_ACTIVE_DEALS) { dd.status = 'expired'; return { world: d.done() }; }
       const from = d.bizById(deal.fromBusinessId);
       if (!from || from.status === 'bankrupt') { dd.status = 'expired'; return { world: d.done() }; }
       const to = d.biz(bi);
@@ -396,8 +412,9 @@ function proposeDeal(w: WorldState, ctx: EngineCtx, d: Draft, bi: number, toId: 
   const to = w.businesses.find((b) => b.id === toId);
   if (!to || to.id === from.id) return err(w, 'bad partner');
   if (from.status !== 'open' || to.status !== 'open') return err(w, 'both must be open');
-  const live = (id: string) => w.deals.filter((x) => (x.fromBusinessId === id || x.toBusinessId === id) && (x.status === 'active' || x.status === 'proposed')).length;
-  if (live(from.id) >= RULES.MAX_ACTIVE_DEALS || live(to.id) >= RULES.MAX_ACTIVE_DEALS) return err(w, 'too many deals');
+  // proposer: active + own pending offers; partner: active deals only (that is what the proposer can see)
+  const live = (id: string, withProposed: boolean) => w.deals.filter((x) => (x.fromBusinessId === id || x.toBusinessId === id) && (x.status === 'active' || (withProposed && x.status === 'proposed'))).length;
+  if (live(from.id, true) >= RULES.MAX_ACTIVE_DEALS || live(to.id, false) >= RULES.MAX_ACTIVE_DEALS) return err(w, 'too many deals');
   if (w.deals.some((x) => x.status === 'proposed' && x.fromBusinessId === from.id && x.toBusinessId === to.id)) return err(w, 'already proposed');
   switch (terms.type) {
     case 'joint_purchase': if (from.niche !== to.niche || !(terms.months >= 1 && terms.months <= 12)) return err(w, 'joint purchase: same niche, 1–12 months'); break;
@@ -557,7 +574,7 @@ function economyDay(d: Draft, ctx: EngineCtx, weekday: number) {
   for (const [niche, idxs] of byNiche) {
     const pack = packOf(ctx, niche);
     const eps = Math.abs(pack.market.priceElasticity);
-    const kq = 8 * pack.market.weights.quality, kr = 10 * pack.market.weights.reputation, kl = 5 * pack.market.weights.location;
+    const kq = 6 * pack.market.weights.quality, kr = 10 * pack.market.weights.reputation, kl = 5 * pack.market.weights.location;
     const rows = idxs.map((i) => {
       const b = w.businesses[i];
       const place = placeOf(ctx, b.placeId)!;
@@ -587,7 +604,7 @@ function economyDay(d: Draft, ctx: EngineCtx, weekday: number) {
       if (util > (pack.sizing.crowdPenaltyAbove ?? 1)) { qTarget -= 0.1; notes.push(`Line out the door: ${Math.round(lost.size + lost.staff)} customers walked away`); }
       b.quality = clamp(b.quality + 0.1 * (qTarget - b.quality), 0, 1);
       const lostShare = demand > 0 ? (lost.size + lost.staff) / demand : 0;
-      let repTarget = 0.5 + 0.6 * (b.quality - 0.5) - 0.4 * lostShare;
+      let repTarget = 0.5 + 0.3 * (b.quality - 0.5) - 0.4 * lostShare;
       if (util < (pack.sizing.emptyPenaltyBelow ?? 0)) { repTarget -= 0.05; notes.push('Half-empty room today'); }
       b.reputation = clamp(b.reputation + 0.03 * (repTarget - b.reputation), 0, 1);
       const revenue = served * r.price;
@@ -803,7 +820,8 @@ function lawMonthClose(d: Draft, ctx: EngineCtx, month: number) {
       const hint = taxTrail.violationId === 'sales_tax_fraud' ? 'Reported sales look low for this foot traffic' : `Payroll taxes look low for ${staffCount(b.orders)} staff`;
       w.cases.push({ id: `c${w.cases.length + 1}`, businessId: b.id, role: 'tax_auditor', origin: 'flag', openedDay: day, hints: [hint], status: 'open' });
     }
-    if (month % RULES.ROUTINE_INSPECTION_EVERY_MONTHS === 0) w.cases.push({ id: `c${w.cases.length + 1}`, businessId: b.id, role: 'inspector', origin: 'routine', openedDay: day, hints: [`No inspection in ${RULES.ROUTINE_INSPECTION_EVERY_MONTHS} months`], status: 'open' });
+    const every = ctx.tuning?.routineEveryMonths ?? RULES.ROUTINE_INSPECTION_EVERY_MONTHS;
+    if (month % every === 0) w.cases.push({ id: `c${w.cases.length + 1}`, businessId: b.id, role: 'inspector', origin: 'routine', openedDay: day, hints: [`No inspection in ${every} months`], status: 'open' });
   });
   // internal affairs: the official with the most bribes this month is exposed
   let top = -1, best = 0;
