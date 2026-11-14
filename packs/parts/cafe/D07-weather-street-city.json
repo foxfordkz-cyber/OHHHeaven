@@ -1,0 +1,638 @@
+{
+  "id": "cafe",
+  "part": "D07",
+  "theme": "Weather, season, street, city",
+  "checked": "2026-11-14",
+  "extra": {
+    "eventCatalog": [
+      {
+        "id": "snowfall_clear_the_walk",
+        "name": "Snow: the clock starts",
+        "text": "Snow stopped falling. The law gives you 4 hours in the daytime, or until 11 AM after an overnight fall, to open a 4-foot path along your whole frontage. Sanitation agents are out writing tickets.",
+        "scale": "point",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "NOAA daily snowfall at Central Park (GHCN-Daily station USW00094728, element SNOW >= 0.1 in) and the hour the snow ended; DSNY Snow Alert notices",
+        "effects": [
+          {
+            "field": "cashOneTime",
+            "add": -30
+          }
+        ],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.85
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "snow_ice_plan"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_snow_clearing"
+          }
+        ],
+        "realFrequency": "About 11 days a season with measurable snow at Central Park, 1991-2020 normals (Dec 2.1, Jan 3.7, Feb 3.2, Mar 2.0). The 2025-26 winter brought 43.4 inches, the most in 11 years (CBS New York).",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "The deadlines are DSNY's. The $30 is one snowfall of the staff option: 1.5 hours at $17.00 plus ice melt. The 0.85 day multiplier is the snow value already in ai/src/data/nyc-climate.json; this event adds the duty and the ticket, not a second drop."
+      },
+      {
+        "id": "icy_sidewalk_refreeze",
+        "name": "Black ice at the door",
+        "text": "Yesterday's slush froze overnight. If your stretch of sidewalk is the icy one, people cross the street instead of walking past your window, and the first fall is yours to answer for.",
+        "scale": "point",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "Central Park snow depth above zero (GHCN SNWD) with a daily low at or below 32°F on the days after a snowfall; NWS Special Weather Statement for black ice",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.98
+          }
+        ],
+        "daily": {
+          "days": 3,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.85,
+              "onlyIf": "snow_ice_plan = none"
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "snow_ice_plan"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_snow_clearing"
+          }
+        ],
+        "realFrequency": "Follows most snowfalls: January's normal low at Central Park is 27.8°F and February's 29.6°F, so slush refreezes overnight for one to three nights. In January-February 2026 the cold after the January 25 storm kept ice on sidewalks for more than a week.",
+        "tier": "core",
+        "source": "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMinTNormals.pdf",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "The user's own example. No study measures how many passers-by avoid an icy storefront; 0.85 on icy days for a shop that did not clear is my estimate, set equal to the snow-day drop. Month value: 3 icy days x 15% / 30 = 1.5%, rounded to 0.98. A shop that cleared its walk gets no penalty."
+      },
+      {
+        "id": "sidewalk_fall_claim",
+        "name": "Letter from a lawyer: someone fell on your ice",
+        "text": "A pedestrian slipped in front of your shop on a day you did not clear the snow. Their lawyer has written to the building owner, and your lease says you pay the owner back.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "realSignal": "Not a public signal: the claim follows from the player's own record. It is created when a snowfall deadline passed with snow_ice_plan = none (or the shortcut on) and arrives two to four months later",
+        "effects": [
+          {
+            "field": "cashOneTime",
+            "add": -2500
+          },
+          {
+            "field": "insurance",
+            "mult": 1.25
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "snow_ice_plan"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_snow_clearing"
+          }
+        ],
+        "realFrequency": "The Hartford, 2025: slips, falls and customer injuries are 20% of small-business liability claims, twice the 2015 share; the average claim is $45,000 and the average liability claim $97,200.",
+        "tier": "core",
+        "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Deterministic by rule 4: the claim exists only if the walk was left uncleared, and only once per winter. $2,500 = deductible and legal time (planning value); the 25% premium increase for a year after a paid claim is my estimate, no public rate table was found. A court can only hold the tenant itself liable if the lease or its own shoveling made things worse (Cruz v Heights Broadway, First Department 2023); the usual route is the lease's indemnity clause."
+      },
+      {
+        "id": "wet_floor_inside",
+        "name": "Slush on the floor",
+        "text": "Every customer walks in with snow on their boots. By ten o'clock the tile by the door is a skating rink, and the line stands right on it.",
+        "scale": "point",
+        "months": [
+          11,
+          12,
+          1,
+          2,
+          3,
+          4
+        ],
+        "realSignal": "Any day with rain or snow in the forecast (NWS point forecast for New York, NY); days with precipitation of 0.01 in or more at Central Park",
+        "effects": [
+          {
+            "field": "quality",
+            "add": -0.01,
+            "onlyIf": "entrance_floor_safety = nothing"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "entrance_floor_safety"
+          }
+        ],
+        "realFrequency": "Central Park has about 10 to 11 days with precipitation in every month of the year (1991-2020 normals).",
+        "tier": "core",
+        "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "The quality effect is a design value. The money risk sits in the wet_floor_fall_claim record: with 'nothing' chosen through a whole winter the engine raises one claim, as with the sidewalk."
+      },
+      {
+        "id": "blizzard_shutdown",
+        "name": "Blizzard warning: the city tells people to stay home",
+        "text": "A foot or more of snow is forecast. Schools go remote, above-ground trains may stop, and the mayor asks everyone to stay off the roads. Half your staff cannot get in and the street is empty.",
+        "scale": "city",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "NWS New York (OKX) Winter Storm Warning or Blizzard Warning for New York (Manhattan) County; NYC Emergency Management travel advisory; MTA service alerts",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.95
+          },
+          {
+            "field": "staffAvailability",
+            "mult": 0.96
+          }
+        ],
+        "daily": {
+          "days": 2,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.4
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.5
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.5
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "storm_day_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "snow_ice_plan"
+          }
+        ],
+        "realFrequency": "Two in the 2025-26 winter: January 25, 2026 (11.4 inches in Central Park, a record for the date) and a February 2026 blizzard (19.7 inches, ninth largest on record). Many winters have none: the 2022-23 season had 2.3 inches in total.",
+        "tier": "core",
+        "source": "https://www.cbsnews.com/newyork/news/2025-2026-nyc-winter-cold-snow",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "The deck's 'storm' day is 0.7; a warned blizzard is worse. 0.4 on the storm day and the day after is my estimate from Foursquare's 'up to 40% drop in major weather events' (already cited in nyc-climate.json) and Placer.ai's 20-30% storm-week losses in the hardest-hit states. Month value: 2 days x 60% / 30 = 4%. Delivery falls too: the city has suspended e-bike delivery during the worst hours of past storms. The 2022-23 total is from memory and needs a check."
+      },
+      {
+        "id": "ice_melt_shortage",
+        "name": "Ice melt sold out",
+        "text": "A storm is two days away and every hardware store within a mile is out of rock salt. Shops that bought their bags in November are fine. The rest are shoveling twice and hoping.",
+        "scale": "country",
+        "months": [
+          1,
+          2
+        ],
+        "realSignal": "Local hardware store and distributor stock reports before a forecast storm; New York State road-salt contract prices (OGS award: $52.87-$99.90 a ton for 2025-26, average $72.32)",
+        "effects": [
+          {
+            "field": "cashOneTime",
+            "add": -60
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "snow_ice_plan"
+          }
+        ],
+        "realFrequency": "January and February 2026: stores in the Hudson Valley and Yonkers sold out before the storms and blamed their distributors (News 12); shortages were reported across the Northeast and Midwest.",
+        "tier": "deep",
+        "source": "https://longisland.news12.com/2026/01/22/hudson-valley-customers-face-ice-melt-shortage-ahead-of-major-snowstorm/1mt40tbth8IHiDHAC6zw1E",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "The contractor option of snow_ice_plan is immune (the crew brings its own salt). For the staff option the engine adds a second shoveling pass and a marked-up bag: $60 is a planning value. No retail price per 50 lb bag in New York in 2026 was found."
+      }
+    ],
+    "mechanics": [
+      {
+        "id": "sidewalk_clock",
+        "title": "The sidewalk is yours: a legal clock after every snowfall",
+        "playerDecision": "A standing order for December-March (lever snow_ice_plan): staff shovel on the clock, a seasonal contractor, or nothing. On a blizzard day a second order (storm_day_policy): open with a skeleton crew or close.",
+        "engineMath": "The weather series already marks snow days. For each snow day d the engine sets a deadline from the hour the snow stopped (weather seed gives the hour; daytime 7:00-16:59 -> d + 4 h; 17:00-20:59 -> + 14 h; overnight -> 11:00 next morning). staff_shovel: cost = 1.5 h x wage + $5 ice melt per snow day, and one worker is off the bar for that time (capacity that hour -1). contractor: flat monthly fee, no capacity loss. none: (1) violation snow_ice_not_cleared is open from the deadline until the ice is gone (snow depth 0 or three days above freezing): any sanitation inspection or 311 complaint in that window finds it; second and third tickets in one winter use the higher steps $150 and $250-$350; (2) footTraffic at this door x 0.85 on those days; (3) the first such window of the winter creates one sidewalk_fall_claim that lands 60-120 days later. No dice: every branch follows from the weather series and the order.",
+        "fieldsNeeded": [
+          "levers[].activeMonths",
+          "weather day: hour the precipitation ended",
+          "weather day: snowDepth and refreeze flag",
+          "violations[].fineSteps (array by offense number)",
+          "business.frontageFeet (from the place)",
+          "events[].delayDays (a consequence that lands later)"
+        ],
+        "numbers": [
+          {
+            "what": "Hours to clear when snow stops 7:00 AM-4:59 PM",
+            "value": 4,
+            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Hours to clear when snow stops 5:00 PM-8:59 PM",
+            "value": 14,
+            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Deadline hour when snow stops 9:00 PM-6:59 AM",
+            "value": 11,
+            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Minimum width of the cleared path, feet",
+            "value": 4,
+            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Fine steps, USD: first, second, third offense (DSNY page; flyer gives up to 150 / 350 / 350)",
+            "value": [
+              100,
+              150,
+              250
+            ],
+            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Summonses for uncleared sidewalks after the January 25, 2026 storm",
+            "value": 4000,
+            "source": "https://www.amny.com/news/nyc-blizzard-sidewalk-shoverling-rules-tickets",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Average slip, fall or customer injury claim, small business, USD, 2025",
+            "value": 45000,
+            "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Days a season with measurable snow, Central Park, 1991-2020",
+            "value": 11.2,
+            "source": "https://en.wikipedia.org/wiki/Climate_of_New_York_City",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          }
+        ],
+        "tier": "core"
+      }
+    ],
+    "howNumbersWereChecked": "This session could run web searches but could not open pages: the cloud environment's network policy refused www.nyc.gov, codelibrary.amlegal.com and every other outside host. So no number here is 'verified' in the strict sense of PACK.md (opened the primary source myself). Every record is 'estimate' and carries an 'evidence' field: 'official_excerpt' = the search tool quoted the number from the official page named in 'source' (agency page, law text, court decision); 'secondary' = news, trade press, insurer or vendor report; 'calc' = my arithmetic or a game-design value, with the calculation in 'note'. A person or an agent with open network access can turn every 'official_excerpt' into 'verified' by opening the link.",
+    "claims": [
+      {
+        "id": "sidewalk_fall_claim",
+        "name": "Pedestrian falls on your uncleared sidewalk",
+        "law": "NYC Administrative Code §7-210 (owner liable); the lease passes the cost to the tenant; CPLR §214 (three years to sue)",
+        "trigger": "A snowfall deadline passed with snow_ice_plan = none or the shortcut skip_snow_clearing on; at most one claim per winter",
+        "delayDays": [
+          60,
+          120
+        ],
+        "cost": {
+          "ownerPaysInsured": 2500,
+          "premiumMultNextYear": 1.25,
+          "averageClaim": 45000
+        },
+        "reputationHit": 0.02,
+        "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Average claim $45,000: The Hartford 2025 review of small-business claims (slip, fall or customer injury; $20,000 in 2015). $2,500 (deductible and legal time) and the 25% premium increase are planning values: no public rate table was found. Under Cruz v Heights Broadway (First Department, 2023) the Administrative Code makes a tenant clear snow but does not make it liable in tort; the tenant pays through the indemnity clause of the lease, or directly if its own shoveling made the ice worse."
+      },
+      {
+        "id": "wet_floor_fall_claim",
+        "name": "Customer falls on your wet floor or doorstep",
+        "law": "New York common law of premises liability (negligence); NYC Administrative Code §7-210 for the sidewalk; 29 CFR 1910.22(a) for workers",
+        "trigger": "entrance_floor_safety = nothing through a month with 8 or more wet days; at most one claim per year",
+        "delayDays": [
+          30,
+          120
+        ],
+        "cost": {
+          "ownerPaysInsured": 2500,
+          "premiumMultNextYear": 1.25,
+          "averageClaim": 45000
+        },
+        "reputationHit": 0.02,
+        "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Not a government penalty: the record models a lawsuit so the engine can price the risk. Max $45,000 is the average slip, fall or customer injury claim of a small business in The Hartford's 2025 review (Insurance Journal, December 10, 2025); it was $20,000 in 2015. Base $2,500 is my planning value for what an insured owner pays: a $1,000-$2,500 deductible plus a premium increase at renewal. The claim arrives months after the fall: the New York deadline to sue for personal injury is three years (CPLR §214)."
+      }
+    ]
+  },
+  "officials": [
+    {
+      "id": "sanitation_agent",
+      "name": "Sanitation enforcement agent",
+      "agency": "NYC Department of Sanitation (DSNY)",
+      "role": "inspector",
+      "checks": [
+        "snow_ice_not_cleared"
+      ],
+      "realProcess": "Uniformed enforcement agents and sanitation police walk commercial blocks during set 'routing times' and after every snowfall. They write a summons on the spot to the business or the owner; no warning is required. The summons is answered at the Office of Administrative Trials and Hearings (OATH) or paid.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/street-sidewalk-rules-businesses.page",
+      "confidence": "estimate",
+      "evidence": "official_excerpt"
+    }
+  ],
+  "levers": [
+    {
+      "id": "snow_ice_plan",
+      "name": "Snow and ice at your door",
+      "activeMonths": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "options": [
+        {
+          "id": "staff_shovel",
+          "label": "Staff shovel and salt on the clock, within the legal window",
+          "monthlyCost": 90,
+          "effects": {}
+        },
+        {
+          "id": "contractor",
+          "label": "Seasonal contract: a crew clears and salts after every snowfall",
+          "monthlyCost": 400,
+          "effects": {
+            "capacity": 0.01
+          }
+        },
+        {
+          "id": "none",
+          "label": "Leave it: the sun will melt it",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.03
+          },
+          "causes": "snow_ice_not_cleared",
+          "claimRisk": "sidewalk_fall_claim"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "Charged only in December-March (activeMonths is a new field). Staff option: Central Park averages about 11 days a season with measurable snow (1991-2020 normals in ai/src/data/nyc-climate.json: Dec 2.1, Jan 3.7, Feb 3.2, Mar 2.0), about 2.75 a month; one hour of a $17.00 worker each time plus a second pass for refreeze = 2.75 x 1.5 h x $17 = $70, plus about $20 of ice melt. Contractor: no New York storefront price was found; vendor guides quote $350-$1,500 per visit for commercial lots in Brooklyn and $2,000-$10,000 a season nationally, which is plowing, not a 20-foot sidewalk. $400 a month ($1,600 a season) is my planning value for a shovel-only sidewalk contract: get three local quotes. The -3% demand of 'none' applies only on days with snow or ice on the ground (see extra.mechanics.sidewalk_clock)."
+    },
+    {
+      "id": "entrance_floor_safety",
+      "name": "Wet floor at the entrance",
+      "options": [
+        {
+          "id": "mats_and_signs",
+          "label": "Rented entrance mats swapped weekly, wet-floor signs, mop every hour in bad weather",
+          "monthlyCost": 80,
+          "effects": {
+            "quality": 0.01
+          }
+        },
+        {
+          "id": "nothing",
+          "label": "A towel by the door",
+          "monthlyCost": 0,
+          "effects": {},
+          "claimRisk": "wet_floor_fall_claim"
+        }
+      ],
+      "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "No price list for mat rental in New York was found; $80 a month (two mats, weekly swap) is my planning value from uniform-service quotes I could not open. The reason the lever exists is the insurer's number: The Hartford's 2025 ten-year review puts the average slip, fall or customer injury claim of a small business at $45,000, up from $20,000 in 2015, and one in five small-business liability claims is now a fall."
+    },
+    {
+      "id": "storm_day_policy",
+      "name": "When a storm is forecast",
+      "options": [
+        {
+          "id": "open_as_usual",
+          "label": "Open as usual with the full schedule",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "skeleton_crew",
+          "label": "Open with whoever lives close; cancel the other shifts the night before",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": -0.02
+          }
+        },
+        {
+          "id": "close_for_the_day",
+          "label": "Close on warning days and tell staff the evening before",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.02
+          }
+        }
+      ],
+      "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "Applies only on days with a National Weather Service warning (blizzard, winter storm, flash flood, tropical storm). open_as_usual: full wages against 40% of normal traffic, and workers who cannot get in are simply absent. skeleton_crew: wages for half the staff; shifts cancelled the night before cost nothing. close_for_the_day: no sales and no wages if staff were told before they reported; anyone who already reported is owed call-in pay of 3 hours at the minimum wage (12 NYCRR §146-1.5; the State Labor Department applies it to weather closings). The effects written here are month-level placeholders: 1-2 warning days a month in winter. The shortcut storm_day_no_call_in_pay is the illegal variant."
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "skip_snow_clearing",
+      "name": "Do not clear the snow",
+      "what": "Nobody shovels or salts your sidewalk after a snowfall. You save the labor. A sanitation agent can ticket you the same day, and if someone falls on your ice the claim follows you for three years.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 90
+      },
+      "violation": "snow_ice_not_cleared"
+    },
+    {
+      "id": "storm_day_no_call_in_pay",
+      "name": "Send staff home in a storm with no pay",
+      "what": "You close an hour into the storm and pay only the minutes worked. The law says everyone who reported is owed at least three hours.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 35
+      },
+      "violation": "call_in_pay_unpaid"
+    }
+  ],
+  "violations": [
+    {
+      "id": "snow_ice_not_cleared",
+      "name": "Snow or ice left on the sidewalk past the legal deadline",
+      "law": "NYC Administrative Code §16-123",
+      "official": "sanitation_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 100,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 350
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "criminal": "None. The larger exposure is civil: a pedestrian who falls on the uncleared sidewalk can sue the building owner (Administrative Code §7-210), and most store leases make the tenant pay the owner back.",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "confidence": "estimate",
+      "evidence": "official_excerpt",
+      "note": "DSNY snow laws page as quoted by web search: snow that stops between 7:00 AM and 4:59 PM must be cleared within 4 hours; between 5:00 PM and 8:59 PM within 14 hours; between 9:00 PM and 6:59 AM by 11:00 AM. A path at least 4 feet wide where possible; snow may not be pushed into the street or crosswalk. Fines on that page: $100 first offense, $150 second, $250 third and later; a DSNY flyer and news reports give $100-$150, $150-$350 and $250-$350. The 2014 DSNY rules digest names 'every owner, lessee, tenant, occupant, or other person having charge of any lot or building'. Each uncleared snowfall is a new offense. After the January 25, 2026 storm (11.4 inches in Central Park) the city wrote more than 4,000 such summonses."
+    },
+    {
+      "id": "call_in_pay_unpaid",
+      "name": "Call-in pay not paid after a weather closing",
+      "law": "12 NYCRR §146-1.5 (Hospitality Industry Wage Order); NY Labor Law §198(1-a)",
+      "official": "labor_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "criminal": "None for a first case; repeated willful non-payment of wages is a misdemeanor under Labor Law §198-a.",
+      "source": "https://ag.ny.gov/resources/individuals/workers-rights/wages-pay",
+      "confidence": "estimate",
+      "evidence": "official_excerpt",
+      "note": "Attorney General wage page as quoted by web search: in most cases restaurant or hotel workers should receive three hours of pay at the applicable minimum wage when they report and are sent home. Law firms report the State Labor Department applies call-in pay to closings for bad weather. Saved amount: one sent-home shift per worker per winter month, 3 h x $17.00 = $51, less about an hour actually paid = $35. Unpaid wages are owed back with 100% liquidated damages (Labor Law §198(1-a)), hence pctOfSaved 2, as for the other wage violations in the pack."
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "snow_clock",
+      "title": "The snow clock",
+      "text": "When snow stops between 7 AM and 4:59 PM you have 4 hours to clear your sidewalk; 5 PM to 8:59 PM, 14 hours; overnight, until 11 AM. A 4-foot path, nothing pushed into the street. Fines run $100 to $350 per snowfall.",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page"
+    },
+    {
+      "id": "sidewalk_liability",
+      "title": "Who pays when someone falls",
+      "text": "In New York City the building owner, not the city, is liable when someone is hurt on the sidewalk in front (Administrative Code §7-210). Read your lease: most make the store clear the snow and pay the owner back. The average fall claim is $45,000.",
+      "source": "https://www.nycourts.gov/REPORTER/3dseries/2012/2012_02424.htm"
+    },
+    {
+      "id": "storm_day_pay",
+      "title": "Sending staff home in a storm",
+      "text": "Close early for weather and you still owe pay: under New York's hospitality wage order a worker who reports for a shift is owed at least 3 hours at the minimum wage, or the scheduled shift if shorter. Decide before they travel, not after.",
+      "source": "https://dol.ny.gov/hospitality-wage-order-faq"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "title": "DSNY: Snow and Ice Removal Laws",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+      "title": "NYC311: Snow or Ice on Sidewalk",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nycourts.gov/REPORTER/3dseries/2012/2012_02424.htm",
+      "title": "Bing v 296 Third Ave. Group, L.P. (sidewalk liability under Administrative Code §7-210)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+      "title": "Insurance Journal: Hartford 10-year analysis of small-business claims (December 10, 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cbsnews.com/newyork/news/2025-2026-nyc-winter-cold-snow",
+      "title": "CBS New York: 2025-2026 was NYC's coldest, snowiest winter in 11 years",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.amny.com/news/nyc-blizzard-sidewalk-shoverling-rules-tickets",
+      "title": "amNewYork: sidewalk shoveling rules and tickets after the January 2026 storm",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dol.ny.gov/hospitality-wage-order-faq",
+      "title": "NYS Department of Labor: Hospitality Wage Order FAQ (call-in pay)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://ag.ny.gov/resources/individuals/workers-rights/wages-pay",
+      "title": "NY Attorney General: Wages and pay (call-in pay, three hours for restaurant workers)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://longisland.news12.com/2026/01/22/hudson-valley-customers-face-ice-melt-shortage-ahead-of-major-snowstorm/1mt40tbth8IHiDHAC6zw1E",
+      "title": "News 12: ice melt shortage ahead of the January 2026 storm",
+      "checked": "2026-11-14"
+    }
+  ]
+}
