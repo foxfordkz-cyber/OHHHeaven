@@ -11,7 +11,7 @@ export const monthStartDay = (month: number): number => (month - 1) * RULES.DAYS
 export const monthEndDay = (month: number): number => month * RULES.DAYS_PER_MONTH;
 export const clamp01 = (x: number): number => Math.min(1, Math.max(0, x));
 export const money = (x: number): number => Math.round(x);
-export const usd = (x: number): string => `$${Math.round(x).toLocaleString('en-US')}`;
+export const usd = (x: number): string => `${x < 0 ? '-' : ''}$${Math.abs(Math.round(x)).toLocaleString('en-US')}`;
 
 // ───────────── пакеты ─────────────
 
