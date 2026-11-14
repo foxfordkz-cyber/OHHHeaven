@@ -850,10 +850,14 @@ export function recommendOpening(niche: NicheId, placeId: string, _w: WorldState
       permitDays > 0 ? `Permits take ${permitDays} days; rent is due meanwhile: ${formatMoney((rent * permitDays) / RULES.DAYS_PER_MONTH)}` : 'No permit wait',
       `${staffNeeded} staff for about ${Math.round(Math.min(expected, sizeCapMonth))} ${pack.unit.name}s a month`,
     ];
+    const fixedMonth = rent + payrollMonth(pack, orders) * 1.12 + sum(pack.monthlyCosts.filter((c) => c.basis === 'fixed').map((c) => c.amount));
+    const reserve = fixedMonth * 2 + (rent * permitDays) / RULES.DAYS_PER_MONTH;
+    const safe = cashLeft >= reserve;
+    if (!safe) why.push(`Thin cushion: less than two months of fixed costs (${formatMoney(fixedMonth)} a month)`);
     const projected = Math.min(expected, sizeCapMonth) * (pack.unit.refPrice - pack.unit.cogsPerUnit) - rent - payrollMonth(pack, orders);
-    return { rec: { kitId: kit.id, size, items: kit.items.map((x) => ({ ...x })), total: cost, cashLeft, orders, daysToOpen: permitDays, why } as OpenRecommendation, projected, fits: cost <= pack.startCapital };
+    return { rec: { kitId: kit.id, size, items: kit.items.map((x) => ({ ...x })), total: cost, cashLeft, orders, daysToOpen: permitDays, why } as OpenRecommendation, projected, safe, fits: cost <= pack.startCapital };
   });
-  return recs.filter((r) => r.fits).sort((a, b) => b.projected - a.projected).map((r) => r.rec);
+  return recs.filter((r) => r.fits).sort((a, b) => Number(b.safe) - Number(a.safe) || b.projected - a.projected).map((r) => r.rec);
 }
 
 export function whatIf(w: WorldState, ctx: EngineCtx, businessId: string, orders: Partial<StandingOrders>): { projected: MonthReport; analytics: Analytics } {

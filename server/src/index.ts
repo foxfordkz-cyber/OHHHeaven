@@ -1,6 +1,6 @@
 // @ohh/server — HTTP по build/CONTRACT.md §6. Два мира при старте: живой `nyc` и быстрый `demo`.
 import express, { type NextFunction, type Request, type Response } from 'express';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import type { Server } from 'node:http';
 import { join, resolve } from 'node:path';
 import type { Action, OfficialRole, Query } from '@ohh/shared';
@@ -58,17 +58,30 @@ export class GameServer {
     return rt;
   }
 
+  private snapshotIds(): string[] {
+    const dir = this.opts.snapshotDir;
+    if (!dir || !existsSync(dir)) return [];
+    return readdirSync(dir).filter((f) => /^[a-z0-9-]+\.json$/.test(f)).map((f) => f.slice(0, -5));
+  }
+
+  /** Живой `nyc`, быстрый `demo` и все демо-города из снимков. */
   boot(): this {
     this.open({ id: 'nyc', name: 'New York (live)', demo: false, seed: 2026 });
     this.open({ id: 'demo', name: 'Demo City', demo: true, seed: 7 });
+    for (const id of this.snapshotIds()) {
+      if (this.runtimes.has(id) || !/^demo-\d+$/.test(id)) continue;
+      const n = Number(id.slice(5));
+      this.open({ id, name: `Demo City ${n}`, demo: true, seed: 7 + n });
+    }
     return this;
   }
 
   createDemo(name: string): WorldRuntime | null {
-    const demos = [...this.runtimes.values()].filter((r) => r.world.config.demo).length;
+    const demos = [...this.runtimes.values()].filter((r) => r.world.config.demo && r.world.phase === 'running').length;
     if (demos >= MAX_DEMO_WORLDS) return null;
-    let n = demos + 1;
-    while (this.runtimes.has(`demo-${n}`)) n++;
+    const taken = new Set([...this.runtimes.keys(), ...this.snapshotIds()]);
+    let n = 2;
+    while (taken.has(`demo-${n}`)) n++;
     return this.open({ id: `demo-${n}`, name: name || `Demo City ${n}`, demo: true, seed: 7 + n });
   }
 
