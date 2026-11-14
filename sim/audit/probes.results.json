@@ -1,0 +1,379 @@
+{
+  "metadata": {
+    "schemaVersion": 1,
+    "commit": "1e9d4b732f1418b5c8f28e9d7af3babb64628514",
+    "inputs": {
+      "packs/cafe.json": "1868832cf6affecd89206ca742e96a7e9b01f2bd3000de18404f196467040f24",
+      "packs/_common.json": "404aee2c944b30d680f4b36b25a6707442af7452f49c09960c00783917a72ce3",
+      "data/places.json": "1fa9d2e7b1b5136c3511c6d4d37c65945dfb3ff1efd881553f6a69ba1119159c"
+    },
+    "engineTree": "900ac7a9c3ca71595822a4ee5a34457565cafdf7",
+    "sharedTree": "3b7c2b3591de4a8c7a544a9a29c68984e1fcc012",
+    "days": 360,
+    "source": "Engine simulation; not real-world outcome frequencies",
+    "confidence": "estimate",
+    "note": "Deterministic seed 1; no host bots, external events, weather shocks, prize money or human officials. Built-in law runs. Fixed legal orders; exceptions explicitly described per probe. Monetary outputs are model calculations, not researched prices.",
+    "fixture": {
+      "source": "build/ROUND3.md#G1; sim/audit/README.md",
+      "confidence": "estimate",
+      "note": "Controlled regression inputs, not measured cafe statistics. The 800 sqft/$6000 monthly rent/0.5 foot-traffic fixture and 140-point grid preserve the earlier audit. Pedestrians = pack.market.unitsPerSlotMonth / (30 * pack.extra.footfall.captureRate): an average mature cafe without rivals starts at the old reference monthly demand. No renovation class is assigned, so the pack flat build-out cost applies. The role stress test overrides pedestrians with the largest cafe-door count in data/places.json; the bankruptcy stress test uses the smallest."
+    }
+  },
+  "pass": false,
+  "probes": [
+    {
+      "id": "market_1_10_100",
+      "pass": true,
+      "criterion": "Co-located identical cafes lose individual demand in the public demand function AND through tickDay; aggregate direct demand stays below the fixed local pool.",
+      "numbers": {
+        "direct": [
+          {
+            "cafes": 1,
+            "firstDemandMonth": 6000.000000000001,
+            "totalDemandMonth": 6000.000000000001
+          },
+          {
+            "cafes": 10,
+            "firstDemandMonth": 1304.3478260869567,
+            "totalDemandMonth": 13043.478260869566
+          },
+          {
+            "cafes": 100,
+            "firstDemandMonth": 147.78325123152712,
+            "totalDemandMonth": 14778.325123152716
+          }
+        ],
+        "integratedFirstMonth": [
+          {
+            "cafes": 1,
+            "firstDemand": 5800,
+            "firstProfit": 5976.04,
+            "totalDemand": 5800
+          },
+          {
+            "cafes": 10,
+            "firstDemand": 1253,
+            "firstProfit": -17435,
+            "totalDemand": 12530
+          },
+          {
+            "cafes": 100,
+            "firstDemand": 141,
+            "firstProfit": -23820.94,
+            "totalDemand": 14100
+          }
+        ],
+        "localPoolCeiling": 15000.000000000002
+      }
+    },
+    {
+      "id": "shift_lead",
+      "pass": false,
+      "criterion": "At equal headcount the lead improves served orders, quality or capacity under load; a higher wage alone is not a benefit.",
+      "numbers": [
+        {
+          "label": "Four baristas",
+          "placeId": "audit-door-0",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 24,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 4,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 111387.25,
+          "netWorth": 104589.69,
+          "setupSpent": 170217,
+          "revenue": 170969,
+          "profit": 28687.69,
+          "served": 20114,
+          "demand": 76451,
+          "quality": 0.5700033856599129,
+          "reputation": 0.19397603020509818,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 26267,
+              "served": 6554,
+              "capacity": 6573,
+              "profit": 9254.77,
+              "revenue": 55709
+            },
+            {
+              "month": 2,
+              "demand": 25460,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 9716.46,
+              "revenue": 57630
+            },
+            {
+              "month": 3,
+              "demand": 24724,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 9716.46,
+              "revenue": 57630
+            }
+          ]
+        },
+        {
+          "label": "Three baristas and a lead",
+          "placeId": "audit-door-0",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 24,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 109825.84,
+          "netWorth": 103495.44,
+          "setupSpent": 170217,
+          "revenue": 170969,
+          "profit": 27593.44,
+          "served": 20114,
+          "demand": 76451,
+          "quality": 0.5700033856599129,
+          "reputation": 0.19397603020509818,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 26267,
+              "served": 6554,
+              "capacity": 6573,
+              "profit": 8898.22,
+              "revenue": 55709
+            },
+            {
+              "month": 2,
+              "demand": 25460,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 9347.61,
+              "revenue": 57630
+            },
+            {
+              "month": 3,
+              "demand": 24724,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 9347.61,
+              "revenue": 57630
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "month_close_levers",
+      "pass": true,
+      "criterion": "One cheap closing day saves one day of cost, not the whole month; lines reconcile to cash.",
+      "numbers": {
+        "paid": {
+          "cleaning": "deep",
+          "sourcing": "specialty",
+          "hours": "long",
+          "pest_control": "monthly",
+          "staff_pay": "above"
+        },
+        "cheap": {
+          "cleaning": "standard",
+          "sourcing": "standard",
+          "hours": "standard",
+          "pest_control": "monthly",
+          "staff_pay": "standard"
+        },
+        "roundingBudget": 0.036000000000000004,
+        "rows": [
+          {
+            "month": 2,
+            "honestCost": 5185,
+            "switchedCost": 5022.33,
+            "expectedHonest": 5185,
+            "expectedSwitched": 5022.33,
+            "cashReconciliationError": 0
+          },
+          {
+            "month": 3,
+            "honestCost": 5185,
+            "switchedCost": 5022.33,
+            "expectedHonest": 5185,
+            "expectedSwitched": 5022.33,
+            "cashReconciliationError": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "loan_is_not_profit",
+      "pass": true,
+      "criterion": "Zero-interest principal moves cash but changes neither revenue, profit nor accrued tax for lender or borrower.",
+      "numbers": {
+        "amount": 30000,
+        "immediateCash": 29999.999999999985,
+        "rows": [
+          {
+            "business": "Lender",
+            "revenueWithout": 51000,
+            "revenueWith": 51000,
+            "profitWithout": 6324.66,
+            "profitWith": 6324.66,
+            "taxesWithout": 8999.2,
+            "taxesWith": 8999.2,
+            "principalLines": [
+              {
+                "id": "deal:deal-40-1:loan_out",
+                "label": "Loan to Borrower",
+                "kind": "deal",
+                "amount": -30000
+              },
+              {
+                "id": "deal:deal-40-1:p1:principal",
+                "label": "Loan payment 1/6 from Borrower",
+                "kind": "deal",
+                "amount": 5000
+              }
+            ],
+            "cashReconciliationError": 0
+          },
+          {
+            "business": "Borrower",
+            "revenueWithout": 51000,
+            "revenueWith": 51000,
+            "profitWithout": 6324.66,
+            "profitWith": 6324.66,
+            "taxesWithout": 8999.2,
+            "taxesWith": 8999.2,
+            "principalLines": [
+              {
+                "id": "deal:deal-40-1:loan_in",
+                "label": "Loan from Lender",
+                "kind": "deal",
+                "amount": 30000
+              },
+              {
+                "id": "deal:deal-40-1:p1:principal",
+                "label": "Loan payment 1/6 to Lender",
+                "kind": "deal",
+                "amount": -5000
+              }
+            ],
+            "cashReconciliationError": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "no_second_starting_capital",
+      "pass": true,
+      "criterion": "After an actual simulated bankruptcy, reopening uses residual net worth or is rejected for lack of funds.",
+      "numbers": {
+        "bankrupt": {
+          "label": "Deliberately unaffordable payroll",
+          "placeId": "audit-door-0",
+          "status": "bankrupt",
+          "openedDay": 22,
+          "bankruptDay": 120,
+          "size": 18,
+          "orders": {
+            "price": 16,
+            "staff": {
+              "barista": 8,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": -32606.06,
+          "netWorth": -20327.86,
+          "setupSpent": 141166,
+          "revenue": 22544,
+          "profit": -116755.36,
+          "served": 1409,
+          "demand": 1409,
+          "quality": 0.5,
+          "reputation": 0.09819682855586631,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 83,
+              "served": 83,
+              "capacity": 2040,
+              "profit": -13990.47,
+              "revenue": 1328
+            },
+            {
+              "month": 2,
+              "demand": 379,
+              "served": 379,
+              "capacity": 7650,
+              "profit": -35075.79,
+              "revenue": 6064
+            },
+            {
+              "month": 3,
+              "demand": 452,
+              "served": 452,
+              "capacity": 7650,
+              "profit": -34124.68,
+              "revenue": 7232
+            },
+            {
+              "month": 4,
+              "demand": 495,
+              "served": 495,
+              "capacity": 7650,
+              "profit": -33564.42,
+              "revenue": 7920
+            }
+          ]
+        },
+        "originalCapital": 224000,
+        "remaining": 0,
+        "reopenCost": 133882,
+        "error": "Not enough money: this setup costs $133,882, you have $0 left after Deliberately unaffordable payroll went bankrupt",
+        "secondCapital": null
+      }
+    }
+  ]
+}

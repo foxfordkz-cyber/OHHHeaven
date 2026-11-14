@@ -1,0 +1,2929 @@
+{
+  "metadata": {
+    "schemaVersion": 1,
+    "commit": "1e9d4b732f1418b5c8f28e9d7af3babb64628514",
+    "inputs": {
+      "packs/cafe.json": "1868832cf6affecd89206ca742e96a7e9b01f2bd3000de18404f196467040f24",
+      "packs/_common.json": "404aee2c944b30d680f4b36b25a6707442af7452f49c09960c00783917a72ce3",
+      "data/places.json": "1fa9d2e7b1b5136c3511c6d4d37c65945dfb3ff1efd881553f6a69ba1119159c"
+    },
+    "engineTree": "900ac7a9c3ca71595822a4ee5a34457565cafdf7",
+    "sharedTree": "3b7c2b3591de4a8c7a544a9a29c68984e1fcc012",
+    "days": 360,
+    "source": "Engine simulation; not real-world outcome frequencies",
+    "confidence": "estimate",
+    "note": "Deterministic seed 1; no host bots, external events, weather shocks, prize money or human officials. Built-in law runs. Fixed legal orders; exceptions explicitly described per probe. Monetary outputs are model calculations, not researched prices.",
+    "profileSource": "sim/audit/profiles.ts (until A1 publishes D20)",
+    "provisional": true,
+    "selectionSource": "data/places.json; anchor distances and modelled footfall; classification is an audit estimate",
+    "ranking": "Surviving profiles first, then cumulative reported profit over the year; ties within one cent count as shared winners."
+  },
+  "profiles": [
+    {
+      "source": "packs/cafe.json (kits, unit.refPrice, staff, levers); build/ROUND3.md#G1",
+      "confidence": "estimate",
+      "note": "Provisional audit policy, not observed NYC financial data. Seats come from kit sizes; staffing is a chosen decision. Specialty price is refPrice + $1, an explicit grid point from the prior audit. No coefficients are added to the engine.",
+      "id": "takeaway",
+      "label": "Takeaway",
+      "kit": "lean",
+      "size": 12,
+      "price": 8.5,
+      "staff": {
+        "barista": 3,
+        "shift_lead": 0
+      },
+      "levers": {}
+    },
+    {
+      "source": "packs/cafe.json (kits, unit.refPrice, staff, levers); build/ROUND3.md#G1",
+      "confidence": "estimate",
+      "note": "Provisional audit policy, not observed NYC financial data. Seats come from kit sizes; staffing is a chosen decision. Specialty price is refPrice + $1, an explicit grid point from the prior audit. No coefficients are added to the engine.",
+      "id": "neighborhood",
+      "label": "Neighborhood seating",
+      "kit": "premium",
+      "size": 24,
+      "price": 8.5,
+      "staff": {
+        "barista": 3,
+        "shift_lead": 1
+      },
+      "levers": {}
+    },
+    {
+      "source": "packs/cafe.json (kits, unit.refPrice, staff, levers); build/ROUND3.md#G1",
+      "confidence": "estimate",
+      "note": "Provisional audit policy, not observed NYC financial data. Seats come from kit sizes; staffing is a chosen decision. Specialty price is refPrice + $1, an explicit grid point from the prior audit. No coefficients are added to the engine.",
+      "id": "specialty",
+      "label": "Specialty",
+      "kit": "premium",
+      "size": 18,
+      "price": 9.5,
+      "staff": {
+        "barista": 3,
+        "shift_lead": 1
+      },
+      "levers": {
+        "sourcing": "specialty",
+        "cleaning": "deep",
+        "staff_pay": "above"
+      }
+    }
+  ],
+  "universalWinners": [],
+  "failures": [
+    "Copy does not demonstrably reduce original profit: campus"
+  ],
+  "pass": false,
+  "results": [
+    {
+      "type": "office",
+      "label": "Office / commuter proxy",
+      "note": "Nearest subway among affordable doors, without a college anchor. There are no measured office-worker shares in this dataset.",
+      "place": {
+        "id": "ev-061",
+        "address": "Ave A between E 12th St & E 13th St, east side, near E 13th St",
+        "block": "Ave A, E 10th–E 14th St",
+        "lat": 40.729418,
+        "lng": -73.980435,
+        "kind": "storefront",
+        "sqft": 870,
+        "tier": "mid",
+        "rentPerSqftYear": 109,
+        "footTraffic": 0.52,
+        "suitableFor": [
+          "cafe",
+          "barbershop",
+          "bodega"
+        ],
+        "sourceDataset": "manual:east-village-grid-v1",
+        "note": "unverified",
+        "pedestriansPerDay": 5060,
+        "anchors": [
+          {
+            "kind": "subway",
+            "name": "1 Av (L)",
+            "distM": 198,
+            "ridersPerDay": 22674
+          },
+          {
+            "kind": "school",
+            "name": "East Side Community School",
+            "distM": 175
+          },
+          {
+            "kind": "park",
+            "name": "Joseph C. Sauer Park",
+            "distM": 149
+          },
+          {
+            "kind": "hospital",
+            "name": "Roberto Clemente Family Guidance Center",
+            "distM": 118
+          }
+        ],
+        "rivals": [
+          {
+            "niche": "cafe",
+            "within150m": 3,
+            "weight": 2.89,
+            "nearest": [
+              {
+                "name": "The Oasis Cafe",
+                "distM": 59
+              },
+              {
+                "name": "Knock Out Cafe",
+                "distM": 61
+              },
+              {
+                "name": "Dunkin' / 'Baskin Robbins",
+                "distM": 145
+              }
+            ]
+          }
+        ],
+        "footfallNote": "modelled: MTA station entries within walking distance and DOHMH food places within 150 m, scaled to DOT sidewalk counts",
+        "formerUse": "cafe"
+      },
+      "rows": [
+        {
+          "profile": "takeaway",
+          "label": "Takeaway",
+          "placeId": "ev-061",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 119454.11,
+          "netWorth": 111797.41,
+          "setupSpent": 146327,
+          "revenue": 394085.5,
+          "profit": 23422.91,
+          "served": 46363,
+          "demand": 59268,
+          "quality": 0.39000000000021945,
+          "reputation": 0.23157021316843932,
+          "lastQuarterProfit": 4515.94,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7902.5,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7902.5,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 961,
+              "served": 961,
+              "capacity": 1360,
+              "profit": -6339.51,
+              "revenue": 8168.5
+            },
+            {
+              "month": 4,
+              "demand": 4684,
+              "served": 4630,
+              "capacity": 5100,
+              "profit": 3858.1,
+              "revenue": 39355
+            },
+            {
+              "month": 5,
+              "demand": 5778,
+              "served": 5072,
+              "capacity": 5100,
+              "profit": 6396.38,
+              "revenue": 43112
+            },
+            {
+              "month": 6,
+              "demand": 6112,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 6557.19,
+              "revenue": 43350
+            },
+            {
+              "month": 7,
+              "demand": 6447,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 6176.05,
+              "revenue": 43350
+            },
+            {
+              "month": 8,
+              "demand": 6702,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 4515.94,
+              "revenue": 43350
+            },
+            {
+              "month": 9,
+              "demand": 7190,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 4515.94,
+              "revenue": 43350
+            },
+            {
+              "month": 10,
+              "demand": 7256,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 4515.94,
+              "revenue": 43350
+            },
+            {
+              "month": 11,
+              "demand": 7257,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 4515.94,
+              "revenue": 43350
+            },
+            {
+              "month": 12,
+              "demand": 6881,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 4515.94,
+              "revenue": 43350
+            }
+          ]
+        },
+        {
+          "profile": "neighborhood",
+          "label": "Neighborhood seating",
+          "placeId": "ev-061",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 24,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 119178.13,
+          "netWorth": 114105.18,
+          "setupSpent": 182662,
+          "revenue": 514794,
+          "profit": 50648.18,
+          "served": 60564,
+          "demand": 74286,
+          "quality": 0.5700000000268433,
+          "reputation": 0.4300700053535319,
+          "lastQuarterProfit": 8037.35,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7902.5,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7902.5,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 1059,
+              "served": 1059,
+              "capacity": 1813,
+              "profit": -6985.93,
+              "revenue": 9001.5
+            },
+            {
+              "month": 4,
+              "demand": 5413,
+              "served": 5413,
+              "capacity": 6800,
+              "profit": 3819.99,
+              "revenue": 46010.5
+            },
+            {
+              "month": 5,
+              "demand": 7090,
+              "served": 6660,
+              "capacity": 6800,
+              "profit": 10981.2,
+              "revenue": 56610
+            },
+            {
+              "month": 6,
+              "demand": 7652,
+              "served": 6752,
+              "capacity": 6800,
+              "profit": 10413.82,
+              "revenue": 57392
+            },
+            {
+              "month": 7,
+              "demand": 8142,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8037.35,
+              "revenue": 57630
+            },
+            {
+              "month": 8,
+              "demand": 8507,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8037.35,
+              "revenue": 57630
+            },
+            {
+              "month": 9,
+              "demand": 9146,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8037.35,
+              "revenue": 57630
+            },
+            {
+              "month": 10,
+              "demand": 9248,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8037.35,
+              "revenue": 57630
+            },
+            {
+              "month": 11,
+              "demand": 9255,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8037.35,
+              "revenue": 57630
+            },
+            {
+              "month": 12,
+              "demand": 8774,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8037.35,
+              "revenue": 57630
+            }
+          ]
+        },
+        {
+          "profile": "specialty",
+          "label": "Specialty",
+          "placeId": "ev-061",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 153992.87,
+          "netWorth": 141045.54,
+          "setupSpent": 182158,
+          "revenue": 579585.5,
+          "profit": 77336.54,
+          "served": 61009,
+          "demand": 66704,
+          "quality": 0.636183159747969,
+          "reputation": 0.5592435112501088,
+          "lastQuarterProfit": 11905.39,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7902.5,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7902.5,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 869,
+              "served": 869,
+              "capacity": 1886,
+              "profit": -7896.83,
+              "revenue": 8255.5
+            },
+            {
+              "month": 4,
+              "demand": 4787,
+              "served": 4787,
+              "capacity": 7072,
+              "profit": 2385.6,
+              "revenue": 45476.5
+            },
+            {
+              "month": 5,
+              "demand": 6538,
+              "served": 6512,
+              "capacity": 7072,
+              "profit": 13967.68,
+              "revenue": 61864
+            },
+            {
+              "month": 6,
+              "demand": 6975,
+              "served": 6867,
+              "capacity": 7072,
+              "profit": 13548.7,
+              "revenue": 65236.5
+            },
+            {
+              "month": 7,
+              "demand": 7333,
+              "served": 6933,
+              "capacity": 7072,
+              "profit": 11566.29,
+              "revenue": 65863.5
+            },
+            {
+              "month": 8,
+              "demand": 7663,
+              "served": 6991,
+              "capacity": 7072,
+              "profit": 11834.48,
+              "revenue": 66414.5
+            },
+            {
+              "month": 9,
+              "demand": 8194,
+              "served": 7031,
+              "capacity": 7072,
+              "profit": 12019.46,
+              "revenue": 66794.5
+            },
+            {
+              "month": 10,
+              "demand": 8243,
+              "served": 7036,
+              "capacity": 7072,
+              "profit": 12042.57,
+              "revenue": 66842
+            },
+            {
+              "month": 11,
+              "demand": 8245,
+              "served": 7040,
+              "capacity": 7072,
+              "profit": 12061.06,
+              "revenue": 66880
+            },
+            {
+              "month": 12,
+              "demand": 7857,
+              "served": 6943,
+              "capacity": 7072,
+              "profit": 11612.53,
+              "revenue": 65958.5
+            }
+          ]
+        }
+      ],
+      "winners": [
+        "specialty"
+      ],
+      "copy": {
+        "pass": true,
+        "note": "Separate 90-day operating competition probe: both shops are established via the public openEstablished API. The baseline original is identically established. Each pays the engine resident setup cost; no manual capital injection. Compare matching full calendar months through the first bankruptcy close. Month 1 contains 29 ticks in both worlds.",
+        "neighbor": {
+          "id": "ev-060",
+          "address": "Ave A between E 12th St & E 12th St, west side, near E 12th St",
+          "block": "Ave A, E 10th–E 14th St",
+          "lat": 40.72907,
+          "lng": -73.981123,
+          "kind": "storefront",
+          "sqft": 760,
+          "tier": "mid",
+          "rentPerSqftYear": 129,
+          "footTraffic": 0.54,
+          "suitableFor": [
+            "cafe",
+            "barbershop",
+            "bodega"
+          ],
+          "sourceDataset": "manual:east-village-grid-v1",
+          "note": "unverified",
+          "pedestriansPerDay": 5240,
+          "anchors": [
+            {
+              "kind": "subway",
+              "name": "1 Av (L)",
+              "distM": 214,
+              "ridersPerDay": 22674
+            },
+            {
+              "kind": "school",
+              "name": "East Side Community School",
+              "distM": 115
+            },
+            {
+              "kind": "park",
+              "name": "Joseph C. Sauer Park",
+              "distM": 151
+            },
+            {
+              "kind": "hospital",
+              "name": "Roberto Clemente Family Guidance Center",
+              "distM": 158
+            }
+          ],
+          "rivals": [
+            {
+              "niche": "cafe",
+              "within150m": 3,
+              "weight": 3.15,
+              "nearest": [
+                {
+                  "name": "The Oasis Cafe",
+                  "distM": 30
+                },
+                {
+                  "name": "The Rabbit Books And Bar",
+                  "distM": 108
+                },
+                {
+                  "name": "Knock Out Cafe",
+                  "distM": 118
+                }
+              ]
+            }
+          ],
+          "footfallNote": "modelled: MTA station entries within walking distance and DOHMH food places within 150 m, scaled to DOT sidewalk counts",
+          "formerUse": "salon"
+        },
+        "distanceM": 69.7,
+        "months": [
+          1,
+          2,
+          3
+        ],
+        "baselineProfit": 34761.19,
+        "copiedProfit": 32634.09,
+        "solo": {
+          "label": "Specialty",
+          "placeId": "ev-061",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 110574.61,
+          "netWorth": 98470.19,
+          "setupSpent": 182158,
+          "revenue": 196688,
+          "profit": 34761.19,
+          "served": 20704,
+          "demand": 23938,
+          "quality": 0.6206371408600749,
+          "reputation": 0.5365108110486397,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 7524,
+              "served": 6702,
+              "capacity": 6836,
+              "profit": 10999.73,
+              "revenue": 63669
+            },
+            {
+              "month": 2,
+              "demand": 7954,
+              "served": 6952,
+              "capacity": 7072,
+              "profit": 11654.15,
+              "revenue": 66044
+            },
+            {
+              "month": 3,
+              "demand": 8460,
+              "served": 7050,
+              "capacity": 7072,
+              "profit": 12107.31,
+              "revenue": 66975
+            }
+          ]
+        },
+        "original": {
+          "label": "Original",
+          "placeId": "ev-061",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 107098.28,
+          "netWorth": 96343.09,
+          "setupSpent": 182158,
+          "revenue": 192318,
+          "profit": 32634.09,
+          "served": 20244,
+          "demand": 21202,
+          "quality": 0.6327975880619792,
+          "reputation": 0.5940631701782835,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 6612,
+              "served": 6500,
+              "capacity": 6836,
+              "profit": 10065.67,
+              "revenue": 61750
+            },
+            {
+              "month": 2,
+              "demand": 7044,
+              "served": 6788,
+              "capacity": 7072,
+              "profit": 10895.79,
+              "revenue": 64486
+            },
+            {
+              "month": 3,
+              "demand": 7546,
+              "served": 6956,
+              "capacity": 7072,
+              "profit": 11672.63,
+              "revenue": 66082
+            }
+          ]
+        },
+        "copy": {
+          "label": "Copy",
+          "placeId": "ev-060",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 116224.36,
+          "netWorth": 105663.29,
+          "setupSpent": 172373,
+          "revenue": 192498.5,
+          "profit": 32169.29,
+          "served": 20263,
+          "demand": 21298,
+          "quality": 0.6327968356931095,
+          "reputation": 0.5919129839844217,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 6631,
+              "served": 6505,
+              "capacity": 6836,
+              "profit": 9904.57,
+              "revenue": 61797.5
+            },
+            {
+              "month": 2,
+              "demand": 7080,
+              "served": 6796,
+              "capacity": 7072,
+              "profit": 10748.56,
+              "revenue": 64562
+            },
+            {
+              "month": 3,
+              "demand": 7587,
+              "served": 6962,
+              "capacity": 7072,
+              "profit": 11516.16,
+              "revenue": 66139
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "residential",
+      "label": "Residential proxy",
+      "note": "Lowest modelled footfall among affordable doors without college or museum anchors; not a measured resident share.",
+      "place": {
+        "id": "ev-069",
+        "address": "Ave B between E 12th St & E 13th St, west side, mid-block",
+        "block": "Ave B, E 10th–E 14th St",
+        "lat": 40.728427,
+        "lng": -73.97865,
+        "kind": "storefront",
+        "sqft": 810,
+        "tier": "cheap",
+        "rentPerSqftYear": 95,
+        "footTraffic": 0.28,
+        "suitableFor": [
+          "cafe",
+          "barbershop",
+          "bodega"
+        ],
+        "sourceDataset": "manual:east-village-grid-v1",
+        "note": "unverified",
+        "pedestriansPerDay": 2720,
+        "anchors": [
+          {
+            "kind": "subway",
+            "name": "1 Av (L)",
+            "distM": 377,
+            "ridersPerDay": 22674
+          },
+          {
+            "kind": "school",
+            "name": "The Children'S Workshop School",
+            "distM": 91
+          },
+          {
+            "kind": "park",
+            "name": "Joseph C. Sauer Park",
+            "distM": 98
+          },
+          {
+            "kind": "hospital",
+            "name": "Roberto Clemente Family Guidance Center",
+            "distM": 68
+          }
+        ],
+        "rivals": [
+          {
+            "niche": "cafe",
+            "within150m": 3,
+            "weight": 2.43,
+            "nearest": [
+              {
+                "name": "B-Cup Cafe",
+                "distM": 13
+              },
+              {
+                "name": "Knock Out Cafe",
+                "distM": 129
+              },
+              {
+                "name": "Dunkin' / 'Baskin Robbins",
+                "distM": 147
+              }
+            ]
+          }
+        ],
+        "footfallNote": "modelled: MTA station entries within walking distance and DOHMH food places within 150 m, scaled to DOT sidewalk counts",
+        "formerUse": "cafe"
+      },
+      "rows": [
+        {
+          "profile": "takeaway",
+          "label": "Takeaway",
+          "placeId": "ev-069",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 99832.56,
+          "netWorth": 99168.45,
+          "setupSpent": 136082,
+          "revenue": 318461,
+          "profit": 548.95,
+          "served": 37466,
+          "demand": 37466,
+          "quality": 0.4512666731184554,
+          "reputation": 0.43492155369207897,
+          "lastQuarterProfit": 5129.47,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -6412.5,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -6412.5,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 540,
+              "served": 540,
+              "capacity": 1360,
+              "profit": -7267.19,
+              "revenue": 4590
+            },
+            {
+              "month": 4,
+              "demand": 2675,
+              "served": 2675,
+              "capacity": 5100,
+              "profit": -5878.98,
+              "revenue": 22737.5
+            },
+            {
+              "month": 5,
+              "demand": 3479,
+              "served": 3479,
+              "capacity": 5100,
+              "profit": -1261.8,
+              "revenue": 29571.5
+            },
+            {
+              "month": 6,
+              "demand": 3815,
+              "served": 3815,
+              "capacity": 5100,
+              "profit": 667.76,
+              "revenue": 32427.5
+            },
+            {
+              "month": 7,
+              "demand": 4151,
+              "served": 4151,
+              "capacity": 5100,
+              "profit": 2597.32,
+              "revenue": 35283.5
+            },
+            {
+              "month": 8,
+              "demand": 4336,
+              "served": 4336,
+              "capacity": 5100,
+              "profit": 3659.72,
+              "revenue": 36856
+            },
+            {
+              "month": 9,
+              "demand": 4651,
+              "served": 4651,
+              "capacity": 5100,
+              "profit": 5468.7,
+              "revenue": 39533.5
+            },
+            {
+              "month": 10,
+              "demand": 4686,
+              "served": 4686,
+              "capacity": 5100,
+              "profit": 5669.69,
+              "revenue": 39831
+            },
+            {
+              "month": 11,
+              "demand": 4658,
+              "served": 4658,
+              "capacity": 5100,
+              "profit": 5508.89,
+              "revenue": 39593
+            },
+            {
+              "month": 12,
+              "demand": 4475,
+              "served": 4475,
+              "capacity": 5100,
+              "profit": 4209.84,
+              "revenue": 38037.5
+            }
+          ]
+        },
+        {
+          "profile": "neighborhood",
+          "label": "Neighborhood seating",
+          "placeId": "ev-069",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 24,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 64420.58,
+          "netWorth": 72671.23,
+          "setupSpent": 172417,
+          "revenue": 377952.5,
+          "profit": -1030.77,
+          "served": 44465,
+          "demand": 44465,
+          "quality": 0.6100000000000001,
+          "reputation": 0.6086009272724414,
+          "lastQuarterProfit": 7007.93,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -6412.5,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -6412.5,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 596,
+              "served": 596,
+              "capacity": 1813,
+              "profit": -8154.83,
+              "revenue": 5066
+            },
+            {
+              "month": 4,
+              "demand": 2971,
+              "served": 2971,
+              "capacity": 6800,
+              "profit": -8713.8,
+              "revenue": 25253.5
+            },
+            {
+              "month": 5,
+              "demand": 3890,
+              "served": 3890,
+              "capacity": 6800,
+              "profit": -3436.22,
+              "revenue": 33065
+            },
+            {
+              "month": 6,
+              "demand": 4338,
+              "served": 4338,
+              "capacity": 6800,
+              "profit": -863.47,
+              "revenue": 36873
+            },
+            {
+              "month": 7,
+              "demand": 4819,
+              "served": 4819,
+              "capacity": 6800,
+              "profit": 1898.79,
+              "revenue": 40961.5
+            },
+            {
+              "month": 8,
+              "demand": 5117,
+              "served": 5117,
+              "capacity": 6800,
+              "profit": 3610.14,
+              "revenue": 43494.5
+            },
+            {
+              "month": 9,
+              "demand": 5608,
+              "served": 5608,
+              "capacity": 6800,
+              "profit": 6429.83,
+              "revenue": 47668
+            },
+            {
+              "month": 10,
+              "demand": 5781,
+              "served": 5781,
+              "capacity": 6800,
+              "profit": 7423.32,
+              "revenue": 49138.5
+            },
+            {
+              "month": 11,
+              "demand": 5835,
+              "served": 5835,
+              "capacity": 6800,
+              "profit": 7733.43,
+              "revenue": 49597.5
+            },
+            {
+              "month": 12,
+              "demand": 5510,
+              "served": 5510,
+              "capacity": 6800,
+              "profit": 5867.04,
+              "revenue": 46835
+            }
+          ]
+        },
+        {
+          "profile": "specialty",
+          "label": "Specialty",
+          "placeId": "ev-069",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 66817.96,
+          "netWorth": 74063.33,
+          "setupSpent": 171913,
+          "revenue": 395627.5,
+          "profit": 109.33,
+          "served": 41645,
+          "demand": 41645,
+          "quality": 0.7399999999999753,
+          "reputation": 0.7386589546846878,
+          "lastQuarterProfit": 7880.96,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -6412.5,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -6412.5,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 490,
+              "served": 490,
+              "capacity": 1886,
+              "profit": -8951.51,
+              "revenue": 4655
+            },
+            {
+              "month": 4,
+              "demand": 2628,
+              "served": 2628,
+              "capacity": 7072,
+              "profit": -10620.47,
+              "revenue": 24966
+            },
+            {
+              "month": 5,
+              "demand": 3612,
+              "served": 3612,
+              "capacity": 7072,
+              "profit": -4013.65,
+              "revenue": 34314
+            },
+            {
+              "month": 6,
+              "demand": 4092,
+              "served": 4092,
+              "capacity": 7072,
+              "profit": -790.81,
+              "revenue": 38874
+            },
+            {
+              "month": 7,
+              "demand": 4546,
+              "served": 4546,
+              "capacity": 7072,
+              "profit": 2257.46,
+              "revenue": 43187
+            },
+            {
+              "month": 8,
+              "demand": 4829,
+              "served": 4829,
+              "capacity": 7072,
+              "profit": 4157.58,
+              "revenue": 45875.5
+            },
+            {
+              "month": 9,
+              "demand": 5290,
+              "served": 5290,
+              "capacity": 7072,
+              "profit": 7252.86,
+              "revenue": 50255
+            },
+            {
+              "month": 10,
+              "demand": 5453,
+              "served": 5453,
+              "capacity": 7072,
+              "profit": 8347.28,
+              "revenue": 51803.5
+            },
+            {
+              "month": 11,
+              "demand": 5507,
+              "served": 5507,
+              "capacity": 7072,
+              "profit": 8709.86,
+              "revenue": 52316.5
+            },
+            {
+              "month": 12,
+              "demand": 5198,
+              "served": 5198,
+              "capacity": 7072,
+              "profit": 6585.73,
+              "revenue": 49381
+            }
+          ]
+        }
+      ],
+      "winners": [
+        "takeaway"
+      ],
+      "copy": {
+        "pass": true,
+        "note": "Separate 90-day operating competition probe: both shops are established via the public openEstablished API. The baseline original is identically established. Each pays the engine resident setup cost; no manual capital injection. Compare matching full calendar months through the first bankruptcy close. Month 1 contains 29 ticks in both worlds.",
+        "neighbor": {
+          "id": "ev-070",
+          "address": "Ave B between E 13th St & E 14th St, east side, mid-block",
+          "block": "Ave B, E 10th–E 14th St",
+          "lat": 40.728898,
+          "lng": -73.977873,
+          "kind": "storefront",
+          "sqft": 780,
+          "tier": "cheap",
+          "rentPerSqftYear": 92,
+          "footTraffic": 0.24,
+          "suitableFor": [
+            "cafe",
+            "barbershop",
+            "bodega"
+          ],
+          "sourceDataset": "manual:east-village-grid-v1",
+          "note": "unverified",
+          "pedestriansPerDay": 2300,
+          "anchors": [
+            {
+              "kind": "subway",
+              "name": "1 Av (L)",
+              "distM": 390,
+              "ridersPerDay": 22674
+            },
+            {
+              "kind": "school",
+              "name": "The Children'S Workshop School",
+              "distM": 149
+            },
+            {
+              "kind": "park",
+              "name": "Joseph C. Sauer Park",
+              "distM": 178
+            },
+            {
+              "kind": "hospital",
+              "name": "Roberto Clemente Family Guidance Center",
+              "distM": 119
+            }
+          ],
+          "rivals": [
+            {
+              "niche": "cafe",
+              "within150m": 2,
+              "weight": 1.52,
+              "nearest": [
+                {
+                  "name": "B-Cup Cafe",
+                  "distM": 96
+                },
+                {
+                  "name": "Dunkin' / 'Baskin Robbins",
+                  "distM": 121
+                },
+                {
+                  "name": "Knock Out Cafe",
+                  "distM": 162
+                }
+              ]
+            }
+          ],
+          "footfallNote": "modelled: MTA station entries within walking distance and DOHMH food places within 150 m, scaled to DOT sidewalk counts",
+          "formerUse": "retail"
+        },
+        "distanceM": 83.84,
+        "months": [
+          1,
+          2,
+          3
+        ],
+        "baselineProfit": 11291.17,
+        "copiedProfit": 5500.99,
+        "solo": {
+          "label": "Takeaway",
+          "placeId": "ev-069",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 115355.67,
+          "netWorth": 109910.67,
+          "setupSpent": 136082,
+          "revenue": 117852.5,
+          "profit": 11291.17,
+          "served": 13865,
+          "demand": 13885,
+          "quality": 0.39934807269922584,
+          "reputation": 0.42822759146937284,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 4489,
+              "served": 4489,
+              "capacity": 4930,
+              "profit": 3465.92,
+              "revenue": 38156.5
+            },
+            {
+              "month": 2,
+              "demand": 4566,
+              "served": 4566,
+              "capacity": 5100,
+              "profit": 3430.11,
+              "revenue": 38811
+            },
+            {
+              "month": 3,
+              "demand": 4830,
+              "served": 4810,
+              "capacity": 5100,
+              "profit": 4395.14,
+              "revenue": 40885
+            }
+          ]
+        },
+        "original": {
+          "label": "Original",
+          "placeId": "ev-069",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 105843.93,
+          "netWorth": 104120.49,
+          "setupSpent": 136082,
+          "revenue": 105408.5,
+          "profit": 5500.99,
+          "served": 12401,
+          "demand": 12401,
+          "quality": 0.4550494513841291,
+          "reputation": 0.470798325517276,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 3963,
+              "served": 3963,
+              "capacity": 4930,
+              "profit": 1385.56,
+              "revenue": 33685.5
+            },
+            {
+              "month": 2,
+              "demand": 4082,
+              "served": 4082,
+              "capacity": 5100,
+              "profit": 1515.88,
+              "revenue": 34697
+            },
+            {
+              "month": 3,
+              "demand": 4356,
+              "served": 4356,
+              "capacity": 5100,
+              "profit": 2599.55,
+              "revenue": 37026
+            }
+          ]
+        },
+        "copy": {
+          "label": "Copy",
+          "placeId": "ev-070",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 107129.37,
+          "netWorth": 106644.12,
+          "setupSpent": 131897,
+          "revenue": 99917.5,
+          "profit": 3839.62,
+          "served": 11755,
+          "demand": 11755,
+          "quality": 0.47,
+          "reputation": 0.4749686910261689,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 3745,
+              "served": 3745,
+              "capacity": 4930,
+              "profit": 821.23,
+              "revenue": 31832.5
+            },
+            {
+              "month": 2,
+              "demand": 3857,
+              "served": 3857,
+              "capacity": 5100,
+              "profit": 923.85,
+              "revenue": 32784.5
+            },
+            {
+              "month": 3,
+              "demand": 4153,
+              "served": 4153,
+              "capacity": 5100,
+              "profit": 2094.54,
+              "revenue": 35300.5
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "tourist",
+      "label": "Visitor / museum proxy",
+      "note": "A museum within 150 m; choose highest modelled footfall among fitting doors, not a measured tourist share.",
+      "place": {
+        "id": "ev-114",
+        "address": "E 4th St between Bowery & 2nd Ave, south side, mid-block",
+        "block": "E 4th St, Bowery–2nd Ave",
+        "lat": 40.726552,
+        "lng": -73.990647,
+        "kind": "storefront",
+        "sqft": 760,
+        "tier": "mid",
+        "rentPerSqftYear": 116,
+        "footTraffic": 0.53,
+        "suitableFor": [
+          "cafe",
+          "barbershop"
+        ],
+        "sourceDataset": "manual:east-village-grid-v1",
+        "note": "unverified",
+        "pedestriansPerDay": 5140,
+        "anchors": [
+          {
+            "kind": "subway",
+            "name": "2 Av (F)",
+            "distM": 356,
+            "ridersPerDay": 14331
+          },
+          {
+            "kind": "college",
+            "name": "Cooper Union",
+            "distM": 193
+          },
+          {
+            "kind": "school",
+            "name": "La Salle Academy",
+            "distM": 192
+          },
+          {
+            "kind": "park",
+            "name": "Manuel Plaza",
+            "distM": 176
+          },
+          {
+            "kind": "hospital",
+            "name": "Mobile Medical Unit",
+            "distM": 81
+          },
+          {
+            "kind": "museum",
+            "name": "The Ukrainian Museum",
+            "distM": 145
+          }
+        ],
+        "rivals": [
+          {
+            "niche": "cafe",
+            "within150m": 5,
+            "weight": 4.57,
+            "nearest": [
+              {
+                "name": "Three Jewels",
+                "distM": 68
+              },
+              {
+                "name": "Coffee Project Ny",
+                "distM": 91
+              },
+              {
+                "name": "Kona Coffee Roasters",
+                "distM": 115
+              }
+            ]
+          }
+        ],
+        "footfallNote": "modelled: MTA station entries within walking distance and DOHMH food places within 150 m, scaled to DOT sidewalk counts",
+        "formerUse": "cafe"
+      },
+      "rows": [
+        {
+          "profile": "takeaway",
+          "label": "Takeaway",
+          "placeId": "ev-114",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 131229.38,
+          "netWorth": 123053.59,
+          "setupSpent": 134072.01,
+          "revenue": 382066.5,
+          "profit": 22424.1,
+          "served": 44949,
+          "demand": 50701,
+          "quality": 0.3900000000630544,
+          "reputation": 0.2851492720424594,
+          "lastQuarterProfit": 4898.74,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7346.67,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7346.67,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 851,
+              "served": 851,
+              "capacity": 1360,
+              "profit": -6415.36,
+              "revenue": 7233.5
+            },
+            {
+              "month": 4,
+              "demand": 4188,
+              "served": 4182,
+              "capacity": 5100,
+              "profit": 1841.17,
+              "revenue": 35547
+            },
+            {
+              "month": 5,
+              "demand": 5140,
+              "served": 4999,
+              "capacity": 5100,
+              "profit": 6533.01,
+              "revenue": 42491.5
+            },
+            {
+              "month": 6,
+              "demand": 4655,
+              "served": 4632,
+              "capacity": 5100,
+              "profit": 4425.4,
+              "revenue": 39372
+            },
+            {
+              "month": 7,
+              "demand": 4950,
+              "served": 4869,
+              "capacity": 5100,
+              "profit": 5786.44,
+              "revenue": 41386.5
+            },
+            {
+              "month": 8,
+              "demand": 5130,
+              "served": 5016,
+              "capacity": 5100,
+              "profit": 5351.82,
+              "revenue": 42636
+            },
+            {
+              "month": 9,
+              "demand": 6572,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 4898.74,
+              "revenue": 43350
+            },
+            {
+              "month": 10,
+              "demand": 6570,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 4898.74,
+              "revenue": 43350
+            },
+            {
+              "month": 11,
+              "demand": 6520,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 4898.74,
+              "revenue": 43350
+            },
+            {
+              "month": 12,
+              "demand": 6125,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 4898.74,
+              "revenue": 43350
+            }
+          ]
+        },
+        {
+          "profile": "neighborhood",
+          "label": "Neighborhood seating",
+          "placeId": "ev-114",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 24,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 125657.61,
+          "netWorth": 120065.57,
+          "setupSpent": 170407.01,
+          "revenue": 491393.5,
+          "profit": 44353.58,
+          "served": 57811,
+          "demand": 64198,
+          "quality": 0.570000096662875,
+          "reputation": 0.4813499015701762,
+          "lastQuarterProfit": 8420.15,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7346.67,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7346.67,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 944,
+              "served": 944,
+              "capacity": 1813,
+              "profit": -7090.52,
+              "revenue": 8024
+            },
+            {
+              "month": 4,
+              "demand": 4750,
+              "served": 4750,
+              "capacity": 6800,
+              "profit": 568.38,
+              "revenue": 40375
+            },
+            {
+              "month": 5,
+              "demand": 6309,
+              "served": 6265,
+              "capacity": 6800,
+              "profit": 9268.63,
+              "revenue": 53252.5
+            },
+            {
+              "month": 6,
+              "demand": 5820,
+              "served": 5819,
+              "capacity": 6800,
+              "profit": 6707.38,
+              "revenue": 49461.5
+            },
+            {
+              "month": 7,
+              "demand": 6399,
+              "served": 6326,
+              "capacity": 6800,
+              "profit": 8255.62,
+              "revenue": 53771
+            },
+            {
+              "month": 8,
+              "demand": 6711,
+              "served": 6587,
+              "capacity": 6800,
+              "profit": 7656.83,
+              "revenue": 55989.5
+            },
+            {
+              "month": 9,
+              "demand": 8510,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8420.15,
+              "revenue": 57630
+            },
+            {
+              "month": 10,
+              "demand": 8466,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8420.15,
+              "revenue": 57630
+            },
+            {
+              "month": 11,
+              "demand": 8405,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8420.15,
+              "revenue": 57630
+            },
+            {
+              "month": 12,
+              "demand": 7884,
+              "served": 6780,
+              "capacity": 6800,
+              "profit": 8420.15,
+              "revenue": 57630
+            }
+          ]
+        },
+        {
+          "profile": "specialty",
+          "label": "Specialty",
+          "placeId": "ev-114",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 150278.15,
+          "netWorth": 136729.62,
+          "setupSpent": 169903.01,
+          "revenue": 536104,
+          "profit": 60765.63,
+          "served": 56432,
+          "demand": 58027,
+          "quality": 0.6373621039339062,
+          "reputation": 0.6190491207329523,
+          "lastQuarterProfit": 12331.35,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7346.67,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -7346.67,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 765,
+              "served": 765,
+              "capacity": 1886,
+              "profit": -8039.26,
+              "revenue": 7267.5
+            },
+            {
+              "month": 4,
+              "demand": 4178,
+              "served": 4178,
+              "capacity": 7072,
+              "profit": -1147.55,
+              "revenue": 39691
+            },
+            {
+              "month": 5,
+              "demand": 5755,
+              "served": 5755,
+              "capacity": 7072,
+              "profit": 9440.82,
+              "revenue": 54672.5
+            },
+            {
+              "month": 6,
+              "demand": 5390,
+              "served": 5390,
+              "capacity": 7072,
+              "profit": 6990.12,
+              "revenue": 51205
+            },
+            {
+              "month": 7,
+              "demand": 5986,
+              "served": 5986,
+              "capacity": 7072,
+              "profit": 9889,
+              "revenue": 56867
+            },
+            {
+              "month": 8,
+              "demand": 6273,
+              "served": 6261,
+              "capacity": 7072,
+              "profit": 8841.69,
+              "revenue": 59479.5
+            },
+            {
+              "month": 9,
+              "demand": 7677,
+              "served": 7050,
+              "capacity": 7072,
+              "profit": 12490.11,
+              "revenue": 66975
+            },
+            {
+              "month": 10,
+              "demand": 7502,
+              "served": 7050,
+              "capacity": 7072,
+              "profit": 12490.11,
+              "revenue": 66975
+            },
+            {
+              "month": 11,
+              "demand": 7431,
+              "served": 7050,
+              "capacity": 7072,
+              "profit": 12490.11,
+              "revenue": 66975
+            },
+            {
+              "month": 12,
+              "demand": 7070,
+              "served": 6947,
+              "capacity": 7072,
+              "profit": 12013.82,
+              "revenue": 65996.5
+            }
+          ]
+        }
+      ],
+      "winners": [
+        "specialty"
+      ],
+      "copy": {
+        "pass": true,
+        "note": "Separate 90-day operating competition probe: both shops are established via the public openEstablished API. The baseline original is identically established. Each pays the engine resident setup cost; no manual capital injection. Compare matching full calendar months through the first bankruptcy close. Month 1 contains 29 ticks in both worlds.",
+        "neighbor": {
+          "id": "ev-115",
+          "address": "E 4th St between Bowery & 2nd Ave, north side, mid-block",
+          "block": "E 4th St, Bowery–2nd Ave",
+          "lat": 40.726512,
+          "lng": -73.989868,
+          "kind": "storefront",
+          "sqft": 640,
+          "tier": "mid",
+          "rentPerSqftYear": 129,
+          "footTraffic": 0.48,
+          "suitableFor": [
+            "cafe",
+            "barbershop"
+          ],
+          "sourceDataset": "manual:east-village-grid-v1",
+          "note": "unverified",
+          "pedestriansPerDay": 4660,
+          "anchors": [
+            {
+              "kind": "subway",
+              "name": "2 Av (F)",
+              "distM": 346,
+              "ridersPerDay": 14331
+            },
+            {
+              "kind": "college",
+              "name": "Cooper Union",
+              "distM": 232
+            },
+            {
+              "kind": "school",
+              "name": "La Salle Academy",
+              "distM": 181
+            },
+            {
+              "kind": "hospital",
+              "name": "Mobile Medical Unit",
+              "distM": 119
+            },
+            {
+              "kind": "museum",
+              "name": "The Ukrainian Museum",
+              "distM": 130
+            }
+          ],
+          "rivals": [
+            {
+              "niche": "cafe",
+              "within150m": 6,
+              "weight": 4.39,
+              "nearest": [
+                {
+                  "name": "Kona Coffee Roasters",
+                  "distM": 81
+                },
+                {
+                  "name": "The Bean",
+                  "distM": 95
+                },
+                {
+                  "name": "Coffee Project Ny",
+                  "distM": 95
+                }
+              ]
+            }
+          ],
+          "footfallNote": "modelled: MTA station entries within walking distance and DOHMH food places within 150 m, scaled to DOT sidewalk counts",
+          "formerUse": "retail"
+        },
+        "distanceM": 65.79,
+        "months": [
+          1,
+          2,
+          3
+        ],
+        "baselineProfit": 35683.02,
+        "copiedProfit": 31253.12,
+        "solo": {
+          "label": "Specialty",
+          "placeId": "ev-114",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 124126.83,
+          "netWorth": 111647.01,
+          "setupSpent": 169903.01,
+          "revenue": 196222.5,
+          "profit": 35683.02,
+          "served": 20655,
+          "demand": 21417,
+          "quality": 0.6206684415400717,
+          "reputation": 0.5887489342175533,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 6717,
+              "served": 6646,
+              "capacity": 6836,
+              "profit": 11123.59,
+              "revenue": 63137
+            },
+            {
+              "month": 2,
+              "demand": 7095,
+              "served": 6959,
+              "capacity": 7072,
+              "profit": 12069.32,
+              "revenue": 66110.5
+            },
+            {
+              "month": 3,
+              "demand": 7605,
+              "served": 7050,
+              "capacity": 7072,
+              "profit": 12490.11,
+              "revenue": 66975
+            }
+          ]
+        },
+        "original": {
+          "label": "Original",
+          "placeId": "ev-114",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 116887.19,
+          "netWorth": 107217.11,
+          "setupSpent": 169903.01,
+          "revenue": 187121.5,
+          "profit": 31253.12,
+          "served": 19697,
+          "demand": 19868,
+          "quality": 0.6695727753220323,
+          "reputation": 0.6568739744043625,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 6105,
+              "served": 6105,
+              "capacity": 6836,
+              "profit": 8621.95,
+              "revenue": 57997.5
+            },
+            {
+              "month": 2,
+              "demand": 6660,
+              "served": 6659,
+              "capacity": 7072,
+              "profit": 10682.08,
+              "revenue": 63260.5
+            },
+            {
+              "month": 3,
+              "demand": 7103,
+              "served": 6933,
+              "capacity": 7072,
+              "profit": 11949.09,
+              "revenue": 65863.5
+            }
+          ]
+        },
+        "copy": {
+          "label": "Copy",
+          "placeId": "ev-115",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 125153.41,
+          "netWorth": 117408.9,
+          "setupSpent": 156953,
+          "revenue": 179474,
+          "profit": 28494.9,
+          "served": 18892,
+          "demand": 18892,
+          "quality": 0.7115829542351277,
+          "reputation": 0.6868820402212527,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 5806,
+              "served": 5806,
+              "capacity": 6836,
+              "profit": 7560.74,
+              "revenue": 55157
+            },
+            {
+              "month": 2,
+              "demand": 6452,
+              "served": 6452,
+              "capacity": 7072,
+              "profit": 10046.29,
+              "revenue": 61294
+            },
+            {
+              "month": 3,
+              "demand": 6634,
+              "served": 6634,
+              "capacity": 7072,
+              "profit": 10887.87,
+              "revenue": 63023
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "campus",
+      "label": "Campus proxy",
+      "note": "Nearest college anchor among remaining fitting doors; no measured student share.",
+      "place": {
+        "id": "ev-100",
+        "address": "E 9th St between 2nd Ave & 3rd Ave, south side, near 2nd Ave",
+        "block": "E 9th St, 2nd–3rd Ave",
+        "lat": 40.729071,
+        "lng": -73.987155,
+        "kind": "storefront",
+        "sqft": 930,
+        "tier": "mid",
+        "rentPerSqftYear": 120,
+        "footTraffic": 0.5,
+        "suitableFor": [
+          "cafe",
+          "barbershop"
+        ],
+        "sourceDataset": "manual:east-village-grid-v1",
+        "note": "unverified",
+        "pedestriansPerDay": 4830,
+        "anchors": [
+          {
+            "kind": "subway",
+            "name": "Astor Pl (6)",
+            "distM": 347,
+            "ridersPerDay": 12968
+          },
+          {
+            "kind": "college",
+            "name": "St. John'S University Manhattan",
+            "distM": 280
+          },
+          {
+            "kind": "hospital",
+            "name": "Odyssey House East 6th St Clinic",
+            "distM": 203
+          },
+          {
+            "kind": "library",
+            "name": "Ottendorfer Library",
+            "distM": 55
+          },
+          {
+            "kind": "plaza",
+            "name": "Abe Lebewohl Park",
+            "distM": 108
+          }
+        ],
+        "rivals": [
+          {
+            "niche": "cafe",
+            "within150m": 10,
+            "weight": 7.72,
+            "nearest": [
+              {
+                "name": "Seald Cafe",
+                "distM": 42
+              },
+              {
+                "name": "Te Company",
+                "distM": 45
+              },
+              {
+                "name": "La Cabra",
+                "distM": 46
+              }
+            ]
+          }
+        ],
+        "footfallNote": "modelled: MTA station entries within walking distance and DOHMH food places within 150 m, scaled to DOT sidewalk counts",
+        "formerUse": "cafe"
+      },
+      "rows": [
+        {
+          "profile": "takeaway",
+          "label": "Takeaway",
+          "placeId": "ev-100",
+          "status": "open",
+          "openedDay": 82,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 42627.29,
+          "netWorth": 41969.81,
+          "setupSpent": 156294.5,
+          "revenue": 314636,
+          "profit": -36437.19,
+          "served": 37016,
+          "demand": 37018,
+          "quality": 0.40117899021703807,
+          "reputation": 0.4089666587784262,
+          "lastQuarterProfit": 2937.24,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -9300,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -9300,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 562,
+              "served": 562,
+              "capacity": 1360,
+              "profit": -10028.35,
+              "revenue": 4777
+            },
+            {
+              "month": 4,
+              "demand": 2780,
+              "served": 2780,
+              "capacity": 5100,
+              "profit": -8163.49,
+              "revenue": 23630
+            },
+            {
+              "month": 5,
+              "demand": 3610,
+              "served": 3610,
+              "capacity": 5100,
+              "profit": -3397.01,
+              "revenue": 30685
+            },
+            {
+              "month": 6,
+              "demand": 3459,
+              "served": 3459,
+              "capacity": 5100,
+              "profit": -4264.16,
+              "revenue": 29401.5
+            },
+            {
+              "month": 7,
+              "demand": 3764,
+              "served": 3764,
+              "capacity": 5100,
+              "profit": -2512.63,
+              "revenue": 31994
+            },
+            {
+              "month": 8,
+              "demand": 3969,
+              "served": 3969,
+              "capacity": 5100,
+              "profit": -1335.37,
+              "revenue": 33736.5
+            },
+            {
+              "month": 9,
+              "demand": 4735,
+              "served": 4733,
+              "capacity": 5100,
+              "profit": 3052.09,
+              "revenue": 40230.5
+            },
+            {
+              "month": 10,
+              "demand": 4709,
+              "served": 4709,
+              "capacity": 5100,
+              "profit": 2914.27,
+              "revenue": 40026.5
+            },
+            {
+              "month": 11,
+              "demand": 4699,
+              "served": 4699,
+              "capacity": 5100,
+              "profit": 2856.85,
+              "revenue": 39941.5
+            },
+            {
+              "month": 12,
+              "demand": 4731,
+              "served": 4731,
+              "capacity": 5100,
+              "profit": 3040.61,
+              "revenue": 40213.5
+            }
+          ]
+        },
+        {
+          "profile": "neighborhood",
+          "label": "Neighborhood seating",
+          "placeId": "ev-100",
+          "status": "bankrupt",
+          "openedDay": 82,
+          "bankruptDay": 120,
+          "size": 24,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": -6104.58,
+          "netWorth": 13371.45,
+          "setupSpent": 192629.5,
+          "revenue": 31985.5,
+          "profit": -40118.05,
+          "served": 3763,
+          "demand": 3763,
+          "quality": 0.6100000000000001,
+          "reputation": 0.5053592211167124,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -9300,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -9300,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 628,
+              "served": 628,
+              "capacity": 1813,
+              "profit": -10858.56,
+              "revenue": 5338
+            },
+            {
+              "month": 4,
+              "demand": 3135,
+              "served": 3135,
+              "capacity": 6800,
+              "profit": -10659.49,
+              "revenue": 26647.5
+            }
+          ]
+        },
+        {
+          "profile": "specialty",
+          "label": "Specialty",
+          "placeId": "ev-100",
+          "status": "bankrupt",
+          "openedDay": 82,
+          "bankruptDay": 120,
+          "size": 18,
+          "orders": {
+            "price": 9.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 1
+            },
+            "levers": {
+              "cleaning": "deep",
+              "sourcing": "specialty",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "above"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": -8811.28,
+          "netWorth": 10486.08,
+          "setupSpent": 192125.5,
+          "revenue": 30599.5,
+          "profit": -43255.42,
+          "served": 3221,
+          "demand": 3221,
+          "quality": 0.7376277595279178,
+          "reputation": 0.5731118289444342,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -9300,
+              "revenue": 0
+            },
+            {
+              "month": 2,
+              "demand": 0,
+              "served": 0,
+              "capacity": 0,
+              "profit": -9300,
+              "revenue": 0
+            },
+            {
+              "month": 3,
+              "demand": 503,
+              "served": 503,
+              "capacity": 1886,
+              "profit": -11751.73,
+              "revenue": 4778.5
+            },
+            {
+              "month": 4,
+              "demand": 2718,
+              "served": 2718,
+              "capacity": 7072,
+              "profit": -12903.69,
+              "revenue": 25821
+            }
+          ]
+        }
+      ],
+      "winners": [
+        "takeaway"
+      ],
+      "copy": {
+        "pass": false,
+        "note": "Separate 90-day operating competition probe: both shops are established via the public openEstablished API. The baseline original is identically established. Each pays the engine resident setup cost; no manual capital injection. Compare matching full calendar months through the first bankruptcy close. Month 1 contains 29 ticks in both worlds.",
+        "neighbor": {
+          "id": "ev-035",
+          "address": "2nd Ave between St Marks Pl & E 9th St, west side, near E 9th St",
+          "block": "2nd Ave, St Marks Pl–E 10th St",
+          "lat": 40.729031,
+          "lng": -73.987033,
+          "kind": "storefront",
+          "sqft": 890,
+          "tier": "mid",
+          "rentPerSqftYear": 144,
+          "footTraffic": 0.82,
+          "suitableFor": [
+            "cafe",
+            "barbershop",
+            "bodega"
+          ],
+          "sourceDataset": "manual:east-village-grid-v1",
+          "note": "unverified",
+          "pedestriansPerDay": 7940,
+          "anchors": [
+            {
+              "kind": "subway",
+              "name": "Astor Pl (6)",
+              "distM": 359,
+              "ridersPerDay": 12968
+            },
+            {
+              "kind": "college",
+              "name": "St. John'S University Manhattan",
+              "distM": 291
+            },
+            {
+              "kind": "hospital",
+              "name": "Odyssey House East 6th St Clinic",
+              "distM": 201
+            },
+            {
+              "kind": "library",
+              "name": "Ottendorfer Library",
+              "distM": 64
+            },
+            {
+              "kind": "plaza",
+              "name": "Abe Lebewohl Park",
+              "distM": 112
+            }
+          ],
+          "rivals": [
+            {
+              "niche": "cafe",
+              "within150m": 10,
+              "weight": 7.73,
+              "nearest": [
+                {
+                  "name": "Seald Cafe",
+                  "distM": 31
+                },
+                {
+                  "name": "Te Company",
+                  "distM": 34
+                },
+                {
+                  "name": "La Cabra",
+                  "distM": 49
+                }
+              ]
+            }
+          ],
+          "footfallNote": "modelled: MTA station entries within walking distance and DOHMH food places within 150 m, scaled to DOT sidewalk counts",
+          "formerUse": "salon"
+        },
+        "distanceM": 11.2,
+        "months": [
+          1,
+          2,
+          3
+        ],
+        "baselineProfit": 8192.71,
+        "copiedProfit": 9181.45,
+        "solo": {
+          "label": "Takeaway",
+          "placeId": "ev-100",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 91190.98,
+          "netWorth": 86599.71,
+          "setupSpent": 156294.5,
+          "revenue": 124015,
+          "profit": 8192.71,
+          "served": 14590,
+          "demand": 14736,
+          "quality": 0.39815098990489456,
+          "reputation": 0.4163372106102467,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 4935,
+              "served": 4833,
+              "capacity": 4930,
+              "profit": 2837.83,
+              "revenue": 41080.5
+            },
+            {
+              "month": 2,
+              "demand": 4922,
+              "served": 4895,
+              "capacity": 5100,
+              "profit": 2742.7,
+              "revenue": 41607.5
+            },
+            {
+              "month": 3,
+              "demand": 4879,
+              "served": 4862,
+              "capacity": 5100,
+              "profit": 2612.18,
+              "revenue": 41327
+            }
+          ]
+        },
+        "original": {
+          "label": "Original",
+          "placeId": "ev-100",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 92815.23,
+          "netWorth": 87588.45,
+          "setupSpent": 156294.5,
+          "revenue": 126140,
+          "profit": 9181.45,
+          "served": 14840,
+          "demand": 14840,
+          "quality": 0.39813377568927805,
+          "reputation": 0.4182882956530043,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 4896,
+              "served": 4896,
+              "capacity": 4930,
+              "profit": 3086.99,
+              "revenue": 41616
+            },
+            {
+              "month": 2,
+              "demand": 5005,
+              "served": 5005,
+              "capacity": 5100,
+              "profit": 3177.75,
+              "revenue": 42542.5
+            },
+            {
+              "month": 3,
+              "demand": 4939,
+              "served": 4939,
+              "capacity": 5100,
+              "profit": 2916.71,
+              "revenue": 41981.5
+            }
+          ]
+        },
+        "copy": {
+          "label": "Copy",
+          "placeId": "ev-035",
+          "status": "open",
+          "openedDay": 1,
+          "bankruptDay": null,
+          "size": 12,
+          "orders": {
+            "price": 8.5,
+            "staff": {
+              "barista": 3,
+              "shift_lead": 0
+            },
+            "levers": {
+              "cleaning": "standard",
+              "sourcing": "standard",
+              "hours": "standard",
+              "pest_control": "monthly",
+              "staff_pay": "standard"
+            },
+            "shortcuts": [],
+            "blockFund": false,
+            "autopilot": "hold"
+          },
+          "cash": 90269.22,
+          "netWorth": 85594.2,
+          "setupSpent": 156584.5,
+          "revenue": 128605,
+          "profit": 7477.2,
+          "served": 15130,
+          "demand": 20100,
+          "quality": 0.39000677131982625,
+          "reputation": 0.2959580560740745,
+          "lastQuarterProfit": null,
+          "months": [
+            {
+              "month": 1,
+              "demand": 6927,
+              "served": 4930,
+              "capacity": 4930,
+              "profit": 2271.06,
+              "revenue": 41905
+            },
+            {
+              "month": 2,
+              "demand": 6662,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 2603.07,
+              "revenue": 43350
+            },
+            {
+              "month": 3,
+              "demand": 6511,
+              "served": 5100,
+              "capacity": 5100,
+              "profit": 2603.07,
+              "revenue": 43350
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
