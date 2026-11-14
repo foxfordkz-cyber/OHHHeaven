@@ -7,7 +7,7 @@ import { NICHE_META as MAP_NICHE } from '../../map/geo';
 import { switchMode, useGame, useStoreState, useView } from '../../app/store';
 import {
   AiBadge, Badge, Banner, Button, Card, Clock, Feed, Icon, List, ListRow, MoneyText, NICHE_ICON, Skeleton, Stat, formatMoney, formatNumber,
-  type IconName, ThemeToggle, Logo , Sheet } from '../../ui';
+  type IconName, ThemeToggle, Logo, LangToggle, useT , Sheet } from '../../ui';
 import './home.css';
 
 const IDEA_EXAMPLES = ['A coffee shop near the subway', 'A barbershop with three chairs', 'A corner store with long hours'];
@@ -89,6 +89,7 @@ export function Home() {
 // ───────────────────────── city board: who leads right now, what just happened ─────────────────────────
 
 function CityBoard({ view, businesses, onOpen, onAll }: { view: Exclude<ClientView, { kind: 'official' }>; businesses: PublicBusiness[]; onOpen: (id: string) => void; onAll: () => void }) {
+  const tr = useT();
   const nameOf = new Map(businesses.map((b) => [b.id, b] as const));
   const leaders: Standing[] = Object.values(view.leaderboards)
     .flatMap((list) => (list ?? []).filter((x) => !x.bankrupt).slice(0, 3))
@@ -101,8 +102,8 @@ function CityBoard({ view, businesses, onOpen, onAll }: { view: Exclude<ClientVi
       {leaders.length > 0 && (
         <div className="city-board">
           <div className="row-between">
-            <h2 className="city-board__title">Leading the city</h2>
-            <button type="button" className="city-board__all" onClick={onAll}>All</button>
+            <h2 className="city-board__title">{tr('Leading the city', 'Лидеры города')}</h2>
+            <button type="button" className="city-board__all" onClick={onAll}>{tr('All', 'Все')}</button>
           </div>
           <ol className="city-board__list">
             {leaders.map((x) => (
@@ -111,7 +112,7 @@ function CityBoard({ view, businesses, onOpen, onAll }: { view: Exclude<ClientVi
                   <span className="city-board__rank" style={{ background: MAP_NICHE[x.niche]?.color }}>{x.rank}</span>
                   <span className="city-board__name">
                     <b className="truncate">{x.name ?? nameOf.get(x.businessId)?.name ?? 'Business'}</b>
-                    <small>{`${NICHE_META[x.niche]?.name ?? x.niche} · ${x.isAi ? 'AI' : 'player'}`}</small>
+                    <small>{`${NICHE_META[x.niche]?.name ?? x.niche} · ${x.isAi ? tr('AI', 'ИИ') : tr('player', 'игрок')}`}</small>
                   </span>
                   <span className="city-board__worth num">{formatMoney(x.netWorth, { compact: true })}</span>
                 </button>
@@ -122,7 +123,7 @@ function CityBoard({ view, businesses, onOpen, onAll }: { view: Exclude<ClientVi
       )}
       {news.length > 0 && (
         <div className="city-board city-board--news">
-          <h2 className="city-board__title">Just happened</h2>
+          <h2 className="city-board__title">{tr('Just happened', 'Только что')}</h2>
           <ul className="city-board__news">
             {news.map((n) => (
               <li key={n.id}><span className="num">Day {n.day}</span>{n.text}</li>
@@ -143,25 +144,26 @@ function firstVisit(): boolean {
   try { return window.localStorage.getItem(GUIDE_KEY) !== '1'; } catch { return false; }
 }
 
-const GUIDE_STEPS: { title: string; text: string }[] = [
-  { title: 'You open a small business', text: 'A coffee shop or a barbershop on a real street in New York. You start with test money, not your own.' },
-  { title: 'Everything costs what it really costs', text: 'Rent, equipment, wages, permits and taxes are real New York numbers. You see every step and every bill before you pay it.' },
-  { title: 'The city lives without you', text: 'One game day takes 48 real minutes. You set the rules for your shop once, and it works while you sleep. Come back when you like.' },
-  { title: 'Other people play around you', text: 'Neighbors can make deals with you or report you to the city. Inspectors are players too. The best three shops in each trade win the prize.' },
+const GUIDE_STEPS: { title: string; text: string; titleRu: string; textRu: string }[] = [
+  { title: 'You open a small business', text: 'A coffee shop or a barbershop on a real street in New York. You start with test money, not your own.', titleRu: 'Ты открываешь маленький бизнес', textRu: 'Кофейню или барбершоп на настоящей улице Нью-Йорка. Деньги на старт тестовые, не твои.' },
+  { title: 'Everything costs what it really costs', text: 'Rent, equipment, wages, permits and taxes are real New York numbers. You see every step and every bill before you pay it.', titleRu: 'Всё стоит столько, сколько в жизни', textRu: 'Аренда, оборудование, зарплаты, разрешения и налоги — настоящие цифры Нью-Йорка. Каждый шаг и каждый счёт видно до оплаты.' },
+  { title: 'The city lives without you', text: 'One game day takes 48 real minutes. You set the rules for your shop once, and it works while you sleep. Come back when you like.', titleRu: 'Город живёт и без тебя', textRu: 'Один игровой день идёт 48 настоящих минут. Один раз задаёшь правила, и заведение работает, пока ты спишь. Заходи, когда удобно.' },
+  { title: 'Other people play around you', text: 'Neighbors can make deals with you or report you to the city. Inspectors are players too. The best three shops in each trade win the prize.', titleRu: 'Вокруг играют другие люди', textRu: 'Соседи могут договориться с тобой или пожаловаться на тебя городу. Инспекторы — тоже игроки. Три лучших заведения в каждой нише получают приз.' },
 ];
 
 function Guide({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const tr = useT();
   return (
-    <Sheet open={open} onClose={onClose} title="How First Year works" footer={<Button block onClick={onClose}>Got it — show me the city</Button>}>
+    <Sheet open={open} onClose={onClose} title={tr('How First Year works', 'Как устроен First Year')} footer={<Button block onClick={onClose}>{tr('Got it — show me the city', 'Понятно — покажи город')}</Button>}>
       <ol className="home-guide">
         {GUIDE_STEPS.map((g, i) => (
           <li key={g.title}>
             <b className="home-guide__n">{i + 1}</b>
-            <div><strong>{g.title}</strong><p>{g.text}</p></div>
+            <div><strong>{tr(g.title, g.titleRu)}</strong><p>{tr(g.text, g.textRu)}</p></div>
           </li>
         ))}
       </ol>
-      <p className="xsmall muted">Nothing here can cost you real money. You can read this again: “How it works” at the top.</p>
+      <p className="xsmall muted">{tr('Nothing here can cost you real money. You can read this again: “How it works” at the top.', 'Настоящих денег здесь потерять нельзя. Перечитать можно по ссылке «Как это работает» вверху.')}</p>
     </Sheet>
   );
 }
@@ -169,20 +171,22 @@ function Guide({ open, onClose }: { open: boolean; onClose: () => void }) {
 // ───────────────────────── 0. top bar ─────────────────────────
 
 function HomeNav({ demo, onHelp }: { demo: boolean; onHelp: () => void }) {
+  const tr = useT();
   const navigate = useNavigate();
   return (
     <nav className="home-nav" aria-label="Main">
       <button type="button" className="home-nav__brand" onClick={() => navigate('/')}>
         <Logo size={32} />
-        {demo && <Badge tone="accent" icon="play">Demo city</Badge>}
+        {demo && <Badge tone="accent" icon="play">{tr('Demo city', 'Демо-город')}</Badge>}
       </button>
       <div className="home-nav__links">
-        <button type="button" className="home-nav__link" onClick={() => navigate('/map')}>City map</button>
-        <button type="button" className="home-nav__link" onClick={() => navigate('/leaderboards')}>Leaderboards</button>
-        <button type="button" className="home-nav__link" onClick={onHelp}>How it works</button>
+        <button type="button" className="home-nav__link" onClick={() => navigate('/map')}>{tr('City map', 'Карта города')}</button>
+        <button type="button" className="home-nav__link" onClick={() => navigate('/leaderboards')}>{tr('Leaderboards', 'Лидеры')}</button>
+        <button type="button" className="home-nav__link" onClick={onHelp}>{tr('How it works', 'Как это работает')}</button>
       </div>
+      <LangToggle />
       <ThemeToggle />
-      <Button size="sm" icon="store" onClick={() => navigate('/start')}>Start</Button>
+      <Button size="sm" icon="store" onClick={() => navigate('/start')}>{tr('Start', 'Начать')}</Button>
     </nav>
   );
 }
@@ -190,12 +194,13 @@ function HomeNav({ demo, onHelp }: { demo: boolean; onHelp: () => void }) {
 // ───────────────────────── 1. city strip ─────────────────────────
 
 function CityStrip({ view }: { view: ClientView }) {
+  const tr = useT();
   const { world } = view;
   return (
     <header className="home-strip">
       <div className="row-between">
         <div className="eyebrow">New York City · Season 0</div>
-        {world.config.demo && <Badge tone="accent" icon="play">Demo city</Badge>}
+        {world.config.demo && <Badge tone="accent" icon="play">{tr('Demo city', 'Демо-город')}</Badge>}
       </div>
       <Clock world={world} weather={view.weather[0]} />
       <div className="grid-3 home-counters">
@@ -210,20 +215,22 @@ function CityStrip({ view }: { view: ClientView }) {
 // ───────────────────────── 3–5. pitch, idea, two buttons ─────────────────────────
 
 function Pitch() {
+  const tr = useT();
   return (
     <section className="home-pitch">
-      <h1 className="h1">Test your business idea in real New York.</h1>
-      <p className="home-pitch__sub">Real rent, real permits, real taxes. None of your savings at risk.</p>
-      <ol className="home-first" aria-label="What you do here">
-        <li><b>1</b><span>Type any small business idea below.</span></li>
-        <li><b>2</b><span>See a real address, what it costs to open and which permits you need.</span></li>
-        <li><b>3</b><span>Run it next to other players. A few minutes a day is enough.</span></li>
+      <h1 className="h1">{tr('Test your business idea in real New York.', 'Проверь свою бизнес-идею в настоящем Нью-Йорке.')}</h1>
+      <p className="home-pitch__sub">{tr('Real rent, real permits, real taxes. None of your savings at risk.', 'Настоящая аренда, разрешения и налоги. Твои сбережения не рискуют.')}</p>
+      <ol className="home-first" aria-label={tr('What you do here', 'Что здесь делать')}>
+        <li><b>1</b><span>{tr('Type any small business idea below.', 'Впиши ниже любую идею маленького бизнеса.')}</span></li>
+        <li><b>2</b><span>{tr('See a real address, what it costs to open and which permits you need.', 'Увидишь настоящий адрес, сколько стоит открыться и какие нужны разрешения.')}</span></li>
+        <li><b>3</b><span>{tr('Run it next to other players. A few minutes a day is enough.', 'Веди бизнес рядом с другими игроками. Хватит нескольких минут в день.')}</span></li>
       </ol>
     </section>
   );
 }
 
 function IdeaBox() {
+  const tr = useT();
   const navigate = useNavigate();
   const { query } = useGame();
   const [text, setText] = useState('');
@@ -241,9 +248,9 @@ function IdeaBox() {
 
   return (
     <form className="idea-box" onSubmit={submit}>
-      <label className="field__label" htmlFor="idea">What would you open?</label>
+      <label className="field__label" htmlFor="idea">{tr('What would you open?', 'Что бы ты открыл?')}</label>
       <div className="idea-box__row">
-        <input id="idea" className="input" placeholder="A coffee shop with fresh pastries…" value={text} onChange={(e) => setText(e.target.value)} autoComplete="off" enterKeyHint="go" />
+        <input id="idea" className="input" placeholder={tr('A coffee shop with fresh pastries…', 'Кофейня со свежей выпечкой…')} value={text} onChange={(e) => setText(e.target.value)} autoComplete="off" enterKeyHint="go" />
         <Button type="submit" aria-label="See my plan" loading={busy} disabled={!text.trim()} className="idea-box__go">
           {!busy && <Icon name="arrowRight" size={20} />}
         </Button>
@@ -260,11 +267,12 @@ function IdeaBox() {
 }
 
 function Ctas() {
+  const tr = useT();
   const navigate = useNavigate();
   return (
     <div className="stack-sm">
-      <Button block size="lg" icon="store" onClick={() => navigate('/start')}>Start my business</Button>
-      <Button block variant="secondary" icon="badge" onClick={() => navigate('/start?as=official')}>Work for the city — free</Button>
+      <Button block size="lg" icon="store" onClick={() => navigate('/start')}>{tr('Start my business', 'Открыть свой бизнес')}</Button>
+      <Button block variant="secondary" icon="badge" onClick={() => navigate('/start?as=official')}>{tr('Work for the city — free', 'Работать на город — бесплатно')}</Button>
     </div>
   );
 }

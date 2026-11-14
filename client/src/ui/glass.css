@@ -331,6 +331,9 @@ button.list-row:active { background: var(--press); }
 .icon-btn:hover { background: var(--fill-hover); }
 .icon-btn:active { scale: 0.95; }
 
+.lang-toggle { display: inline-flex; align-items: center; flex: none; padding: 3px; gap: 0; border-radius: var(--r-2); background: var(--fill); }
+.lang-toggle button { min-width: 34px; height: 34px; padding: 0 8px; border: 0; border-radius: 9px; background: transparent; color: var(--text-2); font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.02em; cursor: pointer; transition: background var(--t-fast), color var(--t-fast); }
+.lang-toggle button[aria-pressed='true'] { background: var(--segment); color: var(--text); box-shadow: 0 1px 3px rgba(16, 24, 20, 0.14); }
 .theme-toggle {
   width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; padding: 0;
   border-radius: var(--r-2); cursor: pointer; color: var(--text-2);

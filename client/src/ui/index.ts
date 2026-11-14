@@ -8,3 +8,4 @@ export * from './format';
 export * from './theme';
 export * from './ThemeToggle';
 export * from './Logo';
+export * from './i18n';

@@ -12,11 +12,11 @@ const ORDER: NicheId[] = ['cafe', 'barbershop', 'bodega', 'guesthouse', 'rentals
 const NAMES: Record<NicheId, string> = { cafe: 'Coffee shop', barbershop: 'Barbershop', bodega: 'Corner store', guesthouse: 'Guesthouse', rentals: 'Apartment rentals' };
 
 const KEYWORDS: Record<NicheId, RegExp> = {
-  cafe: /\b(coffee|caf[eé]s?|espresso|latte|cappuccino|tea|matcha|boba|bubble tea|bakery|bakeries|pastr(y|ies)|bagels?|donuts?|doughnuts?|juice|smoothies?|brunch|breakfast|sandwich(es)?|dessert|ice cream|food truck|restaurant|diner|food|kitchen|eatery|snack bar)\b/gi,
-  barbershop: /\b(barbers?|barbershops?|haircuts?|hair|salons?|beard|shaves?|fades?|braids|stylists?|grooming|beauty|nails?|spa)\b/gi,
-  bodega: /\b(bodegas?|deli|grocer(y|ies)|convenience|corner store|mini ?market|market|produce|newsstand|general store|shop|store|retail)\b/gi,
-  guesthouse: /\b(hotels?|motels?|hostels?|guest ?house|b ?& ?b|bed and breakfast|inn|lodging|guest rooms?|airbnb)\b/gi,
-  rentals: /\b(rent(ing)? out|rentals?|apartments?|landlord|real estate|propert(y|ies)|tenants?|lease out|buildings?)\b/gi,
+  cafe: /\b(coffee|caf[eé]s?|espresso|latte|cappuccino|tea|matcha|boba|bubble tea|bakery|bakeries|pastr(y|ies)|bagels?|donuts?|doughnuts?|juice|smoothies?|brunch|breakfast|sandwich(es)?|dessert|ice cream|food truck|restaurant|diner|food|kitchen|eatery|snack bar)\b|кофе|кафе|эспрессо|латте|пекарн|выпечк|чай|завтрак|десерт|бранч/gi,
+  barbershop: /\b(barbers?|barbershops?|haircuts?|hair|salons?|beard|shaves?|fades?|braids|stylists?|grooming|beauty|nails?|spa)\b|барбер|парикмахер|стрижк|бород|брить/gi,
+  bodega: /\b(bodegas?|deli|grocer(y|ies)|convenience|corner store|mini ?market|market|produce|newsstand|general store|shop|store|retail)\b|магазин|продукт|ларёк|ларек|киоск/gi,
+  guesthouse: /\b(hotels?|motels?|hostels?|guest ?house|b ?& ?b|bed and breakfast|inn|lodging|guest rooms?|airbnb)\b|отель|гостиниц|хостел|гостевой/gi,
+  rentals: /\b(rent(ing)? out|rentals?|apartments?|landlord|real estate|propert(y|ies)|tenants?|lease out|buildings?)\b|аренд|квартир|недвижимост|сдавать/gi,
 };
 
 /** Closest playable niche when the matched one has no pack yet. */

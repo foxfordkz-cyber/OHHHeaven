@@ -235,3 +235,9 @@
 .home-guide__n { width: 28px; height: 28px; border-radius: 9px; font-size: 14px; background: var(--primary); color: var(--on-primary); }
 .home-guide strong { display: block; font-weight: 600; font-size: var(--fs-lg); letter-spacing: -0.012em; }
 .home-guide p { margin: 2px 0 0; color: var(--text-2); font-size: var(--fs-md); line-height: 1.45; }
+
+/* header order on phones: logo · language · theme · Start; the name gives way first */
+.home-nav > .lang-toggle { margin-left: auto; }
+.home-nav > .theme-toggle { margin-left: 0; }
+@media (min-width: 768px) { .home-nav > .lang-toggle { margin-left: 0; } }
+@media (max-width: 420px) { .home-nav .logo__name { display: none; } .home-nav { gap: 8px; } }
