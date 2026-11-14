@@ -22,7 +22,7 @@ function LeaderboardsPage() {
 }
 
 function DevEnd({ view }: { view: OwnerView }) {
-  const store = useMemo(() => devStore(view, { delayMs: 700 }), [view]);
+  const store = useMemo(() => devStore(view, { delayMs: 700, plan: realPlan as unknown as RealWorldPlan }), [view]);
   return <WithStore store={store}><DevEndInner view={view} /></WithStore>;
 }
 function DevEndInner({ view }: { view: OwnerView }) {
