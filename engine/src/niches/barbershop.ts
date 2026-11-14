@@ -1,18 +1,9 @@
 // Barbershop niche hooks (agent 15). Pure functions: no network, files, Date or Math.random.
 // Numbers come from packs/barbershop.json (`extra.weekdayDemand`, `extra.staffLoyalty`, `extra.payModels`,
 // `extra.retail`, `extra.apprentice`, `extra.frontDesk`); the constants below are only fallbacks.
-import type { BusinessState, DayReport, GameDate, NicheKpi, Pack, PnlLine } from '../../../shared/src/types';
-import { RULES, dateOf } from '../../../shared/src/rules';
-
-// Same shape as in build/CONTRACT.md, section 3. When agent 01 publishes engine/src/niches/index.ts
-// with this interface, import it from there instead.
-export interface NicheHooks {
-  demandMult?(b: BusinessState, date: GameDate, pack: Pack): number;
-  capacityDay?(b: BusinessState, pack: Pack): number | null;
-  extraLines?(b: BusinessState, pack: Pack, month: number): PnlLine[];
-  kpis?(b: BusinessState, pack: Pack): NicheKpi[];
-  notes?(b: BusinessState, r: DayReport, pack: Pack): string[];
-}
+import type { BusinessState, DayReport, GameDate, NicheKpi, Pack, PnlLine } from '@ohh/shared';
+import { RULES, dateOf } from '@ohh/shared';
+import type { NicheHooks } from './index';
 
 const DAYS = RULES.DAYS_PER_MONTH;
 const FALLBACK_WEEKDAY = [0.6, 0.85, 0.95, 1.1, 1.4, 1.4, 0.7]; // Mon..Sun
@@ -52,7 +43,7 @@ export function settings(pack: Pack): Settings {
     followShare: clamp(num(loyalty.followShare, 0.32), 0, 1),
     returningShare: clamp(num(loyalty.returningClientShare, 0.4463), 0, 1),
     barberShare: clamp(num(obj(pay.commission).barberShare, 0.5), 0, 1),
-    payrollTaxRate: clamp(num(pay.employerPayrollTaxRate, 0.11), 0, 1),
+    payrollTaxRate: clamp(num(pay.employerPayrollTaxRate, 0.1), 0, 1),
     retailPerCut: Math.max(0, num(retail.revenuePerHaircut, 2.5)),
     retailCogsShare: clamp(num(retail.cogsShare, 0.5), 0, 1),
     apprenticeProductivity: clamp(num(extra(pack, 'apprentice').productivity, 0.6), 0, 1),

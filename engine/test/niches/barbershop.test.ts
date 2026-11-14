@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import rawPack from '../../../packs/barbershop.json';
-import { dateOf } from '../../../shared/src/rules';
-import type { BusinessState, DayReport, MonthReport, Pack, StandingOrders } from '../../../shared/src/types';
+import { dateOf } from '@ohh/shared';
+import type { BusinessState, DayReport, MonthReport, Pack, StandingOrders } from '@ohh/shared';
 import { capacityDay, cutters, demandMult, departureMult, extraLines, hooks, kpis, lostBarberShare, notes, weekdayMult } from '../../src/niches/barbershop';
 
 const pack = rawPack as unknown as Pack;
@@ -147,7 +147,7 @@ describe('barbershop: month-close lines', () => {
     const lines = extraLines(b, pack, 1);
     const topUp = 0.5 * 40000 - basePay;
     expect(lines.find((l) => l.id === 'commission_topup')).toMatchObject({ kind: 'payroll', amount: -topUp });
-    expect(lines.find((l) => l.id === 'commission_topup_tax')!.amount).toBeCloseTo(-topUp * 0.11, 2);
+    expect(lines.find((l) => l.id === 'commission_topup_tax')!.amount).toBeCloseTo(-topUp * 0.1, 2);
   });
 
   it('in a slow month commission never goes below hourly pay: no negative top-up', () => {
@@ -298,7 +298,7 @@ describe('barbershop pack: numbers hold together', () => {
     const revenue = cuts * price;
     const barber = pack.staff.find((r) => r.id === 'barber')!;
     const payroll = barbers * barber.hourlyWage * barber.hoursPerMonth;
-    const payrollTax = payroll * 0.11;
+    const payrollTax = payroll * (pack.extra as { payModels: { employerPayrollTaxRate: number } }).payModels.employerPayrollTaxRate;
     const rent = (pack.extra as { rentByTier: { mid: { monthlyFor750Sqft: number } } }).rentByTier.mid.monthlyFor750Sqft;
     const other = pack.monthlyCosts.reduce((a, c) => a + (c.basis === 'fixed' ? c.amount : c.basis === 'per_staff' ? c.amount * barbers : c.basis === 'per_size' ? c.amount * chairs : c.basis === 'per_unit' ? c.amount * cuts : c.amount * revenue), 0);
     const cleaning = pack.levers.find((l) => l.id === 'cleaning')!.options.find((o) => o.id === 'staff_daily')!.monthlyCost + chairs * pack.sizing.cleaningCostPerSizeMonth;

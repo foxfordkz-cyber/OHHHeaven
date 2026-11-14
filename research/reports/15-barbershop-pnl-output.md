@@ -17,7 +17,7 @@
 | Retail products at wholesale cost | -$725 |
 | Supplies per haircut | -$928 |
 | Wages | -$14,272 |
-| Employer payroll taxes and insurance (11.0%) | -$1,570 |
+| Employer payroll taxes and insurance (10.0%) | -$1,427 |
 | Rent, mid tier, 750 sq ft | -$6,250 |
 | Electricity, gas and water | -$450 |
 | Business internet | -$69 |
@@ -36,22 +36,22 @@
 | Cleaning supplies per chair | -$112 |
 | Shop cleaning: Staff sweep after every cut and mop every night | -$120 |
 | Booking: Online booking app with reminders | -$90 |
-| **Profit before the owner's income taxes** | **$4,045** |
+| **Profit before the owner's income taxes** | **$4,187** |
 
-Shares of revenue: supplies 5.4% (norm 7.0%), labor 52.0% (norm 45.0%), rent 20.5% (norm 12.0%), net 13.3% (norm 12.0%).
+Shares of revenue: supplies 5.4% (norm 7.0%), labor 51.6% (norm 45.0%), rent 20.5% (norm 12.0%), net 13.8% (norm 12.0%).
 
 ### Honest owner: sensitivity
 
 | Case | Revenue | Profit | Net margin |
 |---|---:|---:|---:|
-| Slow month, 480 cuts | $25,200 | -$768 | -3.0% |
-| Typical month, 580 cuts | $30,450 | $4,045 | 13.3% |
-| Strong month, 680 cuts | $35,700 | $8,857 | 24.8% |
-| Cheap tier rent, 580 cuts | $30,450 | $6,857 | 22.5% |
-| Prime tier rent, 580 cuts | $30,450 | -$6,893 | -22.6% |
-| 3 barbers, 520 cuts (Saturday clients lost) | $27,300 | $5,148 | 18.9% |
-| Commission 50%, 580 cuts | $30,450 | $3,791 | 12.5% |
-| Price $60, 520 cuts | $32,500 | $6,206 | 19.1% |
+| Slow month, 480 cuts | $25,200 | -$625 | -2.5% |
+| Typical month, 580 cuts | $30,450 | $4,187 | 13.8% |
+| Strong month, 680 cuts | $35,700 | $9,000 | 25.2% |
+| Cheap tier rent, 580 cuts | $30,450 | $6,999 | 23.0% |
+| Prime tier rent, 580 cuts | $30,450 | -$6,751 | -22.2% |
+| 3 barbers, 520 cuts (Saturday clients lost) | $27,300 | $5,255 | 19.3% |
+| Commission 50%, 580 cuts | $30,450 | $3,936 | 12.9% |
+| Price $60, 520 cuts | $32,500 | $6,349 | 19.5% |
 
 ### Owner who cuts every corner: same shop, all shortcuts on, minimal cleaning
 
@@ -62,7 +62,7 @@ Shares of revenue: supplies 5.4% (norm 7.0%), labor 52.0% (norm 45.0%), rent 20.
 | Retail products at wholesale cost | -$725 |
 | Supplies per haircut | -$928 |
 | Wages | -$14,272 |
-| Employer payroll taxes and insurance (11.0%) | -$1,570 |
+| Employer payroll taxes and insurance (10.0%) | -$1,427 |
 | Rent, mid tier, 750 sq ft | -$6,250 |
 | Electricity, gas and water | -$450 |
 | Business internet | -$69 |
@@ -81,7 +81,7 @@ Shares of revenue: supplies 5.4% (norm 7.0%), labor 52.0% (norm 45.0%), rent 20.
 | Cleaning supplies per chair | -$112 |
 | Shop cleaning: Sweep when it piles up, mop once a week | -$40 |
 | Booking: Online booking app with reminders | -$90 |
-| Shortcut: Call your barbers 1099 contractors | $1,570 |
+| Shortcut: Call your barbers 1099 contractors | $1,427 |
 | Shortcut: Put an unlicensed barber on a chair | $848 |
 | Shortcut: Skip disinfecting tools between clients | $110 |
 | Shortcut: Let the shop license and city permit lapse | $3 |
@@ -93,15 +93,15 @@ Shares of revenue: supplies 5.4% (norm 7.0%), labor 52.0% (norm 45.0%), rent 20.
 | Shortcut: Leave cash haircuts out of the register | $914 |
 | **Profit before the owner's income taxes** | **$10,561** |
 
-Shares of revenue: supplies 5.4% (norm 7.0%), labor 52.0% (norm 45.0%), rent 20.5% (norm 12.0%), net 34.7% (norm 12.0%).
+Shares of revenue: supplies 5.4% (norm 7.0%), labor 51.6% (norm 45.0%), rent 20.5% (norm 12.0%), net 34.7% (norm 12.0%).
 
-Extra profit against the honest owner: $6,516 a month.
+Extra profit against the honest owner: $6,374 a month.
 
 ### What an inspection finds after 6 months
 
 | Violation | Found by | Saved in 6 months | Fine | Law |
 |---|---|---:|---:|---|
-| Employees treated as independent contractors | Labor standards investigator (tax_auditor) | $9,420 | $23,774 | NY Labor Law Art. 18 (unemployment insurance contributions) |
+| Employees treated as independent contractors | Labor standards investigator (tax_auditor) | $8,563 | $22,704 | NY Labor Law Art. 18 (unemployment insurance contributions) |
 | Unlicensed barber working in the shop | State license investigator (inspector) | $5,088 | $6,500 | NY General Business Law Art. 28: §441(a), §444 (owner who permits an unlicensed person to practice) |
 | Tools not cleaned and disinfected between clients | City health inspector (inspector) | $660 | $1,700 | NYC Health Code §163.05 (implements must be clean and sanitary) |
 | Operating on an expired license or permit | State license investigator (inspector) | $15 | $2,000 | NY General Business Law §439 (renewal), §441(a), §444 |
@@ -112,9 +112,9 @@ Extra profit against the honest owner: $6,516 a month.
 | Commercial waste without a licensed carter | Sanitation enforcement agent (inspector) | $570 | $600 | NYC Administrative Code §16-116 (commercial waste removal) |
 | Cash sales kept off the books | State tax auditor (tax_auditor) | $5,481 | $9,592 | NY Tax Law §1145 (sales tax penalties) and Art. 37 (tax fraud) |
 | Unsanitary shop: floor, towels, waste | City health inspector (inspector) | $480 | $800 | NYC Health Code §163.05 (covered receptacles, clean towels), §163.11 (floor swept and mopped at least daily) |
-| **Total** | | **$39,099** | **$79,223** | |
+| **Total** | | **$38,242** | **$78,153** | |
 
-Net result of 6 months of shortcuts if everything is found: -$40,125. Reputation hit: 71.0% in total.
+Net result of 6 months of shortcuts if everything is found: -$39,911. Reputation hit: 71.0% in total.
 
 ### Opening before the licenses arrive
 
