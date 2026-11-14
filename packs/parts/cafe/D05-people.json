@@ -1303,5 +1303,527 @@
         "no_disability_pfl_coverage"
       ]
     }
+  ],
+  "events": [
+    {
+      "id": "students_leave_for_summer",
+      "name": "Finals and summer break",
+      "text": "College terms end. Student baristas cut their hours for exams, then leave the city for the summer.",
+      "effect": {
+        "field": "staffAvailability",
+        "mult": 0.93
+      },
+      "months": 1,
+      "source": "https://www.bls.gov/news.release/jolts.t04.htm",
+      "confidence": "estimate",
+      "note": "Seasonal pattern known to every shop near a campus; the 7% loss of hours is my estimate (one part-timer in a team of five working half hours for a month, then leaving). Announced for May. Search-seen (primary, bls.gov): the quits rate in accommodation and food services ran 3.6% to 5.0% a month in mid-2026."
+    },
+    {
+      "id": "holiday_time_off_requests",
+      "name": "Holiday week: everyone wants the same days off",
+      "text": "Thanksgiving through New Year. Half the team asks for the same days and flies home.",
+      "effect": {
+        "field": "staffAvailability",
+        "mult": 0.9
+      },
+      "months": 1,
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+      "confidence": "estimate",
+      "note": "The 10% loss of hours is my estimate. No law makes a private employer pay extra on holidays in New York, but the 32 unpaid protected hours a year (since February 22, 2026) can be used with no notice for the reasons the law covers, and many shops lose more to simple resignations after the holidays."
+    },
+    {
+      "id": "summer_hiring_squeeze",
+      "name": "Summer hiring squeeze",
+      "text": "Every patio, rooftop and ice cream window in the city is hiring at once. Good baristas have offers.",
+      "effect": {
+        "field": "wages",
+        "mult": 1.02
+      },
+      "months": 3,
+      "source": "https://www.restaurantdive.com/news/nra-restaurants-summer-hiring-surge-low-labor-supply-wage-growth/823673/",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): the National Restaurant Association projected about 450,000 seasonal restaurant jobs for summer 2026 and described soft hiring with low labor supply. The 2% wage pressure is my estimate (about 40 cents on a $21 wage)."
+    },
+    {
+      "id": "chain_raises_pay",
+      "name": "A chain on your block raises barista pay",
+      "text": "The chain two doors down posts a new starting wage. Your staff read the same job boards.",
+      "effect": {
+        "field": "wages",
+        "mult": 1.03
+      },
+      "months": 6,
+      "source": "https://jobs.generalcatalyst.com/companies/blank-street/jobs/86227204-barista-manhattan",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, 2026 job postings): a venture-backed coffee chain lists New York baristas at $17 to $18 an hour plus tips and shift leads at $21; the largest chain's flagship lists $18.39 to start and $19.31 after certification. The 3% is my estimate of the raise an independent gives to keep people when a neighbour moves up by about $1."
+    },
+    {
+      "id": "protected_time_off_enforcement",
+      "name": "City enforcement push on protected time off",
+      "text": "The city worker-protection agency announces a data-driven sweep of employers with sick leave complaints.",
+      "effect": {
+        "field": "inspections",
+        "mult": 1.5
+      },
+      "months": 2,
+      "source": "https://www.nyc.gov/mayors-office/news/2026/02/mayor-mamdani-announces-major-expansion-of-protected-time-off-fo",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, nyc.gov, February 2026): the mayor announced the expansion of protected time off for 4.3 million workers together with a new data-driven enforcement strategy. The 1.5x inspection rate is a game-balance value."
+    },
+    {
+      "id": "i9_audit_notices",
+      "name": "Federal I-9 audit notices reach restaurants",
+      "text": "Immigration and Customs Enforcement serves notices of inspection. Employers get three business days to hand over every Form I-9.",
+      "effect": {
+        "field": "inspections",
+        "mult": 1.3
+      },
+      "months": 3,
+      "source": "https://www.morganlewis.com/pubs/2026/04/ice-rewrites-the-rules-on-form-i-9-violations",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, law firms, April and October 2026): on March 16, 2026 ICE reclassified many common Form I-9 errors as substantive violations subject to immediate penalties; paperwork fines run $288 to $2,861 per form. The three business days are the standard notice period (from memory). The 1.3x is a game-balance value."
+    },
+    {
+      "id": "work_permits_end",
+      "name": "Work permits end for a group of workers",
+      "text": "A federal protected-status program ends. Workers who relied on it lose permission to work on the stated date and must show other documents or stop.",
+      "effect": {
+        "field": "staffAvailability",
+        "mult": 0.94
+      },
+      "months": 3,
+      "source": "https://blogs.duanemorris.com/immigrationlaw/2026/07/24/tps-terminations-are-coming-fast-what-employers-need-to-know-right-now/",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, law firms, June and July 2026): after a Supreme Court ruling, Temporary Protected Status ended for several countries in July and August 2026; employers had to re-verify affected workers on Form I-9 Supplement B on the effective date, not before. The National Restaurant Association and the New York State Restaurant Association asked for a 90 to 120 day transition. Search-seen (secondary): an industry study counted about 4,800 restaurant workers gone from New York City since March 2025. The 6% is my estimate."
+    },
+    {
+      "id": "stomach_bug_week",
+      "name": "Stomach bug goes through the team",
+      "text": "One sick barista becomes three. Food workers with vomiting or diarrhea may not work, and they are entitled to protected time off.",
+      "effect": {
+        "field": "staffAvailability",
+        "mult": 0.85
+      },
+      "months": 1,
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+      "confidence": "estimate",
+      "note": "The 15% loss of hours is my estimate: three of five people out for four days each. Sick food workers must be kept away from food under the city Health Code (see the health researcher's part for the code and the fine). Search-seen (primary, nyc.gov Protected Time Off FAQ): no documentation may be required for an absence of three or fewer consecutive work days."
+    },
+    {
+      "id": "jury_duty_summons",
+      "name": "A barista is called for jury duty",
+      "text": "A summons arrives. Jury service in New York City can take a few days or two weeks, and the job is protected.",
+      "effect": {
+        "field": "staffAvailability",
+        "mult": 0.95
+      },
+      "months": 1,
+      "source": "https://www.littler.com/news-analysis/asap/nys-legislature-increases-daily-jury-duty-fee-40-72",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary; also nycourts.gov juror pay guidance): since June 8, 2025 the juror fee is $72 a day; employers with more than 10 employees pay the first three days (the lower of $72 and the daily wage), smaller employers need not pay. The 5% is my estimate: one of five people out for a quarter of the month."
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "pay_frequency_violation",
+      "title": "Weekly pay",
+      "source": "https://www.ebglaw.com/workforce-bulletin/new-york-enacts-amendment-to-limit-frequency-of-pay-damages-for-manual-workers",
+      "text": "Baristas and other manual workers must be paid every week, within 7 days of the week's end (NY Labor Law 191). Paying every two weeks costs interest the first time, and 100% damages on every late paycheck after a prior finding."
+    },
+    {
+      "id": "no_wage_notice_statements",
+      "title": "Pay notice and pay stubs",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "text": "Give each hire a written pay notice in English and their main language, and a pay stub every payday. No notice: $50 per work day. No stubs: $250 per work day. Each is capped at $5,000 per worker. A new notice is due before any pay change."
+    },
+    {
+      "id": "call_in_pay_unpaid",
+      "title": "Call-in pay",
+      "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+      "text": "A worker who shows up for a shift is owed at least 3 hours of pay, or the scheduled shift if shorter, even if you send them home after 20 minutes because it is raining or the power is out (12 NYCRR 146-1.5)."
+    },
+    {
+      "id": "meal_period_denied",
+      "title": "Meal periods",
+      "source": "https://dol.ny.gov/ls443-guidelines-meal-periods",
+      "text": "A shift of more than 6 hours that covers 11 am to 2 pm includes a 30-minute meal period. On a one-person shift the worker may agree to eat on the job, but anyone who asks for an uninterrupted break must get one (NY Labor Law 162)."
+    },
+    {
+      "id": "illegal_deductions",
+      "title": "Deductions from pay",
+      "source": "https://dol.ny.gov/illegal-deductions",
+      "text": "You may not take cash shortages, breakage, walkouts or fines out of a worker's pay, or make them pay you back in cash. Only deductions required by law or agreed in writing for the worker's own benefit are legal (NY Labor Law 193)."
+    },
+    {
+      "id": "uniform_costs_unpaid",
+      "title": "Uniforms",
+      "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
+      "text": "If you require a logo shirt or apron, you pay for it. Unless you supply enough wash-and-wear sets you also owe weekly uniform maintenance pay: $19.85 for over 30 hours, $15.80 for 20 to 30, $9.55 for 20 or fewer (NYC, 2026)."
+    },
+    {
+      "id": "tip_pool_ineligible",
+      "title": "Who may share tips",
+      "source": "https://www.dol.gov/agencies/whd/flsa/tipsFAQ",
+      "text": "Only workers who serve customers may share tips: baristas, counter staff, and shift leads with no real authority over others. Managers and owners may never take a share, and New York does not allow a required pool to include the dishwasher or baker."
+    },
+    {
+      "id": "invalid_tip_credit",
+      "title": "Tip credit paperwork",
+      "source": "https://dol.ny.gov/minimum-wage-tipped-workers-p717-english",
+      "text": "The $11.35 tipped wage (a $5.65 tip credit) is legal only with written notice before the first shift, tip records, and tips that really cover the gap. Miss one and the full $17.00 was due for every hour, going back six years."
+    },
+    {
+      "id": "exempt_misclassification",
+      "title": "Salary does not end overtime",
+      "source": "https://www.proskauer.com/blog/new-york-state-minimum-wage-and-exempt-salary-updates-for-2026",
+      "text": "A title does not end overtime. In NYC in 2026 an exempt manager needs a salary of at least $1,275 a week ($66,300 a year) and must really manage. Everyone else is paid by the hour and gets 1.5 times the rate after 40 hours."
+    },
+    {
+      "id": "retaliation",
+      "title": "No retaliation",
+      "source": "https://dol.ny.gov/wages-and-hours-frequently-asked-questions",
+      "text": "You may not fire, cut hours or threaten a worker for complaining about pay, sick leave or safety, even if the complaint is wrong. Under NY Labor Law 215 the state can fine up to $20,000, on top of lost pay and damages."
+    },
+    {
+      "id": "child_labor",
+      "title": "Workers under 18",
+      "source": "https://dol.ny.gov/hours-work-minors",
+      "text": "Workers under 18 need working papers. At 16 and 17 during the school year: 4 hours on school nights, 8 hours on other days, never after 10 pm. Since May 2025 a first violation can cost up to $10,000."
+    },
+    {
+      "id": "unpaid_volunteer_labor",
+      "title": "No volunteers",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "text": "A for-profit shop cannot use volunteers. A friend, a cousin or an \"intern\" who works the counter is an employee: at least $17.00 an hour, on payroll, and covered by workers' compensation from the first hour."
+    },
+    {
+      "id": "unreported_tips",
+      "title": "Tips are wages",
+      "source": "https://www.irs.gov/instructions/i941",
+      "text": "Tips are wages for payroll tax: you withhold from them and pay 7.65% on top. Since 2025 workers may deduct up to $25,000 of tips from federal income tax, but only tips that were reported, so unreported cash now costs your staff money."
+    },
+    {
+      "id": "unfair_labor_practice",
+      "title": "Acting together is protected",
+      "source": "https://www.buchalter.com/blogs/recreational-equipment-inc-and-united-food-commercial-workers-local-555-nlrb-alj-finds-unlawful-discharge-during-organizing-drive-but-denies-gissel-bargaining-order/",
+      "text": "Two or more workers who talk or act together about pay, schedules or safety are protected by federal law, union or no union, even in a five-person shop. Fire them for it and the labor board orders them rehired with back pay."
+    },
+    {
+      "id": "no_day_of_rest",
+      "title": "One day of rest in seven",
+      "source": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611",
+      "text": "Restaurant employers must give every worker at least 24 hours off in a row each calendar week and name the day in advance (NY Labor Law 161). A worker who agrees to a seventh day does not make it legal."
+    },
+    {
+      "id": "no_disability_pfl_coverage",
+      "title": "Disability and Paid Family Leave insurance",
+      "source": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp",
+      "text": "Every NY employer must carry disability and Paid Family Leave insurance. Staff fund family leave through a 0.432% payroll deduction (max $411.91 in 2026). With no policy you pay the claims yourself and commit a misdemeanor."
+    },
+    {
+      "id": "no_harassment_policy_training",
+      "title": "Harassment policy and yearly training",
+      "source": "https://newyork.public.law/laws/n.y._labor_law_section_201-g",
+      "text": "Every New York employer, even with one employee, must have a written harassment prevention policy, give it to each hire, and train every worker every year (Labor Law 201-g). The state's model policy and training are free."
+    },
+    {
+      "id": "harassment_complaint_ignored",
+      "title": "Harassment law covers every employer",
+      "source": "https://www.dglaw.com/new-york-state-legislation-significantly-expands-workplace-harassment-protections/",
+      "text": "New York's Human Rights Law covers every employer, whatever its size. Harassment is anything worse than \"petty slights\", and it includes customers harassing your staff once you know. Act on every complaint and write down what you did."
+    },
+    {
+      "id": "job_ad_no_pay_range",
+      "title": "Pay range in every job ad",
+      "source": "https://pillsburylaw.com/en/news-and-insights/nyc-pay-transparency-law.html",
+      "text": "With 4 or more workers (the owner counts), every NYC job ad must state the lowest and highest pay you would offer, even a sign in the window. First notice: 30 days to fix it at no cost. After that, fines can reach $250,000."
+    },
+    {
+      "id": "illegal_hiring_questions",
+      "title": "Questions you may not ask",
+      "source": "https://www.nyc.gov/site/cchr/media/fair-chance-faqs.page",
+      "text": "In NYC you may not ask applicants about arrests or convictions before a conditional offer, run a credit check, or ask what they earned before. The rules apply from 4 workers, the owner included. Penalties run up to $125,000."
+    },
+    {
+      "id": "protected_time_off",
+      "title": "Protected time off (2026)",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+      "text": "NYC law: 40 hours of safe and sick leave a year, earned at 1 hour per 30 worked, plus 32 unpaid hours available from the first day (since February 22, 2026). No doctor's note for 3 days or less, and staff need not find their own cover."
+    },
+    {
+      "id": "fifth_employee",
+      "title": "The fifth employee",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+      "text": "Sick leave turns from unpaid to paid at five employees. With 1 to 4 workers and net income under $1 million, the 40 hours are unpaid but protected; with 5 to 99 they are paid at the regular rate. Part-timers count."
+    },
+    {
+      "id": "paid_family_leave",
+      "title": "Paid Family Leave",
+      "source": "https://paidfamilyleave.ny.gov/2026",
+      "text": "A worker can take up to 12 weeks of Paid Family Leave at 67% of pay, up to $1,228.53 a week in 2026, paid by the insurer. You must hold the job and keep any health coverage going. You pay nothing, but you are short one person."
+    },
+    {
+      "id": "jury_duty",
+      "title": "Jury duty",
+      "source": "https://www.nycourts.gov/media/24781",
+      "text": "A worker called for jury duty cannot be fired or punished for serving. Employers with more than 10 employees pay the first 3 days, up to $72 a day; smaller shops need not pay, but must give the time off."
+    },
+    {
+      "id": "termination_paperwork",
+      "title": "When someone leaves",
+      "source": "https://dol.ny.gov/notice-eligibility-ui-benefits",
+      "text": "When anyone leaves, for any reason, hand over two papers within 5 working days: a letter with the last day and the date benefits end, and the state Record of Employment (form IA 12.3) so they can claim unemployment."
+    },
+    {
+      "id": "unemployment_charges",
+      "title": "Unemployment claims raise your rate",
+      "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+      "text": "Benefits paid to people you let go are charged to your account and raise your state rate: 1.7% to 9.5% in 2026 against 4.1% for a new employer. A quit without good cause or a firing for misconduct is not charged, if you answer the state's notice on time."
+    },
+    {
+      "id": "six_year_lookback",
+      "title": "Six years of records",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "text": "Wage claims in New York reach back six years and are doubled. Keep schedules, punches, pay stubs, tip sheets and signed pay notices that long. With no records, the worker's own account of the hours is what counts."
+    },
+    {
+      "id": "card_tip_fee",
+      "title": "Tips paid by card",
+      "source": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
+      "text": "Card tips belong to the staff. New York lets you take off only the card company's own fee on the tip, pro rata (about 2.5 cents on the dollar), and tips must be shown apart from wages on the pay stub."
+    },
+    {
+      "id": "owner_on_bar_tips",
+      "title": "The owner behind the bar",
+      "source": "https://www.dol.gov/sites/dolgov/files/WHD/opinion-letters/FLSA/FLSA2026-13.pdf",
+      "text": "An owner or manager may keep a tip handed over for a drink they alone made and served. They may not take anything from the shared jar or the pooled card tips, however many hours they worked the bar."
+    },
+    {
+      "id": "cannabis_off_duty",
+      "title": "Cannabis off the clock",
+      "source": "https://www.fisherphillips.com/news-insights/new-york-publishes-guidance-adult-cannabis.html",
+      "text": "Cannabis is legal for adults in New York. You may not test for it or discipline staff for using it off the clock (Labor Law 201-d). You may act only on specific, visible signs of impairment during a shift."
+    },
+    {
+      "id": "fingerprints_and_monitoring",
+      "title": "Fingerprint clocks and monitoring",
+      "source": "https://www.dwt.com/blogs/employment-labor-and-benefits/2021/11/monitoring-electronic-communications-new-york",
+      "text": "You may not require a fingerprint, so a fingerprint time clock must be optional (Labor Law 201-a). If you monitor staff phones, email or internet you must give written notice at hire and post it: $500, $1,000, then $3,000 per offense."
+    },
+    {
+      "id": "secure_choice",
+      "title": "Retirement plan at 10 employees",
+      "source": "https://www.mercer.com/en-us/insights/law-and-policy/most-new-york-employers-have-secure-choice-deadlines-approaching/",
+      "text": "From 10 employees and two years in business, a New York employer with no retirement plan must enroll staff in the state Secure Choice IRA and pass on their payroll deductions. Registration deadlines ran from March to July 2026."
+    },
+    {
+      "id": "fica_tip_credit",
+      "title": "Tax credit on tips",
+      "source": "https://www.irs.gov/irm/part4/irm_04-023-007",
+      "text": "A cafe can claim a federal income tax credit for the 7.65% employer tax it pays on staff tips (IRS Form 8846). On $2,000 of reported tips a month that is about $1,836 a year back: one more reason to run tips through payroll."
+    },
+    {
+      "id": "minimum_wage_outlook",
+      "title": "Minimum wage outlook",
+      "source": "https://www.littler.com/news-analysis/asap/new-york-city-proposes-bill-sets-higher-minimum-wages-and-eliminates-tip-credits",
+      "text": "NYC minimum wage is $17.00 in 2026 and is reported unchanged for January 1, 2027. A City Council bill (Int. 757, March 2026) would phase in $30 by 2030 for large firms, $29 by 2031 for small ones, and end the tipped wage. It is not law."
+    },
+    {
+      "id": "workers_comp_audit",
+      "title": "Workers' comp audit",
+      "source": "https://www.fisherphillips.com/en/news-insights/do-your-contractors-carry-workers-compensation-coverage-how-it-can-impact-your-policy-and-5-ways-to-prepare-for-insurance-audits-and-disputes.html",
+      "text": "Workers' comp is billed on estimated payroll and trued up by an audit after the policy year. Underestimate and a bill follows. Pay a cleaner or handyman who has no insurance of their own and their fee is added to your payroll."
+    },
+    {
+      "id": "i9_reverification",
+      "title": "Expiring work permits",
+      "source": "https://www.morganlewis.com/pubs/2026/06/after-mullin-a-practical-guide-for-employers-with-tps-workers",
+      "text": "When a work permit expires, re-check documents on Form I-9 Supplement B on that date, not before, and let the worker choose which valid document to show. Checking early is discrimination; missing it risks $288 to $2,861 per form."
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "set_pay_and_tip_rules",
+      "title": "Set the pay ladder and the tip rules in writing",
+      "kind": "people",
+      "text": "Decide starting pay, the 90-day raise and the lead premium before the first interview. Write down who shares the tips and how (by hours worked), and that managers and the owner take none. Staff sign it with the pay notice.",
+      "link": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf"
+    },
+    {
+      "id": "buy_disability_pfl_policy",
+      "title": "Buy disability and Paid Family Leave insurance",
+      "kind": "legal",
+      "text": "Required from the first employee and asked for on the food permit application. The employer part is about $18 a worker a year; Paid Family Leave is funded by a 0.432% deduction from staff pay (2026).",
+      "agency": "NYS Workers' Compensation Board",
+      "waitDays": 3,
+      "link": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/employer-disability-benefits.jsp"
+    },
+    {
+      "id": "adopt_required_policies",
+      "title": "Adopt the written policies the law requires",
+      "kind": "legal",
+      "text": "A harassment prevention policy (state model, free), a protected time off policy, and a complaint procedure. Every employer needs them, even with one employee. Hand them to each hire and keep the signed copies.",
+      "agency": "NYS Department of Labor; NYS Division of Human Rights",
+      "link": "https://www.ny.gov/sites/default/files/2023-04/Worker_Toolkit.pdf"
+    },
+    {
+      "id": "certify_shift_leads",
+      "title": "Get Food Protection Certificates for every shift lead",
+      "kind": "permit",
+      "text": "A certificate holder must be in the shop every open hour, so one certificate is not enough. Certify yourself and two leads: sickness or a day off should never leave a shift uncovered. Their study time is paid time.",
+      "setupItemId": "extra_food_protection_certs",
+      "fee": 24,
+      "waitDays": 14,
+      "agency": "NYC Health Academy (DOHMH)",
+      "link": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page"
+    },
+    {
+      "id": "post_jobs_with_pay_range",
+      "title": "Post the jobs with a pay range",
+      "kind": "people",
+      "text": "Every ad, even a sign in the window, states the lowest and highest hourly pay. Do not ask about arrests, credit or past pay. Expect a week or two to fill a barista job and longer for a lead.",
+      "link": "https://www.nyc.gov/site/cchr/media/fair-chance-faqs.page"
+    },
+    {
+      "id": "run_paid_trial_shifts",
+      "title": "Run paid trial shifts",
+      "kind": "people",
+      "text": "Watch each finalist work a real rush for three hours and pay for it: anyone who reports for a shift is owed at least three hours. Call two references before you make an offer.",
+      "link": "https://dol.ny.gov/hospitality-wage-order-faq"
+    },
+    {
+      "id": "first_day_paperwork",
+      "title": "First-day paperwork for each hire",
+      "kind": "legal",
+      "text": "Form I-9 with original documents, tax forms, the written pay notice in the worker's main language, the city Notice of Employee Rights, the harassment policy, and a new-hire report to the state within 20 days.",
+      "agency": "USCIS; NYS Department of Labor; NYC DCWP",
+      "link": "https://dol.ny.gov/system/files/documents/2021/03/wage-theft-prevention-act-frequently-asked-questions.pdf"
+    },
+    {
+      "id": "set_weekly_payroll",
+      "title": "Set payroll to weekly",
+      "kind": "money",
+      "text": "Baristas are manual workers: payday is every week, within seven days of the week's end. Run tips through payroll, show them apart from wages on the stub, and keep every record for six years.",
+      "link": "https://www.ebglaw.com/workforce-bulletin/new-york-enacts-amendment-to-limit-frequency-of-pay-damages-for-manual-workers"
+    },
+    {
+      "id": "build_the_schedule",
+      "title": "Build the schedule",
+      "kind": "people",
+      "text": "Cover every open hour with a certificate holder. Keep each workday inside 10 hours from start to finish, give everyone 24 hours off in a row each week, and plan who relieves whom for the 30-minute meal period.",
+      "link": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611"
+    },
+    {
+      "id": "train_before_opening",
+      "title": "Train the team before opening day",
+      "kind": "people",
+      "text": "Budget 30 paid hours a person: recipes, the register, cleaning, allergens, and the one-hour harassment prevention training. A new barista needs about three months to reach full speed, so open with at least two experienced people.",
+      "link": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/"
+    },
+    {
+      "id": "post_workplace_notices",
+      "title": "Post the required notices",
+      "kind": "legal",
+      "text": "Minimum wage poster, the city protected time off notice, workers' compensation, disability and Paid Family Leave notices, and your harassment policy, where staff can read them.",
+      "agency": "NYS Department of Labor; NYC DCWP; Workers' Compensation Board",
+      "link": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSafeSickLeave-MandatoryNotice-English.pdf"
+    },
+    {
+      "id": "plan_your_own_hours",
+      "title": "Plan your own hours",
+      "kind": "people",
+      "text": "Decide which shifts are yours and which belong to a lead. An owner who opens and closes every day has no slack for the first sick call. Half of restaurant owners in one survey skipped their own pay in the past year to make payroll.",
+      "link": "https://modernrestaurantmanagement.com/?p=40802"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "job_boards",
+      "category": "Hiring",
+      "what": "Places to post barista and shift-lead jobs",
+      "whereToFind": "General job sites, hospitality job boards, your roaster's network, a sign in the window; always state the pay range",
+      "examples": "Indeed, Culinary Agents, Poached, Craigslist, Instagram",
+      "link": "https://culinaryagents.com/jobs/716734-Barista",
+      "source": "https://100hires.com/indeed-job-posting-cost.html",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): sponsored posts on Indeed need a daily budget reported between $5 and $25. Prices for Craigslist and Poached were not found in this session."
+    },
+    {
+      "id": "payroll_providers",
+      "category": "Payroll",
+      "what": "Weekly payroll, tax filings, pay stubs and new-hire reporting",
+      "whereToFind": "Payroll services that integrate with your register and handle tips and New York forms",
+      "examples": "Gusto, Square Payroll, Homebase Payroll, ADP",
+      "link": "https://gusto.com/product/pricing",
+      "source": "https://gusto.com/resources/guides/switch-payroll-providers/square-pricing",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, 2026): Square Payroll $35 a month plus $6 per person paid; Homebase payroll $39 plus $6 per person; Gusto Simple from $49 a month. Check that weekly pay runs cost nothing extra."
+    },
+    {
+      "id": "scheduling_apps",
+      "category": "Scheduling and time clock",
+      "what": "Schedules, shift swaps, time punches and labor-law alerts",
+      "whereToFind": "Apps built for hourly teams; many are free for one location",
+      "examples": "Homebase, 7shifts, When I Work",
+      "link": "https://www.joinhomebase.com/compare/homebase-vs-7shifts",
+      "source": "https://www.joinhomebase.com/compare/homebase-vs-7shifts",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, checked by a comparison site in October 2026): Homebase Basic free, Essentials $30 a month, Plus $70; 7shifts has paid tiers from about $10 to $25 a month."
+    },
+    {
+      "id": "temp_staffing",
+      "category": "Emergency staffing",
+      "what": "A trained barista for one shift when someone calls out",
+      "whereToFind": "On-demand hospitality staffing apps; book the day before or the same morning",
+      "examples": "Instawork, Qwick, Indeed Flex",
+      "link": "https://www.instawork.com/temp-work-rate/barista-rate-in-new-york-ny",
+      "source": "https://www.instawork.com/temp-work-rate/barista-rate-in-new-york-ny",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, the platform's own rate page): temp baristas in New York City earn about $24.54 an hour ($21.78 to $25.45) and the business pays a markup of 20% to 65% on top, so $29 to $40 an hour."
+    },
+    {
+      "id": "barista_training",
+      "category": "Training",
+      "what": "Espresso, milk and workflow training for new hires and leads",
+      "whereToFind": "Your wholesale roaster's training lab (often free with a wholesale account); specialty coffee association courses",
+      "examples": "Roaster training labs in Brooklyn and Queens; Specialty Coffee Association Barista Skills courses",
+      "link": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+      "source": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): cafe operators put a new barista on register and bar-back for two to six weeks before the bar; competency comes after about three months. Course prices were not found in this session."
+    },
+    {
+      "id": "hr_compliance_help",
+      "category": "Labor law help",
+      "what": "Free forms and model policies; a lawyer for the handbook and for any complaint",
+      "whereToFind": "NYS Department of Labor (pay notice forms, posters), NYC DCWP (protected time off notice), NYC Small Business Services; an employment lawyer who represents restaurants",
+      "examples": "NYS model harassment policy and training; DCWP Notice of Employee Rights",
+      "link": "https://dol.ny.gov/wage-theft-resources",
+      "source": "https://dol.ny.gov/wage-theft-resources",
+      "confidence": "estimate",
+      "note": "The forms are free. A lawyer's hourly rate was not found in a public source; the $300 used in the setup list is a planning figure."
+    },
+    {
+      "id": "health_benefit_options",
+      "category": "Health benefits",
+      "what": "A tax-free health stipend or a small-group plan",
+      "whereToFind": "A benefits broker; QSEHRA administrators; the state small business marketplace",
+      "examples": "QSEHRA administrators (PeopleKeep, Take Command); NY State of Health Small Business Marketplace",
+      "link": "https://www.peoplekeep.com/blog/qsehra-contribution-limits",
+      "source": "https://www.dfs.ny.gov/reports_and_publications/press_releases/pr20250829",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): a QSEHRA may reimburse up to $6,450 a year for one person and $13,100 for a family in 2026. Search-seen (primary, dfs.ny.gov): New York approved an average 13.0% increase for 2026 small-group plans and, as reported, 8% for 2027. A per-employee premium was not found."
+    },
+    {
+      "id": "employment_practices_insurance",
+      "category": "Insurance",
+      "what": "Employment practices liability insurance (EPLI): defence and settlements for harassment, discrimination and wrongful firing claims",
+      "whereToFind": "The broker who placed your general liability policy; often an add-on to a business owner's policy",
+      "examples": "Carriers that write restaurant packages",
+      "link": "https://insureon.com/small-business-insurance/employment-practices-liability/cost",
+      "source": "https://insureon.com/small-business-insurance/employment-practices-liability/cost",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): small restaurants pay $800 to $3,000 a year; one broker average is $1,824 a year, another $2,655. Most policies exclude wage-and-hour claims, which are the common ones in restaurants."
+    }
   ]
 }
