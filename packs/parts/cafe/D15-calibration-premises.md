@@ -240,6 +240,18 @@
 - [WebstaurantStore, two-group espresso machine price](https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html)
 - [DNAinfo, East Village cafe back patio ruled illegal](https://www.dnainfo.com/new-york/20141006/east-village/city-waited-3-decades-rule-yaffa-cafes-back-patio-illegal-manager-says)
 
+Для сравнения с Россией и Испанией (`extra.comparisonsAbroad`):
+
+- https://sberbusiness.live/publications/arendnye-kanikuly
+- https://www.consultant.ru/law/podborki/arendnye_kanikuly_jeto/
+- https://www.enalquiler.com/comunidad-alquiler/todas/alquiler-comercial-local-vacio_91399.html
+- https://www.bolsamania.com/declaracion-impuestos-renta/?p=13269
+- https://sberbusiness.live/kursy/urok-5-3-kak-zaklyuchit-dogovor
+- https://derecholocal.es/?p=15180
+- https://www.certicalia.com/preguntas/p/titularidad-de-la-licencia-de-actividad-de-un-restaurante
+- https://www.legalitas.com/actualidad/traspaso-cesion-local
+- https://www.justanswer.es/legal-es/83ygo-alquile-una-cafeteria-al-propietario-pagando-al-anterior.html
+
 ## Приложение А. Таблица «событие → эффект → источник»
 
 Порядок: по группам, внутри — core, deep, exotic. Конф.: V — первоисточник открыт мной (`verified`), E — оценка (`estimate`). «Мес.» — месяцы года, «Длит.» — `durationMonths`.
@@ -257,11 +269,11 @@
 | `d00_premises_landlord_access` | core | D00 | `closureDays` +2 | все | 1 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
 | `d00_premises_landlord_permit` | core | D00 | `openingDelayDays` +30 | все | 1 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
 | `d00_premises_lease_court` | core | D00 | `cash` -7,500 | все | 3 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
-| `d00_premises_lease_rent_start ⇢ free_rent_runs_out` | core | D00 | `setupRentDays` +17 (light 17, standard 47, heavy 137) | все | — | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
+| `d00_premises_lease_rent_start ⇢ free_rent_runs_out` | core | D00 | `setupRentDays` +17 (light 17, standard 47, heavy 137) | все | 2 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
 | `d00_premises_surrender_clawback` | core | D00 | `cash` -33,120 | все | 0 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | V |
 | `first_timer_turned_away` | core | D01 | `depositMonths` +3 | все | 0 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
 | `free_rent_ends ⇢ free_rent_runs_out` | core | D14 | `inbox` +1 | все | 0 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
-| `free_rent_runs_out` | core | D01 | `setupRentDays` +17 (light 17, standard 47, heavy 137); `rent` ×1.0 | все | — | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
+| `free_rent_runs_out` | core | D01 | `setupRentDays` +17 (light 17, standard 47, heavy 137); `rent` ×1.0 | все | 2 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
 | `landlord_blocks_the_sale` | core | D09 | `salePrice` ×0.9; `closingDelayDays` +30 | все | 2 | [nysenate.gov](https://www.nysenate.gov/legislation/laws/RPP/226-B) | E |
 | `landlord_late_delivery` | core | D01 | `openingDelayDays` +45; `rent` ×0.0; `setupCost` +375 | все | 2 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
 | `lease_renewal_offer` | core | D10 | `rent` ×1.2 (prime 1.3, mid 1.2, cheap 1.05) | все | 60 | [nyc.gov](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf) | E |
