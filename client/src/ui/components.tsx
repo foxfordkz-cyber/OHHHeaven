@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { NavLink } from 'react-router-dom';
 import { Icon, type IconName } from './icons';
 import { formatMoney, toneOf } from './format';
@@ -231,9 +232,11 @@ export function Tabs<T extends string>({ tabs, value, onChange, label }: { tabs:
 
 export function Sheet({ open, onClose, title, children, footer }: { open: boolean; onClose: () => void; title: ReactNode; children: ReactNode; footer?: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeRef.current();
     document.addEventListener('keydown', onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -242,9 +245,10 @@ export function Sheet({ open, onClose, title, children, footer }: { open: boolea
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
     };
-  }, [open, onClose]);
-  if (!open) return null;
-  return (
+  }, [open]);
+  if (!open || typeof document === 'undefined') return null;
+  // A portal keeps the panel fixed to the viewport even when opened from inside another panel.
+  return createPortal(
     <>
       <div className="sheet-backdrop" onClick={onClose} />
       <div className="sheet" role="dialog" aria-modal="true" aria-label={typeof title === 'string' ? title : undefined} tabIndex={-1} ref={ref}>
@@ -258,7 +262,8 @@ export function Sheet({ open, onClose, title, children, footer }: { open: boolea
         <div className="sheet__body">{children}</div>
         {footer && <div className="sheet__foot">{footer}</div>}
       </div>
-    </>
+    </>,
+    document.body,
   );
 }
 

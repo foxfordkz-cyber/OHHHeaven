@@ -232,23 +232,9 @@ export const fixtureRoadmap: RoadmapItem[] = [
 /** The roadmap of a player who has not opened yet: the same steps, all still to do. */
 export const fixtureRoadmapTodo: RoadmapItem[] = fixtureRoadmap.map((s) => ({ ...s, status: 'todo' }));
 
-export const fixtureOpenRecommendations: OpenRecommendation[] = [
-  {
-    kitId: 'standard', size: 24, items: [{ id: 'espresso_machine', qty: 1 }, { id: 'grinder', qty: 2 }, { id: 'refrigeration', qty: 1 }, { id: 'pos', qty: 1 }, { id: 'seating', qty: 24 }, { id: 'buildout', qty: 1 }, { id: 'deposit', qty: 1 }, { id: 'fse_permit', qty: 1 }, { id: 'sales_tax_cert', qty: 1 }, { id: 'llc', qty: 1 }, { id: 'opening_stock', qty: 1 }],
-    total: 89_080, cashLeft: 30_920, orders: fixtureOrders, daysToOpen: 21,
-    why: ['24 seats fit 900 sq ft with room for the counter', 'Leaves 3.4 months of costs in the bank — the usual advice is at least 3', 'A two-group espresso machine keeps up with 260 cups a day'],
-  },
-  {
-    kitId: 'lean', size: 12, items: [{ id: 'espresso_machine_used', qty: 1 }, { id: 'grinder', qty: 1 }, { id: 'refrigeration', qty: 1 }, { id: 'pos', qty: 1 }, { id: 'seating', qty: 12 }, { id: 'buildout', qty: 1 }, { id: 'deposit', qty: 1 }, { id: 'fse_permit', qty: 1 }, { id: 'sales_tax_cert', qty: 1 }, { id: 'llc', qty: 1 }, { id: 'opening_stock', qty: 1 }],
-    total: 72_480, cashLeft: 47_520, orders: { ...fixtureOrders, staff: { barista: 2, shift_lead: 0 } }, daysToOpen: 21,
-    why: ['Most cash stays in the bank', 'Mostly takeaway: half the seats', 'A used machine breaks more often'],
-  },
-  {
-    kitId: 'premium', size: 36, items: [{ id: 'espresso_machine', qty: 1 }, { id: 'grinder', qty: 3 }, { id: 'refrigeration', qty: 2 }, { id: 'pos', qty: 2 }, { id: 'seating', qty: 36 }, { id: 'buildout', qty: 1 }, { id: 'deposit', qty: 1 }, { id: 'fse_permit', qty: 1 }, { id: 'sales_tax_cert', qty: 1 }, { id: 'llc', qty: 1 }, { id: 'opening_stock', qty: 1 }],
-    total: 108_840, cashLeft: 11_160, orders: { ...fixtureOrders, staff: { barista: 4, shift_lead: 1 } }, daysToOpen: 21,
-    why: ['More seats for the lunch rush', 'Less than one month of costs left in the bank — risky', 'Higher quality, higher prices possible'],
-  },
-];
+const KIT_STANDARD = [{ id: 'espresso_machine', qty: 1 }, { id: 'grinder', qty: 2 }, { id: 'refrigeration', qty: 1 }, { id: 'pos', qty: 1 }, { id: 'seating', qty: 1 }, { id: 'buildout', qty: 1 }, { id: 'deposit', qty: 1 }, { id: 'fse_permit', qty: 1 }, { id: 'sales_tax_cert', qty: 1 }, { id: 'llc', qty: 1 }, { id: 'opening_stock', qty: 1 }];
+const KIT_LEAN = [{ id: 'espresso_machine_used', qty: 1 }, { id: 'grinder', qty: 1 }, { id: 'refrigeration', qty: 1 }, { id: 'pos', qty: 1 }, { id: 'seating', qty: 1 }, { id: 'buildout', qty: 1 }, { id: 'deposit', qty: 1 }, { id: 'fse_permit', qty: 1 }, { id: 'sales_tax_cert', qty: 1 }, { id: 'llc', qty: 1 }, { id: 'opening_stock', qty: 1 }];
+const KIT_PREMIUM = [{ id: 'espresso_machine', qty: 1 }, { id: 'grinder', qty: 3 }, { id: 'refrigeration', qty: 2 }, { id: 'pos', qty: 2 }, { id: 'seating', qty: 1 }, { id: 'buildout', qty: 1 }, { id: 'deposit', qty: 1 }, { id: 'fse_permit', qty: 1 }, { id: 'sales_tax_cert', qty: 1 }, { id: 'llc', qty: 1 }, { id: 'opening_stock', qty: 1 }];
 
 export const fixtureIdea: IdeaMatch = {
   niche: 'cafe', businessName: 'Morning Cup', tier: 'mid', kitId: 'standard',
@@ -344,9 +330,9 @@ export const fixtureCafePack: Pack = {
     setup('opening_stock', 'Opening stock: beans, milk, cups', 'inventory', 3_000, true),
   ],
   kits: [
-    { id: 'lean', name: 'Lean', size: 12, items: fixtureOpenRecommendations[1].items, pitch: 'Mostly takeaway, used machine, cash stays in the bank.' },
-    { id: 'standard', name: 'Standard', size: 24, items: fixtureOpenRecommendations[0].items, pitch: 'A neighborhood café that can handle the morning rush.' },
-    { id: 'premium', name: 'Premium', size: 36, items: fixtureOpenRecommendations[2].items, pitch: 'Room for the lunch crowd. Little cash left for a slow start.' },
+    { id: 'lean', name: 'Lean', size: 12, items: KIT_LEAN, pitch: 'Mostly takeaway, used machine, cash stays in the bank.' },
+    { id: 'standard', name: 'Standard', size: 24, items: KIT_STANDARD, pitch: 'A neighborhood café that can handle the morning rush.' },
+    { id: 'premium', name: 'Premium', size: 36, items: KIT_PREMIUM, pitch: 'Room for the lunch crowd. Little cash left for a slow start.' },
   ],
   monthlyCosts: [
     { id: 'utilities', name: 'Utilities', kind: 'utilities', basis: 'fixed', amount: 1_150, confidence: 'estimate' },
@@ -377,6 +363,31 @@ export const fixtureCafePack: Pack = {
   manager: { monthlySalary: 4_800, confidence: 'estimate' },
   sources: [{ url: 'https://dol.ny.gov/minimum-wage-0', title: 'NYS Department of Labor — minimum wage', checked: '2026-11-14' }],
 };
+
+/** Setup cost the way the client previews it: price x qty, or x size for items that scale with size. */
+function sumKit(pack: Pack, items: { id: string; qty: number }[], size: number): number {
+  return items.reduce((t, it) => {
+    const item = pack.setup.find((x) => x.id === it.id);
+    return item ? t + item.cost * (item.scalesWithSize ? size : it.qty) : t;
+  }, 0);
+}
+
+function formatUsd(v: number): string {
+  return `$${Math.round(v).toLocaleString('en-US')}`;
+}
+
+const rec = (kitId: OpenRecommendation['kitId'], size: number, items: { id: string; qty: number }[], staff: Record<string, number>, why: (cashLeft: number) => string[]): OpenRecommendation => {
+  const total = sumKit(fixtureCafePack, items, size);
+  const cashLeft = fixtureCafePack.startCapital - total;
+  return { kitId, size, items, total, cashLeft, orders: { ...fixtureOrders, staff }, daysToOpen: 21, why: why(cashLeft) };
+};
+
+/** recommend_opening for a coffee shop at 29 Avenue B (p12, fits 28 seats). The recommended kit comes first. */
+export const fixtureOpenRecommendations: OpenRecommendation[] = [
+  rec('standard', 24, KIT_STANDARD, { barista: 3, shift_lead: 1 }, (left) => ['24 seats fit 850 sq ft with room for the counter and the line', `Keeps ${formatUsd(left)} in the bank for the slow first months`, 'A two-group espresso machine keeps up with the 8 am rush']),
+  rec('lean', 12, KIT_LEAN, { barista: 2, shift_lead: 0 }, (left) => [`Most cash stays in the bank: ${formatUsd(left)}`, 'Mostly takeaway: half the seats', 'A used machine breaks down more often']),
+  rec('premium', 28, KIT_PREMIUM, { barista: 4, shift_lead: 1 }, (left) => ['Every seat the room allows for the lunch crowd', `Only ${formatUsd(left)} left in the bank, risky if sales start slow`, 'Higher quality supports higher prices']),
+];
 
 /** Example barbershop pack (placeholder until packs/barbershop.json from agent 15). All numbers are estimates. */
 export const fixtureBarberPack: Pack = {
