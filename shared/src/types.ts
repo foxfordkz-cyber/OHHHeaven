@@ -43,6 +43,12 @@ export interface PackSetupItem extends Sourced {
   agency?: string;                // кто выдаёт
   link?: string;                  // официальная страница
   withoutItViolation?: string;    // id нарушения, если работать без этого
+  /** Как считается цена. fixed (по умолчанию) — `cost`. per_sqft — ставка ремонта по состоянию помещения × площадь.
+   *  months_rent — `rate` месяцев аренды этого места. pct_of_buildout — `rate` (доля) от цены ремонта. `cost` — запасное число, если места нет. */
+  costBasis?: 'fixed' | 'per_sqft' | 'months_rent' | 'pct_of_buildout';
+  rate?: number;
+  afterBuildout?: boolean;        // ожидание начинается, когда закончен ремонт (проверка готового помещения)
+  includedInTakeover?: boolean;   // при покупке действующего бизнеса уже есть и отдельно не оплачивается
 }
 
 export interface PackKit { id: 'lean' | 'standard' | 'premium'; name: string; size: number; items: { id: string; qty: number }[]; pitch: string }
@@ -115,11 +121,28 @@ export interface PackSet { common: CommonPack; niches: Partial<Record<NicheId, P
 
 // ───────────────────────── Карта (data/places.json) ─────────────────────────
 
+/** Чем помещение было раньше: от этого зависят цена и срок ремонта (pack.extra.buildout). */
+export type FormerUse = 'cafe' | 'food' | 'retail' | 'salon';
+export type AnchorKind = 'subway' | 'college' | 'school' | 'park' | 'hospital' | 'library' | 'museum' | 'plaza';
+/** Что стоит рядом и влияет на поток: станция метро, вуз, школа, парк, больница. Из открытых данных города. */
+export interface PlaceAnchor { kind: AnchorKind; name: string; distM: number; ridersPerDay?: number }
+/** Настоящие заведения той же ниши рядом (в игре не участвуют, но делят тех же прохожих). */
+export interface PlaceRivals { niche: NicheId; within150m: number; weight: number; nearest: { name: string; distM: number }[] }
+/** Действующий бизнес на продажу: дороже пустого помещения, зато без ремонта и с готовой базой клиентов. */
+export interface PlaceForSale { niche: NicheId; askingPrice: Money; size: number; note?: string }
+
 export interface Place {
   id: string; address: string; block: string;            // block — улица-квартал для фонда квартала
   lat: number; lng: number; kind: 'storefront' | 'building';
   sqft: number; tier: PlaceTier; rentPerSqftYear: Money; footTraffic: number; // 0–1
   suitableFor: NicheId[]; sourceDataset?: string; note?: string;
+  pedestriansPerDay?: number;      // человек в будний день проходит по этому кварталу (оба тротуара); расчёт по открытым данным
+  corner?: boolean;
+  formerUse?: FormerUse;
+  forSale?: PlaceForSale;
+  anchors?: PlaceAnchor[];
+  rivals?: PlaceRivals[];
+  footfallNote?: string;           // как получено число прохожих
 }
 
 // ───────────────────────── Мир ─────────────────────────

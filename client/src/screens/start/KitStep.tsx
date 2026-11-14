@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { NicheId, OpenRecommendation, OwnerView, Pack, PackSetupItem } from '@ohh/shared/types';
+import type { NicheId, OpenRecommendation, OwnerView, Pack, PackSetupItem, Place } from '@ohh/shared/types';
 import type { Catalog } from '../../app/catalog';
 import { useGame } from '../../app/store';
 import { Badge, Button, Card, Icon, MoneyText, RuleCard, SegmentedControl, Sheet, Skeleton, Stat, Stepper, Toggle, formatMoney } from '../../ui';
@@ -57,20 +57,20 @@ export function KitStep({ draft, catalog, view }: { draft: Draft; update: (p: Pa
         </p>
       </div>
 
-      <KitCard pack={pack} rec={recommended} commonViolations={catalog.packs.common} />
+      <KitCard pack={pack} rec={recommended} place={place} commonViolations={catalog.packs.common} />
 
       <div className="stack-sm">
-        <Button block size="lg" icon="store" loading={busy} onClick={() => open(recommended.kitId, recommended.size, recommended.items)}>
-          Open with recommended setup
+        <Button block size="lg" icon="store" loading={busy} disabled={recommended.cashLeft < 0} onClick={() => open(recommended.kitId, recommended.size, recommended.items)}>
+          {recommended.cashLeft < 0 ? 'This space costs more than you have' : 'Open with recommended setup'}
         </Button>
         <Button block variant="secondary" icon="edit" onClick={() => setCustomizing(true)}>
           Customize
         </Button>
-        <p className="xsmall faint" style={{ textAlign: 'center' }}>Rent starts the day you sign. Permits take {recommended.daysToOpen} days; you cannot legally open before them.</p>
+        <p className="xsmall faint" style={{ textAlign: 'center' }}>Rent starts the day you sign. Construction and permits take {recommended.daysToOpen} days; you cannot open before the room is built.</p>
       </div>
 
       {customizing && (
-        <CustomizeSheet pack={pack} recs={recs} start={recommended} maxSize={maxSizeFor(pack, place)} common={catalog.packs.common} busy={busy} onClose={() => setCustomizing(false)} onOpen={(k, s, i) => open(k, s, i)} />
+        <CustomizeSheet pack={pack} recs={recs} start={recommended} place={place} maxSize={maxSizeFor(pack, place)} common={catalog.packs.common} busy={busy} onClose={() => setCustomizing(false)} onOpen={(k, s, i) => open(k, s, i)} />
       )}
       <p className="xsmall faint">Numbers shown are the plan before opening. The city's books record what you actually pay.</p>
       {view.world.config.demo && <p className="xsmall faint">Demo city: one game day passes every {view.world.config.dayMs / 1000} seconds.</p>}
@@ -79,8 +79,8 @@ export function KitStep({ draft, catalog, view }: { draft: Draft; update: (p: Pa
 }
 
 /** The recommended setup, open by default: size, purchases by group with prices, total, cash left, days to open, why. */
-export function KitCard({ pack, rec, commonViolations }: { pack: Pack; rec: OpenRecommendation; commonViolations?: Catalog['packs']['common'] }) {
-  const lines = kitLines(pack, rec.items, rec.size);
+export function KitCard({ pack, rec, place, commonViolations }: { pack: Pack; rec: OpenRecommendation; place?: Place; commonViolations?: Catalog['packs']['common'] }) {
+  const lines = kitLines(pack, rec.items, rec.size, place);
   const groups = groupLines(lines);
   const [rule, setRule] = useState<PackSetupItem | null>(null);
   return (
@@ -152,7 +152,7 @@ function RuleSheet({ item, pack, common, onClose }: { item: PackSetupItem | null
 }
 
 /** "Customize": another kit, another size (recalculated), optional items off. Required items stay locked. */
-export function CustomizeSheet({ pack, recs, start, maxSize, common, busy, onClose, onOpen }: { pack: Pack; recs: OpenRecommendation[]; start: OpenRecommendation; maxSize: number; common?: Catalog['packs']['common']; busy: boolean; onClose: () => void; onOpen: (kitId: OpenRecommendation['kitId'], size: number, items: KitItems) => void }) {
+export function CustomizeSheet({ pack, recs, start, place, maxSize, common, busy, onClose, onOpen }: { pack: Pack; recs: OpenRecommendation[]; start: OpenRecommendation; place?: Place; maxSize: number; common?: Catalog['packs']['common']; busy: boolean; onClose: () => void; onOpen: (kitId: OpenRecommendation['kitId'], size: number, items: KitItems) => void }) {
   const [kitId, setKitId] = useState(start.kitId);
   const [size, setSize] = useState(Math.min(start.size, maxSize));
   const [items, setItems] = useState<KitItems>(start.items);
@@ -167,9 +167,9 @@ export function CustomizeSheet({ pack, recs, start, maxSize, common, busy, onClo
     setItems(r.items);
   };
 
-  const total = kitTotal(pack, items, size);
+  const total = kitTotal(pack, items, size, place);
   const cashLeft = pack.startCapital - total;
-  const wait = daysToOpen(pack, items);
+  const wait = daysToOpen(pack, items, place);
   const chosen = new Set(items.map((i) => i.id));
   const candidates = pack.setup.filter((s) => chosen.has(s.id) || !s.required);
 

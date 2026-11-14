@@ -1,7 +1,8 @@
 // Share-of-market model from research/reports/43-economy-sim.md (section 1), generalised to any niche pack.
 // One segment, logit with an outside option ("buy elsewhere"). Weights come from pack.market.weights,
 // location from place.footTraffic. The step is a month here; the day step divides by 30 and applies daily multipliers.
-import type { Pack } from '@ohh/shared';
+import type { Pack, Place } from '@ohh/shared';
+import { distanceM, overlap, rivalsOf, type FootfallParams } from '@ohh/shared';
 
 export interface DemandInput {
   id: string;
@@ -78,4 +79,44 @@ export function monthlyDemand(m: MarketParams, xs: readonly DemandInput[]): { de
   const pool = xs.reduce((a, x) => a + m.unitsPerSlotMonth * (1 + m.outside) * (0.5 + x.footTraffic), 0);
   const denom = xs.length * m.outside + pull.reduce((a, b) => a + b, 0);
   return { demand: pull.map((a) => (pool * a) / denom), pull };
+}
+
+// ───────────────────────── demand from the people who walk past ─────────────────────────
+
+export interface FootfallInput extends DemandInput { place: Place; awareness: number }   // awareness 0–1: share of the regular crowd
+
+const distCache = new WeakMap<Place, Map<string, number>>();
+function distBetween(a: Place, b: Place): number {
+  let m = distCache.get(a);
+  if (!m) { m = new Map(); distCache.set(a, m); }
+  let d = m.get(b.id);
+  if (d === undefined) { d = distanceM(a, b); m.set(b.id, d); }
+  return d;
+}
+
+/**
+ * Monthly demand when the pack and every competing place carry footfall data (pack.extra.footfall,
+ * place.pedestriansPerDay). People walking the block × the share who buy at an average, known shop; shops closer
+ * than radiusM, real coffee shops around (place.rivals) and "not here" split them. A shop alone on its block at the
+ * reference price gets pedestrians × captureRate a day.
+ */
+export function footfallDemand(pack: Pack, f: FootfallParams, m: MarketParams, xs: readonly FootfallInput[]): { demand: number[]; pull: number[] } {
+  const k = Math.abs(m.elasticity);
+  const wp = Math.max(0.05, m.weights.price);
+  const kq = k * (m.weights.quality / wp), kr = k * (m.weights.reputation / wp);
+  const strength = xs.map((x) => Math.exp(
+    -f.priceSensitivity * Math.log(Math.max(0.01, x.price) / m.refPrice)
+    + kq * (x.quality - 0.5) + kr * (x.reputation - 0.5)
+    + ADS_W * Math.log(1 + Math.max(0, x.marketing) / m.adsHalf)));
+  const demand = xs.map((x, i) => {
+    let rivals = (rivalsOf(x.place, pack.id)?.weight ?? 0) * f.staticWeight;
+    for (let j = 0; j < xs.length; j++) {
+      if (j === i) continue;
+      const o = overlap(distBetween(x.place, xs[j].place), f.radiusM);
+      if (o > 0) rivals += o * strength[j] * xs[j].awareness;
+    }
+    const share = strength[i] / (strength[i] + rivals + f.outside);
+    return (x.place.pedestriansPerDay ?? 0) * 30 * f.captureRate * (1 + f.outside) * share * x.awareness;
+  });
+  return { demand, pull: strength.map((a, i) => a * xs[i].awareness) };
 }

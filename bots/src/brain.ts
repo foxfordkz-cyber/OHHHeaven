@@ -2,6 +2,7 @@
 // Action and decide only from ownerSight / officialSight (what a human in their seat would see).
 import type { Action, BusinessState, DealTerms, NicheId, OfficialRole, OpenRecommendation, Pack, Place, Player, PublicBusiness, StandingOrders, WorldState } from '../../shared/src/types';
 import { RULES } from '../../shared/src/rules';
+import { baselineOrdersDay } from '../../shared/src/place';
 import { FIRST, LAST, businessName } from './names';
 import { officialSight, ownerSight, type OwnerSight } from './observe';
 import { hashStr, mulberry32, rngFor, shuffle } from './rng';
@@ -66,7 +67,9 @@ export function rentShare(ctx: EngineCtx, niche: NicheId, p: Place, profile: Own
   const pack = ctx.packs.niches[niche];
   if (!pack) return Infinity;
   const e = Math.exp(5 * pack.market.weights.location * (p.footTraffic - 0.55));
-  const demand = pack.market.unitsPerSlotMonth * (0.6 + 0.8 * p.footTraffic) * (e / (e + 0.4286));
+  // with footfall data: the orders this door supports once the regulars know the shop (people walking by, real rivals)
+  const base = baselineOrdersDay(pack, p);
+  const demand = base != null ? base * RULES.DAYS_PER_MONTH : pack.market.unitsPerSlotMonth * (0.6 + 0.8 * p.footTraffic) * (e / (e + 0.4286));
   const seats = Math.min(pack.sizing.max, Math.floor((p.sqft * RULES.USABLE_FLOOR_SHARE) / pack.sizing.sqftPerUnit), pack.kits.find((k) => k.id === 'standard')?.size ?? pack.sizing.default);
   const capacity = (seats * pack.sizing.unitsServedPerSizeMonth) / (1 - (pack.sizing.takeawayShare ?? 0));
   const revenue = Math.min(demand, capacity) * pack.unit.refPrice * (profile.quality === 'high' ? 1.3 : 1);
@@ -74,14 +77,20 @@ export function rentShare(ctx: EngineCtx, niche: NicheId, p: Place, profile: Own
 }
 
 /** Rent a sensible owner accepts: at most 25% of the revenue the place can bring (30% for a premium shop). */
-export const affordable =(ctx: EngineCtx, niche: NicheId, p: Place, profile: OwnerProfile): boolean =>
-  rentShare(ctx, niche, p, profile) <= (profile.quality === 'high' ? 0.3 : 0.25);
+export const affordable =(ctx: EngineCtx, niche: NicheId, p: Place, profile: OwnerProfile): boolean => {
+  const pack = ctx.packs.niches[niche];
+  // counted from real foot traffic the test is stricter: shops that last keep rent near a seventh of their sales
+  const measured = !!pack && baselineOrdersDay(pack, p) != null;
+  const limit = measured ? (profile.quality === 'high' ? 0.17 : 0.14) : (profile.quality === 'high' ? 0.3 : 0.25);
+  return rentShare(ctx, niche, p, profile) <= limit;
+};
 
 /** Pick a free place: affordable ones first (by character tier, name-seeded jitter); if none, the lowest rent share. */
 export function choosePlace(ctx: EngineCtx, name: string, niche: NicheId, profile: OwnerProfile, occupied: Set<string>): Place | undefined {
   const rng = rngFor('place', name);
   const want = profile.tier;
-  const free = ctx.places.filter((p) => !occupied.has(p.id) && p.suitableFor.includes(niche));
+  // an operating business for sale is left for a buyer: residents do not settle in it
+  const free = ctx.places.filter((p) => !occupied.has(p.id) && p.suitableFor.includes(niche) && !(p.forSale && p.forSale.niche === niche));
   const careless = profile.price === 'fixed_random';
   const pool = careless ? free : free.filter((p) => affordable(ctx, niche, p, profile));
   if (!pool.length) return careless ? undefined : free.reduce<Place | undefined>((a, p) => (!a || rentShare(ctx, niche, p, profile) < rentShare(ctx, niche, a, profile) ? p : a), undefined);
@@ -155,10 +164,17 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     const pack = ctx.packs.niches[niche];
     if (!pack) return [];
     const occupied = new Set(w.businesses.filter((b) => b.status !== 'bankrupt').map((b) => b.placeId));
-    const place = choosePlace(ctx, sight.me.name, niche, profile, occupied);
-    if (!place) return [];
-    const recs = recommend(niche, place.id, w, ctx);
-    if (!recs.length) return [];
+    // a newcomer walks past the doors it cannot pay for: the build-out of a space that never had this trade can cost more than the savings
+    let place: Place | undefined;
+    let recs: OpenRecommendation[] = [];
+    for (let tries = 0; tries < 40; tries++) {
+      const p = choosePlace(ctx, sight.me.name, niche, profile, occupied);
+      if (!p) break;
+      const r = recommend(niche, p.id, w, ctx);
+      if (r.length && r.some((x) => x.cashLeft >= 0)) { place = p; recs = r.filter((x) => x.cashLeft >= 0); break; }
+      occupied.add(p.id);
+    }
+    if (!place || !recs.length) return [];
     const rng = rngFor('open', sight.me.name, w.config.seed);
     const rec = profile.kit === 'random' ? recs[Math.floor(rng() * recs.length)] : recs.find((r) => r.kitId === profile.kit) ?? recs[0];
     const name = businessName(niche, sight.me.name, place.block, hashStr(sight.me.name));
@@ -186,7 +202,9 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     const place = placeOf(ctx, b.placeId)!;
     const acts: Action[] = [];
     if (b.status === 'setup') {
-      if (profile.launchEarly || b.permits.every((p) => p.readyDay <= w.day)) acts.push({ type: 'launch' });
+      // open when the room is built and the required permits are in; an optional licence (sidewalk tables) is no reason to keep the doors shut
+      const needed = b.permits.filter((p) => { const def = pack.setup.find((x) => x.id === p.itemId); return !def || def.required || def.kind === 'buildout'; });
+      if (profile.launchEarly || needed.every((p) => p.readyDay <= w.day)) acts.push({ type: 'launch' });
       return acts;
     }
     const rng = rngFor('day', playerId, w.day, w.config.seed);

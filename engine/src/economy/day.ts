@@ -1,8 +1,8 @@
 // One game day for every business: build/CONTRACT.md, section 3, step 4.
 import type { BusinessState, DayReport, FeedItem, InboxItem, NicheId, Pack, Place, PnlLine, TaxLiability, WorldState } from '@ohh/shared';
-import { dateOf, RULES } from '@ohh/shared';
+import { anchorDayMult, awarenessAt, dateOf, footfallParams, RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
-import { monthlyDemand, marketParams, type DemandInput } from './demand';
+import { footfallDemand, monthlyDemand, marketParams, type DemandInput, type FootfallInput } from './demand';
 import { activeEvents, eventMult, itemsQuality, leverEffects, MARKETING_DECAY_DAY, TRAINING_DECAY_DAY, trainingBoost, weekdayMult } from './effects';
 import { dealModifiers } from './deps';
 import { hooksFor } from './hooks';
@@ -54,7 +54,20 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
       const b = start[i];
       return { id: b.id, price: b.orders.price, quality: b.quality, reputation: b.reputation, footTraffic: placeOf(ctx, b.placeId)?.footTraffic ?? 0.5, marketing: econOf(b).marketing };
     });
-    const { demand, pull } = monthlyDemand(params, inputs);
+    // footfall model when the pack and every competing place carry the data; the share-of-market model otherwise
+    const foot = footfallParams(pack);
+    const footInputs: FootfallInput[] = [];
+    if (foot) {
+      for (let k = 0; k < idx.length; k++) {
+        const b = start[idx[k]];
+        const place = placeOf(ctx, b.placeId);
+        if (!place || !place.pedestriansPerDay) break;
+        const a0 = econOf(b).awareness0 ?? foot.awarenessStart;
+        footInputs.push({ ...inputs[k], place, awareness: awarenessAt(day - (b.openedDay ?? day), a0, foot.rampDays) });
+      }
+    }
+    const useFoot = !!foot && footInputs.length === idx.length;
+    const { demand, pull } = useFoot ? footfallDemand(pack, foot!, params, footInputs) : monthlyDemand(params, inputs);
     const wd = weekdayMult(pack, date.weekday);
     idx.forEach((i, k) => {
       const b = start[i];
@@ -63,7 +76,8 @@ export function economyDay(w: WorldState, ctx: EngineCtx): WorldState {
       const mods = dealModifiers(w, ctx, b.id);
       const lev = leverEffects(b, pack);
       const dayMult = wd * weatherMult * eventMult(events, 'demand', niche, place) * eventMult(events, 'footTraffic', niche, place)
-        * mods.demandMult * mods.footTrafficMult * (hooks.demandMult?.(b, date, pack) ?? 1) * lev.demandMult;
+        * mods.demandMult * mods.footTrafficMult * (hooks.demandMult?.(b, date, pack) ?? 1) * lev.demandMult
+        * (useFoot && place ? anchorDayMult(place, date.weekday, date.month) : 1);
       const dem = Math.max(0, Math.round((demand[k] / RULES.DAYS_PER_MONTH) * dayMult));
       const staffN = staffCount(b.orders.staff);
       const perStaff = pack.capacity.unitsPerStaffMonth;

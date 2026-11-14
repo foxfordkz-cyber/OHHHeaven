@@ -21,6 +21,7 @@ export interface EconExtra {
   mtd: EconMtd;
   taxYtd?: Record<string, Money>;   // tax id → amount accrued this season (for taxes with a wage base per worker)
   maxStaff?: number;                // most workers employed at once this season (wage bases are per person)
+  awareness0?: number;              // share of the regular crowd on opening day; unset — a brand-new shop (pack.extra.footfall.awarenessStart)
 }
 export type EBusiness = BusinessState & { extra?: Record<string, unknown> & { econ?: EconExtra } };
 

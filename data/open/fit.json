@@ -1,0 +1,285 @@
+{
+ "built": "2026-11-14",
+ "fetched": "2026-11-14",
+ "assumptions": {
+  "dayFromCountedHours": 2.4,
+  "oneSide": 1,
+  "subwayDecayM": 250,
+  "foodRadiusM": 150,
+  "sideStreet": 0.6,
+  "corner": 1.25,
+  "activeSince": "2024-01-01",
+  "rivalRadiusM": 250
+ },
+ "formula": "people walking the block per weekday (both sidewalks) = k1 × Σ(station weekday entries × exp(−distance / subwayDecayM)) + k2 × (food places within foodRadiusM); × sideStreet off the corridors; × corner at corners",
+ "k1": 0.3064362279792145,
+ "k2": 35.97452592447808,
+ "calibration": [
+  {
+   "where": "Delancey Street (Orchard Street – Ludlow Street)",
+   "weekday5hBothSides": 4509,
+   "observedDay": 10822,
+   "modelled": 10874,
+   "errorPct": 0
+  },
+  {
+   "where": "East 14th Street (Fifth Avenue – University Place)",
+   "weekday5hBothSides": 7767,
+   "observedDay": 18641,
+   "modelled": 17251,
+   "errorPct": -7
+  },
+  {
+   "where": "East 8th Street (University Place – Greene Street)",
+   "weekday5hBothSides": 3292,
+   "observedDay": 7901,
+   "modelled": 11536,
+   "errorPct": 46
+  },
+  {
+   "where": "Forsyth Street (Canal Street – Division Street)",
+   "weekday5hBothSides": 3632,
+   "observedDay": 8717,
+   "modelled": 5053,
+   "errorPct": -42
+  }
+ ],
+ "stations": [
+  {
+   "name": "14 St-Union Sq (4,5,6,L,N,Q,R,W)",
+   "lat": 40.735065,
+   "lng": -73.99042,
+   "weekday": 83724,
+   "saturday": 71364,
+   "sunday": 48821
+  },
+  {
+   "name": "W 4 St-Wash Sq (A,C,E,B,D,F,M)",
+   "lat": 40.732338,
+   "lng": -74.000496,
+   "weekday": 41802,
+   "saturday": 43801,
+   "sunday": 30303
+  },
+  {
+   "name": "14 St/6 Av (1,2,3,L,F,M)",
+   "lat": 40.737797,
+   "lng": -73.997734,
+   "weekday": 41222,
+   "saturday": 40746,
+   "sunday": 27104
+  },
+  {
+   "name": "14 St/8 Av (A,C,E,L)",
+   "lat": 40.740334,
+   "lng": -74.00214,
+   "weekday": 40112,
+   "saturday": 33606,
+   "sunday": 25627
+  },
+  {
+   "name": "Canal St (6,J,Z,N,Q,R,W)",
+   "lat": 40.7187,
+   "lng": -74.00058,
+   "weekday": 37744,
+   "saturday": 40671,
+   "sunday": 27049
+  },
+  {
+   "name": "Broadway-Lafayette St/Bleecker St (6,B,D,F,M)",
+   "lat": 40.725605,
+   "lng": -73.99543,
+   "weekday": 35823,
+   "saturday": 35435,
+   "sunday": 24484
+  },
+  {
+   "name": "Delancey St-Essex St (F,M,J,Z)",
+   "lat": 40.718464,
+   "lng": -73.98778,
+   "weekday": 25857,
+   "saturday": 26714,
+   "sunday": 19511
+  },
+  {
+   "name": "23 St-Baruch College (6)",
+   "lat": 40.739864,
+   "lng": -73.9866,
+   "weekday": 23305,
+   "saturday": 11570,
+   "sunday": 7652
+  },
+  {
+   "name": "Brooklyn Bridge-City Hall/Chambers St (4,5,6,J,Z)",
+   "lat": 40.713154,
+   "lng": -74.00377,
+   "weekday": 22685,
+   "saturday": 13000,
+   "sunday": 7755
+  },
+  {
+   "name": "1 Av (L)",
+   "lat": 40.730953,
+   "lng": -73.98163,
+   "weekday": 22674,
+   "saturday": 16402,
+   "sunday": 9071
+  },
+  {
+   "name": "Grand St (B,D)",
+   "lat": 40.718266,
+   "lng": -73.99375,
+   "weekday": 19670,
+   "saturday": 17429,
+   "sunday": 13207
+  },
+  {
+   "name": "Canal St (A,C,E)",
+   "lat": 40.720825,
+   "lng": -74.005226,
+   "weekday": 15627,
+   "saturday": 10774,
+   "sunday": 7233
+  },
+  {
+   "name": "8 St-NYU (R,W)",
+   "lat": 40.730328,
+   "lng": -73.99263,
+   "weekday": 14546,
+   "saturday": 16697,
+   "sunday": 11420
+  },
+  {
+   "name": "Spring St (C,E)",
+   "lat": 40.726227,
+   "lng": -74.00374,
+   "weekday": 14478,
+   "saturday": 10067,
+   "sunday": 7696
+  },
+  {
+   "name": "2 Av (F)",
+   "lat": 40.7234,
+   "lng": -73.98994,
+   "weekday": 14331,
+   "saturday": 19164,
+   "sunday": 14106
+  },
+  {
+   "name": "Houston St (1)",
+   "lat": 40.728252,
+   "lng": -74.00536,
+   "weekday": 13032,
+   "saturday": 7628,
+   "sunday": 5078
+  },
+  {
+   "name": "Astor Pl (6)",
+   "lat": 40.730053,
+   "lng": -73.99107,
+   "weekday": 12968,
+   "saturday": 13384,
+   "sunday": 8751
+  },
+  {
+   "name": "East Broadway (F)",
+   "lat": 40.713715,
+   "lng": -73.99017,
+   "weekday": 12496,
+   "saturday": 11591,
+   "sunday": 8952
+  },
+  {
+   "name": "Prince St (R,W)",
+   "lat": 40.72433,
+   "lng": -73.9977,
+   "weekday": 12200,
+   "saturday": 19420,
+   "sunday": 12794
+  },
+  {
+   "name": "Christopher St-Stonewall (1)",
+   "lat": 40.73342,
+   "lng": -74.00291,
+   "weekday": 10712,
+   "saturday": 14477,
+   "sunday": 9909
+  },
+  {
+   "name": "Spring St (6)",
+   "lat": 40.7223,
+   "lng": -73.99714,
+   "weekday": 10287,
+   "saturday": 13323,
+   "sunday": 8702
+  },
+  {
+   "name": "3 Av (L)",
+   "lat": 40.73285,
+   "lng": -73.98612,
+   "weekday": 6010,
+   "saturday": 4002,
+   "sunday": 2825
+  },
+  {
+   "name": "Franklin St (1)",
+   "lat": 40.71932,
+   "lng": -74.00689,
+   "weekday": 5387,
+   "saturday": 3876,
+   "sunday": 2598
+  },
+  {
+   "name": "Canal St (1)",
+   "lat": 40.722855,
+   "lng": -74.00628,
+   "weekday": 5010,
+   "saturday": 3999,
+   "sunday": 2615
+  },
+  {
+   "name": "City Hall (R,W)",
+   "lat": 40.713284,
+   "lng": -74.00698,
+   "weekday": 4943,
+   "saturday": 2440,
+   "sunday": 1641
+  },
+  {
+   "name": "Bowery (J,Z)",
+   "lat": 40.72028,
+   "lng": -73.99391,
+   "weekday": 3220,
+   "saturday": 2698,
+   "sunday": 1835
+  }
+ ],
+ "counts": {
+  "foodPlacesActive": 3153,
+  "coffeeShopsActive": 385,
+  "facilities": 92,
+  "places": 128
+ },
+ "sources": [
+  {
+   "name": "NYC DOT Bi-Annual Pedestrian Counts",
+   "url": "https://data.cityofnewyork.us/d/cqsj-cfgu",
+   "used": "May and October 2025 weekday counts at the screenlines nearest to the East Village"
+  },
+  {
+   "name": "MTA Subway Hourly Ridership: Beginning 2025",
+   "url": "https://data.ny.gov/d/5wq4-mkjj",
+   "used": "entries per station complex, 5–18 October 2026"
+  },
+  {
+   "name": "DOHMH New York City Restaurant Inspection Results",
+   "url": "https://data.cityofnewyork.us/d/43nn-pn8j",
+   "used": "establishments inspected since 2024: street life and real coffee shops"
+  },
+  {
+   "name": "NYC Facilities Database (City Planning)",
+   "url": "https://data.cityofnewyork.us/d/ji82-xba5",
+   "used": "colleges, schools, parks, hospitals, libraries, museums"
+  }
+ ]
+}
