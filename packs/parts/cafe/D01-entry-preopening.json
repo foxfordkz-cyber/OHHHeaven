@@ -4790,12 +4790,12 @@
         "trigger": "decision:popup_venue=shared_corner",
         "effects": [
           {
-            "field": "demand",
-            "mult": 0
+            "field": "closureDays",
+            "add": 30
           },
           {
             "field": "awareness",
-            "mult": 0.5
+            "mult": 0.7
           }
         ],
         "playerMoves": [
@@ -4811,7 +4811,7 @@
         "realFrequency": "No statistic; follows from operating under another operator's permit and supervision",
         "source": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about",
         "seenIn": "page_opened",
-        "note": "Design values. Fires at the end of the agreed term unless the agreement gives a renewal right."
+        "note": "Design values: a month with no sales while a new place is found, and 0.7 of the regulars follow (the floor for multipliers with no source). Fires at the end of the agreed term unless the agreement gives a renewal right."
       },
       {
         "scale": "city",
