@@ -64,6 +64,7 @@ export function InsightsTab({ view, ask, links = LINKS }: { view: OwnerView; ask
             <Tip k="fixedCostsMonth"><span className="faint">Fixed costs</span> <span className="num">{money(a.fixedCostsMonth)}</span><span className="faint"> a month</span></Tip>
             <Tip k="contributionPerUnit"><span className="faint">Each {unitWord(b.niche, 1)} adds</span> <span className="num">{money(a.contributionPerUnit, { cents: true })}</span></Tip>
             {a.breakEvenPrice !== null && <Tip k="breakEven"><span className="faint">Break-even price at this volume</span> <span className="num">{money(a.breakEvenPrice, { cents: true })}</span></Tip>}
+            {a.paybackMonths !== null && <Tip k="payback"><span className="faint">Payback:</span> <span className="num">{a.paybackMonths} months</span><span className="faint"> at this pace</span></Tip>}
           </div>
         </Card>
       )}
@@ -75,8 +76,8 @@ export function InsightsTab({ view, ask, links = LINKS }: { view: OwnerView; ask
             <Tip k="benchmarks" className="ins-bench">
               <span className="small faint">Against the industry, share of sales</span>
               {costs.rows.map((r) => (
-                <span key={r.metric} className="ins-bench__row">
-                  <span className="grow">{r.text}</span>
+                <span key={r.metric} className="ins-bench__row" aria-label={r.text}>
+                  <span className="grow">{r.short}</span>
                   <Badge tone={r.tone === 'bad' ? 'loss' : r.tone === 'good' ? 'profit' : 'neutral'}>{r.word}</Badge>
                 </span>
               ))}
@@ -92,8 +93,14 @@ export function InsightsTab({ view, ask, links = LINKS }: { view: OwnerView; ask
       {cap && (
         <Card title={<TitleTip k="lostSales">Capacity and lost sales</TitleTip>} subtitle={cap.headline} tone={cap.lostUnits > 0 ? 'warn' : 'default'}>
           <div className="stack-sm">
-            <Tip k="utilization" className="ins-meter"><ProgressBar value={Math.min(1, cap.utilization)} tone={cap.utilization > 0.95 ? 'loss' : 'info'} label={`Staff load ${pct(cap.utilization)}`} /></Tip>
-            <Tip k="sizeUtilization" className="ins-meter"><ProgressBar value={Math.min(1, cap.sizeUtilization)} tone={cap.sizeUtilization > 0.9 ? 'warn' : 'info'} label={`Seats in use ${pct(cap.sizeUtilization)}`} /></Tip>
+            <Tip k="utilization" className="ins-meter">
+              <span className="row-between small"><span>Staff load</span><span className="num">{pct(cap.utilization)}</span></span>
+              <ProgressBar value={Math.min(1, cap.utilization)} tone={cap.utilization > 0.95 ? 'loss' : 'info'} label={`Staff load ${pct(cap.utilization)}`} />
+            </Tip>
+            <Tip k="sizeUtilization" className="ins-meter">
+              <span className="row-between small"><span>{b.niche === 'cafe' ? 'Seats in use' : 'Room in use'}</span><span className="num">{pct(cap.sizeUtilization)}</span></span>
+              <ProgressBar value={Math.min(1, cap.sizeUtilization)} tone={cap.sizeUtilization > 0.9 ? 'warn' : 'info'} label={`Room in use ${pct(cap.sizeUtilization)}`} />
+            </Tip>
             {cap.reasons.length > 0 && (
               <ul className="ins-reasons">
                 {cap.reasons.map((r) => (

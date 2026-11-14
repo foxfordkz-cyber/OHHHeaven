@@ -5,6 +5,7 @@ import { useGame } from '../../app/store';
 import { int, money, nicheName, unitWord } from '../insights/format';
 import { decodePlan, planLink, planTokenFromHash } from './plan-link';
 import { useRuleCards } from './rulecards';
+import { PLAN_PRINT_CSS } from './print';
 import './plan.css';
 
 type AskFn = (q: Query) => Promise<unknown>;
@@ -30,6 +31,7 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
   const many = unitWord(plan.niche, 2);
   return (
     <article className="plan" aria-label="Your real-world plan">
+      <style data-plan-print="">{PLAN_PRINT_CSS}</style>
       <header className="plan-block plan-header">
         <div className="eyebrow">First Year · {nicheName(plan.niche)}</div>
         <h1 className="h1">Your real-world plan</h1>
@@ -50,15 +52,15 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
 
       <section className="plan-block plan-grid" aria-label="Break-even and payback">
         <div><div className="plan-kicker">Break-even</div><div className="plan-big num">{plan.breakEvenUnitsMonth === null ? '—' : int(plan.breakEvenUnitsMonth)}</div><div className="small muted">{plan.breakEvenUnitsMonth === null ? `each ${one} lost money` : `${many} a month · about ${int(plan.breakEvenUnitsMonth / 30)} a day`}</div></div>
-        <div><div className="plan-kicker">Payback</div><div className="plan-big num">{plan.paybackMonths === null ? 'not reached' : `${plan.paybackMonths} mo`}</div><div className="small muted">at your season’s pace</div></div>
+        <div><div className="plan-kicker">Payback</div><div className="plan-big num">{plan.paybackMonths === null ? 'not reached' : `${plan.paybackMonths} months`}</div><div className="small muted">at your season’s pace</div></div>
       </section>
 
       <section className="plan-block" aria-labelledby="plan-docs">
         <h2 id="plan-docs" className="h3">Documents, in this order</h2>
         <ol className="plan-steps">
-          {plan.checklist.map((s) => (
+          {plan.checklist.map((s, i) => (
             <li key={s.id} className="plan-row plan-step">
-              <div className="plan-step__title">{s.title}</div>
+              <div className="plan-step__title"><span className="plan-num" aria-hidden="true">{i + 1}</span>{s.title}</div>
               <div className="plan-step__meta small">
                 {s.agency && <span>{s.agency}</span>}
                 {s.fee !== undefined && <span>{s.fee === 0 ? 'free' : money(s.fee, { cents: s.fee % 1 !== 0 })}</span>}
@@ -86,11 +88,11 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
       <section className="plan-block" aria-labelledby="plan-lessons">
         <h2 id="plan-lessons" className="h3">Three lessons from your season</h2>
         <ol className="plan-lessons">
-          {plan.lessons.slice(0, 3).map((l) => {
+          {plan.lessons.slice(0, 3).map((l, i) => {
             const card = l.ruleCardId ? cards.get(l.ruleCardId) : undefined;
             return (
               <li key={l.title} className="plan-row plan-lesson">
-                <div className="row-between"><strong>{l.title}</strong><span className="num plan-loss">{money(-Math.abs(l.amount))}</span></div>
+                <div className="plan-lesson__head"><span className="plan-num" aria-hidden="true">{i + 1}</span><strong className="grow">{l.title}</strong><span className="num plan-loss">{money(-Math.abs(l.amount))}</span></div>
                 <div className="small">{l.lesson}</div>
                 {card && <div className="plan-rule"><RuleCard title={card.title} text={card.text} source={card.source} /></div>}
               </li>

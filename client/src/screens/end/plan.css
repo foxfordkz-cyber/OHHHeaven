@@ -1,4 +1,4 @@
-/* Real-world plan (agent 11): a screen page and a one-to-two page print-out (US Letter). */
+/* Real-world plan (agent 11): the screen page. The print-out rules live in print.ts (PlanView injects them). */
 .plan { display: flex; flex-direction: column; gap: var(--s-3); }
 .plan-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-3); padding: var(--s-4); box-shadow: var(--shadow-1); }
 .plan-block > h2 { margin: 0 0 var(--s-2); }
@@ -13,47 +13,19 @@
 .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
 .plan-kicker { font-size: var(--fs-xs); color: var(--text-2); font-weight: 650; text-transform: uppercase; letter-spacing: 0.06em; }
 .plan-big { font-size: var(--fs-2xl); font-weight: 800; line-height: 1.1; }
-.plan-steps, .plan-lessons { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: var(--s-3); }
+.plan-steps, .plan-lessons { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-3); }
+.plan-num { display: inline-grid; place-items: center; flex: none; width: 20px; height: 20px; margin-right: 8px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 11px; font-weight: 800; vertical-align: 1px; }
+.plan-lesson__head { display: flex; align-items: baseline; gap: 0; }
+.plan-lesson__head .grow { padding-right: var(--s-2); }
 .plan-step { display: flex; flex-direction: column; gap: 2px; }
 .plan-step__title { font-weight: 650; }
-.plan-step__meta { display: flex; flex-wrap: wrap; gap: 4px 10px; color: var(--text-2); }
+.plan-step__meta { display: flex; flex-wrap: wrap; gap: 4px 10px; color: var(--text-2); padding-left: 28px; }
+.plan-step > .small, .plan-step > .plan-link { margin-left: 28px; }
 .plan-step__meta span + span::before { content: '·'; margin-right: 10px; color: var(--text-3); }
 .plan-link { color: var(--info); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
 .plan-link:hover { text-decoration: underline; }
 .plan-suppliers { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: var(--s-2); font-size: var(--fs-sm); }
 .plan-lesson { display: flex; flex-direction: column; gap: 4px; }
-.plan-loss { color: var(--loss); font-weight: 700; }
+.plan-loss { color: var(--loss); font-weight: 700; white-space: nowrap; }
 .plan-rule { margin-top: 4px; }
 .plan-disclaimer { display: flex; gap: 8px; align-items: flex-start; color: var(--text-2); }
-
-@media print {
-  @page { size: letter; margin: 11mm 12mm; }
-  html, body, #root { background: #fff !important; color: #111 !important; }
-  .app { max-width: none !important; margin: 0 !important; padding: 0 !important; background: #fff !important; min-height: 0 !important; }
-  .app > :not(.plan-root), .toaster, .bottom-nav, .no-print { display: none !important; }
-  .plan-root { padding: 0 !important; gap: 0 !important; }
-
-  .plan { display: grid; grid-template-columns: 1fr 1fr; gap: 6pt 8pt; color: #111; font-size: 9pt; line-height: 1.3; }
-  .plan > * { grid-column: 1 / -1; }
-  .plan > .plan-half { grid-column: auto; }
-  .plan-block { break-inside: avoid; page-break-inside: avoid; background: #fff !important; border: 0.75pt solid #b9bec6 !important; border-radius: 4pt !important; box-shadow: none !important; padding: 6pt 8pt !important; }
-  .plan-row, .plan-step, .plan-lesson, .plan-table tr { break-inside: avoid; page-break-inside: avoid; }
-  .plan h1, .plan h2, .plan h3, .plan-kicker { color: #111 !important; break-after: avoid; page-break-after: avoid; }
-  .plan h1 { font-size: 17pt; margin: 0 0 2pt; }
-  .plan h2, .plan .h3 { font-size: 10.5pt; margin: 0 0 3pt; }
-  .plan .muted, .plan .faint, .plan .small, .plan .xsmall, .plan .eyebrow, .plan-step__meta, .plan-note, .plan-disclaimer { color: #333 !important; }
-  .plan .small { font-size: 8.5pt; }
-  .plan-table { font-size: 8.5pt; }
-  .plan-table td { padding: 1.5pt 0; border-color: #d5d8dd !important; }
-  .plan-total td { border-color: #888 !important; }
-  .plan-big { font-size: 14pt; }
-  .plan-steps, .plan-lessons { gap: 4pt; }
-  .plan-suppliers { gap: 2pt; font-size: 8.5pt; }
-  .plan-loss { color: #b42318 !important; }
-  .plan-link { color: #111 !important; text-decoration: none; }
-  .plan-link svg { display: none; }
-  .plan-link::after { content: ' ' attr(data-url); font-size: 7.5pt; color: #444; word-break: break-all; }
-  .plan .rule-card { background: #f4f5f7 !important; border: 0.75pt solid #c9cdd3 !important; color: #111 !important; padding: 4pt 6pt !important; box-shadow: none !important; }
-  .plan .rule-card * { color: #111 !important; }
-  .plan svg { color: #333; }
-}

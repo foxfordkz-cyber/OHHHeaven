@@ -26,7 +26,7 @@ function Row({ r, testMoney }: { r: BoardRow; testMoney: boolean }) {
       </span>
       <span className="lb-worth num">{compactMoney(r.netWorth)}</span>
       <span className="lb-prize num" title={r.isAi ? 'AI businesses do not win prizes' : undefined}>
-        {r.prize !== null ? money(r.prize, { cents: true }) : r.isAi ? 'no prize' : '—'}
+        {r.prize !== null ? money(r.prize, { cents: true }) : <span className="lb-none">{r.isAi ? 'no prize' : '—'}</span>}
         {r.prize !== null && testMoney && <span className="lb-test">test</span>}
       </span>
     </li>
@@ -39,7 +39,7 @@ export function NicheTable({ board, testMoney, limit }: { board: NicheBoard; tes
   const pinned = board.mine && !shown.some((r) => r.mine) ? board.mine : null;
   return (
     <div className="lb">
-      <div className="lb-head small faint"><span>#</span><span className="grow">Business</span><span>Net worth</span><span>Prize</span></div>
+      <div className="lb-head small faint"><span>#</span><span className="grow">Business</span><span title="Cash + half of equipment − debts">Worth</span><span>Prize</span></div>
       <ol className="lb-list">
         {shown.map((r) => <Row key={r.businessId} r={r} testMoney={testMoney} />)}
       </ol>
@@ -68,7 +68,7 @@ export function OfficialsTable({ view }: { view: OwnerView }) {
             <span className="lb-rank num">{r.rank}</span>
             <span className="lb-name grow"><span className="lb-title">{r.name}</span><span className="lb-sub">{r.isAi ? <AiBadge /> : 'Plays for free'}</span></span>
             <span className="lb-worth num">{r.points}</span>
-            <span className="lb-prize num">{r.prize !== null ? money(r.prize, { cents: true }) : r.isAi ? 'no prize' : '—'}</span>
+            <span className="lb-prize num">{r.prize !== null ? money(r.prize, { cents: true }) : <span className="lb-none">{r.isAi ? 'no prize' : '—'}</span>}</span>
           </li>
         ))}
       </ol>

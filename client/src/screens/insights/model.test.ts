@@ -22,7 +22,8 @@ describe('headline numbers', () => {
     expect(stats.map((s) => s.key)).toEqual(['profit', 'cash', 'runway', 'payback']);
     expect(stats[0].value.startsWith('+$')).toBe(true);
     expect(stats[2].value).toBe('In profit');
-    expect(stats[3].sub).toMatch(/^Payback: \d+ months at this pace$/);
+    expect(stats[3].sentence).toMatch(/^Payback: \d+ months at this pace$/);
+    expect(stats[3].sub).toBe('at this pace');
   });
   it('a losing cafe has a runway in months and no payback', () => {
     const stats = headline(cafeStrugglingView);

@@ -8,7 +8,7 @@ import { monthAbbr, stackBar, type BreakEvenInput, type Segment, type TrendMark,
 export type Tone = 'good' | 'bad' | 'neutral';
 
 // ───────────── headline numbers ─────────────
-export interface Stat { key: string; label: string; value: string; sub?: string; tone: Tone }
+export interface Stat { key: string; label: string; value: string; sub?: string; tone: Tone; sentence?: string }
 
 export function headline(v: OwnerView): Stat[] {
   const a = v.analytics;
@@ -27,7 +27,7 @@ export function headline(v: OwnerView): Stat[] {
       : { key: 'runway', label: 'Cash runway', value: `${a.cashRunwayMonths.toFixed(1)} months`, tone: a.cashRunwayMonths < 2 ? 'bad' : 'neutral', sub: 'until cash runs out at this loss' },
     a.paybackMonths === null
       ? { key: 'payback', label: 'Payback', value: 'Not yet', tone: 'bad', sub: `at this pace the ${compactMoney(a.setupInvested)} you put in does not come back` }
-      : { key: 'payback', label: 'Payback', value: `${a.paybackMonths} months`, tone: a.paybackMonths <= 24 ? 'good' : 'neutral', sub: `Payback: ${a.paybackMonths} months at this pace` },
+      : { key: 'payback', label: 'Payback', value: `${a.paybackMonths} months`, tone: a.paybackMonths <= 24 ? 'good' : 'neutral', sub: 'at this pace', sentence: `Payback: ${a.paybackMonths} months at this pace` },
   ];
 }
 
@@ -77,14 +77,15 @@ const METRIC_LABELS: Record<string, string> = {
 };
 const HIGHER_IS_BETTER = new Set(['netMarginPct']);
 
-export interface BenchmarkRow { metric: string; text: string; you: string; industry: string; word: string; tone: Tone }
+export interface BenchmarkRow { metric: string; text: string; short: string; you: string; industry: string; word: string; tone: Tone }
 
 export function benchmarkRow(bm: Benchmark): BenchmarkRow {
   const better = HIGHER_IS_BETTER.has(bm.metric);
   const word = bm.verdict === 'ok' ? 'normal' : (bm.verdict === 'good') === better ? 'high' : 'low';
   const tone: Tone = bm.verdict === 'good' ? 'good' : bm.verdict === 'bad' ? 'bad' : 'neutral';
   const label = METRIC_LABELS[bm.metric] ?? bm.metric;
-  return { metric: bm.metric, you: pct(bm.you), industry: pct(bm.industry), word, tone, text: `${label} ${pct(bm.you)} · industry ${pct(bm.industry)} · ${word}` };
+  const short = `${label} ${pct(bm.you)} · industry ${pct(bm.industry)}`;
+  return { metric: bm.metric, you: pct(bm.you), industry: pct(bm.industry), word, tone, short, text: `${short} · ${word}` };
 }
 
 export interface CostModel { period: string; segments: Segment[]; total: number; rows: BenchmarkRow[] }
