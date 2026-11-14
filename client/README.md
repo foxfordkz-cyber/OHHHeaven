@@ -59,3 +59,15 @@ layout helpers: `.screen`, `.screen--with-nav`, `.stack`, `.row`, `.row-between`
 
 Home and `/start` render the map through `src/app/slots.tsx` (`CityMapSlot`). Until `src/map/` exports `CityMap`, the slot
 draws a styled stand-in. When the map lands, switch the one import in `slots.tsx`. `maplibre-gl` is already a dependency.
+
+## Links between screens
+
+| Link | Opens |
+|---|---|
+| `/start` | the opening path; `?niche=cafe` preselects a niche, `?as=official` joins as a city official and goes to `/desk` |
+| `/biz`, `/desk`, `/end`, `/city/<worldId>` | screens of agents 10, 12, 11, 09 (placeholders until their `screen` module lands) |
+| `?mode=local` · `?mode=remote` | the city in the browser · the server (remembered in `localStorage`) |
+| `?world=nyc` · `?world=demo` | the live city (48 min per day) · the demo city (2 s per day) |
+| `/dev` | every screen on example data, no server |
+
+Places and niche packs for any screen: `useCatalog()` from `src/app/catalog.ts` (server → in-browser city → examples).
