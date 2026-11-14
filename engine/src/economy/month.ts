@@ -8,7 +8,7 @@ import { shortcutSavings } from './deps';
 import { defaultLeverOption } from './effects';
 import { hooksFor } from './hooks';
 import { netWorthOf } from './networth';
-import { accrue, applicableTaxes, dueDayFor, isSalesTax } from './taxes';
+import { accrue, applicableTaxes, dueDayFor, isSalesTax, wageBase } from './taxes';
 import { addLine, econOf, emptyMtd, placeOf, placeRentMonth, round2, withEcon, type EconExtra } from './util';
 
 const BOOK_KINDS = new Set<PnlLine['kind']>(['revenue', 'cogs', 'payroll', 'rent', 'opex', 'deal', 'other']);
@@ -113,12 +113,17 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
   const books = lines.filter((l) => BOOK_KINDS.has(l.kind)).reduce((a, l) => a + l.amount, 0);
   let accruedOther = 0;
   const taxes = applicableTaxes(ctx, pack);
+  const taxYtd = { ...(econ.taxYtd ?? {}) };
+  const maxStaff = Math.max(econ.maxStaff ?? 0, peakStaff(b, m));
   for (const t of taxes) {
     if (isSalesTax(t) || t.base === 'profit') continue;
     const periods = t.due === 'monthly' ? 1 : t.due === 'quarterly' ? 3 : 12;
     const base = t.base === 'payroll' ? payroll : t.base === 'rent' ? rent : t.base === 'revenue' ? m.revenue : 0;
-    const amt = round2(t.base === 'fixed' ? (m.daysOpen > 0 ? t.rate / periods : 0) : t.rate * base);
+    let amt = round2(t.base === 'fixed' ? (m.daysOpen > 0 ? t.rate / periods : 0) : t.rate * base);
+    const wb = t.base === 'payroll' ? wageBase(ctx, t.id) : null;
+    if (wb !== null) amt = round2(Math.max(0, Math.min(amt, t.rate * wb * maxStaff - (taxYtd[t.id] ?? 0))));
     if (amt <= 0) continue;
+    taxYtd[t.id] = round2((taxYtd[t.id] ?? 0) + amt);
     accruedOther = round2(accruedOther + amt);
     liabilities = accrue(liabilities, t.id, amt, dueDayFor(t, month, ctx));
   }
@@ -153,7 +158,7 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
     taxesAccrued: round2(m.salesTax + accruedOther + accruedProfit), taxesPaid: round2(m.taxesPaid + paidNow),
     fines: round2(-sumKinds('fine')), quality: b.quality, reputation: b.reputation, netWorth: 0, rankInNiche: 0,
   };
-  const econNext: EconExtra = { ...econ, lossCarry: carry, cashStart: cash, mtd: emptyMtd() };
+  const econNext: EconExtra = { ...econ, lossCarry: carry, cashStart: cash, mtd: emptyMtd(), taxYtd, maxStaff };
   const closed: BusinessState = withEcon({
     ...paidState,
     history: [...b.history, report],
@@ -176,6 +181,13 @@ export function syncMonthStart(w: WorldState): WorldState {
       return econ.cashStart === start ? b : withEcon(b, { ...econ, cashStart: start });
     }),
   };
+}
+
+/** Most workers on staff at once this month: the orders now, or the average if it was higher. */
+function peakStaff(b: BusinessState, m: EconExtra['mtd']): number {
+  const now = Object.values(b.orders.staff).reduce((a, n) => a + Math.max(0, n), 0);
+  const avg = m.daysOpen > 0 ? Object.values(m.staffDays).reduce((a, n) => a + n, 0) / m.daysOpen : 0;
+  return m.daysOpen > 0 ? Math.max(now, Math.ceil(avg)) : 0;
 }
 
 function mergeTrails(old: readonly ViolationTrail[], updated: readonly ViolationTrail[]): ViolationTrail[] {

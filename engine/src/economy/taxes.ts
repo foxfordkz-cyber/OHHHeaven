@@ -61,6 +61,13 @@ export function accrue(liabilities: readonly TaxLiability[], taxId: string, amou
   return out;
 }
 
+/** Annual wage base per worker for payroll taxes (FUTA $7,000, NY SUI $17,600 in 2026): _common.extra.wageBases[taxId]. */
+export function wageBase(ctx: EngineCtx, taxId: string): number | null {
+  const bases = (ctx.packs.common.extra as Record<string, unknown> | undefined)?.wageBases as Record<string, unknown> | undefined;
+  const v = bases?.[taxId];
+  return typeof v === 'number' && v > 0 ? v : null;
+}
+
 export function taxName(ctx: EngineCtx, pack: Pack | undefined, taxId: string): string {
   return pack?.taxes.find((t) => t.id === taxId)?.name ?? ctx.packs.common.taxes.find((t) => t.id === taxId)?.name ?? taxId;
 }

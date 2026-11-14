@@ -142,3 +142,17 @@ describe('sales tax base', () => {
     expect(day.revenue * 0.9 * 0.08875).toBeLessThan(collected);
   });
 });
+
+describe('payroll taxes with a wage base per worker', () => {
+  it('FUTA stops at $7,000 per worker a season and NY SUI at $17,600 (_common.extra.wageBases)', () => {
+    let { w, ctx } = cafeCity(1);
+    w = run(w, ctx, 360 - w.day);
+    const b = w.businesses[0];
+    const staff = Object.values(b.orders.staff).reduce((a, n) => a + n, 0);
+    const accrued = (id: string) => b.liabilities.filter((l) => l.taxId === id).reduce((a, l) => a + l.amount, 0);
+    expect(accrued('futa')).toBeCloseTo(0.006 * 7000 * staff, 0);
+    expect(accrued('ny_sui')).toBeCloseTo(0.041 * 17600 * staff, 0);
+    const payroll = b.history.reduce((a, m) => a + m.lines.filter((l) => l.kind === 'payroll').reduce((x, l) => x - l.amount, 0), 0);
+    expect(accrued('ny_sui')).toBeLessThan(0.041 * payroll);
+  });
+});
