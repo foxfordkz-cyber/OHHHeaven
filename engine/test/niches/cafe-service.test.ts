@@ -9,15 +9,14 @@ import type { BusinessState, DayReport, Pack, Place, StandingOrders } from '@ohh
 import rawPack from '../../../packs/cafe.json';
 import rawFormats from '../../../packs/parts/cafe/D20-formats.json';
 import rawPlaces from '../../../data/places.json';
-import { composeHooks } from '../../src/niches/cafe';
+import { composeHooks, hooks as cafeHooks } from '../../src/niches/cafe';
 import {
   part, seatUseDay, serviceCfg, serviceDay, serviceDayNotes, serviceDayWith, serviceKpis, serviceNotes, seatsThatFit, walkAway,
   type Guests, type ServiceCfg, type ServiceInputs,
 } from '../../src/niches/cafe/service';
 import type { CafeDay, StaffPower } from '../../src/niches/cafe/contract';
-import { plainCafePack } from './plain-cafe-pack';
 
-const basePack = plainCafePack(rawPack as unknown as Pack);
+const basePack = rawPack as unknown as Pack;
 const X = (rawFormats as unknown as { extra: Record<string, any> }).extra;
 const pack: Pack = { ...basePack, extra: { ...(basePack.extra ?? {}), guestSegments: X.guestSegments, service: X.service, staffing: X.staffing } };
 const cfg = serviceCfg(pack) as ServiceCfg;
@@ -98,13 +97,13 @@ const report = (dayN: number, demand: number): DayReport => ({
 });
 
 describe('cafe service — the example of FORMATS.md 3.5 (same numbers as packs/parts/cafe/D20-examples.mjs)', () => {
-  const rows: [Place, number, number, number][] = [
+  const rows: ['office' | 'residential', number, number, number][] = [
     // place, orders wanted, seats, served
-    [OFFICE, 250, 6, 246], [OFFICE, 250, 30, 248], [OFFICE, 400, 6, 259], [OFFICE, 400, 30, 248],
-    [OFFICE, 550, 6, 261], [OFFICE, 550, 30, 248], [HOME, 250, 6, 233], [HOME, 250, 30, 216], [HOME, 400, 6, 236],
+    ['office', 250, 6, 246], ['office', 250, 30, 248], ['office', 400, 6, 259], ['office', 400, 30, 248],
+    ['office', 550, 6, 261], ['office', 550, 30, 248], ['residential', 250, 6, 233], ['residential', 250, 30, 216], ['residential', 400, 6, 236],
   ];
-  it.each(rows)('%s, %i orders, %i seats → %i served', (place, demand, seats, served) => {
-    expect(Math.round(day(place, demand, seats).served)).toBe(served);
+  it.each(rows)('%s place, %i orders, %i seats → %i served', (kind, demand, seats, served) => {
+    expect(Math.round(day(kind === 'office' ? OFFICE : HOME, demand, seats).served)).toBe(served);
   });
   it('the rush at 550 orders and 30 seats: a line of about 22, a 21-minute wait, about 60 walked on', () => {
     const s = day(OFFICE, 550, 30);
@@ -186,9 +185,15 @@ describe('cafe service — checks of FORMATS.md 3.6', () => {
     expect(part.qualityDelta!(d)).toBe(0);
     expect(serviceKpis({ ...b, days: [report(DAY, 300)] }, plain)).toEqual([]);
     expect(serviceDayNotes(b, report(DAY, 300), plain)).toEqual([]);
-    expect(part.notes!(b, report(DAY, 300), plain)).toEqual([]);
-    // notes wired by the integrator (B04): the other parts' notes already silence the engine's own loss lines; kpis wait for the engine
-    expect(Object.keys(part).sort()).toEqual(['capacityDay', 'notes', 'qualityDelta']);
+    expect(Object.keys(part).sort()).toEqual(['capacityDay', 'notes', 'qualityDelta']);   // kpis wait for the engine (journal)
+  });
+
+  it('9a. without extra.service the cafe says what the engine would have said, exactly once across all its parts', () => {
+    const r = { ...report(DAY, 300), servedUnits: 250, lost: { size: 30, staff: 20, closure: 0 } };
+    const said = cafeHooks.notes!(cafe(), r, basePack);
+    expect(said.filter((n) => n === 'Line out the door: 30 customers walked away')).toHaveLength(1);
+    expect(said.filter((n) => n === 'Short-staffed: 20 customers left unserved')).toHaveLength(1);
+    expect(cafeHooks.notes!(cafe(), report(DAY, 300), basePack).filter((n) => /^(Line out the door|Short-staffed)/.test(n))).toEqual([]);
   });
 });
 
@@ -222,9 +227,48 @@ describe('cafe service — through the hooks the engine calls', () => {
     const b = cafe({ size: 30, orders: orders({ staff: { barista: 2 } }), days: [report(DAY, 550)] });
     const k = serviceKpis(b, pack);
     expect(k.map((x) => x.id)).toEqual(['rush_served', 'bar_rush_per_hour', 'seat_turns', 'seats_peak_use']);
-    const notes = serviceDayNotes(b, report(DAY, 550), pack);
-    expect(notes.length).toBeGreaterThan(0);
+    const r = { ...report(DAY, 550), servedUnits: 400, lost: { size: 0, staff: 150, closure: 0 } };
+    const notes = serviceDayNotes(b, r, pack);
+    expect(part.notes!(b, r, pack)).toEqual(notes);
     expect(notes.join(' ')).toMatch(/Out of hands|Morning rush/);
+  });
+
+  it('notes never name more or fewer lost guests than the day report', () => {
+    // a team that covers every open hour: hours nobody covers are staffing's to explain
+    const b = cafe({ size: 30, orders: orders({ staff: { barista: 3, shift_lead: 1 } }) });
+    const lostIn = (notes: string[]): number => notes.reduce((a, n) => {
+      const m = n.match(/^Morning rush: .*, (\d+) walked on$/) ?? n.match(/^Out of hands: (\d+) order/) ?? n.match(/^No free seat: (\d+) guest/)
+        ?? n.match(/^(?:Line out the door|Short-staffed): (\d+) /);
+      return a + (m ? Number(m[1]) : 0);
+    }, 0);
+    for (const lost of [0, 7, 150, 300]) {
+      const r = { ...report(DAY, 550), servedUnits: 550 - lost, lost: { size: 0, staff: lost, closure: 0 } };
+      expect(Math.abs(lostIn(serviceDayNotes(b, r, pack)) - lost)).toBeLessThanOrEqual(2);   // each line rounds once
+    }
+    // a quiet day by the model, but the report lost guests: the engine's words, not an invented cause
+    const quiet = { ...report(DAY, 40), servedUnits: 30, lost: { size: 4, staff: 6, closure: 0 } };
+    expect(serviceDayNotes(cafe(), quiet, pack)).toEqual(['Line out the door: 4 customers walked away', 'Short-staffed: 6 customers left unserved']);
+  });
+
+  it('the notes offer the next step with its price: one more barista, or the seats the floor still has room for', () => {
+    const b = cafe({ size: 30, orders: orders({ staff: { barista: 2 } }) });
+    const r = { ...report(DAY, 550), servedUnits: 400, lost: { size: 0, staff: 150, closure: 0 } };
+    const hire = serviceDayNotes(b, r, pack).find((n) => n.startsWith('One more barista'));
+    expect(hire).toMatch(/^One more barista: about \d+ more orders a day — \$[\d,]+ a month in sales for \$3,360 in wages$/);
+    const won = Number(hire!.match(/about (\d+) more/)![1]);
+    expect(won).toBeGreaterThan(0);
+    expect(won).toBeLessThanOrEqual(150);
+    expect(hire).toContain(`$${(won * 8.5 * 30).toLocaleString('en-US')}`);
+
+    // a small room at a residential door loses guests to seats only: the floor has room, and no hire is offered
+    const room = cafe({ size: 6, orders: orders({ staff: { barista: 5, shift_lead: 1 } }) });
+    const day6 = serviceDay(at(room, 250, HOME))!;
+    expect(day6.lost.seats).toBeGreaterThan(0);
+    expect(day6.lost.labor + day6.lost.queue).toBe(0);
+    const lost = Math.round(day6.lost.seats);
+    const notes = serviceDayNotes(room, { ...report(DAY, 250), lost: { size: lost, staff: 0, closure: 0 } }, pack, { place: HOME, day: DAY, date: DATE });
+    expect(notes.find((n) => n.startsWith('No free seat'))).toMatch(/ — the floor has room for 48 more seats$/);
+    expect(notes.some((n) => n.startsWith('One more'))).toBe(false);
   });
 
   it('seat use at the busiest hour: a takeaway counter is not "packed" just because it sells a lot', () => {

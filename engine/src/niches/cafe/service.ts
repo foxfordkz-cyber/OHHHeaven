@@ -4,7 +4,7 @@
 // Without extra.service in the pack this part answers nothing and the game is unchanged.
 // Pure: no network, no files, no Date, no Math.random. Shares of guests who walk away are shares of the flow, not chances.
 import type { BusinessState, DayReport, NicheKpi, Pack, Place } from '@ohh/shared';
-import { dateOf } from '@ohh/shared';
+import { RULES, dateOf } from '@ohh/shared';
 import type { NicheEnv } from '../index';
 import type { CafeDay, CafePart, GuestGroup, StaffPower } from './contract';
 import { guestMix } from './segments';
@@ -233,12 +233,23 @@ export function serviceDayWith(cfg: ServiceCfg, inp: ServiceInputs): ServiceDay 
 
 // ───────────── what the owner sees ─────────────
 
+const DAYS_PER_MONTH = RULES.DAYS_PER_MONTH;
 const whole = (x: number): number => Math.round(x);
 const plural = (n: number, one: string, many: string): string => `${n} ${n === 1 ? one : many}`;
 const clock = (h: number): string => (h === 0 ? '12 am' : h < 12 ? `${h} am` : h === 12 ? '12 pm' : `${h - 12} pm`);
 
-/** One sentence per cause of lost orders, the biggest first; plus the floor that has no room for the seats. */
-export function serviceNotes(s: ServiceDay, size?: number, sqft?: number): string[] {
+/** What the owner could do about today's losses, with its price: the next step the notes offer. */
+export interface ServiceHint {
+  /** One more person of the pack's first role (a barista): orders a day won back, sales and wages a month. */
+  hire?: { role: string; orders: number; salesMonth: number; wagesMonth: number };
+  /** Seats the floor still has room for (known only with the place). */
+  seatsFree?: number;
+}
+
+const usd = (x: number): string => `$${Math.round(x).toLocaleString('en-US')}`;
+
+/** One sentence per cause of lost orders (line, hands, seats), the biggest first; then what one step would win back; then the floor. */
+export function serviceNotes(s: ServiceDay, size?: number, sqft?: number, hint: ServiceHint = {}): string[] {
   const out: { n: number; text: string }[] = [];
   const walked = whole(s.rush.walked);
   if (walked > 0) {
@@ -250,13 +261,15 @@ export function serviceNotes(s: ServiceDay, size?: number, sqft?: number): strin
   }
   const left = whole(s.seats.left);
   if (left > 0) {
-    out.push({ n: s.seats.left, text: `No free seat: ${plural(left, 'guest', 'guests')} left, ${whole(s.seats.tookAway)} took it to go` });
+    const room = hint.seatsFree != null && hint.seatsFree > 0 ? ` — the floor has room for ${plural(hint.seatsFree, 'more seat', 'more seats')}` : '';
+    out.push({ n: s.seats.left, text: `No free seat: ${plural(left, 'guest', 'guests')} left, ${whole(s.seats.tookAway)} took it to go${room}` });
   }
-  const hours = whole(s.lost.hours);
-  if (hours > 0) {
-    out.push({ n: s.lost.hours, text: `Nobody on the floor for part of the day: ${plural(hours, 'order', 'orders')} missed` });
-  }
+  // orders lost to hours nobody covers are staffing's to explain (its coverage note); the hire hint counts them
   const notes = out.sort((a, b) => b.n - a.n).map((o) => o.text);
+  const h = hint.hire;
+  if (h && whole(h.orders) > 0) {
+    notes.push(`One more ${h.role.toLowerCase()}: about ${plural(whole(h.orders), 'more order', 'more orders')} a day — ${usd(h.salesMonth)} a month in sales for ${usd(h.wagesMonth)} in wages`);
+  }
   if (size != null && Number.isFinite(s.seats.fit) && size > s.seats.fit) {
     const where = sqft != null ? `in ${Math.round(sqft)} sq ft` : 'on this floor';
     notes.push(`Only ${plural(s.seats.fit, 'seat fits', 'seats fit')} ${where}: ${size - s.seats.fit} of your ${size} seats have no floor`);
@@ -299,18 +312,86 @@ export function seatUseDay(d: CafeDay): number | null {
   return s && s.seats.count > 0 ? s.seats.present / s.seats.count : null;
 }
 
+/** The engine's own words for the day's losses, split as the engine split them. */
+function engineLines(r: DayReport): string[] {
+  const out: string[] = [];
+  const size = Math.round(r.lost.size), staff = Math.round(r.lost.staff);
+  if (size > 0) out.push(`Line out the door: ${size} customers walked away`);
+  if (staff > 0) out.push(`Short-staffed: ${staff} customers left unserved`);
+  return out;
+}
+
+const NO_LOSS = { hours: 0, queue: 0, seats: 0, labor: 0 };
+
+/**
+ * The model's day held to the report's total: the losses it names add up to the guests the report lost (closures
+ * aside); the model only splits them by cause. The engine passes no place to notes yet (FORMATS.md, request 1), so
+ * the model may count seats that have no floor or the guests of an average door; the total stays the true one.
+ * null when the report lost guests the model sees no cause for.
+ */
+function heldToReport(s: ServiceDay, r: DayReport): ServiceDay | null {
+  const reported = Math.max(0, r.lost.size + r.lost.staff);
+  const modelled = s.lost.hours + s.lost.queue + s.lost.seats + s.lost.labor;
+  if (reported > 0 && modelled <= 1e-9) return null;
+  const k = modelled > 0 ? reported / modelled : 0;
+  return {
+    ...s,
+    lost: { hours: s.lost.hours * k, queue: s.lost.queue * k, seats: s.lost.seats * k, labor: s.lost.labor * k },
+    rush: { ...s.rush, walked: s.rush.walked * k },
+    seats: { ...s.seats, left: s.seats.left * k },
+  };
+}
+
 /** The owner's sentences for one day report: why orders were lost today. */
 export function serviceDayNotes(b: BusinessState, r: DayReport, pack: Pack, env?: NicheEnv): string[] {
   const s = dayFromReport(b, r, pack, env?.place);
-  return s ? serviceNotes(s, b.size, env?.place?.sqft) : [];
+  if (!s) return [];
+  const held = heldToReport(s, r);
+  if (held) return serviceNotes(held, b.size, env?.place?.sqft, hintsFor(b, r, pack, env?.place, s, held));
+  // the model without the door cannot explain the report's losses: say them in the engine's words
+  const quiet: ServiceDay = { ...s, lost: NO_LOSS, rush: { ...s.rush, walked: 0 }, seats: { ...s.seats, left: 0 } };
+  return [...engineLines(r), ...serviceNotes(quiet, b.size, env?.place?.sqft)];
 }
 
 /**
- * The part the cafe glue reads. kpis and notes are not in it yet: today the engine treats the mere presence of a
- * niche's notes hook as "the niche explains its limits" (economy/day.ts, nicheExplainsCapacity) and a kpis hook as
- * "replace the default key numbers" (analytics/analyze.ts), even on days and packs where this part has nothing to say.
- * Once the lead changes those two places (agents/r3-B01.md, requests 1 and 2), add `kpis: serviceKpis,
- * notes: serviceDayNotes` here.
+ * The next step and its price. Hands: the same day once more with one more person of the pack's first role; the
+ * orders won back are capped by what the report lost to the line, hands and hours (nobody wins back more than was
+ * lost). Seats: room the floor still has, when the place is known.
+ */
+function hintsFor(b: BusinessState, r: DayReport, pack: Pack, place: Place | undefined, s: ServiceDay, held: ServiceDay): ServiceHint {
+  const hint: ServiceHint = {};
+  if (place && Number.isFinite(s.seats.fit)) hint.seatsFree = Math.max(0, s.seats.fit - b.size);
+  const role = pack.staff[0];
+  const lostToTeam = held.lost.queue + held.lost.labor + held.lost.hours;
+  if (!role || lostToTeam < 1) return hint;
+  const staff = { ...b.orders.staff, [role.id]: (b.orders.staff[role.id] ?? 0) + 1 };
+  const more = dayFromReport({ ...b, orders: { ...b.orders, staff } }, r, pack, place);
+  // whole orders, so that the sales in the sentence are exactly orders × price × 30
+  const orders = more ? Math.round(Math.min(lostToTeam, Math.max(0, more.served - s.served))) : 0;
+  if (orders >= 1) {
+    hint.hire = {
+      role: role.name, orders,
+      salesMonth: orders * b.orders.price * DAYS_PER_MONTH,
+      wagesMonth: role.hourlyWage * role.hoursPerMonth,
+    };
+  }
+  return hint;
+}
+
+/**
+ * Without extra.service the engine's own limits applied today, and the engine keeps quiet about them because the cafe
+ * has capacity and notes hooks (economy/day.ts, nicheExplainsCapacity). Then someone has to say what it would have
+ * said. staffing.ts says it when it has notes (B03 does, in the same words); otherwise this part does, so the owner
+ * hears it exactly once.
+ */
+function engineLimitNotes(r: DayReport): string[] {
+  return typeof staffing.part.notes === 'function' ? [] : engineLines(r);
+}
+
+/**
+ * The part the cafe glue reads. kpis are not in it yet: today a niche's kpis hook replaces the default key numbers
+ * (analytics/analyze.ts) instead of adding to them, and the average ticket would disappear. Once the lead changes that
+ * (agents/r3-B01.md, request 2), add `kpis: serviceKpis` here.
  */
 export const part: CafePart = {
   capacityDay(d) {
@@ -325,6 +406,7 @@ export const part: CafePart = {
     const s = cfg ? serviceDay(d) : null;
     return s && cfg && s.seats.crowded ? -cfg.crowdQualityDrop : 0;
   },
-  // B04: wired so the owner hears why orders were lost; with the other parts' notes present the engine no longer says it.
-  notes: serviceDayNotes,
+  notes(b, r, pack, env?: NicheEnv) {
+    return serviceCfg(pack) ? serviceDayNotes(b, r, pack, env) : engineLimitNotes(r);
+  },
 };
