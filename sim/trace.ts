@@ -1,7 +1,8 @@
 // Where the cash of a newcomer goes, month by month, before and after the doors open.
-//   npx tsx sim/trace.ts [seasons] [--niche=cafe] [--json=out.json] [--seed=100] [--capture=…] [--start=…] [--ramp=…] [--sens=…] [--no-runway] [--brief]
+//   npx tsx sim/trace.ts [seasons] [--niche=cafe] [--json=out.json] [--seed=100] [--capture=…] [--start=…] [--ramp=…] [--sens=…] [--est-cash=$] [--no-runway] [--brief]
 // --capture/--start/--ramp override pack.extra.footfall for a what-if (nothing is written); --no-runway lets every
-// newcomer open without the cash check of bots/src/runway.ts; --brief prints only the summary.
+// newcomer open without the cash check of bots/src/runway.ts; --est-cash sets the cash every established shop starts
+// with (a what-if for the engine); --brief prints only the summary.
 // Same city as `sim/calibrate.ts season`: 30 established shops (AI residents) plus ten newcomers who play the
 // recommended opening. For every newcomer of the niche it prints: the opening bill (setup spent, cash left on
 // opening day), then each month's lines (revenue, cogs, payroll, rent, opex, taxes) and cash at month end, and for
@@ -59,6 +60,9 @@ for (let s = 0; s < seasons; s++) {
   const brain = createBotBrain({ runwayCheck: !argv.includes('--no-runway'), strategyOf: (p) => strategies.get(p.id), recommendOpening: (n, placeId, world, c) => recommendOpening(n, placeId, world, c) });
   const deps = defaultDeps({ bots: brain });
   let w = newWorld({ ...defaultConfig({ id: 'cal', name: 'Calibration', demo: true, seed }), aiBusinessesTarget: 30 }, ctx, deps);
+  // what-if for the lead (engine/src/economy/actions.ts keeps what a light renovation would have left): established shops start with this much cash
+  const estCash = flag('est-cash');
+  if (estCash != null) w = { ...w, businesses: w.businesses.map((b) => (b.isAi && b.status === 'open' ? { ...b, cash: estCash } : b)) };
   const newcomers: string[] = [];
   NEWCOMERS.forEach((st, i) => {
     const j = joinWorld(w, { name: `Newcomer ${s}-${i}`, kind: 'owner' });
@@ -104,7 +108,7 @@ for (let s = 0; s < seasons; s++) {
 const neu = rows.filter((r) => !r.est);
 const est = rows.filter((r) => r.est);
 const fp = (packs.niches[niche]!.extra as { footfall?: Record<string, number> }).footfall;
-console.log(`footfall: captureRate ${fp?.captureRate}, awarenessStart ${fp?.awarenessStart}, rampDays ${fp?.rampDays}, priceSensitivity ${fp?.priceSensitivity}; runway check ${argv.includes('--no-runway') ? 'off' : 'on'}; seasons ${seasons} from seed ${seed0}; newcomers of all niches who found no door they would sign for: ${neverOpened}`);
+console.log(`footfall: captureRate ${fp?.captureRate}, awarenessStart ${fp?.awarenessStart}, rampDays ${fp?.rampDays}, priceSensitivity ${fp?.priceSensitivity}; established cash ${flag('est-cash') ?? 'as the engine sets it'}; runway check ${argv.includes('--no-runway') ? 'off' : 'on'}; seasons ${seasons} from seed ${seed0}; newcomers of all niches who found no door they would sign for: ${neverOpened}`);
 console.log(`# ${packs.niches[niche]!.name}: newcomers ${neu.length} (closed ${neu.filter((r) => r.bankruptDay != null).length}), established ${est.length} (closed ${est.filter((r) => r.bankruptDay != null).length}), start capital ${usd(packs.niches[niche]!.startCapital)}`);
 for (const r of argv.includes('--brief') ? [] : [...neu, ...est.filter((x) => x.bankruptDay != null)]) {
   console.log(`\n## ${r.est ? 'established' : 'newcomer'} ${r.strat} @ ${r.place} (${r.kind}; ${r.ped} people/day, map says ${r.base} orders/day; rent ${usd(r.rent)}/mo)`);

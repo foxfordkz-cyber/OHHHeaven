@@ -2592,16 +2592,16 @@
       "confidence": "estimate"
     },
     "footfall": {
-      "captureRate": 0.088,
+      "captureRate": 0.095,
       "outside": 1.5,
       "priceSensitivity": 2.7,
       "radiusM": 250,
       "staticWeight": 0.5,
-      "rampDays": 75,
-      "awarenessStart": 0.35,
+      "rampDays": 60,
+      "awarenessStart": 0.5,
       "source": "https://data.cityofnewyork.us/d/cqsj-cfgu",
       "confidence": "estimate",
-      "note": "Demand = people walking the block a day (data/places.json, modelled from MTA station entries and DOHMH food places and scaled to DOT sidewalk counts: data/open/fit.json) x the share who buy here. captureRate is that share for a known, average shop with no rival in sight at the reference price; real coffee shops within 250 m (DOHMH) and playing shops split the same people, and 'outside' is everyone who buys coffee somewhere else or not at all. No public statistic of cafe conversion exists. The rate, the price sensitivity and the ramp were set on the bench (sim/calibrate.ts) against three targets: an established shop on a sound block clears a few thousand dollars a month at about $9 an order, the best price sits within 10% of the reference price, and a careful newcomer ends the first year alive but far below the starting capital. A new shop starts at 35% of its regular crowd and closes about two thirds of the gap every 75 days. Every one of these is an estimate waiting for evidence: research/prompts/80-codex-real-factors.md, part A."
+      "note": "Demand = people walking the block a day (data/places.json, modelled from MTA station entries and DOHMH food places and scaled to DOT sidewalk counts: data/open/fit.json) x the share who buy here. captureRate is that share for a known, average shop with no rival in sight at the reference price; real coffee shops within 250 m (DOHMH) and playing shops split the same people, and 'outside' is everyone who buys coffee somewhere else or not at all. No public statistic of cafe conversion exists. The rate, the price sensitivity and the ramp were set on the bench against three targets: an established shop on a sound block clears a few thousand dollars a month at about $9 an order, the best price sits within 10% of the reference price at doors where the room is not full, and about one newcomer in five who follows the recommended plan closes in the first year (the game's target, build/ROUND3.md B11; not a measured rate). A new shop starts at half of its regular crowd (opening-week curiosity; most affordable rooms are former cafes whose block already buys coffee at that door) and closes about two thirds of the gap every 60 days. Bench, 14 Nov 2026 (agents/r3-B11.md): with 0.088 / 0.35 / 75 days, 13 of 18 newcomer cafes closed in four simulated seasons (npx tsx sim/trace.ts 2 --no-runway, seeds 100 and 200); with 0.095 / 0.5 / 60 days, 6 of 18, three of them before the doors opened because the plan left less cash than the rent of the wait. Every one of these is an estimate waiting for evidence: research/prompts/80-codex-real-factors.md, part A."
     },
     "buildout": {
       "itemId": "buildout",
