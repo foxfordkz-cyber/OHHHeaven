@@ -9,7 +9,7 @@ import { Badge, Banner, Button, Card, List, ListRow, MoneyText, Stat, TopBar, fo
 import { readMemory, writeMemory, type BriefMemory } from './memory';
 import { calendarFile } from './ics';
 import {
-  clockAt, happenings, inTime, lookNow, monthName, monthNews, myStanding, nextReport, pickDecision, resolveSince, rival, round2, snapshotAway, upcoming,
+  clockAt, happenings, inTime, lookNow, monthLength, monthName, monthNews, myStanding, nextReport, pickDecision, resolveSince, rival, round2, snapshotAway, upcoming,
   type Decision, type DecisionOption, type Happening,
 } from './model';
 
@@ -110,7 +110,7 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
         </Card>
       )}
 
-      <NextCard next={next} ahead={ahead} now={now} onDone={finish} done={since.source === 'look' && days === 0} />
+      <NextCard next={next} ahead={ahead} length={monthLength(view)} now={now} onDone={finish} done={since.source === 'look' && days === 0} />
     </main>
   );
 }
@@ -190,7 +190,7 @@ function DecisionCard({ decision, deps, cash }: { decision: Decision; deps: Brie
     );
   }
 
-  const tone = decision.kind === 'notice' ? 'warn' : 'default';
+  const tone = decision.kind === 'restart' ? 'loss' : decision.kind === 'notice' || decision.kind === 'closed' ? 'warn' : 'default';
   const deadline = decision.deadlineDay !== undefined ? <Badge tone="warn" icon="clock">{tr(`by ${dateOf(decision.deadlineDay).label}`, `до ${dateOf(decision.deadlineDay).label}`)}</Badge> : undefined;
   return (
     <Card tone={tone} title={decision.title} subtitle={decision.text} action={deadline} aria-label={tr('Decision for today', 'Решение на сегодня')}>
@@ -230,12 +230,12 @@ function MonthCard({ news }: { news: NonNullable<ReturnType<typeof monthNews>> }
   );
 }
 
-function NextCard({ next, ahead, now, onDone, done }: { next: ReturnType<typeof nextReport>; ahead: ReturnType<typeof upcoming>; now: () => number; onDone(): void; done: boolean }) {
+function NextCard({ next, ahead, length, now, onDone, done }: { next: ReturnType<typeof nextReport>; ahead: ReturnType<typeof upcoming>; length: string; now: () => number; onDone(): void; done: boolean }) {
   const tr = useT();
   const when = next.ms === null ? tr('when the city resumes', 'когда город снова пойдёт') : `${inTime(next.ms)} · ${clockAt(next.ms, now())}`;
   const ics = next.ms === null || next.seasonOver ? null : calendarFile(next, now());
   return (
-    <Card title={next.seasonOver ? tr('The season is over', 'Сезон окончен') : tr(`Next: the ${monthName(next.month)} report`, `Дальше: отчёт за ${monthName(next.month)}`)} subtitle={next.seasonOver ? tr('See the final standings and your personal plan.', 'Смотри итоги и свой личный план.') : tr(`Lands ${when}. In this city a month passes in one real day.`, `Придёт ${when}. В этом городе месяц идёт одни сутки.`)}>
+    <Card title={next.seasonOver ? tr('The season is over', 'Сезон окончен') : tr(`Next: the ${monthName(next.month)} report`, `Дальше: отчёт за ${monthName(next.month)}`)} subtitle={next.seasonOver ? tr('See the final standings and your personal plan.', 'Смотри итоги и свой личный план.') : `${tr(`Lands ${when}.`, `Придёт ${when}.`)} ${length}`}>
       {ahead.length > 0 && (
         <List>
           {ahead.map((u) => (

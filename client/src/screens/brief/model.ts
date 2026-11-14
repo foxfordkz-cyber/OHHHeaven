@@ -104,7 +104,9 @@ export function happenings(view: OwnerView, since: Since, near: Set<string> | nu
     seen.add(key);
     out.push(h);
   };
-  const inbox = [...since.items, ...view.me.inbox].filter((i) => i.day <= today && (i.day > since.day || since.items.includes(i)));
+  // same-day letters count while unread: the look may have come before them
+  const fresh = (i: InboxItem) => i.day > since.day || (i.day === since.day && !i.read);
+  const inbox = [...since.items, ...view.me.inbox].filter((i) => i.day <= today && (fresh(i) || since.items.includes(i)));
   for (const i of inbox) {
     add({ id: `in:${i.id}`, day: i.day, kind: i.kind, title: i.title, text: i.text, tone: inboxTone(i) });
   }
@@ -117,6 +119,7 @@ export function happenings(view: OwnerView, since: Since, near: Set<string> | nu
       : pick(`Running until ${dateOf(e.endDay).label}`, `Идёт до ${dateOf(e.endDay).label}`);
     add({ id: `ev:${e.id}`, day: started ? e.startDay : e.announcedDay, kind: 'event', title: e.title, text: `${when}. ${e.text}`, tone: 'info' });
   }
+  for (const h of dealNews(view, since)) add(h);
   // My own business is in the inbox already; the feed adds what others did.
   const niche = view.business?.niche;
   const sameNiche = new Set(view.neighbors.filter((n) => n.niche === niche).map((n) => n.id));
@@ -134,6 +137,33 @@ function inboxTone(i: InboxItem): Happening['tone'] {
   if (i.kind === 'deal') return /declin|broke|expired/i.test(i.title) ? 'warn' : 'profit';
   if (i.kind === 'money') return /-\$|loss|tax/i.test(i.title + i.text) ? 'warn' : 'profit';
   return 'info';
+}
+
+/** Offers that expired unanswered while I was away, and neighbors' answers to my offers. */
+export function dealNews(view: OwnerView, since: Since): Happening[] {
+  const b = view.business;
+  if (!b) return [];
+  const today = view.world.day;
+  const out: Happening[] = [];
+  for (const d of view.deals) {
+    if (d.toBusinessId === b.id && d.status === 'expired' && d.expiresDay > since.day && d.expiresDay <= today) {
+      const who = nameOf(view, d.fromBusinessId);
+      out.push({
+        id: `missed:${d.id}`, day: d.expiresDay, kind: 'deal', tone: 'warn',
+        title: pick(`Missed: ${who} offered ${termsTitle(d.terms)}`, `Упущено: ${who} предлагал ${termsTitle(d.terms)}`),
+        text: pick(`The offer expired before you answered. An offer waits ${plural(RULES.DEAL_OFFER_DAYS, 'game day')}: check in daily.`, `Предложение истекло без ответа. Предложение ждёт ${RULES.DEAL_OFFER_DAYS} игровых дня: заходи каждый день.`),
+      });
+    }
+    if (d.fromBusinessId !== b.id) continue;
+    const who = nameOf(view, d.toBusinessId);
+    if (d.status === 'active' && d.startDay !== undefined && d.startDay > since.day) {
+      out.push({ id: `yes:${d.id}`, day: d.startDay, kind: 'deal', tone: 'profit', title: pick(`${who} accepted your ${termsTitle(d.terms)}`, `${who} принял твоё предложение: ${termsTitle(d.terms)}`), text: termsResult(d.terms) });
+    }
+    if (d.status === 'declined' && d.expiresDay > since.day) {
+      out.push({ id: `no:${d.id}`, day: Math.min(d.expiresDay, today), kind: 'deal', tone: 'warn', title: pick(`${who} declined your ${termsTitle(d.terms)}`, `${who} отказал: ${termsTitle(d.terms)}`), text: pick('Try another neighbor or other terms.', 'Попробуй другого соседа или другие условия.') });
+    }
+  }
+  return out;
 }
 
 /** One line on what a neighbor's move means for me. `close` — they share my passers-by. */
@@ -168,7 +198,7 @@ export interface DecisionOption {
 
 export interface Decision {
   id: string;
-  kind: 'notice' | 'deal' | 'advice' | 'launch' | 'calm';
+  kind: 'notice' | 'deal' | 'advice' | 'launch' | 'closed' | 'restart' | 'calm';
   title: string;
   text: string;
   deadlineDay?: number;
@@ -179,10 +209,31 @@ export interface Decision {
 export function pickDecision(view: OwnerView): Decision | null {
   const b = view.business;
   if (!b) return null;
+  if (b.status === 'bankrupt') {
+    const day = b.bankruptDay ?? view.world.day;
+    return {
+      id: 'bankrupt', kind: 'restart',
+      title: pick(`${b.name} went bankrupt on ${dateOf(day).label}`, `${b.name} обанкротился ${dateOf(day).label}`),
+      text: pick(`Cash fell to ${formatMoney(b.cash)}. A business that cannot pay its bills closes.`, `Касса упала до ${formatMoney(b.cash)}. Бизнес, который не может платить по счетам, закрывается.`),
+      options: [
+        { id: 'why', label: pick('See what went wrong', 'Разобрать, что пошло не так'), to: '/end', primary: true, result: pick('Where the money went, month by month, and what to change in real life.', 'Куда ушли деньги по месяцам и что поменять в жизни.') },
+        { id: 'again', label: pick('Start again', 'Начать заново'), to: '/start', result: pick('A new business starts with what this one was worth, not with fresh savings.', 'Новый бизнес начинается с того, что стоил этот, а не со свежих сбережений.') },
+      ],
+    };
+  }
   const notice = view.notices.find((n) => n.status === 'notice');
   if (notice) return noticeDecision(notice);
   const offer = view.deals.filter((d) => d.status === 'proposed' && d.toBusinessId === b.id).sort((a, z) => a.expiresDay - z.expiresDay)[0];
   if (offer) return dealDecision(view, offer);
+  if (b.status === 'closed' && b.closedUntilDay && b.closedUntilDay > view.world.day) {
+    const left = b.closedUntilDay - view.world.day;
+    return {
+      id: 'closed', kind: 'closed', deadlineDay: b.closedUntilDay,
+      title: pick(`Closed by inspection until ${dateOf(b.closedUntilDay).label}`, `Закрыт проверкой до ${dateOf(b.closedUntilDay).label}`),
+      text: pick(`${plural(left, 'more day')} with rent and wages and no sales. Fix what was found so the next visit is clean.`, `Ещё дней без продаж, но с арендой и зарплатой: ${left}. Исправь найденное, чтобы следующая проверка прошла чисто.`),
+      options: [{ id: 'today', label: pick('See what was found', 'Что нашли'), to: '/biz/today', primary: true, result: pick('Opens Today with the violations and the shortcuts you run.', 'Откроет «Сегодня» с нарушениями и срезанными углами.') }],
+    };
+  }
   if (b.status === 'setup') {
     const waiting = view.roadmap.filter((s) => s.status === 'waiting');
     const ready = view.roadmap.length > 0 && waiting.length === 0 && view.roadmap.every((s) => s.status === 'done' || s.kind === 'launch');
@@ -342,6 +393,16 @@ export function nextReport(view: OwnerView): NextReport {
   const seasonOver = w.phase === 'ended' || date.month > w.config.seasonMonths;
   const ms = w.config.paused || seasonOver ? null : Math.max(0, w.msToNextDay) + gameDays * w.config.dayMs;
   return { month: date.month, monthLabel: monthName(date.month), gameDays, ms, seasonOver };
+}
+
+/** "In this city a month passes in one real day" — from the real length of a game day. */
+export function monthLength(view: OwnerView): string {
+  const ms = RULES.DAYS_PER_MONTH * view.world.config.dayMs;
+  const hours = ms / 3_600_000;
+  if (Math.abs(hours - 24) < 0.01) return pick('In this city a month passes in one real day.', 'В этом городе месяц идёт одни сутки.');
+  if (hours >= 1) return pick(`In this city a month lasts ${formatNumber(hours, hours % 1 ? 1 : 0)} real hours.`, `В этом городе месяц длится ${formatNumber(hours, hours % 1 ? 1 : 0)} ч.`);
+  const min = Math.max(1, Math.round(ms / 60_000));
+  return pick(`In this demo city a month lasts ${min} min.`, `В этом демо-городе месяц длится ${min} мин.`);
 }
 
 export interface Upcoming {
