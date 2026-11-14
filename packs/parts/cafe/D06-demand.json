@@ -1,0 +1,1962 @@
+{
+  "id": "cafe",
+  "part": "D06",
+  "title": "Demand, guests, queue, reputation",
+  "checked": "2026-11-14",
+  "market": {
+    "unitsPerSlotMonth": 6000,
+    "priceElasticity": -1.3,
+    "weights": {
+      "price": 0.4,
+      "quality": 0.28,
+      "reputation": 0.09,
+      "location": 0.23
+    },
+    "source": "https://www.restaurantdive.com/news/starbucks-cuts-discounts-menu-boosts-marketing-spend-traffic-declines/738605/",
+    "confidence": "estimate",
+    "evidence": "industry_via_search",
+    "note": "D06 revision. (1) unitsPerSlotMonth stays 6,000 (200 orders a day): still a planning point, not a statistic. Cross-checks found: Joe Coffee reports an average ticket of $8.47 at independent shops (was $7.82 a year earlier), which matches the pack's $8.50; BizBuySell's median coffee shop sold in the US takes $375,000 a year = $1,027 a day = about 121 orders a day at that ticket, so 200 a day is a good New York block, not the national middle. (2) priceElasticity stays -1.3 and now has an anchor: Starbucks North America, second quarter of fiscal 2025, transactions fell 4% while prices rose about 3% (-4 / 3 = -1.3). Range: -1.0 (USDA ERS report ERR-139, Okrent and Alston: own-price elasticity of all food away from home -1.02, limited service less elastic than full service) to -2.5 (Starbucks US, fourth quarter of fiscal 2024: ticket +4%, transactions -10%, a quarter with other troubles mixed in). (3) weights: reputation cut from 0.20 to 0.09, the other three keep their old ratios to each other (35 : 25 : 20). Reason: Luca (Harvard Business School working paper 12-016) measured +5-9% revenue per Yelp star for independent restaurants. In the engine one star = 0.25 of the 0-1 reputation scale, and the demand change is |elasticity| x (reputation weight / price weight) x 0.25 x (1 - own share). Old weights: 1.3 x (0.20 / 0.35) x 0.25 x 0.9 = 16.7% per star, twice the top of the measured range. New weights: 1.3 x (0.09 / 0.40) x 0.25 x 0.9 = 6.6% per star. The letter grade and word of mouth act on top of this through events and mechanics (extra.mechanics: star_rating, letter_grade_demand). Toast's 2025 survey of 650 US coffee drinkers supports keeping quality close to price: taste 53%, price 20%, convenience 17%, atmosphere 8% as the main reason to pick one shop over another (stated, not measured). All numbers were read in search results; the pages themselves could not be opened from this session."
+  },
+  "extra": {
+    "d06HowNumbersWereChecked": "This session could run web searches but could not open pages: the environment's network policy blocked direct requests to every site tried (www.nyc.gov, square.com, www.placer.ai). So nothing in this fragment is marked verified. Every number carries the page it was reported from and an 'evidence' tag: primary_via_search (the search tool quoted it from the primary page: a city or state agency, a company's own filing or price page, a statute), study_via_search (a published study, quoted from its abstract or the authors' pages), industry_via_search (a company's report on its own customers, a trade publication or a news report), anecdote (owners' words), assumption (my arithmetic or a planning value; the note shows it). A reader with network access should open the 'source' and upgrade primary_via_search items to verified.",
+    "weekdayMult": [
+      0.9,
+      0.93,
+      0.96,
+      0.98,
+      1.09,
+      1.15,
+      0.99
+    ],
+    "weekdayMultNote": "Mon..Sun; sums to 7. D06 revision for a neighborhood cafe (the East Village map). Anchors: Toast, cafes and bakeries on its platform, April-June 2023: Saturday +15% and Friday +9% transactions against the weekly average; Monday is the slowest day, about 10% under the average. The other four days share what is left (3.86) by my estimate: Tuesday to Thursday rising toward the weekend, Sunday just under average. The old profile (1, 1, 1, 1, 1.05, 1.05, 0.9) had Sunday as the weakest day and no Monday dip, which is the pattern of an office district, not of a residential one. Use extra.weekdayProfiles for other kinds of block. Numbers read in search results; pages not opened.",
+    "weekdayProfiles": {
+      "note": "Four week shapes, each Mon..Sun and summing to 7, so the weekly total stays what the engine computes and only its split changes. Pick by what stands near the door (place.anchors from city data). All are estimates built from the measurements listed; none is a measured cafe series for New York.",
+      "neighborhood": {
+        "mult": [
+          0.9,
+          0.93,
+          0.96,
+          0.98,
+          1.09,
+          1.15,
+          0.99
+        ],
+        "use": "Residential blocks: East Village, Park Slope, Astoria",
+        "basis": "Toast cafe and bakery data 2023: Saturday +15%, Friday +9%, Monday -10% against the weekly average"
+      },
+      "office": {
+        "mult": [
+          1.15,
+          1.45,
+          1.41,
+          1.33,
+          0.91,
+          0.44,
+          0.31
+        ],
+        "use": "Office districts: Midtown, Financial District, Downtown Brooklyn",
+        "basis": "Placer.ai share of weekday office visits, January-October 2025, US: Tuesday 24.3%, Wednesday 23.7%, Thursday 21.8%, Friday 12.4%, so Monday 17.8%; New York's Friday share in the first half of 2026 was 11.9%. I assume 70% of an office-district cafe's weekday orders follow office attendance and 30% do not, Saturday at 35% and Sunday at 25% of an average weekday, then scale to 7. Raw: 0.92, 1.15, 1.13, 1.06, 0.73, 0.35, 0.25."
+      },
+      "transit": {
+        "mult": [
+          1.08,
+          1.17,
+          1.17,
+          1.16,
+          1.1,
+          0.74,
+          0.58
+        ],
+        "use": "Next to a busy subway entrance",
+        "basis": "MTA, October 2026: Tuesday-Thursday above 4.4 million rides, record Thursday 4.72 million, record Friday 4.51 million, record Saturday 3.59 million, record Sunday 3.14 million; Streetsblog: Mondays about 7% under Tuesday-Friday. Ordinary weekend days are well under the records, so Saturday 0.70 and Sunday 0.55 of midweek are my estimates."
+      },
+      "tourist": {
+        "mult": [
+          0.87,
+          0.87,
+          0.88,
+          0.88,
+          1.1,
+          1.25,
+          1.15
+        ],
+        "use": "Tourist corridors: SoHo, Times Square edge, Brooklyn Bridge Park",
+        "basis": "My estimate: weekend-heavy. No day-of-week series for visitor spending was found."
+      },
+      "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+      "confidence": "estimate",
+      "evidence": "industry_via_search"
+    },
+    "hourCurve": {
+      "note": "Share of a day's orders by clock hour, 24 numbers each summing to 1 (index 0 = midnight to 1am). The engine has no hours yet; this is the input for extra.mechanics hourly_peak. Shapes are my estimates fitted to three measurements: Placer.ai 2024, share of visits between 6:00 and 9:59am: Dunkin' 39.9%, Starbucks 29.9%; a convenience-store operator in NACS Magazine: 6-10am is more than half of coffee sales; cafe consultants put the 7-9am rush at 35-45% of the day (one Square merchant: 42% in two hours). The neighborhood curve puts 36% of orders in 7-10am, the office curve 44%.",
+      "neighborhood": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.09,
+        0.14,
+        0.13,
+        0.1,
+        0.08,
+        0.08,
+        0.08,
+        0.07,
+        0.07,
+        0.06,
+        0.05,
+        0.05,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "office": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.12,
+        0.18,
+        0.14,
+        0.09,
+        0.07,
+        0.09,
+        0.08,
+        0.07,
+        0.06,
+        0.05,
+        0.03,
+        0.02,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "peakHour": {
+        "neighborhood": {
+          "hour": 8,
+          "share": 0.14,
+          "ordersAt200ADay": 28
+        },
+        "office": {
+          "hour": 8,
+          "share": 0.18,
+          "ordersAt200ADay": 36
+        }
+      },
+      "afternoonShare": {
+        "neighborhood3pmTo7pm": 0.23,
+        "office3pmTo7pm": 0.16
+      },
+      "source": "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
+      "confidence": "estimate",
+      "evidence": "industry_via_search"
+    },
+    "monthCurve": {
+      "note": "Demand by calendar month for a New York neighborhood cafe, Jan..Dec, per day (game months have 30 days), averaging 1 and summing to 12. My estimate; no monthly sales series for New York cafes was found. What it leans on: (a) Census Monthly Retail Trade, food services and drinking places, not seasonally adjusted, 2025, $ million: August 104,429; September 97,102; October 100,802; November 96,332; December 99,612 (read on FRED, series MRTSSM722USN; January-July 2025 were not shown in the search results); (b) Placer.ai office index: visits slump from late July to Labor Day and again, harder, from Thanksgiving through the first weeks of January (July 2025: 21.8% under 2019; December 2025: 33.1% under 2019); (c) trade press: cafe customers 'disappear at the beginning of every year' (Fresh Cup); (d) autumn drink launches lift coffee visits (Placer.ai: Starbucks +3.4% in October and +14.7% in November 2021 month over month). New York differs from the national series in August: residents leave and offices thin out, so August is below average here although it is the national peak.",
+      "neighborhood": [
+        0.9,
+        0.93,
+        0.99,
+        1.02,
+        1.05,
+        1.03,
+        0.98,
+        0.95,
+        1.04,
+        1.07,
+        1.03,
+        1.01
+      ],
+      "office": [
+        0.9,
+        0.96,
+        1.02,
+        1.04,
+        1.05,
+        1.03,
+        0.95,
+        0.9,
+        1.07,
+        1.09,
+        1.02,
+        0.97
+      ],
+      "tourist": [
+        0.85,
+        0.88,
+        0.97,
+        1.02,
+        1.06,
+        1.06,
+        1.04,
+        1.04,
+        1.02,
+        1.05,
+        0.99,
+        1.02
+      ],
+      "realSignals": [
+        "Census Monthly Retail Trade, food services and drinking places, not seasonally adjusted (FRED MRTSSM722USN, MRTSSM7222USN)",
+        "Placer.ai monthly office index; Kastle weekly occupancy",
+        "MTA daily subway ridership (data.ny.gov)",
+        "CoStar monthly hotel occupancy for New York City (May 2025 87.9%, September 86.6%, October 89.4%)",
+        "NYU and CUNY academic calendars"
+      ],
+      "source": "https://fred.stlouisfed.org/series/MRTSSM722USN",
+      "confidence": "estimate",
+      "evidence": "assumption"
+    },
+    "guestSegments": {
+      "note": "Who buys, by kind of block. Shares of orders are my estimates: nobody publishes this split, and every guide says the same thing, count the people yourself at 8am, 1pm and 5pm on a weekday and on a Saturday. The sizes of the groups are real: see 'facts'. The engine treats all customers as one crowd; extra.mechanics guest_segments describes the split.",
+      "segments": [
+        {
+          "id": "office_commuter",
+          "name": "Office commuters",
+          "week": "office",
+          "day": "office",
+          "seatUse": 0.1,
+          "ticket": 6.5,
+          "priceSensitivity": "low before 9am, they pay for speed",
+          "leavesIf": "more than about five people in line; they are on a clock",
+          "comesBackIf": "the order is ready in under four minutes, every day"
+        },
+        {
+          "id": "resident_regular",
+          "name": "Residents and regulars",
+          "week": "neighborhood",
+          "day": "neighborhood",
+          "seatUse": 0.4,
+          "ticket": 9,
+          "priceSensitivity": "medium; they notice every price change",
+          "leavesIf": "quality slips or a favorite barista quits",
+          "comesBackIf": "they are recognized; a loyalty card helps"
+        },
+        {
+          "id": "remote_worker",
+          "name": "Remote workers with laptops",
+          "week": "weekdays, flat",
+          "day": "10am to 4pm",
+          "seatUse": 1,
+          "ticket": 7,
+          "priceSensitivity": "medium",
+          "leavesIf": "no outlets, no wifi, or a laptop ban",
+          "comesBackIf": "the seat is free; they hold it for two to four hours on one drink"
+        },
+        {
+          "id": "student",
+          "name": "Students",
+          "week": "term time only",
+          "day": "afternoons and evenings",
+          "seatUse": 0.8,
+          "ticket": 6,
+          "priceSensitivity": "high",
+          "leavesIf": "prices rise or seats are gone",
+          "comesBackIf": "there is a cheap drink and a table; finals week fills every seat"
+        },
+        {
+          "id": "tourist",
+          "name": "Tourists and day visitors",
+          "week": "tourist",
+          "day": "10am to 5pm",
+          "seatUse": 0.5,
+          "ticket": 12,
+          "priceSensitivity": "low",
+          "leavesIf": "the rating on the map is under four stars",
+          "comesBackIf": "they do not; one visit, so the map listing does the selling"
+        }
+      ],
+      "mixByBlock": {
+        "residential": {
+          "resident_regular": 0.55,
+          "remote_worker": 0.15,
+          "student": 0.12,
+          "tourist": 0.1,
+          "office_commuter": 0.08
+        },
+        "office": {
+          "office_commuter": 0.6,
+          "tourist": 0.15,
+          "resident_regular": 0.1,
+          "remote_worker": 0.1,
+          "student": 0.05
+        },
+        "campus": {
+          "student": 0.45,
+          "resident_regular": 0.25,
+          "office_commuter": 0.15,
+          "remote_worker": 0.1,
+          "tourist": 0.05
+        },
+        "tourist": {
+          "tourist": 0.45,
+          "office_commuter": 0.25,
+          "resident_regular": 0.15,
+          "remote_worker": 0.1,
+          "student": 0.05
+        }
+      },
+      "facts": [
+        {
+          "what": "Visitors to New York City in 2025",
+          "value": 65000000,
+          "unit": "people a year",
+          "note": "+0.7% on 2024; international 12.5 million, -3.2%; forecast for 2026: 66.3 million",
+          "source": "https://www.6sqft.com/nyc-tourism-in-2025-decline-in-international-visitors/",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
+        },
+        {
+          "what": "Manhattan office attendance on an average weekday, March 2025",
+          "value": 0.57,
+          "unit": "share of office workers",
+          "note": "Partnership for New York City survey of more than 125 employers: 76% of the pre-pandemic level",
+          "source": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
+        },
+        {
+          "what": "Kastle peak-day office occupancy, New York City, Tuesday October 27, 2026",
+          "value": 0.873,
+          "unit": "share of pre-pandemic card swipes",
+          "note": "The highest New York peak of 2026; the ten-city weekly average was 56.5%",
+          "source": "https://www.kastle.com/safety-wellness/getting-america-back-to-work/",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
+        },
+        {
+          "what": "CUNY enrollment, fall 2025",
+          "value": 247000,
+          "unit": "students",
+          "note": "NYU has about 56,800 students in New York, Columbia about 35,200",
+          "source": "https://www.governor.ny.gov/news/governor-hochul-announces-third-consecutive-rise-student-enrollment-city-university-new-york",
+          "confidence": "estimate",
+          "evidence": "primary_via_search"
+        },
+        {
+          "what": "Americans who drank coffee yesterday, January 2026",
+          "value": 0.66,
+          "unit": "share of adults",
+          "note": "National Coffee Association survey of 1,850 adults; 28% of past-day drinkers had a coffee prepared away from home; specialty drinkers 36%",
+          "source": "https://dailycoffeenews.com/2026/04/14/two-thirds-of-americans-drank-coffee-yesterday-nca-report-finds/",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
+        },
+        {
+          "what": "Customers who come back at least twice in a working week",
+          "value": 0.15,
+          "unit": "share of customers",
+          "note": "Square's own data; Square's Local Economy Report: regulars bring six times the yearly revenue of one-time customers; one downtown roastery reports 65-70% of revenue from repeat customers",
+          "source": "https://squareup.com/townsquare/square-data-repeat-v-one-time-customer-tipping-trends",
+          "confidence": "estimate",
+          "evidence": "industry_via_search"
+        }
+      ],
+      "confidence": "estimate",
+      "evidence": "assumption"
+    },
+    "channels": {
+      "note": "Where an order comes from and what is left of each dollar. Contribution = 1 - cost of goods 28% - what the channel takes; labor and rent are not in it. In-store card costs are the pack's own (2.55% + $0.135 an order = 4.1% of an $8.50 ticket). Shares are planning ranges, not statistics for New York cafes.",
+      "list": [
+        {
+          "id": "counter",
+          "name": "Counter: stay or take away",
+          "channelTakes": 0.041,
+          "contribution": 0.679,
+          "shareOfSales": [
+            0.75,
+            0.9
+          ],
+          "basis": "The pack's reference point. National Restaurant Association with Circana: 83% of limited-service traffic was off-premises in 2024 (76% in 2019), drive-thrus included"
+        },
+        {
+          "id": "order_ahead_own",
+          "name": "Order-ahead on your own page",
+          "channelTakes": 0.068,
+          "contribution": 0.652,
+          "shareOfSales": [
+            0.05,
+            0.12
+          ],
+          "basis": "Square Online free plan: 3.3% + 30 cents an online order = 6.8% of $8.50. Starbucks: mobile orders are 33% of US company-store transactions (third quarter of fiscal 2026); Dutch Bros: 11.5% in mid-2025, about 14% by year end. Independents sit lower"
+        },
+        {
+          "id": "marketplace_pickup",
+          "name": "Pickup ordered in a delivery app",
+          "channelTakes": 0.09,
+          "contribution": 0.63,
+          "shareOfSales": [
+            0,
+            0.03
+          ],
+          "basis": "DoorDash pickup commission 6% on every plan plus card processing about 3%"
+        },
+        {
+          "id": "marketplace_delivery_basic",
+          "name": "Delivery app, basic listing",
+          "channelTakes": 0.23,
+          "contribution": 0.49,
+          "shareOfSales": [
+            0.03,
+            0.06
+          ],
+          "basis": "New York City caps: 15% delivery + 5% basic service + 3% card processing. Limited-service delivery was 9% of traffic in 2024 (4% in 2019); a cafe's small tickets put it under that"
+        },
+        {
+          "id": "marketplace_delivery_enhanced",
+          "name": "Delivery app with marketing services",
+          "channelTakes": 0.43,
+          "contribution": 0.29,
+          "shareOfSales": [
+            0.05,
+            0.1
+          ],
+          "basis": "Since Local Law 79 of 2025 an app may add up to 20% for optional enhanced services if it also offers the basic plan: 15 + 5 + 3 + 20 = 43%. DoorDash's national plans are 15%, 25% and 30% delivery commission"
+        },
+        {
+          "id": "catering_marketplace",
+          "name": "Office catering through a marketplace",
+          "channelTakes": 0.18,
+          "contribution": 0.54,
+          "shareOfSales": [
+            0,
+            0.05
+          ],
+          "basis": "ezCater: 15% of food and delivery fee + 2.99% payment fee; 7% when the order comes through your own page; its own drivers cost 10% of the food total, $30 minimum"
+        },
+        {
+          "id": "prepaid_pass",
+          "name": "Prepaid pass or subscription",
+          "channelTakes": 0.068,
+          "contribution": null,
+          "shareOfSales": [
+            0,
+            0.05
+          ],
+          "basis": "Margin depends on how often holders come. Panera: $14.99 a month, capped at 30 drinks a month from August 19, 2026 after years as 'unlimited'"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
+      "confidence": "estimate",
+      "evidence": "primary_via_search"
+    },
+    "queue": {
+      "note": "What limits a rush and when people leave. Service times are trade figures; the walk-away curve is my estimate tied to two measurements: people judge a line by its length, and patience for a coffee is about six minutes.",
+      "drinksPerHour": {
+        "oneBarista": 30,
+        "twoBaristasTwoGroupMachine": 60,
+        "practicalTopTwoGroup": 100
+      },
+      "minutesPerDrink": {
+        "espresso": 1,
+        "milkDrink": 2
+      },
+      "drinksPerOrder": 1.2,
+      "ordersPerHourPerBarBarista": 25,
+      "targetWaitMinutes": {
+        "inStore": 4,
+        "orderAhead": 12
+      },
+      "patienceMinutes": {
+        "coffeeUk2014": 6,
+        "foodAndDrinkMax2023": 10
+      },
+      "walkAwayByPeopleAhead": [
+        {
+          "peopleAhead": [
+            0,
+            3
+          ],
+          "walkAway": 0
+        },
+        {
+          "peopleAhead": [
+            4,
+            5
+          ],
+          "walkAway": 0.05
+        },
+        {
+          "peopleAhead": [
+            6,
+            8
+          ],
+          "walkAway": 0.15
+        },
+        {
+          "peopleAhead": [
+            9,
+            12
+          ],
+          "walkAway": 0.3
+        },
+        {
+          "peopleAhead": [
+            13,
+            99
+          ],
+          "walkAway": 0.5
+        }
+      ],
+      "basis": [
+        {
+          "what": "One barista on a two-group machine makes about 30 drinks an hour, two together about 60; 50 is 'the more truthful figure' for a two-group machine, 100 the ceiling",
+          "source": "https://www.ekuep.com/en/two-groups",
+          "evidence": "industry_via_search"
+        },
+        {
+          "what": "About one minute for an espresso and two for a milk drink",
+          "source": "https://decentespresso.com/blog/the_ten_minute_challenge",
+          "evidence": "industry_via_search"
+        },
+        {
+          "what": "Starbucks target since August 2025: four minutes in the cafe and drive-thru, twelve for mobile and delivery; about half of orders met four minutes before",
+          "source": "https://www.ibj.com/articles/starbucks-ceo-sets-four-minute-service-goal-as-he-tries-to-reinvigorate-sagging-sales",
+          "evidence": "industry_via_search"
+        },
+        {
+          "what": "Lu, Musalem, Olivares and Schilkrut, Management Science 59(8), 2013, a supermarket deli counter: customers react to the length of the queue, not to how fast it moves; a moderate rise in the number of people in line cuts sales like a 5% price increase; the effect is significant above about five people",
+          "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+          "evidence": "study_via_search"
+        },
+        {
+          "what": "UK survey of 5,000 consumers, 2014: people wait 6 minutes 2 seconds on average for a coffee before leaving",
+          "source": "https://www.gs1uk.org/insights/news/technology-and-growing-customer-impatience",
+          "evidence": "industry_via_search"
+        },
+        {
+          "what": "Waitwhile 2023: ten minutes is the longest acceptable wait for food and drink",
+          "source": "https://whitehutchinson.com/news/lenews/2023/march/article109.shtml",
+          "evidence": "industry_via_search"
+        },
+        {
+          "what": "Starbucks, first quarter of fiscal 2017: 1,200 stores took 20% or more of peak orders by mobile (13 a year before); the crowd at the handoff made walk-in customers leave without ordering",
+          "source": "https://www.nrn.com/sales-trends/starbucks-says-mobile-ordering-slowed-service-1q",
+          "evidence": "industry_via_search"
+        }
+      ],
+      "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+      "confidence": "estimate",
+      "evidence": "assumption"
+    },
+    "ratingModel": {
+      "note": "How reviews and the window grade move sales. Effects are from published studies; the mapping to the engine's 0-1 reputation is mine: 4.0 stars = 0.5, one star = 0.25.",
+      "revenuePerStar": {
+        "low": 0.05,
+        "typical": 0.07,
+        "high": 0.09,
+        "appliesTo": "independents only; chains show no effect",
+        "source": "https://econpapers.repec.org/RePEc:hbs:wpaper:12-016",
+        "evidence": "study_via_search"
+      },
+      "halfStarStep": {
+        "what": "Yelp rounds to half stars: 3.74 shows as 3.5, 3.76 as 4. The extra half star made restaurants sell out 19 percentage points (49%) more often",
+        "source": "https://are.berkeley.edu/~mlanderson/pdf/Anderson%20and%20Magruder.pdf",
+        "evidence": "study_via_search"
+      },
+      "thresholds": {
+        "needAtLeast4Stars": 0.68,
+        "needAtLeast4Point5Stars": 0.31,
+        "year": 2026,
+        "source": "https://www.brightlocal.com/research/local-consumer-review-survey/",
+        "evidence": "industry_via_search"
+      },
+      "replyingToReviews": {
+        "starsGained": 0.12,
+        "what": "Hotels that began answering reviews gained 0.12 stars; a third of them moved up half a star on the display within six months (Proserpio and Zervas, Marketing Science 36(5), 2017)",
+        "source": "https://pubsonline.informs.org/doi/10.1287/mksc.2017.1043",
+        "evidence": "study_via_search"
+      },
+      "yelpFilter": {
+        "shareOfReviewsCounted": 0.75,
+        "what": "Yelp says about three quarters of reviews are 'recommended'; the rest do not count toward the stars, and reviews the business asked for are filtered more often",
+        "source": "https://www.nbclosangeles.com/investigations/Yelp-reviews-not-recommended-hurts-business--509724081.html",
+        "evidence": "industry_via_search"
+      },
+      "letterGrade": {
+        "considerGrades": 0.88,
+        "what": "88% of New Yorkers said they considered the letter grade when choosing where to eat (2012 survey, Wong and others, American Journal of Public Health 105(3), 2015). Rothbart, Schwartz and others, Public Administration Review 79, 2019, 28 months of sales-tax data on more than 15,000 restaurants: an A raises revenue and lowers the chance of closing relative to a B; a C lowers revenue and raises the chance of closing relative to a B. The sizes were not shown in what I could read, so the multipliers below are my planning values.",
+        "demandMult": {
+          "A": 1,
+          "gradePending": 0.98,
+          "B": 0.95,
+          "C": 0.88
+        },
+        "source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091",
+        "evidence": "study_via_search"
+      },
+      "confidence": "estimate"
+    },
+    "competition": {
+      "note": "What is around the door in New York and what it does. Counts are from news reports of the Center for an Urban Future's yearly chain census; the size of the hit from a new rival is not measured anywhere I could find, so the ranges are planning values.",
+      "chainCounts": [
+        {
+          "chain": "Dunkin'",
+          "stores": 623,
+          "year": 2025,
+          "note": "The largest chain in the city; passed Starbucks in Manhattan for the first time"
+        },
+        {
+          "chain": "Starbucks",
+          "stores": 328,
+          "year": 2024,
+          "note": "Closed 42 New York stores in 2025, the most of any chain that stayed"
+        },
+        {
+          "chain": "Luckin Coffee",
+          "stores": 22,
+          "year": 2026,
+          "note": "First two US stores opened in June 2025 in Greenwich Village and Chelsea with $1.99 opening drinks; app and kiosk ordering; has taken former Starbucks sites"
+        },
+        {
+          "chain": "Blank Street",
+          "stores": 106,
+          "year": 2026,
+          "note": "Worldwide count; about 500 sq ft a store, automatic espresso machines, two or three staff; matcha is about half of sales"
+        }
+      ],
+      "citywideChains": {
+        "changeIn2025": -0.013,
+        "netStores": -112,
+        "note": "Sixth decline in eight years"
+      },
+      "effectOfANewRivalWithin250m": {
+        "low": 0,
+        "typical": -0.07,
+        "high": -0.15,
+        "basis": "Marketing Science 2018 (Starbucks closures): one more Starbucks within a mile takes 1.2% of a Starbucks store's sales, 0.4% at one to three miles: small, and between identical stores. Owners' accounts run both ways: one Hanover, New Hampshire cafe reported falling sales after a Starbucks opened; in Minneapolis one neighbor lost coffee sales and another lost none. NBER working paper 32604: a new Starbucks changes nothing measurable in tracts that already had cafes."
+      },
+      "streetCarts": {
+        "newVendorLicensesPerYear": 2200,
+        "years": [
+          2026,
+          2031
+        ],
+        "permitsBefore": 6880,
+        "note": "Intro 431, enacted over a veto in January 2026: 2,200 more mobile food vendor supervisory license applications each year through 2031. A coffee cart at the subway stairs sells the commuter's drip coffee for about half a cafe's price."
+      },
+      "sources": [
+        "https://therealdeal.com/new-york/2025/12/23/chain-stores-keep-shrinking-across-nyc/",
+        "https://chainstoreage.com/chinese-coffee-giant-luckin-continues-aggressive-nyc-expansion",
+        "https://dailycoffeenews.com/2026/08/25/blank-street-raises-105-million-expands-to-la/",
+        "https://pubsonline.informs.org/doi/10.1287/mksc.2017.1078",
+        "https://www.nber.org/system/files/working_papers/w32604/w32604.pdf",
+        "https://intro.nyc/0431-2024"
+      ],
+      "source": "https://therealdeal.com/new-york/2025/12/23/chain-stores-keep-shrinking-across-nyc/",
+      "confidence": "estimate",
+      "evidence": "industry_via_search"
+    },
+    "demandEvidence": {
+      "note": "Every demand number the engine or the keen-cray branch assumes, against what could be found. status: confirmed (evidence supports the value), corrected (this fragment changes it), range_only (evidence gives a range, the value is inside or outside it as noted), not_found.",
+      "rows": [
+        {
+          "id": "average_ticket",
+          "where": "unit.refPrice",
+          "current": 8.5,
+          "status": "confirmed",
+          "low": 6,
+          "typical": 8.47,
+          "high": 12,
+          "unit": "USD an order",
+          "evidence": "industry_via_search",
+          "basis": "Joe Coffee: $8.47 at independent shops, $7.82 a year earlier. Toast medians: drip coffee $3.65 (February 2026, +4.3% in a year), cold brew $5.75 (October 2026, +4.0%), latte $5.46 (early 2024); New York lattes are quoted at $6.00-$7.50",
+          "source": "https://joe.coffee/coffee-industry-trends/"
+        },
+        {
+          "id": "orders_per_day",
+          "where": "market.unitsPerSlotMonth",
+          "current": 200,
+          "status": "range_only",
+          "low": 120,
+          "typical": 200,
+          "high": 300,
+          "unit": "orders a day",
+          "evidence": "assumption",
+          "basis": "Median sold US coffee shop: $375,000 a year = 121 orders a day at $8.47. The research notes' New York break-even runs 159-267 a day by rent tier",
+          "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+        },
+        {
+          "id": "price_elasticity",
+          "where": "market.priceElasticity",
+          "current": -1.3,
+          "status": "confirmed",
+          "low": -2.5,
+          "typical": -1.3,
+          "high": -1,
+          "unit": "percent of orders per percent of price",
+          "evidence": "industry_via_search",
+          "basis": "See market.note",
+          "source": "https://ers.usda.gov/sites/default/files/_laserfiche/publications/45003/30438_err139.pdf"
+        },
+        {
+          "id": "capture_rate",
+          "where": "keen-cray branch: extra.footfall.captureRate",
+          "current": 0.088,
+          "status": "range_only",
+          "low": 0.02,
+          "typical": 0.03,
+          "high": 0.04,
+          "unit": "buyers per passer-by, after rivals",
+          "evidence": "industry_via_search",
+          "basis": "A site-selection guide's rule: coffee and lunch places convert 2-4% of passers-by (fast food 3-5%, casual dining 1-3%). 0.088 is the rate with no rival in sight; with the rivals of a typical East Village block the branch's formula lands near 4-5%, the top of the rule. No measurement for New York was found",
+          "source": "https://kitchennmbrs.app/en/knowledge-base/starting-a-restaurant-business-plan/how-do-i-calculate-if-my-restaurant-location-has-enough-foot-traffic-for-my-revenue-target"
+        },
+        {
+          "id": "weekday_curve",
+          "where": "extra.weekdayMult",
+          "current": [
+            1,
+            1,
+            1,
+            1,
+            1.05,
+            1.05,
+            0.9
+          ],
+          "status": "corrected",
+          "typical": [
+            0.9,
+            0.93,
+            0.96,
+            0.98,
+            1.09,
+            1.15,
+            0.99
+          ],
+          "unit": "Mon..Sun multipliers",
+          "evidence": "industry_via_search",
+          "basis": "See extra.weekdayMultNote",
+          "source": "https://www.businesswire.com/news/home/20231207135338/en"
+        },
+        {
+          "id": "hour_curve",
+          "where": "not in the engine",
+          "current": null,
+          "status": "corrected",
+          "unit": "24 shares",
+          "evidence": "industry_via_search",
+          "basis": "See extra.hourCurve",
+          "source": "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research"
+        },
+        {
+          "id": "month_curve",
+          "where": "not in the engine",
+          "current": null,
+          "status": "range_only",
+          "unit": "12 multipliers",
+          "evidence": "assumption",
+          "basis": "See extra.monthCurve",
+          "source": "https://fred.stlouisfed.org/series/MRTSSM722USN"
+        },
+        {
+          "id": "orders_per_labor_hour",
+          "where": "capacity.unitsPerStaffMonth",
+          "current": 10.6,
+          "status": "confirmed",
+          "low": 8,
+          "typical": 10.6,
+          "high": 25,
+          "unit": "orders per paid hour",
+          "evidence": "industry_via_search",
+          "basis": "10.6 is the average over a whole shift with cleaning, stocking and slow hours. At the bar in a rush one barista makes about 30 drinks = 25 orders an hour. The daily average is right; the missing piece is the hour: see extra.mechanics hourly_peak",
+          "source": "https://www.ekuep.com/en/two-groups"
+        },
+        {
+          "id": "queue_walkaway",
+          "where": "engine: SPILL = 0.5 of turned-away buyers try a neighbor",
+          "current": 0.5,
+          "status": "not_found",
+          "evidence": "assumption",
+          "basis": "No measurement of where a person who leaves a coffee line goes. What is measured: patience about six minutes; people judge the line by its length. See extra.queue",
+          "source": "https://www.gs1uk.org/insights/news/technology-and-growing-customer-impatience"
+        },
+        {
+          "id": "review_effect",
+          "where": "market.weights.reputation",
+          "current": 0.2,
+          "status": "corrected",
+          "low": 0.05,
+          "typical": 0.07,
+          "high": 0.09,
+          "unit": "revenue per Yelp star",
+          "evidence": "study_via_search",
+          "basis": "See market.note and extra.ratingModel",
+          "source": "https://econpapers.repec.org/RePEc:hbs:wpaper:12-016"
+        },
+        {
+          "id": "grade_effect",
+          "where": "weak in the engine",
+          "current": null,
+          "status": "range_only",
+          "low": 0.9,
+          "typical": 0.95,
+          "high": 0.98,
+          "unit": "demand multiplier with a B in the window",
+          "evidence": "study_via_search",
+          "basis": "Direction measured (A above B above C in revenue and survival), size not seen. The city's own 2012 figure, restaurant sales up 9.3% in the nine months after grading began, is a before-and-after comparison; the controlled studies found no gain for the average restaurant",
+          "source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091"
+        },
+        {
+          "id": "competitor_effect",
+          "where": "keen-cray branch: extra.footfall.staticWeight, outside",
+          "current": 0.5,
+          "status": "not_found",
+          "low": 0,
+          "typical": -0.07,
+          "high": -0.15,
+          "unit": "change in orders when a rival opens within 250 m",
+          "evidence": "anecdote",
+          "basis": "See extra.competition",
+          "source": "https://pubsonline.informs.org/doi/10.1287/mksc.2017.1078"
+        },
+        {
+          "id": "ramp_up",
+          "where": "keen-cray branch: extra.footfall.awarenessStart, rampDays",
+          "current": "35% on day one, 75-day time constant",
+          "status": "not_found",
+          "evidence": "anecdote",
+          "basis": "No measured opening curve. Owners four months in still ask on forums when numbers settle; blogs give 6-18 months to break even, 18-30 in crowded cities; one cafe's own figure: 20-70% of first-time customers do not return within 100 days",
+          "source": "https://coffeeforums.com/threads/expected-sales-growth-rate-for-a-new-independent-craft-coffee-shop.19522"
+        },
+        {
+          "id": "regulars_share",
+          "where": "not in the engine",
+          "current": null,
+          "status": "range_only",
+          "low": 0.4,
+          "typical": 0.6,
+          "high": 0.7,
+          "unit": "share of revenue from repeat customers",
+          "evidence": "industry_via_search",
+          "basis": "Square case study 65-70%; a general small-business estimate 25-40%; RestoLabs: 38.2% of cafe customers come back within six months",
+          "source": "https://squareup.com/us/en/the-bottom-line/reaching-customers/turn-customers-into-regulars"
+        },
+        {
+          "id": "delivery_share",
+          "where": "event target deliveryShare",
+          "current": null,
+          "status": "range_only",
+          "low": 0.03,
+          "typical": 0.05,
+          "high": 0.09,
+          "unit": "share of sales",
+          "evidence": "industry_via_search",
+          "basis": "Delivery was 9% of limited-service traffic in 2024, 4% in 2019. New York apps carried 3.3 million orders a week in mid-2026, 700,000 more than in December 2023",
+          "source": "https://www.ncrla.org/wp-content/uploads/2025/08/Restaurant-OffPremises-Report.pdf"
+        },
+        {
+          "id": "takeover_regulars",
+          "where": "keen-cray branch: extra.takeover.awareness",
+          "current": 0.9,
+          "status": "not_found",
+          "evidence": "assumption",
+          "basis": "Not researched here: task D01",
+          "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+        }
+      ]
+    }
+  },
+  "levers": [
+    {
+      "id": "hours",
+      "name": "Opening hours",
+      "options": [
+        {
+          "id": "standard",
+          "label": "7am - 7pm",
+          "monthlyCost": 0
+        },
+        {
+          "id": "short",
+          "label": "7am - 3pm: close after lunch",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.23
+          }
+        },
+        {
+          "id": "long",
+          "label": "6am - 9pm",
+          "monthlyCost": 2300,
+          "effects": {
+            "demand": 0.08
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://freshcup.com/five-places-five-operating-hours/",
+      "confidence": "estimate",
+      "evidence": "assumption",
+      "note": "Existing lever, same id; adds the option real owners use most: closing after lunch. On the neighborhood hour curve (extra.hourCurve) the hours from 3pm to 7pm carry 23% of the day's orders (16% in an office district). The option costs nothing by itself: its saving is that the shop can run with one barista fewer, about $3,860 a month in wages and payroll taxes for 160 hours at $21. At 200 orders a day the lost afternoon is worth more than that barista (1,380 orders x $8.50 x 68% = about $7,960 of contribution); under about 100 orders a day closing early wins. Owners' accounts: a Santa Barbara cafe dropped its evening hours once payroll and cleaning were counted against the sales; an upstate New York chain cut weekdays to a 2pm close. The long option is unchanged."
+    },
+    {
+      "id": "order_ahead",
+      "name": "Order-ahead",
+      "options": [
+        {
+          "id": "off",
+          "label": "Counter orders only",
+          "monthlyCost": 0
+        },
+        {
+          "id": "throttled",
+          "label": "Order-ahead on your own page, pickup slots capped in the rush",
+          "monthlyCost": 140,
+          "effects": {
+            "demand": 0.03
+          }
+        },
+        {
+          "id": "open",
+          "label": "Order-ahead with no cap",
+          "monthlyCost": 190,
+          "effects": {
+            "demand": 0.04,
+            "capacity": -0.04
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nrn.com/sales-trends/starbucks-says-mobile-ordering-slowed-service-1q",
+      "confidence": "estimate",
+      "evidence": "industry_via_search",
+      "note": "Cost: Square Online's free plan charges 3.3% + 30 cents on an online order against the pack's 2.55% + 13.5 cents at the counter: about 23 cents more on a $9.25 ticket with tax. With 10% of 6,000 orders placed ahead: 600 x $0.234 = $140; with no cap 800 orders = $190. Demand lifts are my estimates (a third of the order-ahead tickets counted as new). The capacity loss of the uncapped option is the Starbucks lesson of 2017: when a fifth of rush orders came by phone, the crowd at the handoff made walk-in customers turn around. Shares elsewhere: Starbucks 33% of transactions, Dutch Bros 11.5-14%."
+    },
+    {
+      "id": "delivery_apps",
+      "name": "Delivery apps",
+      "options": [
+        {
+          "id": "off",
+          "label": "No delivery",
+          "monthlyCost": 0
+        },
+        {
+          "id": "basic",
+          "label": "One app, basic listing: 15% delivery fee plus processing",
+          "monthlyCost": 530,
+          "effects": {
+            "demand": 0.05,
+            "capacity": -0.01
+          }
+        },
+        {
+          "id": "promoted",
+          "label": "Two apps with paid placement: 25-30% and more",
+          "monthlyCost": 1420,
+          "effects": {
+            "demand": 0.09,
+            "capacity": -0.03
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "A fixed monthly cost stands in for a commission the format cannot express (extra.mechanics channel_margins has the real math). Basic: delivery sales of 5% of $51,000 = $2,550 a month; the app keeps 15% + 3% processing = $459, plus about $70 of bags and carriers = $530. Promoted: 9% = $4,590; 28% = $1,285, plus $135 of packaging = $1,420. New York City caps: 15% for delivery, 5% for basic service, 3% for card processing, and up to 20% more for optional enhanced services only if the app also offers the basic plan (Local Laws 103 of 2021 and 79 of 2025). DoorDash's own plans: 15%, 25%, 30% for delivery; 6% for pickup; orders through the restaurant's own page carry no commission. Sales shares are estimates under the 9% that delivery holds in limited-service traffic nationally."
+    },
+    {
+      "id": "loyalty",
+      "name": "Loyalty program",
+      "options": [
+        {
+          "id": "none",
+          "label": "None",
+          "monthlyCost": 0
+        },
+        {
+          "id": "punch_card",
+          "label": "Paper punch card: the tenth drink is free",
+          "monthlyCost": 220,
+          "effects": {
+            "demand": 0.02
+          }
+        },
+        {
+          "id": "digital",
+          "label": "Digital loyalty on the register, points by phone number",
+          "monthlyCost": 500,
+          "effects": {
+            "demand": 0.04
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://squareup.com/us/en/the-bottom-line/reaching-customers/coffee-shop-loyalty-program",
+      "confidence": "estimate",
+      "evidence": "industry_via_search",
+      "note": "Punch card: 15% of 6,000 orders stamped = 900; a tenth are free: 90 drinks x $2.21 of ingredients = $199, plus $20 of printing. Digital: Square Loyalty costs $45 a month per location up to 500 loyalty visits, $75 up to 1,500, $105 above; with 30% of orders enrolled (1,800 visits) the fee is $105 and 180 free drinks cost $398: about $500. Demand lifts are deliberately small: Square reports enrolled coffee customers spending 1.67 times as much and visiting 57% more often, but that is a seller describing customers who were already its best ones."
+    },
+    {
+      "id": "reviews",
+      "name": "Online reviews",
+      "options": [
+        {
+          "id": "ignore",
+          "label": "Leave the listings alone",
+          "monthlyCost": 0
+        },
+        {
+          "id": "reply",
+          "label": "Answer every review within two days, keep hours and photos current",
+          "monthlyCost": 0,
+          "effects": {
+            "reputation": 0.03
+          }
+        },
+        {
+          "id": "reply_and_ask",
+          "label": "Answer every review and put a review QR card on the counter",
+          "monthlyCost": 20,
+          "effects": {
+            "reputation": 0.04
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://pubsonline.informs.org/doi/10.1287/mksc.2017.1043",
+      "confidence": "estimate",
+      "evidence": "study_via_search",
+      "note": "Hotels that began answering reviews gained 0.12 stars (Proserpio and Zervas, 2017); at one star = 0.25 of the reputation scale that is +0.03. Asking adds volume, my estimate +0.01: Google allows asking; Yelp's filter tends to drop reviews a business asked for; a reward for a good review is a federal violation (see shortcut reward_good_reviews). The money cost is zero and the real cost is the owner's hour a week, which the game does not price. $20 is the printed cards."
+    },
+    {
+      "id": "peak_schedule",
+      "name": "Rush-hour schedule",
+      "options": [
+        {
+          "id": "flat",
+          "label": "The same crew all day",
+          "monthlyCost": 0
+        },
+        {
+          "id": "overlap",
+          "label": "Stagger shifts so two people work the bar from 7 to 10",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.08
+          }
+        },
+        {
+          "id": "split_shifts",
+          "label": "Split shifts around the morning and afternoon rush",
+          "monthlyCost": 1020,
+          "effects": {
+            "capacity": 0.12
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.ekuep.com/en/two-groups",
+      "confidence": "estimate",
+      "evidence": "assumption",
+      "note": "The engine counts capacity by the month; a cafe loses its sales by the hour. At 200 orders a day the 8am hour brings 28 orders (36 in an office district) against about 25 an hour from one barista on the bar, so a flat crew turns people away at 8am while standing idle at 3pm. Overlap moves hours, not money. Split shifts stretch a worker's day past ten hours from start to finish, and New York's hospitality wage order then adds one hour at the minimum wage for that day: $17 x 2 workers x 30 days = $1,020. Capacity gains are my estimates of the rush orders saved, as a share of the day."
+    },
+    {
+      "id": "menu_size",
+      "name": "Menu size",
+      "options": [
+        {
+          "id": "standard",
+          "label": "Espresso drinks, drip, tea, a pastry case",
+          "monthlyCost": 0
+        },
+        {
+          "id": "focused",
+          "label": "Short menu: no blended drinks, nothing made to order",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.06,
+            "demand": -0.03
+          }
+        },
+        {
+          "id": "wide",
+          "label": "Everything: blended drinks, matcha, toasts",
+          "monthlyCost": 350,
+          "effects": {
+            "demand": 0.05,
+            "capacity": -0.08
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.fox5ny.com/news/starbucks-menu-reduction-2025",
+      "confidence": "estimate",
+      "evidence": "industry_via_search",
+      "note": "Speed against reach. A straight espresso takes about a minute and a milk drink two; blended and made-to-order items take longer and block the bar. Starbucks said in January 2025 it would cut about 30% of its food and drink items by the end of the fiscal year to shorten waits. The wide menu's $350 is extra spoilage and prep supplies, my estimate. All effect sizes are estimates."
+    },
+    {
+      "id": "catering",
+      "name": "Office catering",
+      "options": [
+        {
+          "id": "off",
+          "label": "None",
+          "monthlyCost": 0
+        },
+        {
+          "id": "coffee_boxes",
+          "label": "Coffee boxes for offices: your own orders plus a catering marketplace",
+          "monthlyCost": 320,
+          "effects": {
+            "demand": 0.03
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://catering.ezcater.com/en/help/what-is-the-commission/-payment-breakdown",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "45 boxes a month at $30 = $1,350 = 2.6% of the reference sales, rounded to 0.03. Two thirds come through ezCater: 15% of food and delivery fee + 2.99% payment fee = 18% of $900 = $162; boxes, cups and lids for 45 kits at $3.50 = $158. A 96 oz box holds about ten 10 oz cups; Dunkin's sells for $22-$35 depending on the store. From 2026 ezCater also charges $2.25 for each order delivered without tracking. Volumes are my estimate for a shop near offices."
+    },
+    {
+      "id": "card_pricing",
+      "name": "Card fees at the counter",
+      "options": [
+        {
+          "id": "absorb",
+          "label": "One price; you pay the card fees",
+          "monthlyCost": 0
+        },
+        {
+          "id": "two_prices",
+          "label": "Post a cash price and a card price side by side",
+          "monthlyCost": -700,
+          "effects": {
+            "demand": -0.03,
+            "reputation": -0.01
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://newyork.public.law/laws/n.y._general_business_law_section_518",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "The negative cost is recovered fees: $51,000 x 90% paid by card x 60% of that on credit cards x 2.6% = $716. New York General Business Law section 518 (in force since February 11, 2024): the posted price must already be the total card price, the difference may not exceed what the processor charges you, and it applies to credit cards only, not debit. New York City also forbids charging more for cash and forbids a restaurant from adding a surcharge line to listed prices (6 RCNY section 5-59), so two posted prices is the only lawful form. Customers dislike it: J.D. Power found 81% of card users have switched payment method to dodge a surcharge and warns of 'acute abandonment risk'; the 3% demand loss is my estimate."
+    },
+    {
+      "id": "limited_time_drink",
+      "name": "Seasonal drink",
+      "options": [
+        {
+          "id": "none",
+          "label": "The same menu all year",
+          "monthlyCost": 0
+        },
+        {
+          "id": "seasonal",
+          "label": "A new limited-time drink every season",
+          "monthlyCost": 150,
+          "effects": {
+            "demand": 0.02,
+            "quality": 0.01
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.placer.ai/anchor/articles/starbucks-and-dunkins-ltos-boost-traffic",
+      "confidence": "estimate",
+      "evidence": "industry_via_search",
+      "note": "Chains have taught customers to expect a seasonal drink: Placer.ai counted Starbucks visits 44.5% above average on the day its holiday drinks launched in November 2025. $150 a month covers syrups, test batches and a sign; the 2% lift for an independent is my estimate."
+    },
+    {
+      "id": "value_anchor",
+      "name": "Entry price",
+      "options": [
+        {
+          "id": "none",
+          "label": "Drip coffee priced like everything else",
+          "monthlyCost": 0
+        },
+        {
+          "id": "three_dollar_drip",
+          "label": "Keep a $3 drip coffee on the board",
+          "monthlyCost": 1350,
+          "effects": {
+            "demand": 0.05
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://pos.toasttab.com/blog/data/toast-restaurant-trends-report-coffee-prices-2026",
+      "confidence": "estimate",
+      "evidence": "industry_via_search",
+      "note": "The answer to a cart at the subway stairs or a chain's $1.99 app coupon. Cost: 30% of 6,000 orders are drip (my estimate); cutting it from $3.75 to $3.00 gives up $0.75 x 1,800 = $1,350 a month. Toast's median price of a drip coffee was $3.65 in February 2026. The 5% lift is my estimate; at the reference shop it adds about $1,730 of contribution, so the move pays only when someone is actually undercutting you."
+    },
+    {
+      "id": "laptop_tables",
+      "name": "Laptops",
+      "options": [
+        {
+          "id": "welcome",
+          "label": "Laptops welcome at every table",
+          "monthlyCost": 0
+        },
+        {
+          "id": "limited",
+          "label": "No laptops at the window tables at lunch and on weekends",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.05,
+            "demand": -0.02,
+            "reputation": -0.01
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.axios.com/2025/05/09/coffee-shops-no-wifi-laptops-remote-work",
+      "confidence": "estimate",
+      "evidence": "industry_via_search",
+      "note": "A remote worker holds a seat for two to four hours on one drink. Axios, May 2025: cafes are dropping wifi and limiting laptops to turn tables and bring conversation back; several New York shops ban laptops on weekends or keep them to one bar; a Chicago owner reported sales up 20% in the first laptop-free year. Effect sizes are my estimates. Task D02 owns the seat arithmetic; this lever exists here because the student and remote-worker events need a move."
+    },
+    {
+      "id": "restroom_policy",
+      "name": "Restroom",
+      "options": [
+        {
+          "id": "customers_only",
+          "label": "For customers: the door code is on the receipt",
+          "monthlyCost": 0
+        },
+        {
+          "id": "open",
+          "label": "Open to anyone who asks",
+          "monthlyCost": 150,
+          "effects": {
+            "reputation": 0.01
+          }
+        }
+      ],
+      "tier": "exotic",
+      "source": "https://news.wttw.com/2025/01/22/starbucks-policy-change-flushes-out-debate-over-public-restroom-access",
+      "confidence": "estimate",
+      "evidence": "industry_via_search",
+      "note": "In January 2025 Starbucks ended its seven-year open-door rule: restrooms and seats are for paying customers again. Its neighbors now get the requests. $150 a month is paper, soap and extra cleaning, my estimate. A New York cafe with fewer than 20 seats does not have to offer a customer restroom at all."
+    },
+    {
+      "id": "community_nights",
+      "name": "Evenings",
+      "options": [
+        {
+          "id": "none",
+          "label": "Nothing after closing",
+          "monthlyCost": 0
+        },
+        {
+          "id": "weekly",
+          "label": "One event a week: run club, open mic or a tasting",
+          "monthlyCost": 250,
+          "effects": {
+            "demand": 0.02,
+            "reputation": 0.02
+          }
+        }
+      ],
+      "tier": "exotic",
+      "source": "https://freshcup.com/five-places-five-operating-hours/",
+      "confidence": "estimate",
+      "evidence": "assumption",
+      "note": "A planning value with no measurement behind it: $250 covers a paid hour of two staff and supplies four times a month. Owners describe events as the cheapest way to be known on the block; no study of the effect on sales was found."
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "buy_fake_reviews",
+      "name": "Buy a batch of five-star reviews",
+      "what": "A 'reputation' seller posts glowing reviews for less than honest marketing costs. Platforms flag it publicly and the FTC's review rule allows up to $53,088 per fake review.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 300
+      },
+      "violation": "fake_reviews"
+    },
+    {
+      "id": "reward_good_reviews",
+      "name": "Free cookie for a five-star review",
+      "what": "Trading a freebie for a positive review looks harmless. The FTC rule bans rewards that depend on what the review says, and Yelp demotes businesses caught asking.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 100
+      },
+      "violation": "fake_reviews"
+    },
+    {
+      "id": "hide_grade_card",
+      "name": "Take the B out of the window",
+      "what": "A B or C in the window costs customers every day it hangs there. The card must be posted where passersby can see it; hiding it is a fine at the next visit, and neighbors do report it.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.04
+      },
+      "violation": "grade_card_not_posted"
+    },
+    {
+      "id": "hidden_card_surcharge",
+      "name": "Add 3% at the register for cards without posting it",
+      "what": "A card fee keyed in at checkout recovers your processing cost. New York requires the full card price to be posted in advance: up to $500 for each violation.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.025
+      },
+      "violation": "card_surcharge_not_disclosed"
+    },
+    {
+      "id": "flyers_on_poles",
+      "name": "Tape flyers to lamp posts and parked cars",
+      "what": "Cheaper than ads. Every flyer on a pole, street furniture or a car is its own violation: $75 to $150 the first time, $150 to $250 after, plus the cost of removal.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 150
+      },
+      "violation": "illegal_posting"
+    },
+    {
+      "id": "allow_dogs_inside",
+      "name": "Let customers bring dogs inside",
+      "what": "Dog owners are loyal regulars. Only service dogs may enter a food establishment in New York City; pets inside are a Health Department violation that adds points toward a B.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.02
+      },
+      "violation": "live_animals_inside"
+    },
+    {
+      "id": "fake_specialty_claims",
+      "name": "Print 'single-origin, organic' and pour the house blend",
+      "what": "The menu promises specialty beans; the hopper holds the cheap ones. Each false statement is a separate deceptive trade practice under the city's Consumer Protection Law.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 750
+      },
+      "violation": "deceptive_menu_claims"
+    }
+  ],
+  "violations": [
+    {
+      "id": "fake_reviews",
+      "name": "Fake or paid-for reviews",
+      "law": "16 CFR Part 465 (FTC Rule on the Use of Consumer Reviews and Testimonials); NY General Business Law §§ 349, 350; NYC Administrative Code § 20-700",
+      "official": "dcwp_inspector",
+      "foundBy": [
+        "complaint",
+        "sting"
+      ],
+      "fine": {
+        "base": 2500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 53088
+      },
+      "closureDays": 0,
+      "reputationHit": 0.12,
+      "criminal": "No; civil penalties. Fraud charges are possible only as part of a larger scheme.",
+      "source": "https://www.venable.com/insights/publications/2025/12/ftc-signals-heightened-enforcement-of-new",
+      "confidence": "estimate",
+      "evidence": "industry_via_search",
+      "note": "The FTC's rule took effect on October 21, 2024: no buying, selling or writing of fake reviews, no reviews by insiders without disclosure, no rewards that depend on the review being positive. Maximum civil penalty $53,088 per violation (2025 amount); in December 2025 the FTC sent warning letters to ten companies. The $2,500 base is the smallest penalty in New York's 'Operation Clean Turf' (September 2013): the Attorney General ran a sting with a fake Brooklyn yogurt shop and settled with 19 companies for more than $350,000 in all. The reputation hit is my estimate of a public warning on the listing; the game's 'sting' route mirrors that operation. Read in law-firm and news summaries, not in the rule's text."
+    },
+    {
+      "id": "grade_card_not_posted",
+      "name": "Letter grade card hidden or not posted",
+      "law": "NYC Health Code § 81.51; 24 RCNY Chapter 23",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 1000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.05,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/rii-grade-posting-faq.pdf",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "The pack's own rule card (from the Chapter 23 penalty schedule, opened by its author): $500 for not posting, $1,000 for tampering. The Health Department's grade-posting guide (2011) says up to $1,000 for not posting and $200 for posting it wrongly, and that repeat offenders can lose the permit. The card goes on the front window, door or outside wall. After a B or C at re-inspection the owner may post 'Grade Pending' until the hearing: that is legal; an empty window is not."
+    },
+    {
+      "id": "card_surcharge_not_disclosed",
+      "name": "Card surcharge not included in the posted price",
+      "law": "NY General Business Law § 518; 6 RCNY § 5-59",
+      "official": "dcwp_inspector",
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 500
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://content.govdelivery.com/accounts/NYSDOS/bulletins/38661fe",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "New York Department of State notice on the law in force since February 11, 2024: the seller must post the total price for paying by credit card, the surcharge cannot be more than the processor charges, a sign saying 'a fee applies' is not enough; civil penalty up to $500 per violation, enforced by the Attorney General and local governments. The game charges one $500 penalty per citation."
+    },
+    {
+      "id": "illegal_posting",
+      "name": "Flyers posted on public property or parked cars",
+      "law": "NYC Administrative Code §§ 10-119, 10-121",
+      "official": "sanitation_enforcement_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 1500,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 5000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://intro.nyc/0302-2024",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "Council bill summary of the current law: $75 to $150 for a first offense, $150 to $250 for each later one within 12 months, every posted flyer a separate violation, and the poster also pays for removal. The game counts a run of 20 flyers: 20 x $75 = $1,500, capped at 20 x $250 = $5,000. A 2024 bill would raise the repeat maximum to $1,000; whether it passed was not confirmed."
+    },
+    {
+      "id": "live_animals_inside",
+      "name": "Pet dogs inside the shop",
+      "law": "NYC Health Code § 81.25; inspection item 04O",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 200,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 350
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/pet-cafes.pdf",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "The Health Department's pet guidance and the city's 311 page: a dog that is not a service animal inside a food establishment is a Health Code violation (item 04O, 'live animals other than fish in tank or service animal'); dogs are allowed in outdoor seating if the shop posts the sign and keeps them leashed. The fine and the points for item 04O were not seen: $200 to $350 is assumed from the pack's other Chapter 23 violations of similar weight, and the points should be read from the scoring sheet before use."
+    },
+    {
+      "id": "deceptive_menu_claims",
+      "name": "False claims on the menu",
+      "law": "NYC Administrative Code § 20-700 (Consumer Protection Law); 6 RCNY § 6-47; NY General Business Law § 350",
+      "official": "dcwp_inspector",
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 525,
+        "perMonth": 0,
+        "pctOfSaved": 0.5,
+        "max": 3500
+      },
+      "closureDays": 0,
+      "reputationHit": 0.06,
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-98103",
+      "confidence": "estimate",
+      "evidence": "primary_via_search",
+      "note": "The city's penalty schedule for a deceptive trade practice lists $525, $1,050 and $3,500 (first, second, third and later violations, as far as the garbled table could be read); every false statement is its own violation, and a first-time offender who proves the claim was fixed may owe nothing. The half of the saving added to the fine is the game's way of counting several statements. 'Organic' has a federal rule of its own."
+    }
+  ],
+  "officials": [
+    {
+      "id": "sanitation_enforcement_agent",
+      "name": "Sanitation enforcement agent",
+      "agency": "NYC Department of Sanitation (DSNY)",
+      "role": "inspector",
+      "checks": [
+        "illegal_posting"
+      ],
+      "realProcess": "Agents walk their districts every day and write summonses on the spot for dirty sidewalks, blocked sidewalks and illegal postings. The summons goes to the business named on the flyer and is heard at the city's administrative tribunal (OATH).",
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/street-sidewalk-rules-businesses.page",
+      "confidence": "estimate",
+      "note": "Described from the Sanitation Department's business rules pages as quoted in search results. Other tasks (D07, D08) may define the same official under another id; the merger should keep one."
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_fake_reviews",
+      "name": "Report fake reviews or false menu claims",
+      "text": "In real life: a complaint to the city's consumer protection department or the state Attorney General. Investigators check who wrote the reviews and whether the menu says what is in the cup. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "fake_reviews",
+        "deceptive_menu_claims"
+      ]
+    },
+    {
+      "id": "report_hidden_grade",
+      "name": "Report a missing grade card or dogs inside (311)",
+      "text": "In real life: a 311 complaint to the Health Department. An inspector checks that the letter grade hangs where passersby can see it and that only service animals are inside. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "grade_card_not_posted",
+        "live_animals_inside"
+      ]
+    },
+    {
+      "id": "report_hidden_fees",
+      "name": "Report an unposted card surcharge",
+      "text": "In real life: a complaint to consumer protection with the receipt. The posted price must already include any card fee. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "card_surcharge_not_disclosed"
+      ]
+    },
+    {
+      "id": "report_illegal_flyers",
+      "name": "Report flyers on poles and cars (311)",
+      "text": "In real life: a 311 complaint to the Sanitation Department with a photo. Each flyer on public property is a separate fine for the business it advertises. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "illegal_posting"
+      ]
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "delivery_fee_caps",
+      "title": "Delivery app fees are capped",
+      "text": "NYC caps what an app may charge a restaurant: 15% for delivery, 5% for basic service, 3% for card processing. Optional 'enhanced' services may add up to 20%, and only if the app also offers the basic plan. Overcharged? The city has won refunds for restaurants.",
+      "source": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page"
+    },
+    {
+      "id": "fake_reviews",
+      "title": "Fake reviews",
+      "text": "Buying reviews, writing your own, or rewarding only good ones breaks the FTC review rule: up to $53,088 per violation. New York's Attorney General once opened a fake yogurt shop to catch sellers of reviews: 19 companies paid over $350,000.",
+      "source": "https://www.venable.com/insights/publications/2025/12/ftc-signals-heightened-enforcement-of-new"
+    },
+    {
+      "id": "grade_card_not_posted",
+      "title": "The grade stays in the window",
+      "text": "A, B or C must hang where passersby can see it. After a bad re-inspection you may post 'Grade Pending' until your hearing. An empty window is a $500 fine; 88% of New Yorkers say they look at the grade before eating.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/rii-grade-posting-faq.pdf"
+    },
+    {
+      "id": "card_surcharge_not_disclosed",
+      "title": "Card surcharges",
+      "text": "In New York the posted price must already be the full credit card price. The extra may not exceed what your processor charges, and debit cards are excluded. A fee added at the register costs up to $500 per violation.",
+      "source": "https://content.govdelivery.com/accounts/NYSDOS/bulletins/38661fe"
+    },
+    {
+      "id": "illegal_posting",
+      "title": "Flyers",
+      "text": "Handing a flyer to a person is legal. Taping it to a pole, a bus shelter or a windshield is not: $75-$150 each the first time, $150-$250 after that, every flyer counted separately, plus removal costs.",
+      "source": "https://intro.nyc/0302-2024"
+    },
+    {
+      "id": "live_animals_inside",
+      "title": "Dogs",
+      "text": "Only service dogs may come inside a food establishment in NYC. Pet dogs are allowed in outdoor seating if you post the sign and they stay leashed. A dog inside is a Health Department violation with points toward your grade.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/pet-cafes.pdf"
+    },
+    {
+      "id": "deceptive_menu_claims",
+      "title": "What the menu says",
+      "text": "Every false statement to a customer, 'organic', 'house-made', 'single-origin', is a separate violation of the city's Consumer Protection Law: $525 the first time, up to $3,500 for repeats.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-98103"
+    },
+    {
+      "id": "review_stars",
+      "title": "What a star is worth",
+      "text": "A Harvard study of Seattle restaurants: one more Yelp star lifts an independent's revenue 5-9%; chains gain nothing. In 2026, 68% of consumers want at least 4 stars and 31% want 4.5.",
+      "source": "https://econpapers.repec.org/RePEc:hbs:wpaper:12-016"
+    },
+    {
+      "id": "queue_length",
+      "title": "The line",
+      "text": "People judge a line by its length, not its speed: a longer queue cuts sales like a 5% price rise (Columbia study). Patience for a coffee is about 6 minutes. One barista makes about 30 drinks an hour.",
+      "source": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf"
+    },
+    {
+      "id": "hybrid_week",
+      "title": "The office week",
+      "text": "Office visits bunch midweek: Tuesday 24%, Wednesday 24%, Thursday 22%, Friday 12% of the week (Placer.ai, 2025). In New York the Friday share fell to 11.9% in 2026. A cafe that lives on offices earns its week in three days.",
+      "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/"
+    },
+    {
+      "id": "regulars",
+      "title": "Regulars",
+      "text": "Square's data: a regular brings six times the yearly revenue of a one-time customer, and about 15% of customers come back at least twice in a working week. A cafe is built on a few hundred people, not on the crowd.",
+      "source": "https://squareup.com/us/en/the-bottom-line/reaching-customers/turn-customers-into-regulars"
+    },
+    {
+      "id": "split_shift_pay",
+      "title": "Split shifts",
+      "text": "If a worker's day runs more than 10 hours from first clock-in to last clock-out, breaks included, New York's hospitality wage order adds one hour of pay at the minimum wage for that day: $17 in New York City in 2026.",
+      "source": "https://dol.ny.gov/minimum-wage-0"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "delivery_platforms",
+      "category": "Delivery apps",
+      "what": "Marketplaces that list your menu and send couriers; they keep a commission on every order",
+      "whereToFind": "Sign up on each app's merchant page; compare the basic plan first and read which services are 'enhanced'",
+      "examples": "DoorDash, Uber Eats, Grubhub",
+      "link": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "source": "https://merchants.doordash.com/en-us/products/pricing",
+      "confidence": "estimate",
+      "note": "DoorDash plans: 15%, 25% or 30% of each delivery order, 6% on pickup, no monthly fee, for businesses with 75 or fewer locations. New York City caps apply on top: see rule card delivery_fee_caps. Read on DoorDash's pricing page through search results."
+    },
+    {
+      "id": "online_ordering_loyalty",
+      "category": "Order-ahead and loyalty software",
+      "what": "A page where customers order and pay before they arrive, and a points program tied to the register",
+      "whereToFind": "Usually an add-on from your register company; ask what it charges per online order and per loyalty visit",
+      "examples": "Square Online, Square Loyalty, Toast Online Ordering, Joe Coffee",
+      "link": "https://squareup.com/us/en/pricing",
+      "source": "https://square.com/help/us/en/article/6382",
+      "confidence": "estimate",
+      "note": "Square Online free plan: 3.3% + 30 cents an online order. Square Loyalty: $45 a month per location up to 500 loyalty visits, $75 up to 1,500, $105 above. Prices as listed on review sites and Square's help page in 2026, read through search results."
+    },
+    {
+      "id": "catering_marketplace",
+      "category": "Office catering marketplaces",
+      "what": "Sites where office managers order coffee and breakfast for meetings",
+      "whereToFind": "Register as a caterer on the marketplace; also offer the same boxes on your own page at a lower fee",
+      "examples": "ezCater",
+      "link": "https://catering.ezcater.com/en/help/selling-fees",
+      "source": "https://catering.ezcater.com/en/help/what-is-the-commission/-payment-breakdown",
+      "confidence": "estimate",
+      "note": "ezCater: 15% commission on food and delivery fee plus a 2.99% payment fee; 7% for orders through your own page; its delivery service costs 10% of the food total with a $30 minimum. Uber agreed to buy ezCater in October 2026, so terms may change."
+    },
+    {
+      "id": "review_listings",
+      "category": "Map and review listings",
+      "what": "Free business profiles where people find your hours, photos and rating",
+      "whereToFind": "Claim the listings yourself; nobody needs to be paid for this, and nobody can sell you honest reviews",
+      "examples": "Google Business Profile, Yelp for Business, Apple Business Connect",
+      "link": "https://www.ftc.gov/business-guidance/resources/consumer-reviews-testimonials-rule-questions-answers",
+      "source": "https://www.brightlocal.com/research/local-consumer-review-survey/",
+      "confidence": "estimate",
+      "note": "BrightLocal's 2026 survey of 1,002 US consumers: 68% want at least four stars before using a local business and 31% want four and a half. The FTC link is the agency's question-and-answer page on the review rule; its address is cited from memory and was not opened."
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://are.berkeley.edu/~mlanderson/pdf/Anderson%20and%20Magruder.pdf",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://catering.ezcater.com/en/help/selling-fees",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://catering.ezcater.com/en/help/what-is-the-commission/-payment-breakdown",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://chainstoreage.com/chinese-coffee-giant-luckin-continues-aggressive-nyc-expansion",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-98103",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://coffeeforums.com/threads/expected-sales-growth-rate-for-a-new-independent-craft-coffee-shop.19522",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://content.govdelivery.com/accounts/NYSDOS/bulletins/38661fe",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://dailycoffeenews.com/2026/04/14/two-thirds-of-americans-drank-coffee-yesterday-nca-report-finds/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://dailycoffeenews.com/2026/08/25/blank-street-raises-105-million-expands-to-la/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://decentespresso.com/blog/the_ten_minute_challenge",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://dol.ny.gov/minimum-wage-0",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://econpapers.repec.org/RePEc:hbs:wpaper:12-016",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://ers.usda.gov/sites/default/files/_laserfiche/publications/45003/30438_err139.pdf",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/series/MRTSSM722USN",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://freshcup.com/five-places-five-operating-hours/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://intro.nyc/0302-2024",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://intro.nyc/0431-2024",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://joe.coffee/coffee-industry-trends/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://kitchennmbrs.app/en/knowledge-base/starting-a-restaurant-business-plan/how-do-i-calculate-if-my-restaurant-location-has-enough-foot-traffic-for-my-revenue-target",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://merchants.doordash.com/en-us/products/pricing",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://news.wttw.com/2025/01/22/starbucks-policy-change-flushes-out-debate-over-public-restroom-access",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://newyork.public.law/laws/n.y._general_business_law_section_518",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/puar.13091",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://pos.toasttab.com/blog/data/toast-restaurant-trends-report-coffee-prices-2026",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://pubsonline.informs.org/doi/10.1287/mksc.2017.1043",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://pubsonline.informs.org/doi/10.1287/mksc.2017.1078",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://square.com/help/us/en/article/6382",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://squareup.com/townsquare/square-data-repeat-v-one-time-customer-tipping-trends",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://squareup.com/us/en/pricing",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://squareup.com/us/en/the-bottom-line/reaching-customers/coffee-shop-loyalty-program",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://squareup.com/us/en/the-bottom-line/reaching-customers/turn-customers-into-regulars",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://therealdeal.com/new-york/2025/12/23/chain-stores-keep-shrinking-across-nyc/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://whitehutchinson.com/news/lenews/2023/march/article109.shtml",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.6sqft.com/nyc-tourism-in-2025-decline-in-international-visitors/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.axios.com/2025/05/09/coffee-shops-no-wifi-laptops-remote-work",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.brightlocal.com/research/local-consumer-review-survey/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.businesswire.com/news/home/20231207135338/en",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.convenience.org/Media/Daily/2025/January/22/3-Dunkin-Morning-Starbucks-Evening_Research",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.ekuep.com/en/two-groups",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.fox5ny.com/news/starbucks-menu-reduction-2025",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.ftc.gov/business-guidance/resources/consumer-reviews-testimonials-rule-questions-answers",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.governor.ny.gov/news/governor-hochul-announces-third-consecutive-rise-student-enrollment-city-university-new-york",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.gs1uk.org/insights/news/technology-and-growing-customer-impatience",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.ibj.com/articles/starbucks-ceo-sets-four-minute-service-goal-as-he-tries-to-reinvigorate-sagging-sales",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.kastle.com/safety-wellness/getting-america-back-to-work/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.nbclosangeles.com/investigations/Yelp-reviews-not-recommended-hurts-business--509724081.html",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.nber.org/system/files/working_papers/w32604/w32604.pdf",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.ncrla.org/wp-content/uploads/2025/08/Restaurant-OffPremises-Report.pdf",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.nrn.com/sales-trends/starbucks-says-mobile-ordering-slowed-service-1q",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/pet-cafes.pdf",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/rii-grade-posting-faq.pdf",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dca/businesses/Delivery-Apps-Requirements.page",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/street-sidewalk-rules-businesses.page",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.placer.ai/anchor/articles/starbucks-and-dunkins-ltos-boost-traffic",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.restaurantdive.com/news/starbucks-cuts-discounts-menu-boosts-marketing-spend-traffic-declines/738605/",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    },
+    {
+      "url": "https://www.venable.com/insights/publications/2025/12/ftc-signals-heightened-enforcement-of-new",
+      "checked": "2026-11-14",
+      "how": "search result, page not opened"
+    }
+  ]
+}
