@@ -780,6 +780,182 @@
           "causes": "time_temp_abuse"
         }
       ]
+    },
+    {
+      "id": "commissary_choice",
+      "name": "Commissary",
+      "options": [
+        {
+          "id": "shared_depot",
+          "label": "Shared depot near your corner",
+          "monthlyCost": 750
+        },
+        {
+          "id": "cheap_outer_depot",
+          "label": "Cheaper depot far away (longer morning push)",
+          "monthlyCost": 450,
+          "effects": {
+            "capacity": -0.08
+          }
+        },
+        {
+          "id": "full_service",
+          "label": "Full-service commissary with prep space",
+          "monthlyCost": 1500,
+          "effects": {
+            "capacity": 0.05,
+            "quality": 0.02
+          }
+        }
+      ]
+    },
+    {
+      "id": "truck_route",
+      "name": "Where the truck works",
+      "options": [
+        {
+          "id": "office_district",
+          "label": "Weekday office districts (tickets and tolls)",
+          "monthlyCost": 600,
+          "effects": {
+            "demand": 0.1
+          }
+        },
+        {
+          "id": "events_markets",
+          "label": "Weekend events and markets (stall fees)",
+          "monthlyCost": 1200,
+          "effects": {
+            "demand": 0.15
+          }
+        },
+        {
+          "id": "outer_boroughs",
+          "label": "Outer-borough residential and industrial streets",
+          "monthlyCost": 150,
+          "effects": {
+            "demand": -0.1
+          }
+        }
+      ]
+    },
+    {
+      "id": "vehicle_maintenance",
+      "name": "Truck and generator maintenance",
+      "options": [
+        {
+          "id": "scheduled",
+          "label": "Scheduled service every 3 months",
+          "monthlyCost": 350
+        },
+        {
+          "id": "when_broken",
+          "label": "Fix it when it breaks (breakdown after 4 months: 10 days off the road)",
+          "monthlyCost": 0
+        }
+      ]
+    },
+    {
+      "id": "id_checks",
+      "name": "ID checks for alcohol",
+      "options": [
+        {
+          "id": "scan_everyone",
+          "label": "Scan every ID at the bar",
+          "monthlyCost": 60
+        },
+        {
+          "id": "visual_check",
+          "label": "Visual check when someone looks young",
+          "monthlyCost": 0
+        }
+      ]
+    },
+    {
+      "id": "kitchen_contract",
+      "name": "Kitchen for the delivery brand",
+      "options": [
+        {
+          "id": "hourly_shared",
+          "label": "Hourly shared kitchen",
+          "monthlyCost": 4200
+        },
+        {
+          "id": "dedicated_station",
+          "label": "Dedicated station in a ghost kitchen",
+          "monthlyCost": 6500,
+          "effects": {
+            "capacity": 0.15
+          }
+        },
+        {
+          "id": "own_small_lease",
+          "label": "Own small kitchen lease (slower to set up, nobody can lock you out)",
+          "monthlyCost": 7000,
+          "effects": {
+            "capacity": 0.2,
+            "reputation": 0.02
+          }
+        }
+      ]
+    },
+    {
+      "id": "market_days",
+      "name": "Market days per month",
+      "options": [
+        {
+          "id": "weekends_only",
+          "label": "One market, every weekend",
+          "monthlyCost": 1400,
+          "effects": {
+            "demand": 0.0
+          }
+        },
+        {
+          "id": "two_markets",
+          "label": "Two markets, weekends and one weekday",
+          "monthlyCost": 2600,
+          "effects": {
+            "demand": 0.35
+          }
+        },
+        {
+          "id": "holiday_market",
+          "label": "Six-week holiday market booth",
+          "monthlyCost": 6000,
+          "effects": {
+            "demand": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "id": "wholesale_share",
+      "name": "Wholesale baking for other cafes",
+      "options": [
+        {
+          "id": "retail_only",
+          "label": "Bake only for our own counter",
+          "monthlyCost": 0
+        },
+        {
+          "id": "some_wholesale",
+          "label": "Supply three nearby cafes (under half of sales)",
+          "monthlyCost": 600,
+          "effects": {
+            "demand": 0.12
+          }
+        },
+        {
+          "id": "mostly_wholesale",
+          "label": "Mostly wholesale (state Article 20-C license instead of city permit)",
+          "monthlyCost": 1200,
+          "effects": {
+            "demand": 0.3,
+            "reputation": -0.01
+          }
+        }
+      ]
     }
   ],
   "shortcuts": [
@@ -1574,10 +1750,3078 @@
     }
   ],
   "extra": {
-    "formats": [],
-    "mechanics": [],
-    "eventCatalog": [],
-    "transitions": []
+    "formats": [
+      {
+        "id": "takeaway_window",
+        "name": "Takeaway window or counter-only coffee bar",
+        "tier": "core",
+        "differsFromCafe": "No seats, 150-300 sq ft, often a slice of a bigger storefront or a window onto the sidewalk. No customer restroom (the pack's 20-seat rule never triggers), no dining furniture, no table cleaning. Revenue is all takeaway: the sizing model's seats do not matter, the queue does. Rent is a third to a half of the cafe's for the same block, but the ticket is lower (drink only, few pastries) and nothing holds customers on a cold or rainy day.",
+        "startCost": {
+          "min": 70000,
+          "typical": 95000,
+          "max": 140000,
+          "confidence": "estimate",
+          "note": "Cafe pack minus the seating side: build-out 200 sq ft x $225 = $45,000 (setup.kiosk_buildout), espresso machine and grinder $9,700, refrigeration, sinks and smallwares about $6,000, deposit 3 x $3,000 rent, permits, opening stock and 2-3 months of working capital. My calculation, no published figure for NYC windows."
+        },
+        "space": {
+          "sqftMin": 120,
+          "sqftMax": 300,
+          "seats": 0
+        },
+        "permits": [
+          "Food Service Establishment Permit (DOHMH, $280 a year), same as the cafe",
+          "Food Protection Certificate",
+          "Sign permit if the sign is over 6 sq ft",
+          "No sidewalk cafe license: a window may not put tables out"
+        ],
+        "equipment": "Same bar as the cafe (espresso machine, grinder, under-counter fridge, hand sink, three-compartment sink). Optional ventless oven for toasted items.",
+        "staff": "1 barista most hours, 2 at the morning peak; the owner usually works the window.",
+        "demand": "Morning rush 7-10 a.m. carries the day; one barista at a two-group machine makes about 60-80 drinks an hour (cafe pack capacity). In January-February demand drops harder than for a seated cafe because nobody stays inside.",
+        "risks": [
+          "Queue on the sidewalk in front of a neighbour's door: complaints and a landlord dispute",
+          "Weather: no indoor seats to shelter customers",
+          "Landlord carve-outs: a window inside another tenant's lease is a sublease that can end when that lease ends",
+          "Lower ticket: pastries sell less without a table"
+        ],
+        "reusesFromCafe": [
+          "unit (refPrice lower: about $6)",
+          "staff.barista",
+          "fse_permit",
+          "food_protection_cert",
+          "espresso_machine",
+          "grinder",
+          "levers.cleaning",
+          "levers.sourcing",
+          "violations (health)"
+        ],
+        "needsOwn": [
+          "sizing.unitName = 'window', takeawayShare = 1.0",
+          "rent about 35-50% of the cafe's",
+          "weather sensitivity higher than the cafe",
+          "queue penalty instead of crowd penalty"
+        ],
+        "packOverrides": {
+          "unit.refPrice": 6.0,
+          "sizing.takeawayShare": 1.0,
+          "sizing.max": 0,
+          "startCapital": 95000
+        },
+        "sources": [
+          "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+          "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc"
+        ]
+      },
+      {
+        "id": "coffee_cart",
+        "name": "Street coffee and breakfast cart",
+        "tier": "core",
+        "differsFromCafe": "No lease, no build-out: a $15,000 cart, a $50 personal license and a $200 two-year unit permit. But the permit is capped and was rationed by waiting lists for decades, so most carts work under a rented permit at $14,000-$25,000 per two years. The cart must sleep at a commissary, must stand next to the curb 20 ft from doors and 10 ft from crosswalks, and is enforced by Sanitation. Ticket is small (coffee $1.50-$3, bagel) and volume is all morning.",
+        "startCost": {
+          "min": 20000,
+          "typical": 30000,
+          "max": 60000,
+          "confidence": "estimate",
+          "note": "Cart $15,000 + generator $1,800 + commissary deposit $1,500 + license and permit $250 + G-23 $25 + first stock $1,500 + 3 months of working capital. With a rented permit add $14,000-$25,000 up front (Queens Eagle 2025)."
+        },
+        "space": {
+          "sqftMin": 0,
+          "sqftMax": 0,
+          "seats": 0
+        },
+        "permits": [
+          "Mobile Food Vending License for every worker ($50 / 2 years)",
+          "Mobile Food Vending Unit Permit ($200 / 2 years, capped; 2,200 new applications a year 2026-2031)",
+          "Commissary agreement (approved non-retail food establishment)",
+          "FDNY G-23 Certificate of Fitness if propane is used",
+          "Restricted Area permit for private plazas (no cap)"
+        ],
+        "equipment": "Cart with hand sink and water tanks, airpots or a compact espresso machine, generator or battery, cooler.",
+        "staff": "Owner alone or with one helper; the supervisory license holder must be present.",
+        "demand": "7-10 a.m. office and commuter rush; a Midtown cart vendor said 9 a.m. is the busiest hour and coffee the best seller (Daily Meal). A Manhattan cart owner lost about half his customers after a $0.25 price rise (Business Insider, December 2025): extreme price sensitivity. An Upper East Side food cart made up to $1,300 a day in summer and $600 in winter before the pandemic, $300 after (West Side Rag 2021).",
+        "risks": [
+          "Permit: renting is illegal and the holder can pull it any time; permit scammers target vendors (ABC7)",
+          "Sanitation enforcement sweeps, $250 placement fines, removal of the setup",
+          "Fights over the spot with storefront businesses and other vendors (ABC7, Upper West Side cart, November 2025)",
+          "Weather: rain and cold cut sales by half",
+          "Commissary closes or raises rent: no cart can operate without one"
+        ],
+        "reusesFromCafe": [
+          "unit (much lower refPrice)",
+          "levers.sourcing",
+          "benchmarks as a ceiling"
+        ],
+        "needsOwn": [
+          "no rent; commissary fee instead",
+          "no sizing (hardCap by one worker's speed)",
+          "permit queue mechanic",
+          "siting rules as violations",
+          "weather multiplier about 2x the cafe's"
+        ],
+        "packOverrides": {
+          "unit.refPrice": 3.0,
+          "sizing.takeawayShare": 1.0,
+          "capacity.maxStaff": 2,
+          "startCapital": 30000
+        },
+        "sources": [
+          "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license",
+          "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
+          "https://www.6sqft.com/nyc-passes-landmark-street-vendor-reform-including-expanding-permit-cap/",
+          "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+          "https://www.nyc.gov/assets/dsny/downloads/what-we-do/cleaning/street-vending-enforcement/mobile-food-vendor-educational-highlights-tips.pdf",
+          "https://abc7ny.com/post/7-side-street-vendors-fight-keep-breakfast-carts-spot-upper-west/18173830/",
+          "https://www.westsiderag.com/2021/06/08/from-the-window-of-her-food-cart-shes-watched-and-nourished-the-neighborhood-for-two-decades"
+        ]
+      },
+      {
+        "id": "food_truck",
+        "name": "Coffee or food truck",
+        "tier": "deep",
+        "differsFromCafe": "Same capped DOHMH permit as a cart, plus a vehicle: $100,000-$175,000 new, commercial insurance, parking, fuel, propane under FDNY rules and a commissary. Trucks may not sell at metered spots (34 RCNY 4-08(h)(8)), which rules out most of Midtown's curb, and they pay the congestion toll entering Manhattan below 60th Street. Upside: it can follow events, offices on weekdays and parks on weekends.",
+        "startCost": {
+          "min": 70000,
+          "typical": 120000,
+          "max": 200000,
+          "confidence": "estimate",
+          "note": "Used fitted truck $90,000 (setup.food_truck_used) + permits and FDNY $400 + commissary deposit $1,500 + wrap and menu $5,000 + stock and working capital; a new truck $100,000-$175,000 (Start Business by State 2026)."
+        },
+        "space": {
+          "sqftMin": 0,
+          "sqftMax": 0,
+          "seats": 0
+        },
+        "permits": [
+          "Mobile Food Vending License and Unit Permit (capped)",
+          "FDNY LPG truck permit $105 and G-23 Certificate of Fitness",
+          "DMV registration and commercial auto insurance",
+          "Commissary"
+        ],
+        "equipment": "Truck with generator, espresso or grill line, refrigeration, water tanks, fire extinguisher 20:B-C.",
+        "staff": "2 people: driver-cook and cashier.",
+        "demand": "Lunch and events; weekday office districts, weekend markets and festivals. Event fees and parking decide the margin.",
+        "risks": [
+          "Meter rule: tickets and tows in metered zones (CBS, Midtown crackdowns)",
+          "Vehicle breakdown stops the whole business",
+          "Congestion toll and parking tickets as a monthly cost",
+          "Permit market as for carts"
+        ],
+        "reusesFromCafe": [
+          "unit",
+          "staff roles",
+          "levers.sourcing",
+          "health violations"
+        ],
+        "needsOwn": [
+          "vehicle maintenance and breakdown events",
+          "parking tickets as a cost",
+          "location choice each month (events)",
+          "permit queue mechanic"
+        ],
+        "packOverrides": {
+          "unit.refPrice": 11.0,
+          "sizing.takeawayShare": 1.0,
+          "startCapital": 120000
+        },
+        "sources": [
+          "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
+          "https://www.nyc.gov/site/fdny/business/all-certifications/per-liquefiedpetroleumgas.page",
+          "https://nycourts.gov/reporter/3dseries/2012/2012_03552.htm",
+          "https://www.cbsnews.com/newyork/news/food-trucks-being-chased-from-midtown-over-meter-rule",
+          "https://startbusinessbystate.com/new-york/food-truck/",
+          "https://altitude.geotab.com/news-and-releases/nyc-congestion-pricing-2026-update/"
+        ]
+      },
+      {
+        "id": "bakery_cafe",
+        "name": "Bakery-cafe (bakes on site)",
+        "tier": "core",
+        "differsFromCafe": "Ovens, mixers, proofers and night or dawn labor. Pastry becomes the main product instead of a 2% side line, so the ticket rises and cost of goods follows flour, butter and egg prices. Gas ovens need a gas authorization and a Con Edison turn-on that has taken months; three-phase electric ovens need the panel for it. If wholesale to other cafes is more than half the business, the State Department of Agriculture and Markets licenses it (Article 20-C, $400 for two years) instead of the city Health Department.",
+        "startCost": {
+          "min": 250000,
+          "typical": 340000,
+          "max": 500000,
+          "confidence": "estimate",
+          "note": "Cafe pack $224,000 + convection oven $8,086 + spiral mixer $9,000 + proofer $4,500 + extra refrigeration and benches $8,000 + hood or ventilation where needed $0-$45,000 + gas work $3,500 + 2 more months of build-out rent while ovens are installed. My calculation."
+        },
+        "space": {
+          "sqftMin": 900,
+          "sqftMax": 1600,
+          "seats": 20
+        },
+        "permits": [
+          "FSE permit (retail) or NYS Ag & Markets Article 20-C license (wholesale majority, $400 / 2 years)",
+          "DOB permits for ovens and ventilation; gas authorization",
+          "FDNY cooking permit $70 if under a Type I hood"
+        ],
+        "equipment": "Convection or deck oven, spiral mixer, proofer/retarder, sheeter (later), walk-in or extra reach-ins, bakers' benches.",
+        "staff": "1-2 bakers starting 3-5 a.m. plus counter staff; bakers are the hardest hire and the most expensive hours.",
+        "demand": "Morning and weekend; holiday orders (Thanksgiving pies, Christmas) are the year's peaks; wholesale accounts smooth the week.",
+        "risks": [
+          "Ingredient swings: eggs averaged $5.69 a dozen in Q1 2025 and $2.27 in September 2026 (BLS via FRED); butter averaged a record $2.88/lb in 2024 and $1.54 in July 2026 (CME)",
+          "Gas delays or a building gas shutoff stop the ovens",
+          "Night labor and burnout",
+          "Two-agency trap: a wholesale bakery whose state permit lapsed was closed by the city (Duane Park Patisserie, October 2025)",
+          "Waste: unsold pastry at closing"
+        ],
+        "reusesFromCafe": [
+          "whole cafe pack: coffee bar, FSE permit, staff.barista, levers, violations"
+        ],
+        "needsOwn": [
+          "baker role with night premium",
+          "cogs linked to egg, butter and flour indices",
+          "oven capacity as a second capacity limit",
+          "wholesale channel and the 51% agency switch",
+          "waste lever: bake-to-order vs bake-to-display"
+        ],
+        "packOverrides": {
+          "unit.refPrice": 11.0,
+          "unit.cogsPerUnit": 3.3,
+          "startCapital": 340000
+        },
+        "sources": [
+          "https://tribecacitizen.com/2025/10/21/duane-park-patisserie-caught-in-bureaucratic-snafu/",
+          "https://nysenate.gov/legislation/laws/AGM/251-Z-3",
+          "https://www.webstaurantstore.com/vulcan-vc6ed-208-3-single-deck-full-size-electric-deep-depth-convection-oven-with-solid-state-controls-208v-3-phase-12-5-kw/901VC6EDC.html",
+          "https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment",
+          "https://www.dnainfo.com/new-york/20160422/lower-east-side/lucky-bee-is-still-waiting-for-full-gas-service-restaurant-owner-says",
+          "https://fred.stlouisfed.org/data/APU0000708111",
+          "https://www.indexbox.io/blog/cme-grade-aa-butter-cash-price-falls-to-15400-per-pound-on-july-22-2026/"
+        ]
+      },
+      {
+        "id": "sandwich_bar",
+        "name": "Sandwich bar / deli counter",
+        "tier": "core",
+        "differsFromCafe": "Lunch instead of breakfast: the peak moves to 12-2 p.m. and the ticket doubles ($13-$17). Cost of goods rises to about a third of sales (meat, cheese, bread, produce) and prep labor grows: slicing, assembly, morning prep. Cold sandwiches need only a refrigerated prep table and a slicer; hot pressed sandwiches need a ventless oven or a hood. Catering trays for offices are a second channel.",
+        "startCost": {
+          "min": 180000,
+          "typical": 250000,
+          "max": 380000,
+          "confidence": "estimate",
+          "note": "Cafe pack minus part of the coffee bar + prep table $1,329 + slicer $619 + second reach-in + ventless oven $17,190 or hood $45,000 + bigger opening stock. My calculation."
+        },
+        "space": {
+          "sqftMin": 600,
+          "sqftMax": 1200,
+          "seats": 12
+        },
+        "permits": [
+          "FSE permit and Food Protection Certificate (same as cafe)",
+          "FDNY cooking permit and hood only if grilling or frying"
+        ],
+        "equipment": "Refrigerated sandwich prep table, slicer, reach-in fridges, toaster or ventless oven, bread rack.",
+        "staff": "2-4 at lunch: sandwich makers are faster to train than baristas but the line needs more hands at noon.",
+        "demand": "Office lunch, strongly tied to how many days a week offices are full; catering for meetings.",
+        "risks": [
+          "Slicer cuts and Listeria if the slicer is not cleaned",
+          "Meat and cheese price swings",
+          "Office attendance on Mondays and Fridays",
+          "Competition from delis and bodegas already on every block"
+        ],
+        "reusesFromCafe": [
+          "FSE permit, health violations, staff structure, levers.cleaning, card fees, insurance"
+        ],
+        "needsOwn": [
+          "lunch-shaped hourly demand",
+          "higher cogs (0.32-0.35)",
+          "prep labor per unit",
+          "catering channel"
+        ],
+        "packOverrides": {
+          "unit.refPrice": 15.0,
+          "unit.cogsPerUnit": 5.0,
+          "startCapital": 250000
+        },
+        "sources": [
+          "https://www.webstaurantstore.com/avantco-apt-48-hc-48-2-door-refrigerated-sandwich-prep-table/178APT48HC.html",
+          "https://www.webstaurantstore.com/avantco-sl512-12-manual-gravity-feed-meat-slicer-1-2-hp/177SL512.html",
+          "https://www.webstaurantstore.com/turbochef-bullet-high-speed-accelerated-cooking-cooking-countertop-oven/532BULLETM.html",
+          "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+        ]
+      },
+      {
+        "id": "juice_bar",
+        "name": "Juice and smoothie bar",
+        "tier": "deep",
+        "differsFromCafe": "Produce instead of coffee: cost of goods is far higher and spoils in days. A cold-press juicer costs about $11,900; blenders are loud. Juice pressed and bottled for later sale must carry the unpasteurized warning label (fines $400-$600) and may need a HACCP plan approved by DOHMH. Demand peaks in January (resolutions, cleanses) and in summer heat, and is fashion-driven: NYC chains shrank sharply (Organic Avenue closed in 2015, Liquiteria shut, Juice Press closed East Village and Greenwich Street stores in 2025-2026).",
+        "startCost": {
+          "min": 120000,
+          "typical": 190000,
+          "max": 300000,
+          "confidence": "estimate",
+          "note": "Cafe-style build-out of a smaller space + juicer $11,900 + blenders $1,900 + walk-in or extra reach-ins + sealer $1,800. My calculation."
+        },
+        "space": {
+          "sqftMin": 300,
+          "sqftMax": 800,
+          "seats": 6
+        },
+        "permits": [
+          "FSE permit; HACCP plan if bottling juice for later sale",
+          "Unpasteurized juice warning label (Health Code Article 81, 21 CFR 101.17(g))"
+        ],
+        "equipment": "Cold-press juicer, commercial blenders with enclosures, produce washing sink, reach-in fridges, bottle sealer or capper.",
+        "staff": "2 at peaks; daily produce prep before opening.",
+        "demand": "January and June-August peaks; affluent residential and gym-adjacent blocks; fragile to fashion.",
+        "risks": [
+          "Spoilage: produce lasts days, juice has a short shelf life",
+          "Fashion cycle and chain collapses",
+          "Label and HACCP violations",
+          "High ticket ($9-$13) with low repeat outside peaks"
+        ],
+        "reusesFromCafe": [
+          "FSE permit, levers, sizing logic (small)"
+        ],
+        "needsOwn": [
+          "produce cogs index",
+          "spoilage per day",
+          "January demand spike",
+          "label violation"
+        ],
+        "packOverrides": {
+          "unit.refPrice": 11.0,
+          "unit.cogsPerUnit": 3.6,
+          "startCapital": 190000
+        },
+        "sources": [
+          "https://www.goodnature.com/reseller",
+          "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+          "https://evgrieve.com/2025/10/the-last-of-east-village-juice-press.html",
+          "https://tribecacitizen.com/2026/08/04/juice-press-on-greenwich-has-closed/comment-page-1/",
+          "https://www.amny.com/eat-and-drink/organic-avenue-closing-all-stores-after-october-15-1.10967154",
+          "https://www.6sqft.com/?p=42480"
+        ]
+      },
+      {
+        "id": "bubble_tea",
+        "name": "Bubble tea shop",
+        "tier": "core",
+        "differsFromCafe": "Cheaper bar (no $7,600 espresso machine, no $2,000 grinders) but a different supply chain: tapioca pearls, tea and syrups are imported mostly from Taiwan and Southeast Asia, so tariffs and shipping move the cost per drink. Pearls are cooked in batches and lose texture within hours, which forces discards. Customers are students and young adults, the peak is afternoon and evening, and wide plastic straws run into the city's on-request straw law.",
+        "startCost": {
+          "min": 100000,
+          "typical": 170000,
+          "max": 280000,
+          "confidence": "estimate",
+          "note": "Small storefront build-out + sealer $1,800 + pearl cooker and dispensers $4,500 + blenders $1,900 + ice machine $3,500 + refrigeration; franchise brands add a fee. My calculation."
+        },
+        "space": {
+          "sqftMin": 400,
+          "sqftMax": 900,
+          "seats": 10
+        },
+        "permits": [
+          "FSE permit and Food Protection Certificate (same as cafe)",
+          "Straws: plastic only on request (Local Law 64 of 2021)"
+        ],
+        "equipment": "Sealer, pearl cooker, tea brewers, fructose dispenser, blenders, ice machine, shaker station.",
+        "staff": "2-3 per shift; fast to train; open late.",
+        "demand": "Afternoon and evening, summer peak, near schools and universities; delivery share high.",
+        "risks": [
+          "Tariffs on Taiwanese inputs",
+          "Saturation: chains open near each other",
+          "Time-temperature rules for cooked pearls",
+          "Straw law fines $100-$400"
+        ],
+        "reusesFromCafe": [
+          "FSE permit, health violations, levers.cleaning, staff wage rules, delivery mechanics"
+        ],
+        "needsOwn": [
+          "afternoon/evening hourly curve",
+          "import cogs index (tariffs)",
+          "pearl batch lever",
+          "school calendar demand"
+        ],
+        "packOverrides": {
+          "unit.refPrice": 7.5,
+          "unit.cogsPerUnit": 1.9,
+          "startCapital": 170000
+        },
+        "sources": [
+          "https://pos.toasttab.com/blog/on-the-line/how-much-does-it-cost-to-open-a-boba-shop",
+          "https://www.market-prospects.com/articles/from-trade-wars-to-bubble-tea-when-global-tariffs-impact-a-local-industry",
+          "https://www.ktvu.com/news/tariffs-impact-boba-guys-us-based-bubble-tea-factory",
+          "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page"
+        ]
+      },
+      {
+        "id": "cafe_wine_bar",
+        "name": "Cafe by day, wine and beer by night",
+        "tier": "core",
+        "differsFromCafe": "The same room earns a second shift: 5-10 p.m. wine and beer at a $14-$18 ticket. The price is a state license and time: Restaurant Wine is $960 for two years in NYC plus $100 filing (and requires a kitchen and a real menu), a 30-day community board notice comes first, new applications took 24-26 weeks, and the 180-day temporary permit ($640) bridges part of the wait. Then come evening labor, liquor liability insurance, underage stings and neighbours' noise complaints.",
+        "startCost": {
+          "min": 15000,
+          "typical": 30000,
+          "max": 60000,
+          "confidence": "estimate",
+          "note": "On top of the cafe: license $1,060 + temporary permit $640 + lawyer $5,000 + wine and beer fit-out $6,000 + opening wine stock $4,000 + menu and kitchen upgrade to qualify (ventless oven $17,190 when needed). My calculation."
+        },
+        "space": {
+          "sqftMin": 800,
+          "sqftMax": 1500,
+          "seats": 24
+        },
+        "permits": [
+          "SLA Restaurant Wine (or Tavern Wine) license",
+          "SLA Temporary Retail Permit",
+          "30-day community board notice",
+          "NYC retail liquor license tax (25% of the annual fee)",
+          "Kitchen and menu that satisfy the SLA"
+        ],
+        "equipment": "Wine fridge, kegerator, glassware, simple hot food line.",
+        "staff": "Evening server-bartender; anyone serving must be 18+; owner or manager on site for license compliance.",
+        "demand": "Thursday-Saturday evenings; neighbourhoods with residents rather than office districts.",
+        "risks": [
+          "License wait: 6-12 months with rent running",
+          "Community board stipulations: closing hours, no outdoor drinks",
+          "Underage sale: $2,500-$4,000 first offense",
+          "Dram shop liability",
+          "Noise complaints near apartments"
+        ],
+        "reusesFromCafe": [
+          "everything; this is the cafe with a second shift"
+        ],
+        "needsOwn": [
+          "second daypart with its own demand and ticket",
+          "license timeline mechanic",
+          "alcohol cogs (wine about 30%)",
+          "noise and sting violations"
+        ],
+        "packOverrides": {
+          "eveningUnit.refPrice": 16.0,
+          "eveningUnit.cogsPerUnit": 4.8
+        },
+        "sources": [
+          "https://sla.ny.gov/system/files/documents/2026/06/retail-fee-chart_6122026.pdf",
+          "https://sla.ny.gov/system/files/documents/2026/03/temporary-retail-st-permit_02262026_0.pdf",
+          "https://www.cb11m.org/liquor-licenses/",
+          "https://lawrodriguez.com/articles/the-return-of-long-liquor-license-delays-in-nyc/",
+          "https://www.nyc.gov/site/finance/business/business-retail-beer-wine-and-liquor-license-tax.page",
+          "https://nyc-business.nyc.gov/nycbusiness/description/restaurant-wine-license",
+          "https://nyc-business.nyc.gov/nycbusiness/description/tavern-wine-license"
+        ]
+      },
+      {
+        "id": "delivery_kitchen",
+        "name": "Delivery-only kitchen (shared or ghost kitchen)",
+        "tier": "deep",
+        "differsFromCafe": "No storefront, no walk-in customers, no foot traffic: all orders come through apps that keep 23% (basic plan) to 43% (enhanced plan) of each order under NYC's caps. Rent is hours in a shared kitchen ($25-$48 an hour in Brooklyn and Queens listings) or a station in a ghost kitchen. Visibility is the app's ranking, not the street. The operator can disappear overnight: Pilotworks locked out 175 food businesses in Brooklyn in 2019; Reef closed its three New York ghost kitchens.",
+        "startCost": {
+          "min": 15000,
+          "typical": 35000,
+          "max": 80000,
+          "confidence": "estimate",
+          "note": "Kitchen onboarding $3,500 + small equipment $5,000 + packaging and tablets $1,500 + permits + photography and launch promotions $5,000 + 3 months of working capital. My calculation."
+        },
+        "space": {
+          "sqftMin": 0,
+          "sqftMax": 300,
+          "seats": 0
+        },
+        "permits": [
+          "Each business still needs its own DOHMH permit or must operate under the shared kitchen's arrangement",
+          "Food Protection Certificate",
+          "Insurance certificate naming the kitchen"
+        ],
+        "equipment": "Mostly the kitchen's; you bring smallwares, packaging, label printer.",
+        "staff": "1-3 cooks; no front of house.",
+        "demand": "Evening and weekend delivery; ranking falls without promotions; ratings drive everything.",
+        "risks": [
+          "Commission 23%-43%",
+          "Operator closure (Pilotworks 2019)",
+          "Algorithm changes",
+          "No walk-in fallback"
+        ],
+        "reusesFromCafe": [
+          "FSE rules, food safety violations, staff wage rules"
+        ],
+        "needsOwn": [
+          "no footTraffic; demand = app impressions x conversion",
+          "deliveryShare = 1",
+          "rating mechanic",
+          "kitchen hours as rent"
+        ],
+        "packOverrides": {
+          "unit.refPrice": 18.0,
+          "sizing.takeawayShare": 1.0,
+          "startCapital": 35000
+        },
+        "sources": [
+          "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+          "https://council.nyc.gov/press/2025/05/01/2859/",
+          "https://thekitchendoor.com/kitchen-rental/ben-commissary-shared-kitchen",
+          "https://thekitchendoor.com/kitchen-rental/nimbus-downtown-brooklyn",
+          "https://thecounter.org/major-food-incubator-closes-suddenly-leaves-175-companies-kitchenless/",
+          "https://bisnow.com/new-york/news/industrial/ghost-kitchen-reef-technology-closing-three-new-york-locations-125368"
+        ]
+      },
+      {
+        "id": "market_stall",
+        "name": "Market stall or pop-up (street fairs, Smorgasburg, holiday markets)",
+        "tier": "deep",
+        "differsFromCafe": "A weekend or seasonal stand instead of a lease: a $70 annual Temporary Food Service Establishment permit, a tent and the market's fee. Markets choose vendors by application and demand weekly commitment (vendors who miss a day still pay). It is how many NYC food brands test a product before signing a lease.",
+        "startCost": {
+          "min": 3000,
+          "typical": 8000,
+          "max": 20000,
+          "confidence": "estimate",
+          "note": "Tent and gear $2,500 + permit $70 + G-23 if propane + first market fees + stock. An older profile priced a Smorgasburg 10x10 stall at $120-$225 a day; electricity adds $50 a day (Appear Here)."
+        },
+        "space": {
+          "sqftMin": 100,
+          "sqftMax": 100,
+          "seats": 0
+        },
+        "permits": [
+          "Temporary Food Service Establishment Permit ($70 / year)",
+          "Food Protection Certificate holder on site",
+          "FDNY G-23 for propane"
+        ],
+        "equipment": "Tent, tables, coolers, hand-wash station, generator or market power.",
+        "staff": "2 on market days.",
+        "demand": "Weekends April-October; November-December holiday markets; rain cancels.",
+        "risks": [
+          "Weather cancellations still cost the fee",
+          "Market selection: not accepted next season",
+          "Commissary or licensed kitchen still needed for prep"
+        ],
+        "reusesFromCafe": [
+          "unit, levers.sourcing, health violations"
+        ],
+        "needsOwn": [
+          "days-per-month instead of a full month",
+          "market fee per day",
+          "weather cancellation"
+        ],
+        "packOverrides": {
+          "unit.refPrice": 10.0,
+          "sizing.takeawayShare": 1.0,
+          "startCapital": 8000
+        },
+        "sources": [
+          "https://portal.311.nyc.gov/article/?kanumber=KA-01825",
+          "https://www.nyc.gov/assets/doh/downloads/pdf/permit/tfse-application-packet.pdf",
+          "https://specialtyfoodmagazine.epubxp.com/i/123797/51",
+          "https://la.smorgasburg.com/vendor-info",
+          "https://www.appearhere.us/spaces/smorgasburg-saturday-in-williamsburg-f-b",
+          "https://documentedny.com/2025/04/17/street-vendor-nyc-fairs-markets/"
+        ]
+      },
+      {
+        "id": "concession_kiosk",
+        "name": "Kiosk in a park, plaza or inside another business",
+        "tier": "deep",
+        "differsFromCafe": "No market rent: you pay the owner the greater of a guaranteed minimum or a share of gross sales (NYC Parks: 6%-11%; Harlem Meer snack bar 9% vs $20,000 in year 1; Cadman Plaza cafe 10%). Spots are won by proposal (RFP) for multi-year terms; a business improvement district or park conservancy can run its own kiosk RFPs (Bryant Park 2024, The Battery 2025). Footfall is the park's: huge in summer weekends, thin in winter.",
+        "startCost": {
+          "min": 40000,
+          "typical": 80000,
+          "max": 150000,
+          "confidence": "estimate",
+          "note": "Kiosk fit-out often partly provided; equipment $15,000-$25,000, concession deposit $10,000, proposal preparation, working capital for the slow first winter. My calculation."
+        },
+        "space": {
+          "sqftMin": 80,
+          "sqftMax": 400,
+          "seats": 0
+        },
+        "permits": [
+          "FSE permit or Restricted Area mobile permit",
+          "Concession license from NYC Parks or the private owner",
+          "Parks rules on hours, menu and signage"
+        ],
+        "equipment": "Same bar as the takeaway window.",
+        "staff": "1-3, season-dependent.",
+        "demand": "Weekend and summer heavy; events in the park; winter closure in many kiosks.",
+        "risks": [
+          "Guaranteed minimum due even in a bad season",
+          "License not renewed at the end of the term",
+          "Owner's rules on menu and prices",
+          "Seasonal closure"
+        ],
+        "reusesFromCafe": [
+          "takeaway window economics",
+          "FSE permit"
+        ],
+        "needsOwn": [
+          "rent = max(minimum, % of sales)",
+          "park seasonality",
+          "RFP win as a roadmap step"
+        ],
+        "packOverrides": {
+          "sizing.takeawayShare": 1.0,
+          "startCapital": 80000
+        },
+        "sources": [
+          "https://static.nycgovparks.org/images/pagefiles/203/Harlem-Meer-Step-2-NPH-Final-approved-__676adfc6612a7.pdf",
+          "https://static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cadman-Plaza-Cafe-05122025__680bcae9c9b47.pdf",
+          "https://www2.nycgovparks.org/opportunities/concessions/rfps-rfbs-rfeis",
+          "https://www.thebattery.org/wp-content/uploads/2025/07/2025-RFP-Bosque-Kiosks-HC.pdf",
+          "https://bryantpark.org:443/assets/uploads/documents/general/RFP_for_BP_Kiosks_02-26-24.pdf"
+        ]
+      }
+    ],
+    "transitions": [
+      {
+        "id": "add_hot_kitchen",
+        "from": "cafe",
+        "to": "cafe with hot food",
+        "options": [
+          {
+            "path": "ventless",
+            "cost": 17190,
+            "monthsWithoutRevenueLoss": 0,
+            "permits": [
+              "Check DOB/FDNY acceptance of the UL 710B listing"
+            ],
+            "source": "https://www.webstaurantstore.com/turbochef-bullet-high-speed-accelerated-cooking-cooking-countertop-oven/532BULLETM.html",
+            "confidence": "verified"
+          },
+          {
+            "path": "type1_hood",
+            "cost": 45000,
+            "monthsOfWork": 3,
+            "permits": [
+              "DOB mechanical filing for hood and duct",
+              "FDNY suppression installation and acceptance test",
+              "FDNY Commercial Cooking System permit $70",
+              "Gas authorization if gas"
+            ],
+            "source": "https://sinra.ai/projects/permits/mechanical-systems-852-9-avenue-manhattan-622733663",
+            "confidence": "estimate"
+          }
+        ],
+        "note": "A cafe that wants hot sandwiches picks a ventless oven (one purchase, light-duty food only) or a Type I hood (heavy work, a roof duct, often the landlord's consent and weeks with the counter closed). The landlord's lease must allow cooking: many retail leases forbid 'cooking with open flame or grease-producing equipment'."
+      },
+      {
+        "id": "add_alcohol",
+        "from": "cafe",
+        "to": "cafe_wine_bar",
+        "steps": [
+          "Community board 30-day notice and hearing",
+          "SLA application with floor plan and menu",
+          "Temporary Retail Permit ($640, about 6-8 weeks)",
+          "License ($960 + $100 for two years, 24-26 weeks or more)",
+          "NYC license tax, liquor liability insurance, staff training"
+        ],
+        "cost": 15000,
+        "months": 6,
+        "source": "https://sla.ny.gov/system/files/documents/2026/06/retail-fee-chart_6122026.pdf",
+        "confidence": "estimate",
+        "note": "Costs from the SLA fee chart and TRP form; the $15,000 adds the lawyer, fit-out and opening stock (my estimate)."
+      },
+      {
+        "id": "second_location",
+        "from": "cafe",
+        "to": "two cafes",
+        "cost": 224000,
+        "months": 6,
+        "source": "packs/cafe.json",
+        "confidence": "estimate",
+        "note": "A second site repeats the whole setup (new lease, deposit, build-out, its own FSE permit: permits are per address) and needs a manager at the first site ($4,800 a month in the cafe pack) because the owner can no longer stand behind both counters. Shared purchasing and one roaster contract save a few points of cost of goods."
+      },
+      {
+        "id": "cart_to_storefront",
+        "from": "coffee_cart",
+        "to": "takeaway_window or cafe",
+        "cost": 95000,
+        "months": 4,
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+        "confidence": "estimate",
+        "note": "The usual graduation path: the cart proves a following, then a window lease. The cart permit and the storefront FSE permit are separate; a supervisory license holder must still work the cart if it stays open."
+      }
+    ],
+    "mechanics": [
+      {
+        "id": "format_choice",
+        "title": "Choose the food format at the start",
+        "tier": "core",
+        "playerDecision": "Before picking a space, the player picks a format: cafe, takeaway window, cart, truck, bakery-cafe, sandwich bar, juice bar, bubble tea, cafe-wine bar, delivery kitchen, market stall or park kiosk.",
+        "engineMath": "The format loads the cafe pack and applies extra.formats[].packOverrides (startCapital, unit.refPrice, unit.cogsPerUnit, sizing.takeawayShare) plus the format's own setup items (setup[].formats contains the format id). Rent comes from the place, except: cart/truck -> monthlyCosts.commissary_fee; delivery_kitchen -> shared_kitchen_hours; concession_kiosk -> max(minimum, concession_share x revenue). Demand: footTraffic-based for storefront formats; delivery_kitchen uses deliveryShare = 1 and ignores footTraffic.",
+        "fieldsNeeded": [
+          "extra.formats[].packOverrides",
+          "setup[].formats",
+          "monthlyCosts by format",
+          "hourly demand profile by format (breakfast, lunch, afternoon, evening)"
+        ],
+        "numbers": [
+          {
+            "what": "Cafe start capital in the current pack",
+            "value": 224000,
+            "source": "packs/cafe.json",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Cart unit permit, two years",
+            "value": 200,
+            "source": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
+            "confidence": "verified"
+          },
+          {
+            "what": "Delivery app basic plan cap",
+            "value": 0.23,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+            "confidence": "verified"
+          }
+        ]
+      },
+      {
+        "id": "vending_permit_queue",
+        "title": "The cart permit queue and the permit black market",
+        "tier": "core",
+        "playerDecision": "A cart player either waits for the city's permit list (no sales meanwhile, or sells only on private property with a Restricted Area permit) or rents someone else's permit now (shortcut rent_vending_permit).",
+        "engineMath": "Legal path: the permit arrives after N months, where N falls each fiscal year from July 2026 to 2031 as 2,200 new applications open (announced to all players in advance). Black-market path: monthly cost black_market_permit_rent ($850), immediate sales; violation permit_holder_absent can be found by dsny_vendor_officer inspection or a rival's report; on finding: fine, cart removed for closureDays, and the permit is lost (back to the queue). Restricted Area path: no queue, but demand x 0.6 (private plazas only) plus a fee to the owner (lever cart_spot).",
+        "fieldsNeeded": [
+          "shortcut.unlocks (a shortcut that buys time instead of money)",
+          "queueMonths by game year",
+          "permit loss on violation"
+        ],
+        "numbers": [
+          {
+            "what": "New supervisory license applications per year 2026-2031",
+            "value": 2200,
+            "source": "https://www.6sqft.com/nyc-passes-landmark-street-vendor-reform-including-expanding-permit-cap/",
+            "confidence": "verified"
+          },
+          {
+            "what": "New permits per year under Local Law 18 of 2021 through FY2026",
+            "value": 445,
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
+            "confidence": "verified"
+          },
+          {
+            "what": "Black-market permit rent, two years, upper end",
+            "value": 25000,
+            "source": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+            "confidence": "verified"
+          }
+        ]
+      },
+      {
+        "id": "evening_alcohol_license",
+        "title": "Adding evening wine and beer: the license clock",
+        "tier": "core",
+        "playerDecision": "Apply to add alcohol (lever alcohol_program); choose whether to wait for the temporary permit or pour early (shortcut pour_before_license).",
+        "engineMath": "Month 0: community board notice (30 days). Month 1: SLA filing + TRP application ($100 + $960 + $640). TRP arrives about 2 months later and lasts 6 months; license arrives at month 1 + 6 to 12 (announced range; the exact month is set at filing, no dice). While licensed: a second daypart opens with its own demand (evening residents) and ticket $16, cogs 30%; costs: evening labor, liquor_liability_insurance, nyc_liquor_license_tax once a year. Community board stipulations cap closing time (options wine_beer_late unavailable if the board stipulated 10 p.m.).",
+        "fieldsNeeded": [
+          "dayparts: separate demand and ticket per daypart",
+          "license timeline per application",
+          "stipulations as option locks"
+        ],
+        "numbers": [
+          {
+            "what": "Restaurant Wine license fee, NYC, two years",
+            "value": 960,
+            "source": "https://sla.ny.gov/system/files/documents/2026/06/retail-fee-chart_6122026.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Temporary Retail Permit, 180 days, wine/liquor",
+            "value": 640,
+            "source": "https://sla.ny.gov/system/files/documents/2026/03/temporary-retail-st-permit_02262026_0.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "SLA processing estimate for new applications, weeks",
+            "value": 26,
+            "source": "https://lawrodriguez.com/articles/the-return-of-long-liquor-license-delays-in-nyc/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "First-offense sale to minor, civil penalty, low end",
+            "value": 2500,
+            "source": "https://sla.ny.gov/news/04112024-sla-conducts-underage-drinking-operation-bethlehem",
+            "confidence": "verified"
+          }
+        ]
+      },
+      {
+        "id": "hot_food_upgrade",
+        "title": "Hot food: ventless oven or a real hood",
+        "tier": "core",
+        "playerDecision": "Lever hot_food: cold only, ventless oven ($17,190, no works) or a full Type I hood ($45,000, months of works).",
+        "engineMath": "Ventless: one setup purchase, demand +6%, quality +0.02, ticket +$1.50; menu limited (no frying). Hood: setup $45,000 + 2-3 months of partial operation (counter open, kitchen closed), FDNY permit and $250 a month of cleaning and suppression service; skipping the service (shortcut skip_suppression_service) triggers suppression_overdue after 3 months and, with grease build-up, a kitchen fire event that closes the shop (the fire is a consequence, not a dice roll: it happens in the announced month if the service was skipped for 6 months).",
+        "fieldsNeeded": [
+          "setup option groups (either-or)",
+          "partial-operation months during works",
+          "deferred consequence after N months of a shortcut"
+        ],
+        "numbers": [
+          {
+            "what": "TurboChef Bullet ventless oven",
+            "value": 17190,
+            "source": "https://www.webstaurantstore.com/turbochef-bullet-high-speed-accelerated-cooking-cooking-countertop-oven/532BULLETM.html",
+            "confidence": "verified"
+          },
+          {
+            "what": "DOB filing, new Type I hood and exhaust, 852 Ninth Ave",
+            "value": 22000,
+            "source": "https://sinra.ai/projects/permits/mechanical-systems-852-9-avenue-manhattan-622733663",
+            "confidence": "estimate"
+          },
+          {
+            "what": "FDNY commercial cooking system permit",
+            "value": 70,
+            "source": "https://www.nyc.gov/site/fdny/business/all-certifications/per-commercialcookingsystem.page",
+            "confidence": "verified"
+          }
+        ]
+      },
+      {
+        "id": "delivery_platform_economics",
+        "title": "Delivery apps: capped commission and the enhanced tier",
+        "tier": "core",
+        "playerDecision": "Lever delivery_plan: no apps, basic plan, or enhanced plan.",
+        "engineMath": "Delivery revenue = deliveryShare x demand x ticket. Fee = 23% (basic) or up to 43% (enhanced) of delivery revenue (monthlyCosts.delivery_app_commission). Enhanced plan raises deliveryShare; the event delivery_enhanced_tier lowers deliveryShare for basic-plan players. For delivery_kitchen, deliveryShare = 1 and footTraffic is ignored.",
+        "fieldsNeeded": [
+          "deliveryShare per format",
+          "commission by plan"
+        ],
+        "numbers": [
+          {
+            "what": "Delivery fee cap",
+            "value": 0.15,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Basic service cap",
+            "value": 0.05,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Enhanced service extra cap",
+            "value": 0.2,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Card processing cap",
+            "value": 0.03,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+            "confidence": "verified"
+          }
+        ]
+      },
+      {
+        "id": "second_location",
+        "title": "Opening a second location",
+        "tier": "deep",
+        "playerDecision": "After month 6 with positive cash, the player may open a second site.",
+        "engineMath": "The second site is a new business object with its own place, setup, lease and FSE permit (permits are per address). The owner can staff only one counter: the first site needs the manager (manager.monthlySalary) or loses the owner's quality bonus. Shared purchasing: cogs x 0.97 at both sites. Cash is shared, so a bad second site can sink the first one.",
+        "fieldsNeeded": [
+          "multiple businesses per player",
+          "owner presence flag",
+          "shared cash"
+        ],
+        "numbers": [
+          {
+            "what": "Manager salary in the cafe pack",
+            "value": 4800,
+            "source": "packs/cafe.json",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "concession_fee_floor",
+        "title": "Concession rent: the greater of a minimum or a share of sales",
+        "tier": "deep",
+        "playerDecision": "Bid for a park or plaza kiosk: choose the share of sales and the guaranteed minimum to offer.",
+        "engineMath": "Monthly rent = max(minimum / 12, share x revenue). Higher bids win the spot (other players or a fixed city reserve); the winner is locked in for the license term.",
+        "fieldsNeeded": [
+          "rent formula type max(fixed, pct)",
+          "auction of spots"
+        ],
+        "numbers": [
+          {
+            "what": "Harlem Meer snack bar share of gross receipts",
+            "value": 0.09,
+            "source": "https://static.nycgovparks.org/images/pagefiles/203/Harlem-Meer-Step-2-NPH-Final-approved-__676adfc6612a7.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Harlem Meer year-1 minimum",
+            "value": 20000,
+            "source": "https://static.nycgovparks.org/images/pagefiles/203/Harlem-Meer-Step-2-NPH-Final-approved-__676adfc6612a7.pdf",
+            "confidence": "verified"
+          },
+          {
+            "what": "Cadman Plaza cafe share of gross receipts",
+            "value": 0.1,
+            "source": "https://static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cadman-Plaza-Cafe-05122025__680bcae9c9b47.pdf",
+            "confidence": "verified"
+          }
+        ]
+      },
+      {
+        "id": "bakery_agency_switch",
+        "title": "Bakery: city or state regulator by sales mix",
+        "tier": "exotic",
+        "playerDecision": "A bakery-cafe chooses how much to sell wholesale to other cafes.",
+        "engineMath": "If wholesale share > 50%, the business needs NYS Agriculture and Markets Article 20-C ($400 / 2 years) instead of the city FSE permit; letting the state license lapse while the city sees a retail shop leads to a city 'no permit' violation and closure until a city permit is issued (Duane Park Patisserie: violation September 8, 2025, closed October 20, reopened days later after inspection).",
+        "fieldsNeeded": [
+          "wholesale channel share",
+          "licensing authority switch"
+        ],
+        "numbers": [
+          {
+            "what": "Article 20-C license fee, two years",
+            "value": 400,
+            "source": "https://nysenate.gov/legislation/laws/AGM/251-Z-3",
+            "confidence": "verified"
+          }
+        ]
+      }
+    ],
+    "eventCatalog": [
+      {
+        "id": "vending_permit_applications_open",
+        "name": "New cart permits become available",
+        "text": "The city opens a new round of supervisory license applications for street food vendors. Expect more carts on busy corners from next month.",
+        "scale": "city",
+        "months": [
+          7
+        ],
+        "realSignal": "DOHMH/DCWP invitation round under Intro 431-B (January 2026): 2,200 supervisory license applications a year, fiscal years 2027-2031",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.98
+          },
+          {
+            "field": "permitQueueMonths",
+            "mult": 0.7
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cart_spot"
+          },
+          {
+            "kind": "shortcut",
+            "id": "rent_vending_permit"
+          }
+        ],
+        "realFrequency": "Once a year, July, 2026-2031",
+        "tier": "core",
+        "source": "https://www.6sqft.com/nyc-passes-landmark-street-vendor-reform-including-expanding-permit-cap/",
+        "confidence": "estimate",
+        "note": "The 2,200 figure is from the law as reported; the 2% capture loss for storefronts on vendor-heavy blocks and the 30% shorter queue are my estimates.",
+        "formats": [
+          "cafe",
+          "takeaway_window",
+          "coffee_cart",
+          "food_truck"
+        ]
+      },
+      {
+        "id": "vending_enforcement_sweep",
+        "name": "Sanitation vending sweep on your corridor",
+        "text": "Sanitation and police sweep the avenue: carts too close to crosswalks are ticketed and some setups are removed.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "DSNY Street Vending Enforcement operations; Roosevelt Avenue crackdown, spring 2025",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.8
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cart_spot"
+          },
+          {
+            "kind": "shortcut",
+            "id": "cart_too_close"
+          }
+        ],
+        "realFrequency": "Several times a year on busy corridors",
+        "tier": "core",
+        "source": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+        "confidence": "estimate",
+        "note": "Queens Eagle (April 2025): the Roosevelt Avenue crackdown pushed vendors toward black-market permits. Legal, well-placed carts lose only the days of disruption (my 20% estimate).",
+        "formats": [
+          "coffee_cart",
+          "food_truck"
+        ]
+      },
+      {
+        "id": "permit_holder_takes_back_permit",
+        "name": "Your permit holder wants it back",
+        "text": "The person whose permit you rent wants double, or plans to sell it to someone else at the end of the two-year cycle.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Two-year permit cycle; Queens Eagle reports of $14,000-$25,000 per cycle",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.0
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "rent_vending_permit"
+          },
+          {
+            "kind": "lever",
+            "id": "cart_spot"
+          }
+        ],
+        "realFrequency": "At each two-year renewal for rented permits",
+        "tier": "deep",
+        "source": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+        "confidence": "estimate",
+        "note": "Follows from the player's choice to rent a permit; the cart stops until a new permit or a Restricted Area spot is found.",
+        "formats": [
+          "coffee_cart",
+          "food_truck"
+        ]
+      },
+      {
+        "id": "permit_scam_offer",
+        "name": "A 'permit broker' offers a fast permit",
+        "text": "A stranger offers to get you a cart permit in two weeks for $3,000 cash up front.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "ABC7 report on a scammer targeting NYC street food vendors",
+        "effects": [
+          {
+            "field": "cash",
+            "mult": 1.0
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cart_spot"
+          },
+          {
+            "kind": "shortcut",
+            "id": "rent_vending_permit"
+          }
+        ],
+        "realFrequency": "Recurring scams reported by vendors",
+        "tier": "deep",
+        "source": "https://abc7ny.com/post/new-york-city-street-food-vendors-speak-permit-scammer-targeting/17467153/",
+        "confidence": "estimate",
+        "note": "A choice event: paying loses the cash and brings no permit. The legal route is the DOHMH list or a Restricted Area permit.",
+        "formats": [
+          "coffee_cart",
+          "food_truck"
+        ]
+      },
+      {
+        "id": "commissary_rent_hike",
+        "name": "Your commissary raises its fee",
+        "text": "Your depot raises the monthly fee by a third. Carts cannot legally operate without a commissary.",
+        "scale": "city",
+        "months": [
+          1,
+          7
+        ],
+        "realSignal": "Commissary price lists; DOHMH requirement of an approved commissary for every unit",
+        "effects": [
+          {
+            "field": "commissary_fee",
+            "mult": 1.33
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "commissary_choice"
+          }
+        ],
+        "realFrequency": "Typically at contract renewal",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+        "confidence": "estimate",
+        "note": "The size of the rise is my estimate; the requirement is from DOHMH.",
+        "formats": [
+          "coffee_cart",
+          "food_truck"
+        ]
+      },
+      {
+        "id": "meter_crackdown",
+        "name": "Midtown meter crackdown",
+        "text": "Traffic agents ticket and tow food trucks selling from metered spots in Midtown.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Enforcement of 34 RCNY 4-08(h)(8); CBS New York report on trucks chased from Midtown",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.85
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "truck_route"
+          },
+          {
+            "kind": "shortcut",
+            "id": "vend_from_meter"
+          }
+        ],
+        "realFrequency": "Periodic since 2011",
+        "tier": "deep",
+        "source": "https://www.cbsnews.com/newyork/news/food-trucks-being-chased-from-midtown-over-meter-rule",
+        "confidence": "estimate",
+        "note": "Monroy v. City of New York (2012) confirmed the rule applies to food trucks.",
+        "formats": [
+          "food_truck"
+        ]
+      },
+      {
+        "id": "congestion_toll_truck",
+        "name": "Congestion toll for the truck",
+        "text": "Every weekday trip into Manhattan below 60th Street pays the congestion toll.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "MTA Congestion Relief Zone toll (since January 5, 2025): passenger vehicles $9 at peak; trucks about $14-$22",
+        "effects": [
+          {
+            "field": "fixedCost",
+            "mult": 1.0
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "truck_route"
+          }
+        ],
+        "realFrequency": "Permanent",
+        "tier": "core",
+        "source": "https://altitude.geotab.com/news-and-releases/nyc-congestion-pricing-2026-update/",
+        "confidence": "estimate",
+        "note": "Add about $14.40 x 20 weekdays = $288 a month for a small truck working Midtown; vans tolled as passenger cars pay $9. Amounts from Geotab's summary, to be checked against MTA tables.",
+        "formats": [
+          "food_truck"
+        ]
+      },
+      {
+        "id": "truck_breakdown",
+        "name": "The truck breaks down",
+        "text": "The generator dies on the hottest week. The truck sits in the shop for ten days.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Follows four months on the 'fix it when it breaks' maintenance option",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.65
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "vehicle_maintenance"
+          }
+        ],
+        "realFrequency": "Consequence of the player's choice",
+        "tier": "core",
+        "source": "https://startbusinessbystate.com/new-york/food-truck/",
+        "confidence": "estimate",
+        "note": "Ten lost days of thirty = demand x 0.65; repair about $3,000; my estimates.",
+        "formats": [
+          "food_truck"
+        ]
+      },
+      {
+        "id": "fdny_propane_check",
+        "name": "FDNY checks propane on carts and trucks",
+        "text": "Fire inspectors check G-23 certificates and cylinder sizes at a street fair and on your route.",
+        "scale": "city",
+        "months": [
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "realSignal": "FDNY enforcement of the G-23 rule and LPG truck permits",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.5
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "swap_propane_yourself"
+          }
+        ],
+        "realFrequency": "Seasonal, with street fairs",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/fdny/business/all-certifications/cof-g23.page",
+        "confidence": "estimate",
+        "note": "FDNY: only a G-23 holder may connect LPG over one pound to a cart or truck; trucks may carry at most two cylinders of 100 lb.",
+        "formats": [
+          "coffee_cart",
+          "food_truck",
+          "market_stall"
+        ]
+      },
+      {
+        "id": "heat_advisory_cold_drinks",
+        "name": "Heat advisory: iced drinks fly, hot coffee stalls",
+        "text": "The heat index tops 95°F two days running. Bubble tea and juice sell out; nobody wants a hot latte from a cart.",
+        "scale": "city",
+        "months": [
+          6,
+          7,
+          8
+        ],
+        "realSignal": "NWS heat advisory for NYC: heat index 95-99°F for 2 consecutive days or 100-104°F for any duration",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.15,
+            "formats": [
+              "bubble_tea",
+              "juice_bar"
+            ]
+          },
+          {
+            "field": "demand",
+            "mult": 0.85,
+            "formats": [
+              "coffee_cart"
+            ]
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "pearl_batches"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Several advisories each summer (NWS Upton issued one on May 19, 2026)",
+        "tier": "core",
+        "source": "https://www.weather.gov/okx/extremeheat",
+        "confidence": "estimate",
+        "note": "Criteria from NWS and NYC Emergency Management; the demand multipliers are my estimates.",
+        "formats": [
+          "bubble_tea",
+          "juice_bar",
+          "coffee_cart",
+          "cafe"
+        ]
+      },
+      {
+        "id": "january_cleanse_peak",
+        "name": "January resolutions",
+        "text": "Everyone is on a cleanse. Juice and smoothie orders jump for three weeks, then fall back.",
+        "scale": "country",
+        "months": [
+          1
+        ],
+        "realSignal": "Seasonal search and sales peak for juice cleanses each January",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.25,
+            "formats": [
+              "juice_bar"
+            ]
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          }
+        ],
+        "realFrequency": "Every January",
+        "tier": "core",
+        "source": "https://www.goodnature.com/reseller",
+        "confidence": "estimate",
+        "note": "No public NYC sales series was found; the size is my estimate and needs data (see 'not found').",
+        "formats": [
+          "juice_bar"
+        ]
+      },
+      {
+        "id": "produce_price_spike",
+        "name": "Produce costs jump",
+        "text": "Greens, berries and citrus cost more this month after a bad harvest in California and Mexico.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3
+        ],
+        "realSignal": "BLS CPI 'fresh fruits and vegetables' index month over month",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.08,
+            "formats": [
+              "juice_bar",
+              "sandwich_bar"
+            ]
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          }
+        ],
+        "realFrequency": "Most winters",
+        "tier": "deep",
+        "source": "https://www.bls.gov/cpi/",
+        "confidence": "estimate",
+        "note": "Signal is the CPI series; the 8% size is my estimate.",
+        "formats": [
+          "juice_bar",
+          "sandwich_bar"
+        ]
+      },
+      {
+        "id": "egg_price_spike",
+        "name": "Egg prices spike (bird flu)",
+        "text": "Avian flu culls laying hens. Eggs cost more than double last year's price; every croissant and custard costs more.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3
+        ],
+        "realSignal": "BLS average price, eggs grade A large (FRED APU0000708111) above $4 a dozen",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.06,
+            "formats": [
+              "bakery_cafe"
+            ]
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "lever",
+            "id": "bake_schedule"
+          }
+        ],
+        "realFrequency": "Q1 2025 average $5.69; September 2026 $2.27",
+        "tier": "core",
+        "source": "https://fred.stlouisfed.org/data/APU0000708111",
+        "confidence": "verified",
+        "note": "Prices seen in the FRED data excerpt; the 6% cost-of-goods effect for a bakery (eggs about 10% of its ingredient cost) is my estimate.",
+        "formats": [
+          "bakery_cafe",
+          "cafe"
+        ]
+      },
+      {
+        "id": "butter_price_slump",
+        "name": "Butter gets cheap",
+        "text": "Butter on the Chicago exchange drops to $1.54 a pound, about half of 2024's record. Laminated pastry gets cheaper to make.",
+        "scale": "world",
+        "months": [
+          6,
+          7,
+          8
+        ],
+        "realSignal": "CME Grade AA butter cash price",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 0.96,
+            "formats": [
+              "bakery_cafe"
+            ]
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bake_schedule"
+          },
+          {
+            "kind": "lever",
+            "id": "wholesale_share"
+          }
+        ],
+        "realFrequency": "2024 record average $2.88/lb; 2025 average $2.22; July 22, 2026 $1.54",
+        "tier": "deep",
+        "source": "https://www.indexbox.io/blog/cme-grade-aa-butter-cash-price-falls-to-15400-per-pound-on-july-22-2026/",
+        "confidence": "estimate",
+        "note": "Prices from USDA/CME reports in the search excerpt; the 4% effect is my estimate.",
+        "formats": [
+          "bakery_cafe"
+        ]
+      },
+      {
+        "id": "tapioca_import_tariff",
+        "name": "Tariffs on Taiwanese ingredients",
+        "text": "New import duties hit pearls, tea and syrups. Your distributor adds a surcharge.",
+        "scale": "world",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "US tariff schedule on imports from Taiwan; distributor surcharges",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.08,
+            "formats": [
+              "bubble_tea"
+            ]
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "lever",
+            "id": "pearl_batches"
+          }
+        ],
+        "realFrequency": "Repeated in 2025",
+        "tier": "core",
+        "source": "https://www.market-prospects.com/articles/from-trade-wars-to-bubble-tea-when-global-tariffs-impact-a-local-industry",
+        "confidence": "estimate",
+        "note": "Inputs mostly from Taiwan or Southeast Asia; a US boba maker spoke of up to $1 more per drink (KTVU). The 8% is my estimate.",
+        "formats": [
+          "bubble_tea"
+        ]
+      },
+      {
+        "id": "back_to_school_boba",
+        "name": "Back to school",
+        "text": "Students are back. Afternoon lines return to the bubble tea counter.",
+        "scale": "city",
+        "months": [
+          9
+        ],
+        "realSignal": "NYC public school calendar and university terms",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.12,
+            "formats": [
+              "bubble_tea"
+            ]
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "pearl_batches"
+          }
+        ],
+        "realFrequency": "Every September",
+        "tier": "deep",
+        "source": "https://www.schools.nyc.gov/calendar",
+        "confidence": "estimate",
+        "note": "Size is my estimate.",
+        "formats": [
+          "bubble_tea"
+        ]
+      },
+      {
+        "id": "plastic_straw_inspection",
+        "name": "Straw law checks",
+        "text": "Consumer protection inspectors visit drink shops to check that plastic straws are only given on request.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "DCWP enforcement of Local Law 64 of 2021",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "plastic_straws_default"
+          }
+        ],
+        "realFrequency": "Enforcement since November 2021",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+        "confidence": "estimate",
+        "note": "Fines $100-$400 per violation.",
+        "formats": [
+          "bubble_tea",
+          "juice_bar",
+          "cafe"
+        ]
+      },
+      {
+        "id": "gas_turn_on_delay",
+        "name": "Con Edison gas turn-on delayed",
+        "text": "Your ovens are installed, but Con Edison says the building's service needs new piping. Gas could take months.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Con Edison gas availability answer for the address; DOB gas authorization status",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.8
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hot_food"
+          },
+          {
+            "kind": "lever",
+            "id": "bake_schedule"
+          }
+        ],
+        "realFrequency": "A 2017 NY Senate survey: only 17% of businesses got gas on time",
+        "tier": "core",
+        "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+        "confidence": "estimate",
+        "note": "Follows the player's choice of gas equipment in a space without confirmed gas. Lucky Bee cooked on induction for three months (DNAinfo 2016).",
+        "formats": [
+          "bakery_cafe",
+          "delivery_kitchen",
+          "cafe_wine_bar"
+        ]
+      },
+      {
+        "id": "building_gas_shutoff",
+        "name": "Gas shut off for the whole building",
+        "text": "A leak test upstairs fails. Con Edison locks the gas meter until the landlord's plumber passes a new test.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Con Edison shutoff after failed leak test or illegal piping",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.85
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hot_food"
+          }
+        ],
+        "realFrequency": "Several per year in old buildings",
+        "tier": "deep",
+        "source": "https://bronx.news12.com/con-ed-illegal-gas-plumbing-work-forces-service-shutdown-for-fordham-restaurant-tenants-41500504",
+        "confidence": "estimate",
+        "note": "News 12: a Fordham restaurant was told 6-8 months. Electric-only kitchens keep running.",
+        "formats": [
+          "bakery_cafe",
+          "delivery_kitchen",
+          "cafe_wine_bar",
+          "sandwich_bar"
+        ]
+      },
+      {
+        "id": "liquor_application_backlog",
+        "name": "Liquor Authority backlog",
+        "text": "New applications are taking six months or more. Your temporary permit may run out first.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "SLA notice on processing time for new applications: 24-26 weeks",
+        "effects": [
+          {
+            "field": "licenseWaitMonths",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "alcohol_program"
+          },
+          {
+            "kind": "shortcut",
+            "id": "pour_before_license"
+          }
+        ],
+        "realFrequency": "Recurring since 2019",
+        "tier": "core",
+        "source": "https://lawrodriguez.com/articles/the-return-of-long-liquor-license-delays-in-nyc/",
+        "confidence": "estimate",
+        "note": "Some NYC applications stayed open more than a year (Rodriguez Law).",
+        "formats": [
+          "cafe_wine_bar"
+        ]
+      },
+      {
+        "id": "community_board_stipulations",
+        "name": "Community board asks for a 10 p.m. close",
+        "text": "The board backs your liquor application on conditions: close by 10 p.m., no drinks on the sidewalk, no live music.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Community board SLA committee resolution on the application",
+        "effects": [
+          {
+            "field": "eveningHours",
+            "mult": 0.8
+          }
+        ],
+        "durationMonths": 24,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "alcohol_program"
+          }
+        ],
+        "realFrequency": "Common on residential blocks",
+        "tier": "core",
+        "source": "https://cbmanhattan.cityofnewyork.us/cb12/wp-content/uploads/sites/2/2026/01/2026.01-CB12M-SLA-Licensing-Manual.pdf",
+        "confidence": "estimate",
+        "note": "Boards are advisory; the SLA often writes the stipulations into the license method of operation.",
+        "formats": [
+          "cafe_wine_bar"
+        ]
+      },
+      {
+        "id": "temporary_permit_expiring",
+        "name": "Temporary permit about to expire",
+        "text": "Your 180-day temporary permit runs out next month and the license is still pending.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "SLA temporary retail permit term (180 days since 2024) and extension rules",
+        "effects": [
+          {
+            "field": "cash",
+            "mult": 1.0
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "alcohol_program"
+          },
+          {
+            "kind": "shortcut",
+            "id": "pour_before_license"
+          }
+        ],
+        "realFrequency": "Whenever the license outruns the permit",
+        "tier": "deep",
+        "source": "https://sla.ny.gov/system/files/documents/2026/03/temporary-retail-st-permit_02262026_0.pdf",
+        "confidence": "verified",
+        "note": "The SLA form lists 30- and 60-day extensions (for beer-only: $64 and $128).",
+        "formats": [
+          "cafe_wine_bar"
+        ]
+      },
+      {
+        "id": "underage_decoy_operation",
+        "name": "Underage decoy operation",
+        "text": "The Liquor Authority and police send under-21 decoys into licensed places across the borough this month.",
+        "scale": "city",
+        "months": [
+          5,
+          6,
+          9,
+          12
+        ],
+        "realSignal": "SLA press releases on underage drinking operations",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 2.0
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "id_checks"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_id_checks"
+          }
+        ],
+        "realFrequency": "Several operations a year per region",
+        "tier": "core",
+        "source": "https://sla.ny.gov/news/04112024-sla-conducts-underage-drinking-operation-bethlehem",
+        "confidence": "estimate",
+        "note": "Penalty from SLA: $2,500-$4,000 first offense, up to $10,000.",
+        "formats": [
+          "cafe_wine_bar"
+        ]
+      },
+      {
+        "id": "noise_complaints_wine_nights",
+        "name": "Neighbours complain about late nights",
+        "text": "Upstairs tenants call 311 about voices and music after 10 p.m. DEP measures the noise in their apartment.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "311 noise complaints; DEP 42 dBA limit in a dwelling for commercial music",
+        "effects": [
+          {
+            "field": "reputation",
+            "mult": 0.98
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "alcohol_program"
+          }
+        ],
+        "realFrequency": "Follows the 'until midnight' option",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-code-fact-sheet.pdf",
+        "confidence": "estimate",
+        "note": "DEP fact sheet: commercial establishments may not exceed 42 dBA measured inside a dwelling; DEP can mitigate a first violation to zero if the owner fixes it (limiter, consultant).",
+        "formats": [
+          "cafe_wine_bar"
+        ]
+      },
+      {
+        "id": "delivery_enhanced_plan_push",
+        "name": "Apps push the enhanced plan",
+        "text": "Delivery apps move enhanced-plan restaurants to the top of the list. Basic-plan kitchens lose orders.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Local Law 79 of 2025: optional enhanced services up to 20% on top of the 23% basic cap",
+        "effects": [
+          {
+            "field": "deliveryShare",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "delivery_plan"
+          }
+        ],
+        "realFrequency": "Ongoing since 2025",
+        "tier": "core",
+        "source": "https://council.nyc.gov/press/2025/05/01/2859/",
+        "confidence": "estimate",
+        "note": "The size is my estimate.",
+        "formats": [
+          "delivery_kitchen",
+          "cafe",
+          "bubble_tea",
+          "sandwich_bar"
+        ]
+      },
+      {
+        "id": "fee_cap_review",
+        "name": "City reviews delivery fee caps",
+        "text": "Consumer protection asks restaurants for feedback on the delivery fee caps. Changes could follow next year.",
+        "scale": "city",
+        "months": [
+          4
+        ],
+        "realSignal": "DCWP fee-cap feedback flyer, April 2026",
+        "effects": [
+          {
+            "field": "deliveryShare",
+            "mult": 1.0
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "delivery_plan"
+          }
+        ],
+        "realFrequency": "Periodic",
+        "tier": "exotic",
+        "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+        "confidence": "estimate",
+        "note": "An announcement event with no immediate effect.",
+        "formats": [
+          "delivery_kitchen"
+        ]
+      },
+      {
+        "id": "shared_kitchen_lockout",
+        "name": "Your shared kitchen shuts overnight",
+        "text": "The kitchen operator emails tenants that it is closing today. Your stock is inside and orders are queued.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Operator insolvency; Pilotworks Brooklyn closed with hours of notice in October 2019 (175 businesses)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.3
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "kitchen_contract"
+          }
+        ],
+        "realFrequency": "Rare, but repeated (Pilotworks 2019; Reef closed three NY sites)",
+        "tier": "deep",
+        "source": "https://thecounter.org/major-food-incubator-closes-suddenly-leaves-175-companies-kitchenless/",
+        "confidence": "estimate",
+        "note": "Announced-in-advance rule: the game announces the operator's trouble a month ahead (missed payments, staff layoffs) so the player can move.",
+        "formats": [
+          "delivery_kitchen",
+          "market_stall"
+        ]
+      },
+      {
+        "id": "ghost_kitchen_operator_exit",
+        "name": "Ghost kitchen operator leaves New York",
+        "text": "The company running your ghost kitchen files to close its New York sites at the end of next month.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "NY State WARN notice filings by kitchen operators",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.5
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "kitchen_contract"
+          }
+        ],
+        "realFrequency": "Reef: three NY sites, 53 workers, closure on September 30",
+        "tier": "deep",
+        "source": "https://bisnow.com/new-york/news/industrial/ghost-kitchen-reef-technology-closing-three-new-york-locations-125368",
+        "confidence": "estimate",
+        "note": "WARN filings give the advance notice the game needs.",
+        "formats": [
+          "delivery_kitchen"
+        ]
+      },
+      {
+        "id": "market_season_opens",
+        "name": "Outdoor market season opens",
+        "text": "Weekend food markets reopen in parks and waterfronts. Booths are booked by application.",
+        "scale": "city",
+        "months": [
+          4
+        ],
+        "realSignal": "Smorgasburg and other markets announce new-season vendors in spring",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.3,
+            "formats": [
+              "market_stall"
+            ]
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "market_days"
+          }
+        ],
+        "realFrequency": "Every April",
+        "tier": "core",
+        "source": "https://www.prospectpark.org/smorgasburg-announces-new-2025-vendors/",
+        "confidence": "estimate",
+        "note": "Size is my estimate.",
+        "formats": [
+          "market_stall"
+        ]
+      },
+      {
+        "id": "holiday_markets",
+        "name": "Holiday markets",
+        "text": "Six weeks of holiday markets in parks and plazas: the year's busiest booths, at the year's highest fees.",
+        "scale": "city",
+        "months": [
+          11,
+          12
+        ],
+        "realSignal": "Holiday market booth calendars (Bryant Park, Union Square, Columbus Circle)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.6,
+            "formats": [
+              "market_stall"
+            ]
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "market_days"
+          }
+        ],
+        "realFrequency": "Every November-December",
+        "tier": "deep",
+        "source": "https://bryantpark.org",
+        "confidence": "estimate",
+        "note": "Booth fees were not found in public sources (see 'not found').",
+        "formats": [
+          "market_stall",
+          "bakery_cafe"
+        ]
+      },
+      {
+        "id": "street_fair_season",
+        "name": "Street fair season",
+        "text": "Weekend street fairs close avenues and fill them with vendor booths, many with a $70 temporary food permit.",
+        "scale": "block",
+        "months": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "realSignal": "Street Activity Permit Office (SAPO) street fair calendar",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.1
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "market_days"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Most weekends May-October",
+        "tier": "deep",
+        "source": "https://documentedny.com/2025/04/17/street-vendor-nyc-fairs-markets/",
+        "confidence": "estimate",
+        "note": "Documented (April 2025): street fair vendors no longer need a separate DCWP temporary vendor permit.",
+        "formats": [
+          "market_stall",
+          "cafe",
+          "takeaway_window"
+        ]
+      },
+      {
+        "id": "rain_weekend",
+        "name": "Rainy weekends",
+        "text": "The forecast shows rain on two of four weekends. Markets run, but crowds stay home.",
+        "scale": "city",
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "realSignal": "NWS climate normals: about 10-11 days with measurable precipitation per month in Central Park",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.8,
+            "formats": [
+              "market_stall",
+              "coffee_cart"
+            ]
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "market_days"
+          }
+        ],
+        "realFrequency": "Monthly",
+        "tier": "core",
+        "source": "https://www.weather.gov/okx/",
+        "confidence": "estimate",
+        "note": "Normal rain days are climatology, announced as the month's expected weather; the size is my estimate.",
+        "formats": [
+          "market_stall",
+          "coffee_cart",
+          "food_truck"
+        ]
+      },
+      {
+        "id": "park_kiosk_rfp",
+        "name": "Park kiosk license up for bid",
+        "text": "The Parks Department or a park conservancy invites proposals for a coffee kiosk: a share of sales against a guaranteed minimum.",
+        "scale": "city",
+        "months": [
+          2,
+          7
+        ],
+        "realSignal": "NYC Parks concessions RFP listings; conservancy RFPs (Bryant Park 2024, The Battery 2025)",
+        "effects": [
+          {
+            "field": "opportunity",
+            "mult": 1.0
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cart_spot"
+          }
+        ],
+        "realFrequency": "Several a year",
+        "tier": "deep",
+        "source": "https://www2.nycgovparks.org/opportunities/concessions/rfps-rfbs-rfeis",
+        "confidence": "estimate",
+        "note": "A choice event: bid share and minimum (mechanic concession_fee_floor).",
+        "formats": [
+          "concession_kiosk",
+          "coffee_cart",
+          "takeaway_window"
+        ]
+      },
+      {
+        "id": "thanksgiving_pie_orders",
+        "name": "Thanksgiving and holiday orders",
+        "text": "Pie and bread pre-orders pour in for the holiday week. Ovens run around the clock.",
+        "scale": "country",
+        "months": [
+          11,
+          12
+        ],
+        "realSignal": "Holiday calendar",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.25,
+            "formats": [
+              "bakery_cafe"
+            ]
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bake_schedule"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "Every year",
+        "tier": "core",
+        "source": "https://www.bls.gov/cpi/",
+        "confidence": "estimate",
+        "note": "Size is my estimate; capacity is the oven, not the counter.",
+        "formats": [
+          "bakery_cafe"
+        ]
+      },
+      {
+        "id": "state_bakery_license_lapse",
+        "name": "State bakery license lapses",
+        "text": "Your State Agriculture license expired last month. A city inspector says you now need a city permit, and writes you up.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "NYS Agriculture and Markets license expiry for a mostly-wholesale bakery",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.7
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "wholesale_share"
+          }
+        ],
+        "realFrequency": "Rare; Duane Park Patisserie, 2025",
+        "tier": "exotic",
+        "source": "https://tribecacitizen.com/2025/10/21/duane-park-patisserie-caught-in-bureaucratic-snafu/",
+        "confidence": "verified",
+        "note": "Tribeca Citizen: state permit expired August 14, 2025; city violation September 8; closed October 20; reopened after applying for a city permit and passing inspection.",
+        "formats": [
+          "bakery_cafe"
+        ]
+      },
+      {
+        "id": "deli_meat_recall",
+        "name": "Deli meat recall",
+        "text": "Your deli meat brand is recalled nationwide. You pull it, throw it out and switch suppliers; customers avoid cold cuts for a week.",
+        "scale": "country",
+        "months": [
+          7,
+          8
+        ],
+        "realSignal": "USDA FSIS recall notices",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.92,
+            "formats": [
+              "sandwich_bar"
+            ]
+          },
+          {
+            "field": "cogs",
+            "mult": 1.04,
+            "formats": [
+              "sandwich_bar"
+            ]
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          }
+        ],
+        "realFrequency": "Boar's Head recalled about 7 million lb in July 2024",
+        "tier": "deep",
+        "source": "https://boarshead.com/pages/2024-07-30-july-2024-product-recall-BH-statement",
+        "confidence": "estimate",
+        "note": "A blog citing the episode said all deli meat sales fell almost 8% the week the recall was announced; secondary source.",
+        "formats": [
+          "sandwich_bar"
+        ]
+      },
+      {
+        "id": "office_attendance_up",
+        "name": "Offices fill up again",
+        "text": "Big employers in Midtown move to four or five office days. Weekday lunch lines get longer.",
+        "scale": "city",
+        "months": [
+          1,
+          9
+        ],
+        "realSignal": "Manhattan office vacancy fell to 19.3% (Cushman & Wakefield, Q2 2026); availability 13.0%, lowest since October 2020 (Colliers)",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.05,
+            "formats": [
+              "sandwich_bar",
+              "coffee_cart",
+              "takeaway_window"
+            ]
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "Gradual since 2023",
+        "tier": "deep",
+        "source": "https://www.credaily.com/?p=219828",
+        "confidence": "estimate",
+        "note": "Vacancy is a proxy; no 2026 badge-swipe data was found. Size is my estimate.",
+        "formats": [
+          "sandwich_bar",
+          "coffee_cart",
+          "takeaway_window",
+          "cafe"
+        ]
+      },
+      {
+        "id": "cart_spot_dispute",
+        "name": "A storefront fights your cart's spot",
+        "text": "The shop behind your corner calls 311 every morning and asks the landlord to put planters on the sidewalk.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "311 vendor complaints; ABC7 'Street vendors fight to keep their coffee cart's spot' (November 2025)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cart_spot"
+          }
+        ],
+        "realFrequency": "Common in Manhattan",
+        "tier": "deep",
+        "source": "https://abc7ny.com/post/7-side-street-vendors-fight-keep-breakfast-carts-spot-upper-west/18173830/",
+        "confidence": "estimate",
+        "note": "The Upper West Side cart in ABC7's story was back in its spot within 24 hours after 30 years on the block.",
+        "formats": [
+          "coffee_cart",
+          "food_truck"
+        ]
+      },
+      {
+        "id": "price_rise_backlash_cart",
+        "name": "Regulars balk at a 25-cent rise",
+        "text": "You add a quarter to a cart coffee. Half the regulars walk to the next cart.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Business Insider as-told-to essay, Midtown coffee cart owner, December 2025",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.5
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          }
+        ],
+        "realFrequency": "Follows a price rise at a low-ticket cart",
+        "tier": "deep",
+        "source": "https://www.businessinsider.com/dad-ran-food-cart-worst-business-i-still-did-it-2025-12",
+        "confidence": "estimate",
+        "note": "The owner said he lost about half his customers after a $0.25 rise. Implies a cart's price elasticity far above the cafe pack's.",
+        "formats": [
+          "coffee_cart"
+        ]
+      }
+    ]
   },
-  "sources": []
+  "sources": [
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-ful",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/restricted-area-permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
+      "title": "portal.311.nyc.gov/article/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://pos.toasttab.com/blog/on-the-line/how-much-does-a-food-cart-cost",
+      "title": "pos.toasttab.com/blog/on-the-line/how-much-does-a-food-cart-cost",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://startbusinessbystate.com/new-york/food-truck/",
+      "title": "startbusinessbystate.com/new-york/food-truck/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+      "title": "www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/fdny/business/all-certifications/cof-g23.page",
+      "title": "www.nyc.gov/site/fdny/business/all-certifications/cof-g23.page",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/fdny/business/all-certifications/per-liquefiedpetroleumgas.page",
+      "title": "www.nyc.gov/site/fdny/business/all-certifications/per-liquefiedpetroleu",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishment-permit",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishmen",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01825",
+      "title": "portal.311.nyc.gov/article/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://specialtyfoodmagazine.epubxp.com/i/123797/51",
+      "title": "specialtyfoodmagazine.epubxp.com/i/123797/51",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "title": "www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://static.nycgovparks.org/images/pagefiles/203/Harlem-Meer-Step-2-NPH-Final-approved-__676adfc6612a7.pdf",
+      "title": "static.nycgovparks.org/images/pagefiles/203/Harlem-Meer-Step-2-NPH-Final-approved-",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/vulcan-vc6ed-208-3-single-deck-full-size-electric-deep-depth-convection-oven-with-solid-state-controls-208v-3-phase-12-5-kw/901VC6EDC.html",
+      "title": "www.webstaurantstore.com/vulcan-vc6ed-208-3-single-deck-full-size-electric-deep-dept",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/turbochef-bullet-high-speed-accelerated-cooking-cooking-countertop-oven/532BULLETM.html",
+      "title": "www.webstaurantstore.com/turbochef-bullet-high-speed-accelerated-cooking-cooking-cou",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sinra.ai/projects/permits/mechanical-systems-852-9-avenue-manhattan-622733663",
+      "title": "sinra.ai/projects/permits/mechanical-systems-852-9-avenue-manhattan-",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/fdny/business/all-certifications/per-commercialcookingsystem.page",
+      "title": "www.nyc.gov/site/fdny/business/all-certifications/per-commercialcooking",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipme",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/search/spiral-mixer.html",
+      "title": "www.webstaurantstore.com/search/spiral-mixer.html",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/search/proofer-cabinet.html",
+      "title": "www.webstaurantstore.com/search/proofer-cabinet.html",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/avantco-apt-48-hc-48-2-door-refrigerated-sandwich-prep-table/178APT48HC.html",
+      "title": "www.webstaurantstore.com/avantco-apt-48-hc-48-2-door-refrigerated-sandwich-prep-tabl",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/avantco-sl512-12-manual-gravity-feed-meat-slicer-1-2-hp/177SL512.html",
+      "title": "www.webstaurantstore.com/avantco-sl512-12-manual-gravity-feed-meat-slicer-1-2-hp/177",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.goodnature.com/reseller",
+      "title": "www.goodnature.com/reseller",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.katom.com/491-5085.html",
+      "title": "www.katom.com/491-5085.html",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://pos.toasttab.com/blog/on-the-line/how-much-does-it-cost-to-open-a-boba-shop",
+      "title": "pos.toasttab.com/blog/on-the-line/how-much-does-it-cost-to-open-a-boba-shop",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/restaurant-wine-license",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/restaurant-wine-license",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sla.ny.gov/system/files/documents/2026/06/retail-fee-chart_6122026.pdf",
+      "title": "sla.ny.gov/system/files/documents/2026/06/retail-fee-chart_6122026.pdf",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sla.ny.gov/eligibility-temporary-retail-permits",
+      "title": "sla.ny.gov/eligibility-temporary-retail-permits",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sla.ny.gov/system/files/documents/2026/03/temporary-retail-st-permit_02262026_0.pdf",
+      "title": "sla.ny.gov/system/files/documents/2026/03/temporary-retail-st-permit_0",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/communityboards/mandates/liquor-licenses.page",
+      "title": "www.nyc.gov/site/communityboards/mandates/liquor-licenses.page",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cb11m.org/liquor-licenses/",
+      "title": "www.cb11m.org/liquor-licenses/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sla.ny.gov/restaurant-license-quick-reference-0",
+      "title": "sla.ny.gov/restaurant-license-quick-reference-0",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://lawrodriguez.com/articles/what-is-the-difference-between-a-restaurant-wine-license-and-a-tavern-wine-license/",
+      "title": "lawrodriguez.com/articles/what-is-the-difference-between-a-restaurant-wine-l",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.thekitchendoor.com/kitchen-rental/brooklyn-commerical-prep-kitchen",
+      "title": "www.thekitchendoor.com/kitchen-rental/brooklyn-commerical-prep-kitchen",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+      "title": "www.nyc.gov/assets/dca/downloads/pdf/about/FeeCapFlyer-April2026.pdf",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+      "title": "queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://thekitchendoor.com/kitchen-rental/ben-commissary-shared-kitchen",
+      "title": "thekitchendoor.com/kitchen-rental/ben-commissary-shared-kitchen",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.insureon.com/insurance/liquor-liability/cost",
+      "title": "www.insureon.com/insurance/liquor-liability/cost",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/fire-safety-in-commercial-cooking-locations.pdf",
+      "title": "www.nyc.gov/assets/fdny/downloads/pdf/business/Support/fire-safety-in-c",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cadman-Plaza-Cafe-05122025__680bcae9c9b47.pdf",
+      "title": "static.nycgovparks.org/images/pagefiles/206/NYC-Parks-Notice-of-Public-Hearing-Cad",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/Support/use-store-LPG-food-cart-commissaries.pdf",
+      "title": "www.nyc.gov/assets/fdny/downloads/pdf/business/Support/use-store-LPG-fo",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/finance/business/business-retail-beer-wine-and-liquor-license-tax.page",
+      "title": "www.nyc.gov/site/finance/business/business-retail-beer-wine-and-liquor-",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.6sqft.com/new-legislation-ends-criminal-penalties-for-nyc-street-vendors/",
+      "title": "www.6sqft.com/new-legislation-ends-criminal-penalties-for-nyc-street-vend",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://newyork.news12.com/street-vendors-react-to-decriminalization",
+      "title": "newyork.news12.com/street-vendors-react-to-decriminalization",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nycourts.gov/reporter/3dseries/2012/2012_03552.htm",
+      "title": "nycourts.gov/reporter/3dseries/2012/2012_03552.htm",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dsny/downloads/what-we-do/cleaning/street-vending-enforcement/mobile-food-vendor-educational-highlights-tips.pdf",
+      "title": "www.nyc.gov/assets/dsny/downloads/what-we-do/cleaning/street-vending-en",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nysenate.gov/legislation/laws/ABC/130",
+      "title": "nysenate.gov/legislation/laws/ABC/130",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sla.ny.gov/news/04112024-sla-conducts-underage-drinking-operation-bethlehem",
+      "title": "sla.ny.gov/news/04112024-sla-conducts-underage-drinking-operation-beth",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "title": "codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/fdny/downloads/pdf/codes/3-rcny-115-02.pdf",
+      "title": "www.nyc.gov/assets/fdny/downloads/pdf/codes/3-rcny-115-02.pdf",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "title": "www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dep/environment/noise-code.page",
+      "title": "www.nyc.gov/site/dep/environment/noise-code.page",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc.gov/VendorEnforcement",
+      "title": "nyc.gov/VendorEnforcement",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sla.ny.gov/frequent-violations-abc-law-retailers",
+      "title": "sla.ny.gov/frequent-violations-abc-law-retailers",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.6sqft.com/nyc-passes-landmark-street-vendor-reform-including-expanding-permit-cap/",
+      "title": "www.6sqft.com/nyc-passes-landmark-street-vendor-reform-including-expandin",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://lawrodriguez.com/articles/the-return-of-long-liquor-license-delays-in-nyc/",
+      "title": "lawrodriguez.com/articles/the-return-of-long-liquor-license-delays-in-nyc/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://council.nyc.gov/press/2025/05/01/2859/",
+      "title": "council.nyc.gov/press/2025/05/01/2859/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.market-prospects.com/articles/from-trade-wars-to-bubble-tea-when-global-tariffs-impact-a-local-industry",
+      "title": "www.market-prospects.com/articles/from-trade-wars-to-bubble-tea-when-global-tariffs-",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://bronx.news12.com/con-ed-illegal-gas-plumbing-work-forces-service-shutdown-for-fordham-restaurant-tenants-41500504",
+      "title": "bronx.news12.com/con-ed-illegal-gas-plumbing-work-forces-service-shutdown-fo",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://sla.ny.gov/500-foot-law",
+      "title": "sla.ny.gov/500-foot-law",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://turbochef.com/?p=1863",
+      "title": "turbochef.com/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://tribecacitizen.com/2025/10/21/duane-park-patisserie-caught-in-bureaucratic-snafu/",
+      "title": "tribecacitizen.com/2025/10/21/duane-park-patisserie-caught-in-bureaucratic-sna",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://totalfood.com/getting-restaurant-open-easier-nyc-hospitality-alliance-con-edison/",
+      "title": "totalfood.com/getting-restaurant-open-easier-nyc-hospitality-alliance-con",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://abc7ny.com/post/7-side-street-vendors-fight-keep-breakfast-carts-spot-upper-west/18173830/",
+      "title": "abc7ny.com/post/7-side-street-vendors-fight-keep-breakfast-carts-spot-",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.westsiderag.com/2021/06/08/from-the-window-of-her-food-cart-shes-watched-and-nourished-the-neighborhood-for-two-decades",
+      "title": "www.westsiderag.com/2021/06/08/from-the-window-of-her-food-cart-shes-watched-an",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cbsnews.com/newyork/news/food-trucks-being-chased-from-midtown-over-meter-rule",
+      "title": "www.cbsnews.com/newyork/news/food-trucks-being-chased-from-midtown-over-met",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://altitude.geotab.com/news-and-releases/nyc-congestion-pricing-2026-update/",
+      "title": "altitude.geotab.com/news-and-releases/nyc-congestion-pricing-2026-update/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nysenate.gov/legislation/laws/AGM/251-Z-3",
+      "title": "nysenate.gov/legislation/laws/AGM/251-Z-3",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20160422/lower-east-side/lucky-bee-is-still-waiting-for-full-gas-service-restaurant-owner-says",
+      "title": "www.dnainfo.com/new-york/20160422/lower-east-side/lucky-bee-is-still-waitin",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/data/APU0000708111",
+      "title": "fred.stlouisfed.org/data/APU0000708111",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.indexbox.io/blog/cme-grade-aa-butter-cash-price-falls-to-15400-per-pound-on-july-22-2026/",
+      "title": "www.indexbox.io/blog/cme-grade-aa-butter-cash-price-falls-to-15400-per-poun",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://evgrieve.com/2025/10/the-last-of-east-village-juice-press.html",
+      "title": "evgrieve.com/2025/10/the-last-of-east-village-juice-press.html",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://tribecacitizen.com/2026/08/04/juice-press-on-greenwich-has-closed/comment-page-1/",
+      "title": "tribecacitizen.com/2026/08/04/juice-press-on-greenwich-has-closed/comment-page",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.amny.com/eat-and-drink/organic-avenue-closing-all-stores-after-october-15-1.10967154",
+      "title": "www.amny.com/eat-and-drink/organic-avenue-closing-all-stores-after-octob",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.6sqft.com/?p=42480",
+      "title": "www.6sqft.com/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.ktvu.com/news/tariffs-impact-boba-guys-us-based-bubble-tea-factory",
+      "title": "www.ktvu.com/news/tariffs-impact-boba-guys-us-based-bubble-tea-factory",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/tavern-wine-license",
+      "title": "nyc-business.nyc.gov/nycbusiness/description/tavern-wine-license",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://thekitchendoor.com/kitchen-rental/nimbus-downtown-brooklyn",
+      "title": "thekitchendoor.com/kitchen-rental/nimbus-downtown-brooklyn",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://thecounter.org/major-food-incubator-closes-suddenly-leaves-175-companies-kitchenless/",
+      "title": "thecounter.org/major-food-incubator-closes-suddenly-leaves-175-companies-k",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://bisnow.com/new-york/news/industrial/ghost-kitchen-reef-technology-closing-three-new-york-locations-125368",
+      "title": "bisnow.com/new-york/news/industrial/ghost-kitchen-reef-technology-clos",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/permit/tfse-application-packet.pdf",
+      "title": "www.nyc.gov/assets/doh/downloads/pdf/permit/tfse-application-packet.pdf",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://la.smorgasburg.com/vendor-info",
+      "title": "la.smorgasburg.com/vendor-info",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.appearhere.us/spaces/smorgasburg-saturday-in-williamsburg-f-b",
+      "title": "www.appearhere.us/spaces/smorgasburg-saturday-in-williamsburg-f-b",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://documentedny.com/2025/04/17/street-vendor-nyc-fairs-markets/",
+      "title": "documentedny.com/2025/04/17/street-vendor-nyc-fairs-markets/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www2.nycgovparks.org/opportunities/concessions/rfps-rfbs-rfeis",
+      "title": "www2.nycgovparks.org/opportunities/concessions/rfps-rfbs-rfeis",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.thebattery.org/wp-content/uploads/2025/07/2025-RFP-Bosque-Kiosks-HC.pdf",
+      "title": "www.thebattery.org/wp-content/uploads/2025/07/2025-RFP-Bosque-Kiosks-HC.pdf",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://bryantpark.org:443/assets/uploads/documents/general/RFP_for_BP_Kiosks_02-26-24.pdf",
+      "title": "bryantpark.org:443/assets/uploads/documents/general/RFP_for_BP_Kiosks_02-26-24",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://abc7ny.com/post/new-york-city-street-food-vendors-speak-permit-scammer-targeting/17467153/",
+      "title": "abc7ny.com/post/new-york-city-street-food-vendors-speak-permit-scammer",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.weather.gov/okx/extremeheat",
+      "title": "www.weather.gov/okx/extremeheat",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.bls.gov/cpi/",
+      "title": "www.bls.gov/cpi/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.schools.nyc.gov/calendar",
+      "title": "www.schools.nyc.gov/calendar",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+      "title": "nysenate.gov/sites/default/files/press-release/attachment/cooking_withou",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://cbmanhattan.cityofnewyork.us/cb12/wp-content/uploads/sites/2/2026/01/2026.01-CB12M-SLA-Licensing-Manual.pdf",
+      "title": "cbmanhattan.cityofnewyork.us/cb12/wp-content/uploads/sites/2/2026/01/2026.01-CB12M-SLA-L",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-code-fact-sheet.pdf",
+      "title": "www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-co",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.prospectpark.org/smorgasburg-announces-new-2025-vendors/",
+      "title": "www.prospectpark.org/smorgasburg-announces-new-2025-vendors/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://bryantpark.org",
+      "title": "bryantpark.org",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.weather.gov/okx/",
+      "title": "www.weather.gov/okx/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://boarshead.com/pages/2024-07-30-july-2024-product-recall-BH-statement",
+      "title": "boarshead.com/pages/2024-07-30-july-2024-product-recall-BH-statement",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.credaily.com/?p=219828",
+      "title": "www.credaily.com/",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.businessinsider.com/dad-ran-food-cart-worst-business-i-still-did-it-2025-12",
+      "title": "www.businessinsider.com/dad-ran-food-cart-worst-business-i-still-did-it-2025-12",
+      "checked": "2026-11-14"
+    }
+  ]
 }
