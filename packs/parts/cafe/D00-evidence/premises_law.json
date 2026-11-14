@@ -1,0 +1,2661 @@
+{
+  "eventCatalog": [
+    {
+      "id": "d00_premises_seller_tax_claim",
+      "name": "Seller tax claim holds up closing",
+      "text": "A tax claim interrupts the asset purchase before funds can be released.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Buyer receives Notice of Claim to Purchaser.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_seller_tax_claim",
+          "optionId": "first",
+          "label": "Keep funds withheld and resolve the claim with tax counsel"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_seller_tax_claim",
+          "optionId": "second",
+          "label": "Renegotiate or abandon the transaction before paying"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.tax.ny.gov/bus/doingbus/buy.htm",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_permit_transfer",
+      "name": "Seller credentials do not transfer",
+      "text": "An operating shop changes hands but the buyer still needs its own registrations.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Proposed purchase relies on seller licenses without transfer approval.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_permit_transfer",
+          "optionId": "first",
+          "label": "Apply for buyer registrations before takeover"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_permit_transfer",
+          "optionId": "second",
+          "label": "Delay closing until required credentials are ready"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.tax.ny.gov/bus/doingbus/buy.htm",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_guaranty_scope",
+      "name": "Guaranty reaches the owner",
+      "text": "The lease draft asks the owner to guarantee obligations personally.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Draft guaranty covers all tenant obligations.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_guaranty_scope",
+          "optionId": "first",
+          "label": "Negotiate a limited guaranty with counsel"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_guaranty_scope",
+          "optionId": "second",
+          "label": "Select a different premises or security structure"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_surrender_clawback",
+      "name": "Exit clauses claw back concessions",
+      "text": "A proposed surrender triggers repayment language for lease concessions.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Counsel identifies concession clawbacks in the signed exit terms.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_surrender_clawback",
+          "optionId": "first",
+          "label": "Negotiate a written release including concessions"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_surrender_clawback",
+          "optionId": "second",
+          "label": "Budget contractual exit obligations before surrendering"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_use_mismatch",
+      "name": "The advertised shop is not approved for your use",
+      "text": "The intended cafe use does not match the property record.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Architect compares proposed use against CO and finds a mismatch.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_use_mismatch",
+          "optionId": "first",
+          "label": "Seek approval for the revised use before occupying"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_use_mismatch",
+          "optionId": "second",
+          "label": "Choose a space already approved for the proposed use"
+        }
+      ],
+      "tier": "core",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/certificate-of-occupancy",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_prepermit_fail",
+      "name": "Pre-permit inspection lists corrections",
+      "text": "The inspected space does not satisfy the health requirements.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Inspector issues a correction list after pre-permit inspection.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_prepermit_fail",
+          "optionId": "first",
+          "label": "Correct the listed items and request reinspection"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_prepermit_fail",
+          "optionId": "second",
+          "label": "Revise the opening menu or layout with agency guidance"
+        }
+      ],
+      "tier": "core",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_renewal_docs",
+      "name": "Renewal package is incomplete",
+      "text": "The health renewal lacks current insurance proof or has unresolved fines.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Renewal checklist identifies missing documentation or outstanding fines.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_renewal_docs",
+          "optionId": "first",
+          "label": "Resolve required payment and upload current proof"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_renewal_docs",
+          "optionId": "second",
+          "label": "Seek agency review of disputed records before expiry"
+        }
+      ],
+      "tier": "core",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_asbestos_scope",
+      "name": "Renovation disturbs asbestos-containing material",
+      "text": "The certified investigation changes what can be demolished.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Investigator identifies material within the planned work area.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_asbestos_scope",
+          "optionId": "first",
+          "label": "Commission compliant abatement and revise the schedule"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_asbestos_scope",
+          "optionId": "second",
+          "label": "Redesign the scope with professionals to avoid disturbance"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_swo_partial",
+      "name": "A partial stop-work order divides the project",
+      "text": "Only identified work is barred, and permitted remedial steps must follow the order.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "DOB issues a partial stop-work order for the site.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_swo_partial",
+          "optionId": "first",
+          "label": "Have the contractor correct and seek rescission"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_swo_partial",
+          "optionId": "second",
+          "label": "Reschedule only unaffected work allowed by the order"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_swo_rescission",
+      "name": "Permit arrives but stop-work order remains",
+      "text": "The contractor cannot resume prohibited work merely because a permit was issued.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Work permit exists but DOB has not rescinded the stop-work order.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_swo_rescission",
+          "optionId": "first",
+          "label": "Complete correction and arrange required reinspection"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_swo_rescission",
+          "optionId": "second",
+          "label": "Keep prohibited work paused until formal rescission"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_signoffs_missing",
+      "name": "Construction looks finished but the job is open",
+      "text": "Final inspection and filing close-out remain incomplete.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "DOB job record lacks required signed-off permits or final documents.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_signoffs_missing",
+          "optionId": "first",
+          "label": "Retain professionals to finish the sign-offs"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_signoffs_missing",
+          "optionId": "second",
+          "label": "Hold the launch commitment until legal close-out is resolved"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_old_legal_use",
+      "name": "Older premises have no modern occupancy certificate",
+      "text": "An exempt older building needs documented confirmation of lawful use.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Property search finds no CO and professional identifies an older-building exemption.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_old_legal_use",
+          "optionId": "first",
+          "label": "Request a Letter of No Objection with supporting history"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_old_legal_use",
+          "optionId": "second",
+          "label": "Select premises with clear documented legal use"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_temporary_occupancy",
+      "name": "Opening depends on temporary occupancy conditions",
+      "text": "The building is safe for conditional occupancy but final matters remain.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "DOB issues temporary rather than final occupancy authorization.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_temporary_occupancy",
+          "optionId": "first",
+          "label": "Track conditions and complete final occupancy requirements"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_temporary_occupancy",
+          "optionId": "second",
+          "label": "Delay commitment until final approval is available"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_gas_sequence",
+      "name": "Cooking gas waits for separate agency inspections",
+      "text": "The utility cannot supply the planned cooking service before required approvals.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "FDNY or DOB inspection for the gas cooking installation remains outstanding.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_gas_sequence",
+          "optionId": "first",
+          "label": "Coordinate licensed trades and required inspections"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_gas_sequence",
+          "optionId": "second",
+          "label": "Evaluate a compliant electric or reduced-menu design before changing equipment"
+        }
+      ],
+      "tier": "core",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_hood_rearrange",
+      "name": "Moving a griddle changes suppression coverage",
+      "text": "The new equipment arrangement no longer matches the approved protection design.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner proposes rearrangement or removal of equipment under the existing hood.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_hood_rearrange",
+          "optionId": "first",
+          "label": "Have the licensed contractor revise the protection system"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_hood_rearrange",
+          "optionId": "second",
+          "label": "Keep the approved equipment arrangement"
+        }
+      ],
+      "tier": "core",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_landmark_repaint",
+      "name": "A quick facade refresh needs landmark review",
+      "text": "The chosen storefront paint or exterior change needs LPC permission.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Landmarks map identifies the premises and proposed work changes the exterior.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_landmark_repaint",
+          "optionId": "first",
+          "label": "Apply for the proposed exterior treatment"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_landmark_repaint",
+          "optionId": "second",
+          "label": "Keep the existing exterior while selecting an approvable design"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_landmark_terrace",
+      "name": "Outdoor seating has a second approval path",
+      "text": "A designated storefront needs landmark review as well as applicable sidewalk dining permission.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Outdoor seating plan is at a designated building.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_landmark_terrace",
+          "optionId": "first",
+          "label": "Coordinate LPC and DOT applications"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_landmark_terrace",
+          "optionId": "second",
+          "label": "Operate without the proposed outdoor seating"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_backflow_install",
+      "name": "Water protection device needs a separate approval",
+      "text": "The premises needs an approved backflow installation.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "DEP or licensed professional identifies required protection not installed.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_backflow_install",
+          "optionId": "first",
+          "label": "Obtain design approval and licensed installation"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_backflow_install",
+          "optionId": "second",
+          "label": "Require landlord completion before accepting the premises"
+        }
+      ],
+      "tier": "core",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/application-for-approval-of-backflow-prevention-devices",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_early_stock",
+      "name": "Food arrives before the pre-operational visit",
+      "text": "The scheduled pre-operational pathway requires no food storage, preparation or service on site.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner schedules food delivery while seeking the pre-operational inspection pathway.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_early_stock",
+          "optionId": "first",
+          "label": "Move delivery until the pathway requirements are met"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_early_stock",
+          "optionId": "second",
+          "label": "Confirm the correct inspection pathway before beginning food operations"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/sbs/businesses/food-establishment-form.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_utility_deposit",
+      "name": "Ready wiring still waits for customer paperwork",
+      "text": "The utility needs complete applications, certifications and deposits before final service.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Project Center shows outstanding customer-side documentation.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_utility_deposit",
+          "optionId": "first",
+          "label": "Complete the customer and contractor submissions"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_utility_deposit",
+          "optionId": "second",
+          "label": "Reschedule opening commitments against confirmed service readiness"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/faq",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_utility_extra",
+      "name": "Chosen service design triggers extra utility charges",
+      "text": "A nonstandard entry or excess service request changes the connection cost.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Con Edison identifies a tariff-covered nonstandard service request.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_utility_extra",
+          "optionId": "first",
+          "label": "Accept a quoted compliant standard layout"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_utility_extra",
+          "optionId": "second",
+          "label": "Budget the documented extra service charges"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/faq",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_meter_not_live",
+      "name": "The new meter is not yet turned on",
+      "text": "Final connections and activation remain after preparation work.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Utility case lacks final turn-on confirmation.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_meter_not_live",
+          "optionId": "first",
+          "label": "Coordinate the final connection appointment"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_meter_not_live",
+          "optionId": "second",
+          "label": "Keep the opening date conditional until service is live"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/gas-and-electric-service-update-guide",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_lpc_incomplete",
+      "name": "Landmark application lacks usable drawings",
+      "text": "A proposed access ramp or shopfront change needs complete supporting material.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Application lacks dimensioned drawings or current photographs.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_lpc_incomplete",
+          "optionId": "first",
+          "label": "Submit a complete package through the appropriate review service"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_lpc_incomplete",
+          "optionId": "second",
+          "label": "Simplify the proposal with pre-application advice"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/lpc/applications/lpc-business-express.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_sign_relief_scope",
+      "name": "Sign assistance is mistaken for blanket permission",
+      "text": "A sign proposal still needs its actual construction and zoning requirements checked.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner relies on temporary accessory-sign relief without reviewing its scope.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_sign_relief_scope",
+          "optionId": "first",
+          "label": "Verify eligibility and regularize the sign"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_sign_relief_scope",
+          "optionId": "second",
+          "label": "Use a compliant alternative sign design"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/buildings/safety/sign.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_exemption_scope",
+      "name": "Permit-exempt storefront work still has code duties",
+      "text": "The proposed small alteration affects requirements beyond the permit exemption.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner selects an exempt work category without checking other applicable rules.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_exemption_scope",
+          "optionId": "first",
+          "label": "Have the full scope reviewed before construction"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_exemption_scope",
+          "optionId": "second",
+          "label": "Retain the existing compliant storefront"
+        }
+      ],
+      "tier": "core",
+      "source": "https://home4.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-storefronts.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_access_route",
+      "name": "Extra seating blocks the accessible route",
+      "text": "A layout change obstructs access to service or toilets.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner adds furniture or stock to the previously accessible route.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_access_route",
+          "optionId": "first",
+          "label": "Reconfigure furniture to restore access"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_access_route",
+          "optionId": "second",
+          "label": "Reduce seating or storage occupying the route"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.ada.gov/resources/title-iii-primer/",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_entrance_step",
+      "name": "An entrance step excludes customers",
+      "text": "The shop must assess feasible access improvements and service alternatives.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Access survey records a step that prevents independent entry.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_entrance_step",
+          "optionId": "first",
+          "label": "Commission feasible compliant access work"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_entrance_step",
+          "optionId": "second",
+          "label": "Provide readily achievable alternative service while addressing barriers"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.ada.gov/resources/title-iii-primer/",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_dog_papers",
+      "name": "Staff demand service-dog certification",
+      "text": "The admission policy imposes documentation the ADA does not require.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Staff training or a customer complaint reveals a certification demand.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_dog_papers",
+          "optionId": "first",
+          "label": "Correct the policy and train staff on permitted questions"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_dog_papers",
+          "optionId": "second",
+          "label": "Escalate uncertainty to a trained manager while preserving access"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.ada.gov/topics/service-animals/",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_event_capacity",
+      "name": "A private event changes the occupancy plan",
+      "text": "A planned gathering must be checked against lawful capacity and assembly requirements.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Proposed event attendance or configuration exceeds the approved small-shop layout.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_event_capacity",
+          "optionId": "first",
+          "label": "Cap bookings to the authorized use and capacity"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_event_capacity",
+          "optionId": "second",
+          "label": "Obtain required assembly approvals before the event"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_music_neighbors",
+      "name": "Neighbors report amplified music",
+      "text": "The cafe needs a measured and documented response to a recurring noise complaint.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Neighbor complaint or agency notice identifies cafe music.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_music_neighbors",
+          "optionId": "first",
+          "label": "Reduce sound and assess acoustic controls"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_music_neighbors",
+          "optionId": "second",
+          "label": "Use MEND mediation to agree practical changes while complying"
+        }
+      ],
+      "tier": "core",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_odor_home",
+      "name": "Cafe exhaust enters a neighboring home",
+      "text": "The discharge arrangement needs technical investigation.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Documented odor complaint identifies cafe exhaust entering a residence.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_odor_home",
+          "optionId": "first",
+          "label": "Have a professional inspect and correct the discharge"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_odor_home",
+          "optionId": "second",
+          "label": "Suspend the implicated cooking process pending correction"
+        }
+      ],
+      "tier": "core",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02313",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_landlord_access",
+      "name": "Landlord blocks access to the leased shop",
+      "text": "A documented access dispute threatens operations and needs legal handling.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Landlord changes access or removes keys without lawful resolution of tenancy.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_landlord_access",
+          "optionId": "first",
+          "label": "Document facts and seek commercial tenancy counsel"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_landlord_access",
+          "optionId": "second",
+          "label": "Seek an agreed access restoration or negotiated exit with counsel"
+        }
+      ],
+      "tier": "core",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-42543",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_landlord_permit",
+      "name": "Landlord refuses cooperation on permitted work",
+      "text": "The cafe cannot progress agreed legal construction without owner cooperation.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Documented unreasonable refusal blocks the tenant permitted project.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_landlord_permit",
+          "optionId": "first",
+          "label": "Seek legal advice on cooperation and lease remedies"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_landlord_permit",
+          "optionId": "second",
+          "label": "Negotiate written milestones or a release from the premises"
+        }
+      ],
+      "tier": "core",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-42543",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_lease_court",
+      "name": "A lease dispute moves beyond advisory help",
+      "text": "The city assistance program cannot serve as the litigation representation plan.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Negotiation fails and the dispute requires court representation.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_lease_court",
+          "optionId": "first",
+          "label": "Find suitable litigation counsel and preserve records"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_lease_court",
+          "optionId": "second",
+          "label": "Pursue a negotiated resolution with available advisory support"
+        }
+      ],
+      "tier": "core",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01277",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_toilet_renovation",
+      "name": "Renovation changes an old toilet exemption",
+      "text": "An older food premises loses its exemption when the specified renovation condition is met.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Architect identifies qualifying construction work at an otherwise exempt premises.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_toilet_renovation",
+          "optionId": "first",
+          "label": "Include required patron facilities in the renovation"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_toilet_renovation",
+          "optionId": "second",
+          "label": "Redesign the project lawfully after professional review"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_toilet_route",
+      "name": "Customers reach the toilet through food preparation",
+      "text": "The proposed shared bathroom route conflicts with health requirements.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Layout shows patron access crossing preparation, food storage or washing areas.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_toilet_route",
+          "optionId": "first",
+          "label": "Redesign the customer route"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_toilet_route",
+          "optionId": "second",
+          "label": "Provide compliant separate facilities or revise the concept"
+        }
+      ],
+      "tier": "core",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_ac_neighbor",
+      "name": "The rooftop condenser is noisy in an apartment",
+      "text": "Equipment placement creates a noise issue beyond the cafe boundary.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "DEP complaint or acoustic survey identifies the cafe circulation device.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_ac_neighbor",
+          "optionId": "first",
+          "label": "Obtain measured mitigation such as isolation or relocation"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_ac_neighbor",
+          "optionId": "second",
+          "label": "Change operating arrangements within safe and lawful limits"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_noise_test_shutdown",
+      "name": "Noise inspection needs equipment switched off briefly",
+      "text": "The inspection compares sound with and without the cafe equipment.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Inspector requests a coordinated shutdown for noise measurement.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_noise_test_shutdown",
+          "optionId": "first",
+          "label": "Schedule a safe interruption and preserve product conditions"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_noise_test_shutdown",
+          "optionId": "second",
+          "label": "Coordinate an alternative compliant test window with the inspector"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_platform_allergy",
+      "name": "The delivery menu has no allergy communication method",
+      "text": "Platform menu configuration must support the stated allergy-information route.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner enables online orders without item allergen information or a way to report an allergy.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_platform_allergy",
+          "optionId": "first",
+          "label": "Add the required notice and communication method"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_platform_allergy",
+          "optionId": "second",
+          "label": "Provide item-level allergen information through the ordering menu"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_poster_languages",
+      "name": "The allergy poster is not readable by the team",
+      "text": "Posting must meet worker-language and visibility requirements.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Staff languages or prep-area placement do not match the displayed sign.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_poster_languages",
+          "optionId": "first",
+          "label": "Print the applicable translated sign in work areas"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_poster_languages",
+          "optionId": "second",
+          "label": "Reorganize sign placement and train staff on the information"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_app_cashless",
+      "name": "App-only ordering excludes cash customers",
+      "text": "A walk-in purchase still needs a lawful cash route.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Cafe requires on-premises customers to pay exclusively through its app.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_app_cashless",
+          "optionId": "first",
+          "label": "Add a staffed cash-payment route"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_app_cashless",
+          "optionId": "second",
+          "label": "Use a compliant on-site cash-conversion arrangement"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/CashlessBanGuidance-AppBasedTransactions.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_inspector_arrives",
+      "name": "An inspector arrives during service",
+      "text": "The shop must provide access and accurate records while continuing safe operations.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Announced common inspection round reaches premises and inspector identity is verified.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_inspector_arrives",
+          "optionId": "first",
+          "label": "Assign the trained supervisor to accompany the inspection"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_inspector_arrives",
+          "optionId": "second",
+          "label": "Reduce service complexity while staff support the inspection"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/the-inspection-process.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_dinein_safety",
+      "name": "Adding dine-in service changes the safety checklist",
+      "text": "The cafe needs the applicable resuscitation equipment and notices.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner enables consumption on premises without updating the safety checklist.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_dinein_safety",
+          "optionId": "first",
+          "label": "Provide required equipment and signs before dine-in service"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_dinein_safety",
+          "optionId": "second",
+          "label": "Keep service in a legally compliant format until ready"
+        }
+      ],
+      "tier": "core",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01352",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    },
+    {
+      "id": "d00_premises_penny_change",
+      "name": "The till runs short of pennies",
+      "text": "The cafe must apply a lawful disclosed change policy.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Cash reconciliation shows insufficient small change.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_penny_change",
+          "optionId": "first",
+          "label": "Replenish change and continue exact cash totals"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_premises_move_penny_change",
+          "optionId": "second",
+          "label": "Use the disclosed customer-favorable rounding permitted by DCWP"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dca/consumers/Prohibition-of-Cashless-Establishments.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario inferred from the cited guidance; activate only from the recorded state or an announced common scenario. No probability, invented delay, price, or revenue multiplier is assigned. Obtain case-specific measurements, approved plans and quotes before numerical activation.",
+      "evidenceStatus": "primary guidance; scenario is an inference"
+    }
+  ],
+  "nonObvious": [
+    {
+      "id": "d00_premises_no_buy_assets_tax",
+      "text": "Buying used business equipment can still trigger sales tax.",
+      "why": "The asking price is not necessarily the all-in asset acquisition cost.",
+      "source": "https://www.tax.ny.gov/bus/doingbus/buy.htm",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_entity_owes",
+      "text": "A good-guy guaranty may limit personal liability while the tenant company still owes rent.",
+      "why": "Vacating is not automatically a negotiated termination of the lease.",
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_broker_use",
+      "text": "An attractive commercial listing does not establish lawful cafe occupancy.",
+      "why": "Property records and approved use must be checked separately from the listing.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/certificate-of-occupancy",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_health_not_co",
+      "text": "A health application receipt is not a substitute for building approval.",
+      "why": "Separate agencies can block different parts of an opening.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_newer_acm",
+      "text": "A building-age exemption does not authorize disturbing known asbestos.",
+      "why": "The actual material and work scope still matter.",
+      "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_swo_two_gates",
+      "text": "Permit issuance and lifting a stop-work order are separate gates.",
+      "why": "Treating one approval as both can create further penalties.",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_finished_not_done",
+      "text": "The contractor leaving the site does not mean the DOB project is closed.",
+      "why": "Owner, design professional and inspection records remain part of completion.",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_tco_not_final",
+      "text": "Temporary occupancy is a continuing dependency on the building owner.",
+      "why": "Cafe trading may depend on unfinished building paperwork outside the tenant fit-out.",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_gas_not_meter",
+      "text": "Installed gas appliances are not evidence that cooking gas can be turned on.",
+      "why": "Fire, building and utility steps are interdependent.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_same_hood",
+      "text": "Using the same hood does not make every equipment layout acceptable.",
+      "why": "Nozzle coverage and approved plans follow the cooking arrangement.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_landmark_color",
+      "text": "Even changing a storefront paint color can require approval at a landmark.",
+      "why": "A cosmetic budget can conceal an administrative dependency.",
+      "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_backflow_report",
+      "text": "Backflow protection is not complete merely because a device is installed.",
+      "why": "Certified testing and reporting remain obligations.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/application-for-approval-of-backflow-prevention-devices",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_gas_before_visit",
+      "text": "A gas-using establishment must have working gas before requesting the pre-operational visit.",
+      "why": "Booking an inspection cannot substitute for an unfinished utility connection.",
+      "source": "https://www.nyc.gov/site/sbs/businesses/food-establishment-form.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_inspection_revisit",
+      "text": "A failed readiness check can create a charged utility reinspection.",
+      "why": "The contractor being nearly finished may still be expensive.",
+      "source": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/faq",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_express_scope",
+      "text": "A faster review service still needs the right drawings and eligible work.",
+      "why": "An incomplete package cannot rely on the word express to set an opening date.",
+      "source": "https://www.nyc.gov/site/lpc/applications/lpc-business-express.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_permit_exempt",
+      "text": "No DOB permit required does not mean no applicable rules.",
+      "why": "Landmarks and other code requirements can remain in force.",
+      "source": "https://home4.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-storefronts.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_access_ongoing",
+      "text": "Accessibility includes how the shop is operated after construction.",
+      "why": "Movable tables and stock can block a route that was compliant when built.",
+      "source": "https://www.ada.gov/resources/title-iii-primer/",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_service_vest",
+      "text": "A service dog need not have a vest or registration certificate.",
+      "why": "Visual branding cannot be used as the cafe admission test.",
+      "source": "https://www.ada.gov/topics/service-animals/",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_assembly_chain",
+      "text": "Initial building assembly approval does not replace recurring fire permits.",
+      "why": "A cafe adding larger gatherings creates another renewal obligation.",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_roof_discharge",
+      "text": "A kitchen can function inside while its exhaust causes a neighboring-building problem.",
+      "why": "The system must work for the building context as well as the cook line.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02313",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_lawful_nonrenewal",
+      "text": "A lawful refusal to renew is not automatically commercial tenant harassment.",
+      "why": "An unfavorable business outcome and a legally actionable act are different.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-42543",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_free_help_limit",
+      "text": "Commercial Lease Assistance does not include litigation services.",
+      "why": "Eligibility for advice does not fund a lawsuit.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01277",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_toilet_seats",
+      "text": "A customer-seat exemption does not remove employee toilet requirements.",
+      "why": "Back-of-house needs do not disappear in a takeaway concept.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_noise_inside_home",
+      "text": "A cafe sound level can be assessed inside a neighbor residence.",
+      "why": "A quiet impression at the counter does not establish compliance next door.",
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_allergy_transition",
+      "text": "The NYC sign guidance distinguishes the current obligation from later summons enforcement.",
+      "why": "Do not turn a future enforcement date into an immediate game fine.",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_app_not_remote",
+      "text": "An order placed through an app while at the counter is not automatically an off-premises transaction.",
+      "why": "Payment interface design can create a consumer-protection violation.",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/CashlessBanGuidance-AppBasedTransactions.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_safety_sign",
+      "text": "Having emergency equipment does not replace the notice that it is available.",
+      "why": "A supply purchase and a customer information duty are separate tasks.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01352",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    },
+    {
+      "id": "d00_premises_no_coins_accepted",
+      "text": "Penny scarcity does not create an exemption from cash acceptance.",
+      "why": "A change-supply problem must not become an undisclosed cash surcharge.",
+      "source": "https://www.nyc.gov/site/dca/consumers/Prohibition-of-Cashless-Establishments.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of cited guidance, not a measured incidence or universal outcome."
+    }
+  ],
+  "failureStories": [],
+  "sources": [
+    {
+      "id": "d00_premises_src_bulk",
+      "url": "https://www.tax.ny.gov/bus/doingbus/buy.htm",
+      "title": "Buying a business",
+      "publisher": "NYS Tax Department",
+      "language": "en",
+      "jurisdiction": "NY",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Buyer must notify Tax Department before payment or possession, obtain own registration and withhold payment after a tax claim.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_lease",
+      "url": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "title": "Commercial Lease Guide",
+      "publisher": "NYC SBS",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Full and partial guaranties differ; entity rent liability may survive surrender; repayment clauses can defeat expected good-guy protection.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_co",
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/certificate-of-occupancy",
+      "title": "Certificate of Occupancy",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Changes in use, exits or occupancy can require a new CO; agency approvals and violation clearance are part of completion.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_fse",
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "title": "Food Service Establishment Permit",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Health permit does not replace other approvals; failed inspection requires correction; renewals need insurance proof and fine payment.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_asbestos",
+      "url": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+      "title": "Project Requirements: Asbestos",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Assessment, exemption or abatement documentation may be needed before DOB permits; known material disturbed by work must be addressed.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_swo",
+      "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+      "title": "Stop Work Order",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Full or partial orders restrict work; obtaining a permit alone does not rescind an order.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_loc",
+      "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+      "title": "Letter of No Objection or Completion",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Physical completion is not project close-out; sign-offs and complete filings are required; older buildings may need legal-use confirmation.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_tco",
+      "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+      "title": "Temporary Certificate of Occupancy",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Temporary occupancy depends on required sign-offs and unresolved issues; reoccupying after a qualifying vacancy may need a new TCO.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_gas",
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment",
+      "title": "Gas Authorization for Restaurants",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Licensed trades and FDNY/DOB inspections precede utility gas service for applicable cooking systems.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_hood_change",
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems",
+      "title": "Rangehood Fire-Suppression Systems",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Rearranging or removing cooking equipment can require changes to suppression plans; change of ownership is included in application guidance.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_landmark",
+      "url": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "title": "Landmarked Storefronts",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Exterior work including signage, awnings, paint and sidewalk cafes is subject to LPC review at designated properties.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_backflow",
+      "url": "https://nyc-business.nyc.gov/nycbusiness/description/application-for-approval-of-backflow-prevention-devices",
+      "title": "Approval of Backflow Prevention Devices",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "DEP approval precedes installation permit; testing and reporting recur; failure to install can lead to water shutoff.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_preoperation",
+      "url": "https://www.nyc.gov/site/sbs/businesses/food-establishment-form.page",
+      "title": "Food Establishment Pre-Operational Inspection Form",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Form requires operational equipment and hot/cold water; active food operations are ineligible for pre-operational inspection; gas must already work if used.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_utility_faq",
+      "url": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/faq",
+      "title": "Building and Remodeling FAQ",
+      "publisher": "Con Edison",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Connection depends on contractor readiness, municipal certifications and deposits; certain nonstandard service requests or repeat inspections can add charges.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_utility_sequence",
+      "url": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/gas-and-electric-service-update-guide",
+      "title": "Gas and Electric Service Step-by-Step Guide",
+      "publisher": "Con Edison",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Contractor site readiness and utility inspections precede construction, final connection and meter turn-on.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_lpc_express",
+      "url": "https://www.nyc.gov/site/lpc/applications/lpc-business-express.page",
+      "title": "LPC Business Express",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Qualifying business applications receive specialized review; photographs and dimensioned drawings are needed; portal identifies eligibility.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_sign_moratorium",
+      "url": "https://www.nyc.gov/site/buildings/safety/sign.page",
+      "title": "DOB Sign Guidance",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Current guidance describes accessory-sign assistance and moratorium provisions while retaining construction and zoning compliance.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_storefront",
+      "url": "https://home4.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-storefronts.page",
+      "title": "Project Requirements for Owner: Storefronts",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Permit-exempt work remains subject to other law and agency requirements; larger scopes need design professionals and filed plans.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_ada_primer",
+      "url": "https://www.ada.gov/resources/title-iii-primer/",
+      "title": "ADA Update: A Primer for Small Business",
+      "publisher": "US Department of Justice",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Businesses must consider readily achievable barrier removal, keep accessible routes clear and offer available alternatives when removal is not readily achievable.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_service_dogs",
+      "url": "https://www.ada.gov/topics/service-animals/",
+      "title": "Service Animals",
+      "publisher": "US Department of Justice",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Public businesses generally admit service animals; staff cannot demand certification; limited permitted questions and exclusion conditions apply.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_assembly",
+      "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page",
+      "title": "Place of Assembly Certificate of Operation",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Assembly occupancy requires DOB approval; continuing permits pass to FDNY inspection and renewal.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_noise",
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+      "title": "Noise from Bar, Club, or Restaurant",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Noise complaints can lead to measurements and enforcement; MEND NYC offers mediation for neighborhood disputes.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_exhaust_odor",
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02313",
+      "title": "Ventilation or Exhaust System Complaint",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Improperly installed exhaust and odors can be reported to DOB; exhaust may enter nearby residences.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_harassment",
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-42543",
+      "title": "Commercial Tenant Harassment",
+      "publisher": "NYC Administrative Code",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Law identifies coercive service interruptions, blocked access and unreasonable refusal to cooperate; lawful nonrenewal is excluded.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_lease_help",
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01277",
+      "title": "Commercial Lease Assistance",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Program supports signing, amendment, renewal and termination issues; it does not provide litigation services.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_toilet_law",
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+      "title": "Employee and Patron Toilets",
+      "publisher": "NYC Health Code",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Employees need facilities; qualifying older patron-toilet exemptions can end with permitted renovation; shared access cannot cross food work areas.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_dep_guide",
+      "url": "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf",
+      "title": "Hospitality Environmental Compliance Guide",
+      "publisher": "NYC DEP",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Circulation equipment is measured from affected residences; inspection may briefly require shutdown; construction requires noise planning.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_allergy_menu",
+      "url": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "title": "Required Signs: Food Allergies and Intolerances",
+      "publisher": "NYC Health",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Current guidance extends allergy communication to menus and platforms, requires worker-language signs, and states summons enforcement begins in January 2027.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_app_cash",
+      "url": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/CashlessBanGuidance-AppBasedTransactions.pdf",
+      "title": "Cashless Ban: App-based Transaction Guidance",
+      "publisher": "NYC DCWP",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "A cafe cannot turn an on-premises purchase into an exempt internet transaction simply by requiring an app.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_inspection",
+      "url": "https://www.nyc.gov/site/doh/business/food-operators/the-inspection-process.page",
+      "title": "The Inspection Process",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Inspections are unannounced; identification guidance, owner rights and tribunal help are provided.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_cpr",
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01352",
+      "title": "Restaurant CPR Rules",
+      "publisher": "NYC government",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "On-site consumption requires resuscitation equipment and customer notice; choking poster must be displayed.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_src_cash_penny",
+      "url": "https://www.nyc.gov/site/dca/consumers/Prohibition-of-Cashless-Establishments.page",
+      "title": "Cashless Ban and Penny Rounding Advisory",
+      "publisher": "NYC DCWP",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Cash cannot cost more; advisory permits specified customer-favorable cash rounding and requires disclosure; penny payments cannot simply be refused.",
+      "tier": "core"
+    }
+  ],
+  "researchLevers": [
+    {
+      "id": "d00_premises_move_seller_tax_claim",
+      "name": "Seller tax claim holds up closing response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Keep funds withheld and resolve the claim with tax counsel"
+        },
+        {
+          "id": "second",
+          "label": "Renegotiate or abandon the transaction before paying"
+        }
+      ],
+      "source": "https://www.tax.ny.gov/bus/doingbus/buy.htm",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_permit_transfer",
+      "name": "Seller credentials do not transfer response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Apply for buyer registrations before takeover"
+        },
+        {
+          "id": "second",
+          "label": "Delay closing until required credentials are ready"
+        }
+      ],
+      "source": "https://www.tax.ny.gov/bus/doingbus/buy.htm",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_guaranty_scope",
+      "name": "Guaranty reaches the owner response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Negotiate a limited guaranty with counsel"
+        },
+        {
+          "id": "second",
+          "label": "Select a different premises or security structure"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_surrender_clawback",
+      "name": "Exit clauses claw back concessions response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Negotiate a written release including concessions"
+        },
+        {
+          "id": "second",
+          "label": "Budget contractual exit obligations before surrendering"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_use_mismatch",
+      "name": "The advertised shop is not approved for your use response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Seek approval for the revised use before occupying"
+        },
+        {
+          "id": "second",
+          "label": "Choose a space already approved for the proposed use"
+        }
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/certificate-of-occupancy",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_prepermit_fail",
+      "name": "Pre-permit inspection lists corrections response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Correct the listed items and request reinspection"
+        },
+        {
+          "id": "second",
+          "label": "Revise the opening menu or layout with agency guidance"
+        }
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_renewal_docs",
+      "name": "Renewal package is incomplete response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Resolve required payment and upload current proof"
+        },
+        {
+          "id": "second",
+          "label": "Seek agency review of disputed records before expiry"
+        }
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_asbestos_scope",
+      "name": "Renovation disturbs asbestos-containing material response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Commission compliant abatement and revise the schedule"
+        },
+        {
+          "id": "second",
+          "label": "Redesign the scope with professionals to avoid disturbance"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_swo_partial",
+      "name": "A partial stop-work order divides the project response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Have the contractor correct and seek rescission"
+        },
+        {
+          "id": "second",
+          "label": "Reschedule only unaffected work allowed by the order"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_swo_rescission",
+      "name": "Permit arrives but stop-work order remains response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Complete correction and arrange required reinspection"
+        },
+        {
+          "id": "second",
+          "label": "Keep prohibited work paused until formal rescission"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_signoffs_missing",
+      "name": "Construction looks finished but the job is open response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Retain professionals to finish the sign-offs"
+        },
+        {
+          "id": "second",
+          "label": "Hold the launch commitment until legal close-out is resolved"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_old_legal_use",
+      "name": "Older premises have no modern occupancy certificate response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Request a Letter of No Objection with supporting history"
+        },
+        {
+          "id": "second",
+          "label": "Select premises with clear documented legal use"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_temporary_occupancy",
+      "name": "Opening depends on temporary occupancy conditions response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Track conditions and complete final occupancy requirements"
+        },
+        {
+          "id": "second",
+          "label": "Delay commitment until final approval is available"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_gas_sequence",
+      "name": "Cooking gas waits for separate agency inspections response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Coordinate licensed trades and required inspections"
+        },
+        {
+          "id": "second",
+          "label": "Evaluate a compliant electric or reduced-menu design before changing equipment"
+        }
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_hood_rearrange",
+      "name": "Moving a griddle changes suppression coverage response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Have the licensed contractor revise the protection system"
+        },
+        {
+          "id": "second",
+          "label": "Keep the approved equipment arrangement"
+        }
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_landmark_repaint",
+      "name": "A quick facade refresh needs landmark review response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Apply for the proposed exterior treatment"
+        },
+        {
+          "id": "second",
+          "label": "Keep the existing exterior while selecting an approvable design"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_landmark_terrace",
+      "name": "Outdoor seating has a second approval path response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Coordinate LPC and DOT applications"
+        },
+        {
+          "id": "second",
+          "label": "Operate without the proposed outdoor seating"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_backflow_install",
+      "name": "Water protection device needs a separate approval response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Obtain design approval and licensed installation"
+        },
+        {
+          "id": "second",
+          "label": "Require landlord completion before accepting the premises"
+        }
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/application-for-approval-of-backflow-prevention-devices",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_early_stock",
+      "name": "Food arrives before the pre-operational visit response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Move delivery until the pathway requirements are met"
+        },
+        {
+          "id": "second",
+          "label": "Confirm the correct inspection pathway before beginning food operations"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/sbs/businesses/food-establishment-form.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_utility_deposit",
+      "name": "Ready wiring still waits for customer paperwork response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Complete the customer and contractor submissions"
+        },
+        {
+          "id": "second",
+          "label": "Reschedule opening commitments against confirmed service readiness"
+        }
+      ],
+      "source": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/faq",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_utility_extra",
+      "name": "Chosen service design triggers extra utility charges response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Accept a quoted compliant standard layout"
+        },
+        {
+          "id": "second",
+          "label": "Budget the documented extra service charges"
+        }
+      ],
+      "source": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/faq",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_meter_not_live",
+      "name": "The new meter is not yet turned on response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Coordinate the final connection appointment"
+        },
+        {
+          "id": "second",
+          "label": "Keep the opening date conditional until service is live"
+        }
+      ],
+      "source": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/gas-and-electric-service-update-guide",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_lpc_incomplete",
+      "name": "Landmark application lacks usable drawings response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Submit a complete package through the appropriate review service"
+        },
+        {
+          "id": "second",
+          "label": "Simplify the proposal with pre-application advice"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/lpc/applications/lpc-business-express.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_sign_relief_scope",
+      "name": "Sign assistance is mistaken for blanket permission response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Verify eligibility and regularize the sign"
+        },
+        {
+          "id": "second",
+          "label": "Use a compliant alternative sign design"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/buildings/safety/sign.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_exemption_scope",
+      "name": "Permit-exempt storefront work still has code duties response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Have the full scope reviewed before construction"
+        },
+        {
+          "id": "second",
+          "label": "Retain the existing compliant storefront"
+        }
+      ],
+      "source": "https://home4.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-storefronts.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_access_route",
+      "name": "Extra seating blocks the accessible route response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Reconfigure furniture to restore access"
+        },
+        {
+          "id": "second",
+          "label": "Reduce seating or storage occupying the route"
+        }
+      ],
+      "source": "https://www.ada.gov/resources/title-iii-primer/",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_entrance_step",
+      "name": "An entrance step excludes customers response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Commission feasible compliant access work"
+        },
+        {
+          "id": "second",
+          "label": "Provide readily achievable alternative service while addressing barriers"
+        }
+      ],
+      "source": "https://www.ada.gov/resources/title-iii-primer/",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_dog_papers",
+      "name": "Staff demand service-dog certification response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Correct the policy and train staff on permitted questions"
+        },
+        {
+          "id": "second",
+          "label": "Escalate uncertainty to a trained manager while preserving access"
+        }
+      ],
+      "source": "https://www.ada.gov/topics/service-animals/",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_event_capacity",
+      "name": "A private event changes the occupancy plan response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Cap bookings to the authorized use and capacity"
+        },
+        {
+          "id": "second",
+          "label": "Obtain required assembly approvals before the event"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/place-of-assembly-certificate-of-operation.page",
+      "tier": "deep",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_music_neighbors",
+      "name": "Neighbors report amplified music response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Reduce sound and assess acoustic controls"
+        },
+        {
+          "id": "second",
+          "label": "Use MEND mediation to agree practical changes while complying"
+        }
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_odor_home",
+      "name": "Cafe exhaust enters a neighboring home response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Have a professional inspect and correct the discharge"
+        },
+        {
+          "id": "second",
+          "label": "Suspend the implicated cooking process pending correction"
+        }
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02313",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_landlord_access",
+      "name": "Landlord blocks access to the leased shop response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Document facts and seek commercial tenancy counsel"
+        },
+        {
+          "id": "second",
+          "label": "Seek an agreed access restoration or negotiated exit with counsel"
+        }
+      ],
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-42543",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_landlord_permit",
+      "name": "Landlord refuses cooperation on permitted work response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Seek legal advice on cooperation and lease remedies"
+        },
+        {
+          "id": "second",
+          "label": "Negotiate written milestones or a release from the premises"
+        }
+      ],
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-42543",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_lease_court",
+      "name": "A lease dispute moves beyond advisory help response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Find suitable litigation counsel and preserve records"
+        },
+        {
+          "id": "second",
+          "label": "Pursue a negotiated resolution with available advisory support"
+        }
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01277",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_toilet_renovation",
+      "name": "Renovation changes an old toilet exemption response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Include required patron facilities in the renovation"
+        },
+        {
+          "id": "second",
+          "label": "Redesign the project lawfully after professional review"
+        }
+      ],
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+      "tier": "deep",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_toilet_route",
+      "name": "Customers reach the toilet through food preparation response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Redesign the customer route"
+        },
+        {
+          "id": "second",
+          "label": "Provide compliant separate facilities or revise the concept"
+        }
+      ],
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_ac_neighbor",
+      "name": "The rooftop condenser is noisy in an apartment response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Obtain measured mitigation such as isolation or relocation"
+        },
+        {
+          "id": "second",
+          "label": "Change operating arrangements within safe and lawful limits"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_noise_test_shutdown",
+      "name": "Noise inspection needs equipment switched off briefly response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Schedule a safe interruption and preserve product conditions"
+        },
+        {
+          "id": "second",
+          "label": "Coordinate an alternative compliant test window with the inspector"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf",
+      "tier": "deep",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_platform_allergy",
+      "name": "The delivery menu has no allergy communication method response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Add the required notice and communication method"
+        },
+        {
+          "id": "second",
+          "label": "Provide item-level allergen information through the ordering menu"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_poster_languages",
+      "name": "The allergy poster is not readable by the team response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Print the applicable translated sign in work areas"
+        },
+        {
+          "id": "second",
+          "label": "Reorganize sign placement and train staff on the information"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/required-signs.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_app_cashless",
+      "name": "App-only ordering excludes cash customers response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Add a staffed cash-payment route"
+        },
+        {
+          "id": "second",
+          "label": "Use a compliant on-site cash-conversion arrangement"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/CashlessBanGuidance-AppBasedTransactions.pdf",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_inspector_arrives",
+      "name": "An inspector arrives during service response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Assign the trained supervisor to accompany the inspection"
+        },
+        {
+          "id": "second",
+          "label": "Reduce service complexity while staff support the inspection"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/the-inspection-process.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_dinein_safety",
+      "name": "Adding dine-in service changes the safety checklist response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Provide required equipment and signs before dine-in service"
+        },
+        {
+          "id": "second",
+          "label": "Keep service in a legally compliant format until ready"
+        }
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01352",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    },
+    {
+      "id": "d00_premises_move_penny_change",
+      "name": "The till runs short of pennies response",
+      "options": [
+        {
+          "id": "first",
+          "label": "Replenish change and continue exact cash totals"
+        },
+        {
+          "id": "second",
+          "label": "Use the disclosed customer-favorable rounding permitted by DCWP"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dca/consumers/Prohibition-of-Cashless-Establishments.page",
+      "tier": "core",
+      "note": "Proposed legal choices; costs and effects are unpriced, not zero-cost actions."
+    }
+  ],
+  "searchLog": [
+    {
+      "id": "d00_premises_search_initial",
+      "queries": [
+        "site.nyc.gov business restaurant opening certificate occupancy letter no objection permit ownership change",
+        "site.nyc.gov commercial lease guide good guy guaranty rent abatement cafe",
+        "site.tax.ny.gov bulk sales restaurant buying business notice purchaser",
+        "site.nyc.gov restaurant asbestos construction stop work order permits",
+        "site.nyc.gov restaurant commercial cooking fire suppression hood inspection",
+        "site.nyc.gov restaurant backflow prevention annual test plumbing",
+        "site.nyc.gov store restaurant landmark storefront signage permit",
+        "site.coned.com new business service gas electricity project center restaurant"
+      ],
+      "language": "en",
+      "purpose": "Primary opening, premises and legal dependencies",
+      "tier": "core"
+    },
+    {
+      "id": "d00_premises_search_access",
+      "queries": [
+        "site.ada.gov small business restaurants readily achievable barrier removal service animals",
+        "site.nyc.gov restaurant place assembly permit cellar basement customer toilet",
+        "site.nyc.gov restaurant noise exhaust odor complaint construction",
+        "site.nyc.gov commercial tenant harassment lease legal assistance",
+        "site.nyc.gov restaurant cashless illegal cash payment credit card surcharge",
+        "site.nyc.gov restaurant health inspection settle hearing default reopening closed",
+        "site.nyc.gov restaurant allergies choking poster CPR kit"
+      ],
+      "language": "en",
+      "purpose": "Accessibility, nuisance, due process and consumer requirements",
+      "tier": "core"
+    }
+  ],
+  "gaps": []
+}

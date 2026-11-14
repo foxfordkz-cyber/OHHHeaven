@@ -1,0 +1,2744 @@
+{
+  "eventCatalog": [
+    {
+      "id": "d00_street_icy_entry",
+      "name": "An icy entrance",
+      "text": "A snow-covered approach needs a safe pedestrian route before customers arrive.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "A shared weather bulletin announces snow; the player's opening inspection records uncleared ice.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_icy_entry",
+          "optionId": "adapt",
+          "label": "Assign trained staff to clear and document the route"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_icy_entry",
+          "optionId": "reconfigure",
+          "label": "Hire a snow contractor and verify completion"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_curbcut_snow",
+      "name": "Snow blocks the curb cut",
+      "text": "A cleared doorway still leaves the accessible approach blocked.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The inspection after an announced snowfall finds snow at an adjacent curb cut or hydrant.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_curbcut_snow",
+          "optionId": "adapt",
+          "label": "Clear the full approach and hydrant area"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_curbcut_snow",
+          "optionId": "reconfigure",
+          "label": "Delay entry and arrange contractor clearance"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_closed_day_litter",
+      "name": "The sidewalk gets dirty on a closed day",
+      "text": "Closing the cafe does not suspend sidewalk upkeep.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's closure calendar has no assigned exterior cleaning coverage.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_closed_day_litter",
+          "optionId": "adapt",
+          "label": "Contract exterior cleaning during closure"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_closed_day_litter",
+          "optionId": "reconfigure",
+          "label": "Assign a paid staff check on closed days"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/sidewalks-gutters.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_treepit_litter",
+      "name": "Litter collects in the tree pit",
+      "text": "The exterior cleaning boundary extends beyond the doorstep.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's inspection finds uncollected litter in the adjoining tree pit or gutter.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_treepit_litter",
+          "optionId": "adapt",
+          "label": "Add the full perimeter to the cleaning route"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_treepit_litter",
+          "optionId": "reconfigure",
+          "label": "Coordinate building-wide upkeep with management"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/sidewalks-gutters.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_bin_overflow",
+      "name": "The waste lid will not close",
+      "text": "A busy service exceeds the chosen bin capacity.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Recorded waste exceeds the usable capacity of the player's lidded bins.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_bin_overflow",
+          "optionId": "adapt",
+          "label": "Add compliant bins and storage capacity"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_bin_overflow",
+          "optionId": "reconfigure",
+          "label": "Arrange an extra collection before overflow"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_bins_before_open",
+      "name": "Empty bins block reopening",
+      "text": "Collection is complete but the bins remain at the curb.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The opening checklist records collection bins still outside when trading is due to resume.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_bins_before_open",
+          "optionId": "adapt",
+          "label": "Assign bin retrieval before opening"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_bins_before_open",
+          "optionId": "reconfigure",
+          "label": "Rearrange collection and staff handover with the carter"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_waste_zone_switch",
+      "name": "Your waste zone changes providers",
+      "text": "The existing carter may not be authorized for the implemented zone.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "DSNY announces the address's final implementation date and the current contract fails the authorization check.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_waste_zone_switch",
+          "optionId": "adapt",
+          "label": "Sign with an authorized carter"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_waste_zone_switch",
+          "optionId": "reconfigure",
+          "label": "Coordinate an authorized building-wide contract"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dsny/businesses/setup-operations/hiring-a-private-carter.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_overhead_ice",
+      "name": "Ice hangs above the entrance",
+      "text": "A cleared pavement does not remove an overhead hazard.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "A public thaw warning is followed by the player's inspection finding ice on an awning.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_overhead_ice",
+          "optionId": "adapt",
+          "label": "Close the affected entrance and call building management"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_overhead_ice",
+          "optionId": "reconfigure",
+          "label": "Hire qualified removal and use a safe approved alternative entrance"
+        }
+      ],
+      "tier": "core",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03706",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_weekend_subway_loss",
+      "name": "The weekend train stops serving the block",
+      "text": "A transport disruption changes how customers reach the cafe.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "A common scenario uses an official MTA shutdown notice for the serving line.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_weekend_subway_loss",
+          "optionId": "adapt",
+          "label": "Promote pickup to nearby residents"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_weekend_subway_loss",
+          "optionId": "reconfigure",
+          "label": "Reduce perishable preparation using actual preorders"
+        }
+      ],
+      "tier": "core",
+      "source": "https://ny1.com/nyc/brooklyn/news/2026/08/20/brooklyn-business-owners-rally-against-g-train-service-shutdowns",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_secondary"
+    },
+    {
+      "id": "d00_street_outdoor_service_path",
+      "name": "Outdoor service spills into the public walkway",
+      "text": "The chosen table arrangement makes staff cross the public pedestrian path.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's layout requires serving patrons from outside the permitted cafe area.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_outdoor_service_path",
+          "optionId": "adapt",
+          "label": "Reconfigure tables and service access within the permit"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_outdoor_service_path",
+          "optionId": "reconfigure",
+          "label": "Reduce outdoor tables and serve indoors"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.diningoutnyc.info/rules/sidewalk/operate",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_sidewalk_defect",
+      "name": "A defect appears on the approach",
+      "text": "A damaged sidewalk needs the responsible owner and repair route identified.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's documented site inspection finds a sidewalk defect.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_sidewalk_defect",
+          "optionId": "adapt",
+          "label": "Notify the landlord and obtain a repair plan"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_sidewalk_defect",
+          "optionId": "reconfigure",
+          "label": "Seek DOT guidance and maintain a safe accessible approach"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_vault_sidewalk",
+      "name": "The damaged sidewalk is over a vault",
+      "text": "A cellar extension changes the repair scope.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's due-diligence records show a vault beneath the defective sidewalk.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_vault_sidewalk",
+          "optionId": "adapt",
+          "label": "Commission a qualified private structural repair plan"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_vault_sidewalk",
+          "optionId": "reconfigure",
+          "label": "Negotiate landlord-funded repairs before committing to the site"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_commuter_route_change",
+      "name": "The morning route changes",
+      "text": "A published service change alters the usual arrival path.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "MTA publishes a planned change affecting the cafe's observed commuter route.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_commuter_route_change",
+          "optionId": "adapt",
+          "label": "Update access instructions and pickup timing"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_commuter_route_change",
+          "optionId": "reconfigure",
+          "label": "Adjust morning preparation to measured orders"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.mta.info/alerts",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_local_access_rule",
+      "name": "An Open Street changes loading access",
+      "text": "Pedestrian programming and vehicle permissions depend on the exact block schedule.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "DOT publishes a local-access or full-closure schedule covering the cafe.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_local_access_rule",
+          "optionId": "adapt",
+          "label": "Arrange deliveries within the permitted access window"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_local_access_rule",
+          "optionId": "reconfigure",
+          "label": "Use a lawful alternate loading point with the supplier"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/html/dot/html/pedestrians/openstreets.shtml",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_summer_delivery",
+      "name": "Summer Streets disrupts a delivery",
+      "text": "The route's event timetable conflicts with the chosen supplier slot.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "The official event flyer and the player's delivery booking overlap.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_summer_delivery",
+          "optionId": "adapt",
+          "label": "Move the delivery outside the closure"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_summer_delivery",
+          "optionId": "reconfigure",
+          "label": "Receive supplies beforehand within safe storage capacity"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/html/dot/downloads/pdf/summer-streets-manhattan-flyer-2026.pdf",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_catchbasin_clog",
+      "name": "Leaves block the street drain",
+      "text": "A nearby catch basin cannot accept rainfall normally.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "A shared heavy-rain warning coincides with visible debris at the catch basin.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_catchbasin_clog",
+          "optionId": "adapt",
+          "label": "Report the blockage and safely clear surface debris"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_catchbasin_clog",
+          "optionId": "reconfigure",
+          "label": "Protect the entrance and move stock above vulnerable levels"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dep/environment/flood-prevention.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_groundwater_entry",
+      "name": "Water enters after the rain ends",
+      "text": "Saturated ground can keep pushing water through the cellar envelope.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "After the announced rain scenario, a site assessment identifies foundation or floor-drain entry.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_groundwater_entry",
+          "optionId": "adapt",
+          "label": "Keep stock out of the affected cellar and commission repairs"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_groundwater_entry",
+          "optionId": "reconfigure",
+          "label": "Use compliant off-site storage until remediation"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dep/environment/flood-prevention.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_smoke_air_alert",
+      "name": "An air-quality alert changes service",
+      "text": "Smoke arriving from outside the city makes outdoor service less suitable.",
+      "scale": "city",
+      "months": [],
+      "realSignal": "The host announces a shared NYC air-quality advisory; no fire casualties are modeled.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_smoke_air_alert",
+          "optionId": "adapt",
+          "label": "Suspend outdoor seating and follow indoor-air guidance"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_smoke_air_alert",
+          "optionId": "reconfigure",
+          "label": "Shorten exposed service and communicate pickup arrangements"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/doh/health/health-topics/air-quality-fire-smoke-and-effect-on-air-quality.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_new_shop_assessment",
+      "name": "A new cafe does not qualify for an assessment",
+      "text": "A resilience support program has eligibility conditions.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's application fails the published operating-history or location criteria.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_new_shop_assessment",
+          "optionId": "adapt",
+          "label": "Arrange a private site assessment"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_new_shop_assessment",
+          "optionId": "reconfigure",
+          "label": "Use public preparedness guidance and recheck eligibility later"
+        }
+      ],
+      "tier": "core",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/emergency-preparedness/business-preparedness-and-resiliency-program/expanded-risk-assessment-service",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_backup_after_recedes",
+      "name": "The backup is gone before inspection",
+      "text": "Water receding does not remove the need to document and report the problem.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player observes sewage entry during the shared rain scenario and the water later recedes.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_backup_after_recedes",
+          "optionId": "adapt",
+          "label": "Report the backup with preserved records"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_backup_after_recedes",
+          "optionId": "reconfigure",
+          "label": "Ask a licensed plumber to identify private-line defects"
+        }
+      ],
+      "tier": "core",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01510",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure site impact and obtain quotes before numerical activation. Empty months means any month with the stated signal.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_office_policy",
+      "name": "An office neighbor changes attendance policy",
+      "text": "The customer base around an office block changes when its employer changes attendance requirements.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "A preannounced neighborhood scenario publishes an employer's attendance-policy change.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_office_policy",
+          "optionId": "adapt",
+          "label": "Seek recurring office pickup orders"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_office_policy",
+          "optionId": "reconfigure",
+          "label": "Re-measure the morning rush before changing staffing"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_weekday_mismatch",
+      "name": "The same staffing template misses weekday demand",
+      "text": "An average weekday hides the local office attendance pattern.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's order history shows a recurring weekday gap after adopting a uniform schedule.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_weekday_mismatch",
+          "optionId": "adapt",
+          "label": "Schedule labor from the measured weekday pattern"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_weekday_mismatch",
+          "optionId": "reconfigure",
+          "label": "Target resident preorders on quieter days"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_visitor_mix",
+      "name": "The visitor mix changes",
+      "text": "Citywide arrivals can rise while a cafe's visitor segment weakens.",
+      "scale": "world",
+      "months": [],
+      "realSignal": "A shared tourism scenario uses an official report showing different domestic and international trends.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_visitor_mix",
+          "optionId": "adapt",
+          "label": "Adjust visitor-facing marketing using actual customer data"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_visitor_mix",
+          "optionId": "reconfigure",
+          "label": "Develop resident loyalty and nearby partnerships"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_forecast_not_orders",
+      "name": "A tourism forecast becomes an inventory bet",
+      "text": "Forecast visitors are not confirmed cafe orders.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player increases perishable buying solely from a citywide visitor forecast.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_forecast_not_orders",
+          "optionId": "adapt",
+          "label": "Use staged replenishment based on transactions"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_forecast_not_orders",
+          "optionId": "reconfigure",
+          "label": "Presell group or hotel orders before preparing extra stock"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_school_closure",
+      "name": "The school-day customer routine stops",
+      "text": "A published school closure changes the neighborhood's normal school-run routine.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "The serving public school's official calendar announces a closure.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_school_closure",
+          "optionId": "adapt",
+          "label": "Reduce school-run preparation using prior observed demand"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_school_closure",
+          "optionId": "reconfigure",
+          "label": "Offer preorders for resident households"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_wrong_school_calendar",
+      "name": "The nearby school follows another calendar",
+      "text": "The cafe relied on a calendar that does not cover its local school.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player uses NYCPS dates for a nearby private, charter or other excluded school.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_wrong_school_calendar",
+          "optionId": "adapt",
+          "label": "Confirm that school's calendar directly"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_wrong_school_calendar",
+          "optionId": "reconfigure",
+          "label": "Base staffing on confirmed orders until dates are known"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_race_access",
+      "name": "The marathon changes access across the street",
+      "text": "The race route and parking restrictions affect staff and delivery travel.",
+      "scale": "city",
+      "months": [],
+      "realSignal": "The host announces the published race-route restrictions for the block.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_race_access",
+          "optionId": "adapt",
+          "label": "Arrange staff arrival and receiving before restrictions"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_race_access",
+          "optionId": "reconfigure",
+          "label": "Use an approved alternative route and communicate pickup access"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/assets/cecm/downloads/pdf/tcs-street-closures-marathon-2026.pdf",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_rolling_reopening",
+      "name": "A road stays closed beyond the planned pickup",
+      "text": "Race-day road reopening is not a fixed promise to a supplier.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "The player's booking assumes a reopening time the official notice leaves to police discretion.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_rolling_reopening",
+          "optionId": "adapt",
+          "label": "Book a flexible receiving window"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_rolling_reopening",
+          "optionId": "reconfigure",
+          "label": "Hold safe reserve stock and reschedule the delivery"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/assets/cecm/downloads/pdf/tcs-street-closures-marathon-2026.pdf",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_wrong_hours",
+      "name": "Search results show the wrong opening hours",
+      "text": "Customers see hours that no longer match the player's chosen schedule.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player changes staffed hours but leaves the public business profile unchanged.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_wrong_hours",
+          "optionId": "adapt",
+          "label": "Correct all published operating hours"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_wrong_hours",
+          "optionId": "reconfigure",
+          "label": "Restore the advertised schedule until updates are visible"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://support.google.com/business/answer/15300403",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_split_shift_listing",
+      "name": "An afternoon closure is missing online",
+      "text": "A split operating day needs a matching public listing.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player adds a service break without publishing the break in the profile.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_split_shift_listing",
+          "optionId": "adapt",
+          "label": "Publish split-day hours"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_split_shift_listing",
+          "optionId": "reconfigure",
+          "label": "Keep a staffed pickup window through the advertised period"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://support.google.com/business/answer/15300403",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_review_extortion",
+      "name": "A demand follows a wave of suspicious reviews",
+      "text": "A threat asks the owner to pay for review removal.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "A preannounced platform-abuse scenario supplies a documented demand and review links.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_review_extortion",
+          "optionId": "adapt",
+          "label": "Preserve evidence and report through the extortion channel"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_review_extortion",
+          "optionId": "reconfigure",
+          "label": "Escalate documented threats to appropriate support or authorities"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://support.google.com/business/answer/16404809",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_laptop_capacity",
+      "name": "Occupied tables stop turning over",
+      "text": "A full room may leave arriving customers without a place to sit.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's observations show extended laptop stays and customers leaving for lack of seats.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_laptop_capacity",
+          "optionId": "adapt",
+          "label": "Create clearly posted laptop zones and busy-period rules"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_laptop_capacity",
+          "optionId": "reconfigure",
+          "label": "Keep a coworking offer with explicit paid terms"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.reddit.com/r/barista/comments/1hs15rk/losing_business_due_to_people_working_on_laptops/",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_secondary"
+    },
+    {
+      "id": "d00_street_hotspot_workaround",
+      "name": "Turning off Wi-Fi does not free the tables",
+      "text": "Guests can continue working through their own mobile connection.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player removes Wi-Fi but observed dwell time remains unchanged.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_hotspot_workaround",
+          "optionId": "adapt",
+          "label": "Address seating use directly with a clear policy"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_hotspot_workaround",
+          "optionId": "reconfigure",
+          "label": "Retain a designated work area and protect walk-in tables"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.reddit.com/r/barista/comments/1hs15rk/losing_business_due_to_people_working_on_laptops/",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_secondary"
+    },
+    {
+      "id": "d00_street_wifi_expectation",
+      "name": "The cafe's atmosphere conflicts with guest expectations",
+      "text": "A Wi-Fi-free concept needs a consistent service explanation.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player markets a social cafe but customer inquiries show an expectation of workspace service.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_wifi_expectation",
+          "optionId": "adapt",
+          "label": "Explain the concept before purchase and offer suitable seating"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_wifi_expectation",
+          "optionId": "reconfigure",
+          "label": "Add a limited work area while preserving social space"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://dailycoffeenews.com/2019/10/23/as-wi-fi-becomes-ubiquitous-some-cafes-are-still-holding-out/",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_secondary"
+    },
+    {
+      "id": "d00_street_review_incentives",
+      "name": "A review promotion breaches platform rules",
+      "text": "A chosen incentive campaign conflicts with the platform's fake-engagement policy.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player offers incentives for reviews and receives a documented platform restriction.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_review_incentives",
+          "optionId": "adapt",
+          "label": "Stop the incentive and use compliant feedback requests"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_review_incentives",
+          "optionId": "reconfigure",
+          "label": "Appeal with evidence if the restriction was applied in error"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://support.google.com/business/answer/14114287",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_still_closed_online",
+      "name": "The reopened cafe still looks closed online",
+      "text": "Opening the doors does not automatically repair the online status.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's temporary closure ends while the business profile still says closed.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_still_closed_online",
+          "optionId": "adapt",
+          "label": "Update and verify the reopened hours"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_still_closed_online",
+          "optionId": "reconfigure",
+          "label": "Publish a reopening announcement while support corrects the listing"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://support.google.com/business/answer/15300571",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_new_identity_listing",
+      "name": "A changed identity needs new verification",
+      "text": "A name or location change can follow a different profile path from reopening.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player changes location or identity and tries to reuse the old closed profile.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_new_identity_listing",
+          "optionId": "adapt",
+          "label": "Follow the new-profile verification process"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_new_identity_listing",
+          "optionId": "reconfigure",
+          "label": "Ask platform support about eligible review transfer"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://support.google.com/business/answer/15300571",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_online_queue",
+      "name": "Online orders overwhelm the chosen service capacity",
+      "text": "The accepted order backlog grows beyond the cafe's measured ability to prepare it.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's accepted delivery and counter queue exceeds its measured completion capacity.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_online_queue",
+          "optionId": "adapt",
+          "label": "Add realistic prep time with Busy status"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_online_queue",
+          "optionId": "reconfigure",
+          "label": "Pause the affected channel while completing accepted orders"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://help.doordash.com/en-us/merchants/article/what-is-my-store-status",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_capacity_threshold",
+      "name": "The delivery threshold no longer matches the team",
+      "text": "A manually configured order cap can outlive the staffing plan it was based on.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player reduces staff but keeps the previous manual platform capacity threshold.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_capacity_threshold",
+          "optionId": "adapt",
+          "label": "Recalculate the manual cap from current service measurements"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_capacity_threshold",
+          "optionId": "reconfigure",
+          "label": "Use available optimization and monitor the resulting queue"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://help.doordash.com/en-us/merchants/article/what-are-operations-settings-and-how-do-i-use-them",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_unapproved_listing",
+      "name": "An app lists the cafe without the required agreement",
+      "text": "An unexpected listing carries menu or ordering expectations the cafe did not approve.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "A shared platform scenario presents a listing with no written restaurant agreement.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_unapproved_listing",
+          "optionId": "adapt",
+          "label": "Request removal and document a DCWP complaint"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_unapproved_listing",
+          "optionId": "reconfigure",
+          "label": "Negotiate a compliant written agreement before participating"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_phone_fee_nonsale",
+      "name": "A phone charge appears without a completed sale",
+      "text": "A reconciliation finds an app fee for a call that did not become an order.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's invoice audit finds a phone-order charge unmatched to a sale.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_phone_fee_nonsale",
+          "optionId": "adapt",
+          "label": "Dispute the charge with order records"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_phone_fee_nonsale",
+          "optionId": "reconfigure",
+          "label": "Escalate documented noncompliance to DCWP"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_delete_customer_data",
+      "name": "A delivery customer withdraws data consent",
+      "text": "Imported customer data carries continuing duties.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The cafe receives a customer's valid request to stop use and delete app-shared data.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_delete_customer_data",
+          "optionId": "adapt",
+          "label": "Delete the data and document completion"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_delete_customer_data",
+          "optionId": "reconfigure",
+          "label": "Stop the affected marketing workflow while verifying all copies"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_courier_bathroom",
+      "name": "A delivery worker asks to use the bathroom",
+      "text": "Pickup service includes bathroom-access responsibilities with limited exceptions.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "A worker collecting an accepted app order requests access.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_courier_bathroom",
+          "optionId": "adapt",
+          "label": "Provide access under the agreement"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_courier_bathroom",
+          "optionId": "reconfigure",
+          "label": "Address a documented health or safety exception and communicate it"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_neighbor_music",
+      "name": "A neighbor reports cafe music",
+      "text": "A music setting chosen inside can create a problem in an adjoining residence.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player's music operation produces a documented complaint or measurement.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_neighbor_music",
+          "optionId": "adapt",
+          "label": "Reduce sound transmission and commission an assessment"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_neighbor_music",
+          "optionId": "reconfigure",
+          "label": "Use eligible mediation while implementing a quieter service plan"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_construction_noise",
+      "name": "Nearby construction changes the customer environment",
+      "text": "Approved construction can make an otherwise attractive sitting area less usable.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "The host announces permitted nearby works and its published noise-mitigation plan.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_construction_noise",
+          "optionId": "adapt",
+          "label": "Shift seating away from the source and promote takeaway"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_construction_noise",
+          "optionId": "reconfigure",
+          "label": "Coordinate timing or report documented noncompliance"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_street_promo_obligation",
+      "name": "A campaign offer must actually be honored",
+      "text": "A promotional program creates operating commitments.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The player signs the participation agreement but menu preparation no longer covers its valid offer.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_street_move_promo_obligation",
+          "optionId": "adapt",
+          "label": "Restore the agreed offer and supply plan"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_street_move_promo_obligation",
+          "optionId": "reconfigure",
+          "label": "Seek the organizer's approved amendment before advertising changes"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://assets.ctfassets.net/1aemqu6a6t65/42JY7VyYe1cbH1rGIkzGsl/e7e0db95a6d78ebb76f356aeec0300f3/W-26_NYC_Restaurant_Week_Participation_Agreement.pdf",
+      "confidence": "estimate",
+      "note": "Deterministic qualitative scenario derived from the cited source; measure local impact before numerical activation. Empty months means any month with the stated signal. Foreign operator accounts are comparison evidence only.",
+      "evidenceStatus": "opened_primary"
+    }
+  ],
+  "nonObvious": [
+    {
+      "id": "d00_street_no_curb_not_door",
+      "text": "Clearing only the doorway can leave the actual access route unusable.",
+      "why": "Adjacent curb cuts and hydrants are part of the snow responsibility, so a narrow shovel path is incomplete.",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_closed_not_exempt",
+      "text": "A planned day off still needs exterior cleaning coverage.",
+      "why": "The sidewalk continues collecting litter when no employee is present.",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/sidewalks-gutters.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_volume_not_bags",
+      "text": "Waste capacity is limited by whether the lid closes.",
+      "why": "A bin that exists but overflows does not meet the set-out rule.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_landlord_carter",
+      "text": "A landlord's shared collection does not erase the cafe's compliance tasks.",
+      "why": "Ground-floor businesses still need the required records and visible carter decal.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/setup-operations/hiring-a-private-carter.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_look_up",
+      "text": "The winter opening walk must also look above the door.",
+      "why": "A safe pavement can sit directly under an unsafe awning or ice mass.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03706",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_shuttle_not_same",
+      "text": "A replacement bus does not prove sales will stay unchanged.",
+      "why": "Greenpoint owners reported customer losses despite replacement shuttles; their observations are not a universal sales coefficient.",
+      "source": "https://ny1.com/nyc/brooklyn/news/2026/08/20/brooklyn-business-owners-rally-against-g-train-service-shutdowns",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_vault_cost",
+      "text": "A sidewalk over a cellar vault follows a different repair path.",
+      "why": "DOT says these structural sections must be repaired privately rather than by the City's sidewalk program.",
+      "source": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_event_two_sides",
+      "text": "A pedestrian event can help discovery while disrupting replenishment.",
+      "why": "The same official event guidance invites customers and asks businesses to reschedule deliveries.",
+      "source": "https://www.nyc.gov/html/dot/downloads/pdf/summer-streets-manhattan-flyer-2026.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_four_pathways",
+      "text": "Basement water is not always the same failure.",
+      "why": "Drain blockage, groundwater, coastal backflow and sewer overload need different diagnosis.",
+      "source": "https://www.nyc.gov/site/dep/environment/flood-prevention.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_remote_weather",
+      "text": "Bad air can arrive from far beyond the cafe's city.",
+      "why": "The relevant operating signal is the local advisory, not whether a fire is visible nearby.",
+      "source": "https://www.nyc.gov/site/doh/health/health-topics/air-quality-fire-smoke-and-effect-on-air-quality.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_eligibility",
+      "text": "Public resilience help is not automatic for a newly opened shop.",
+      "why": "Eligibility includes operating history and other conditions, so opening plans cannot assume an immediate award.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/emergency-preparedness/business-preparedness-and-resiliency-program/expanded-risk-assessment-service",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_receded_evidence",
+      "text": "A sewer complaint remains useful after the water disappears.",
+      "why": "Reporting and retaining request records can preserve an investigation trail when the visible condition has cleared.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01510",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Source-backed practical implication; not a measured frequency or financial estimate."
+    },
+    {
+      "id": "d00_street_no_office_average",
+      "text": "An office attendance average is not a cafe's weekday schedule.",
+      "why": "The survey varies by employer size and industry; an individual block needs its own observations.",
+      "source": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_visitors_spend",
+      "text": "Visitor totals and spending mix can move differently.",
+      "why": "Domestic growth does not guarantee recovery in the international customers on whom a particular location relies.",
+      "source": "https://www.business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_calendar_scope",
+      "text": "The public-school calendar does not cover every school next door.",
+      "why": "Private and charter calendars can shift the expected parent and student footfall.",
+      "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_race_delivery",
+      "text": "Race-day reopening times may remain uncertain.",
+      "why": "The official notice leaves rolling road reopenings to police discretion, so delivery promises need slack.",
+      "source": "https://www.nyc.gov/assets/cecm/downloads/pdf/tcs-street-closures-marathon-2026.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_digital_break",
+      "text": "An operating break must be published as part of the opening hours.",
+      "why": "A customer may travel to an unlocked-looking online listing while the cafe is actually between services.",
+      "source": "https://support.google.com/business/answer/15300403",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_review_evidence",
+      "text": "Paying a review-removal demand does not guarantee removal.",
+      "why": "Google specifically recommends evidence preservation and reporting instead of payment.",
+      "source": "https://support.google.com/business/answer/16404809",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_full_room",
+      "text": "A busy-looking room can hide poor table availability for new purchasers.",
+      "why": "The Toronto poster's experience concerns dwell time; it does not establish a universal ban or sales uplift.",
+      "source": "https://www.reddit.com/r/barista/comments/1hs15rk/losing_business_due_to_people_working_on_laptops/",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_wifi_positioning",
+      "text": "Wi-Fi is a positioning choice with customer-service consequences.",
+      "why": "Interviewed operators describe successful alternatives, but the response depends on the cafe's audience.",
+      "source": "https://dailycoffeenews.com/2019/10/23/as-wi-fi-becomes-ubiquitous-some-cafes-are-still-holding-out/",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_review_discount",
+      "text": "A review discount can damage the profile it was meant to improve.",
+      "why": "The platform can restrict reviews or show a warning after prohibited engagement.",
+      "source": "https://support.google.com/business/answer/14114287",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_reopen_admin",
+      "text": "Reopening includes a digital status task.",
+      "why": "A corrected profile matters independently of physical reopening and new opening hours.",
+      "source": "https://support.google.com/business/answer/15300571",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_pause_control",
+      "text": "A growing digital queue is partly under the operator's control.",
+      "why": "The platform exposes prep-time and pause controls, so accepting every order is a choice.",
+      "source": "https://help.doordash.com/en-us/merchants/article/what-is-my-store-status",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_old_cap",
+      "text": "A manual order cap is not automatically updated after staffing cuts.",
+      "why": "Platform settings can preserve yesterday's capacity assumption.",
+      "source": "https://help.doordash.com/en-us/merchants/article/what-are-operations-settings-and-how-do-i-use-them",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_data_not_owned",
+      "text": "App customer data is not an unrestricted marketing asset.",
+      "why": "Consent withdrawal and deletion duties remain after the order is fulfilled.",
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_mediation_timing",
+      "text": "Neighbor mediation has eligibility limits.",
+      "why": "An existing adversarial or formal litigation process can make the dispute ineligible.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_noise_place",
+      "text": "Sound near the espresso bar is not the only relevant measurement.",
+      "why": "Neighbor impact and the source's surroundings matter, so a comfortable indoor setting does not settle a noise dispute.",
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    },
+    {
+      "id": "d00_street_no_campaign_not_windfall",
+      "text": "A city promotion is not an automatic revenue bonus for every cafe.",
+      "why": "Participation brings offer and trademark conditions; observed sales and margins must justify joining.",
+      "source": "https://assets.ctfassets.net/1aemqu6a6t65/42JY7VyYe1cbH1rGIkzGsl/e7e0db95a6d78ebb76f356aeec0300f3/W-26_NYC_Restaurant_Week_Participation_Agreement.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Practical implication of the cited source; no quantified demand effect is claimed."
+    }
+  ],
+  "failureStories": [],
+  "sources": [
+    {
+      "id": "d00_street_source_snow",
+      "url": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "title": "Snow and Ice Removal Laws",
+      "publisher": "DSNY",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Occupants must clear sidewalks, adjacent curb cuts and hydrants; snow must not be pushed into the street.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_gutters",
+      "url": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/sidewalks-gutters.page",
+      "title": "Sidewalks and Gutters",
+      "publisher": "DSNY",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Maintenance includes the gutter and tree pits, address-specific enforcement windows and arrangements while the business is closed.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_setout",
+      "url": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "title": "Setout Rules for Businesses",
+      "publisher": "DSNY",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Secure lids, enough capacity, correct set-out time, prompt bin removal and separation of recyclables are required.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_carter",
+      "url": "https://www.nyc.gov/site/dsny/businesses/setup-operations/hiring-a-private-carter.page",
+      "title": "Hiring a Private Carter",
+      "publisher": "DSNY",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Zone-authorized service, visible decals and retained contracts matter; self-hauling requires registration.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_roofice",
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03706",
+      "title": "Snow or Ice on Building",
+      "publisher": "NYC311",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Owners must secure overhead snow and ice, clear gutters and address unsafe awnings and overhangs.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_gtrain",
+      "url": "https://ny1.com/nyc/brooklyn/news/2026/08/20/brooklyn-business-owners-rally-against-g-train-service-shutdowns",
+      "title": "Brooklyn business owners rally against G train service shutdowns",
+      "publisher": "NY1",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "local_reporting",
+      "access": "opened_secondary",
+      "evidence": "Owners reported weekend customer losses during service shutdowns; shuttle buses did not eliminate the reported effect.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_sidewalkdining",
+      "url": "https://www.diningoutnyc.info/rules/sidewalk/operate",
+      "title": "Sidewalk Cafe: How to Operate",
+      "publisher": "NYC DOT / Dining Out NYC",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Service must stay within the cafe footprint; accessibility, operating hours and enforcement procedures apply.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_sidewalk",
+      "url": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+      "title": "Sidewalks",
+      "publisher": "NYC DOT",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Owner maintenance duties, utility damage documentation, sidewalk notices and private repair of vault sidewalks are described.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_mta",
+      "url": "https://www.mta.info/alerts",
+      "title": "Planned Service Changes",
+      "publisher": "MTA",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Official interface supplies current and future planned subway, bus and railroad changes.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_openstreets",
+      "url": "https://www.nyc.gov/html/dot/html/pedestrians/openstreets.shtml",
+      "title": "Open Streets",
+      "publisher": "NYC DOT",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Routes have different full-closure, school and limited-local-access schedules.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_summerstreets",
+      "url": "https://www.nyc.gov/html/dot/downloads/pdf/summer-streets-manhattan-flyer-2026.pdf",
+      "title": "Summer Streets Manhattan Community Flyer",
+      "publisher": "NYC DOT",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Business guidance recommends delivery rescheduling; buses and parking change while subway service on route is unaffected by the event.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_floodtypes",
+      "url": "https://www.nyc.gov/site/dep/environment/flood-prevention.page",
+      "title": "Flooding and Climate Change",
+      "publisher": "NYC DEP",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Street blockage, coastal backflow, groundwater penetration and overwhelmed sewers are distinct flood pathways.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_airquality",
+      "url": "https://www.nyc.gov/site/doh/health/health-topics/air-quality-fire-smoke-and-effect-on-air-quality.page",
+      "title": "Air Quality Guidance: Fire, Smoke, and High Ozone",
+      "publisher": "NYC Health",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Long-distance wildfire smoke and warm-weather ozone can affect outdoor air; official advisories provide actionable signals.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_prep",
+      "url": "https://nyc-business.nyc.gov/nycbusiness/emergency-preparedness/business-preparedness-and-resiliency-program/expanded-risk-assessment-service",
+      "title": "Expanded Risk Assessment Service",
+      "publisher": "NYC SBS",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "The business risk assessment program has operating-history, location, permit and prior-benefit eligibility conditions.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_sewer",
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01510",
+      "title": "Sewer Backup",
+      "publisher": "NYC311",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "A backup can be reported after water recedes; private service-line failures remain the owner's repair responsibility.",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_source_hybrid",
+      "url": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
+      "title": "Return to Office Survey Results, March 2025",
+      "publisher": "Partnership for New York City",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "survey",
+      "access": "opened_primary",
+      "evidence": "Major Manhattan employers report differing attendance across industries and firm sizes; hybrid policies remain common.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_tourism",
+      "url": "https://www.business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+      "title": "2025 Visitation Annual Report Release",
+      "publisher": "NYC Tourism + Conventions",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "industry_report",
+      "access": "opened_primary",
+      "evidence": "Domestic visitation growth and international declines can coexist; visitor mix and spending differ.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_school",
+      "url": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "title": "School Year Calendar 2026–2027",
+      "publisher": "NYC Public Schools",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Official public-school calendar includes school closures and a scope warning for other school types; no cafe demand impact is quantified.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_marathon",
+      "url": "https://www.nyc.gov/assets/cecm/downloads/pdf/tcs-street-closures-marathon-2026.pdf",
+      "title": "Marathon Street Closure Notice",
+      "publisher": "NYC Office of the Mayor",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Businesses receive closure and parking notices; rolling reopening remains subject to police discretion.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_googlehours",
+      "url": "https://support.google.com/business/answer/15300403",
+      "title": "Edit your business hours",
+      "publisher": "Google",
+      "language": "en",
+      "jurisdiction": "platform",
+      "type": "platform_documentation",
+      "access": "opened_primary",
+      "evidence": "Business hours and split-day breaks can be represented on Maps and Search.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_extortion",
+      "url": "https://support.google.com/business/answer/16404809",
+      "title": "Report negative review extortion scams",
+      "publisher": "Google",
+      "language": "en",
+      "jurisdiction": "platform",
+      "type": "platform_documentation",
+      "access": "opened_primary",
+      "evidence": "Google advises preserving evidence, reporting extortion and not paying the demand.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_laptopreddit",
+      "url": "https://www.reddit.com/r/barista/comments/1hs15rk/losing_business_due_to_people_working_on_laptops/",
+      "title": "Losing Business Due to People Working on Laptops",
+      "publisher": "Reddit / r/barista",
+      "language": "en",
+      "jurisdiction": "Toronto comparison",
+      "type": "owner_account_unverified",
+      "access": "opened_secondary",
+      "evidence": "Poster describes tables filled by laptop users; commenters suggest zoning and note hotspots defeat Wi-Fi restrictions.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_wificafe",
+      "url": "https://dailycoffeenews.com/2019/10/23/as-wi-fi-becomes-ubiquitous-some-cafes-are-still-holding-out/",
+      "title": "As Wi-Fi Becomes Ubiquitous, Some Cafes Are Still Holding Out",
+      "publisher": "Daily Coffee News",
+      "language": "en",
+      "jurisdiction": "US comparison",
+      "type": "owner_interviews",
+      "access": "opened_secondary",
+      "evidence": "Operators explain Wi-Fi-free positioning and customer conversations; results vary by cafe.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_reviewpolicy",
+      "url": "https://support.google.com/business/answer/14114287",
+      "title": "Business Profile restrictions for policy violations",
+      "publisher": "Google",
+      "language": "en",
+      "jurisdiction": "platform",
+      "type": "platform_documentation",
+      "access": "opened_primary",
+      "evidence": "Fake engagement may lead to review restrictions, unpublished ratings or profile warnings; appeal is available.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_reopened",
+      "url": "https://support.google.com/business/answer/15300571",
+      "title": "Mark your business as reopened",
+      "publisher": "Google",
+      "language": "en",
+      "jurisdiction": "platform",
+      "type": "platform_documentation",
+      "access": "opened_primary",
+      "evidence": "Reopening requires a profile update; a location or name change may instead require a new verified profile.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_ddstatus",
+      "url": "https://help.doordash.com/en-us/merchants/article/what-is-my-store-status",
+      "title": "How to Manage Your Store Status and Availability",
+      "publisher": "DoorDash",
+      "language": "en",
+      "jurisdiction": "platform",
+      "type": "platform_documentation",
+      "access": "opened_primary",
+      "evidence": "Merchants can add prep time or pause selected channels and update special hours.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_ddcapacity",
+      "url": "https://help.doordash.com/en-us/merchants/article/what-are-operations-settings-and-how-do-i-use-them",
+      "title": "Operations Settings",
+      "publisher": "DoorDash",
+      "language": "en",
+      "jurisdiction": "platform",
+      "type": "platform_documentation",
+      "access": "opened_primary",
+      "evidence": "Order capacity can be limited by meal period or day; manual thresholds differ from automatically updated optimization.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_appterms",
+      "url": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "title": "Restaurants Using Delivery Apps",
+      "publisher": "NYC DCWP",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Written listings, fee protections, phone-order rules, courier bathroom access and customer-data duties apply.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_noise",
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+      "title": "Noise from Bar, Club, or Restaurant",
+      "publisher": "NYC311",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Chronic noise complaints can lead to measurements; MEND offers mediation with eligibility limits.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_noiseguide",
+      "url": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf",
+      "title": "A Guide to NYC's Noise Code",
+      "publisher": "NYC DEP",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "official",
+      "access": "opened_primary",
+      "evidence": "Construction needs noise mitigation; equipment and music can affect neighbors, and measurement location matters.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_street_source_restaurantweek",
+      "url": "https://assets.ctfassets.net/1aemqu6a6t65/42JY7VyYe1cbH1rGIkzGsl/e7e0db95a6d78ebb76f356aeec0300f3/W-26_NYC_Restaurant_Week_Participation_Agreement.pdf",
+      "title": "Restaurant Week Winter Participation Agreement",
+      "publisher": "NYC Tourism + Conventions",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "program_terms",
+      "access": "opened_primary",
+      "evidence": "Participation requires accepting terms, honoring valid offers and obtaining permission to use program marks.",
+      "tier": "deep"
+    }
+  ],
+  "researchLevers": [
+    {
+      "id": "d00_street_move_icy_entry",
+      "name": "Respond to an icy entrance",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Assign trained staff to clear and document the route"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Hire a snow contractor and verify completion"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_curbcut_snow",
+      "name": "Respond to snow blocks the curb cut",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Clear the full approach and hydrant area"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Delay entry and arrange contractor clearance"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_closed_day_litter",
+      "name": "Respond to the sidewalk gets dirty on a closed day",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Contract exterior cleaning during closure"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Assign a paid staff check on closed days"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/sidewalks-gutters.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_treepit_litter",
+      "name": "Respond to litter collects in the tree pit",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Add the full perimeter to the cleaning route"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Coordinate building-wide upkeep with management"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/sidewalks-gutters.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_bin_overflow",
+      "name": "Respond to the waste lid will not close",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Add compliant bins and storage capacity"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Arrange an extra collection before overflow"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_bins_before_open",
+      "name": "Respond to empty bins block reopening",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Assign bin retrieval before opening"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Rearrange collection and staff handover with the carter"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_waste_zone_switch",
+      "name": "Respond to your waste zone changes providers",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Sign with an authorized carter"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Coordinate an authorized building-wide contract"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/setup-operations/hiring-a-private-carter.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_overhead_ice",
+      "name": "Respond to ice hangs above the entrance",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Close the affected entrance and call building management"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Hire qualified removal and use a safe approved alternative entrance"
+        }
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03706",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_weekend_subway_loss",
+      "name": "Respond to the weekend train stops serving the block",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Promote pickup to nearby residents"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Reduce perishable preparation using actual preorders"
+        }
+      ],
+      "source": "https://ny1.com/nyc/brooklyn/news/2026/08/20/brooklyn-business-owners-rally-against-g-train-service-shutdowns",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_outdoor_service_path",
+      "name": "Respond to outdoor service spills into the public walkway",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Reconfigure tables and service access within the permit"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Reduce outdoor tables and serve indoors"
+        }
+      ],
+      "source": "https://www.diningoutnyc.info/rules/sidewalk/operate",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_sidewalk_defect",
+      "name": "Respond to a defect appears on the approach",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Notify the landlord and obtain a repair plan"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Seek DOT guidance and maintain a safe accessible approach"
+        }
+      ],
+      "source": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_vault_sidewalk",
+      "name": "Respond to the damaged sidewalk is over a vault",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Commission a qualified private structural repair plan"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Negotiate landlord-funded repairs before committing to the site"
+        }
+      ],
+      "source": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_commuter_route_change",
+      "name": "Respond to the morning route changes",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Update access instructions and pickup timing"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Adjust morning preparation to measured orders"
+        }
+      ],
+      "source": "https://www.mta.info/alerts",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_local_access_rule",
+      "name": "Respond to an open street changes loading access",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Arrange deliveries within the permitted access window"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Use a lawful alternate loading point with the supplier"
+        }
+      ],
+      "source": "https://www.nyc.gov/html/dot/html/pedestrians/openstreets.shtml",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_summer_delivery",
+      "name": "Respond to summer streets disrupts a delivery",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Move the delivery outside the closure"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Receive supplies beforehand within safe storage capacity"
+        }
+      ],
+      "source": "https://www.nyc.gov/html/dot/downloads/pdf/summer-streets-manhattan-flyer-2026.pdf",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_catchbasin_clog",
+      "name": "Respond to leaves block the street drain",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Report the blockage and safely clear surface debris"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Protect the entrance and move stock above vulnerable levels"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dep/environment/flood-prevention.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_groundwater_entry",
+      "name": "Respond to water enters after the rain ends",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Keep stock out of the affected cellar and commission repairs"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Use compliant off-site storage until remediation"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dep/environment/flood-prevention.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_smoke_air_alert",
+      "name": "Respond to an air-quality alert changes service",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Suspend outdoor seating and follow indoor-air guidance"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Shorten exposed service and communicate pickup arrangements"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/doh/health/health-topics/air-quality-fire-smoke-and-effect-on-air-quality.page",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_new_shop_assessment",
+      "name": "Respond to a new cafe does not qualify for an assessment",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Arrange a private site assessment"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Use public preparedness guidance and recheck eligibility later"
+        }
+      ],
+      "source": "https://nyc-business.nyc.gov/nycbusiness/emergency-preparedness/business-preparedness-and-resiliency-program/expanded-risk-assessment-service",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_backup_after_recedes",
+      "name": "Respond to the backup is gone before inspection",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Report the backup with preserved records"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Ask a licensed plumber to identify private-line defects"
+        }
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01510",
+      "tier": "core",
+      "note": "Qualitative choices; prices and capacity require a quote or site measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_office_policy",
+      "name": "Respond to an office neighbor changes attendance policy",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Seek recurring office pickup orders"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Re-measure the morning rush before changing staffing"
+        }
+      ],
+      "source": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_weekday_mismatch",
+      "name": "Respond to the same staffing template misses weekday demand",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Schedule labor from the measured weekday pattern"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Target resident preorders on quieter days"
+        }
+      ],
+      "source": "https://pfnyc.org/research/return-to-office-survey-results-march-2025",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_visitor_mix",
+      "name": "Respond to the visitor mix changes",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Adjust visitor-facing marketing using actual customer data"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Develop resident loyalty and nearby partnerships"
+        }
+      ],
+      "source": "https://www.business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_forecast_not_orders",
+      "name": "Respond to a tourism forecast becomes an inventory bet",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Use staged replenishment based on transactions"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Presell group or hotel orders before preparing extra stock"
+        }
+      ],
+      "source": "https://www.business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_school_closure",
+      "name": "Respond to the school-day customer routine stops",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Reduce school-run preparation using prior observed demand"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Offer preorders for resident households"
+        }
+      ],
+      "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_wrong_school_calendar",
+      "name": "Respond to the nearby school follows another calendar",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Confirm that school's calendar directly"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Base staffing on confirmed orders until dates are known"
+        }
+      ],
+      "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_race_access",
+      "name": "Respond to the marathon changes access across the street",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Arrange staff arrival and receiving before restrictions"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Use an approved alternative route and communicate pickup access"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/cecm/downloads/pdf/tcs-street-closures-marathon-2026.pdf",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_rolling_reopening",
+      "name": "Respond to a road stays closed beyond the planned pickup",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Book a flexible receiving window"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Hold safe reserve stock and reschedule the delivery"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/cecm/downloads/pdf/tcs-street-closures-marathon-2026.pdf",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_wrong_hours",
+      "name": "Respond to search results show the wrong opening hours",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Correct all published operating hours"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Restore the advertised schedule until updates are visible"
+        }
+      ],
+      "source": "https://support.google.com/business/answer/15300403",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_split_shift_listing",
+      "name": "Respond to an afternoon closure is missing online",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Publish split-day hours"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Keep a staffed pickup window through the advertised period"
+        }
+      ],
+      "source": "https://support.google.com/business/answer/15300403",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_review_extortion",
+      "name": "Respond to a demand follows a wave of suspicious reviews",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Preserve evidence and report through the extortion channel"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Escalate documented threats to appropriate support or authorities"
+        }
+      ],
+      "source": "https://support.google.com/business/answer/16404809",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_laptop_capacity",
+      "name": "Respond to occupied tables stop turning over",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Create clearly posted laptop zones and busy-period rules"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Keep a coworking offer with explicit paid terms"
+        }
+      ],
+      "source": "https://www.reddit.com/r/barista/comments/1hs15rk/losing_business_due_to_people_working_on_laptops/",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_hotspot_workaround",
+      "name": "Respond to turning off wi-fi does not free the tables",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Address seating use directly with a clear policy"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Retain a designated work area and protect walk-in tables"
+        }
+      ],
+      "source": "https://www.reddit.com/r/barista/comments/1hs15rk/losing_business_due_to_people_working_on_laptops/",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_wifi_expectation",
+      "name": "Respond to the cafe's atmosphere conflicts with guest expectations",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Explain the concept before purchase and offer suitable seating"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Add a limited work area while preserving social space"
+        }
+      ],
+      "source": "https://dailycoffeenews.com/2019/10/23/as-wi-fi-becomes-ubiquitous-some-cafes-are-still-holding-out/",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_review_incentives",
+      "name": "Respond to a review promotion breaches platform rules",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Stop the incentive and use compliant feedback requests"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Appeal with evidence if the restriction was applied in error"
+        }
+      ],
+      "source": "https://support.google.com/business/answer/14114287",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_still_closed_online",
+      "name": "Respond to the reopened cafe still looks closed online",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Update and verify the reopened hours"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Publish a reopening announcement while support corrects the listing"
+        }
+      ],
+      "source": "https://support.google.com/business/answer/15300571",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_new_identity_listing",
+      "name": "Respond to a changed identity needs new verification",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Follow the new-profile verification process"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Ask platform support about eligible review transfer"
+        }
+      ],
+      "source": "https://support.google.com/business/answer/15300571",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_online_queue",
+      "name": "Respond to online orders overwhelm the chosen service capacity",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Add realistic prep time with Busy status"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Pause the affected channel while completing accepted orders"
+        }
+      ],
+      "source": "https://help.doordash.com/en-us/merchants/article/what-is-my-store-status",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_capacity_threshold",
+      "name": "Respond to the delivery threshold no longer matches the team",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Recalculate the manual cap from current service measurements"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Use available optimization and monitor the resulting queue"
+        }
+      ],
+      "source": "https://help.doordash.com/en-us/merchants/article/what-are-operations-settings-and-how-do-i-use-them",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_unapproved_listing",
+      "name": "Respond to an app lists the cafe without the required agreement",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Request removal and document a DCWP complaint"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Negotiate a compliant written agreement before participating"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_phone_fee_nonsale",
+      "name": "Respond to a phone charge appears without a completed sale",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Dispute the charge with order records"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Escalate documented noncompliance to DCWP"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_delete_customer_data",
+      "name": "Respond to a delivery customer withdraws data consent",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Delete the data and document completion"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Stop the affected marketing workflow while verifying all copies"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_courier_bathroom",
+      "name": "Respond to a delivery worker asks to use the bathroom",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Provide access under the agreement"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Address a documented health or safety exception and communicate it"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dca/businesses/Restaurants-Using-Delivery-Apps.page",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_neighbor_music",
+      "name": "Respond to a neighbor reports cafe music",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Reduce sound transmission and commission an assessment"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Use eligible mediation while implementing a quieter service plan"
+        }
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_construction_noise",
+      "name": "Respond to nearby construction changes the customer environment",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Shift seating away from the source and promote takeaway"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Coordinate timing or report documented noncompliance"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/noise-code-guide-summary.pdf",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    },
+    {
+      "id": "d00_street_move_promo_obligation",
+      "name": "Respond to a campaign offer must actually be honored",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Restore the agreed offer and supply plan"
+        },
+        {
+          "id": "reconfigure",
+          "label": "Seek the organizer's approved amendment before advertising changes"
+        }
+      ],
+      "source": "https://assets.ctfassets.net/1aemqu6a6t65/42JY7VyYe1cbH1rGIkzGsl/e7e0db95a6d78ebb76f356aeec0300f3/W-26_NYC_Restaurant_Week_Participation_Agreement.pdf",
+      "tier": "deep",
+      "note": "Qualitative choices; prices and capacity require a quote or measurement. No cost-free action is implied."
+    }
+  ],
+  "searchLog": [
+    {
+      "id": "d00_street_search_initial",
+      "queries": [
+        "site.nyc.gov snow ice removal sidewalk property owners businesses DSNY",
+        "site.nyc.gov sidewalk cafe rain flooding heat emergency business",
+        "site.nyc.gov commercial waste containers set out collection businesses",
+        "site.mta.info G train shutdown 2024 businesses Brooklyn closure",
+        "site.nyc.gov businesses prepare flooding catch basin backup rain restaurant",
+        "site.nyc.gov air quality business wildfire smoke ventilation heat emergency",
+        "site.mta.info planned service changes G train September 2026",
+        "site.nyc.gov summer streets 2026 open streets business deliveries"
+      ],
+      "language": "en",
+      "purpose": "Exterior winter duties, waste, access and flood/air signals",
+      "tier": "core"
+    },
+    {
+      "id": "d00_street_search_demand",
+      "queries": [
+        "site.pfnyc.org return to office survey 2026 weekdays Monday Friday",
+        "site.business.nyctourism.com research 2025 2026 visitors international tourism",
+        "site.schools.nyc.gov 2026 2027 school calendar",
+        "site.nyrr.org 2026 New York City Marathon street closures spectators",
+        "site.support.google.com business profile incorrect hours edit temporary closure",
+        "site.support.google.com business profile fake reviews extortion report",
+        "site.reddit.com/r/Coffee shop owner laptops tables no wifi",
+        "site.reddit.com/r/restaurantowners cafe delivery app orders overwhelmed queue",
+        "site.merchants.doordash.com pause orders busy restaurant prep time",
+        "site.nyc.gov delivery apps restaurant caps menu listing consent",
+        "site.nyc.gov restaurant week participation restaurants 2026 cafe",
+        "site.nyc.gov restaurant noise air conditioner commercial music MEND"
+      ],
+      "language": "en",
+      "purpose": "Demand segmentation, customer dwell, digital reputation, delivery limits and neighbor relations",
+      "tier": "deep"
+    }
+  ],
+  "gaps": []
+}

@@ -1,0 +1,2845 @@
+{
+  "eventCatalog": [
+    {
+      "id": "d00_equipment_food_water_warranty",
+      "name": "Water specification fails before installation",
+      "text": "Potable water can still be unsuitable for the espresso machine and jeopardize its warranty.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Commissioning water test falls outside the installed machine specification.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_water_warranty_response",
+          "optionId": "adapt",
+          "label": "Obtain a treatment design and retest before commissioning"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_water_warranty_response",
+          "optionId": "pause",
+          "label": "Select equipment and treatment compatible with the tested supply"
+        }
+      ],
+      "tier": "core",
+      "source": "https://lamarzoccousa.com/wp-content/uploads/2025/07/MAN.29.1_LINEA_EN_V1.0_ONLINE-1.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_blocked_vent",
+      "name": "Cup storage obstructs machine ventilation",
+      "text": "Packing cloths or supplies over machine vents conflicts with the manufacturer installation guidance.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Preopening check finds obstructed intake, exhaust or warming-tray ventilation after storage was changed.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_blocked_vent_response",
+          "optionId": "adapt",
+          "label": "Rearrange storage and reopen the ventilation path"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_blocked_vent_response",
+          "optionId": "pause",
+          "label": "Pause the station for a technician check if overheating symptoms remain"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://lamarzoccousa.com/wp-content/uploads/2025/07/MAN.29.1_LINEA_EN_V1.0_ONLINE-1.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_unknown_fridge_history",
+      "name": "Overnight refrigeration history is missing",
+      "text": "Food that feels cold now does not establish that it stayed safe throughout an outage.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "An announced outage intersects an unlogged overnight refrigeration interval.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_unknown_fridge_history_response",
+          "optionId": "adapt",
+          "label": "Discard food whose safety cannot be established and document losses"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_unknown_fridge_history_response",
+          "optionId": "pause",
+          "label": "Transfer only demonstrably safe stock under the operator guidance and reduce the menu"
+        }
+      ],
+      "tier": "core",
+      "source": "https://healthweb-back.health.ny.gov/publications/7082/",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_ice_bin_cooler",
+      "name": "Emergency stock is placed in the ice bin",
+      "text": "Using the drink-ice bin as a refrigerator can contaminate ice with food particles.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The outage response plan places food packages directly in the drink-ice machine.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_ice_bin_cooler_response",
+          "optionId": "adapt",
+          "label": "Move ice into a separate food cooler and keep the drink-ice system protected"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_ice_bin_cooler_response",
+          "optionId": "pause",
+          "label": "Stop iced drinks until the contaminated system has been cleaned and sanitized"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://healthweb-back.health.ny.gov/publications/7082/",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_boil_water_menu",
+      "name": "Water notice invalidates the normal preparation plan",
+      "text": "A boil-water notice affects foods and beverages prepared with the supply, not only drinking glasses.",
+      "scale": "block",
+      "months": [],
+      "realSignal": "Public water advisory covers the cafe address.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_boil_water_menu_response",
+          "optionId": "adapt",
+          "label": "Arrange an authority-approved safe-water operating plan"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_boil_water_menu_response",
+          "optionId": "pause",
+          "label": "Suspend affected preparation until the advisory and reopening conditions are resolved"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.health.ny.gov/environmental/water/drinking/boilwater/docs/checklist_food_service_establishments.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_white_label_recall",
+      "name": "A hidden common producer issues a recall",
+      "text": "Different branded canned coffees can share a manufacturer named in a recall.",
+      "scale": "country",
+      "months": [],
+      "realSignal": "Published recall matches the producer and product identification on stocked cans.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_white_label_recall_response",
+          "optionId": "adapt",
+          "label": "Quarantine every matching brand and seek documented refunds"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_white_label_recall_response",
+          "optionId": "pause",
+          "label": "Replace the canned line with traceable unaffected products"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/snapchill-llc-recalls-canned-coffee-products-due-potential-clostridium-botulinum",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_recall_refund_proof",
+      "name": "A recall refund needs purchase evidence",
+      "text": "Removing affected stock and obtaining a refund are separate tasks with documentation requirements.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Recall instructions request proof of purchase or product images before disposal.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_recall_refund_proof_response",
+          "optionId": "adapt",
+          "label": "Record affected lots and evidence before following disposal instructions"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_recall_refund_proof_response",
+          "optionId": "pause",
+          "label": "Arrange an authorized return and retain the handoff record"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/snapchill-llc-recalls-canned-coffee-products-due-potential-clostridium-botulinum",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_used_remote_pickup",
+      "name": "A used machine bargain needs remote collection",
+      "text": "Owner accounts describe transporting used equipment from another region to obtain a lower purchase price.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The chosen used-equipment listing requires buyer collection and inspection away from the cafe.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_used_remote_pickup_response",
+          "optionId": "adapt",
+          "label": "Compare a documented transport-and-inspection quote with the asking price"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_used_remote_pickup_response",
+          "optionId": "pause",
+          "label": "Buy a locally serviceable alternative with disclosed condition"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.reddit.com/r/Coffee/comments/1cla0xp/cafe_owners_what_issue_are_you_facing_that_a_new/",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_secondary"
+    },
+    {
+      "id": "d00_equipment_food_cake_mix_shake",
+      "name": "A drink special contains raw cake mix",
+      "text": "A milkshake recipe can introduce raw flour without any cooking step.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "A proposed drink recipe includes ordinary uncooked cake mix or flour.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_cake_mix_shake_response",
+          "optionId": "adapt",
+          "label": "Use an ingredient explicitly manufactured for ready-to-eat use"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_cake_mix_shake_response",
+          "optionId": "pause",
+          "label": "Remove the raw-flour drink from the menu"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.fda.gov/food/buy-store-serve-safe-food/handling-flour-safely-what-you-need-know",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_flour_dust",
+      "name": "Baking flour spreads into ready-to-eat preparation",
+      "text": "Loose flour can contaminate nearby finished foods even when the baking recipe itself is cooked.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The chosen baking workflow dusts flour near exposed ready-to-eat items.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_flour_dust_response",
+          "optionId": "adapt",
+          "label": "Separate preparation areas or times and clean before ready-to-eat work"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_flour_dust_response",
+          "optionId": "pause",
+          "label": "Purchase finished baked goods until separation is feasible"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.fda.gov/food/buy-store-serve-safe-food/handling-flour-safely-what-you-need-know",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_vacuum_menu",
+      "name": "A vacuum-packed menu extension needs process review",
+      "text": "Buying a vacuum sealer does not by itself authorize a specialized food process.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Menu expansion introduces sous vide, cook-chill or vacuum packaging without the required approved plan.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_vacuum_menu_response",
+          "optionId": "adapt",
+          "label": "Submit the specific process for approval before production"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_vacuum_menu_response",
+          "optionId": "pause",
+          "label": "Use conventional approved preparation without reduced-oxygen packaging"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/haccp-plan-checklist.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_specialized_wholesale",
+      "name": "A wholesale order exceeds the process approval scope",
+      "text": "A cafe cannot assume its specialized-process approval permits packaged sales to another business.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "A proposed outside wholesale order contains food made under the cafe HACCP process.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_specialized_wholesale_response",
+          "optionId": "adapt",
+          "label": "Seek the appropriate licensing and process review for the intended distribution"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_specialized_wholesale_response",
+          "optionId": "pause",
+          "label": "Limit production to the uses permitted by the existing approval"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/haccp-plan-checklist.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_accessible_straw_stock",
+      "name": "A plastic-free order removes required straw stock",
+      "text": "NYC businesses must keep the specified plastic beverage straws available on request.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Procurement replaces all requested-use plastic straws without retaining compliant stock.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_accessible_straw_stock_response",
+          "optionId": "adapt",
+          "label": "Restock the required straws and train request handling"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_accessible_straw_stock_response",
+          "optionId": "pause",
+          "label": "Use a supplier that carries both routine alternatives and requested-use stock"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_splash_stick_substitution",
+      "name": "A packaging substitute introduces plastic splash sticks",
+      "text": "A plastic splash stick is regulated differently from a requested beverage straw.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "A supplier substitution delivers plastic stirrers or splash sticks for service.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_splash_stick_substitution_response",
+          "optionId": "adapt",
+          "label": "Reject the substitution and obtain compliant alternatives"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_splash_stick_substitution_response",
+          "optionId": "pause",
+          "label": "Remove the affected accessory from service"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_sanitizer_only",
+      "name": "Hand sanitizer is substituted for handwashing",
+      "text": "A sanitizer bottle cannot replace the handwashing step in a food-safety workflow.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Station plan or observed practice substitutes sanitizer for required handwashing.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_sanitizer_only_response",
+          "optionId": "adapt",
+          "label": "Restore accessible handwashing and retrain the workflow"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_sanitizer_only_response",
+          "optionId": "pause",
+          "label": "Suspend affected food handling until the proper setup is available"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.cdc.gov/norovirus/communication-resources/facts-for-food-workers.html",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_vomit_cleanup",
+      "name": "A contamination incident reaches exposed food",
+      "text": "Food and contact surfaces exposed to a vomiting incident need a specific cleanup response.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "An announced common scenario or observed incident contaminates the food-service area.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_vomit_cleanup_response",
+          "optionId": "adapt",
+          "label": "Isolate the area, discard implicated food and use the specified disinfection procedure"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_vomit_cleanup_response",
+          "optionId": "pause",
+          "label": "Close the affected service area and obtain a competent cleanup response"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.cdc.gov/norovirus/communication-resources/facts-for-food-workers.html",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_pfas_packaging",
+      "name": "Grease-resistant packaging lacks compliance evidence",
+      "text": "A grease-resistant fiber package needs more than a green marketing label.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "A proposed covered food package has no adequate supplier evidence concerning intentionally added PFAS.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_pfas_packaging_response",
+          "optionId": "adapt",
+          "label": "Obtain written compliance information before ordering"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_pfas_packaging_response",
+          "optionId": "pause",
+          "label": "Select an alternative with documented compliance"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://dec.ny.gov/environmental-protection/pollution-prevention/pfas-in-food-packaging",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_default_accessories",
+      "name": "An ordering integration restores unwanted accessories",
+      "text": "A delivery-menu change can reset accessory defaults that NYC regulates.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Ordering platform configuration automatically includes utensils, condiment packets or napkins without request.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_default_accessories_response",
+          "optionId": "adapt",
+          "label": "Change defaults and preserve customer request choices"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_default_accessories_response",
+          "optionId": "pause",
+          "label": "Use a compliant manual packing checklist until the integration is corrected"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_order_minimum",
+      "name": "A short replenishment order misses the supplier minimum",
+      "text": "A supplier delivery minimum can force a choice between excess stock and another purchasing channel.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Account-specific checkout minimum exceeds the replenishment basket.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_order_minimum_response",
+          "optionId": "adapt",
+          "label": "Combine only items supported by storage and demand forecasts"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_order_minimum_response",
+          "optionId": "pause",
+          "label": "Use an approved backup supplier for the smaller order"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://help.baldorfood.com/hc/en-us/articles/360022183633-What-is-the-order-minimum-for-business-accounts",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_short_delivery_invoice",
+      "name": "A short delivery is mistaken for an invoiced loss",
+      "text": "Missing stock and incorrectly charged stock require different corrections.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Receiving count does not match the original order and invoice.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_short_delivery_invoice_response",
+          "optionId": "adapt",
+          "label": "Reconcile backorders and request credit for actual discrepancies"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_short_delivery_invoice_response",
+          "optionId": "pause",
+          "label": "Source missing essentials and amend availability before accepting new orders"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://help.baldorfood.com/hc/en-us/articles/360024349313-How-can-I-request-a-pickup-or-credit",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_unloading_gap",
+      "name": "The machine arrives without unloading arrangements",
+      "text": "Common-carrier delivery may leave unloading and interior movement to the buyer.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Freight confirmation excludes the unloading or access service the chosen equipment needs.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_unloading_gap_response",
+          "optionId": "adapt",
+          "label": "Book appropriate insured handling before accepting delivery"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_unloading_gap_response",
+          "optionId": "pause",
+          "label": "Reschedule delivery after an access survey"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.webstaurantstore.com/common_carrier.html",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_clean_receipt_damage",
+      "name": "A clean delivery signature weakens a damage claim",
+      "text": "Visible freight damage must be documented at receipt rather than discovered after the driver leaves.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Receiving staff are about to sign for visibly damaged equipment without notation.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_clean_receipt_damage_response",
+          "optionId": "adapt",
+          "label": "Inspect and document condition with the carrier"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_clean_receipt_damage_response",
+          "optionId": "pause",
+          "label": "Follow the supplier refusal or exception process for the damaged shipment"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.webstaurantstore.com/common_carrier.html",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_scratch_dent_scope",
+      "name": "A discounted unit has different condition and return terms",
+      "text": "Scratch-and-dent buying requires comparing disclosed damage with the delivered condition.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner selects an outlet unit before reviewing its specific damage description and return terms.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_scratch_dent_scope_response",
+          "optionId": "adapt",
+          "label": "Approve the documented condition and arrange inspection"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_scratch_dent_scope_response",
+          "optionId": "pause",
+          "label": "Choose a unit with condition and support terms matching the operating need"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.webstaurantstore.com/outlet-return-policy.html",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_missed_cutoff",
+      "name": "The order is placed after the supplier cutoff",
+      "text": "A late order can leave the next service without the planned delivery.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Order timestamp is after the applicable supplier cutoff for the requested delivery.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_missed_cutoff_response",
+          "optionId": "adapt",
+          "label": "Use an approved backup source and adjust the menu"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_missed_cutoff_response",
+          "optionId": "pause",
+          "label": "Wait for the confirmed route and stop accepting unavailable items"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.baldorfood.com/how-to-order",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_perishable_return",
+      "name": "A perishable purchase has restricted return rights",
+      "text": "Perishable categories may have return conditions unlike ordinary merchandise.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "An unwanted delivered perishable falls within the supplier restricted-return category.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_perishable_return_response",
+          "optionId": "adapt",
+          "label": "Discuss an eligible credit promptly with receiving evidence"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_perishable_return_response",
+          "optionId": "pause",
+          "label": "Replan safe use within the validated shelf life and reduce future orders"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.baldorfood.com/help/delivery-informatin",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_foam_closeout",
+      "name": "A cheap packaging closeout contains prohibited food-service foam",
+      "text": "A discounted packaging lot may be unsuitable for lawful NYC food service.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Procurement review identifies banned foam food containers in the proposed order.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_foam_closeout_response",
+          "optionId": "adapt",
+          "label": "Choose compliant food-service packaging"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_foam_closeout_response",
+          "optionId": "pause",
+          "label": "Reject the lot and revise the approved purchasing list"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/foam-containers.page",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_filter_flow",
+      "name": "A loaded filter starves connected equipment",
+      "text": "A filter can restrict flow even though the supply has not been shut off.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Flowing-water pressure or measured flow falls outside the installed system guidance after cartridge service was deferred.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_filter_flow_response",
+          "optionId": "adapt",
+          "label": "Replace the appropriate cartridge and verify flow"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_filter_flow_response",
+          "optionId": "pause",
+          "label": "Have a water-service technician diagnose the restriction before operating equipment"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.pentair.com/en-us/commercial-filtration/resources-and-education/replacing-your-filter-cartridge.html",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_restart_filter",
+      "name": "Reopening requires a filtration restart plan",
+      "text": "A water system left idle needs the manufacturer restart and disinfection procedure considered before service.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The owner reopens after extended shutdown without checking the filtration restart guidance.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_restart_filter_response",
+          "optionId": "adapt",
+          "label": "Follow the model-specific restart and cartridge guidance"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_restart_filter_response",
+          "optionId": "pause",
+          "label": "Arrange a service visit before reconnecting beverage production"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.pentair.com/en-us/commercial-filtration/resources-and-education/replacing-your-filter-cartridge.html",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_clean_vs_descale",
+      "name": "Descaling leaves the coffee-oil problem untreated",
+      "text": "A maintenance plan that only descales does not address accumulated coffee oils.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner substitutes descaling for the equipment cleaning procedure and residue remains.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_clean_vs_descale_response",
+          "optionId": "adapt",
+          "label": "Perform the model-approved oil-cleaning and separate scale-control procedures"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_clean_vs_descale_response",
+          "optionId": "pause",
+          "label": "Have a service provider restore the machine before restarting the station"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://urnex.com/faqs",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_taste_before_failure",
+      "name": "Residue harms drink quality before the machine stops",
+      "text": "Coffee equipment can still run while accumulated residue changes the cup.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Cleaning was omitted and inspection or controlled tasting identifies stale equipment residue.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_taste_before_failure_response",
+          "optionId": "adapt",
+          "label": "Clean and verify with a fresh test batch"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_taste_before_failure_response",
+          "optionId": "pause",
+          "label": "Switch to another clean brewing station while restoring the affected one"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://urnex.com/faqs",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_purge_budget",
+      "name": "Cleaning consumes sellable beans during the purge",
+      "text": "Grinder-cleaning instructions include a purge that is discarded.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner introduces the recommended cleaner but the prep plan has no purge allowance.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_purge_budget_response",
+          "optionId": "adapt",
+          "label": "Budget and execute the specified purge before serving"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_purge_budget_response",
+          "optionId": "pause",
+          "label": "Schedule cleaning and reserve the required beans outside service"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.mahlkoenig.com/en-de/blogs/news/clean-commercial-coffee-grinders",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_grinder_recalibration",
+      "name": "Cleaning changes the grinder setting reference",
+      "text": "A cleaned or moved grinder may need calibration before the previous setting is trusted.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Post-cleaning dial-in no longer meets the recorded recipe despite the old setting number.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_grinder_recalibration_response",
+          "optionId": "adapt",
+          "label": "Recalibrate and dial in using the model instructions"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_grinder_recalibration_response",
+          "optionId": "pause",
+          "label": "Use a calibrated backup grinder until the primary is ready"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.mahlkoenig.com/en-de/blogs/news/clean-commercial-coffee-grinders",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_sanitizer_material",
+      "name": "The chosen dishwasher chemistry damages selected wares",
+      "text": "Some materials are incompatible with the specified chemical-sanitizing process.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The purchased wares include materials the installed machine specification excludes.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_sanitizer_material_response",
+          "optionId": "adapt",
+          "label": "Replace the incompatible wares with suitable items"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_sanitizer_material_response",
+          "optionId": "pause",
+          "label": "Provide another approved warewashing process for those wares"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_service_clearance",
+      "name": "A built-in dishwasher cannot be pulled out for service",
+      "text": "A unit can fit in the counter yet lack required service access.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Counter installation prevents the specified forward removal or service clearance.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_service_clearance_response",
+          "optionId": "adapt",
+          "label": "Modify the cabinet layout with the installer"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_service_clearance_response",
+          "optionId": "pause",
+          "label": "Select a machine whose maintenance access fits the lawful design"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_chemical_mixing",
+      "name": "A chemical change creates an unsafe mixing proposal",
+      "text": "Sanitizer and other chemicals must not be casually premixed.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Staff propose combining chemicals during refilling or deliming contrary to the installed machine instructions.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_chemical_mixing_response",
+          "optionId": "adapt",
+          "label": "Stop the change and obtain the chemical supplier procedure"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_chemical_mixing_response",
+          "optionId": "pause",
+          "label": "Use a trained service provider to restore safe chemical feeds"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_ice_heat_neighbor",
+      "name": "New hot equipment undermines ice production",
+      "text": "Ice production depends on the local installation environment as well as the model nameplate.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Layout change places the installed icemaker by a new heat source outside its guidance.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_ice_heat_neighbor_response",
+          "optionId": "adapt",
+          "label": "Relocate equipment with compliant ventilation and service access"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_ice_heat_neighbor_response",
+          "optionId": "pause",
+          "label": "Reduce the ice-dependent menu while using an approved ice source"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://secure.hoshizakiamerica.com/docs/manuals/KM-E_H-Series_instr.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_ice_maintenance_access",
+      "name": "The icemaker cannot be serviced where it stands",
+      "text": "The service schedule cannot be fulfilled if nearby fixtures block access.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "The chosen buildout obstructs the installed ice machine service and air clearances.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_ice_maintenance_access_response",
+          "optionId": "adapt",
+          "label": "Reconfigure the storage and fixtures for access"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_ice_maintenance_access_response",
+          "optionId": "pause",
+          "label": "Arrange an approved relocation and interim ice supply"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://secure.hoshizakiamerica.com/docs/manuals/KM-E_H-Series_instr.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_primary"
+    },
+    {
+      "id": "d00_equipment_food_condenser_warranty",
+      "name": "A cleaning service call is outside the refrigerator warranty",
+      "text": "A warranty need not pay for ordinary condenser cleaning.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Service diagnosis attributes the selected unit problem to a dirty condenser after cleaning was omitted.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_condenser_warranty_response",
+          "optionId": "adapt",
+          "label": "Approve maintenance work and restore the cleaning plan"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_condenser_warranty_response",
+          "optionId": "pause",
+          "label": "Compare professional cleaning with replacement only after diagnosis"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://dc2kentprodcontent.blob.core.windows.net/installationmanuals/TFM/TFM_ENGLISH.pdf",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_bulk_bean_staling",
+      "name": "A bulk discount outlasts the cafe quality window",
+      "text": "A large coffee order can lose quality before the slower shop uses it.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Demand forecast and opened-stock age conflict with the roaster storage and quality plan.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_bulk_bean_staling_response",
+          "optionId": "adapt",
+          "label": "Buy smaller batches and measure waste against freight savings"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_bulk_bean_staling_response",
+          "optionId": "pause",
+          "label": "Negotiate staged delivery while preserving the agreed bean specification"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://sca.coffee/sca-news/2012/02/15/what-is-the-shelf-life-of-roasted-coffee-a-literature-review-on-coffee-staling-bjcx7",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_milk_waste_pressure",
+      "name": "Waste pressure leads to a leftover-milk workflow",
+      "text": "A reported owner response to milk waste was to pool steamed leftovers; the safer management question is portion control.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Measured milk waste triggers a proposed pooled-leftover workflow rather than a documented safe procedure.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_milk_waste_pressure_response",
+          "optionId": "adapt",
+          "label": "Train portions with appropriate pitchers and record waste"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_milk_waste_pressure_response",
+          "optionId": "pause",
+          "label": "Simplify drink sizes and use freshly handled milk under the safety plan"
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.reddit.com/r/barista/comments/rl6lot/food_safe_question_for_baristassmart_people/",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "opened_secondary"
+    },
+    {
+      "id": "d00_equipment_food_offline_pending",
+      "name": "An offline sale has not become collected cash",
+      "text": "Serving a customer against an offline transaction leaves payment unsettled.",
+      "scale": "country",
+      "months": [],
+      "realSignal": "A public provider disruption or observed connection failure causes the configured terminal to enter offline mode.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_offline_pending_response",
+          "optionId": "adapt",
+          "label": "Use supported offline limits and reconcile upload status promptly"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_offline_pending_response",
+          "optionId": "pause",
+          "label": "Offer lawful cash or another working payment method"
+        }
+      ],
+      "tier": "core",
+      "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_offline_loyalty",
+      "name": "Offline orders need later loyalty reconciliation",
+      "text": "Some connected functions do not reconcile like the core payment capture.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Offline sales upload without the loyalty linkage required by the provider workflow.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_offline_loyalty_response",
+          "optionId": "adapt",
+          "label": "Reconcile eligible points from retained transaction records"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_offline_loyalty_response",
+          "optionId": "pause",
+          "label": "Explain the outage and offer a documented later adjustment"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_juice_bottling",
+      "name": "Bottling fresh juice changes the labeling task",
+      "text": "A juice sold in a sealed package may need warning labeling even where the retail HACCP exemption applies.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner moves from made-to-order service to packaged untreated juice.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_juice_bottling_response",
+          "optionId": "adapt",
+          "label": "Review the specific processing and labeling requirements before launch"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_juice_bottling_response",
+          "optionId": "pause",
+          "label": "Continue direct preparation in a compliant format without the new packaged line"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/guidance-industry-juice-hazard-analysis-critical-control-point-hazards-and-controls-guidance-first",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_juice_wholesale",
+      "name": "Selling juice to another business changes the regulatory scope",
+      "text": "Retail juice guidance distinguishes direct consumer sales from distribution to other businesses.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner accepts an external wholesale juice contract.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_juice_wholesale_response",
+          "optionId": "adapt",
+          "label": "Obtain the required process and licensing review before supplying"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_juice_wholesale_response",
+          "optionId": "pause",
+          "label": "Keep the juice activity within the qualifying retail model"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/guidance-industry-juice-hazard-analysis-critical-control-point-hazards-and-controls-guidance-first",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_cooling_batch",
+      "name": "A larger prep batch cannot cool on the existing plan",
+      "text": "Scaling a recipe increases the cooling problem, not only ingredient cost.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "Owner increases batch depth or volume beyond the validated cooling method.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_cooling_batch_response",
+          "optionId": "adapt",
+          "label": "Divide and cool using an approved measured procedure"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_cooling_batch_response",
+          "optionId": "pause",
+          "label": "Prepare smaller batches that the existing equipment can safely handle"
+        }
+      ],
+      "tier": "core",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46063",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    },
+    {
+      "id": "d00_equipment_food_probe_missing",
+      "name": "Temperature-critical preparation has no suitable measuring device",
+      "text": "A timer and a warm-looking food surface cannot substitute for the required internal-temperature checks.",
+      "scale": "point",
+      "months": [],
+      "realSignal": "New menu adds a temperature-controlled process without a suitable thermometer and documented checks.",
+      "effects": [],
+      "playerMoves": [
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_probe_missing_response",
+          "optionId": "adapt",
+          "label": "Obtain appropriate measuring equipment and validate the process"
+        },
+        {
+          "kind": "lever",
+          "id": "d00_equipment_food_probe_missing_response",
+          "optionId": "pause",
+          "label": "Suspend the new item while serving the established safe menu"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46063",
+      "confidence": "estimate",
+      "note": "Qualitative deterministic scenario derived from the cited evidence. Apply only to an observed condition following a player decision, or a publicly announced shared scenario; quantify costs and service loss from quotes and logs before numerical activation. No failure probability or fixed breakdown interval is asserted.",
+      "evidenceStatus": "search_excerpt"
+    }
+  ],
+  "nonObvious": [
+    {
+      "id": "d00_equipment_food_water_warranty_insight",
+      "text": "Potable water can still be unsuitable for the espresso machine and jeopardize its warranty.",
+      "why": "A drinking-water test and an equipment-water test answer different questions.",
+      "source": "https://lamarzoccousa.com/wp-content/uploads/2025/07/MAN.29.1_LINEA_EN_V1.0_ONLINE-1.pdf",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_blocked_vent_insight",
+      "text": "Packing cloths or supplies over machine vents conflicts with the manufacturer installation guidance.",
+      "why": "Using every visible surface for storage can create an equipment constraint.",
+      "source": "https://lamarzoccousa.com/wp-content/uploads/2025/07/MAN.29.1_LINEA_EN_V1.0_ONLINE-1.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_unknown_fridge_history_insight",
+      "text": "Food that feels cold now does not establish that it stayed safe throughout an outage.",
+      "why": "Restored power can conceal a prior unsafe temperature excursion.",
+      "source": "https://healthweb-back.health.ny.gov/publications/7082/",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_ice_bin_cooler_insight",
+      "text": "Using the drink-ice bin as a refrigerator can contaminate ice with food particles.",
+      "why": "Ice for cooling packages and ice for drinks are separate food-safety functions.",
+      "source": "https://healthweb-back.health.ny.gov/publications/7082/",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_boil_water_menu_insight",
+      "text": "A boil-water notice affects foods and beverages prepared with the supply, not only drinking glasses.",
+      "why": "A plumbed coffee or ice machine is another route for unsafe water.",
+      "source": "https://www.health.ny.gov/environmental/water/drinking/boilwater/docs/checklist_food_service_establishments.pdf",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_white_label_recall_insight",
+      "text": "Different branded canned coffees can share a manufacturer named in a recall.",
+      "why": "Changing a visible brand may not diversify the underlying manufacturing exposure.",
+      "source": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/snapchill-llc-recalls-canned-coffee-products-due-potential-clostridium-botulinum",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_recall_refund_proof_insight",
+      "text": "Removing affected stock and obtaining a refund are separate tasks with documentation requirements.",
+      "why": "A safety write-off can become an unrecoverable cash loss if evidence disappears.",
+      "source": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/snapchill-llc-recalls-canned-coffee-products-due-potential-clostridium-botulinum",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_used_remote_pickup_insight",
+      "text": "Owner accounts describe transporting used equipment from another region to obtain a lower purchase price.",
+      "why": "The listing price omits the owner time, handling and commissioning decision.",
+      "source": "https://www.reddit.com/r/Coffee/comments/1cla0xp/cafe_owners_what_issue_are_you_facing_that_a_new/",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_cake_mix_shake_insight",
+      "text": "A milkshake recipe can introduce raw flour without any cooking step.",
+      "why": "A dessert flavor is not automatically a safe ready-to-eat ingredient.",
+      "source": "https://www.fda.gov/food/buy-store-serve-safe-food/handling-flour-safely-what-you-need-know",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_flour_dust_insight",
+      "text": "Loose flour can contaminate nearby finished foods even when the baking recipe itself is cooked.",
+      "why": "Adding baking changes the contamination paths of the whole counter.",
+      "source": "https://www.fda.gov/food/buy-store-serve-safe-food/handling-flour-safely-what-you-need-know",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_vacuum_menu_insight",
+      "text": "Buying a vacuum sealer does not by itself authorize a specialized food process.",
+      "why": "Equipment capability and permission to use a process are separate.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/haccp-plan-checklist.pdf",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_specialized_wholesale_insight",
+      "text": "A cafe cannot assume its specialized-process approval permits packaged sales to another business.",
+      "why": "An approved in-house process is not a general food manufacturing license.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/haccp-plan-checklist.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_accessible_straw_stock_insight",
+      "text": "NYC businesses must keep the specified plastic beverage straws available on request.",
+      "why": "An environmental purchasing shortcut can create an accommodation problem.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_splash_stick_substitution_insight",
+      "text": "A plastic splash stick is regulated differently from a requested beverage straw.",
+      "why": "Similar-looking disposable drink accessories do not have identical exceptions.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_sanitizer_only_insight",
+      "text": "A sanitizer bottle cannot replace the handwashing step in a food-safety workflow.",
+      "why": "A clean-looking station may still omit the critical washing step.",
+      "source": "https://www.cdc.gov/norovirus/communication-resources/facts-for-food-workers.html",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_vomit_cleanup_insight",
+      "text": "Food and contact surfaces exposed to a vomiting incident need a specific cleanup response.",
+      "why": "Routine wiping is not the same as cleaning after a norovirus contamination incident.",
+      "source": "https://www.cdc.gov/norovirus/communication-resources/facts-for-food-workers.html",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_pfas_packaging_insight",
+      "text": "A grease-resistant fiber package needs more than a green marketing label.",
+      "why": "Grease resistance and compostable branding do not prove compliance with the PFAS rule.",
+      "source": "https://dec.ny.gov/environmental-protection/pollution-prevention/pfas-in-food-packaging",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_default_accessories_insight",
+      "text": "A delivery-menu change can reset accessory defaults that NYC regulates.",
+      "why": "Compliance can fail in software even when counter staff follow the rule.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_order_minimum_insight",
+      "text": "A supplier delivery minimum can force a choice between excess stock and another purchasing channel.",
+      "why": "A low unit price can require a basket that raises spoilage and tied-up cash.",
+      "source": "https://help.baldorfood.com/hc/en-us/articles/360022183633-What-is-the-order-minimum-for-business-accounts",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_short_delivery_invoice_insight",
+      "text": "Missing stock and incorrectly charged stock require different corrections.",
+      "why": "The purchase order alone is not the amount the supplier ultimately billed.",
+      "source": "https://help.baldorfood.com/hc/en-us/articles/360024349313-How-can-I-request-a-pickup-or-credit",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_unloading_gap_insight",
+      "text": "Common-carrier delivery may leave unloading and interior movement to the buyer.",
+      "why": "Delivery to the address is not installation behind the counter.",
+      "source": "https://www.webstaurantstore.com/common_carrier.html",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_clean_receipt_damage_insight",
+      "text": "Visible freight damage must be documented at receipt rather than discovered after the driver leaves.",
+      "why": "The receiving procedure can change whether a damaged asset is compensated.",
+      "source": "https://www.webstaurantstore.com/common_carrier.html",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_scratch_dent_scope_insight",
+      "text": "Scratch-and-dent buying requires comparing disclosed damage with the delivered condition.",
+      "why": "A cosmetic discount and a repairable functional defect are not interchangeable.",
+      "source": "https://www.webstaurantstore.com/outlet-return-policy.html",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_missed_cutoff_insight",
+      "text": "A late order can leave the next service without the planned delivery.",
+      "why": "Counting stock at closing may be too late for the next delivery window.",
+      "source": "https://www.baldorfood.com/how-to-order",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_perishable_return_insight",
+      "text": "Perishable categories may have return conditions unlike ordinary merchandise.",
+      "why": "Overordering cannot always be reversed by sending unopened food back.",
+      "source": "https://www.baldorfood.com/help/delivery-informatin",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_foam_closeout_insight",
+      "text": "A discounted packaging lot may be unsuitable for lawful NYC food service.",
+      "why": "Availability for sale elsewhere does not establish legal use by this cafe.",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/foam-containers.page",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_filter_flow_insight",
+      "text": "A filter can restrict flow even though the supply has not been shut off.",
+      "why": "Static pressure is not the same as available pressure during demand.",
+      "source": "https://www.pentair.com/en-us/commercial-filtration/resources-and-education/replacing-your-filter-cartridge.html",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_restart_filter_insight",
+      "text": "A water system left idle needs the manufacturer restart and disinfection procedure considered before service.",
+      "why": "Restarting the cash register is easier than restarting a dormant food-water system.",
+      "source": "https://www.pentair.com/en-us/commercial-filtration/resources-and-education/replacing-your-filter-cartridge.html",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_clean_vs_descale_insight",
+      "text": "A maintenance plan that only descales does not address accumulated coffee oils.",
+      "why": "Two bottles labeled cleaner may address different physical deposits.",
+      "source": "https://urnex.com/faqs",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_taste_before_failure_insight",
+      "text": "Coffee equipment can still run while accumulated residue changes the cup.",
+      "why": "A machine that switches on is not necessarily producing an acceptable product.",
+      "source": "https://urnex.com/faqs",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_purge_budget_insight",
+      "text": "Grinder-cleaning instructions include a purge that is discarded.",
+      "why": "Theoretical recipe yield omits maintenance-related bean use.",
+      "source": "https://www.mahlkoenig.com/en-de/blogs/news/clean-commercial-coffee-grinders",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_grinder_recalibration_insight",
+      "text": "A cleaned or moved grinder may need calibration before the previous setting is trusted.",
+      "why": "The setting number is not a permanent physical grind measurement.",
+      "source": "https://www.mahlkoenig.com/en-de/blogs/news/clean-commercial-coffee-grinders",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_sanitizer_material_insight",
+      "text": "Some materials are incompatible with the specified chemical-sanitizing process.",
+      "why": "Buying dishes and buying the dishwasher are interdependent purchasing decisions.",
+      "source": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_service_clearance_insight",
+      "text": "A unit can fit in the counter yet lack required service access.",
+      "why": "Equipment dimensions and maintainable installation dimensions differ.",
+      "source": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_chemical_mixing_insight",
+      "text": "Sanitizer and other chemicals must not be casually premixed.",
+      "why": "A cleaning task can create a hazardous reaction before any dishes are washed.",
+      "source": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_ice_heat_neighbor_insight",
+      "text": "Ice production depends on the local installation environment as well as the model nameplate.",
+      "why": "Adding an oven can reduce the capacity of equipment elsewhere on the same counter.",
+      "source": "https://secure.hoshizakiamerica.com/docs/manuals/KM-E_H-Series_instr.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_ice_maintenance_access_insight",
+      "text": "The service schedule cannot be fulfilled if nearby fixtures block access.",
+      "why": "A maintenance contract cannot compensate for an inaccessible installation.",
+      "source": "https://secure.hoshizakiamerica.com/docs/manuals/KM-E_H-Series_instr.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_condenser_warranty_insight",
+      "text": "A warranty need not pay for ordinary condenser cleaning.",
+      "why": "Warranty ownership does not eliminate maintenance cash needs.",
+      "source": "https://dc2kentprodcontent.blob.core.windows.net/installationmanuals/TFM/TFM_ENGLISH.pdf",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_bulk_bean_staling_insight",
+      "text": "A large coffee order can lose quality before the slower shop uses it.",
+      "why": "Unit-cost savings can disappear through stock age and sensory quality loss.",
+      "source": "https://sca.coffee/sca-news/2012/02/15/what-is-the-shelf-life-of-roasted-coffee-a-literature-review-on-coffee-staling-bjcx7",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_milk_waste_pressure_insight",
+      "text": "A reported owner response to milk waste was to pool steamed leftovers; the safer management question is portion control.",
+      "why": "Waste targets can unintentionally reward unsafe or poor-quality work; forum advice is not the NYC temperature rule.",
+      "source": "https://www.reddit.com/r/barista/comments/rl6lot/food_safe_question_for_baristassmart_people/",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_offline_pending_insight",
+      "text": "Serving a customer against an offline transaction leaves payment unsettled.",
+      "why": "The screen can record a sale before the bank has approved it.",
+      "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_offline_loyalty_insight",
+      "text": "Some connected functions do not reconcile like the core payment capture.",
+      "why": "Restored connectivity does not guarantee every customer-account side effect has been repaired.",
+      "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_juice_bottling_insight",
+      "text": "A juice sold in a sealed package may need warning labeling even where the retail HACCP exemption applies.",
+      "why": "An exemption from a process rule is not an exemption from labeling.",
+      "source": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/guidance-industry-juice-hazard-analysis-critical-control-point-hazards-and-controls-guidance-first",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_juice_wholesale_insight",
+      "text": "Retail juice guidance distinguishes direct consumer sales from distribution to other businesses.",
+      "why": "A small wholesale order can change the applicable operating category.",
+      "source": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/guidance-industry-juice-hazard-analysis-critical-control-point-hazards-and-controls-guidance-first",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_cooling_batch_insight",
+      "text": "Scaling a recipe increases the cooling problem, not only ingredient cost.",
+      "why": "The fridge is storage equipment; putting a large hot container inside does not prove safe cooling.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46063",
+      "tier": "core",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    },
+    {
+      "id": "d00_equipment_food_probe_missing_insight",
+      "text": "A timer and a warm-looking food surface cannot substitute for the required internal-temperature checks.",
+      "why": "A menu extension can require measurement equipment before it requires extra seats.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46063",
+      "tier": "deep",
+      "confidence": "estimate",
+      "note": "Operational inference from the cited source; no prevalence, universal loss amount or causal guarantee asserted."
+    }
+  ],
+  "failureStories": [],
+  "sources": [
+    {
+      "id": "d00_equipment_food_source_linea",
+      "url": "https://lamarzoccousa.com/wp-content/uploads/2025/07/MAN.29.1_LINEA_EN_V1.0_ONLINE-1.pdf",
+      "title": "Linea commercial espresso machine manual",
+      "publisher": "La Marzocco",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Commercial machine instructions require compliant water; faulty equipment requires qualified repair; grilles must remain unobstructed.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_ny_power",
+      "url": "https://healthweb-back.health.ny.gov/publications/7082/",
+      "title": "When the Power Goes Out: A Guide for Food Operators",
+      "publisher": "New York State Department of Health",
+      "language": "en",
+      "jurisdiction": "NY",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Guidance distinguishes food by temperature history, warns against storing food in the ice machine, and advises disposal records for insurance.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_ny_boil",
+      "url": "https://www.health.ny.gov/environmental/water/drinking/boilwater/docs/checklist_food_service_establishments.pdf",
+      "title": "Boil Water Notices: Food Service Establishment Checklist",
+      "publisher": "New York State Department of Health",
+      "language": "en",
+      "jurisdiction": "NY",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Search excerpt states that tap-water food must be assessed and potentially discarded during boil-water notices. PDF fetch returned 403; do not claim full-text verification.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_snapchill",
+      "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/snapchill-llc-recalls-canned-coffee-products-due-potential-clostridium-botulinum",
+      "title": "Snapchill canned coffee recall announcement",
+      "publisher": "FDA / Snapchill",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Recall concerned canned coffee process filings and potential botulinum toxin; announcement reported no illnesses at that time; multiple roaster brands shared the producer.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_owner_issues",
+      "url": "https://www.reddit.com/r/Coffee/comments/1cla0xp/cafe_owners_what_issue_are_you_facing_that_a_new/",
+      "title": "Cafe owners: problems a new owner should know",
+      "publisher": "Reddit r/Coffee",
+      "language": "en",
+      "jurisdiction": "US comparison",
+      "type": "forum",
+      "access": "opened_secondary",
+      "evidence": "Self-described cafe owner describes used-equipment sourcing and logistics; mobile owner reports maintenance and scale problems. Anecdotes are not failure-rate evidence.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_flour",
+      "url": "https://www.fda.gov/food/buy-store-serve-safe-food/handling-flour-safely-what-you-need-know",
+      "title": "Handling Flour Safely",
+      "publisher": "FDA",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Flour is raw; powder can spread to ready-to-eat food; raw cake mix should not be added to milkshakes.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_haccp",
+      "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/haccp-plan-checklist.pdf",
+      "title": "Specialized Processes: HACCP Plan Review Checklist",
+      "publisher": "NYC Health",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Specialized processes need approved plans; checklist restricts distribution of food processed under such plans to other business entities.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_straws",
+      "url": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "title": "Plastic Straws, Splash Sticks, and Stirrers",
+      "publisher": "NYC DSNY",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Businesses must retain noncompostable single-use plastic beverage straws for requests; plastic splash sticks and stirrers are prohibited.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_noro",
+      "url": "https://www.cdc.gov/norovirus/communication-resources/facts-for-food-workers.html",
+      "title": "Norovirus: Facts for Food Workers",
+      "publisher": "CDC",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Hand sanitizer is not a substitute for soap-and-water washing; contamination can affect ready-to-eat foods and surfaces.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_pfas",
+      "url": "https://dec.ny.gov/environmental-protection/pollution-prevention/pfas-in-food-packaging",
+      "title": "PFAS in Food Packaging",
+      "publisher": "New York State DEC",
+      "language": "en",
+      "jurisdiction": "NY",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Covered plant-fiber food packaging may not contain intentionally added PFAS; businesses must assess packaging compliance.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_skip",
+      "url": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
+      "title": "Utensils, Condiments, Napkins, and Containers",
+      "publisher": "NYC DSNY",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Takeout and delivery accessories are provided on request; self-service stations inside the establishment are treated differently.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_baldor_min",
+      "url": "https://help.baldorfood.com/hc/en-us/articles/360022183633-What-is-the-order-minimum-for-business-accounts",
+      "title": "Business account order minimum",
+      "publisher": "Baldor Specialty Foods",
+      "language": "en",
+      "jurisdiction": "NY regional supplier",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Order minimums vary by customer type and location; no universal cafe minimum is published in the viewed excerpt.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_baldor_credit",
+      "url": "https://help.baldorfood.com/hc/en-us/articles/360024349313-How-can-I-request-a-pickup-or-credit",
+      "title": "Requesting a pickup or credit",
+      "publisher": "Baldor Specialty Foods",
+      "language": "en",
+      "jurisdiction": "NY regional supplier",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Receiving staff should inspect order and invoice; missing items must be distinguished from uncharged backorders.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_freight",
+      "url": "https://www.webstaurantstore.com/common_carrier.html",
+      "title": "Common carrier shipping",
+      "publisher": "WebstaurantStore",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Buyer is responsible for unloading and bringing goods inside; delivery damage should be noted on the proof of delivery.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_outlet",
+      "url": "https://www.webstaurantstore.com/outlet-return-policy.html",
+      "title": "Outlet Scratch and Dent Return Policy",
+      "publisher": "WebstaurantStore",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Outlet condition and shipping damage must be compared to the listing; the seller describes testing before shipment.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_baldor_order",
+      "url": "https://www.baldorfood.com/how-to-order",
+      "title": "How to Order",
+      "publisher": "Baldor Specialty Foods",
+      "language": "en",
+      "jurisdiction": "NY regional supplier",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Supplier publishes order cutoffs and delivery days; current account and warehouse terms need checking.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_baldor_return",
+      "url": "https://www.baldorfood.com/help/delivery-informatin",
+      "title": "Delivery Information",
+      "publisher": "Baldor Specialty Foods",
+      "language": "en",
+      "jurisdiction": "NY regional supplier",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Supplier advises immediate inspection and describes return restrictions for meats, cheeses and fresh truffles.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_foamban",
+      "url": "https://www.nyc.gov/site/dsny/businesses/materials-handling/foam-containers.page",
+      "title": "Foam Food Containers and Packing Peanuts",
+      "publisher": "NYC DSNY",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "NYC foam restrictions distinguish food-service containers from protective foam blocks used in shipping.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_filter",
+      "url": "https://www.pentair.com/en-us/commercial-filtration/resources-and-education/replacing-your-filter-cartridge.html",
+      "title": "Replacing commercial water filter cartridges",
+      "publisher": "Pentair",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Cartridge change depends on water quality and use; assess pressure under flowing water, and changes in flow or taste.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_urnex",
+      "url": "https://urnex.com/faqs",
+      "title": "Coffee equipment cleaning and descaling FAQ",
+      "publisher": "Urnex",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Cleaning removes coffee oils while descaling removes mineral buildup; stale residue affects taste before complete blockage.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_mahlkonig",
+      "url": "https://www.mahlkoenig.com/en-de/blogs/news/clean-commercial-coffee-grinders",
+      "title": "Cleaning Commercial Coffee Grinders",
+      "publisher": "Mahlkoenig",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Manufacturer explains residue, dosing effects, purge coffee, and model-dependent recalibration and tools.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_hobart",
+      "url": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "title": "LXnC Chemical Sanitizing Dishwasher Specification",
+      "publisher": "Hobart",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Specification defines permitted sanitizer, compatibility exclusions, service access, and chemical separation; apply only to the specified machine.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_hoshizaki",
+      "url": "https://secure.hoshizakiamerica.com/docs/manuals/KM-E_H-Series_instr.pdf",
+      "title": "KM H-Series commercial icemaker instructions",
+      "publisher": "Hoshizaki",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "opened_primary",
+      "evidence": "Historical model manual warns that ambient and inlet-water conditions affect capacity and placement near heat sources is unsuitable. Model comparison only; no current universal interval claimed.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_true",
+      "url": "https://dc2kentprodcontent.blob.core.windows.net/installationmanuals/TFM/TFM_ENGLISH.pdf",
+      "title": "TFM Installation Manual",
+      "publisher": "True Manufacturing",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Manufacturer manual search excerpt explicitly states condenser cleaning is not covered by warranty.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_staling",
+      "url": "https://sca.coffee/sca-news/2012/02/15/what-is-the-shelf-life-of-roasted-coffee-a-literature-review-on-coffee-staling-bjcx7",
+      "title": "Literature review on roasted coffee staling",
+      "publisher": "Specialty Coffee Association",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Review links staling to whole-bean versus ground state and exposure to oxygen, moisture and temperature.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_milk_forum",
+      "url": "https://www.reddit.com/r/barista/comments/rl6lot/food_safe_question_for_baristassmart_people/",
+      "title": "Question about holding leftover steamed milk",
+      "publisher": "Reddit r/barista",
+      "language": "en",
+      "jurisdiction": "Unspecified comparison",
+      "type": "forum",
+      "access": "opened_secondary",
+      "evidence": "A worker reports an owner holding leftover steamed milk at room temperature; responses describe measured portions and smaller pitchers. Anonymous account, not verified prevalence or a legal authority.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_square_offline",
+      "url": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+      "title": "Process offline payments",
+      "publisher": "Square",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Offline payments can later decline or expire; hardware and session rules differ and customer recovery is not guaranteed.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_juice",
+      "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/guidance-industry-juice-hazard-analysis-critical-control-point-hazards-and-controls-guidance-first",
+      "title": "Juice HACCP Hazards and Controls Guidance",
+      "publisher": "FDA",
+      "language": "en",
+      "jurisdiction": "US",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Retail juice exemption is tied to direct consumer sales; untreated packaged juice labeling obligations remain.",
+      "tier": "deep"
+    },
+    {
+      "id": "d00_equipment_food_source_nyc_prep",
+      "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46063",
+      "title": "NYC Health Code food preparation and protection",
+      "publisher": "NYC Health Code via American Legal",
+      "language": "en",
+      "jurisdiction": "NYC",
+      "type": "primary",
+      "access": "search_excerpt",
+      "evidence": "Code describes measured cooking, cooling, reheating and protection from contamination; temperature devices are required.",
+      "tier": "deep"
+    }
+  ],
+  "researchLevers": [
+    {
+      "id": "d00_equipment_food_water_warranty_response",
+      "name": "Water specification fails before installation response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Obtain a treatment design and retest before commissioning"
+        },
+        {
+          "id": "pause",
+          "label": "Select equipment and treatment compatible with the tested supply"
+        }
+      ],
+      "source": "https://lamarzoccousa.com/wp-content/uploads/2025/07/MAN.29.1_LINEA_EN_V1.0_ONLINE-1.pdf",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_blocked_vent_response",
+      "name": "Cup storage obstructs machine ventilation response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Rearrange storage and reopen the ventilation path"
+        },
+        {
+          "id": "pause",
+          "label": "Pause the station for a technician check if overheating symptoms remain"
+        }
+      ],
+      "source": "https://lamarzoccousa.com/wp-content/uploads/2025/07/MAN.29.1_LINEA_EN_V1.0_ONLINE-1.pdf",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_unknown_fridge_history_response",
+      "name": "Overnight refrigeration history is missing response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Discard food whose safety cannot be established and document losses"
+        },
+        {
+          "id": "pause",
+          "label": "Transfer only demonstrably safe stock under the operator guidance and reduce the menu"
+        }
+      ],
+      "source": "https://healthweb-back.health.ny.gov/publications/7082/",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_ice_bin_cooler_response",
+      "name": "Emergency stock is placed in the ice bin response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Move ice into a separate food cooler and keep the drink-ice system protected"
+        },
+        {
+          "id": "pause",
+          "label": "Stop iced drinks until the contaminated system has been cleaned and sanitized"
+        }
+      ],
+      "source": "https://healthweb-back.health.ny.gov/publications/7082/",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_boil_water_menu_response",
+      "name": "Water notice invalidates the normal preparation plan response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Arrange an authority-approved safe-water operating plan"
+        },
+        {
+          "id": "pause",
+          "label": "Suspend affected preparation until the advisory and reopening conditions are resolved"
+        }
+      ],
+      "source": "https://www.health.ny.gov/environmental/water/drinking/boilwater/docs/checklist_food_service_establishments.pdf",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_white_label_recall_response",
+      "name": "A hidden common producer issues a recall response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Quarantine every matching brand and seek documented refunds"
+        },
+        {
+          "id": "pause",
+          "label": "Replace the canned line with traceable unaffected products"
+        }
+      ],
+      "source": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/snapchill-llc-recalls-canned-coffee-products-due-potential-clostridium-botulinum",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_recall_refund_proof_response",
+      "name": "A recall refund needs purchase evidence response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Record affected lots and evidence before following disposal instructions"
+        },
+        {
+          "id": "pause",
+          "label": "Arrange an authorized return and retain the handoff record"
+        }
+      ],
+      "source": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/snapchill-llc-recalls-canned-coffee-products-due-potential-clostridium-botulinum",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_used_remote_pickup_response",
+      "name": "A used machine bargain needs remote collection response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Compare a documented transport-and-inspection quote with the asking price"
+        },
+        {
+          "id": "pause",
+          "label": "Buy a locally serviceable alternative with disclosed condition"
+        }
+      ],
+      "source": "https://www.reddit.com/r/Coffee/comments/1cla0xp/cafe_owners_what_issue_are_you_facing_that_a_new/",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_cake_mix_shake_response",
+      "name": "A drink special contains raw cake mix response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Use an ingredient explicitly manufactured for ready-to-eat use"
+        },
+        {
+          "id": "pause",
+          "label": "Remove the raw-flour drink from the menu"
+        }
+      ],
+      "source": "https://www.fda.gov/food/buy-store-serve-safe-food/handling-flour-safely-what-you-need-know",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_flour_dust_response",
+      "name": "Baking flour spreads into ready-to-eat preparation response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Separate preparation areas or times and clean before ready-to-eat work"
+        },
+        {
+          "id": "pause",
+          "label": "Purchase finished baked goods until separation is feasible"
+        }
+      ],
+      "source": "https://www.fda.gov/food/buy-store-serve-safe-food/handling-flour-safely-what-you-need-know",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_vacuum_menu_response",
+      "name": "A vacuum-packed menu extension needs process review response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Submit the specific process for approval before production"
+        },
+        {
+          "id": "pause",
+          "label": "Use conventional approved preparation without reduced-oxygen packaging"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/haccp-plan-checklist.pdf",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_specialized_wholesale_response",
+      "name": "A wholesale order exceeds the process approval scope response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Seek the appropriate licensing and process review for the intended distribution"
+        },
+        {
+          "id": "pause",
+          "label": "Limit production to the uses permitted by the existing approval"
+        }
+      ],
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/haccp-plan-checklist.pdf",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_accessible_straw_stock_response",
+      "name": "A plastic-free order removes required straw stock response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Restock the required straws and train request handling"
+        },
+        {
+          "id": "pause",
+          "label": "Use a supplier that carries both routine alternatives and requested-use stock"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_splash_stick_substitution_response",
+      "name": "A packaging substitute introduces plastic splash sticks response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Reject the substitution and obtain compliant alternatives"
+        },
+        {
+          "id": "pause",
+          "label": "Remove the affected accessory from service"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/plastic-straws.page",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_sanitizer_only_response",
+      "name": "Hand sanitizer is substituted for handwashing response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Restore accessible handwashing and retrain the workflow"
+        },
+        {
+          "id": "pause",
+          "label": "Suspend affected food handling until the proper setup is available"
+        }
+      ],
+      "source": "https://www.cdc.gov/norovirus/communication-resources/facts-for-food-workers.html",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_vomit_cleanup_response",
+      "name": "A contamination incident reaches exposed food response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Isolate the area, discard implicated food and use the specified disinfection procedure"
+        },
+        {
+          "id": "pause",
+          "label": "Close the affected service area and obtain a competent cleanup response"
+        }
+      ],
+      "source": "https://www.cdc.gov/norovirus/communication-resources/facts-for-food-workers.html",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_pfas_packaging_response",
+      "name": "Grease-resistant packaging lacks compliance evidence response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Obtain written compliance information before ordering"
+        },
+        {
+          "id": "pause",
+          "label": "Select an alternative with documented compliance"
+        }
+      ],
+      "source": "https://dec.ny.gov/environmental-protection/pollution-prevention/pfas-in-food-packaging",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_default_accessories_response",
+      "name": "An ordering integration restores unwanted accessories response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Change defaults and preserve customer request choices"
+        },
+        {
+          "id": "pause",
+          "label": "Use a compliant manual packing checklist until the integration is corrected"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_order_minimum_response",
+      "name": "A short replenishment order misses the supplier minimum response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Combine only items supported by storage and demand forecasts"
+        },
+        {
+          "id": "pause",
+          "label": "Use an approved backup supplier for the smaller order"
+        }
+      ],
+      "source": "https://help.baldorfood.com/hc/en-us/articles/360022183633-What-is-the-order-minimum-for-business-accounts",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_short_delivery_invoice_response",
+      "name": "A short delivery is mistaken for an invoiced loss response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Reconcile backorders and request credit for actual discrepancies"
+        },
+        {
+          "id": "pause",
+          "label": "Source missing essentials and amend availability before accepting new orders"
+        }
+      ],
+      "source": "https://help.baldorfood.com/hc/en-us/articles/360024349313-How-can-I-request-a-pickup-or-credit",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_unloading_gap_response",
+      "name": "The machine arrives without unloading arrangements response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Book appropriate insured handling before accepting delivery"
+        },
+        {
+          "id": "pause",
+          "label": "Reschedule delivery after an access survey"
+        }
+      ],
+      "source": "https://www.webstaurantstore.com/common_carrier.html",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_clean_receipt_damage_response",
+      "name": "A clean delivery signature weakens a damage claim response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Inspect and document condition with the carrier"
+        },
+        {
+          "id": "pause",
+          "label": "Follow the supplier refusal or exception process for the damaged shipment"
+        }
+      ],
+      "source": "https://www.webstaurantstore.com/common_carrier.html",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_scratch_dent_scope_response",
+      "name": "A discounted unit has different condition and return terms response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Approve the documented condition and arrange inspection"
+        },
+        {
+          "id": "pause",
+          "label": "Choose a unit with condition and support terms matching the operating need"
+        }
+      ],
+      "source": "https://www.webstaurantstore.com/outlet-return-policy.html",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_missed_cutoff_response",
+      "name": "The order is placed after the supplier cutoff response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Use an approved backup source and adjust the menu"
+        },
+        {
+          "id": "pause",
+          "label": "Wait for the confirmed route and stop accepting unavailable items"
+        }
+      ],
+      "source": "https://www.baldorfood.com/how-to-order",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_perishable_return_response",
+      "name": "A perishable purchase has restricted return rights response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Discuss an eligible credit promptly with receiving evidence"
+        },
+        {
+          "id": "pause",
+          "label": "Replan safe use within the validated shelf life and reduce future orders"
+        }
+      ],
+      "source": "https://www.baldorfood.com/help/delivery-informatin",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_foam_closeout_response",
+      "name": "A cheap packaging closeout contains prohibited food-service foam response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Choose compliant food-service packaging"
+        },
+        {
+          "id": "pause",
+          "label": "Reject the lot and revise the approved purchasing list"
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/foam-containers.page",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_filter_flow_response",
+      "name": "A loaded filter starves connected equipment response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Replace the appropriate cartridge and verify flow"
+        },
+        {
+          "id": "pause",
+          "label": "Have a water-service technician diagnose the restriction before operating equipment"
+        }
+      ],
+      "source": "https://www.pentair.com/en-us/commercial-filtration/resources-and-education/replacing-your-filter-cartridge.html",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_restart_filter_response",
+      "name": "Reopening requires a filtration restart plan response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Follow the model-specific restart and cartridge guidance"
+        },
+        {
+          "id": "pause",
+          "label": "Arrange a service visit before reconnecting beverage production"
+        }
+      ],
+      "source": "https://www.pentair.com/en-us/commercial-filtration/resources-and-education/replacing-your-filter-cartridge.html",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_clean_vs_descale_response",
+      "name": "Descaling leaves the coffee-oil problem untreated response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Perform the model-approved oil-cleaning and separate scale-control procedures"
+        },
+        {
+          "id": "pause",
+          "label": "Have a service provider restore the machine before restarting the station"
+        }
+      ],
+      "source": "https://urnex.com/faqs",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_taste_before_failure_response",
+      "name": "Residue harms drink quality before the machine stops response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Clean and verify with a fresh test batch"
+        },
+        {
+          "id": "pause",
+          "label": "Switch to another clean brewing station while restoring the affected one"
+        }
+      ],
+      "source": "https://urnex.com/faqs",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_purge_budget_response",
+      "name": "Cleaning consumes sellable beans during the purge response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Budget and execute the specified purge before serving"
+        },
+        {
+          "id": "pause",
+          "label": "Schedule cleaning and reserve the required beans outside service"
+        }
+      ],
+      "source": "https://www.mahlkoenig.com/en-de/blogs/news/clean-commercial-coffee-grinders",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_grinder_recalibration_response",
+      "name": "Cleaning changes the grinder setting reference response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Recalibrate and dial in using the model instructions"
+        },
+        {
+          "id": "pause",
+          "label": "Use a calibrated backup grinder until the primary is ready"
+        }
+      ],
+      "source": "https://www.mahlkoenig.com/en-de/blogs/news/clean-commercial-coffee-grinders",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_sanitizer_material_response",
+      "name": "The chosen dishwasher chemistry damages selected wares response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Replace the incompatible wares with suitable items"
+        },
+        {
+          "id": "pause",
+          "label": "Provide another approved warewashing process for those wares"
+        }
+      ],
+      "source": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_service_clearance_response",
+      "name": "A built-in dishwasher cannot be pulled out for service response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Modify the cabinet layout with the installer"
+        },
+        {
+          "id": "pause",
+          "label": "Select a machine whose maintenance access fits the lawful design"
+        }
+      ],
+      "source": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_chemical_mixing_response",
+      "name": "A chemical change creates an unsafe mixing proposal response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Stop the change and obtain the chemical supplier procedure"
+        },
+        {
+          "id": "pause",
+          "label": "Use a trained service provider to restore safe chemical feeds"
+        }
+      ],
+      "source": "https://www.hobartcorp.com/sites/default/files/webdam-assets/LXnC%20Chemical%20Sanitizing%20Dishwasher%20Spec%20Sheet%20F48663%20%2809-23%29.pdf",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_ice_heat_neighbor_response",
+      "name": "New hot equipment undermines ice production response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Relocate equipment with compliant ventilation and service access"
+        },
+        {
+          "id": "pause",
+          "label": "Reduce the ice-dependent menu while using an approved ice source"
+        }
+      ],
+      "source": "https://secure.hoshizakiamerica.com/docs/manuals/KM-E_H-Series_instr.pdf",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_ice_maintenance_access_response",
+      "name": "The icemaker cannot be serviced where it stands response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Reconfigure the storage and fixtures for access"
+        },
+        {
+          "id": "pause",
+          "label": "Arrange an approved relocation and interim ice supply"
+        }
+      ],
+      "source": "https://secure.hoshizakiamerica.com/docs/manuals/KM-E_H-Series_instr.pdf",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_condenser_warranty_response",
+      "name": "A cleaning service call is outside the refrigerator warranty response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Approve maintenance work and restore the cleaning plan"
+        },
+        {
+          "id": "pause",
+          "label": "Compare professional cleaning with replacement only after diagnosis"
+        }
+      ],
+      "source": "https://dc2kentprodcontent.blob.core.windows.net/installationmanuals/TFM/TFM_ENGLISH.pdf",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_bulk_bean_staling_response",
+      "name": "A bulk discount outlasts the cafe quality window response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Buy smaller batches and measure waste against freight savings"
+        },
+        {
+          "id": "pause",
+          "label": "Negotiate staged delivery while preserving the agreed bean specification"
+        }
+      ],
+      "source": "https://sca.coffee/sca-news/2012/02/15/what-is-the-shelf-life-of-roasted-coffee-a-literature-review-on-coffee-staling-bjcx7",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_milk_waste_pressure_response",
+      "name": "Waste pressure leads to a leftover-milk workflow response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Train portions with appropriate pitchers and record waste"
+        },
+        {
+          "id": "pause",
+          "label": "Simplify drink sizes and use freshly handled milk under the safety plan"
+        }
+      ],
+      "source": "https://www.reddit.com/r/barista/comments/rl6lot/food_safe_question_for_baristassmart_people/",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_offline_pending_response",
+      "name": "An offline sale has not become collected cash response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Use supported offline limits and reconcile upload status promptly"
+        },
+        {
+          "id": "pause",
+          "label": "Offer lawful cash or another working payment method"
+        }
+      ],
+      "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_offline_loyalty_response",
+      "name": "Offline orders need later loyalty reconciliation response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Reconcile eligible points from retained transaction records"
+        },
+        {
+          "id": "pause",
+          "label": "Explain the outage and offer a documented later adjustment"
+        }
+      ],
+      "source": "https://squareup.com/help/us/en/article/7777-process-card-payments-with-offline-mode",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_juice_bottling_response",
+      "name": "Bottling fresh juice changes the labeling task response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Review the specific processing and labeling requirements before launch"
+        },
+        {
+          "id": "pause",
+          "label": "Continue direct preparation in a compliant format without the new packaged line"
+        }
+      ],
+      "source": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/guidance-industry-juice-hazard-analysis-critical-control-point-hazards-and-controls-guidance-first",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_juice_wholesale_response",
+      "name": "Selling juice to another business changes the regulatory scope response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Obtain the required process and licensing review before supplying"
+        },
+        {
+          "id": "pause",
+          "label": "Keep the juice activity within the qualifying retail model"
+        }
+      ],
+      "source": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/guidance-industry-juice-hazard-analysis-critical-control-point-hazards-and-controls-guidance-first",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_cooling_batch_response",
+      "name": "A larger prep batch cannot cool on the existing plan response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Divide and cool using an approved measured procedure"
+        },
+        {
+          "id": "pause",
+          "label": "Prepare smaller batches that the existing equipment can safely handle"
+        }
+      ],
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46063",
+      "tier": "core",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    },
+    {
+      "id": "d00_equipment_food_probe_missing_response",
+      "name": "Temperature-critical preparation has no suitable measuring device response",
+      "options": [
+        {
+          "id": "adapt",
+          "label": "Obtain appropriate measuring equipment and validate the process"
+        },
+        {
+          "id": "pause",
+          "label": "Suspend the new item while serving the established safe menu"
+        }
+      ],
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46063",
+      "tier": "deep",
+      "note": "Unpriced decision specification; do not treat either option as free. Actual lawful operation depends on approvals, capacity and documented conditions."
+    }
+  ],
+  "searchLog": [],
+  "gaps": []
+}
