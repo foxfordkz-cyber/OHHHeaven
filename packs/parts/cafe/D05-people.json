@@ -4685,6 +4685,1077 @@
         "confidence": "estimate",
         "note": "Arithmetic for a small employer, my straight-line reading: $17 to $27 over four years is $2.50 a year, so about $19.50 in 2027; a $21 barista would expect about $1.70 more to keep the gap, +8%. The bill's own 2027 step was not in the results. Use only as a labelled scenario."
       }
+    ],
+    "mechanics": [
+      {
+        "id": "roster_and_coverage",
+        "title": "Roster, shifts and coverage",
+        "tier": "core",
+        "playerDecision": "How many people of each role to keep, how many hours each, opening hours, and how many hours the owner works the floor.",
+        "engineMath": "Hours needed each month = open hours x positions on the floor (2 from opening to 11 am, 1.5 after, as a default) + half an hour before opening and after closing for each person on those shifts. Hours available = sum over staff of hoursPerMonth x availability (events, absence rate 4%) x productivity (skill ramp) + owner floor hours. If available < needed: first the gap is filled with overtime at 1.5x for anyone past 40 hours a week (173 a month), up to 55 hours a week; what is still missing is lost capacity. Each scheduled day longer than 10 hours end to end adds one hour at $17.00. Each worker needs 24 consecutive hours off a week, so one person can cover at most six days. A certificate holder must be present every open hour: certified hours available must be at least the open hours, or the violation no_food_protection_cert is active. A shift cut after the worker arrives still costs 3 hours.",
+        "fieldsNeeded": [
+          "staff[].skillStage",
+          "staff[].weeklyHours",
+          "staff[].certified",
+          "extra.coverage.positionsByHourBand",
+          "business.ownerFloorHours",
+          "payroll.overtimeHours",
+          "payroll.spreadOfHoursDays"
+        ],
+        "numbers": [
+          {
+            "what": "Open hours a month at 7 am to 7 pm",
+            "value": 360,
+            "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+            "confidence": "estimate",
+            "note": "Arithmetic: 12 h x 30 days; the existing pack's opening hours."
+          },
+          {
+            "what": "Overtime multiplier after 40 hours a week",
+            "value": 1.5,
+            "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+            "confidence": "estimate",
+            "note": "Search-seen (primary, NY DOL Part 146 and FAQ)."
+          },
+          {
+            "what": "Spread-of-hours pay per day over 10 hours",
+            "value": 17,
+            "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
+            "confidence": "estimate",
+            "note": "One hour at the basic minimum hourly rate (12 NYCRR 146-1.6)."
+          },
+          {
+            "what": "Call-in pay, minimum hours",
+            "value": 3,
+            "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
+            "confidence": "estimate",
+            "note": "12 NYCRR 146-1.5."
+          },
+          {
+            "what": "Meal period, minutes, for a shift over 6 hours across 11 am to 2 pm",
+            "value": 30,
+            "source": "https://dol.ny.gov/ls443-guidelines-meal-periods",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Consecutive hours of rest each calendar week",
+            "value": 24,
+            "source": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Monthly absence rate, food preparation and serving",
+            "value": 0.04,
+            "source": "https://www.deputy.com/blog/restaurant-no-shows-what-they-cost-and-how-to-cover",
+            "confidence": "estimate",
+            "note": "BLS figure for 2025 quoted by a vendor."
+          }
+        ]
+      },
+      {
+        "id": "turnover_and_replacement",
+        "title": "Turnover without dice: tenure pressure",
+        "tier": "core",
+        "playerDecision": "Pay against the market, schedule stability, tips, benefits, how complaints are handled, and whether to replace people who leave.",
+        "engineMath": "Each worker carries a pressure counter. Each month it grows by base x the product of the multipliers in force. When it reaches 1 the worker leaves: with two weeks' notice if the product was under 1.5 in the last month, without notice otherwise. Base = 1/26 for full-timers (median tenure 2.2 years) and 1/9 for student part-timers (one school year). Multipliers: take-home pay (wage + tips per hour) below market by $1: x1.4; above by $2: x0.6; schedule fixed two weeks ahead: x0.8; night before: x1.5; no card tips: x1.2; health stipend: x0.8; a month with overtime creep: x1.3; a wage shortcut that touches this worker: x1.5; a complaint ignored: x2. On leaving: cash -$2,706 (recruiting and training; -$1,350 if the training lever is \"shadow only\", with the quality penalty instead), a vacancy of 14 days (7 in September, 28 with word-of-mouth hiring in May to July), then a new hire at the first skill stage. Any wage violation that touched the leaver is reported the following month (complaint_to_audit_pipeline). No random draw anywhere: two players with the same settings lose the same people in the same months.",
+        "fieldsNeeded": [
+          "staff[].tenurePressure",
+          "staff[].monthsOnJob",
+          "staff[].kind (full_time | student)",
+          "market.takeHomeWage",
+          "business.vacancies[]"
+        ],
+        "numbers": [
+          {
+            "what": "Median tenure, food preparation and serving occupations, years (January 2026)",
+            "value": 2.2,
+            "source": "https://www.bls.gov/news.release/tenure.htm",
+            "confidence": "estimate",
+            "note": "Search-seen (primary, bls.gov)."
+          },
+          {
+            "what": "Monthly quits rate, accommodation and food services, June to September 2026",
+            "value": "3.6%-5.0%",
+            "source": "https://www.bls.gov/news.release/jolts.t04.htm",
+            "confidence": "estimate",
+            "note": "Search-seen (primary, bls.gov); September is preliminary."
+          },
+          {
+            "what": "Yearly turnover, limited-service hourly staff",
+            "value": 1.1,
+            "source": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/",
+            "confidence": "estimate",
+            "note": "Black Box Intelligence 2025, quoted second-hand."
+          },
+          {
+            "what": "Hard cost to replace one hourly worker",
+            "value": 2706,
+            "source": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Cost with lost output (older Cornell study)",
+            "value": 5864,
+            "source": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Market take-home pay of a New York barista, wage plus tips, per hour",
+            "value": 22.6,
+            "source": "https://culinaryagents.com/jobs/716734-Barista",
+            "confidence": "estimate",
+            "note": "Arithmetic: middle of 2026 postings ($18.50 to $20.00) = $19.50, plus $3.13 of tips. The pack's $21 wage is $1.50 above that."
+          },
+          {
+            "what": "Multipliers and vacancy days",
+            "value": "see engineMath",
+            "source": "https://www.bls.gov/news.release/jolts.t04.htm",
+            "confidence": "estimate",
+            "note": "Game-balance values chosen so that default settings give about 50% yearly turnover in a five-person team; not measurements."
+          }
+        ]
+      },
+      {
+        "id": "skill_ramp",
+        "title": "Skill: speed and quality by months on the job",
+        "tier": "core",
+        "playerDecision": "Whom to hire (trained or new), how to train, and whom to put on the bar at the rush.",
+        "engineMath": "Each worker's productivity and quality follow extra.staffModel.skillRamp by months on the job: 0.4, 0.7, 0.85, 1.0, then 1.1 after a year. Team capacity = capacity.unitsPerStaffMonth x sum of productivity (instead of x headcount). Team quality bonus = hours-weighted mean of the stage quality values. Training lever: \"shadow only\" delays every stage by one month; \"barista school\" brings stage 4 forward to month 3 and adds +0.02 quality at stage 5. A hire with experience (role barista or shift_lead) starts at stage 3. While a trainee is in stages 1 and 2, the person training them works at 0.9.",
+        "fieldsNeeded": [
+          "staff[].monthsOnJob",
+          "staff[].skillStage",
+          "extra.staffModel.skillRamp"
+        ],
+        "numbers": [
+          {
+            "what": "Weeks before a new barista works the bar",
+            "value": "2-6",
+            "source": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+            "confidence": "estimate",
+            "note": "Operators quoted by Perfect Daily Grind."
+          },
+          {
+            "what": "Months to competency",
+            "value": 3,
+            "source": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+            "confidence": "estimate",
+            "note": "Same article; a large chain's posting says \"full-bar capable within 90 days\"."
+          },
+          {
+            "what": "Months to full proficiency",
+            "value": 12,
+            "source": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Productivity fractions by stage",
+            "value": "0.4 / 0.7 / 0.85 / 1.0 / 1.1",
+            "source": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+            "confidence": "estimate",
+            "note": "My reading of the time marks; not measured."
+          }
+        ]
+      },
+      {
+        "id": "tips_and_take_home",
+        "title": "Tips as part of pay",
+        "tier": "core",
+        "playerDecision": "Tip screen or jar, who shares the pool, whether to run tips through payroll, whether to use the tip credit.",
+        "engineMath": "Tip pool each month = sales x tip share (3.9% with a tip screen; 2.0% with a jar only; 0 with the no-tipping option). Tips per service hour = pool / hours worked by pool members. A worker's take-home rate = wage + tips per hour; this is what turnover_and_replacement compares with the market. Employer cost: 7.65% of reported tips (already in the pack as tips_payroll_tax); at year end a profitable shop gets the same amount back as the Form 8846 credit. The card fee on tips (2.5%) may be passed to the pool. Tip credit, if ever used: lawful saving per hour = min(tips per hour, $5.65), and only with notice and records; in a week when tips per hour fall below the credit taken, the employer tops up to $17.00. Any share taken by the owner, a manager or back-of-house staff creates tip_theft or tip_pool_ineligible.",
+        "fieldsNeeded": [
+          "extra.tips.cardTipsShareOfSales",
+          "staff[].inTipPool",
+          "payroll.reportedTips",
+          "taxes.credits[]"
+        ],
+        "numbers": [
+          {
+            "what": "Average tip, quick-service, of those who tip (Q2 2026)",
+            "value": 0.158,
+            "source": "https://pos.toasttab.com/blog/data/restaurant-tipping-trends",
+            "confidence": "estimate",
+            "note": "Search-seen (secondary, Toast)."
+          },
+          {
+            "what": "Card tips as a share of sales (pack assumption)",
+            "value": 0.039,
+            "source": "https://pos.toasttab.com/blog/data/restaurant-tipping-trends",
+            "confidence": "estimate",
+            "note": "$2,000 on $51,000."
+          },
+          {
+            "what": "Tips per barista hour, card only",
+            "value": 3.13,
+            "source": "https://pos.toasttab.com/blog/data/restaurant-tipping-trends",
+            "confidence": "estimate",
+            "note": "Arithmetic: $2,000 / 640 h."
+          },
+          {
+            "what": "Tip credit, food service workers, New York City 2026",
+            "value": 5.65,
+            "source": "https://dol.ny.gov/minimum-wage-tipped-workers-p717-english",
+            "confidence": "estimate",
+            "note": "Search-seen (primary, NY DOL)."
+          },
+          {
+            "what": "Cash wage with the full credit",
+            "value": 11.35,
+            "source": "https://dol.ny.gov/minimum-wage-tipped-workers-p717-english",
+            "confidence": "estimate"
+          }
+        ]
+      },
+      {
+        "id": "owner_hours_and_burnout",
+        "title": "The owner's hours and burnout",
+        "tier": "core",
+        "playerDecision": "How many hours a week the owner works, whether to hire a manager or leads, whether to close one day a week.",
+        "engineMath": "The owner's floor hours are free labor in cash terms and are added to hours available (roster_and_coverage). Fatigue counter: -2 a month at 40 hours a week (not below 0), +1 at 60, +3 at 80; +1 more in any month with an unfilled vacancy the owner covers. At 6: quality -0.03 and the advice panel warns. At 9: quality -0.05 and one administrative slip a month (a late filing or a missed supplier order, chosen in a fixed order). At 12: the shop closes for 3 days and the counter returns to 6. Analytics shows the owner's unpaid hours at $30 an hour (the pack's value for a manager's hour) next to profit.",
+        "fieldsNeeded": [
+          "business.ownerHoursPerWeek",
+          "business.ownerFatigue",
+          "analytics.ownerUnpaidLabor"
+        ],
+        "numbers": [
+          {
+            "what": "Share of hospitality owners reporting burnout (2024 survey)",
+            "value": 0.78,
+            "source": "https://www.thehartford.com/insights-center/business-management/restaurant-owner-stress-management-tips",
+            "confidence": "estimate",
+            "note": "Bionic survey, quoted second-hand; broader than cafes."
+          },
+          {
+            "what": "Restaurant owners who skipped their own pay in the past year to make payroll",
+            "value": 0.51,
+            "source": "https://modernrestaurantmanagement.com/?p=40802",
+            "confidence": "estimate",
+            "note": "Clarify Capital survey of 391 owners, quoted in trade press."
+          },
+          {
+            "what": "Fatigue steps and thresholds",
+            "value": "see engineMath",
+            "source": "https://www.thehartford.com/insights-center/business-management/restaurant-owner-stress-management-tips",
+            "confidence": "estimate",
+            "note": "Game-balance values."
+          }
+        ]
+      },
+      {
+        "id": "shrink_and_cash_controls",
+        "title": "Shrink: cash and stock that walk away",
+        "tier": "deep",
+        "playerDecision": "The cash_controls lever, who makes bank deposits, whether the owner counts the drawer.",
+        "engineMath": "Each month sales x shrink rate never reaches the bank and cost of goods rises by the leak rate: \"trust\" 2.0% of sales and +2% cost of goods; \"PINs and counts\" 0.7% and +0.5%; \"cameras and stock counts\" 0.3% and 0. The loss is not shown as a line until the quarter's books are closed (the accounting cost item exists in the pack); then it appears as \"unexplained shortage\". With a hired manager and \"trust\" for six months in a row, a single loss of $12,000 is booked (deposits not made). Docking staff for shortages is the shortcut dock_pay_for_shortages.",
+        "fieldsNeeded": [
+          "levers.cash_controls.shrinkRate",
+          "pnl.unexplainedShortage",
+          "business.monthsOnTrust"
+        ],
+        "numbers": [
+          {
+            "what": "Employee theft as a share of restaurant sales (vendor figure)",
+            "value": 0.04,
+            "source": "https://www.katalystos.com/blog/employee-theft-and-pos-fraud-in-restaurants",
+            "confidence": "estimate",
+            "note": "Unsourced in detail; I halve it for a small owner-present shop."
+          },
+          {
+            "what": "Median monthly loss in void and refund schemes",
+            "value": 1200,
+            "source": "https://www.katalystos.com/blog/employee-theft-and-pos-fraud-in-restaurants",
+            "confidence": "estimate",
+            "note": "A vendor's summary of a fraud study."
+          },
+          {
+            "what": "Reported manager deposit thefts at coffee shops and cafes",
+            "value": "$12,000-$37,896",
+            "source": "https://www.yahoo.com/news/former-isle-palms-caf-manager-210904482.html",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Shrink rates by option",
+            "value": "2.0% / 0.7% / 0.3%",
+            "source": "https://www.katalystos.com/blog/employee-theft-and-pos-fraud-in-restaurants",
+            "confidence": "estimate",
+            "note": "Game-balance values."
+          }
+        ]
+      },
+      {
+        "id": "complaint_to_audit_pipeline",
+        "title": "How labor violations are found: the worker who leaves",
+        "tier": "core",
+        "playerDecision": "Which labor shortcuts to run, whether to correct them before anyone leaves, how to answer a worker's question.",
+        "engineMath": "A labor violation is found in exactly three ways. (1) A competitor files a report. (2) A worker who was touched by the violation leaves, by quitting or being fired: the month after, a case opens with the labor investigator. (3) A worker asks about it (event barista_asks_about_missing_overtime) and the owner chooses to punish: retaliation is added and the case opens. The case covers every month the shortcut was in force, up to 72, for every worker, at the violation's formula. Voluntary correction: at any time before a case opens the owner may pay 1.0 x the amount saved to the workers, which clears the trail. If the scheduling and time clock cost item was switched off, hours are taken as the worker states them: the saved amount is multiplied by 1.25.",
+        "fieldsNeeded": [
+          "violations[].touchesWorkers",
+          "business.violationTrail[].workersTouched",
+          "actions.voluntaryCorrection",
+          "case.origin = \"departed_worker\""
+        ],
+        "numbers": [
+          {
+            "what": "Limitation period for wage claims, years",
+            "value": 6,
+            "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+            "confidence": "estimate",
+            "note": "Labor Law 198(3), as stated in the existing packs."
+          },
+          {
+            "what": "Liquidated damages on unpaid wages",
+            "value": 1,
+            "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+            "confidence": "estimate",
+            "note": "100% of the wages, so 2.0 x in all."
+          },
+          {
+            "what": "Wages recovered by the state Labor Department in 2025, dollars",
+            "value": 35000000,
+            "source": "https://dol.ny.gov/wage-theft-resources",
+            "confidence": "estimate",
+            "note": "More than $35 million from more than 5,000 employers; search-seen (primary and governor's release)."
+          },
+          {
+            "what": "Multiplier when no time records exist",
+            "value": 1.25,
+            "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+            "confidence": "estimate",
+            "note": "Game-balance value standing for the rule that the worker's account stands."
+          }
+        ]
+      },
+      {
+        "id": "repeat_offense_ladder",
+        "title": "Second and third findings cost more",
+        "tier": "deep",
+        "playerDecision": "Whether to keep a shortcut after it has been found once.",
+        "engineMath": "Each violation keeps a count of findings. The fine formula is multiplied by the ladder step for that count. Ladders from the law: Labor Law 218 fixed penalties 1, 2, 3 (up to $1,000, $2,000, $3,000); pay frequency: interest only at the first finding, then 100% of the late wages; child labor: up to $10,000, then $2,000 to $25,000, then $10,000 to $55,000; retaliation: up to $10,000, then up to $20,000; job ad without a pay range: $0 if fixed within 30 days at the first notice, then up to $250,000.",
+        "fieldsNeeded": [
+          "violations[].fine.ladder",
+          "business.violationTrail[].findings"
+        ],
+        "numbers": [
+          {
+            "what": "Labor Law 218 fixed penalties: first, second, third",
+            "value": "1000 / 2000 / 3000",
+            "source": "https://www.nysenate.gov/legislation/laws/LAB/218",
+            "confidence": "estimate",
+            "note": "From the user's research report, which cites the statute."
+          },
+          {
+            "what": "Child labor: first, second, later",
+            "value": "10000 / 25000 / 55000",
+            "source": "https://www.littler.com/news-analysis/asap/new-york-enacts-sweeping-amendments-child-labor-laws",
+            "confidence": "estimate",
+            "note": "Maximums; search-seen (secondary)."
+          },
+          {
+            "what": "Pay frequency: liquidated damages after a prior finding",
+            "value": 1,
+            "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+            "confidence": "estimate",
+            "note": "100% of the late-paid wages."
+          }
+        ]
+      },
+      {
+        "id": "unemployment_experience_rating",
+        "title": "Letting people go raises next year's unemployment rate",
+        "tier": "deep",
+        "playerDecision": "Fire, lay off or cut hours; answer the state's notice; document misconduct.",
+        "engineMath": "Each chargeable separation (a layoff, a firing without documented misconduct, hours cut to 30 or fewer a week) adds a charge to the employer's account: 7 x the worker's weekly benefit at once, up to 26 weeks in all. Weekly benefit = quarterly wages / 26, capped at $869. Not chargeable: a quit without good cause, or a firing for misconduct, if the owner answers the notice in the same month. In January the state rate is reset: the new-employer rate of 4.1% applies in the first year; after that, rate = 4.1% + 1 point for each $3,000 of net charges, between 1.7% and 9.5%, on the first $17,600 of each worker's pay.",
+        "fieldsNeeded": [
+          "business.uiAccountCharges",
+          "taxes.ny_unemployment.rateOverride",
+          "actions.answerUiNotice"
+        ],
+        "numbers": [
+          {
+            "what": "Weeks of benefit charged first to the last employer",
+            "value": 7,
+            "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+            "confidence": "estimate",
+            "note": "Search-seen (primary, NY DOL employer guide IA 318.2)."
+          },
+          {
+            "what": "Maximum weeks chargeable",
+            "value": 26,
+            "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Maximum weekly benefit from October 13, 2025",
+            "value": 869,
+            "source": "https://www.littler.com/news-analysis/asap/new-york-state-drastically-increases-maximum-weekly-unemployment-insurance",
+            "confidence": "estimate",
+            "note": "Search-seen (secondary, several)."
+          },
+          {
+            "what": "Rate range in 2026, including the 0.075% re-employment fund",
+            "value": "1.7%-9.5%",
+            "source": "https://dol.ny.gov/unemployment-insurance-rate-information",
+            "confidence": "estimate",
+            "note": "Search-seen (primary, NY DOL)."
+          },
+          {
+            "what": "New employer rate 2026",
+            "value": 0.041,
+            "source": "https://dol.ny.gov/unemployment-insurance-rate-information",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Taxable wage base per worker 2026",
+            "value": 17600,
+            "source": "https://dol.ny.gov/unemployment-insurance-rate-information",
+            "confidence": "estimate"
+          },
+          {
+            "what": "One point per $3,000 of charges",
+            "value": 3000,
+            "source": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+            "confidence": "estimate",
+            "note": "Game simplification of the state rate tables, which use the account balance divided by five-year average payroll; not the real formula."
+          }
+        ]
+      },
+      {
+        "id": "leave_bank_and_absence",
+        "title": "Leave banks and absences",
+        "tier": "core",
+        "playerDecision": "The sick-call policy, the depth of the bench, whether to carry the required insurance.",
+        "engineMath": "Each worker has two banks. Safe and sick leave: earned at 1 hour per 30 worked up to 40 a year; paid at the regular rate when the business has 5 or more employees, unpaid with 1 to 4. Unpaid protected time: 32 hours on hire and again each January 1. Absence each month = 4% of scheduled hours, drawn first from the sick bank, then from the unpaid bank; events (flu, stomach bug, jury duty, family leave) add to it. Hours missed are covered in this order: bench hours, owner hours, overtime, a temp at $29 to $40 an hour, otherwise lost capacity. Paid Family Leave: 12 weeks, wages paid by the insurer, job held. No policy on file: the claim (up to $14,742.36) is charged to the business.",
+        "fieldsNeeded": [
+          "staff[].sickBankHours",
+          "staff[].unpaidBankHours",
+          "business.employeeCount",
+          "business.coverOrder"
+        ],
+        "numbers": [
+          {
+            "what": "Sick leave accrual: one hour per hours worked",
+            "value": 30,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+            "confidence": "estimate",
+            "note": "Search-seen (primary, nyc.gov FAQ) via the existing pack."
+          },
+          {
+            "what": "Safe and sick leave hours a year under 100 employees",
+            "value": 40,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Unpaid protected hours on hire and each January 1 (from February 22, 2026)",
+            "value": 32,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+            "confidence": "estimate",
+            "note": "Search-seen (primary, nyc.gov)."
+          },
+          {
+            "what": "Headcount at which the 40 hours become paid",
+            "value": 5,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "Paid Family Leave: weeks, weekly cap, total cap (2026)",
+            "value": "12 / 1228.53 / 14742.36",
+            "source": "https://paidfamilyleave.ny.gov/2026",
+            "confidence": "estimate",
+            "note": "Search-seen (primary, paidfamilyleave.ny.gov)."
+          },
+          {
+            "what": "Temp barista cost per hour, New York City",
+            "value": "29-40",
+            "source": "https://www.instawork.com/temp-work-rate/barista-rate-in-new-york-ny",
+            "confidence": "estimate",
+            "note": "A staffing app's own rate page: $24.54 pay plus 20% to 65%."
+          }
+        ]
+      },
+      {
+        "id": "headcount_thresholds",
+        "title": "Rules that switch on with headcount",
+        "tier": "deep",
+        "playerDecision": "Whether to hire the next person or stretch the hours of those already on payroll.",
+        "engineMath": "When the number of employees crosses a row of extra.thresholds, the matching cost or rule switches on the same month and a rule card is shown: at 4 (counting the owner) the hiring rules of the city Human Rights Law; at 5 paid sick leave for everyone; at 10 (after two years) the retirement program; at 11 jury duty pay. Part-timers count as one each. Stretching four people instead of hiring a fifth saves the sick pay but feeds overtime_creep and tenure pressure.",
+        "fieldsNeeded": [
+          "business.employeeCount",
+          "extra.thresholds[]"
+        ],
+        "numbers": [
+          {
+            "what": "Sick leave cost that switches on at five employees, per worker a month at most",
+            "value": 70,
+            "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+            "confidence": "estimate",
+            "note": "The existing pack's line: 40 h x $21 / 12."
+          }
+        ]
+      },
+      {
+        "id": "weekly_payroll_cash_timing",
+        "title": "Weekly payroll: four months a year have five paydays",
+        "tier": "deep",
+        "playerDecision": "How much cash to hold; when to schedule other large payments.",
+        "engineMath": "Wages leave the account every Friday, not once a month. A month's wage cash = weekly payroll x the number of Fridays in it. In 2026 January, May, July and October have five Fridays: payroll is 25% higher in those months than in a four-Friday month, with the same staff. Employer payroll taxes follow the wages. The event payroll_friday_account_short fires on any Friday when cash is below that week's payroll.",
+        "fieldsNeeded": [
+          "calendar.paydaysInMonth",
+          "payroll.weeklyAmount"
+        ],
+        "numbers": [
+          {
+            "what": "Weekly payroll at the reference point",
+            "value": 3104,
+            "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+            "confidence": "estimate",
+            "note": "Arithmetic: $13,440 / 4.33."
+          },
+          {
+            "what": "Months of 2026 with five Fridays",
+            "value": "January, May, July, October",
+            "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+            "confidence": "estimate",
+            "note": "Calendar arithmetic: January 1, 2026 is a Thursday."
+          }
+        ]
+      }
     ]
-  }
+  },
+  "sources": [
+    {
+      "url": "https://100hires.com/indeed-job-posting-cost.html",
+      "title": "100Hires: how much it costs to post a job on Indeed (2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/",
+      "title": "Black Box Intelligence: State of the Restaurant Workforce, turnover",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://blogs.duanemorris.com/immigrationlaw/2026/07/24/tps-terminations-are-coming-fast-what-employers-need-to-know-right-now/",
+      "title": "Duane Morris: TPS terminations, what employers need to know (July 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://columbianewsservice.com/2025/09/30/tearing-my-family-apart-starbucks-closes-dozens-of-city-stores/",
+      "title": "Columbia News Service: a coffee chain closes dozens of city stores (September 2025)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://culinaryagents.com/jobs/716734-Barista",
+      "title": "Culinary Agents: New York City barista job postings, 2026",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://documentedny.com/2026/06/22/nyc-mayor-signs-heat-safety-order/",
+      "title": "Documented: mayor announces workplace heat safety guidelines (June 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/hospitality-wage-order-faq",
+      "title": "NYS Department of Labor: Hospitality Wage Order Frequently Asked Questions",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/hours-work-minors",
+      "title": "NYS Department of Labor: When a minor can work (hours chart)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/illegal-deductions",
+      "title": "NYS Department of Labor: Illegal deductions (Labor Law 193)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/ls443-guidelines-meal-periods",
+      "title": "NYS Department of Labor: Guidelines for Meal Periods (LS 443)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/minimum-wage-0",
+      "title": "NYS Department of Labor: Minimum wage",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/minimum-wage-tipped-workers-p717-english",
+      "title": "NYS Department of Labor: Combining cash wages and tip credits (P717), 2026 rates",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/notice-eligibility-ui-benefits",
+      "title": "NYS Department of Labor: Notice of eligibility for unemployment benefits (Record of Employment, IA 12.3)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611",
+      "title": "NYS Department of Labor: One Day Rest in Seven, Labor Law 161 (LS 611)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/system/files/documents/2021/03/wage-theft-prevention-act-frequently-asked-questions.pdf",
+      "title": "NYS Department of Labor: Wage Theft Prevention Act Frequently Asked Questions",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/system/files/documents/2025/01/tips-and-gratuities-frequently-asked-questions.pdf",
+      "title": "NYS Department of Labor: Tips and Gratuities Frequently Asked Questions (January 2025)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/system/files/documents/2025/10/ia318.2.pdf",
+      "title": "NYS Department of Labor: Unemployment Insurance Benefits, An Employer's Guide (IA 318.2, October 2025)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/unemployment-insurance-rate-information",
+      "title": "NYS Department of Labor: Current 2026 employer contribution rate",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/wage-theft-resources",
+      "title": "NYS Department of Labor: Wage theft resources (2025 recoveries)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://dol.ny.gov/wages-and-hours-frequently-asked-questions",
+      "title": "NYS Department of Labor: Wages and Hours Frequently Asked Questions",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://forms.labor.ny.gov/WP/CR146.pdf",
+      "title": "NYS Department of Labor: Part 146 Hospitality Industry Wage Order (12 NYCRR 146)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://gusto.com/product/pricing",
+      "title": "Gusto: pricing",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://gusto.com/resources/guides/switch-payroll-providers/square-pricing",
+      "title": "Gusto: Square Payroll pricing for 2026",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://insureon.com/small-business-insurance/employment-practices-liability/cost",
+      "title": "Insureon: employment practices liability insurance cost",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://jobs.generalcatalyst.com/companies/blank-street/jobs/86227204-barista-manhattan",
+      "title": "Coffee chain job postings, Manhattan barista and shift lead pay (2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://lavu.com/labor-cost-for-coffee-shop/",
+      "title": "Lavu: labor cost control for coffee shops (2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://modernrestaurantmanagement.com/?p=40802",
+      "title": "Modern Restaurant Management: the 'little to no breathing room' reality for restaurants (owner survey)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://newyork.public.law/laws/n.y._labor_law_section_201-g",
+      "title": "NY Labor Law 201-g: prevention of sexual harassment",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://nycourts.gov/REPORTER/3dseries/2013/2013_04754.htm",
+      "title": "Barenboim v. Starbucks Corp., NY Court of Appeals (2013)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://paidfamilyleave.ny.gov/2026",
+      "title": "New York Paid Family Leave updates for 2026",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+      "title": "Perfect Daily Grind: how long should it take to train your baristas?",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://pillsburylaw.com/en/news-and-insights/nyc-pay-transparency-law.html",
+      "title": "Pillsbury: NYC pay transparency law",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://pos.toasttab.com/blog/data/restaurant-tipping-trends",
+      "title": "Toast: restaurant tipping trends (Q2 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://pulserevops.com/industry-kpis/ik0402",
+      "title": "Pulse RevOps: KPIs for coffee shops (low-quality source)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://riskandinsurance.com/lost-time-and-your-latte/",
+      "title": "Risk & Insurance: lost time and your latte (AmTrust restaurant claims study)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://rsmus.com/insights/tax-alerts/2026/no-tax-tips-final-rules-confirm-qualifying-occupations-tip-definition.html",
+      "title": "RSM: final rules on the no-tax-on-tips deduction (2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://squareup.com/us/en/pricing",
+      "title": "Square: pricing",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://timesofsandiego.com/business/2026/04/08/la-mesa-coffee-public-square-closed-unpaid-wages/",
+      "title": "Times of San Diego: coffee house closed after a walkout over unpaid wages (April 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.7shifts.com/blog/restaurant-sales-per-labor-hour-splh/",
+      "title": "7shifts: restaurant sales per labor hour",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.bls.gov/news.release/jolts.t04.htm",
+      "title": "BLS JOLTS Table 4: quits levels and rates by industry (September 2026 results)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.bls.gov/news.release/tenure.htm",
+      "title": "BLS Employee Tenure news release (January 2026 data)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.bls.gov/oes/2023/May/oes_35620.htm",
+      "title": "BLS OEWS May 2023: New York-Newark-Jersey City metro area",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.bls.gov/regions/northeast/news-release/2026/occupationalemploymentandwages_newyork_20260605.htm",
+      "title": "BLS: Occupational Employment and Wages in New York-Newark-Jersey City, May 2025",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.brooklynpaper.com/ocean-hill-the-daily-press-unionizes",
+      "title": "Brooklyn Paper: an Ocean Hill coffee shop unionizes",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.buchalter.com/blogs/recreational-equipment-inc-and-united-food-commercial-workers-local-555-nlrb-alj-finds-unlawful-discharge-during-organizing-drive-but-denies-gissel-bargaining-order/",
+      "title": "Buchalter: NLRB judge finds unlawful discharge during an organizing drive (January 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.deputy.com/blog/restaurant-no-shows-what-they-cost-and-how-to-cover",
+      "title": "Deputy: restaurant no-shows, what they cost (quotes BLS absence rates)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.dfs.ny.gov/reports_and_publications/press_releases/pr20250829",
+      "title": "NYS Department of Financial Services: 2026 health insurance premium rates (August 29, 2025)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.dglaw.com/new-york-state-legislation-significantly-expands-workplace-harassment-protections/",
+      "title": "Davis+Gilbert: New York expands workplace harassment protections",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.dol.gov/agencies/whd/flsa/tipsFAQ",
+      "title": "US Department of Labor, Wage and Hour Division: tip regulations FAQ",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.dol.gov/sites/dolgov/files/WHD/opinion-letters/FLSA/FLSA2026-13.pdf",
+      "title": "US Department of Labor opinion letter FLSA2026-13 (managers and tips, September 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.dwt.com/blogs/employment-labor-and-benefits/2021/11/monitoring-electronic-communications-new-york",
+      "title": "Davis Wright Tremaine: New York notice of electronic monitoring",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.ebglaw.com/workforce-bulletin/new-york-enacts-amendment-to-limit-frequency-of-pay-damages-for-manual-workers",
+      "title": "Epstein Becker Green: amendment limiting frequency-of-pay damages",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.fisherphillips.com/en/news-insights/do-your-contractors-carry-workers-compensation-coverage-how-it-can-impact-your-policy-and-5-ways-to-prepare-for-insurance-audits-and-disputes.html",
+      "title": "Fisher Phillips: contractors' workers' compensation coverage and premium audits",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.fisherphillips.com/news-insights/new-york-publishes-guidance-adult-cannabis.html",
+      "title": "Fisher Phillips: New York guidance on adult cannabis use and the workplace",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.heraldnet.com/news/lynnwood-barista-accused-of-faking-a-robbery/",
+      "title": "Everett Herald: barista accused of faking a robbery to hide skimming",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.instawork.com/temp-work-rate/barista-rate-in-new-york-ny",
+      "title": "Instawork: temp barista rate in New York, NY",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.irs.gov/instructions/i941",
+      "title": "IRS: Instructions for Form 941 (March 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.irs.gov/irm/part4/irm_04-023-007",
+      "title": "IRS Internal Revenue Manual 4.23.7: Employment Tax on Tip Income",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.joinhomebase.com/compare/homebase-vs-7shifts",
+      "title": "Homebase: Homebase vs 7shifts",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.katalystos.com/blog/employee-theft-and-pos-fraud-in-restaurants",
+      "title": "Katalyst: employee theft and POS fraud in restaurants (quotes ACFE and NRA figures)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.littler.com/news-analysis/asap/new-york-city-proposes-bill-sets-higher-minimum-wages-and-eliminates-tip-credits",
+      "title": "Littler: New York City bill Int. 757 on a $30 minimum wage and tip credits",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.littler.com/news-analysis/asap/new-york-enacts-sweeping-amendments-child-labor-laws",
+      "title": "Littler: New York enacts sweeping amendments to child labor laws",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.littler.com/news-analysis/asap/new-york-state-drastically-increases-maximum-weekly-unemployment-insurance",
+      "title": "Littler: New York raises the maximum weekly unemployment benefit to $869",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.littler.com/news-analysis/asap/nys-legislature-increases-daily-jury-duty-fee-40-72",
+      "title": "Littler: New York raises the daily jury fee from $40 to $72",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.littler.com/publication-press/publication/new-york-now-requires-paid-lactation-breaks",
+      "title": "Littler: New York now requires paid lactation breaks",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+      "title": "Mayer Brown: New York amends Labor Law to limit damages for late payments to manual workers (July 2025)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.mercer.com/en-us/insights/law-and-policy/most-new-york-employers-have-secure-choice-deadlines-approaching/",
+      "title": "Mercer: New York Secure Choice deadlines (2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.morganlewis.com/pubs/2026/04/ice-rewrites-the-rules-on-form-i-9-violations",
+      "title": "Morgan Lewis: ICE rewrites the rules on Form I-9 violations (April 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.morganlewis.com/pubs/2026/06/after-mullin-a-practical-guide-for-employers-with-tps-workers",
+      "title": "Morgan Lewis: a practical guide for employers with TPS workers (June 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.munichre.com/hsb/en/products/specialty-liability-insurance/epl-plus.html",
+      "title": "HSB (Munich Re): employment practices liability, claim cost figures",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nlrb.gov/case/02-RC-380277",
+      "title": "NLRB case 02-RC-380277 (Manhattan coffee store election, March 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.ny.gov/sites/default/files/2023-04/Worker_Toolkit.pdf",
+      "title": "New York State: sexual harassment prevention, worker toolkit",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSafeSickLeave-MandatoryNotice-English.pdf",
+      "title": "NYC DCWP: Notice of Employee Rights, Protected Time Off (February 22, 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSickLeave-FAQs.pdf",
+      "title": "NYC DCWP: Protected Time Off Law, Frequently Asked Questions (updated February 22, 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nyc.gov/mayors-office/news/2026/02/mayor-mamdani-announces-major-expansion-of-protected-time-off-fo",
+      "title": "NYC Mayor's Office: expansion of protected time off and data-driven enforcement (February 2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nyc.gov/site/cchr/media/fair-chance-faqs.page",
+      "title": "NYC Commission on Human Rights: Fair Chance Act FAQ",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+      "title": "NYC Health: Food Protection Course (online, free)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nycourts.gov/media/24781",
+      "title": "NY State Unified Court System: juror pay guidance",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "title": "NY Labor Law 198: costs, remedies (NY Senate)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/LAB/218",
+      "title": "NY Labor Law 218: violations of certain provisions, civil penalties (NY Senate)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.peoplekeep.com/blog/qsehra-contribution-limits",
+      "title": "PeopleKeep: QSEHRA contribution limits",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.proskauer.com/blog/new-york-state-minimum-wage-and-exempt-salary-updates-for-2026",
+      "title": "Proskauer: New York State minimum wage and exempt salary updates for 2026",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.restaurantdive.com/news/nra-restaurants-summer-hiring-surge-low-labor-supply-wage-growth/823673/",
+      "title": "Restaurant Dive: summer restaurant hiring forecast (2026)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.thehartford.com/insights-center/business-management/restaurant-owner-stress-management-tips",
+      "title": "The Hartford: restaurant owner stress (quotes owner surveys)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.vitalcitynyc.org/nyc-minimum-wage-increase-restaurant-industry/",
+      "title": "Vital City: the minimum wage proposal and New York City restaurants",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/employer-disability-benefits.jsp",
+      "title": "NYS Workers' Compensation Board: disability benefits, employer page",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp",
+      "title": "NYS Workers' Compensation Board: penalties for no disability and Paid Family Leave coverage",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.wsmv.com/2023/06/23/barista-parlor-locations-close-following-employee-walkout/",
+      "title": "WSMV: coffee locations close after an employee walkout (June 2023)",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    },
+    {
+      "url": "https://www.yahoo.com/news/former-isle-palms-caf-manager-210904482.html",
+      "title": "Local news: former cafe manager accused of stealing over $12,000",
+      "checked": "2026-11-14",
+      "seen": "search result only; page not opened (host blocked in this session)"
+    }
+  ]
 }
