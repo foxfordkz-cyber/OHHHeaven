@@ -1,6 +1,7 @@
 import type { OwnerView, Pack } from '@ohh/shared/types';
 import { Pill } from './__stubs__/ui';
 import { dayLabel, nichePlural, realWait, usd, WEATHER_ICON } from './format';
+import { ThemeToggle } from '../../ui/ThemeToggle';
 
 export function statusPill(b: NonNullable<OwnerView['business']>) {
   switch (b.status) {
@@ -24,7 +25,7 @@ export function Header({ view, pack }: { view: OwnerView; pack: Pack | null }) {
     <header className="bz-head">
       <div className="bz-between">
         <h1 className="bz-head-name">{b.name}</h1>
-        {statusPill(b)}
+        <span className="bz-row" style={{ gap: 8 }}>{statusPill(b)}<ThemeToggle /></span>
       </div>
       <div className="bz-head-meta">
         <span>{w.date.label}</span>

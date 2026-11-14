@@ -6,8 +6,7 @@ import { CityMapSlot } from '../../app/slots';
 import { switchMode, useGame, useStoreState, useView } from '../../app/store';
 import {
   AiBadge, Badge, Banner, Button, Card, Clock, Feed, Icon, List, ListRow, MoneyText, NICHE_ICON, Skeleton, Stat, formatMoney, formatNumber,
-  type IconName,
-} from '../../ui';
+  type IconName, ThemeToggle } from '../../ui';
 import './home.css';
 
 const IDEA_EXAMPLES = ['A coffee shop near the subway', 'A barbershop with three chairs', 'A corner store with long hours'];
@@ -97,6 +96,7 @@ function HomeNav({ demo }: { demo: boolean }) {
         <button type="button" className="home-nav__link" onClick={() => navigate('/leaderboards')}>Leaderboards</button>
         <a className="home-nav__link" href="#how-it-works">How it works</a>
       </div>
+      <ThemeToggle />
       <Button size="sm" icon="store" onClick={() => navigate('/start')}>Start</Button>
     </nav>
   );

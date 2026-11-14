@@ -38,7 +38,7 @@ export function WeatherLayer({ condition }: { condition?: WeatherCondition }) {
       last = now;
       ctx.clearRect(0, 0, w, h);
       if (particles === 'rain') {
-        ctx.strokeStyle = 'rgba(170, 200, 255, 0.38)';
+        ctx.strokeStyle = document.documentElement.dataset.theme === 'light' ? 'rgba(52, 78, 110, 0.42)' : 'rgba(190, 205, 225, 0.38)';
         ctx.lineWidth = 1.1;
         ctx.beginPath();
         for (const d of drops) {
@@ -50,7 +50,7 @@ export function WeatherLayer({ condition }: { condition?: WeatherCondition }) {
         }
         ctx.stroke();
       } else {
-        ctx.fillStyle = 'rgba(235, 242, 255, 0.85)';
+        ctx.fillStyle = document.documentElement.dataset.theme === 'light' ? 'rgba(120, 132, 148, 0.75)' : 'rgba(240, 240, 235, 0.85)';
         for (const d of drops) {
           d.y += d.v * dt; d.x += Math.sin((now / 1000) * 0.8 + d.r * 3) * d.drift * dt;
           if (d.y > h + 6) { d.y = -6; d.x = Math.random() * w; }

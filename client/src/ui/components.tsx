@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 import { createPortal } from 'react-dom';
 import { NavLink } from 'react-router-dom';
 import { Icon, type IconName } from './icons';
@@ -325,6 +326,7 @@ export function TopBar({ title, onBack, right }: { title?: ReactNode; onBack?: (
       )}
       <div className="top-bar__title">{title}</div>
       {right}
+      <ThemeToggle />
     </div>
   );
 }
