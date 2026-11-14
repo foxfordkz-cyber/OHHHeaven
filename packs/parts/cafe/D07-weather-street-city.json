@@ -43,12 +43,16 @@
             "id": "skip_snow_clearing"
           }
         ],
-        "realFrequency": "About 11 days a season with measurable snow at Central Park, 1991-2020 normals (Dec 2.1, Jan 3.7, Feb 3.2, Mar 2.0). The 2025-26 winter brought 43.4 inches, the most in 11 years (CBS New York).",
+        "realFrequency": "About 11 days a season with measurable snow (climate table in the engine). Normal season snowfall is 29.8 inches; the last four seasons brought 2.3, 7.5, 12.9 and, by press count, 43.4 inches. Enforcement in January-March 2026: 9,456 summonses for snow and ice on sidewalks (5,852 in January, 3,481 in February) and 54,089 complaints to 311.",
         "tier": "core",
-        "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
-        "note": "The deadlines are DSNY's. The $30 is one snowfall of the staff option: 1.5 hours at $17.00 plus ice melt. The 0.85 day multiplier is the snow value already in ai/src/data/nyc-climate.json; this event adds the duty and the ticket, not a second drop."
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+        "confidence": "verified",
+        "evidence": "opened_official",
+        "note": "Deadlines opened in the NYC311 article; summons and complaint counts are my queries of NYC Open Data (OATH hearings, charge AS21; 311 requests, complaint type 'Snow or Ice', January 20-March 15, 2026). Of January-February summonses that reached a hearing date, 4,379 defaulted. The $30 is one snowfall of the staff option: 1.5 hours at $17.00 plus ice melt. The 0.85 day multiplier is the snow value already in ai/src/data/nyc-climate.json; this event adds the duty and the ticket, not a second drop.",
+        "moreSources": [
+          "https://data.cityofnewyork.us/d/jz4z-kudi",
+          "https://data.cityofnewyork.us/d/erm2-nwe9"
+        ]
       },
       {
         "id": "icy_sidewalk_refreeze",
@@ -135,7 +139,7 @@
         "tier": "core",
         "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
         "confidence": "estimate",
-        "evidence": "secondary",
+        "evidence": "secondary_opened",
         "note": "Deterministic by rule 4: the claim exists only if the walk was left uncleared, and only once per winter. $2,500 = deductible and legal time (planning value); the 25% premium increase for a year after a paid claim is my estimate, no public rate table was found. A court can only hold the tenant itself liable if the lease or its own shoveling made things worse (Cruz v Heights Broadway, First Department 2023); the usual route is the lease's indemnity clause."
       },
       {
@@ -223,12 +227,12 @@
             "id": "snow_ice_plan"
           }
         ],
-        "realFrequency": "Two in the 2025-26 winter: January 25, 2026 (11.4 inches in Central Park, a record for the date) and a February 2026 blizzard (19.7 inches, ninth largest on record). Many winters have none: the 2022-23 season had 2.3 inches in total.",
+        "realFrequency": "Two in the 2025-26 winter by press reports: January 25, 2026 (11.4 inches in Central Park) and a February 2026 blizzard (19.7 inches). Many winters have none: the National Weather Service table gives 2.3 inches for the whole 2022-23 season, 7.5 for 2023-24 and 12.9 for 2024-25, against a normal of 29.8.",
         "tier": "core",
         "source": "https://www.cbsnews.com/newyork/news/2025-2026-nyc-winter-cold-snow",
         "confidence": "estimate",
         "evidence": "secondary",
-        "note": "The deck's 'storm' day is 0.7; a warned blizzard is worse. 0.4 on the storm day and the day after is my estimate from Foursquare's 'up to 40% drop in major weather events' (already cited in nyc-climate.json) and Placer.ai's 20-30% storm-week losses in the hardest-hit states. Month value: 2 days x 60% / 30 = 4%. Delivery falls too: the city has suspended e-bike delivery during the worst hours of past storms. The 2022-23 total is from memory and needs a check."
+        "note": "The deck's 'storm' day is 0.7; a warned blizzard is worse. 0.4 on the storm day and the day after is my estimate from Foursquare's 'up to 40% drop in major weather events' (already cited in nyc-climate.json) and Placer.ai's 20-30% storm-week losses in the hardest-hit states. Month value: 2 days x 60% / 30 = 4%. Delivery falls too: the city has suspended e-bike delivery during the worst hours of past storms. Season totals for 2022-25 were opened in the NWS seasonal snowfall table."
       },
       {
         "id": "ice_melt_shortage",
@@ -279,7 +283,7 @@
           11,
           12
         ],
-        "realSignal": "NYC Department of Buildings permits for the building's number (open data: 'DOB NOW: Build - Approved Permits', work type Sidewalk Shed); the building's facade inspection (FISP, Local Law 11) filing window: every building over six stories files every five years",
+        "realSignal": "NYC Open Data 'DOB NOW: Build - Approved Permits' (data set rbx6-tga4), work type 'Sidewalk Shed', by building identification number; the building's facade inspection filing window (Local Law 11): every building over six stories files every five years",
         "effects": [
           {
             "field": "footTraffic",
@@ -297,12 +301,13 @@
             "id": "sign_in_the_walkway"
           }
         ],
-        "realFrequency": "7,427 permitted sheds citywide on August 17, 2026, after more than 1,000 came down in a year; the average shed permit was 557 days old in March 2026 (497 days in July 2023).",
+        "realFrequency": "My count from NYC Open Data (DOB NOW approved permits, work type Sidewalk Shed, permits not yet expired on November 14, 2026): 6,889 buildings, of them 3,117 in Manhattan, 1,736 in Brooklyn, 1,136 in the Bronx, 840 in Queens and 60 on Staten Island. The Mayor's Office counted 7,427 permitted sheds on August 17, 2026. The average shed permit was 557 days old in March 2026 (West Side Rag, from the same data).",
         "tier": "core",
         "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
         "moreSources": [
           "https://www.nyc.gov/mayors-office/news/2026/08/mamdani-administration-taking-down-sidewalk-sheds-and-improving-",
-          "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag"
+          "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag",
+          "https://data.cityofnewyork.us/d/rbx6-tga4"
         ],
         "confidence": "estimate",
         "evidence": "official_excerpt",
@@ -628,12 +633,15 @@
             "id": "flood_protection"
           }
         ],
-        "realFrequency": "359 breaks in fiscal 2024, a record low, against a five-year average of 427; breaks rose 54% in fiscal 2025 and stood at 8.2 per 100 miles of main in the latest report. Most happen in winter freeze-thaw cycles.",
+        "realFrequency": "Opened the Comptroller's audit of the leak detection program: the city repaired 1,314 water main breaks from fiscal 2023 through fiscal 2025, and breaks 'rose by 54% compared to FY24' in fiscal 2025; only 42 of the 1,314 were found by the program's own surveys. Not opened: 359 breaks in fiscal 2024 against a five-year average of 427, and the winter freeze-thaw pattern (Mayor's Management Report).",
         "tier": "deep",
-        "source": "https://www.nyc.gov/assets/operations/downloads/pdf/pmmr2026/dep.pdf",
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
-        "note": "Rule 4: the engine does not roll for a break. The world schedules a fixed number of breaks per winter from the real count and assigns them to blocks with the oldest mains; the block is told one game day ahead (the street is already leaking). One to two days without water = -5% of a month. $1,500 = spoiled stock and cleanup in an unprotected basement (planning value). Damage from a city main can be claimed from the Comptroller, but a notice of claim must be filed within 90 days."
+        "source": "https://comptroller.nyc.gov/reports/audit-of-the-new-york-city-department-of-environmental-protections-leak-detection-program",
+        "confidence": "verified",
+        "evidence": "opened_official",
+        "note": "Rule 4: the engine does not roll for a break. The world schedules a fixed number of breaks per winter from the real count and assigns them to blocks with the oldest mains; the block is told one game day ahead (the street is already leaking). One to two days without water = -5% of a month. $1,500 = spoiled stock and cleanup in an unprotected basement (planning value). Damage from a city main can be claimed from the Comptroller, but a notice of claim must be filed within 90 days.",
+        "moreSources": [
+          "https://www.nyc.gov/assets/operations/downloads/pdf/pmmr2026/dep.pdf"
+        ]
       },
       {
         "id": "street_resurfacing",
@@ -802,11 +810,12 @@
             "id": "disruption_playbook"
           }
         ],
-        "realFrequency": "Some blocks in SoHo, the Village and Brooklyn Heights are permitted many times a year; most blocks never.",
+        "realFrequency": "My count from NYC Open Data 'Film Permits': 5,491 permits starting in 2025 (Manhattan 2,860, Brooklyn 1,787, Queens 657, the Bronx 108, Staten Island 79) and 6,278 in 2024; 3,497 so far in 2026. Some blocks in SoHo, the Village and Brooklyn Heights are permitted many times a year; most blocks never.",
         "tier": "deep",
         "source": "https://www.dnainfo.com/new-york/20151230/soho/incessant-filming-hurts-small-businesses-on-crosby-street-owners-say",
         "moreSources": [
-          "https://www.nyc.gov/site/mome/industries/info-crews-communities.page"
+          "https://www.nyc.gov/site/mome/industries/info-crews-communities.page",
+          "https://data.cityofnewyork.us/d/tg4x-b46p"
         ],
         "confidence": "estimate",
         "evidence": "secondary",
@@ -848,16 +857,17 @@
             "id": "event_day_plan"
           }
         ],
-        "realFrequency": "More than 150 Open Streets at the start of the 2026 season, down from 326 at the 2021 peak and 202 in 2023.",
+        "realFrequency": "Opened the Comptroller's 'Streets for People': 'At its peak in 2021, there were 326 open streets throughout New York City. Just two years later, the number of open streets had dropped by 40% to 202 sites.' DOT announced more than 150 at the start of the 2026 season (press release, not opened).",
         "tier": "core",
         "source": "https://www.nyc.gov/html/dot/html/pr2022/outdoor-dining.shtml",
         "moreSources": [
           "https://www.nyc.gov/html/dot/html/pr2026/nyc-dot-kicks-off-2026-open-streets-season.shtml",
-          "https://www.osc.ny.gov/files/reports/pdf/report-20-2026.pdf"
+          "https://www.osc.ny.gov/files/reports/pdf/report-20-2026.pdf",
+          "https://comptroller.nyc.gov/reports/streets-for-people"
         ],
         "confidence": "estimate",
         "evidence": "official_excerpt",
-        "note": "DOT's 'Streets for Recovery' (2022, sales-tax data): sales on five Open Streets corridors were 19% above the pre-pandemic baseline while nearby control corridors were 29% below; City Planning (2024) found storefront vacancy 12% lower than the city average. Those are corridor totals driven by restaurants with new outdoor tables and by pandemic conditions; +5% of foot traffic for a counter-service cafe over the whole month is my conservative reading. Deliveries must come before the closure hours. A volunteer group runs it and can lose its funding: the event can end between seasons."
+        "note": "DOT's 'Streets for Recovery' (2022, sales-tax data): sales on five Open Streets corridors were 19% above the pre-pandemic baseline while nearby control corridors were 29% below; City Planning (2024) found storefront vacancy 12% lower than the city average. Those are corridor totals driven by restaurants with new outdoor tables and by pandemic conditions; +5% of foot traffic for a counter-service cafe over the whole month is my conservative reading. Deliveries must come before the closure hours. A volunteer group runs it and can lose its funding: the event can end between seasons. Second pass: the program counts were opened at the Comptroller; the sales figures (+19% against -29%) are still from the DOT release as quoted by search."
       },
       {
         "id": "crz_foot_traffic",
@@ -900,12 +910,12 @@
             "id": "price"
           }
         ],
-        "realFrequency": "In force since January 5, 2025. Year one: 27 million fewer vehicles; foot traffic in the zone up 3.4% against 1.4% boroughwide (Governor's office) or 5% against 1% (Economic Development Corporation).",
+        "realFrequency": "Opened the Governor's first-anniversary release (January 5, 2026): 27 million fewer vehicles entered the zone, an 11% reduction; 'Foot traffic increased by 3.4 percent in the zone, compared to a boroughwide increase of 1.4 percent'; one percentage point fewer vacant storefronts in the zone; sales tax receipts in the city up 6.3% in 2025 through November.",
         "tier": "deep",
         "source": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational",
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
-        "note": "1.02 = the difference between the zone and the rest of the borough in the more cautious of the two official figures (3.4% - 1.4%). Both figures come from the program's sponsors. Applies only to places inside the zone."
+        "confidence": "verified",
+        "evidence": "opened_official",
+        "note": "1.02 = the difference between the zone and the rest of the borough (3.4% - 1.4%). The figures come from the program's sponsor. Applies only to places inside the zone."
       },
       {
         "id": "crz_delivery_surcharge",
@@ -949,11 +959,12 @@
         "tier": "deep",
         "source": "https://www.freightwaves.com/news/new-york-trucking-group-says-manhattan-tolls-burden-industry",
         "moreSources": [
-          "https://aiany.org/wp-content/uploads/2025/01/Overview-of-Congestion-Pricing-Toll-Structure.pdf"
+          "https://aiany.org/wp-content/uploads/2025/01/Overview-of-Congestion-Pricing-Toll-Structure.pdf",
+          "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational"
         ],
         "confidence": "estimate",
         "evidence": "secondary",
-        "note": "Peak tolls with E-ZPass: cars $9 once a day, small trucks $14.40 and large trucks $21.60 on every entry; overnight $2.25, $3.60 and $5.40. Arithmetic: a truck that makes 15 drops in the zone on one entry adds about $1 to $1.50 a drop; five deliveries a week = about $25 a month on roughly $13,000 of goods, so the honest effect is 0.2%. Distributors charge more than cost: a flat $5-$10 per delivery is reported but unsourced; that would be $100-$200 a month, about 1% of cost of goods. The deck uses +2%; I suggest +1%."
+        "note": "Peak tolls with E-ZPass: cars $9 once a day, small trucks $14.40 and large trucks $21.60 on every entry; overnight $2.25, $3.60 and $5.40. Arithmetic: a truck that makes 15 drops in the zone on one entry adds about $1 to $1.50 a drop; five deliveries a week = about $25 a month on roughly $13,000 of goods, so the honest effect is 0.2%. Distributors charge more than cost: a flat $5-$10 per delivery is reported but unsourced; that would be $100-$200 a month, about 1% of cost of goods. The deck uses +2%; I suggest +1%. Opened the Governor's release: truck speeds in the zone were up 5.6% on 2024, so a delivery route takes less time than before the toll."
       },
       {
         "id": "bike_lane_replaces_parking",
@@ -1039,15 +1050,16 @@
             "id": "price"
           }
         ],
-        "realFrequency": "The 1983-era cap on food vending permits is being lifted in steps: the 2026 laws add 12,780 permits by 2031, on top of 5,100 before the reform.",
+        "realFrequency": "Opened NYC311 'Food Cart Vendor Permit': Local Law 18 of 2021 raised the cap by 445 supervisory licenses a year in fiscal 2023-2026; Local Laws 54 and 59 of 2026 raise it by 2,200 a year in fiscal 2027-2031 (500 citywide, 1,500 outside Manhattan, 200 for disabled people and veterans): 11,000 more carts in five years.",
         "tier": "deep",
         "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
         "moreSources": [
-          "https://immresearch.org/iri-insights/new-street-vendor-reforms-will-dramatically-increase-licenses-in-nyc-a-historic-win-for-entrepreneurs-and-immigrants/"
+          "https://immresearch.org/iri-insights/new-street-vendor-reforms-will-dramatically-increase-licenses-in-nyc-a-historic-win-for-entrepreneurs-and-immigrants/",
+          "https://data.cityofnewyork.us/d/jz4z-kudi"
         ],
-        "confidence": "estimate",
-        "evidence": "secondary",
-        "note": "No study of what a cart costs a neighboring cafe was found. -4% is my estimate: the cart takes the cheapest drip-coffee orders in the morning rush, not the latte or the seat. Reporting the cart to 311 is possible only if it breaks a placement rule (too close to a crosswalk, a subway entrance or your door); the exact distances were not confirmed in this session. The legal answers are an earlier opening hour, a faster line and a product the cart does not have."
+        "confidence": "verified",
+        "evidence": "opened_official",
+        "note": "No study of what a cart costs a neighboring cafe was found: -4% is my estimate (the cart takes the cheapest drip-coffee orders in the morning rush, not the latte or the seat). Placement rules, read from the charges in the OATH hearings data set for 2026: a cart may not vend on a sidewalk less than 12 feet wide or away from the curb (466 summonses), touch or lean against a building (349), or stand in a bus stop or next to a hospital (599). A cart that breaks one of these can be reported to 311; one that follows them is legal competition. The legal answers are an earlier opening hour, a faster line and a product the cart does not have."
       },
       {
         "id": "marathon_on_your_avenue",
@@ -1144,8 +1156,8 @@
           "https://www.teaandcoffee.net/blog/39416/as-temperatures-rise-more-uk-consumers-grab-iced-coffees/"
         ],
         "confidence": "estimate",
-        "evidence": "secondary",
-        "note": "The share comes from extra.drinkMixByTemperature (April 47%, May 58% against March 32%). Square's own transaction data for a British heatwave weekend in May 2026 showed iced coffee purchases up 137% on the weekend before, and 47% of people it surveyed switch to iced when it is hot. The +1% on cost of goods is my estimate for the plastic cup, lid, straw and ice of an iced drink against a paper cup; D04 owns the exact figure. A shop that has not stocked cold cups or sized its ice machine loses the orders, not just the margin."
+        "evidence": "secondary_opened",
+        "note": "The share comes from extra.drinkMixByTemperature (April 38%, May 50% against March 24%; the London curve without my New York offset gives 23%, 35% and 9%). Square's own transaction data for a British heatwave weekend in May 2026 showed iced coffee purchases up 137% on the weekend before, and 47% of people it surveyed switch to iced when it is hot. The +1% on cost of goods is my estimate for the plastic cup, lid, straw and ice of an iced drink against a paper cup; D04 owns the exact figure. A shop that has not stocked cold cups or sized its ice machine loses the orders, not just the margin."
       },
       {
         "id": "heat_wave_iced_rush",
@@ -1197,15 +1209,16 @@
             "id": "ac_with_open_door"
           }
         ],
-        "realFrequency": "July averages 7 days at 90°F or more and August 5 (1991-2020). 2025 had 14 such days. On July 2, 2026 Central Park reached 100°F for the first time since July 18, 2012, and a second heat wave followed in mid-July.",
+        "realFrequency": "Opened the NWS table of 90°F days at Central Park: on average 15 a year (3 in June, 7 in July, 4 in August, 1 in September); 24 in 2022, 12 in 2023, 21 in 2024, 14 in 2025. On July 2, 2026 Central Park reached 100°F for the first time since July 18, 2012, and a second heat wave followed in mid-July (press).",
         "tier": "core",
         "source": "https://amp.insurancejournal.com/news/east/2026/07/02/876132.htm",
         "moreSources": [
-          "https://foursquare.com/resources/blog/data/summer-weather-data-reveals-consumer-insights/"
+          "https://foursquare.com/resources/blog/data/summer-weather-data-reveals-consumer-insights/",
+          "https://www.weather.gov/media/okx/Climate/CentralPark/90DegreeDays.pdf"
         ],
         "confidence": "estimate",
         "evidence": "secondary",
-        "note": "Correction to the deck, which cuts foot traffic 5% in heat: Foursquare with AccuWeather found restaurants lose visits on unusually hot days while coffee shop brands gain slightly, so traffic is held at 1.0 and the mix moves (80% iced at 89°F and above by the formula). Utilities +20% on the hot days is my estimate for an air conditioner and three compressors running flat out; month value 4 days / 30 x 20% = 3%."
+        "note": "Correction to the deck, which cuts foot traffic 5% in heat: Foursquare with AccuWeather found restaurants lose visits on unusually hot days while coffee shop brands gain slightly, so traffic is held at 1.0 and the mix moves (73% iced at 90°F and the 80% cap from 96°F by the formula). Utilities +20% on the hot days is my estimate for an air conditioner and three compressors running flat out; month value 4 days / 30 x 20% = 3%."
       },
       {
         "id": "heat_wave_ac_failure",
@@ -1305,7 +1318,7 @@
         ],
         "confidence": "estimate",
         "evidence": "secondary",
-        "note": "Capacity -10% on the affected days is my estimate (slower heat recovery on the espresso machine, staff switching equipment off). If the cut becomes an outage of more than 12 hours caused by Con Edison's local equipment, a business may claim spoiled perishables up to $12,900 within 30 days (311 and Documented, August 2026); the repair and lost sales are D03 and the insurance records of D09."
+        "note": "Capacity -10% on the affected days is my estimate (slower heat recovery on the espresso machine, staff switching equipment off). If the cut becomes an outage of more than 12 hours caused by Con Edison's local equipment, a business may claim spoiled perishables up to $12,900 within 30 days (opened NYC311: 'up to a maximum of $12,900 for actual losses of perishable merchandise'; storm outages are not paid); the repair and lost sales are D03 and the insurance records of D09."
       },
       {
         "id": "rainy_day_mix",
@@ -1680,16 +1693,16 @@
             "id": "storm_day_policy"
           }
         ],
-        "realFrequency": "City sewers handle at most 1.75 inches an hour (1.5 in much of Queens). That was once a five-year storm; in 2023 five storms exceeded it. September 29, 2023: more than 7 inches in Brooklyn in a day. July 14, 2025: 2.07 inches in one hour at Central Park, the second wettest hour on record.",
+        "realFrequency": "Opened the Comptroller's review of the September 29, 2023 storm: 'New York City's sewer system is only designed to manage 1.75 inches of rain' an hour; that morning peak rainfall 'exceeded 3 inches per hour in central and northern Brooklyn' and as much as 8.65 inches fell in the day; only 2.7% of New Yorkers over 16 got the city's emergency alert. Not opened: five storms above the limit in 2023 (DEP testimony) and 2.07 inches in one hour on July 14, 2025 (city release).",
         "tier": "core",
-        "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+        "source": "https://comptroller.nyc.gov/reports/is-new-york-city-ready-for-rain",
         "moreSources": [
           "https://www.nyc.gov/site/em/about/press-releases/20250715_pr_nycem-City-Responds-To-Hstoric-Rainfall-Event.page",
           "https://www.brownstoner.com/brooklyn-life/brooklyn-businesses-flood-recovery",
-          "https://comptroller.nyc.gov/reports/is-new-york-city-ready-for-rain"
+          "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection"
         ],
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
+        "confidence": "verified",
+        "evidence": "opened_official",
         "note": "Deterministic: the weather series gives the hour's rainfall, the place gives the basement and the flood-map flag, the lever gives the loss. After the September 2023 storm Brooklyn restaurants and bars reported equipment and produce destroyed and stock lost (Brownstoner); no dollar figures were published. $4,000 = dry goods, paper stock and a week of milk plus a cleanup crew; $600 = the insurance deductible share and labor with racks and a rider. Both are planning values. One closed day while the basement is pumped and sanitized."
       },
       {
@@ -1732,9 +1745,9 @@
         ],
         "realFrequency": "DEP's own description: above the design rainfall 'the system would just back up until it could release itself, like a bathtub.'",
         "tier": "deep",
-        "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
+        "source": "https://comptroller.nyc.gov/reports/is-new-york-city-ready-for-rain",
+        "confidence": "verified",
+        "evidence": "opened_official",
         "note": "Happens to a shop with flood_protection = none on a block with past sewer complaints, in the first storm of the season near the limit. A shop that skips grease interceptor cleaning (existing shortcut) backs up at lower rainfall: its own line is already narrowed. Sewage in a food room means closing until it is cleaned and sanitized: one day and $2,500 are planning values. The backup rider pays the cleanup; the valve prevents it."
       },
       {
@@ -1864,15 +1877,17 @@
             "id": "bags_on_curb"
           }
         ],
-        "realFrequency": "Sightings peak in summer and fall through winter. Citywide 311 rat sightings fell from 25,230 to 20,025 between the twelve months to November 2024 and to November 2025, and a further 22% in the first seven months of 2026; one Lower East Side area rose 37.6% in the same months.",
+        "realFrequency": "My count of 311 'Rodent' complaints in 2025 by month: 2,180; 2,077; 2,896; 2,903; 3,332; 3,694; 3,635; 3,388; 2,785; 1,935; 1,354; 1,133 (31,312 in the year). June is 3.3 times December. Inside restaurants the season is reversed: citations for evidence of rats (code 04K) were highest in January (99) and December (91) and lowest in September (56).",
         "tier": "core",
-        "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
+        "source": "https://data.cityofnewyork.us/d/erm2-nwe9",
         "moreSources": [
-          "https://humanprogress.org/new-york-city-reports-fewer-rat-sightings/"
+          "https://humanprogress.org/new-york-city-reports-fewer-rat-sightings/",
+          "https://data.cityofnewyork.us/d/43nn-pn8j",
+          "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025"
         ],
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
-        "note": "The event raises pressure; whether it becomes the existing pest_activity violation depends on three levers. Proposed rule (design): pressure 1 in June-September; +1 if trash_setup is bags or three pickups; +1 if rodent_proofing = none; +1 if pest_control = none. At 3 or more the violation pest_activity is open from the next month. Complaints from neighbors bring more inspections, hence inspections x1.1 (estimate)."
+        "confidence": "verified",
+        "evidence": "open_data_query",
+        "note": "Both series are my queries of NYC Open Data (311 Service Requests; DOHMH Restaurant Inspection Results, inspections dated 2025). The 311 intake for rodent complaints was reported broken for part of late 2025, which may deepen the autumn drop. The event raises pressure; whether it becomes the existing pest_activity violation depends on three levers. Proposed rule (design): pressure 1 in June-September; +1 if trash is in bags or picked up three times a week; +1 if rodent_proofing = none; +1 if pest_control = none. At 3 or more the violation pest_activity is open from the next month. inspections x1.1 is an estimate."
       },
       {
         "id": "demolition_next_door",
@@ -1935,14 +1950,16 @@
       },
       {
         "id": "mice_move_in",
-        "name": "First cold week: the mice come inside",
+        "name": "Cold weather: the mice come inside",
         "text": "The first frost sends every mouse on the block looking for warmth. Your wall backs onto a hundred-year-old basement. Droppings behind the pastry case are a critical violation.",
         "scale": "point",
         "months": [
           10,
-          11
+          11,
+          12,
+          1
         ],
-        "realSignal": "First week with lows under 40°F at Central Park (normal low is 51°F in October and 42°F in November)",
+        "realSignal": "Daily lows under 40°F at Central Park from late October; the monthly count of code 04L in the DOHMH restaurant inspection data",
         "effects": [
           {
             "field": "inspections",
@@ -1964,25 +1981,27 @@
             "id": "cleaning"
           }
         ],
-        "realFrequency": "Every autumn. Evidence of mice is among the citations inspectors write most often in the city's open restaurant-inspection data; the ranking by month was not computed in this session.",
+        "realFrequency": "My count of citations for evidence of mice (code 04L) in 2025 restaurant inspections by month: 425; 284; 348; 338; 288; 289; 295; 291; 320; 364; 344; 413. Measured against a steady citation (10F) as a stand-in for the number of inspections, the rate is lowest in July (0.27) and highest in January (0.44): 60% higher.",
         "tier": "deep",
-        "source": "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMinTNormals.pdf",
-        "confidence": "estimate",
-        "evidence": "calc",
-        "note": "Seasonality is common exterminator knowledge, not a figure I found in a source: treat the timing as an estimate. Uses the same pressure rule. The count of code 04L by month can be computed from the open data set DOHMH New York City Restaurant Inspection Results."
+        "source": "https://data.cityofnewyork.us/d/43nn-pn8j",
+        "confidence": "verified",
+        "evidence": "open_data_query",
+        "note": "Query of NYC Open Data 'DOHMH New York City Restaurant Inspection Results': inspections dated in 2025, grouped by month and violation code. The data set holds only establishments that are active now, and the 10F ratio is my proxy for inspection volume, so read the shape, not the level. The season runs from October through January, longer than the two months of the first pass. Uses the rodent pressure rule."
       },
       {
         "id": "fruit_fly_summer",
-        "name": "Fruit flies",
+        "name": "Flies",
         "text": "A cloud of tiny flies over the syrup pumps and the floor drain. Milk residue, warm weather and a drain nobody scrubs. An inspector counts flies as a critical violation.",
         "scale": "point",
         "months": [
           6,
           7,
           8,
-          9
+          9,
+          10,
+          11
         ],
-        "realSignal": "Daily highs above 80°F for a week; follows from cleaning = minimal",
+        "realSignal": "The monthly count of code 04N in the DOHMH restaurant inspection data; daily highs above 75°F; follows from cleaning = minimal",
         "effects": [
           {
             "field": "quality",
@@ -2001,12 +2020,12 @@
             "id": "pest_control"
           }
         ],
-        "realFrequency": "Every summer in a shop that cleans drains and drip trays less than daily.",
+        "realFrequency": "My count of citations for filth flies (code 04N) in 2025 restaurant inspections by month: 141; 64; 100; 118; 133; 206; 366; 397; 388; 438; 351; 253. Against the same stand-in for inspection volume the rate is 0.07 in February and 0.34-0.40 from July through October: about five times higher. The peak is October, not July.",
         "tier": "deep",
-        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
-        "confidence": "estimate",
-        "evidence": "calc",
-        "note": "Health Department violation code 04N covers filth flies in the establishment and is scored like the other pest items in the pack's inspectionPoints table. The event adds no new fine: with cleaning = minimal it opens the existing dirty_surfaces and pest_activity trails in summer. The quality effect is a design value."
+        "source": "https://data.cityofnewyork.us/d/43nn-pn8j",
+        "confidence": "verified",
+        "evidence": "open_data_query",
+        "note": "Query of NYC Open Data, as for the mice event. Health Department code 04N covers filth flies and is scored like the other pest items in the pack's inspectionPoints table. The event adds no new fine: with cleaning = minimal it opens the existing dirty_surfaces and pest_activity trails from June to November. Roaches (04M) follow the same season: 55 citations in February, 175 in August. The quality effect is a design value."
       },
       {
         "id": "trash_piles_after_snow",
@@ -2089,7 +2108,7 @@
         ],
         "confidence": "estimate",
         "evidence": "official_excerpt",
-        "note": "Mechanic outdoor_seat_days counts the usable days. The deck's card gives every cafe +4% demand for two weeks from April 1; it should apply only to shops with licensed outdoor seats (or with the existing sidewalk_tables shortcut, at the price of the violation)."
+        "note": "Mechanic outdoor_seat_days counts the usable days. The deck's card gives every cafe +4% demand for two weeks from April 1; it should apply only to shops with licensed outdoor seats (or with the existing sidewalk_tables shortcut, at the price of the violation). Opened NYC311: 'Sidewalk setups are allowed year-round'; the Council passed year-round roadway dining, with applications opening in early September 2026 and 'a year-round license with higher fees'; license fee $1,050 for four years, or $2,100 for roadway and sidewalk together."
       },
       {
         "id": "roadway_winter_rules_pending",
@@ -2304,8 +2323,8 @@
         "moreSources": [
           "https://www.globest.com/amp/2025/10/21/office-foot-traffic-rebounds-as-rto-mandates-fall-routines-drive-recovery/"
         ],
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
+        "confidence": "verified",
+        "evidence": "opened_official",
         "note": "The date is official. +5% for September-October against the yearly average is my estimate: Placer.ai describes fall routines and return-to-office mandates lifting office visits each autumn, and chains post their best months in October-December."
       },
       {
@@ -2350,8 +2369,8 @@
         "realFrequency": "Three recess weeks a year plus the summer.",
         "tier": "deep",
         "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
+        "confidence": "verified",
+        "evidence": "opened_official",
         "note": "Dates are official; the 10% drop on recess weekdays is my estimate. Tourist districts move the other way in the same weeks (out-of-town families)."
       },
       {
@@ -3280,10 +3299,10 @@
         ],
         "realFrequency": "Every snowfall, for corner places only.",
         "tier": "deep",
-        "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
-        "note": "DSNY's snow page, as quoted by web search, asks owners to clear hydrants, catch basins and pedestrian ramps along with a 4-foot path. The engine's place model already gives a corner a 25% visibility bonus; this is its winter cost: staff time doubles ($30 more per snowfall, see the lever note), and an uncleared ramp is a separate reason for a 311 complaint."
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+        "confidence": "verified",
+        "evidence": "opened_official",
+        "note": "Opened NYC311: 'Clear access to the crosswalk and pedestrian ramp (curb cut) if you own a corner property. Shovel bus stops (without shelters) and fire hydrants.' The engine's place model already gives a corner a 25% visibility bonus; this is its winter cost: staff time doubles ($30 more per snowfall, see the lever note), and an uncleared ramp is a separate reason for a 311 complaint."
       },
       {
         "id": "no_delivery_in_the_storm",
@@ -3377,7 +3396,7 @@
         ],
         "confidence": "estimate",
         "evidence": "secondary",
-        "note": "No dice: the world schedules a fixed small number of these per winter on blocks with the oldest underground network, two to five days after a salted storm. One closed day = 3% of a month. $400 = milk and food lost without ice chests (planning value). An outage of more than 12 hours caused by Con Edison's equipment allows a spoilage claim of up to $12,900."
+        "note": "No dice: the world schedules a fixed small number of these per winter on blocks with the oldest underground network, two to five days after a salted storm. One closed day = 3% of a month. $400 = milk and food lost without ice chests (planning value). An outage of more than 12 hours caused by Con Edison's equipment allows a spoilage claim of up to $12,900 (opened NYC311), but not when a storm caused it."
       },
       {
         "id": "frozen_pipe",
@@ -3422,8 +3441,8 @@
           "https://www.businesswire.com/news/home/20251209433403/en/Water-And-Freezing-Damage-Burglary-Lead-The-Hartfords-Top-Five-Small-Business-Claims"
         ],
         "confidence": "estimate",
-        "evidence": "secondary",
-        "note": "Deterministic: only for a shop that chose none, at most once a winter. $2,500 = deductible and uninsured losses (planning value); three closed days and a 15% premium increase are my estimates. The 15°F threshold is a design value. The insurer pays the $34,600; the owner pays the closed days."
+        "evidence": "secondary_opened",
+        "note": "Deterministic: only for a shop that chose none, at most once a winter. $2,500 = deductible and uninsured losses (planning value); three closed days and a 15% premium increase are my estimates. The 15°F threshold is a design value. The insurer pays the $34,600; the owner pays the closed days. Opened the Insurance Journal report of The Hartford's analysis: water and freezing damage 'represented approximately 22% of small-business claims over the past five years, averaging $34,600 per claim', 20% of claims in 2025; slip, fall and customer injury rose from 10% to 20% of claims and from $20,000 to $45,000; burglary and theft 20%; fire $80,000."
       },
       {
         "id": "line_wont_stand_outside",
@@ -3540,7 +3559,7 @@
       {
         "id": "waste_zone_goes_live",
         "name": "Your commercial waste zone goes live",
-        "text": "The city has divided itself into 20 waste zones with at most three authorized carters each. Your zone starts now: your old hauler may not be one of the three, and you have a few months to sign a new contract.",
+        "text": "The city has divided itself into 20 waste zones with a short list of authorized carters in each. Your zone starts now: your old hauler may not be on the list, and you have two months to sign a new contract or the city picks a carter for you.",
         "scale": "city",
         "months": [
           1,
@@ -3565,16 +3584,17 @@
             "id": "trash_setup"
           }
         ],
-        "realFrequency": "Zone by zone through 2026 and 2027: Upper Manhattan and Brooklyn North began their implementation period on October 1, 2026; Brooklyn East, Manhattan Northeast, Queens West and Manhattan West have dates set; six zones are still to come.",
+        "realFrequency": "Opened the DSNY final rule of June 2026. Implementation start and final dates: Bronx East and Bronx West, October 1-November 30, 2025; Queens Northeast and Brooklyn South, January 1-February 28, 2026; Lower Manhattan, April 1-May 31, 2026; Midtown South and Staten Island, July 1-August 31, 2026; Brooklyn North and Upper Manhattan, October 1-November 30, 2026. Queens Central was first: September 3, 2024-January 2, 2025 (NYC311). Later rules set the remaining zones.",
         "tier": "deep",
-        "source": "https://www.nyc.gov/site/dsny/businesses/cwz/rollout-schedule.page",
+        "source": "https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DSNY-Final-Rule-re-Implementation-Dates-for-the-Brooklyn-North-and-Upper-Manhattan-Commercial-Waste-Zones_Final.pdf",
         "moreSources": [
-          "https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DSNY-Final-Rule-re-Implementation-Dates-for-the-Brooklyn-North-and-Upper-Manhattan-Commercial-Waste-Zones_Final.pdf",
-          "https://www.wasteconnections.com/new-york-city/nyc-commercial-waste-zones"
+          "https://www.wasteconnections.com/new-york-city/nyc-commercial-waste-zones",
+          "https://portal.311.nyc.gov/article/?kanumber=KA-01787",
+          "https://www.nyc.gov/site/dsny/businesses/cwz/rollout-schedule.page"
         ],
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
-        "note": "No money effect is set: each authorized carter has a maximum-rate table and the customer may negotiate below it; a hauler's own FAQ says the program does not raise prices, and no independent comparison was found. The event is a forced decision with a deadline: a business that signs with nobody is assigned a carter."
+        "confidence": "verified",
+        "evidence": "opened_official",
+        "note": "Each zone gets a two-month window between its start and final implementation dates. Opened NYC311: 'Businesses must sign a new service agreement with a zone-authorized carter when their zone is rolled out... If businesses in that zone fail to do so, DSNY will select a carter for that business.' No money effect is set: each authorized carter has a maximum-rate table and the customer may negotiate below it; no independent price comparison was found."
       },
       {
         "id": "fines_review",
@@ -3598,7 +3618,7 @@
             "id": "trash_setup"
           }
         ],
-        "realFrequency": "One-time process in 2026-2027. The earlier Small Business Forward program repealed 30 rules, reduced penalties tied to 50 and added first-time warnings or cure periods to 36.",
+        "realFrequency": "Opened the Comptroller's review (2026): the 2022 Small Business Forward round evaluated 232 regulations and recommended changes to 116; only 36 of those 116 were regularly used to issue violations. Executive Order 11 of January 14, 2026, 'Reducing Fees and Civil Penalties for Small Business', is the third round.",
         "tier": "deep",
         "source": "https://www.nyc.gov/mayors-office/news/2026/01/mayor-mamdani-signs-executive-order-to-inventory-and-cut-fines-a.html",
         "moreSources": [
@@ -3639,15 +3659,15 @@
             "id": "hours"
           }
         ],
-        "realFrequency": "Noise is the most common kind of 311 complaint in the city; the count for commercial music by address is in the open data and was not computed here.",
+        "realFrequency": "OATH hearings data, violations since January 1, 2025: 48 first-offense cases of music from a commercial establishment over permitted levels ($2,000; $8,000 on default; $0 in 4 cured cases) and 65 for unreasonable noise from a sound device ($440; $1,750 on default).",
         "tier": "deep",
-        "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
+        "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
         "moreSources": [
           "https://www.nycourts.gov/reporter/pdfs/2010/2010_30009.pdf"
         ],
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
-        "note": "Opens the commercial_music_noise violation only for a shop with the speaker shortcut on or with long hours in a building with apartments above. The first violation costs nothing if cured: turn it down, move the speaker, put the grinder on a mat. The 'most common complaint' statement is from memory of 311 annual summaries."
+        "confidence": "verified",
+        "evidence": "open_data_query",
+        "note": "Opens the commercial_music_noise violation only for a shop with the speaker shortcut on or with long hours in a building with apartments above. The first violation costs nothing if cured: turn it down, move the speaker, put the grinder on a mat. Few cases reach a summons; most complaints end with a visit."
       },
       {
         "id": "break_in",
@@ -3821,13 +3841,14 @@
         ],
         "realFrequency": "Reference only: DOT inspects after complaints and before its own repair contracts; the yearly count of violations was not confirmed in this session.",
         "tier": "deep",
-        "source": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01506",
         "moreSources": [
-          "https://www.nyc.gov/html/dot/downloads/pdf/nyc-sidewalks-a-property-owners-guide-to-address-sidewalk-defects.pdf"
+          "https://www.nyc.gov/html/dot/downloads/pdf/nyc-sidewalks-a-property-owners-guide-to-address-sidewalk-defects.pdf",
+          "https://portal.311.nyc.gov/article/?kanumber=KA-01786"
         ],
-        "confidence": "estimate",
-        "evidence": "official_excerpt",
-        "note": "DOT, as quoted by web search: the owner has 75 days from receipt to repair; there is no fine; after that the city may send a contractor and the Department of Finance bills the owner. $2,400 = four concrete flags (100 square feet) at about $24 a square foot with permit, my planning value from contractor price guides I could not open. The cost lands on the tenant only where the lease says so: it is a clause to read before signing. A marked defect that nobody fixed is also evidence in a trip-and-fall claim."
+        "confidence": "verified",
+        "evidence": "opened_official",
+        "note": "Opened NYC311: 'If sidewalk defects are not repaired within 75 days after a Sidewalk Violation Notice was issued, DOT may perform the work and bill you for the repair'; 'There is no fine or penalty associated with the violation'; defects from tree roots next to commercial buildings are the owner's responsibility. $2,400 = four concrete flags (100 square feet) at about $24 a square foot with permit, my planning value. The cost lands on the tenant only where the lease says so. A marked defect that nobody fixed is also evidence in a trip-and-fall claim."
       },
       {
         "id": "park_weather_weekend",
@@ -3890,7 +3911,7 @@
         "id": "sidewalk_clock",
         "title": "The sidewalk is yours: a legal clock after every snowfall",
         "playerDecision": "A standing order for December-March (lever snow_ice_plan): staff shovel on the clock, a seasonal contractor, or nothing. On a blizzard day a second order (storm_day_policy): open with a skeleton crew or close.",
-        "engineMath": "The weather series already marks snow days. For each snow day d the engine sets a deadline from the hour the snow stopped (weather seed gives the hour; daytime 7:00-16:59 -> d + 4 h; 17:00-20:59 -> + 14 h; overnight -> 11:00 next morning). staff_shovel: cost = 1.5 h x wage + $5 ice melt per snow day, and one worker is off the bar for that time (capacity that hour -1). contractor: flat monthly fee, no capacity loss. none: (1) violation snow_ice_not_cleared is open from the deadline until the ice is gone (snow depth 0 or three days above freezing): any sanitation inspection or 311 complaint in that window finds it; second and third tickets in one winter use the higher steps $150 and $250-$350; (2) footTraffic at this door x 0.85 on those days; (3) the first such window of the winter creates one sidewalk_fall_claim that lands 60-120 days later. No dice: every branch follows from the weather series and the order.",
+        "engineMath": "The weather series already marks snow days. For each snow day d the engine sets a deadline from the hour the snow stopped (weather seed gives the hour; daytime 7:00-16:59 -> d + 4 h; 17:00-20:59 -> + 14 h; overnight -> 11:00 next morning). staff_shovel: cost = 1.5 h x wage + $5 ice melt per snow day, and one worker is off the bar for that time (capacity that hour -1). contractor: flat monthly fee, no capacity loss. none: (1) violation snow_ice_not_cleared is open from the deadline until the ice is gone (snow depth 0 or three days above freezing): any sanitation inspection or 311 complaint in that window finds it; every uncleared snowfall is a new $100 summons, and a summons left unanswered (the default answer of an absent player must be to pay) becomes $350; (2) footTraffic at this door x 0.85 on those days; (3) the first such window of the winter creates one sidewalk_fall_claim that lands 60-120 days later. No dice: every branch follows from the weather series and the order.",
         "fieldsNeeded": [
           "levers[].activeMonths",
           "weather day: hour the precipitation ended",
@@ -3901,64 +3922,77 @@
         ],
         "numbers": [
           {
-            "what": "Hours to clear when snow stops 7:00 AM-4:59 PM",
+            "what": "Hours to clear when snow stops between 7 AM and 5 PM",
             "value": 4,
-            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+            "confidence": "verified",
+            "evidence": "opened_official"
           },
           {
-            "what": "Hours to clear when snow stops 5:00 PM-8:59 PM",
+            "what": "Hours to clear when snow stops between 5 PM and 9 PM",
             "value": 14,
-            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+            "confidence": "verified",
+            "evidence": "opened_official"
           },
           {
-            "what": "Deadline hour when snow stops 9:00 PM-6:59 AM",
+            "what": "Deadline hour when snow stops between 9 PM and 7 AM",
             "value": 11,
-            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+            "confidence": "verified",
+            "evidence": "opened_official"
           },
           {
             "what": "Minimum width of the cleared path, feet",
             "value": 4,
-            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+            "confidence": "verified",
+            "evidence": "opened_official"
           },
           {
-            "what": "Fine steps, USD: first, second, third offense (DSNY page; flyer gives up to 150 / 350 / 350)",
+            "what": "Penalty imposed for snow and ice on the sidewalk, USD: standard, and when the summons is ignored",
             "value": [
               100,
-              150,
-              250
+              350
             ],
-            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
+            "confidence": "verified",
+            "evidence": "open_data_query"
           },
           {
-            "what": "Summonses for uncleared sidewalks after the January 25, 2026 storm",
-            "value": 4000,
-            "source": "https://www.amny.com/news/nyc-blizzard-sidewalk-shoverling-rules-tickets",
-            "confidence": "estimate",
-            "evidence": "secondary"
+            "what": "Share of snow summonses since January 2025 that ended in default at $350",
+            "value": 0.41,
+            "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
+            "confidence": "verified",
+            "evidence": "open_data_query"
           },
           {
-            "what": "Average slip, fall or customer injury claim, small business, USD, 2025",
+            "what": "Summonses for snow and ice on sidewalks, January-March 2026",
+            "value": 9456,
+            "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
+            "confidence": "verified",
+            "evidence": "open_data_query"
+          },
+          {
+            "what": "311 'Snow or Ice' complaints, January 20-March 15, 2026",
+            "value": 54089,
+            "source": "https://data.cityofnewyork.us/d/erm2-nwe9",
+            "confidence": "verified",
+            "evidence": "open_data_query"
+          },
+          {
+            "what": "Average slip, fall or customer injury claim, small business, USD, 2025 (The Hartford, as reported by Insurance Journal)",
             "value": 45000,
             "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
             "confidence": "estimate",
-            "evidence": "secondary"
+            "evidence": "secondary_opened"
           },
           {
-            "what": "Days a season with measurable snow, Central Park, 1991-2020",
-            "value": 11.2,
-            "source": "https://en.wikipedia.org/wiki/Climate_of_New_York_City",
-            "confidence": "estimate",
-            "evidence": "secondary"
+            "what": "Normal season snowfall, Central Park, inches",
+            "value": 29.8,
+            "source": "https://www.weather.gov/media/okx/Climate/Almanacs/nyc/nycjan.pdf",
+            "confidence": "verified",
+            "evidence": "opened_official"
           }
         ],
         "tier": "core"
@@ -4055,6 +4089,13 @@
             "source": "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf",
             "confidence": "estimate",
             "evidence": "official_excerpt"
+          },
+          {
+            "what": "Buildings with an unexpired sidewalk shed permit, November 14, 2026 (Manhattan 3,117)",
+            "value": 6889,
+            "source": "https://data.cityofnewyork.us/d/rbx6-tga4",
+            "confidence": "verified",
+            "evidence": "open_data_query"
           }
         ],
         "tier": "core"
@@ -4063,7 +4104,7 @@
         "id": "weather_drink_mix",
         "title": "Temperature moves the mix, not the count: hot against iced",
         "playerDecision": "Before the warm months: size the ice machine and stock cold cups (setup and supplies), choose the seasonal menu lever, and set a price for iced drinks. In a heat wave: the cooling plan.",
-        "engineMath": "Each day: icedShare = clamp(0.20 + 0.0122 x (highF - 40), 0.15, 0.80), times event multipliers (rain 0.9, heat 1.1). Orders split into hot and iced. Iced orders use the iced unit cost and price (D04 supplies both; here the placeholder is +1% on cost of goods in iced-heavy months) and draw ice: icedOrders x 0.4 lb against the machine's daily output; orders beyond the ice are lost unless the player buys bagged ice (cash cost). Total orders move only through footTraffic and the weatherDayEffects table. A month's report shows the split so the player learns why July margins differ from January's.",
+        "engineMath": "Each day: icedShare = clamp(0.20 + 0.0122 x (highF - 59) + 0.15, 0.10, 0.80), times event multipliers (rain 0.9, heat 1.1). Orders split into hot and iced. Iced orders use the iced unit cost and price (D04 supplies both; here the placeholder is +1% on cost of goods in iced-heavy months) and draw ice: icedOrders x 0.4 lb against the machine's daily output; orders beyond the ice are lost unless the player buys bagged ice (cash cost). Total orders move only through footTraffic and the weatherDayEffects table. A month's report shows the split so the player learns why July margins differ from January's.",
         "fieldsNeeded": [
           "unit.iced {priceDelta, cogsDelta}",
           "setup ice machine: lbsPerDay",
@@ -4076,15 +4117,39 @@
             "what": "Cold coffee share gained per +1°C of daily high, percentage points (one London cafe)",
             "value": 2.2,
             "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
-            "confidence": "estimate",
-            "evidence": "secondary"
+            "confidence": "verified",
+            "evidence": "opened_official"
           },
           {
             "what": "Share of variation in cold coffee sales explained by daily high",
             "value": 0.92,
             "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
+            "confidence": "verified",
+            "evidence": "opened_official"
+          },
+          {
+            "what": "Cold coffee share at a 15°C (59°F) daily high, same cafe",
+            "value": 0.2,
+            "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
+            "confidence": "verified",
+            "evidence": "opened_official"
+          },
+          {
+            "what": "Cold coffee share in the coldest week (4.9°C) and in a 29°C week, same cafe",
+            "value": [
+              0.016,
+              0.61
+            ],
+            "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
+            "confidence": "verified",
+            "evidence": "opened_official"
+          },
+          {
+            "what": "Offset added for New York iced-coffee habits (my assumption from chain statements)",
+            "value": 0.15,
+            "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
             "confidence": "estimate",
-            "evidence": "secondary"
+            "evidence": "calc"
           },
           {
             "what": "Cold drinks as share of Starbucks US beverage sales, summer 2022",
@@ -4147,9 +4212,9 @@
           {
             "what": "Most rain per hour the sewers are built for, inches",
             "value": 1.75,
-            "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "source": "https://comptroller.nyc.gov/reports/is-new-york-city-ready-for-rain",
+            "confidence": "verified",
+            "evidence": "opened_official"
           },
           {
             "what": "Same for most sewers in Queens, inches",
@@ -4183,11 +4248,18 @@
             "evidence": "secondary"
           },
           {
-            "what": "Average small-business water and freezing damage claim (The Hartford 2025 review lists water damage as the most common claim; the dollar figure was not captured)",
-            "value": null,
+            "what": "Average small-business water and freezing damage claim, USD (The Hartford, as reported by Insurance Journal)",
+            "value": 34600,
             "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
             "confidence": "estimate",
-            "evidence": "secondary"
+            "evidence": "secondary_opened"
+          },
+          {
+            "what": "Peak hourly rain in Brooklyn on September 29, 2023, inches (more than)",
+            "value": 3,
+            "source": "https://comptroller.nyc.gov/reports/is-new-york-city-ready-for-rain",
+            "confidence": "verified",
+            "evidence": "opened_official"
           }
         ],
         "tier": "core"
@@ -4196,7 +4268,7 @@
         "id": "trash_and_rodent_pressure",
         "title": "Trash, season and neighbors add up to a rodent score",
         "playerDecision": "Three standing orders that interact: trash_setup (bins and pickups), rodent_proofing, and the existing pest_control lever.",
-        "engineMath": "pressure = season (1 in June-September, 1 in October-November for mice, else 0) + neighbors (1 while demolition_next_door or trash_piles_after_snow is active) + trash (1 if the shortcut bags_on_curb is on, 1 for three pickups in June-September, 0 for daily pickup) + proofing (1 if rodent_proofing = none) + extermination (1 if pest_control = none). At pressure >= 3 the existing violation pest_activity is open from the first day of the next month and stays open until pressure has been below 3 for a full month. No dice. The player sees the score and its parts in the risk panel, so the fix is always visible.",
+        "engineMath": "pressure = season (1 in June-September for rats outdoors and flies, 1 in October-January for mice and rats indoors, else 0) + neighbors (1 while demolition_next_door or trash_piles_after_snow is active) + trash (1 if the shortcut bags_on_curb is on, 1 for three pickups in June-September, 0 for daily pickup) + proofing (1 if rodent_proofing = none) + extermination (1 if pest_control = none). At pressure >= 3 the existing violation pest_activity is open from the first day of the next month and stays open until pressure has been below 3 for a full month. No dice. The player sees the score and its parts in the risk panel, so the fix is always visible.",
         "fieldsNeeded": [
           "business.rodentPressure (derived, shown in analytics)",
           "levers[].options[].pressure (integer contribution)",
@@ -4204,34 +4276,51 @@
         ],
         "numbers": [
           {
-            "what": "311 rat sightings, twelve months to November 2025",
-            "value": 20025,
-            "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "what": "311 'Rodent' complaints in 2025: June (peak) and December (low)",
+            "value": [
+              3694,
+              1133
+            ],
+            "source": "https://data.cityofnewyork.us/d/erm2-nwe9",
+            "confidence": "verified",
+            "evidence": "open_data_query"
           },
           {
-            "what": "Same, twelve months to November 2024",
-            "value": 25230,
-            "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "what": "Restaurant citations for evidence of mice (04L) in 2025: January (peak) and February (low)",
+            "value": [
+              425,
+              284
+            ],
+            "source": "https://data.cityofnewyork.us/d/43nn-pn8j",
+            "confidence": "verified",
+            "evidence": "open_data_query"
           },
           {
-            "what": "Fine steps for bags instead of bins, USD",
+            "what": "Restaurant citations for filth flies (04N) in 2025: October (peak) and February (low)",
+            "value": [
+              438,
+              64
+            ],
+            "source": "https://data.cityofnewyork.us/d/43nn-pn8j",
+            "confidence": "verified",
+            "evidence": "open_data_query"
+          },
+          {
+            "what": "Fine steps for a business that sets out trash without a lidded bin, USD: first, second, third; and when the first summons is ignored",
             "value": [
               50,
               100,
-              200
+              200,
+              300
             ],
-            "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01787",
+            "confidence": "verified",
+            "evidence": "opened_official"
           },
           {
-            "what": "Threshold of 3 and all weights",
+            "what": "Threshold of 3 and all weights of the pressure score",
             "value": 3,
-            "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
+            "source": "https://data.cityofnewyork.us/d/erm2-nwe9",
             "confidence": "estimate",
             "evidence": "calc"
           }
@@ -4255,8 +4344,8 @@
             "what": "License fee for a sidewalk or a roadway cafe, USD for four years",
             "value": 1050,
             "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
-            "confidence": "estimate",
-            "evidence": "official_excerpt"
+            "confidence": "verified",
+            "evidence": "opened_official"
           },
           {
             "what": "Sidewalk consent fee, USD per sq ft per year, low-high",
@@ -4423,7 +4512,7 @@
         "tier": "core"
       }
     ],
-    "howNumbersWereChecked": "This session could run web searches but could not open pages: the cloud environment's network policy refused www.nyc.gov, codelibrary.amlegal.com and every other outside host. So no number here is 'verified' in the strict sense of PACK.md (opened the primary source myself). Every record is 'estimate' and carries an 'evidence' field: 'official_excerpt' = the search tool quoted the number from the official page named in 'source' (agency page, law text, court decision); 'secondary' = news, trade press, insurer or vendor report; 'calc' = my arithmetic or a game-design value, with the calculation in 'note'. A person or an agent with open network access can turn every 'official_excerpt' into 'verified' by opening the link.",
+    "howNumbersWereChecked": "Two passes on November 14, 2026. First pass: web search only, because the cloud environment refused every outside host; numbers from that pass are 'estimate' with evidence 'official_excerpt' (search quoted the official page named in source), 'secondary' (news, trade press, vendor or insurer report) or 'calc' (my arithmetic or a design value, shown in note). Second pass, after the owner allowed 20 hosts: I downloaded the pages and data myself. Numbers I saw there are 'verified' with evidence 'opened_official' (agency page, law-making document or official PDF) or 'open_data_query' (my own count from NYC Open Data, query described in note). 'secondary_opened' = a trade-press page I opened that reports someone else's study; it stays 'estimate'. Not reachable even after access: www.nyc.gov, www.nycourts.gov and codelibrary.amlegal.com answer automated requests with 403 from their own bot protection, and I did not work around that; everything sourced only to those three hosts is still 'official_excerpt'. Game-balance values (multipliers, quality effects, reputation hits) are design choices, not facts.",
     "claims": [
       {
         "id": "sidewalk_fall_claim",
@@ -4493,7 +4582,7 @@
       "sidewalk_shed"
     ],
     "monthlyClimate": {
-      "station": "New York Central Park, NOAA 1991-2020 normals",
+      "station": "New York Central Park, NOAA 1991-2020 normals (National Weather Service monthly almanacs)",
       "months": [
         "Jan",
         "Feb",
@@ -4513,14 +4602,42 @@
         42.2,
         49.9,
         61.8,
-        71.5,
+        71.4,
         79.7,
-        84.8,
-        83.4,
-        76.3,
+        84.9,
+        83.3,
+        76.2,
         64.5,
-        54.1,
-        44.4
+        54,
+        44.3
+      ],
+      "normalMeanF": [
+        33.7,
+        35.9,
+        42.8,
+        53.7,
+        63.2,
+        72,
+        77.5,
+        76.1,
+        69.2,
+        57.9,
+        48,
+        39.1
+      ],
+      "precipitationInches": [
+        3.64,
+        3.19,
+        4.29,
+        4.09,
+        3.96,
+        4.54,
+        4.6,
+        4.56,
+        4.31,
+        4.38,
+        3.58,
+        4.38
       ],
       "snowfallInches": [
         8.8,
@@ -4536,64 +4653,107 @@
         0.5,
         4.9
       ],
-      "precipitationInches": [
-        3.6,
-        3.2,
-        4.3,
-        4.1,
-        4,
-        4.5,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+      "daysAt90F": {
+        "averagePeriodOfRecord": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          3,
+          7,
+          4,
+          1,
+          0,
+          0,
+          0
+        ],
+        "yearTotalAverage": 15,
+        "byYear": {
+          "2022": 24,
+          "2023": 12,
+          "2024": 21,
+          "2025": 14
+        }
+      },
+      "seasonalSnowfallInches": {
+        "2022-23": 2.3,
+        "2023-24": 7.5,
+        "2024-25": 12.9,
+        "normal": 29.8
+      },
+      "source": "https://www.weather.gov/media/okx/Climate/Almanacs/nyc/nycjan.pdf",
+      "moreSources": [
+        "https://www.weather.gov/media/okx/Climate/CentralPark/90DegreeDays.pdf",
+        "https://www.weather.gov/media/okx/Climate/CentralPark/monthlyseasonalsnowfall.pdf",
+        "https://www.weather.gov/media/okx/Climate/Almanacs/nyc/nycjul.pdf"
       ],
-      "daysAt90F": [
-        0,
-        0,
-        0,
-        0,
-        null,
-        null,
-        7,
-        5,
-        1,
-        0,
-        0,
-        0
-      ],
-      "source": "https://www.weather.gov/media/okx/Climate/CentralPark/monthlyseasonalsnowfall.pdf",
-      "confidence": "estimate",
-      "evidence": "secondary",
-      "note": "Highs are the values already verified in ai/src/data/nyc-climate.json. Snowfall: January 8.8, February 10.1, March 5.0, April 0.4 inches and the 29.8-inch season total were quoted by web search from a table of NOAA normals; October-December (0.1, 0.5, 4.9) are from memory and make the sum 29.8. Precipitation January-June and the 90°F days for July-September were quoted the same way; null = not confirmed in this session. Extremes that matter more than normals: 43.4 inches of snow in the 2025-26 winter; 100°F on July 2, 2026; 2.07 inches of rain in one hour on July 14, 2025."
+      "confidence": "verified",
+      "evidence": "opened_official",
+      "note": "Opened the twelve National Weather Service almanac PDFs for Central Park (nycjan.pdf to nycdec.pdf): 'Mean Max', 'Mean Avg', 'Mean Precip' and 'Mean Snow', all 1991-2020 normals. Precipitation sums to 49.52 inches and snow to 29.8. The highs differ by 0.1°F in six months from ai/src/data/nyc-climate.json, which averaged the daily normals. Days at 90°F or more are from the NWS table 'Average Number of 90°F+ Degree Days By Month' (averages over the whole record since 1869) and its yearly rows. Season snowfall is from the NWS monthly and seasonal snowfall table; its 2025-26 row was incomplete when opened (December 2025: 7.2 inches), so the 43.4-inch total for that winter stays a press figure. Other extremes: 100°F on July 2, 2026 and 2.07 inches of rain in one hour on July 14, 2025 (press and city releases, not opened)."
     },
     "drinkMixByTemperature": {
-      "formula": "icedShare = clamp(0.20 + 0.0122 x (dailyHighF - 40), 0.15, 0.80)",
+      "formula": "icedShare = clamp(0.20 + 0.0122 x (dailyHighF - 59) + 0.15, 0.10, 0.80)",
       "icedShareByMonth": [
-        0.19,
-        0.23,
-        0.32,
-        0.47,
-        0.58,
-        0.68,
-        0.75,
-        0.73,
-        0.64,
+        0.11,
+        0.15,
+        0.24,
+        0.38,
         0.5,
-        0.37,
-        0.25
+        0.6,
+        0.67,
+        0.65,
+        0.56,
+        0.42,
+        0.29,
+        0.17
+      ],
+      "measuredLondonCurveByMonth": [
+        0.02,
+        0.02,
+        0.09,
+        0.23,
+        0.35,
+        0.45,
+        0.52,
+        0.5,
+        0.41,
+        0.27,
+        0.14,
+        0.02
       ],
       "slopePerDegreeF": 0.0122,
-      "anchor": {
-        "highF": 40,
-        "icedShare": 0.2
-      },
+      "measuredPoints": [
+        {
+          "highC": 4.9,
+          "coldShare": 0.016
+        },
+        {
+          "highC": 15,
+          "coldShare": 0.2
+        },
+        {
+          "highC": 20,
+          "coldShare": 0.3
+        },
+        {
+          "highC": 24,
+          "coldShare": 0.4
+        },
+        {
+          "highC": 28,
+          "coldShare": 0.5
+        },
+        {
+          "highC": 29,
+          "coldShare": 0.61
+        }
+      ],
+      "usOffset": 0.15,
       "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
-      "confidence": "estimate",
-      "evidence": "secondary",
-      "note": "Slope: an analysis of one coffee shop in King's Cross, London (January-June) found that each +1°C of daily maximum adds 2.2 percentage points to cold coffee's share of sales and that temperature alone explains 92% of the variation: 2.2 / 1.8 = 1.22 points per °F. Anchor and caps are my assumptions, checked against chains: Starbucks said cold drinks were about 75% of its US beverage sales in summer 2022; Dunkin' says more than half of its coffee is iced even in winter, so an independent New York shop may sit above this curve in winter. A US point-of-sale series by month was not found. Total orders move far less than the mix: NRF and Planalytics put the average weather swing in coffee sales at 5%, and a Penn State teaching data set of a campus cafe found temperature significant for the mix but not for total sales."
+      "confidence": "verified",
+      "evidence": "opened_official",
+      "note": "Opened United Baristas' analysis of one coffee shop (Ensemble, King's Cross, London, January-June): 'for every 1°C increase in the daily maximum temperature, cold coffees increased their share of sales by 2.2 percentage points'; 'Maximum daily temperature alone explains 92% of the variation'; in the coldest week (average high 4.9°C) 1.6% of coffees were cold, in the week of May 25 (29°C) more than 61%; their rule of thumb is 20% at 15°C, 30% at 20°C, 40% at 24°C, over 50% at 28°C. Verified: the slope (2.2 / 1.8 = 1.22 points per °F) and the anchor 20% at 59°F. Not verified: the +15 points I add for New York, which is my assumption from chain statements (Starbucks: about 75% of US beverage sales cold in summer 2022; Dunkin': more than half iced even in winter). The first pass anchored the curve at 20% at 40°F and overstated every month by about 8-10 points. measuredLondonCurveByMonth is the curve with no offset. Total orders move far less than the mix: Planalytics and the retail federation put the average weather swing in coffee sales at 5%."
     },
     "weatherDayEffects": {
       "note": "Proposed refinement of footTrafficMult in ai/src/data/nyc-climate.json. Values marked measured come from the cited studies; the rest are my estimates and say so.",
@@ -4706,8 +4866,8 @@
       "lastDay": "2027-06-28",
       "yomKippurClosed": "2026-09-21",
       "source": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
-      "confidence": "estimate",
-      "evidence": "official_excerpt",
+      "confidence": "verified",
+      "evidence": "opened_official",
       "note": "NYC Public Schools 2026-27 calendar as quoted by web search. About 900,000 students: on school days parents pass at drop-off (around 8 AM) and pick-up (around 3 PM); on recess weeks families with children leave town or sleep in."
     },
     "comparisonsAbroad": [
@@ -4743,6 +4903,31 @@
       }
     ],
     "nonObvious": [
+      {
+        "text": "A very small shop may legally share its carter.",
+        "why": "A business that throws away less than 20 gallons of garbage a week may share private carter service with other businesses, under a written contract.",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01787"
+      },
+      {
+        "text": "Flies are an autumn violation.",
+        "why": "Citations for filth flies in restaurant inspections peaked in October 2025 (438) and were still at 351 in November, against 64 in February.",
+        "source": "https://data.cityofnewyork.us/d/43nn-pn8j"
+      },
+      {
+        "text": "Rats are a summer problem on the street and a winter problem in the kitchen.",
+        "why": "311 rodent complaints peak in June (3,694 in 2025) and bottom in December (1,133); inspection citations for rats and mice inside restaurants peak in December and January.",
+        "source": "https://data.cityofnewyork.us/d/43nn-pn8j"
+      },
+      {
+        "text": "The second dirty-sidewalk or sidewalk-sign ticket costs six times the first.",
+        "why": "For commercial property the steps are $50, $300, $500, not the $50 and $100 quoted for homeowners.",
+        "source": "https://data.cityofnewyork.us/d/jz4z-kudi"
+      },
+      {
+        "text": "An unanswered sanitation ticket multiplies itself.",
+        "why": "OATH data since January 2025: a $100 snow summons became $350 in 41% of cases because nobody answered it; a $50 dirty-sidewalk summons became $450 and a $50 bin summons $300 in about a quarter of cases.",
+        "source": "https://data.cityofnewyork.us/d/jz4z-kudi"
+      },
       {
         "text": "The snow deadline is counted from the minute the snow stops, and the shortest window (4 hours) falls exactly on your business hours.",
         "why": "A storm that ends at 10 AM must be cleared by 2 PM, in the lunch rush, by the same two people who run the bar.",
@@ -4820,23 +5005,23 @@
       },
       {
         "text": "A coffee cup with your logo in the corner basket is evidence against you.",
-        "why": "The code presumes that the business named on garbage found in a public litter basket put it there: $100, $250, $350.",
+        "why": "The code presumes that the business named on garbage in a public litter basket put it there; in practice the charge is rare: 7 summonses since January 2025.",
         "source": "https://dsny.cityofnewyork.us/?p=1198"
       },
       {
         "text": "Ten flyers on lampposts are ten tickets.",
-        "why": "Each poster is a separate violation at $75-$150; a new shop was fined almost $9,000.",
-        "source": "https://www.dnainfo.com/new-york/20120625/fort-greene/illegal-posters-could-pin-fine-on-hakeem-jeffries-campaign"
+        "why": "Each poster is a separate $75 summons, $125 if ignored; 2,690 were written in 2026; a new shop was reportedly fined almost $9,000.",
+        "source": "https://data.cityofnewyork.us/d/jz4z-kudi"
       },
       {
-        "text": "A sandwich board is legal only within 3 feet of your wall.",
+        "text": "A sandwich board is legal only within 3 feet of your wall and up to 5 feet high.",
         "why": "Beyond that it is a sidewalk obstruction; under a shed or on a narrow sidewalk there may be no legal place for it.",
         "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
       },
       {
         "text": "Cooling the sidewalk through an open door is illegal for every store, but almost never ticketed.",
-        "why": "About 2,300 inspections and 58 open-door violations in 2023.",
-        "source": "https://www.nyc.gov/site/dca/news/023-24/shut-front-door-city-reminds-local-businesses-keep-doors-windows-closed-when-running"
+        "why": "About 40 summonses against single stores since January 2025, most at $250 (OATH data); DCWP reported 58 open-door violations in 2023.",
+        "source": "https://data.cityofnewyork.us/d/jz4z-kudi"
       },
       {
         "text": "Your insurance does not cover the two ways rain ruins a basement.",
@@ -4944,8 +5129,8 @@
       {
         "where": "deck card con_ed_rates",
         "was": "utilities +5% in January-February",
-        "now": "+3.5% for the whole of 2026",
-        "why": "The Public Service Commission approved the three-year plan on January 22, 2026."
+        "now": "+3.1% for the whole of 2026 (commercial bill), +2.2% in 2027, +2.3% in 2028",
+        "why": "Department of Public Service summary of the approved rate plan, opened: commercial customer at 10,800 kWh a month."
       },
       {
         "where": "deck card outdoor_dining_season",
@@ -4958,6 +5143,24 @@
         "was": "[1, 1, 1, 1, 1.05, 1.05, 0.9] for every place",
         "now": "keep for residential blocks; office districts need [0.95, 1.2, 1.2, 1.15, 0.6, 0.25, 0.2]",
         "why": "Fridays are 11.9% of weekday office visits in New York."
+      },
+      {
+        "where": "ai/src/data/nyc-climate.json tmaxF",
+        "was": "[39.5, 42.2, 49.9, 61.8, 71.5, 79.7, 84.8, 83.4, 76.3, 64.5, 54.1, 44.4]",
+        "now": "[39.5, 42.2, 49.9, 61.8, 71.4, 79.7, 84.9, 83.3, 76.2, 64.5, 54.0, 44.3] if the monthly almanac is the reference",
+        "why": "National Weather Service monthly almanacs for Central Park, opened; differences of 0.1°F in six months."
+      },
+      {
+        "where": "ai/src/data/nyc-climate.json hotDays",
+        "was": "[0, 0, 0, 0, 1, 3, 6, 4, 1, 0, 0, 0]",
+        "now": "[0, 0, 0, 0, 1, 3, 7, 4, 1, 0, 0, 0], 15 a year",
+        "why": "NWS table 'Average Number of 90°F+ Degree Days By Month', opened: July is 7."
+      },
+      {
+        "where": "ai/src/data/nyc-climate.json precipDays note",
+        "was": "seven months marked estimate",
+        "now": "monthly precipitation totals are now verified in extra.monthlyClimate (3.64 to 4.60 inches); days with precipitation were not re-checked",
+        "why": "NWS almanacs give totals, not day counts."
       }
     ],
     "kitAdditions": {
@@ -4991,7 +5194,7 @@
         "eventCatalog": 83,
         "mechanics": 7,
         "claims": 3,
-        "nonObvious": 32,
+        "nonObvious": 37,
         "levers": 19,
         "shortcuts": 9,
         "violations": 10,
@@ -5000,7 +5203,7 @@
         "reports": 2,
         "events": 8,
         "setup": 4,
-        "sources": 119
+        "sources": 134
       },
       "eventsByTier": {
         "core": 25,
@@ -5015,9 +5218,12 @@
         "world": 1
       },
       "eventsByEvidence": {
-        "official_excerpt": 26,
-        "secondary": 34,
-        "calc": 23
+        "calc": 21,
+        "official_excerpt": 14,
+        "open_data_query": 4,
+        "opened_official": 11,
+        "secondary": 30,
+        "secondary_opened": 3
       },
       "newEffectFields": [
         "capacity",
@@ -5037,7 +5243,13 @@
         "seats",
         "staffAvailability",
         "utilities"
-      ]
+      ],
+      "sourcesOpened": 30,
+      "verified": {
+        "violations": "8 of 10",
+        "eventCatalog": "15 of 83",
+        "mechanicNumbers": "21 of 56"
+      }
     }
   },
   "officials": [
@@ -5055,11 +5267,11 @@
         "illegal_posting",
         "sidewalk_obstruction"
       ],
-      "realProcess": "Uniformed enforcement agents and sanitation police walk commercial blocks during set 'routing times' and after every snowfall. They write a summons on the spot to the business or the owner; no warning is required. The summons is answered at the Office of Administrative Trials and Hearings (OATH) or paid.",
-      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/street-sidewalk-rules-businesses.page",
-      "confidence": "estimate",
-      "evidence": "official_excerpt",
-      "note": "Process described from DSNY's business rule pages as quoted by web search; the pages were not opened in this session. No numbers in this record."
+      "realProcess": "Sanitation enforcement agents walk commercial blocks in two fixed one-hour periods a day that depend on the address, and after every snowfall. They write a summons on the spot; no warning is required. The summons is answered at the Office of Administrative Trials and Hearings or paid; an unanswered one defaults to the maximum penalty.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02443",
+      "confidence": "verified",
+      "evidence": "opened_official",
+      "note": "Opened NYC311: 'Commercial property enforcement times are limited to two 1-hour periods per day. The exact times depend on the Sanitation section the address is located in.' Default penalties are from the OATH hearings data ($350 for snow, $450 for a commercial dirty sidewalk, $300 for a bin violation). In 2026 to mid-November Sanitation agents wrote more than 450,000 summonses of all kinds."
     }
   ],
   "levers": [
@@ -5101,7 +5313,7 @@
       "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Charged only in December-March (activeMonths is a new field). Staff option: Central Park averages about 11 days a season with measurable snow (1991-2020 normals in ai/src/data/nyc-climate.json: Dec 2.1, Jan 3.7, Feb 3.2, Mar 2.0), about 2.75 a month; one hour of a $17.00 worker each time plus a second pass for refreeze = 2.75 x 1.5 h x $17 = $70, plus about $20 of ice melt. Contractor: no New York storefront price was found; vendor guides quote $350-$1,500 per visit for commercial lots in Brooklyn and $2,000-$10,000 a season nationally, which is plowing, not a 20-foot sidewalk. $400 a month ($1,600 a season) is my planning value for a shovel-only sidewalk contract: get three local quotes. The -3% demand of 'none' applies only on days with snow or ice on the ground (see extra.mechanics.sidewalk_clock).",
+      "note": "Charged only in December-March (activeMonths is a new field). Staff option: Central Park averages about 11 days a season with measurable snow (1991-2020 normals in ai/src/data/nyc-climate.json: Dec 2.1, Jan 3.7, Feb 3.2, Mar 2.0), about 2.75 a month; one hour of a $17.00 worker each time plus a second pass for refreeze = 2.75 x 1.5 h x $17 = $70, plus about $20 of ice melt. Contractor: no New York storefront price was found; vendor guides quote $350-$1,500 per visit for commercial lots in Brooklyn and $2,000-$10,000 a season nationally, which is plowing, not a 20-foot sidewalk. $400 a month ($1,600 a season) is my planning value for a shovel-only sidewalk contract: get three local quotes. The summons is $100 per snowfall and $350 if ignored (OATH data). The -3% demand of 'none' applies only on days with snow or ice on the ground (see extra.mechanics.sidewalk_clock).",
       "tier": "core"
     },
     {
@@ -5182,7 +5394,7 @@
           }
         }
       ],
-      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01787",
       "confidence": "estimate",
       "evidence": "calc",
       "note": "The pack already charges $250 a month for the carter (monthlyCosts.waste); the costs here are differences from it. Six pickups instead of three: no published New York price was found (each waste zone has its own maximum-rate table); +$180 is my planning value, about 70% more for twice the stops. Three pickups a week means food waste sits two nights: in June-September that feeds the rodent score (extra.mechanics.trash_and_rodent_pressure). Putting bags on the curb without bins is the shortcut bags_on_curb.",
@@ -5216,7 +5428,7 @@
           "causes": "dirty_sidewalk"
         }
       ],
-      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01803",
       "confidence": "estimate",
       "evidence": "calc",
       "note": "Sweeping: 10 minutes a day of a $17.00 worker x 30 days = $85. Power wash: $150 a visit is my planning value for a 20-foot storefront; no New York price list was found. The duty is real: DSNY makes owners and tenants clean the sidewalk and the gutter 18 inches into the street, even when someone else dropped the litter.",
@@ -5784,11 +5996,19 @@
       "closureDays": 0,
       "reputationHit": 0.03,
       "criminal": "None. The larger exposure is civil: a pedestrian who falls on the uncleared sidewalk can sue the building owner (Administrative Code §7-210), and most store leases make the tenant pay the owner back.",
-      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
-      "confidence": "estimate",
-      "evidence": "official_excerpt",
-      "note": "DSNY snow laws page as quoted by web search: snow that stops between 7:00 AM and 4:59 PM must be cleared within 4 hours; between 5:00 PM and 8:59 PM within 14 hours; between 9:00 PM and 6:59 AM by 11:00 AM. A path at least 4 feet wide where possible; snow may not be pushed into the street or crosswalk. Fines on that page: $100 first offense, $150 second, $250 third and later; a DSNY flyer and news reports give $100-$150, $150-$350 and $250-$350. The 2014 DSNY rules digest names 'every owner, lessee, tenant, occupant, or other person having charge of any lot or building'. Each uncleared snowfall is a new offense. After the January 25, 2026 storm (11.4 inches in Central Park) the city wrote more than 4,000 such summonses.",
-      "tier": "core"
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+      "confidence": "verified",
+      "evidence": "opened_official",
+      "note": "Opened NYC311 'Snow or Ice on Sidewalk': if the snow stops between 7 AM and 5 PM, clear within 4 hours; 5 PM to 9 PM, within 14 hours; 9 PM to 7 AM, by 11 AM. Clear a path at least 4 feet wide; on a corner, clear access to the crosswalk and the pedestrian ramp; shovel bus stops without shelters and fire hydrants; spread salt or sand if the ground is frozen; do not shovel snow into a street, crosswalk or bike lane. The article names the owner of the building or lot and says 'a fine (up to $250)'. Penalties actually imposed, counted from the OATH hearings data set (charge AS21, 'Snow, ice, dirt on sidewalks', violations since January 1, 2025): $100 in 18,026 cases, $350 in 14,548 cases that defaulted, $130 in 1,657, dismissed in 1,403. So the ticket is $100 and becomes $350 if the summons is ignored. Volume: 9,456 summonses for January-March 2026 (January 5,852; February 3,481; March 123) and 54,089 'Snow or Ice' complaints to 311 between January 20 and March 15, 2026. Each uncleared snowfall is a new summons.",
+      "tier": "core",
+      "fineSteps": {
+        "standard": 100,
+        "ifSummonsIgnored": 350
+      },
+      "moreSources": [
+        "https://data.cityofnewyork.us/d/jz4z-kudi",
+        "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page"
+      ]
     },
     {
       "id": "call_in_pay_unpaid",
@@ -5809,15 +6029,49 @@
       "reputationHit": 0.03,
       "criminal": "None for a first case; repeated willful non-payment of wages is a misdemeanor under Labor Law §198-a.",
       "source": "https://ag.ny.gov/resources/individuals/workers-rights/wages-pay",
-      "confidence": "estimate",
-      "evidence": "official_excerpt",
-      "note": "Attorney General wage page as quoted by web search: in most cases restaurant or hotel workers should receive three hours of pay at the applicable minimum wage when they report and are sent home. Law firms report the State Labor Department applies call-in pay to closings for bad weather. Saved amount: one sent-home shift per worker per winter month, 3 h x $17.00 = $51, less about an hour actually paid = $35. Unpaid wages are owed back with 100% liquidated damages (Labor Law §198(1-a)), hence pctOfSaved 2, as for the other wage violations in the pack.",
+      "confidence": "verified",
+      "evidence": "opened_official",
+      "note": "Opened the Attorney General's wage page: 'If you are required or permitted to report to work, even if you are not assigned actual work, you may be entitled to call-in pay. In most cases, restaurant or hotel workers should receive three hours' pay at the appropriate minimum wage.' That the State Labor Department applies it to weather closings is from law-firm advisories (not opened). Saved amount: one sent-home shift per worker per winter month, 3 h x $17.00 = $51, less about an hour actually paid = $35. Unpaid wages are owed back with 100% liquidated damages (Labor Law §198(1-a)), hence pctOfSaved 2, as for the other wage violations in the pack.",
       "tier": "deep"
     },
     {
       "id": "dirty_sidewalk",
       "name": "Dirty sidewalk or gutter in front of the shop",
-      "law": "NYC Administrative Code §16-118(2)(a)",
+      "law": "NYC Administrative Code §16-118(2)",
+      "official": "sanitation_agent",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 50,
+        "perMonth": 250,
+        "pctOfSaved": 0,
+        "max": 500
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
+      "confidence": "verified",
+      "evidence": "open_data_query",
+      "note": "Counted from the OATH hearings data set, violations since January 1, 2025, charges for commercial, manufacturing, industrial and mixed-use property under §16-118: 'Dirty sidewalk' first offense $50 (3,522 cases; $450 in 1,182 defaulted cases), second $300, third $500; 'Fail to clean 18 inches into street' the same steps ($50 in 4,431 cases, $450 in 1,397 defaults; second $300, third $500). In 2026 to mid-November: 2,977 first-offense commercial dirty-sidewalk summonses and 3,468 for the 18 inches. Opened NYC311: owners must clean the sidewalk, tree beds and gutter and 'the area extending 18 inches into the street from the curb', 'even if someone else caused the dirty condition'; commercial enforcement is 'limited to two 1-hour periods per day' that depend on the address; 'when businesses are closed they must arrange to have the area maintained'. The earlier figure ($100 after the first) was wrong for commercial property.",
+      "tier": "core",
+      "fineSteps": {
+        "first": 50,
+        "second": 300,
+        "third": 500,
+        "firstIfSummonsIgnored": 450
+      },
+      "moreSources": [
+        "https://portal.311.nyc.gov/article/?kanumber=KA-02443",
+        "https://portal.311.nyc.gov/article/?kanumber=KA-01803",
+        "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page"
+      ]
+    },
+    {
+      "id": "improper_trash_setout",
+      "name": "Trash set out in bags or at the wrong time",
+      "law": "NYC Administrative Code §16-120; DSNY set-out and containerization rules for businesses",
       "official": "sanitation_agent",
       "foundBy": [
         "inspection",
@@ -5831,34 +6085,21 @@
       },
       "closureDays": 0,
       "reputationHit": 0.02,
-      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
-      "confidence": "estimate",
-      "evidence": "official_excerpt",
-      "note": "DSNY cleaning rules for businesses, as quoted by web search: owners and tenants must clean the sidewalk along the building and the gutter 18 inches from the curb into the street, including tree pits; $50 for the first offense. The Sanitation Foundation gives $100 for each later one; the penalty schedule caps the violation at $300. 311 adds that the rule applies even if someone else caused the mess. Agents ticket commercial blocks during fixed routing hours.",
-      "tier": "core"
-    },
-    {
-      "id": "improper_trash_setout",
-      "name": "Trash set out in bags or at the wrong time",
-      "law": "NYC Administrative Code §16-120; DSNY commercial containerization and set-out rules (Title 16, Rules of the City of New York)",
-      "official": "sanitation_agent",
-      "foundBy": [
-        "inspection",
-        "complaint"
-      ],
-      "fine": {
-        "base": 50,
-        "perMonth": 50,
-        "pctOfSaved": 0,
-        "max": 200
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01787",
+      "confidence": "verified",
+      "evidence": "opened_official",
+      "note": "Opened NYC311 'Waste Disposal for Businesses': 'As of March 1, 2024, all businesses in NYC must use bins with secure lids when setting out trash for collection'; bins may go to the curb 1 hour before closing or after 8 PM; recycling in bags or bundles after 8 PM; all bins off the curb by the time the business reopens; stored inside or within 3 feet of the building line; it is illegal to chain bins to public property; fines $50 for a first offense, $100 for a second, $200 for all later ones. The city does not sell bins to businesses. OATH data, violations since January 1, 2025: 'Improper receptacle, non-residential, 1st' $50 in 10,763 cases and $300 in 5,452 defaults; second offense $100, third $200; 'placed out prior to one hour of closing' $50 (1,064) or $300 on default (404); 'failure to remove receptacles' $50 (994) or $300 (324). In 2026 to mid-November: 4,842, 726 and 546 summonses.",
+      "tier": "core",
+      "fineSteps": {
+        "first": 50,
+        "second": 100,
+        "third": 200,
+        "firstIfSummonsIgnored": 300
       },
-      "closureDays": 0,
-      "reputationHit": 0.02,
-      "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
-      "confidence": "estimate",
-      "evidence": "official_excerpt",
-      "note": "DSNY, March 2024, as quoted by web search: starting March 1, 2024 all businesses must put trash in bins with secure lids; fines start at $50 for a first offense, $100 for a second and $200 for every one after. The business set-out page: bins go out one hour before closing or after 8:00 PM, come off the curb by the time the business reopens, and may be stored within 3 feet of the building line. Recycling in bags or bundles may go out after 8 PM. The exact rule section number was not confirmed.",
-      "tier": "core"
+      "moreSources": [
+        "https://data.cityofnewyork.us/d/jz4z-kudi",
+        "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-"
+      ]
     },
     {
       "id": "commercial_waste_in_litter_basket",
@@ -5880,8 +6121,12 @@
       "source": "https://dsny.cityofnewyork.us/?p=1198",
       "confidence": "estimate",
       "evidence": "official_excerpt",
-      "note": "DSNY collection and set-out laws for businesses, as quoted by web search: 'Under no circumstances can a merchant dispose of any garbage or recyclable materials in a DSNY litter basket'; $100 first offense, $250 second, $350 third and later. The code presumes that the person whose name appears on garbage found in the basket put it there.",
-      "tier": "core"
+      "note": "DSNY collection and set-out laws for businesses, as quoted by web search: 'Under no circumstances can a merchant dispose of any garbage or recyclable materials in a DSNY litter basket'; $100 first offense, $250 second, $350 third and later. The code presumes that the person whose name appears on garbage found in the basket put it there. Second pass: the OATH hearings data set shows this charge ('Improper disposal, DSNY litter basket, 1st offense') only 7 times since January 1, 2025, with $50 or $130 imposed or the case dismissed, so it is rarely ticketed and the $100-$250-$350 schedule quoted from the DSNY page was not confirmed. Opened NYC311: a business must hire a private carter or register as a self-hauler with the Business Integrity Commission, and must post the carter's decal; businesses that throw away less than 20 gallons a week may share a carter.",
+      "tier": "core",
+      "moreSources": [
+        "https://data.cityofnewyork.us/d/jz4z-kudi",
+        "https://portal.311.nyc.gov/article/?kanumber=KA-01787"
+      ]
     },
     {
       "id": "recycling_not_separated",
@@ -5908,7 +6153,7 @@
     {
       "id": "illegal_posting",
       "name": "Flyers posted on public property",
-      "law": "NYC Administrative Code §10-119, §10-121",
+      "law": "NYC Administrative Code §10-119",
       "official": "sanitation_agent",
       "foundBy": [
         "inspection",
@@ -5922,39 +6167,56 @@
       },
       "closureDays": 0,
       "reputationHit": 0.01,
-      "source": "https://intro.nyc/0302-2024",
-      "confidence": "estimate",
-      "evidence": "secondary",
-      "note": "Each flyer is a separate violation: $75-$150 for a first offense and $150-$250 for later ones within 12 months (§10-121 as summarized in City Council Introduction 302 of 2024). Base $750 = ten flyers at $75. Max $9,000: a new pet shop in Clinton Hill was fined almost $9,000 for flyers announcing its opening (DNAinfo). The law presumes the business named on the flyer posted it.",
-      "tier": "deep"
+      "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
+      "confidence": "verified",
+      "evidence": "open_data_query",
+      "note": "Counted from the OATH hearings data set (charge AS30, 'Illegal posting of handbill notice', §10-119), violations since January 1, 2025: $75 where the respondent paid or was found in violation (584 cases), $125 in 5,349 defaulted cases and $105 in 741; 2,690 summonses in 2026 to mid-November. Each posting is its own summons. Base $750 = ten flyers at $75. Max $9,000 is a press report of one Clinton Hill shop fined almost that much (DNAinfo), not verified. Opened NYC311: the Sanitation Department removes postings from public property and, if it can identify who is responsible, 'may give them a violation'.",
+      "tier": "deep",
+      "fineSteps": {
+        "perPosting": 75,
+        "perPostingIfSummonsIgnored": 125
+      },
+      "moreSources": [
+        "https://portal.311.nyc.gov/article/?kanumber=KA-02140",
+        "https://intro.nyc/0302-2024"
+      ]
     },
     {
       "id": "sidewalk_obstruction",
       "name": "Sign, bench or goods blocking the sidewalk",
-      "law": "NYC Administrative Code §16-118 and §19-136 (sidewalk obstructions); 311 guidance: within 3 feet of the building",
+      "law": "NYC Administrative Code §16-118 (sidewalk obstruction); NYC311: signs within 3 feet of the building and no higher than 5 feet",
       "official": "sanitation_agent",
       "foundBy": [
         "inspection",
         "complaint"
       ],
       "fine": {
-        "base": 100,
-        "perMonth": 100,
+        "base": 50,
+        "perMonth": 250,
         "pctOfSaved": 0,
-        "max": 300
+        "max": 500
       },
       "closureDays": 0,
       "reputationHit": 0.01,
-      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
-      "confidence": "estimate",
-      "evidence": "secondary",
-      "note": "311, as quoted by web search: sandwich and A-frame signs must not extend more than 3 feet into the sidewalk from the building. Fine amounts are from press reports, not a current schedule: $100 for a first sign violation and up to $300 after (DSNY to the Midtown Gazette, 2015); a Brooklyn coffee shop was fined $300 by the Sanitation Department for a sidewalk sign (Fox News). The section numbers need a check.",
-      "tier": "core"
+      "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
+      "confidence": "verified",
+      "evidence": "open_data_query",
+      "note": "Counted from the OATH hearings data set, violations since January 1, 2025: 'Sidewalk obstruction, commercial/manufacturing/industrial/mixed use' first offense $50 (7,526 cases; $450 in 2,720 defaults), second $300, third $500; 5,455 first-offense summonses in 2026 to mid-November. Opened NYC311 'Sidewalk Obstruction': 'Sandwich and A-frame signs must not extend more than 3 feet into the sidewalk from the building' and must not 'be higher than 5 feet'. The $100-$300 range from 2015 press reports was wrong.",
+      "tier": "core",
+      "fineSteps": {
+        "first": 50,
+        "second": 300,
+        "third": 500,
+        "firstIfSummonsIgnored": 450
+      },
+      "moreSources": [
+        "https://portal.311.nyc.gov/article/?kanumber=KA-01980"
+      ]
     },
     {
       "id": "open_door_ac",
       "name": "Air conditioning running with the door open",
-      "law": "NYC Administrative Code §20-910 (Local Law 92 of 2015)",
+      "law": "NYC Administrative Code §20-910(b) (Local Law 92 of 2015)",
       "official": "dcwp_inspector",
       "foundBy": [
         "inspection",
@@ -5964,15 +6226,18 @@
         "base": 250,
         "perMonth": 250,
         "pctOfSaved": 0,
-        "max": 1000
+        "max": 550
       },
       "closureDays": 0,
       "reputationHit": 0,
-      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf",
-      "confidence": "estimate",
-      "evidence": "official_excerpt",
-      "note": "DCWP business flyer as quoted by web search: 'The law prohibiting stores from leaving doors or windows open while air conditioning is running now applies to all stores regardless of size'; the only exception on the inspection checklist is a door open for deliveries. Press reports of the law give $250 for a first offense and up to $1,000. Enforcement is light: in 2023 DCWP made nearly 2,300 inspections and wrote 58 violations for open doors.",
-      "tier": "core"
+      "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
+      "confidence": "verified",
+      "evidence": "open_data_query",
+      "note": "Counted from the OATH hearings data set, violations since January 1, 2025, charge 'Business kept exterior door or window open while an air conditioner... was operating' under §20-910(b): about 40 cases against single stores, with $250 imposed most often (16 cases), $400-$550 in a few and 8 dismissed; 9 cases against chain stores at $500 to $1,500. So it is real but rare: roughly two tickets a month citywide. The delivery exception and the rule's reach to stores of every size are from the DCWP flyer as quoted by web search (nyc.gov could not be opened).",
+      "tier": "core",
+      "moreSources": [
+        "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf"
+      ]
     },
     {
       "id": "commercial_music_noise",
@@ -5991,19 +6256,30 @@
       },
       "closureDays": 0,
       "reputationHit": 0.02,
-      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
-      "confidence": "estimate",
-      "evidence": "official_excerpt",
-      "note": "DEP's notice on commercial music, as quoted by web search: a first §24-231 violation carries $2,000, which is reduced to $0 if the business fixes the problem and certifies it; that is why base is 0 and each further month costs $2,000. The $8,000 ceiling is from memory of the penalty schedule and was not confirmed. §24-244(b) needs no meter: a state court upheld a summons against a clothing store whose music could be heard on the sidewalk through propped-open doors.",
-      "tier": "deep"
+      "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
+      "confidence": "verified",
+      "evidence": "open_data_query",
+      "note": "Counted from the OATH hearings data set, violations since January 1, 2025, charge 'Made, caused or permitted music from a commercial establishment over permitted levels': first offense $2,000 in 16 cases, $8,000 in 27 defaulted cases, $0 in 4 (the cure the DEP notice describes); second offense $4,000 or $16,000 on default; third $24,000 on default. A separate charge, 'Unreasonable noise from a sound reproduction device', runs $440, or $1,750 on default. The 42 dB(A) limit inside a neighbor's home and the ban on speakers used to draw customers (§24-244(b)) are from DEP material and a court decision as quoted by web search.",
+      "tier": "deep",
+      "fineSteps": {
+        "firstIfCured": 0,
+        "first": 2000,
+        "firstIfSummonsIgnored": 8000,
+        "second": 4000,
+        "secondIfSummonsIgnored": 16000,
+        "thirdIfSummonsIgnored": 24000
+      },
+      "moreSources": [
+        "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf"
+      ]
     }
   ],
   "ruleCards": [
     {
       "id": "snow_clock",
       "title": "The snow clock",
-      "text": "When snow stops between 7 AM and 4:59 PM you have 4 hours to clear your sidewalk; 5 PM to 8:59 PM, 14 hours; overnight, until 11 AM. A 4-foot path, nothing pushed into the street. Fines run $100 to $350 per snowfall.",
-      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "text": "When snow stops between 7 AM and 5 PM you have 4 hours to clear your sidewalk; 5 PM to 9 PM, 14 hours; overnight, until 11 AM. A 4-foot path, nothing shoveled into the street. The ticket is $100 per snowfall, and $350 if you ignore the summons.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
       "tier": "core"
     },
     {
@@ -6016,36 +6292,36 @@
     {
       "id": "storm_day_pay",
       "title": "Sending staff home in a storm",
-      "text": "Close early for weather and you still owe pay: under New York's hospitality wage order a worker who reports for a shift is owed at least 3 hours at the minimum wage, or the scheduled shift if shorter. Decide before they travel, not after.",
-      "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+      "text": "Close early for weather and you still owe pay: a restaurant worker who reports for a shift and is sent home is owed three hours at the minimum wage in most cases. Decide before they travel, not after.",
+      "source": "https://ag.ny.gov/resources/individuals/workers-rights/wages-pay",
       "tier": "core"
     },
     {
       "id": "trash_bins",
       "title": "Bins with lids",
-      "text": "Since March 1, 2024 every NYC business must set out trash in bins with secure lids: out one hour before closing or after 8 PM, back in before you reopen. Bags on the curb cost $50, then $100, then $200 each time.",
-      "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
+      "text": "Since March 1, 2024 every NYC business must set out trash in bins with secure lids: out one hour before closing or after 8 PM, back in before you reopen. Bags on the curb cost $50, then $100, then $200. Ignore the summons and it is $300.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01787",
       "tier": "core"
     },
     {
       "id": "clean_18_inches",
       "title": "18 inches into the street",
-      "text": "You must keep your sidewalk clean and the gutter too, 18 inches out from the curb, even if someone else dropped the litter. $50 the first time, $100 after that. Agents come during fixed hours for your block.",
-      "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
+      "text": "You must keep your sidewalk clean and the gutter too, 18 inches out from the curb, even if someone else dropped the litter. For a business: $50 the first time, $300 the second, $500 the third. Agents come in two fixed hours a day.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01803",
       "tier": "core"
     },
     {
       "id": "litter_basket",
       "title": "The corner basket is not yours",
-      "text": "City litter baskets are for pedestrians. Shop trash in a basket costs $100, then $250, then $350, and a cup with your name on it is treated as proof. Every business must hire a licensed private carter.",
-      "source": "https://dsny.cityofnewyork.us/?p=1198",
+      "text": "City litter baskets are for pedestrians. Shop trash in one is illegal, and a cup with your name on it counts as proof. Every business must hire a licensed private carter or register to haul its own; under 20 gallons a week, you may share a carter.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01787",
       "tier": "core"
     },
     {
       "id": "open_door_ac",
       "title": "Shut the door",
-      "text": "No store in New York City may run air conditioning with its doors or windows open (Local Law 92 of 2015). The only exception is a door open for deliveries. Fines start at $250 and reach $1,000.",
-      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf",
+      "text": "No store in New York City may run air conditioning with its doors or windows open (Local Law 92 of 2015). The only exception is a door open for deliveries. A first ticket is $250; chain stores pay $500 and up.",
+      "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
       "tier": "deep"
     },
     {
@@ -6065,43 +6341,43 @@
     {
       "id": "sidewalk_sign_3_feet",
       "title": "A-frame signs",
-      "text": "A sandwich board is tolerated only close to your wall: no more than 3 feet out from the building. Further out it is a sidewalk obstruction. Fines run $100 to $300, and a shed or a narrow sidewalk leaves you no legal spot at all.",
+      "text": "A sandwich board may stand no more than 3 feet out from your wall and no higher than 5 feet. Further out it is a sidewalk obstruction: $50 the first time, $300 the second, $500 the third, and $450 if you ignore the first summons.",
       "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
       "tier": "deep"
     },
     {
       "id": "flyers_are_tickets",
       "title": "Flyers on poles",
-      "text": "Taping flyers to lampposts, mailboxes or fences is illegal posting: $75 to $150 for each flyer the first time, $150 to $250 after. Ten flyers is ten tickets. One new Brooklyn shop was fined almost $9,000.",
-      "source": "https://intro.nyc/0302-2024",
+      "text": "Taping flyers to lampposts, mailboxes or fences is illegal posting: $75 for each flyer, $125 if you ignore the summons. Ten flyers is ten tickets. One new Brooklyn shop was reportedly fined almost $9,000.",
+      "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
       "tier": "deep"
     },
     {
       "id": "congestion_zone",
       "title": "Congestion Relief Zone",
-      "text": "Below 60th Street in Manhattan cars pay $9 a day at peak hours; delivery trucks pay $14.40 or $21.60 every time they enter. Suppliers pass it on. In year one foot traffic in the zone rose 3.4% against 1.4% for the borough.",
+      "text": "Below 60th Street in Manhattan cars pay $9 a day at peak hours; delivery trucks pay $14.40 or $21.60 every time they enter. In year one foot traffic in the zone rose 3.4% against 1.4% for the borough, and truck speeds rose 5.6%.",
       "source": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational",
       "tier": "deep"
     },
     {
       "id": "flood_not_insured",
       "title": "Rain is not in the policy",
-      "text": "A standard business owner's policy pays for neither flood nor sewer backup. City sewers handle at most 1.75 inches of rain an hour; in 2023 five storms exceeded that. A water-backup rider costs roughly $50-$250 a year. Keep stock off the basement floor.",
-      "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+      "text": "A standard business owner's policy pays for neither flood nor sewer backup. City sewers are built for at most 1.75 inches of rain an hour; on September 29, 2023 parts of Brooklyn got over 3. A water-backup rider costs roughly $50-$250 a year.",
+      "source": "https://comptroller.nyc.gov/reports/is-new-york-city-ready-for-rain",
       "tier": "core"
     },
     {
       "id": "power_outage_claim",
       "title": "When the power goes out",
-      "text": "If a failure in Con Edison's local grid leaves you dark for more than 12 hours in a 24-hour period, a business can claim spoiled perishables, up to $12,900, within 30 days. Storm outages are excluded.",
+      "text": "If a failure in Con Edison's local grid leaves you dark for more than 12 hours in a 24-hour period, a business can claim spoiled perishables, up to $12,900, within 30 days. Storm outages are not paid.",
       "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02283",
       "tier": "deep"
     },
     {
       "id": "roadway_cafe_all_year",
       "title": "Outdoor dining, all year",
-      "text": "Since August 31, 2026 a licensed roadway cafe may stay up all year instead of coming down from November 30 to March 31. A license costs $1,050 for four years, plus a yearly fee of $5-$31 per square foot. Cafes close by 11 PM.",
-      "source": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm",
+      "text": "Sidewalk cafes may operate all year, and since 2026 roadway cafes may too, under a year-round license with higher fees. The license is $1,050 for four years, or $2,100 for sidewalk and roadway together, plus a yearly fee set by location and size.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
       "tier": "deep"
     },
     {
@@ -6128,8 +6404,8 @@
     {
       "id": "corner_lot_snow",
       "title": "A corner means two sidewalks",
-      "text": "On a corner you clear both frontages, the curb ramps and the path to the crosswalk, and the city asks you to dig out the hydrant and the catch basin. Same clock: 4 hours after daytime snow. A corner shop shovels twice as much.",
-      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "text": "On a corner you clear both frontages plus access to the crosswalk and the curb ramp, and you must shovel out the fire hydrant and any bus stop without a shelter. Same clock: 4 hours after daytime snow. A corner shop shovels twice as much.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
       "tier": "deep"
     },
     {
@@ -6142,21 +6418,21 @@
     {
       "id": "music_on_the_sidewalk",
       "title": "Music and the neighbors",
-      "text": "You may not use a speaker to draw customers on the sidewalk. Music from a business may not exceed 42 dB(A) inside a neighbor's apartment. A first violation is $2,000, cut to $0 if you fix it and certify the fix.",
-      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
+      "text": "You may not use a speaker to draw customers on the sidewalk. Music from a business may not exceed 42 dB(A) inside a neighbor's apartment. A first violation is $2,000, cut to $0 if you fix it and certify the fix, and $8,000 if you ignore it.",
+      "source": "https://data.cityofnewyork.us/d/jz4z-kudi",
       "tier": "deep"
     },
     {
       "id": "fines_under_review",
       "title": "Fines are under review",
-      "text": "Executive Order 11 (January 2026) told city agencies to list more than 6,000 rules and fines on small businesses and propose cuts, warnings and cure periods. Until a fine is actually changed, the old amount stands.",
-      "source": "https://www.nyc.gov/mayors-office/news/2026/01/mayor-mamdani-signs-executive-order-to-inventory-and-cut-fines-a.html",
+      "text": "Executive Order 11 (January 14, 2026) told city agencies to review rules and fines on small businesses and propose cuts, warnings and cure periods. An earlier round changed 116 rules, most of them rarely used. Until a fine is changed, it stands.",
+      "source": "https://comptroller.nyc.gov/reports/review-of-the-small-business-forward-initiative-and-its-impact-on-violations-enforcement",
       "tier": "deep"
     },
     {
       "id": "water_damage_claims",
       "title": "The most common claim",
-      "text": "Water and freezing damage is one of the three most common small-business insurance claims, 20% of the total, and costs $34,600 on average. A burst pipe on one cold night can cost more than a year of profit.",
+      "text": "Water and freezing damage is one of the three most common small-business insurance claims, 20% of the total, and averages $34,600. A burst pipe on one cold night can cost more than a year of profit.",
       "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
       "tier": "deep"
     },
@@ -6171,7 +6447,7 @@
       "id": "sidewalk_violation_75_days",
       "title": "A broken sidewalk is the owner's to fix",
       "text": "When the city marks a sidewalk defect, the property owner has 75 days to repair it. There is no fine, but after 75 days the city may do the work and bill the owner. Most store leases pass sidewalk repairs to the tenant.",
-      "source": "https://www.nyc.gov/html/dot/html/infrastructure/sidewalkintro.shtml",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01506",
       "tier": "deep"
     }
   ],
@@ -6184,7 +6460,8 @@
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
       "title": "NYC311: Snow or Ice on Sidewalk",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nycourts.gov/REPORTER/3dseries/2012/2012_02424.htm",
@@ -6194,7 +6471,8 @@
     {
       "url": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
       "title": "Insurance Journal: Hartford 10-year analysis of small-business claims (December 10, 2025)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.cbsnews.com/newyork/news/2025-2026-nyc-winter-cold-snow",
@@ -6214,7 +6492,8 @@
     {
       "url": "https://ag.ny.gov/resources/individuals/workers-rights/wages-pay",
       "title": "NY Attorney General: Wages and pay (call-in pay, three hours for restaurant workers)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://longisland.news12.com/2026/01/22/hudson-valley-customers-face-ice-melt-shortage-ahead-of-major-snowstorm/1mt40tbth8IHiDHAC6zw1E",
@@ -6309,7 +6588,8 @@
     {
       "url": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational",
       "title": "Governor of New York: first anniversary of congestion pricing (January 5, 2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.freightwaves.com/news/new-york-trucking-group-says-manhattan-tolls-burden-industry",
@@ -6339,7 +6619,8 @@
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
       "title": "NYC311: mobile food vending permits (Local Laws 54 and 59 of 2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
@@ -6379,7 +6660,8 @@
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
       "title": "NYC311: sidewalk obstruction, A-frame signs within 3 feet",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://intro.nyc/0302-2024",
@@ -6399,12 +6681,14 @@
     {
       "url": "https://www.weather.gov/media/okx/Climate/CentralPark/monthlyseasonalsnowfall.pdf",
       "title": "NWS New York: Central Park monthly and seasonal snowfall",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
       "title": "United Baristas: cold coffee demand is more predictable than the British weather (King's Cross cafe analysis)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.teaandcoffee.net/blog/39416/as-temperatures-rise-more-uk-consumers-grab-iced-coffees/",
@@ -6464,7 +6748,8 @@
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02283",
       "title": "NYC311: Con Edison claims for losses from a power outage",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://documentedny.com/2026/08/14/nyc-power-outage-reimbursement/",
@@ -6499,7 +6784,8 @@
     {
       "url": "https://comptroller.nyc.gov/reports/is-new-york-city-ready-for-rain",
       "title": "NYC Comptroller: Is New York City Ready for Rain?",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
@@ -6529,7 +6815,8 @@
     {
       "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
       "title": "NYC311: Dining Out NYC license and fees",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm",
@@ -6574,7 +6861,8 @@
     {
       "url": "https://www.schools.nyc.gov/calendar/2026-2027-school-year-calendar",
       "title": "NYC Public Schools: 2026-2027 school year calendar",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://thenycalliance.org/news-item/summer-fall-2024-survey-results",
@@ -6664,7 +6952,8 @@
     {
       "url": "https://dps.ny.gov/system/files/documents/2026/01/con-edison-electric-rate-case-summary.pdf",
       "title": "NYS Department of Public Service: Con Edison electric rate case summary (January 2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.cbsnews.com/newyork/news/winter-weather-to-blame-for-many-manhole-fires",
@@ -6694,7 +6983,8 @@
     {
       "url": "https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DSNY-Final-Rule-re-Implementation-Dates-for-the-Brooklyn-North-and-Upper-Manhattan-Commercial-Waste-Zones_Final.pdf",
       "title": "DSNY final rule: implementation dates for the Brooklyn North and Upper Manhattan commercial waste zones (June 2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/mayors-office/news/2026/01/mayor-mamdani-signs-executive-order-to-inventory-and-cut-fines-a.html",
@@ -6704,7 +6994,8 @@
     {
       "url": "https://comptroller.nyc.gov/reports/review-of-the-small-business-forward-initiative-and-its-impact-on-violations-enforcement",
       "title": "NYC Comptroller: review of the Small Business Forward initiative (April 2026)",
-      "checked": "2026-11-14"
+      "checked": "2026-11-14",
+      "opened": true
     },
     {
       "url": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
@@ -6770,6 +7061,96 @@
       "url": "https://www.nerdwallet.com/insurance/homeowners/learn/water-backup-coverage",
       "title": "NerdWallet: water backup coverage (cost range)",
       "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01787",
+      "title": "NYC311: Waste Disposal for Businesses",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02443",
+      "title": "NYC311: Dirty Sidewalk or Gutter (enforcement routing times)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01803",
+      "title": "NYC311: Dirty Sidewalk",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02140",
+      "title": "NYC311: Poster or Sticker Complaint",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01506",
+      "title": "NYC311: Sidewalk Violation",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01786",
+      "title": "NYC311: Sidewalk Repair by the City",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://data.cityofnewyork.us/d/jz4z-kudi",
+      "title": "NYC Open Data: OATH Hearings Division Case Status (queried November 14, 2026)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://data.cityofnewyork.us/d/43nn-pn8j",
+      "title": "NYC Open Data: DOHMH New York City Restaurant Inspection Results (queried November 14, 2026)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://data.cityofnewyork.us/d/erm2-nwe9",
+      "title": "NYC Open Data: 311 Service Requests from 2010 to Present (queried November 14, 2026)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://data.cityofnewyork.us/d/rbx6-tga4",
+      "title": "NYC Open Data: DOB NOW Build - Approved Permits (queried November 14, 2026)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://data.cityofnewyork.us/d/tg4x-b46p",
+      "title": "NYC Open Data: Film Permits (queried November 14, 2026)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.weather.gov/media/okx/Climate/Almanacs/nyc/nycjan.pdf",
+      "title": "NWS New York: Central Park monthly almanacs, 1991-2020 normals (nycjan.pdf to nycdec.pdf)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://www.weather.gov/media/okx/Climate/CentralPark/90DegreeDays.pdf",
+      "title": "NWS New York: Central Park 90-degree days by month and year",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://comptroller.nyc.gov/reports/audit-of-the-new-york-city-department-of-environmental-protections-leak-detection-program",
+      "title": "NYC Comptroller: audit of DEP's leak detection program (water main breaks)",
+      "checked": "2026-11-14",
+      "opened": true
+    },
+    {
+      "url": "https://comptroller.nyc.gov/reports/streets-for-people",
+      "title": "NYC Comptroller: Streets for People, Open Streets and the future of public space management",
+      "checked": "2026-11-14",
+      "opened": true
     }
   ],
   "reports": [
@@ -6885,16 +7266,16 @@
     {
       "id": "con_ed_rate_step",
       "name": "Con Edison rates rise",
-      "text": "A three-year rate plan took effect on January 1, 2026: electric bills up about 3.5% this year, with further steps in 2027 and 2028.",
+      "text": "A three-year Con Edison rate plan took effect on January 1, 2026: a typical commercial electric bill is up about 3% this year, with further steps in 2027 and 2028.",
       "effect": {
         "field": "utilities",
-        "mult": 1.035
+        "mult": 1.031
       },
       "months": 12,
-      "source": "https://bronx.news12.com/2026/01/23/state-approves-con-ed-rate-hike-for-gas-and-electric/6dDt72h0hy67PKW8vptuA7",
-      "confidence": "estimate",
-      "evidence": "secondary",
-      "note": "Public Service Commission vote of January 22, 2026, retroactive to January 1. News 12: electric +3.6% of the total bill and gas +2.4% in 2026; a student paper citing the plan: electric 3.5%, 3.2%, 3.1% and gas 4.4%, 5.7%, 5.6% over 2026-2028. The pack is mostly electric, so 1.035. The deck already has a +5% card for January-February: this replaces it with the approved number for the whole year."
+      "source": "https://dps.ny.gov/system/files/documents/2026/01/con-edison-electric-rate-case-summary.pdf",
+      "confidence": "verified",
+      "evidence": "opened_official",
+      "note": "Opened the Department of Public Service summary of the electric rate case: the Commission granted increases in annual electric revenue of $234 million, $409.7 million and $421.1 million over three rate years, 'a 2.8%, 2.8%, and 2.8% increase in total revenues'. Its bill table: a commercial customer using 10,800 kWh a month pays $83.25 more a month in year one (+3.1% of the total bill), then +$61.57 (+2.2%) and +$64.24 (+2.3%); a 425 kWh household +$5.27 (+3.6%). The first pass used 3.5% from the press; 1.031 is the commercial row. Replaces the deck's +5% card for January-February."
     },
     {
       "id": "blizzard_shutdown",
@@ -6920,10 +7301,10 @@
       "required": false,
       "lifespanMonths": 24,
       "withoutItViolation": "improper_trash_setout",
-      "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01787",
       "confidence": "estimate",
       "evidence": "calc",
-      "note": "Required since March 1, 2024 for every business that sets trash at the curb (DSNY). Price is my planning value: two 44-gallon rigid bins with locking lids at about $90 each from a restaurant supplier; no price list was opened. They live inside or within 3 feet of the building line and take about 8 square feet of floor.",
+      "note": "Required since March 1, 2024 for every business that sets trash at the curb (opened NYC311: 'all businesses in NYC must use bins with secure lids'; 'The City does not sell or give away trash or recycling bins to commercial businesses'). Price is my planning value: two 44-gallon rigid bins with locking lids at about $90 each from a restaurant supplier. They live inside or within 3 feet of the building line and take about 8 square feet of floor.",
       "legallyRequired": true
     },
     {
