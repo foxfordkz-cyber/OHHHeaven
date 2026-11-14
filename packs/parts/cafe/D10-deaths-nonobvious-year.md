@@ -4,25 +4,25 @@
 
 ## 1. Вердикт
 
-1. Кафе в Нью-Йорке чаще убивает не пустой зал, а договор аренды: 20 из 58 собранных историй — рост аренды при продлении, отказ продлить, продажа здания или спор с арендодателем. В пакете аренда — одно число без срока и условий.
+1. Кафе в Нью-Йорке чаще убивает не пустой зал, а договор аренды: 21 из 64 собранных историй — рост аренды при продлении, отказ продлить, продажа здания, долг по аренде или спор с арендодателем. В пакете аренда — одно число без срока и условий.
 2. Вторая группа причин — закрытие не по вине владельца при идущей аренде: газ отключён на месяцы (5 историй), леса и стройка, перекрытая улица, нарушения на здании. В пакете заведение закрывает только инспектор.
 3. Третья — деньги и люди: долги и быстрые займы, слишком ранняя вторая точка, уход всей команды, кража, выгорание и болезнь владельца. В пакете работники — это число, а владелец ничего не стоит и не устаёт.
 4. Прохождение игры показало главный перекос: открыться без разрешения выгодно. За 30 дней незаконной работы кафе выручило $55 378, штраф составил $1 400 и 5 дней закрытия.
-5. Сдано: 58 историй закрытия, 104 неочевидных пункта, 36 событий с ходом игрока, 10 механик, календарь первого года по месяцам, 7 исправлений пакета. Все числа помечены `estimate`: открыть страницы источников в этой сессии было нельзя (раздел 6).
+5. Сдано: историй закрытия — 64, неочевидных пунктов — 115, событий с ходом игрока — 38, механик — 10; календарь первого года по месяцам; 7 исправлений пакета. Все числа помечены `estimate`: открыть страницы источников в этой сессии было нельзя (раздел 6).
 
 ## 2. Что добавлено
 
 | Раздел | Записей | Что внутри |
 |---|---|---|
-| `extra.failureStories` | 58 | Истории закрытия: что случилось, причина, урок, ссылка, метки причин. Нью-Йорк — 43, остальные США — 9, другие страны — 6 (Россия, Германия, Новая Зеландия) |
-| `extra.nonObvious` | 104 | Неочевидные вещи: текст для игрока, почему это неочевидно, ссылка, уровень |
-| `extra.eventCatalog` | 36 | События с `realSignal`, условием запуска (`trigger`) и ходом игрока. Уровни: core — 16, deep — 15, exotic — 5 |
+| `extra.failureStories` | 64 | Истории закрытия: что случилось, причина, урок, ссылка, метки причин. Нью-Йорк — 44, остальные США — 12, другие страны — 8 (Россия, Германия, Южная Корея, Новая Зеландия) |
+| `extra.nonObvious` | 115 | Неочевидные вещи: текст для игрока, почему это неочевидно, ссылка, уровень |
+| `extra.eventCatalog` | 38 | События с `realSignal`, условием запуска (`trigger`) и ходом игрока. Уровни: core — 16, deep — 17, exotic — 5 |
 | `extra.mechanics` | 10 | Механики, которых нет в формате (раздел 5) |
 | `extra.ownerYear` | 3 этапа до открытия + 12 месяцев | Что обязательно происходит, что и когда нужно оплатить или сдать, что идёт не так |
 | `extra.gameWalkthrough` | 12 наблюдений | Первый месяц за кафе: что показала игра и чего из жизни в ней нет |
 | `extra.topGaps` | 10 | Главные пробелы пакета по важности |
 | `extra.corrections` | 7 | Исправления существующих записей (раздел 4) |
-| `levers` | 14 | Условия аренды, газ или электричество, резерв, второй ключевой сотрудник, часы владельца, контроль кассы, Wi-Fi, страховые дополнения, музыка, вывеска на тротуаре, кейтеринг, подарочные карты, возвраты, остатки выпечки |
+| `levers` | 15 | Условия аренды, газ или электричество, резерв, второй ключевой сотрудник, часы владельца, контроль кассы, Wi-Fi, страховые дополнения, музыка, вывеска на тротуаре, кейтеринг, подарочные карты, возвраты, остатки выпечки |
 | `shortcuts` | 6 | Зарплата раз в две недели, личный плейлист, скрытая наценка за карту, столики во дворе, работа без воды, порог без пандуса |
 | `violations` | 7 | По одному на каждый срезанный угол и на вывеску-штендер |
 | `officials` | 3 | Санитарный агент (DSNY), инспектор зданий (DOB), частный истец |
@@ -30,7 +30,7 @@
 | `ruleCards` | 21 | Карточки правил к новым нарушениям и к главным находкам |
 | `events` | 7 | Семь событий в обычном формате пакета, одно из них — исправленное `sidewalk_shed` |
 | `setup`, `monthlyCosts` | 3 и 3 | Переносной пандус, консультативная инспекция, бесплатная проверка договора аренды; музыка, замена ушедших работников, списание выпечки |
-| `sources` | 146 | Ссылки с 90 сайтов |
+| `sources` | 159 | Ссылки с 101 сайтов |
 
 Фрагмент, наложенный на `packs/cafe.json`, проходит `node build/validate-pack.mjs` без ошибок и предупреждений.
 
@@ -96,8 +96,14 @@
 | 56 | A coffee corner planned on a neighbor's traffic | мир: Russia | 2022 | ошибка в прогнозе спроса | [источник](https://t-j.ru/list/biz-fails-2022/) |
 | 57 | Schlosscafe Schillingsfuerst | мир: Franconia, Germany | 2024 | нехватка персонала | [источник](https://www.infranken.de/lk/ansbach/gastronomie/schillingsfuerst-schlosscafe-muss-nach-fast-29-jahren-schliessen-trotz-zahlreicher-kunden-art-5837450) |
 | 58 | Niu Asian Cafe | мир: Nuremberg, Germany | 2025 | аренда при продлении; нехватка персонала | [источник](https://www.infranken.de/lk/nuernberg/gastronomie/nuernberger-cafe-geschlossen-niu-asian-cafe-schliessung-andrang-schlange-art-6324224,PRINT) |
+| 59 | NY Bagel Cafe & Deli franchisees | США: Pennsylvania, Virginia, Maryland (franchisor based in New York) | 2020 | франшиза; ошибка в прогнозе спроса; кредит | [источник](https://www.marylandattorneygeneral.gov/Securities%20Actions/2020/SMSFranchise_summary_cd_final_100520.pdf) |
+| 60 | A Tim Hortons franchisee | США: Rochester, New York | 2017 | франшиза; спор с франчайзером | [источник](https://law.com/thelegalintelligencer/2017/10/26/no-more-mr-nice-guy-when-it-comes-to-franchisee-says-the-court) |
+| 61 | A Roasting Plant franchisee | США: Ann Arbor, Michigan (franchisor based in New York City) | 2016 | франшиза; спор с франчайзером | [источник](https://annarborobserver.com/roasting-plant-closes/) |
+| 62 | Singer Hanhae's cafe | мир: Seoul, South Korea | 2026 | доля аренды в выручке; не хватило капитала | [источник](https://www.koreatimes.co.kr/entertainment/20261006/celebrities-who-tried-opening-cafes-in-korea-say-think-twice) |
+| 63 | A celebrity couple's cafe on Jeju | мир: Jeju, South Korea | 2024 | решение владельца; медленные убытки | [источник](https://www.koreatimes.co.kr/entertainment/20261006/celebrities-who-tried-opening-cafes-in-korea-say-think-twice) |
+| 64 | Hekate Cafe & Elixir Lounge | Нью-Йорк: East Village, Manhattan | 2026 | конкурент рядом; формат скопировали | [источник](https://evgrieve.com/search/label/closings%202026) |
 
-Причины по числу историй: аренда при продлении — 8, слишком быстрый рост — 5, отключение газа — 4, спор с арендодателем — 4, долг по аренде — 4, состояние здания — 3, строительные леса — 3, долговая спираль — 3, профсоюз — 3, аренду не продлили — 3, не хватило капитала — 3, дорогой формат — 3, проблема у соседа — 2, выгорание владельца — 2.
+Причины по числу историй: аренда при продлении — 8, слишком быстрый рост — 5, отключение газа — 4, спор с арендодателем — 4, долг по аренде — 4, не хватило капитала — 4, состояние здания — 3, строительные леса — 3, долговая спираль — 3, профсоюз — 3, медленные убытки — 3, аренду не продлили — 3, решение владельца — 3, дорогой формат — 3.
 
 ### Год владельца по месяцам
 
@@ -145,7 +151,7 @@
 
 | № | Пробел | Почему важен | Чем закрывается во фрагменте |
 |---|---|---|---|
-| 1 | Аренда без срока, условий и арендодателя | 20 историй из 58. В пакете одно число — месячная аренда | `lease_terms`, механика `lease_clock`, события `lease_renewal_offer`, `building_sold`, `tax_escalation_bill` |
+| 1 | Аренда без срока, условий и арендодателя | 21 из 64 историй. В пакете одно число — месячная аренда | `lease_terms`, механика `lease_clock`, события `lease_renewal_offer`, `building_sold`, `tax_escalation_bill` |
 | 2 | Месяцы до первой продажи и медленный разгон после | Кафе умирают на 5–8-й месяц, когда кончаются стартовые деньги, или не открываются вовсе | ветка keen-cray; механика `closed_but_paying` |
 | 3 | Закрытия не от инспектора | Газ (до 8 месяцев), вода, уход команды, арест за налоги — аренда при этом идёт | `gas_red_tag`, `water_off`, `staff_walkout`, `sales_tax_warrant`, рычаг `kitchen_energy` |
 | 4 | Работники как число | Нет текучки, ключевого сотрудника, владельца | `key_barista_leaves`, `cross_training`, `staff_replacement`, механика `owner_hours` |
@@ -154,7 +160,7 @@
 | 7 | Улица за дверью | Одно событие (леса на 3 месяца). Средний возраст лесов — 557 дней | исправленный `sidewalk_shed`, `street_dig`, `barricades`, `chain_opens_next_door`, `coffee_carts_2027` |
 | 8 | Календарь | Нет января, сроков на экране, ежегодного роста зарплаты | `extra.ownerYear`, механика `compliance_calendar`, `january_trough`, `wage_step_january` |
 | 9 | Иски частных лиц | Доступность, музыка, частота выплаты зарплаты — это не проверки | механика `private_claims`, `access_claim`, `music_letter`, `pay_frequency_claim` |
-| 10 | Как выглядит смерть | Банкрот видит «касса ниже нуля» | механика `autopsy` и 58 историй с метками причин |
+| 10 | Как выглядит смерть | Банкрот видит «касса ниже нуля» | механика `autopsy` и истории с метками причин |
 
 ## 3. Пятнадцать самых неочевидных находок
 
@@ -241,12 +247,12 @@
 
 ## 7. Источники
 
-Всего 146 ссылок; полный список с указанием, для каких записей использована каждая, — в поле `sources` фрагмента. Все увидены 14 ноября 2026 года в результатах веб-поиска. Ниже — по сайтам.
+Всего 159 ссылок; полный список с указанием, для каких записей использована каждая, — в поле `sources` фрагмента. Все увидены 14 ноября 2026 года в результатах веб-поиска. Ниже — по сайтам.
 
 - **nyc.gov** (12): [1](https://www.nyc.gov/assets/oath/downloads/pdf/Small-Business-DOHMH.pdf), [2](https://www.nyc.gov/assets/doh/downloads/pdf/permit/consultative-inspections.pdf), [3](https://www.nyc.gov/site/dsny/businesses/setup-operations/setout.page), [4](https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page), [5](https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page), [6](https://www.nyc.gov/site/buildings/safety/sign.page), [7](https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page), [8](https://www.nyc.gov/assets/fdny/downloads/pdf/business/cof-g82-noe-study-materials.pdf), [9](https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page), [10](https://www.nyc.gov/assets/doh/downloads/pdf/environmental/fse-application-packet.pdf), [11](https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf), [12](https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf)
 - **dnainfo.com** (6): [1](https://www.dnainfo.com/new-york/20140701/upper-east-side/coffee-shop-on-madison-ave-shutters-after-just-5-months), [2](https://www.dnainfo.com/new-york/20150107/bushwick/coffee-shop-where-owner-called-jews-greedy-closes), [3](https://www.dnainfo.com/chicago/20140103/west-town/swim-cafe-closes-as-owner-battles-cancer-looks-for-someone-take-over), [4](https://www.dnainfo.com/new-york/20111213/downtown/milk-street-cafe-closing-thursday-after-struggle-with-nypd-barricades), [5](https://www.dnainfo.com/new-york/20141006/east-village/city-waited-3-decades-rule-yaffa-cafes-back-patio-illegal-manager-says), [6](https://www.dnainfo.com/new-york/20151221/upper-west-side/ocean-grill-suing-landlord-for-63m-claiming-construction-led-closure)
+- **evgrieve.com** (6): [1](https://evgrieve.com/2018/10/the-coffee-shop-closed-on-union-square.html), [2](https://evgrieve.com/2024/01/ongoing-building-issues-force-caffe.html), [3](https://evgrieve.com/2025/07/buddies-coffee-forced-out-of.html), [4](https://evgrieve.com/search/label/closings%202025), [5](https://evgrieve.com/2022/04/owner-citys-bureaucratic-red-tape.html), [6](https://evgrieve.com/search/label/closings%202026)
 - **brooklynpaper.com** (5): [1](https://www.brooklynpaper.com/two-sheepshead-bay-businesses-closed-for-months-after-nearby-gas-leak), [2](https://www.brooklynpaper.com/gorilla-warfare-as-entire-staff-quits-fifth-ave-coffee-bar), [3](https://www.brooklynpaper.com/vox-popped-outlaw-coffeeshop-closed-down-by-taxman-again), [4](https://www.brooklynpaper.com/brooklyn-roasting-company-files-bankruptcy-plans-to-close-two-remaining-cafe-locations), [5](https://www.brooklynpaper.com/boris-horton-dog-cafe-williamsburg-closure)
-- **evgrieve.com** (5): [1](https://evgrieve.com/2018/10/the-coffee-shop-closed-on-union-square.html), [2](https://evgrieve.com/2024/01/ongoing-building-issues-force-caffe.html), [3](https://evgrieve.com/2025/07/buddies-coffee-forced-out-of.html), [4](https://evgrieve.com/search/label/closings%202025), [5](https://evgrieve.com/2022/04/owner-citys-bureaucratic-red-tape.html)
 - **westsiderag.com** (5): [1](https://www.westsiderag.com/2026/04/02/upper-west-side-cafe-set-to-close-after-38-years-it-breaks-our-hearts), [2](https://www.westsiderag.com/2017/02/03/four-restaurants-close-because-of-gas-problem-in-amsterdam-avenue-building), [3](https://www.westsiderag.com/2024/10/31/cafe-lalo-will-not-reopen-in-its-longtime-uws-home-building-owner), [4](https://www.westsiderag.com/2022/09/27/the-mermaid-inn-closing-current-spot-but-plans-to-reopen-in-neighborhood), [5](https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag)
 - **brooklyn.news12.com** (4): [1](https://brooklyn.news12.com/bushwick-public-house-venue-closes-after-landlord-tripled-rent), [2](https://brooklyn.news12.com/2025/10/29/over-20-greenpoint-businesses-given-last-minute-lease-termination/6RVH66SjcKhEkTZIzqTXr5), [3](https://brooklyn.news12.com/2025/12/10/popular-juice-shop-in-crown-heights-closes-its-doors/1nmkac7r25b71vtq38DmnB), [4](https://brooklyn.news12.com/prospect-lefferts-gardens-restaurant-unable-to-open-due-to-national-grid-standoff-40948244)
 - **dailycoffeenews.com** (4): [1](https://dailycoffeenews.com/2019/01/23/the-rise-decline-and-section-363-sale-of-the-new-york-coffee-chain-fika), [2](https://dailycoffeenews.com/2024/06/11/philadelphias-ocf-coffee-closing-all-shops-after-union-push), [3](https://dailycoffeenews.com/2020/10/23/brooklyn-roasting-company-files-for-chapter-11-bankruptcy), [4](https://dailycoffeenews.com/2026/10/30/popular-san-francisco-coffee-company-closes-both-cafes-after-landlord-disputes/)
@@ -257,6 +263,7 @@
 - **bedfordandbowery.com** (2): [1](https://bedfordandbowery.com/2017/07/les-stalwart-cup-saucer-to-shutter-after-75-years/), [2](https://bedfordandbowery.com/2014/10/heres-why-yaffa-cafe-had-to-close-and-one-last-look-inside/)
 - **brownstoner.com** (2): [1](https://www.brownstoner.com/brooklyn-life/closing-bell-looking-back-at-vox-pop), [2](https://www.brownstoner.com/brooklyn-life/cafe-tucum-evicted-210-patchen-bed-stuy)
 - **bushwickdaily.com** (2): [1](https://bushwickdaily.com/news/6197-bushwick-mainstay-and-community-hub-little-skips-is-closing-its-doors-due-to-rent-increase), [2](https://bushwickdaily.com/?p=17425)
+- **columbianewsservice.com** (2): [1](https://columbianewsservice.com/2025/12/10/the-cafe-must-go-on-the-cingir-brothers-fight-to-save-park-cafe/), [2](https://columbianewsservice.com/2022/02/03/hurricane-ida-floods-left-brooklyn-residents-with-few-options-to-cover-rebuilding/)
 - **dol.ny.gov** (2): [1](https://dol.ny.gov/minimum-wage-0), [2](https://dol.ny.gov/annual-calendar)
 - **dripos.com** (2): [1](https://www.dripos.com/counter-talk/what-coffee-shop-owners-wish-they-knew-before-opening), [2](https://www.dripos.com/counter-talk/how-to-keep-your-best-baristas----and-actually-reduce-turnover)
 - **en.wikipedia.org** (2): [1](https://en.wikipedia.org/wiki/The_City_Bakery), [2](https://en.wikipedia.org/wiki/Manhattan_blackout_of_July_2019)
@@ -268,13 +275,14 @@
 - **tribecacitizen.com** (2): [1](https://tribecacitizen.com/2019/09/25/the-swedish-coffee-spot-fika-has-closed/), [2](https://tribecacitizen.com/?p=109936)
 - **abc7ny.com** (1): [1](https://abc7ny.com/post/starbucks-close-dozens-nyc-coffee-shop-locations-amid-restructure/17918006/)
 - **aiany.org** (1): [1](https://www.aiany.org/news/mamdani-enacts-year-round-outdoor-dining-program/)
+- **annarborobserver.com** (1): [1](https://annarborobserver.com/roasting-plant-closes/)
 - **axios.com** (1): [1](https://www.axios.com/2025/05/09/coffee-shops-no-wifi-laptops-remote-work)
 - **barclaydamon.com** (1): [1](https://www.barclaydamon.com/alerts/accessibility-lawsuits-several-tester-plaintiffsalfred-trippett-patrick-austin-kai-hunte-and-jeffery-williamstargeting-businesses-in-recent-flurry-of-lawsuits)
 - **baristamagazine.com** (1): [1](https://www.baristamagazine.com/los-angeles-kindness-mischief-has-closed-its-doors-but-something-new-is-on-the-horizon/)
 - **billypenn.com** (1): [1](https://billypenn.com/2023/01/11/good-karma-cafe-closes-wash-west-theft-embezzlement/)
 - **bklyner.com** (1): [1](https://bklyner.com/no-new-gas-national-grid-holds-brooklyn-restaurants-hostage)
 - **cbsnews.com** (1): [1](https://www.cbsnews.com/newyork/news/milk-street-cafe-closes-after-losing-business-during-occupy-wall-street-protests/)
-- **columbianewsservice.com** (1): [1](https://columbianewsservice.com/2025/12/10/the-cafe-must-go-on-the-cingir-brothers-fight-to-save-park-cafe/)
+- **citylandnyc.org** (1): [1](https://www.citylandnyc.org/dependent-on-immigrant-workforce-city-hospitality-industry-concerned-about-ice-raids/)
 - **commercialobserver.com** (1): [1](https://commercialobserver.com/2025/03/ny-city-council-approves-reforms-sidewalk-shed-laws/)
 - **community.squareup.com** (1): [1](https://community.squareup.com/t5/Food-and-Beverage/4-Learnings-from-a-new-coffee-shop-owner/m-p/761899)
 - **coned.com** (1): [1](https://www.coned.com/en/accounts-billing/your-bill/how-to-read-your-bill/understanding-your-bill-faq)
@@ -282,6 +290,8 @@
 - **council.nyc.gov** (1): [1](https://council.nyc.gov/press/2025/05/01/2859/)
 - **craneagency.com** (1): [1](https://www.craneagency.com/why-workers-compensation-premiums-increase-at-audit/)
 - **crowell.com** (1): [1](https://www.crowell.com/en/insights/client-alerts/effective-date-of-the-new-york-city-pay-transparency-law-extended-to-november-1-2022)
+- **dailyjournal.com** (1): [1](https://www.dailyjournal.com/articles/384254-starbucks-must-pay-50-million-to-driver-burned-by-spilled-drink-jury-rules)
+- **dol.gov** (1): [1](https://www.dol.gov/newsroom/releases/whd/whd20221004-0)
 - **everycrsreport.com** (1): [1](https://www.everycrsreport.com/files/2025-04-16_IF12970_089de047373b3b37f31f7c8b286333da57803926.html)
 - **finance.yahoo.com** (1): [1](https://finance.yahoo.com/news/starbucks-cold-business-made-up-75-of-us-beverage-sales--bring-on-the-ice-nuggets-201812097.html)
 - **findtherun.com** (1): [1](https://www.findtherun.com/race/130698/2026-tcs-new-york-city-marathon)
@@ -295,10 +305,15 @@
 - **ilovetheupperwestside.com** (1): [1](https://www.ilovetheupperwestside.com/youve-got-a-lawsuit-cafe-lalo-faces-eviction/)
 - **immresearch.org** (1): [1](https://immresearch.org/reports/street-vendor-victory-reshaping-the-way-nyc-authorizes-vending/)
 - **kastle.com** (1): [1](https://www.kastle.com/safety-wellness/getting-america-back-to-work/)
+- **koreatimes.co.kr** (1): [1](https://www.koreatimes.co.kr/entertainment/20261006/celebrities-who-tried-opening-cafes-in-korea-say-think-twice)
 - **kottke.org** (1): [1](https://kottke.org/19/10/what-killed-city-bakery)
+- **law.com** (1): [1](https://law.com/thelegalintelligencer/2017/10/26/no-more-mr-nice-guy-when-it-comes-to-franchisee-says-the-court)
 - **law.justia.com** (1): [1](https://law.justia.com/codes/new-york/2017/pbh/article-19/1901/)
+- **law360.com** (1): [1](https://law360.com/articles/582027)
 - **londoncoffeefestival.com** (1): [1](https://www.londoncoffeefestival.com/journal-1/how-to-open-a-coffee-shop)
 - **manhattan.institute** (1): [1](https://manhattan.institute/article/the-citys-war-on-small-business-slams-cat-cafes)
+- **marylandattorneygeneral.gov** (1): [1](https://www.marylandattorneygeneral.gov/Securities%20Actions/2020/SMSFranchise_summary_cd_final_100520.pdf)
+- **meridiancapital.com** (1): [1](https://meridiancapital.com/beijing-based-luckin-coffee-eyes-starbucks-shuttered-nyc-stores-as-even-more-could-be-closing-sources/)
 - **metro.us** (1): [1](https://www.metro.us/news/local-news/new-york/union-square-coffee-shop-last-day)
 - **mondaq.com** (1): [1](https://www.mondaq.com/unitedstates/discrimination-disability-sexual-harassment/1763220/ada-lawsuits-against-coffee-shops-and-breweries-on-the-rise-how-small-businesses-can-avoid-costly-accessibility-claims-about-architectural-barriers-and-websites)
 - **multisite.nycnewsnetwork.com** (1): [1](https://multisite.nycnewsnetwork.com/clintonhill/?p=1349)
@@ -323,11 +338,13 @@
 - **sage.com** (1): [1](https://www.sage.com/en-us/blog/small-business-survival-skills-one-st-petersburg-cafe-became-community-haven-local-residents/)
 - **secondmeasure.com** (1): [1](https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/)
 - **secretnyc.co** (1): [1](https://secretnyc.co/buddies-coffee-closing-williamsburg/)
+- **sostav.ru** (1): [1](https://www.sostav.ru/blogs/290957/89813)
 - **thecity.nyc** (1): [1](https://www.thecity.nyc/2022/09/21/merchant-cash-advance-new-york-threats-courts/)
 - **thecoastnews.com** (1): [1](https://thecoastnews.com/a-little-moore-friction-between-owners-closes-leucadia-cafe/)
 - **thelodownny.com** (1): [1](https://www.thelodownny.com/?p=111961)
 - **tradingeconomics.com** (1): [1](https://tradingeconomics.com/commodity/coffee/news/599144)
 - **tucson.com** (1): [1](https://tucson.com/life-entertainment/local/food-drink/article_21b69e75-5d55-49b2-9846-c39246a599d7.html)
+- **unhappyfranchisee.com** (1): [1](https://unhappyfranchisee.com/?p=5124)
 - **urbanmilwaukee.com** (1): [1](https://urbanmilwaukee.com/?p=1084521)
 - **venable.com** (1): [1](https://www.venable.com/insights/publications/2026/04/deadlines-for-the-new-york-state-secure-choice)
 - **washingtonian.com** (1): [1](https://washingtonian.com/2024/05/15/the-wydown-abruptly-shuts-down-dc-coffee-shops-amid-unionization-fight/)
