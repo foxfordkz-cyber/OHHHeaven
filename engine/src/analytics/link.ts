@@ -9,7 +9,10 @@ import { hooksFor } from '../niches';
 
 export interface EngineCtx { packs: PackSet; places: Place[] }
 
-export { tickDay, netWorth, dealModifiers, exposureOf } from './__stubs__/engine';
+// Склейка (агент 01, 12:27 UTC): все четыре — настоящие.
+export { tickDay, netWorth } from '../index';
+export { dealModifiers } from '../deals/index';
+export { exposureOf } from '../law/index';
 
 export function nicheKpisHook(b: BusinessState, pack: Pack): NicheKpi[] | null {
   return hooksFor(b.niche).kpis?.(b, pack) ?? null;
