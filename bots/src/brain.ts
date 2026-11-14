@@ -2,10 +2,11 @@
 // Action and decide only from ownerSight / officialSight (what a human in their seat would see).
 import type { Action, BusinessState, DealTerms, NicheId, OfficialRole, OpenRecommendation, Pack, Place, Player, PublicBusiness, StandingOrders, WorldState } from '../../shared/src/types';
 import { RULES } from '../../shared/src/rules';
-import { baselineOrdersDay } from '../../shared/src/place';
+import { baselineOrdersDay, overlap } from '../../shared/src/place';
 import { FIRST, LAST, businessName } from './names';
 import { officialSight, ownerSight, type OwnerSight } from './observe';
 import { hashStr, mulberry32, rngFor, shuffle } from './rng';
+import { lastsThroughRamp, runwayOf } from './runway';
 import { OFFICIAL_PROFILES, OWNER_STRATEGIES, PROFILES, officialStrategyFromName, ownerStrategyFromName, type OfficialStrategy, type OwnerProfile, type OwnerStrategy } from './strategies';
 import type { EngineCtx } from './__stubs__/engine';
 import { recommendOpening as stubRecommendOpening, recommendedPrice as stubRecommendedPrice } from './__stubs__/engine';
@@ -23,6 +24,8 @@ export interface BrainOptions {
   strategyOf?: (p: Player) => OwnerStrategy | OfficialStrategy | undefined;
   /** Override the niche (simulator). Default: derived from the player's name. */
   nicheOf?: (p: Player) => NicheId | undefined;
+  /** Careful characters check that the savings last through the wait and the ramp before signing (default true; the simulator turns it off to measure a newcomer who opens anyway). */
+  runwayCheck?: boolean;
   /** Agent 04's recommendOpening when available; the stub picks the pack's standard kit. */
   recommendOpening?: (niche: NicheId, placeId: string, w: WorldState, ctx: EngineCtx) => OpenRecommendation[];
   /** Price the analytics screen suggests (agent 04's recommend → set_orders.price). Default: stub Lerner-rule advice. */
@@ -103,6 +106,14 @@ export function choosePlace(ctx: EngineCtx, name: string, niche: NicheId, profil
   return best;
 }
 
+/** Weight of the shops of the niche already trading or fitting out around a door (public map data). */
+function rivalsAround(ctx: EngineCtx, niche: NicheId, neighbours: PublicBusiness[]): (p: Place) => number {
+  const radius = (ctx.packs.niches[niche]?.extra as { footfall?: { radiusM?: number } } | undefined)?.footfall?.radiusM ?? 0;
+  const spots = neighbours.filter((n) => n.niche === niche && n.status !== 'bankrupt').map((n) => placeOf(ctx, n.placeId)).filter((x): x is Place => !!x);
+  // each one counts as an average known shop, weighted like the engine weighs it: full next door, nothing at the radius
+  return (p) => (radius > 0 ? spots.reduce((s, q) => s + (q.id === p.id ? 0 : overlap(distanceM(p, q), radius)), 0) : 0);
+}
+
 function fixedCostsMonth(pack: Pack, place: Place, b: BusinessState): number {
   const payroll = pack.staff.reduce((s, r) => s + (b.orders.staff[r.id] ?? 0) * r.hourlyWage * r.hoursPerMonth, 0);
   const fixed = pack.monthlyCosts.filter((c) => c.basis === 'fixed').reduce((s, c) => s + c.amount, 0);
@@ -167,11 +178,15 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     // a newcomer walks past the doors it cannot pay for: the build-out of a space that never had this trade can cost more than the savings
     let place: Place | undefined;
     let recs: OpenRecommendation[] = [];
+    // a careful one also does the napkin sum: rent while the room is built, then the slow first months — does the
+    // money last until the shop pays for itself? (bots/src/runway.ts). A newbie with a random plan does not.
+    const careful = opts.runwayCheck !== false && profile.price !== 'fixed_random';
+    const rivals = careful ? rivalsAround(ctx, niche, sight.neighbors()) : () => 0;
     for (let tries = 0; tries < 40; tries++) {
       const p = choosePlace(ctx, sight.me.name, niche, profile, occupied);
       if (!p) break;
-      const r = recommend(niche, p.id, w, ctx);
-      if (r.length && r.some((x) => x.cashLeft >= 0)) { place = p; recs = r.filter((x) => x.cashLeft >= 0); break; }
+      const r = recommend(niche, p.id, w, ctx).filter((x) => x.cashLeft >= 0 && (!careful || lastsThroughRamp(runwayOf(ctx, niche, p, x, rivals(p)))));
+      if (r.length) { place = p; recs = r; break; }
       occupied.add(p.id);
     }
     if (!place || !recs.length) return [];
