@@ -3,7 +3,7 @@
   "part": "D04",
   "theme": "Menu, cost of goods, suppliers, waste",
   "extra": {
-    "howNumbersWereChecked": "Session of November 14, 2026. Direct page fetches were blocked by the session's network policy (the proxy answered 403), so every number was read through web search. verified = the search was restricted to the primary source's own domain (fred.stlouisfed.org, bls.gov, tax.ny.gov, nyc.gov, dec.ny.gov, webstaurantstore.com and so on) and returned the number from that page. estimate = seen only in a secondary source, or my own arithmetic; the note gives the calculation. Recipes (grams of coffee, ounces of milk) are industry practice, not statistics: they are marked estimate and the note says where the practice is described. Effects of events and levers on demand, quality and reputation are design values for the lead to balance.",
+    "howNumbersWereChecked": "Session of November 14, 2026. Three levels, named in each note. (1) Opened: after the session was given network access to ten hosts I downloaded the page and read the number myself: nysenate.gov (statutes), tax.ny.gov (bulletins), dec.ny.gov, agriculture.ny.gov, fred.stlouisfed.org (BLS tables), ams.usda.gov (milk price announcement), webstaurantstore.com (live prices), balthazarbakery.com and portal.311.nyc.gov (official NYC311 articles). Only these carry confidence = verified. (2) Read through search limited to the source's own domain: used for nyc.gov, which answers automated requests with 'Access Denied' even from a real browser; these are marked estimate and the note says 'read through search limited to nyc.gov'. A person with a browser can confirm each in a minute. (3) Secondary sources and my own arithmetic: estimate, with the calculation in the note. Recipes (grams of coffee, ounces of milk) are trade practice, not statistics. Effects of events and levers on demand, quality and reputation are design values for the lead to balance.",
     "signals": [
       {
         "id": "ice_coffee_c",
@@ -71,8 +71,20 @@
         },
         "history": [
           {
+            "when": "2025-01",
+            "value": 7.019
+          },
+          {
+            "when": "2025-06",
+            "value": 8.132
+          },
+          {
             "when": "2025-09",
             "value": 9.139
+          },
+          {
+            "when": "2025-12",
+            "value": 9.053
           },
           {
             "when": "2026-02",
@@ -80,12 +92,12 @@
           },
           {
             "when": "2026-04",
-            "value": 9.72,
-            "what": "2026 peak (secondary tracker)"
+            "value": 9.723,
+            "what": "peak"
           },
           {
-            "when": "2026-08",
-            "value": 9.299
+            "when": "2026-07",
+            "value": 9.317
           },
           {
             "when": "2026-09",
@@ -98,7 +110,7 @@
         ],
         "source": "https://fred.stlouisfed.org/series/APU0000717311",
         "confidence": "verified",
-        "note": "FRED page updated November 10, 2026: September 2026 $9.332, October 2026 $9.249, September 2025 $9.139. Supermarket shelf price, not a cafe's wholesale price: it shows direction, not level. Retail stayed high in 2026 while futures fell by about a third."
+        "note": "FRED table opened November 14, 2026 (October 2025 has no value). From January 2025 to April 2026 the shelf price rose 38.5%; by October 2026 it had given back 4.9% while the exchange price fell by about a third. Supermarket shelf price, not a cafe's wholesale price: it shows direction, not level."
       },
       {
         "id": "usda_class_i",
@@ -113,9 +125,43 @@
         },
         "history": [
           {
+            "when": "2026-01",
+            "value": 16.35
+          },
+          {
+            "when": "2026-02",
+            "value": 14.7,
+            "what": "low of the year"
+          },
+          {
+            "when": "2026-03",
+            "value": 15.47
+          },
+          {
+            "when": "2026-04",
+            "value": 18.66,
+            "what": "+$3.19 in one month"
+          },
+          {
+            "when": "2026-05",
+            "value": 20.15
+          },
+          {
+            "when": "2026-06",
+            "value": 22.18,
+            "what": "high of the year"
+          },
+          {
             "when": "2026-07",
-            "value": 21.33,
-            "what": "down $0.85 from June"
+            "value": 21.33
+          },
+          {
+            "when": "2026-08",
+            "value": 18.76
+          },
+          {
+            "when": "2026-09",
+            "value": 17.04
           },
           {
             "when": "2026-10",
@@ -124,17 +170,17 @@
           {
             "when": "2026-11",
             "value": 20.27,
-            "what": "up $1.39 in one month; $3.52 above November 2025"
+            "what": "up $1.39; announced October 21, 2026"
           }
         ],
-        "passThrough": "One cwt is about 11.6 gallons, so $1.39 per cwt is about 12 cents a gallon at the farm-to-plant level. New Jersey's milk regulator publishes the same price with a monthly fuel adjuster ($1.49 per cwt for November 2026). Dairies re-price their list monthly from this announcement, so a cafe sees the change in the next invoice.",
-        "source": "https://www.agproud.com/articles/64305-november-class-i-base-price-up-to-2027-per-cwt",
+        "passThrough": "One cwt is about 11.6 gallons, so the 2026 range of $14.70 to $22.18 is $1.27 to $1.91 a gallon at the farm-to-plant level: 64 cents of swing, of which the supermarket shelf showed 29. Dairies re-price their list monthly from this announcement, so a cafe sees the change in the next invoice.",
+        "source": "https://www.ams.usda.gov/mnreports/dymadvancedprices.pdf",
         "sourcesMore": [
-          "https://mymarketnews.ams.usda.gov/filerepo/sites/default/files/2998/2026-10-23/1360985/ams_2998_00354_01.pdf",
+          "https://www.agproud.com/articles/64305-november-class-i-base-price-up-to-2027-per-cwt",
           "https://nj.gov/agriculture/divisions/md/pdf/NOVEMBER-2026-CLASS-I-MILK-PRICES.pdf"
         ],
-        "confidence": "estimate",
-        "note": "Read through search: USDA Dairy Market News for the week of October 19, 2026 cites the Announcement of Advanced Prices released October 21, 2026: base Class I for November 2026 is $20.27 per cwt, up $1.39 from October. 100 lb / 8.6 lb per gallon = 11.6 gallons. The Northeast order adds a location differential on top of the base."
+        "confidence": "verified",
+        "note": "USDA Announcement of Advanced Prices and Pricing Factors, ADV-1126, dated October 21, 2026, opened November 14, 2026: base Class I price for November 2026 $20.27 per cwt, up $1.39; the table of all 2026 months is on page 2. 100 lb / 8.6 lb per gallon = 11.6 gallons. The Northeast order adds a location differential on top of the base."
       },
       {
         "id": "bls_milk_retail",
@@ -149,8 +195,16 @@
         },
         "history": [
           {
-            "when": "2026-01",
-            "value": 4.1
+            "when": "2025-01",
+            "value": 4.025
+          },
+          {
+            "when": "2025-07",
+            "value": 4.162
+          },
+          {
+            "when": "2025-11",
+            "value": 3.997
           },
           {
             "when": "2026-02",
@@ -179,7 +233,7 @@
         ],
         "source": "https://fred.stlouisfed.org/series/APU0000709112",
         "confidence": "verified",
-        "note": "FRED page updated November 10, 2026. Range inside 2026: $4.026 to $4.317, a swing of 7%."
+        "note": "FRED table opened November 14, 2026. Range inside 2026: $4.026 to $4.317, a swing of 7%, while the federal farm-level price swung 51% in the same months: the shelf smooths most of it."
       },
       {
         "id": "bls_eggs",
@@ -195,13 +249,29 @@
         },
         "history": [
           {
+            "when": "2025-01",
+            "value": 4.953
+          },
+          {
+            "when": "2025-02",
+            "value": 5.897
+          },
+          {
             "when": "2025-03",
             "value": 6.227,
             "what": "record, bird flu"
           },
           {
-            "when": "2026-01",
-            "value": 2.577
+            "when": "2025-04",
+            "value": 5.122
+          },
+          {
+            "when": "2025-06",
+            "value": 3.775
+          },
+          {
+            "when": "2025-12",
+            "value": 2.712
           },
           {
             "when": "2026-06",
@@ -214,7 +284,7 @@
         ],
         "source": "https://fred.stlouisfed.org/series/APU0000708111",
         "confidence": "verified",
-        "note": "FRED page updated November 10, 2026. From record to October 2026 the price fell 63%: an egg sandwich that cost 52 cents of egg in March 2025 costs 19 cents now (one egg = 1/12 dozen)."
+        "note": "FRED table opened November 14, 2026. From the March 2025 record to October 2026 the price fell 63%: an egg cost 52 cents then and 19 cents now."
       },
       {
         "id": "kyoto_tencha_auction",
@@ -299,9 +369,9 @@
           "croissant_bakeoff"
         ],
         "latest": {
-          "value": 1.575,
+          "value": 1.361,
           "unit": "USD per lb",
-          "asOf": "2026-07-21"
+          "asOf": "2026-10-21"
         },
         "history": [
           {
@@ -321,11 +391,16 @@
           {
             "when": "2026-07-21",
             "value": 1.575
+          },
+          {
+            "when": "2026-10 (two weeks to mid-October)",
+            "value": 1.361,
+            "what": "USDA two-week product price average, in the advanced price announcement of October 21, 2026"
           }
         ],
         "source": "https://www.barchart.com/futures/quotes/BDX26/overview",
         "confidence": "estimate",
-        "note": "Read through search: Barchart (annual averages), Dairy Processing (September 2025) and a USDA daily report of July 21, 2026. No November 2026 quote was found. A bakery's price list follows butter with a lag and seldom comes back down."
+        "note": "Annual averages and the 2025 and July 2026 points were read through search (Barchart, Dairy Processing, a USDA daily report). The October 2026 figure, $1.3610 per lb, was read in the USDA announcement itself on November 14, 2026. A bakery's price list follows butter with a lag and seldom comes back down."
       },
       {
         "id": "us_diesel",
@@ -339,6 +414,11 @@
           "asOf": "2026-11-05"
         },
         "history": [
+          {
+            "when": "2026-10-21",
+            "value": 5.815,
+            "what": "diesel price printed in the USDA milk price announcement (opened November 14, 2026)"
+          },
           {
             "when": "2026-11-05",
             "value": 6.256,
@@ -428,7 +508,7 @@
         "costPerUnit": 0.1041,
         "source": "https://www.webstaurantstore.com/oatly-barista-edition-oat-milk-32-fl-oz-case/110OTBAROAT.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: Oatly Barista Edition 12/case $39.99 ($0.10 per fl oz); lots of 85 cases $35.49. Shelf-stable until opened. 2.5 times the price of dairy per ounce."
+        "note": "WebstaurantStore, page opened November 14, 2026: Oatly Barista Edition 12/case $39.99 ($0.10 per fl oz); $38.99 for two cases, $35.99 for 85. Shelf-stable until opened. 2.5 times the price of dairy per ounce."
       },
       {
         "id": "hot_cup_12",
@@ -440,31 +520,31 @@
         "signal": "packaging",
         "source": "https://www.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: Choice white poly paper cup $45.99 per 1,000. Same page family: kraft $48.99, compostable EcoChoice $82.49, Solo brand $72.49."
+        "note": "WebstaurantStore, page opened November 14, 2026: Choice white poly paper cup $45.99 per 1,000. Compostable EcoChoice cup, also opened: $78.49. From search captures: kraft $48.99, Solo brand $72.49."
       },
       {
         "id": "hot_lid",
         "name": "Travel lid for 10-24 oz hot cups",
         "pack": "case of 1,000",
-        "packPrice": 30.49,
+        "packPrice": 34.99,
         "unit": "each",
-        "costPerUnit": 0.0305,
+        "costPerUnit": 0.035,
         "signal": "packaging",
         "source": "https://www.webstaurantstore.com/choice-8-oz-squat-to-24-oz-white-hot-paper-cup-travel-lid-case/500L1020W.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: $30.49 per 1,000."
+        "note": "WebstaurantStore, page opened November 14, 2026: $34.99 per 1,000 ($31.49 from two cases)."
       },
       {
         "id": "sleeve",
         "name": "Kraft cup sleeve",
         "pack": "case of 1,200",
-        "packPrice": 41.49,
+        "packPrice": 43.49,
         "unit": "each",
-        "costPerUnit": 0.0346,
+        "costPerUnit": 0.0362,
         "signal": "packaging",
         "source": "https://www.webstaurantstore.com/ecochoice-10-24-oz-kraft-coffee-cup-sleeve-jacket-clutch-case/500COLLARBR.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: EcoChoice 10-20 oz kraft sleeve $41.49 per 1,200."
+        "note": "WebstaurantStore, page opened November 14, 2026: EcoChoice kraft sleeve $43.49 per 1,200 ($41.49 from two cases)."
       },
       {
         "id": "cold_cup_16",
@@ -476,19 +556,19 @@
         "signal": "packaging",
         "source": "https://www.webstaurantstore.com/choice-16-oz-clear-pet-plastic-cold-cup-case/500CC16.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: $59.49 per 1,000 ($53.49 from four cases). Other captures of the same page show $54.99 and $57.99."
+        "note": "WebstaurantStore, page opened November 14, 2026: $59.49 per 1,000 ($56.49 for two or three cases, $53.49 from four)."
       },
       {
         "id": "cold_sip_lid",
         "name": "Strawless sip lid for cold cups",
         "pack": "case of 1,000",
-        "packPrice": 44.49,
+        "packPrice": 38.49,
         "unit": "each",
-        "costPerUnit": 0.0445,
+        "costPerUnit": 0.0385,
         "signal": "packaging",
         "source": "https://www.webstaurantstore.com/choice-9-12-16-20-and-24-oz-clear-sip-through-lid-with-extra-wide-opening-case/500LSTRWLW.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: Choice strawless sip lid $44.49 per 1,000 (another capture $35.49); flat lid with straw slot $31.99. The strawless lid costs 1.25 cents more than a flat lid but needs no straw, which New York lets you hand out only on request."
+        "note": "WebstaurantStore, page opened November 14, 2026: Choice sip-through lid $38.49 per 1,000 ($36.49 from two cases); a flat lid with a straw slot was $31.99 in a search capture. The strawless lid costs about half a cent more than a flat lid but needs no straw, which New York lets you hand out only on request."
       },
       {
         "id": "vanilla_syrup",
@@ -499,7 +579,7 @@
         "costPerUnit": 0.2793,
         "source": "https://www.webstaurantstore.com/monin-premium-vanilla-flavoring-syrup-750-ml-case/544SYPAR045CS.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: Monin vanilla $84.99 per case of 12 ($9.79 a single bottle); Torani vanilla bean $79.99 per case. 750 mL = 25.36 fl oz."
+        "note": "WebstaurantStore, page opened November 14, 2026: Monin vanilla $84.99 per case of 12. From search captures: $9.79 a single bottle; Torani vanilla bean $79.99 per case. 750 mL = 25.36 fl oz."
       },
       {
         "id": "chocolate_sauce",
@@ -511,7 +591,7 @@
         "signal": "ice_cocoa",
         "source": "https://www.webstaurantstore.com/ghirardelli-black-label-chocolate-flavoring-sauce-64-fl-oz-case/40862057CS.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: Ghirardelli Black Label $118.49 per case of 6 ($23.49 a single jug)."
+        "note": "WebstaurantStore, page opened November 14, 2026: Ghirardelli Black Label $118.49 per case of 6 (a single jug $23.49 in a search capture)."
       },
       {
         "id": "chai_concentrate",
@@ -522,19 +602,19 @@
         "costPerUnit": 0.1848,
         "source": "https://www.webstaurantstore.com/tazo-32-fl-oz-chai-tea-latte-1-1-concentrate-case/711TAZ1733CS.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: Tazo chai 1:1 concentrate $35.49 per case of 6; Oregon Chai $36.99; David Rio $37.49."
+        "note": "WebstaurantStore, page opened November 14, 2026: Tazo chai 1:1 concentrate $35.49 per case of 6. From search captures: Oregon Chai $36.99; David Rio $37.49."
       },
       {
         "id": "matcha",
         "name": "Matcha, ceremonial barista grade, 1 lb bag",
-        "pack": "case of 6 x 1 lb",
-        "packPrice": 839,
+        "pack": "1 lb bag",
+        "packPrice": 119.99,
         "unit": "g",
-        "costPerUnit": 0.3083,
+        "costPerUnit": 0.2645,
         "signal": "kyoto_tencha_auction",
         "source": "https://www.webstaurantstore.com/jade-leaf-ceremonial-barista-edition-matcha-powder-1-lb-454g/999JLCRBARL.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: Jade Leaf Ceremonial Barista Edition $839.00 per case of six 1 lb bags ($139.83 per lb; $162.49 a single bag). Culinary grade $456.49 per case ($76 per lb); ceremonial teahouse grade $1,069 per case ($178 per lb). Some listing captures are old; matcha was re-priced across the trade in 2025 and 2026."
+        "note": "WebstaurantStore, page opened November 14, 2026: Jade Leaf Ceremonial Barista Edition, 1 lb bag, $119.99 ($7.50 an ounce). Search captures of the same page showed $162.49 a bag and $839 for a case of six: the listing moves, as matcha was re-priced across the trade in 2025 and 2026. From captures: culinary grade $456.49 per case of six ($76 per lb); ceremonial teahouse grade $1,069 per case ($178 per lb)."
       },
       {
         "id": "tea_bag",
@@ -544,8 +624,8 @@
         "unit": "each",
         "costPerUnit": 0.2551,
         "source": "https://www.webstaurantstore.com/45177/tea.html",
-        "confidence": "verified",
-        "note": "WebstaurantStore: Tazo 96-count case $24.49 (25.5 cents a bag); Harney & Sons 50-count box $15.99 (32 cents); Bigelow Ceylon 1,000-count case $67.99 (7 cents)."
+        "confidence": "estimate",
+        "note": "Search capture of WebstaurantStore, page not opened: Tazo 96-count case $24.49 (25.5 cents a bag); Harney & Sons 50-count box $15.99 (32 cents); Bigelow Ceylon 1,000-count case $67.99 (7 cents)."
       },
       {
         "id": "croissant_bought",
@@ -568,7 +648,7 @@
         "signal": "cme_butter",
         "source": "https://www.webstaurantstore.com/bridor-ready-to-bake-perfect-croissant-2-8-oz-case/108BRI59103.html",
         "confidence": "verified",
-        "note": "WebstaurantStore: Bridor ready-to-bake croissant 2.8 oz, 80/case $109.99 ($1.37 each; $72.99 with the paid membership = $0.91). Raw dough that needs a proofer: Bridor 160/case $113.99 ($0.71 each). Almond-filled 80/case $96.99 ($1.21)."
+        "note": "WebstaurantStore, page opened November 14, 2026: Bridor ready-to-bake croissant 2.8 oz, 80/case $109.99 ($1.37 each; $76.99 for paying members = $0.96). From search captures: raw dough that needs a proofer, Bridor 160/case $113.99 ($0.71 each); almond-filled 80/case $96.99 ($1.21)."
       },
       {
         "id": "muffin_bought",
@@ -624,13 +704,13 @@
         "signal": "bls_eggs",
         "source": "https://fred.stlouisfed.org/series/APU0000708111",
         "confidence": "verified",
-        "note": "BLS average shelf price, October 2026: $2.32 a dozen. It was $6.23 in March 2025."
+        "note": "BLS average shelf price, FRED table opened November 14, 2026: $2.320 a dozen in October 2026. It was $6.227 in March 2025."
       }
     ],
     "packagingSets": {
-      "hot12": 0.111,
-      "cold16": 0.104,
-      "note": "Hot: cup 4.6 cents + lid 3.0 + sleeve 3.5 = 11.1 cents. Cold: cup 5.9 + strawless lid 4.4 = 10.4 cents. Compostable hot cup instead: 8.2 cents for the cup alone, a set of 14.8 cents."
+      "hot12": 0.117,
+      "cold16": 0.098,
+      "note": "Hot: cup 4.6 cents + lid 3.5 + sleeve 3.6 = 11.7 cents. Cold: cup 5.9 + strawless lid 3.8 = 9.8 cents. Compostable hot cup instead: 7.8 cents for the cup alone, a set of 15.0 cents. All five prices were read on the supplier's pages on November 14, 2026."
     },
     "menu": [
       {
@@ -656,16 +736,16 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 0.79,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
-        "cogs": 0.9,
-        "cogsPct": 0.258,
-        "grossPerItem": 2.6,
+        "packagingCost": 0.12,
+        "cogs": 0.91,
+        "cogsPct": 0.259,
+        "grossPerItem": 2.59,
         "tier": "core",
         "source": "https://pro.dilworthcoffee.com/products/dilworth-coffee-espresso-blend-5lb-bulk-bag",
         "confidence": "estimate",
@@ -720,15 +800,15 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 0.71,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
+        "packagingCost": 0.12,
         "cogs": 0.82,
-        "cogsPct": 0.192,
+        "cogsPct": 0.194,
         "grossPerItem": 3.43,
         "tier": "core",
         "source": "https://www.faire.com/product/p_e3sufx7spz",
@@ -758,16 +838,16 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 0.93,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
-        "cogs": 1.04,
-        "cogsPct": 0.19,
-        "grossPerItem": 4.46,
+        "packagingCost": 0.12,
+        "cogs": 1.05,
+        "cogsPct": 0.191,
+        "grossPerItem": 4.45,
         "tier": "core",
         "source": "https://citiesinsider.com/country/united-states/new-york-city/local-food-and-dining/en",
         "confidence": "estimate",
@@ -796,16 +876,16 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 1.12,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
-        "cogs": 1.23,
-        "cogsPct": 0.205,
-        "grossPerItem": 4.77,
+        "packagingCost": 0.12,
+        "cogs": 1.24,
+        "cogsPct": 0.206,
+        "grossPerItem": 4.76,
         "tier": "core",
         "source": "https://citiesinsider.com/country/united-states/new-york-city/cafes-and-coffee-shops/en",
         "confidence": "estimate",
@@ -834,15 +914,15 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 1.75,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
+        "packagingCost": 0.12,
         "cogs": 1.86,
-        "cogsPct": 0.265,
+        "cogsPct": 0.266,
         "grossPerItem": 5.14,
         "tier": "core",
         "source": "https://www.webstaurantstore.com/oatly-barista-edition-oat-milk-32-fl-oz-case/110OTBAROAT.html",
@@ -878,15 +958,15 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 1.31,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
+        "packagingCost": 0.12,
         "cogs": 1.42,
-        "cogsPct": 0.21,
+        "cogsPct": 0.211,
         "grossPerItem": 5.33,
         "tier": "core",
         "source": "https://www.webstaurantstore.com/monin-premium-vanilla-flavoring-syrup-750-ml-case/544SYPAR045CS.html",
@@ -922,15 +1002,15 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 1.39,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
+        "packagingCost": 0.12,
         "cogs": 1.5,
-        "cogsPct": 0.222,
+        "cogsPct": 0.223,
         "grossPerItem": 5.25,
         "tier": "core",
         "source": "https://www.webstaurantstore.com/ghirardelli-black-label-chocolate-flavoring-sauce-64-fl-oz-case/40862057CS.html",
@@ -966,16 +1046,16 @@
             "item": "16 oz cold cup and strawless lid",
             "qty": 1,
             "unit": "set",
-            "cost": 0.104,
+            "cost": 0.098,
             "packaging": true
           }
         ],
         "ingredientCost": 1.05,
         "unsoldShare": 0,
         "packagingCost": 0.1,
-        "cogs": 1.15,
-        "cogsPct": 0.177,
-        "grossPerItem": 5.35,
+        "cogs": 1.14,
+        "cogsPct": 0.176,
+        "grossPerItem": 5.36,
         "tier": "core",
         "source": "https://www.faire.com/product/p_e3sufx7spz",
         "confidence": "estimate",
@@ -1004,7 +1084,7 @@
             "item": "16 oz cold cup and strawless lid",
             "qty": 1,
             "unit": "set",
-            "cost": 0.104,
+            "cost": 0.098,
             "packaging": true
           }
         ],
@@ -1012,7 +1092,7 @@
         "unsoldShare": 0,
         "packagingCost": 0.1,
         "cogs": 0.81,
-        "cogsPct": 0.148,
+        "cogsPct": 0.147,
         "grossPerItem": 4.69,
         "tier": "core",
         "source": "https://pro.dilworthcoffee.com/products/dilworth-coffee-espresso-blend-5lb-bulk-bag",
@@ -1030,7 +1110,7 @@
             "item": "Matcha, ceremonial barista grade, 1 lb bag",
             "qty": 3,
             "unit": "g",
-            "cost": 0.925
+            "cost": 0.794
           },
           {
             "item": "Whole milk, gallon, delivered",
@@ -1042,20 +1122,20 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
-        "ingredientCost": 1.34,
+        "ingredientCost": 1.21,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
-        "cogs": 1.45,
-        "cogsPct": 0.215,
-        "grossPerItem": 5.3,
+        "packagingCost": 0.12,
+        "cogs": 1.32,
+        "cogsPct": 0.196,
+        "grossPerItem": 5.43,
         "tier": "core",
         "source": "https://www.webstaurantstore.com/jade-leaf-ceremonial-barista-edition-matcha-powder-1-lb-454g/999JLCRBARL.html",
         "confidence": "estimate",
-        "note": "3 g of barista-grade matcha at $139.83 per lb = 92 cents: more than the coffee in a latte. With culinary grade ($76 per lb) the powder costs 50 cents. Aggregators list a chain matcha latte in New York at about $5.50."
+        "note": "3 g of barista-grade matcha at $119.99 per lb = 79 cents: more than the coffee in a latte. With culinary grade ($76 per lb) the powder costs 50 cents. Aggregators list a chain matcha latte in New York at about $5.50."
       },
       {
         "id": "chai_latte_12",
@@ -1080,16 +1160,16 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 1.15,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
-        "cogs": 1.26,
-        "cogsPct": 0.21,
-        "grossPerItem": 4.74,
+        "packagingCost": 0.12,
+        "cogs": 1.27,
+        "cogsPct": 0.211,
+        "grossPerItem": 4.73,
         "tier": "core",
         "source": "https://www.webstaurantstore.com/tazo-32-fl-oz-chai-tea-latte-1-1-concentrate-case/711TAZ1733CS.html",
         "confidence": "estimate",
@@ -1112,15 +1192,15 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 0.26,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
+        "packagingCost": 0.12,
         "cogs": 0.37,
-        "cogsPct": 0.098,
+        "cogsPct": 0.099,
         "grossPerItem": 3.38,
         "tier": "core",
         "source": "https://www.webstaurantstore.com/45177/tea.html",
@@ -1150,15 +1230,15 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 0.88,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
+        "packagingCost": 0.12,
         "cogs": 0.99,
-        "cogsPct": 0.197,
+        "cogsPct": 0.199,
         "grossPerItem": 4.01,
         "tier": "core",
         "source": "https://www.webstaurantstore.com/ghirardelli-black-label-chocolate-flavoring-sauce-64-fl-oz-case/40862057CS.html",
@@ -1200,20 +1280,20 @@
             "item": "12 oz cup, lid and sleeve",
             "qty": 1,
             "unit": "set",
-            "cost": 0.111,
+            "cost": 0.117,
             "packaging": true
           }
         ],
         "ingredientCost": 1.46,
         "unsoldShare": 0,
-        "packagingCost": 0.11,
+        "packagingCost": 0.12,
         "cogs": 1.57,
-        "cogsPct": 0.216,
+        "cogsPct": 0.217,
         "grossPerItem": 5.68,
         "tier": "deep",
         "source": "https://www.placer.ai/anchor/articles/psl-day-2026-gives-starbucks-its-biggest-tuesday-of-the-year",
         "confidence": "estimate",
-        "note": "Seasonal sauce is priced like chocolate sauce plus a premium (35 cents an ounce is my estimate). The drink carries a $1.25 premium over a plain latte for 38 cents of extra ingredients. Chains list seasonal lattes at $5.50-$6.50 in New York."
+        "note": "Seasonal sauce is priced like chocolate sauce plus a premium (35 cents an ounce is my estimate). The drink carries a $1.25 premium over a plain latte for 33 cents of extra ingredients. Chains list seasonal lattes at $5.50-$6.50 in New York."
       },
       {
         "id": "croissant_bought",
@@ -1557,14 +1637,14 @@
       "drinksPer100Orders": 111,
       "salesPerOrder": 7.75,
       "cogsPerOrder": 2.01,
-      "ofWhichPackaging": 0.13,
-      "ingredientsPerOrder": 1.88,
-      "cogsPct": 0.26,
+      "ofWhichPackaging": 0.14,
+      "ingredientsPerOrder": 1.87,
+      "cogsPct": 0.259,
       "taxableShareOfSales": 0.965,
       "shrinkAllowancePctOfSales": 0.02,
-      "cogsPctWithShrink": 0.28,
+      "cogsPctWithShrink": 0.279,
       "confidence": "estimate",
-      "note": "Shares are my planning mix for a New York counter cafe, annual average, not a statistic: 111 drinks and 35 food or retail items per 100 orders. Anchors: lattes are the most ordered drink in 44 of 50 states (Square and SCA); whole milk is in 44% of orders with milk, oat in 33%, almond in 10% (Square, 2024); cold coffee is 17% of cups in winter and 21% in summer for all US coffee drinkers (NCA, 2026), far higher among young city customers (Starbucks: 75% of US beverage sales are cold). The mix gives $7.75 per order, 9% under the pack's $8.50: to reach $8.50 with these prices about half of all orders must carry a food item, or a third of drinks must be sold a size up. Cost of goods comes to 26.0% before shrink and 28.0% with a 2% allowance for staff drinks, comps and remakes. The pack's 28% (26% ingredients + 2% cups) stands as an estimate.",
+      "note": "Shares are my planning mix for a New York counter cafe, annual average, not a statistic: 111 drinks and 35 food or retail items per 100 orders. Anchors: lattes are the most ordered drink in 44 of 50 states (Square and SCA); whole milk is in 44% of orders with milk, oat in 33%, almond in 10% (Square, 2024); cold coffee is 17% of cups in winter and 21% in summer for all US coffee drinkers (NCA, 2026), far higher among young city customers (Starbucks: 75% of US beverage sales are cold). The mix gives $7.75 per order, 9% under the pack's $8.50: to reach $8.50 with these prices about half of all orders must carry a food item, or a third of drinks must be sold a size up. Cost of goods comes to 25.9% before shrink and 27.9% with a 2% allowance for staff drinks, comps and remakes. The pack's 28% (26% ingredients + 2% cups) stands as an estimate.",
       "source": "https://squareup.com/us/en/press/national-coffee-day-2024"
     },
     "cogsShares": {
@@ -1572,22 +1652,22 @@
         "coffee": 0.684,
         "bakery": 0.594,
         "dairy_milk": 0.199,
-        "packaging": 0.133,
+        "packaging": 0.137,
         "retail_beans": 0.115,
         "oat_milk": 0.104,
         "syrups_tea_chocolate": 0.086,
-        "matcha": 0.046,
+        "matcha": 0.04,
         "other": 0.049
       },
       "shareOfCogs": {
         "coffee": 0.34,
         "bakery": 0.296,
         "dairy_milk": 0.099,
-        "packaging": 0.066,
+        "packaging": 0.068,
         "retail_beans": 0.057,
         "oat_milk": 0.052,
         "syrups_tea_chocolate": 0.043,
-        "matcha": 0.023,
+        "matcha": 0.02,
         "other": 0.025
       },
       "monthlyVolumesAt6000Orders": {
@@ -1825,11 +1905,11 @@
             "kind": "price"
           }
         ],
-        "realFrequency": "Announced every month. In 2026 the base price moved from $21.33 in July to $18.88 in October and back to $20.27 in November.",
+        "realFrequency": "Announced every month. In 2026 the base price ran from $14.70 in February to $22.18 in June, back to $17.04 in September and up to $20.27 in November; it jumped by a dollar or more in five of the ten monthly moves (April +$3.19, May +$1.49, June +$2.03, October +$1.84, November +$1.39).",
         "tier": "core",
-        "source": "https://www.agproud.com/articles/64305-november-class-i-base-price-up-to-2027-per-cwt",
+        "source": "https://www.ams.usda.gov/mnreports/dymadvancedprices.pdf",
         "confidence": "estimate",
-        "note": "$1.39 on $18.88 is +7.4% at the farm-to-plant level, about 12 cents a gallon; on a $5.28 delivered gallon that is +2.3%, but dairies round up, so I pass 7% through for two months. 7% x 9.9% = +0.7%: a shop that panics over milk is watching the wrong bill."
+        "note": "Signal opened at USDA on November 14, 2026 (announcement of October 21, 2026); the pass-through is my estimate. $1.39 on $18.88 is +7.4% at the farm-to-plant level, about 12 cents a gallon; on a $5.28 delivered gallon that is +2.3%, but dairies round up, so I pass 7% through for two months. 7% x 9.9% = +0.7%: a shop that panics over milk is watching the wrong bill."
       },
       {
         "id": "oat_milk_price_rise",
@@ -1887,7 +1967,7 @@
           3,
           4
         ],
-        "realSignal": "BLS average price of Grade A large eggs above $4.50 a dozen (record $6.227 in March 2025; $2.32 in October 2026)",
+        "realSignal": "BLS average price of Grade A large eggs above $4.50 a dozen (January to May 2025: $4.95, $5.90, $6.23, $5.12, $4.55; October 2026: $2.32)",
         "effects": [
           {
             "field": "cogs",
@@ -1927,7 +2007,7 @@
           11,
           12
         ],
-        "realSignal": "CME spot Grade AA butter above $3.00 per lb (2024 annual average, a record: $2.88; 2025 average $2.22; July 21, 2026: $1.575)",
+        "realSignal": "CME spot Grade AA butter above $3.00 per lb (2024 annual average, a record: $2.88; 2025 average $2.22; USDA two-week average in mid-October 2026: $1.361)",
         "effects": [
           {
             "field": "cogs",
@@ -1954,7 +2034,7 @@
         "tier": "deep",
         "source": "https://www.barchart.com/futures/quotes/BDX26/overview",
         "confidence": "estimate",
-        "note": "15 cents on a $2.10 croissant is +7%; across the whole bakery order I take +6%. 6% x 29.6% = +1.8%. In November 2026 butter is 45% below the 2024 average: this event runs in reverse this year."
+        "note": "15 cents on a $2.10 croissant is +7%; across the whole bakery order I take +6%. 6% x 29.6% = +1.8%. In October 2026 butter is 53% below the 2024 average: this event runs in reverse this year."
       },
       {
         "id": "cocoa_record",
@@ -2011,7 +2091,7 @@
         "effects": [
           {
             "field": "cogs",
-            "mult": 1.016,
+            "mult": 1.014,
             "ingredient": "matcha",
             "ingredientMult": 1.7
           },
@@ -2042,7 +2122,7 @@
         "tier": "core",
         "source": "https://gjtea.org/japanese-tea-report-may-2026/",
         "confidence": "estimate",
-        "note": "Auction +70% in 2026; I pass all of it to the powder. 70% x 2.3% = +1.6%. The 1% demand loss stands for days with no matcha at all. The shortcut is selling culinary grade ($76 per lb) under a ceremonial name ($140 per lb)."
+        "note": "Auction +70% in 2026; I pass all of it to the powder. 70% x 2.0% = +1.4%. The 1% demand loss stands for days with no matcha at all. The shortcut is selling culinary grade ($76 per lb) under a ceremonial name ($120 per lb)."
       },
       {
         "id": "cup_tariff",
@@ -2099,7 +2179,7 @@
         "tier": "core",
         "source": "https://www.uschamber.com/small-business/how-tariffs-impact-coffee-prices",
         "confidence": "estimate",
-        "note": "The 35% is a vendor's figure, not checked against the tariff schedule. Importers absorb part and domestic cups rise in sympathy: I take +15% on packaging. 15% x 6.6% = +1% of cost of goods, or 2.5 cents an order."
+        "note": "The 35% is a vendor's figure, not checked against the tariff schedule. Importers absorb part and domestic cups rise in sympathy: I take +15% on packaging. 15% x 6.8% = +1% of cost of goods, or 2 cents an order."
       },
       {
         "id": "cup_shortage",
@@ -2687,9 +2767,9 @@
         ],
         "realFrequency": "Each new packaging law has had one: foam (warnings to June 30, 2019), straws (to October 31, 2022), Skip the Stuff (to June 30, 2024).",
         "tier": "core",
-        "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
-        "confidence": "verified",
-        "note": "The three warning-period dates are from DSNY pages. No money effect by itself: every shop on the block is inspected that month, and each violation that exists is found. Announced a month ahead, so a player can stop a shortcut in time."
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03462",
+        "confidence": "estimate",
+        "note": "Opened at NYC311: straw enforcement began November 1, 2022 and Skip the Stuff took effect July 31, 2023; the other dates were read through search limited to nyc.gov, which refuses automated requests. No money effect by itself: every shop on the block is inspected that month, and each violation that exists is found. Announced a month ahead, so a player can stop a shortcut in time."
       },
       {
         "id": "reusable_cup_bill",
@@ -2851,7 +2931,7 @@
         "tier": "core",
         "source": "https://freshcup.com/cold-coffees-rise-shows-no-signs-of-slowing-nca-report-finds/",
         "confidence": "estimate",
-        "note": "Summer mix (extra.seasonality): cold drinks 43% of drinks instead of 22%, two fewer croissants and one fewer muffin per 100 orders. Cost per order falls from $2.01 to $1.86 (x0.92) and sales per order from $7.75 to $7.55 (x0.974): the cost share drops from 26.0% to 24.6%, but the margin per order is flat ($5.74 against $5.69) because the pastry leaves the ticket. If the engine has no ticket field, apply neither multiplier. The 70°F threshold and the mix are my estimates; no public series of hot against iced orders by temperature was found."
+        "note": "Summer mix (extra.seasonality): cold drinks 43% of drinks instead of 22%, two fewer croissants and one fewer muffin per 100 orders. Cost per order falls from $2.01 to $1.85 (x0.92) and sales per order from $7.75 to $7.55 (x0.974): the cost share drops from 25.9% to 24.5%, but the margin per order is flat ($5.74 against $5.70) because the pastry leaves the ticket. If the engine has no ticket field, apply neither multiplier. The 70°F threshold and the mix are my estimates; no public series of hot against iced orders by temperature was found."
       },
       {
         "id": "pumpkin_season",
@@ -3073,7 +3153,7 @@
         "tier": "deep",
         "source": "https://wtop.com/lifestyle/2026/02/soaring-coffee-prices-rewrite-some-americans-daily-routines/",
         "confidence": "estimate",
-        "note": "A New York analyst: customers may choose drip over lattes and blended drinks, which hurts profit. Drip costs 25.8% of its price against 20.5% for a latte, so a shift of five orders in a hundred raises the cost share by about 1%. Both numbers are design values."
+        "note": "A New York analyst: customers may choose drip over lattes and blended drinks, which hurts profit. Drip costs 25.9% of its price against 20.6% for a latte, so a shift of five orders in a hundred raises the cost share by about 1%. Both numbers are design values."
       },
       {
         "id": "viral_drink",
@@ -3340,7 +3420,7 @@
           12
         ],
         "scaleNote": "New York State",
-        "realSignal": "The effective date of NY Agriculture and Markets Law §199-g (signed in 2025, in force November 12, 2026)",
+        "realSignal": "The effective date printed under NY Agriculture and Markets Law §199-g: November 12, 2026",
         "effects": [
           {
             "field": "cogs",
@@ -3362,8 +3442,8 @@
         "realFrequency": "Once. Nine major allergens: milk, eggs, fish, shellfish, tree nuts, peanuts, wheat, soybeans, sesame. Food packed after the customer orders is not covered.",
         "tier": "core",
         "source": "https://www.nysenate.gov/legislation/laws/AGM/199-G",
-        "confidence": "estimate",
-        "note": "The statute's wording was read through search: every food establishment labels prepackaged food (prepared, packed and sold on the same premises) with any major allergen it is made with. The effective date comes from secondary sources, and no penalty was found. Label stock and ten minutes a morning: about $35 a month, 0.3% of cost of goods."
+        "confidence": "verified",
+        "note": "Statute opened on the State Senate site on November 14, 2026: every food establishment labels prepackaged food (prepared, prepacked and sold on the same premises) with any major food allergen it is made with; food packaged after the customer orders is excluded; \"Effective November 12, 2026\". The general penalty of the same law, §39: up to $600 for a first violation and up to $1,200 for each later one, each package sold counting separately. The cost is mine: label stock and ten minutes a morning, about $35 a month, 0.3% of cost of goods."
       },
       {
         "id": "bottle_deposit_bill",
@@ -3486,13 +3566,13 @@
             "confidence": "estimate"
           },
           {
-            "what": "Cost of goods as a share of sales: before shrink / with 2% shrink",
-            "value": 0.26,
+            "what": "Cost of goods as a share of sales before shrink (27.9% with a 2% shrink allowance)",
+            "value": 0.259,
             "source": "https://restaurant.org/research-and-media/media/press-releases/new-resource-from-national-restaurant-association-provides-insights-into-operational-realities",
             "confidence": "estimate"
           },
           {
-            "what": "Cheapest and dearest items by cost share: hot tea 9.8%, cold brew 14.8%, latte 20.5%, oat latte with upcharge 26.5%, bought croissant 51.1%",
+            "what": "Cheapest and dearest items by cost share: hot tea 9.9%, cold brew 14.7%, latte 20.6%, oat latte with upcharge 26.6%, bought croissant 51.1%",
             "value": 0.511,
             "source": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
             "confidence": "estimate"
@@ -3539,7 +3619,7 @@
           },
           {
             "what": "Share of cost of goods: packaging",
-            "value": 0.066,
+            "value": 0.068,
             "source": "https://www.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
             "confidence": "estimate"
           },
@@ -3713,19 +3793,19 @@
         "numbers": [
           {
             "what": "Hot set (12 oz cup, lid, sleeve), USD",
-            "value": 0.111,
+            "value": 0.117,
             "source": "https://www.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
             "confidence": "verified"
           },
           {
             "what": "Cold set (16 oz cup, strawless lid), USD",
-            "value": 0.104,
+            "value": 0.098,
             "source": "https://www.webstaurantstore.com/choice-16-oz-clear-pet-plastic-cold-cup-case/500CC16.html",
             "confidence": "verified"
           },
           {
             "what": "Compostable 12 oz hot cup alone, USD",
-            "value": 0.082,
+            "value": 0.078,
             "source": "https://www.webstaurantstore.com/ecochoice-12-oz-white-compostable-paper-hot-cup-case/50012PLAGRN.html",
             "confidence": "verified"
           },
@@ -3766,11 +3846,6 @@
     ],
     "nonObvious": [
       {
-        "text": "The menu's adjectives are enforceable.",
-        "why": "Since 2021 a deceptive practice costs up to $3,500 per violation in the city, and each false statement counts separately.",
-        "source": "https://www.nyc.gov/site/dca/about/consumer-protection-and-licensing-laws.page"
-      },
-      {
         "text": "The coffee in a latte costs more than the milk.",
         "why": "At $16 per lb and $5.28 a gallon a double shot is 71 cents and ten ounces of milk 41 cents. Coffee is a third of cost of goods, dairy a tenth: a shop that hedges milk and ignores beans is guarding the wrong door.",
         "source": "https://www.faire.com/product/p_e3sufx7spz"
@@ -3787,17 +3862,17 @@
       },
       {
         "text": "An iced latte costs less to make than a hot one and sells for more.",
-        "why": "Ice replaces two ounces of milk and the cold cup set costs about the same as the hot one: $1.15 against $1.23, at a price 50 cents higher. Summer is good for margins if the ice machine keeps up.",
+        "why": "Ice replaces two ounces of milk and the cold cup set costs about the same as the hot one: $1.14 against $1.24, at a price 50 cents higher. Summer is good for margins if the ice machine keeps up.",
         "source": "https://www.webstaurantstore.com/choice-16-oz-clear-pet-plastic-cold-cup-case/500CC16.html"
       },
       {
         "text": "Cold brew is the cheapest coffee drink on the menu, and tomorrow's supply is fixed today.",
-        "why": "14.8% cost share, but it steeps 12-24 hours: the first hot afternoon sells it out and nothing can be done until morning.",
+        "why": "14.7% cost share, but it steeps 12-24 hours: the first hot afternoon sells it out and nothing can be done until morning.",
         "source": "https://cdn.shopify.com/s/files/1/0566/9385/0289/files/Cold_Brew_Recipe_-_Full_Sheet.pdf"
       },
       {
         "text": "The matcha in a matcha latte costs more than the coffee in a latte.",
-        "why": "3 g at $139.83 per lb is 92 cents, and the auction price of the leaf rose 70% again in May 2026.",
+        "why": "3 g at $119.99 per lb is 79 cents against 71 cents of coffee, and the auction price of the leaf rose 70% again in May 2026.",
         "source": "https://www.webstaurantstore.com/jade-leaf-ceremonial-barista-edition-matcha-powder-1-lb-454g/999JLCRBARL.html"
       },
       {
@@ -3882,7 +3957,7 @@
       },
       {
         "text": "A cocoa record barely touches a cafe; a matcha auction does.",
-        "why": "Chocolate sauce is 0.9% of cost of goods, matcha 2.3% and rising 70% a year.",
+        "why": "Chocolate sauce is 0.9% of cost of goods, matcha 2% and rising 70% a year.",
         "source": "https://gjtea.org/japanese-tea-report-may-2026/"
       },
       {
@@ -3916,28 +3991,57 @@
         "source": "https://www.dta.ny.gov/pdf/archive/stc/50551.pdf"
       },
       {
+        "text": "The menu's adjectives are enforceable.",
+        "why": "Since 2021 a deceptive practice costs up to $3,500 per violation in the city, and each false statement counts separately.",
+        "source": "https://www.nyc.gov/site/dca/about/consumer-protection-and-licensing-laws.page"
+      },
+      {
         "text": "Since November 12, 2026 a sandwich wrapped in the morning needs an allergen label; the same sandwich wrapped after the order does not.",
         "why": "New York's new law covers food prepared, packed and sold on the same premises. Grab-and-go saves time at the bar and now costs a label.",
         "source": "https://www.nysenate.gov/legislation/laws/AGM/199-G"
       },
       {
         "text": "In the iced season the cost share falls and the profit per order does not.",
-        "why": "Cold drinks are cheaper to make, but the pastry leaves the ticket: $5.69 of margin per order against $5.74.",
+        "why": "Cold drinks are cheaper to make, but the pastry leaves the ticket: $5.70 of margin per order against $5.74.",
         "source": "https://www.ncausa.org/Newsroom/Specialty-Coffee-Consumption-Remains-at-Record-High"
       },
       {
         "text": "The bakery's price list is your second-biggest price risk and nobody publishes it.",
         "why": "Bakery is 30% of cost of goods. Coffee has an exchange and a news cycle; the croissant has a letter in January.",
         "source": "https://www.balthazarbakery.com/wholesale/faq"
+      },
+      {
+        "text": "The farm price of milk swung 51% inside 2026 and the shelf price 7%.",
+        "why": "The federal Class I base ran from $14.70 in February to $22.18 in June; a gallon in the supermarket moved between $4.03 and $4.32. Milk is the most volatile input by exchange and one of the calmest by invoice.",
+        "source": "https://www.ams.usda.gov/mnreports/dymadvancedprices.pdf"
+      },
+      {
+        "text": "Ground coffee on the shelf rose 38.5% in fifteen months.",
+        "why": "$7.02 per lb in January 2025, $9.72 in April 2026. Customers saw that number in the supermarket before they saw your new menu.",
+        "source": "https://fred.stlouisfed.org/series/APU0000717311"
+      },
+      {
+        "text": "A paper bag for a bag of beans costs the customer 5 cents; the same bag around a toasted bagel does not.",
+        "why": "The city's paper bag fee exempts a bag used only for food sliced or prepared to order. The register must print the fee as its own line.",
+        "source": "https://www.tax.ny.gov/bus/st/paper-carryout-bag-fee.htm"
+      },
+      {
+        "text": "Equipment makers announce price rises on the product page.",
+        "why": "On November 14, 2026 the freezer's page read: 'Due to a manufacturer's price increase, this price will increase by 4.00% on 01/01/27'. Buying in December instead of January saves $146 on that one item.",
+        "source": "https://www.webstaurantstore.com/true-t12fhc-25-one-section-solid-door-reachin-freezer-with-led-lighting/200T12FHC.html"
+      },
+      {
+        "text": "Catalog prices of cups and lids move by 10-15% between visits.",
+        "why": "The same lid was $30.49 in a search capture and $34.99 on the live page; the same matcha $162.49 and $119.99. A budget built on one screenshot is already out of date.",
+        "source": "https://www.webstaurantstore.com/choice-8-oz-squat-to-24-oz-white-hot-paper-cup-travel-lid-case/500L1020W.html"
+      },
+      {
+        "text": "A drink given to a guest can owe use tax.",
+        "why": "Taxable inventory bought with a resale certificate and then given away is subject to use tax on its cost; a two-for-one special is not.",
+        "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/purchases_by_restaurants.htm"
       }
     ],
     "failureStories": [
-      {
-        "what": "Modest Coffee took a national distributor order and lost $250,000.",
-        "cause": "It borrowed to stock the order; the retailer did not need it and the coffee came back with a $30,000 bill.",
-        "lesson": "With a large distributor the power is on the other side, however clear the paperwork.",
-        "source": "https://freshcup.com/how-modest-coffee-lost-250k-on-a-distributor-order-then-made-it-all-back-again/"
-      },
       {
         "what": "Daily Dose Cafe and Espresso, Brooklyn Park, Minnesota, closed in December 2024.",
         "cause": "Owner: 'In the last year, coffee prices have almost doubled. You add that to increased labor costs, increased cocoa costs, which we do a lot of: it shrunk the margins.'",
@@ -3961,6 +4065,12 @@
         "cause": "The team cited rising costs and declining customer traffic.",
         "lesson": "Costs and traffic move together: the months when inputs rise are the months when customers trade down.",
         "source": "https://whatnow.com/?p=403722"
+      },
+      {
+        "what": "Modest Coffee took a national distributor order and lost $250,000.",
+        "cause": "It borrowed to stock the order; the retailer did not need it and the coffee came back with a $30,000 bill.",
+        "lesson": "With a large distributor the power is on the other side, however clear the paperwork.",
+        "source": "https://freshcup.com/how-modest-coffee-lost-250k-on-a-distributor-order-then-made-it-all-back-again/"
       }
     ],
     "seasonality": {
@@ -3968,8 +4078,8 @@
         "annual": {
           "coldShareOfDrinks": 0.216,
           "salesPerOrder": 7.75,
-          "cogsPerOrder": 2.011,
-          "cogsPct": 0.26
+          "cogsPerOrder": 2.008,
+          "cogsPct": 0.259
         },
         "summer": {
           "months": [
@@ -3979,8 +4089,8 @@
           ],
           "coldShareOfDrinks": 0.43,
           "salesPerOrder": 7.55,
-          "cogsPerOrder": 1.857,
-          "cogsPct": 0.246,
+          "cogsPerOrder": 1.852,
+          "cogsPct": 0.245,
           "changesPer100Orders": {
             "iced_latte_16": 24,
             "cold_brew_16": 22,
@@ -4003,7 +4113,7 @@
           ],
           "coldShareOfDrinks": 0.101,
           "salesPerOrder": 7.45,
-          "cogsPerOrder": 1.982,
+          "cogsPerOrder": 1.98,
           "cogsPct": 0.266,
           "changesPer100Orders": {
             "iced_latte_16": 6,
@@ -4092,11 +4202,11 @@
         },
         {
           "what": "Hot cups, lids and sleeves, two cases each",
-          "cost": 236
+          "cost": 249
         },
         {
           "what": "Cold cups and lids, one case each",
-          "cost": 104
+          "cost": 98
         },
         {
           "what": "Syrup, chocolate sauce and chai (one case each), tea (two cases)",
@@ -4104,7 +4214,7 @@
         },
         {
           "what": "Matcha, 1 lb",
-          "cost": 162
+          "cost": 120
         },
         {
           "what": "First morning of pastry and bagels",
@@ -4115,7 +4225,7 @@
           "cost": 276
         }
       ],
-      "total": 2417,
+      "total": 2382,
       "confidence": "estimate",
       "note": "Priced from extra.ingredients. Confirms the pack's opening_inventory of $3,000: the difference is cleaning chemicals, gloves and the drinks poured away while the team trains. Nothing here is more than a week of stock except matcha and syrups."
     }
@@ -4618,7 +4728,7 @@
     },
     {
       "url": "https://www.webstaurantstore.com/choice-8-oz-squat-to-24-oz-white-hot-paper-cup-travel-lid-case/500L1020W.html",
-      "title": "WebstaurantStore: Choice travel lid, 1,000/case",
+      "title": "WebstaurantStore: Choice travel lid, live price",
       "checked": "2026-11-14"
     },
     {
@@ -4695,6 +4805,56 @@
       "url": "https://legislation.nysenate.gov/pdf/bills/2021/A10184",
       "title": "NY Assembly bill A10184: bottle bill expansion",
       "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/AGM/39",
+      "title": "NY Agriculture and Markets Law §39: penalties",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.ams.usda.gov/mnreports/dymadvancedprices.pdf",
+      "title": "USDA AMS: Announcement of Advanced Prices and Pricing Factors, November 2026 (October 21, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01787",
+      "title": "NYC311: waste disposal for businesses (lidded bins, fines, decal, organics thresholds)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03588",
+      "title": "NYC311: Skip the Stuff",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02484",
+      "title": "NYC311: plastic bag ban and paper bag fee",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01373",
+      "title": "NYC311: foam ban",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02143",
+      "title": "NYC311: litter basket complaint or request",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/data/APU0000717311",
+      "title": "FRED table: ground coffee, monthly",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/data/APU0000709112",
+      "title": "FRED table: whole milk, monthly",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/data/APU0000708111",
+      "title": "FRED table: eggs, monthly",
+      "checked": "2026-11-14"
     }
   ],
   "officials": [
@@ -4713,6 +4873,18 @@
       ],
       "realProcess": "Agents walk commercial blocks and write a Notice of Violation on the spot: for trash put out wrong, recyclables in the garbage, shop trash in a corner basket, foam cups on the counter. Repeat notices inside 12 months cost more each time. Fines are argued at the city's hearings office (OATH), not in court.",
       "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page"
+    },
+    {
+      "id": "ag_markets_inspector",
+      "name": "State food inspector",
+      "agency": "NYS Department of Agriculture and Markets",
+      "role": "inspector",
+      "checks": [
+        "allergen_label_missing",
+        "unlicensed_food_processing"
+      ],
+      "realProcess": "The state licenses food processing and inspects food sold in packages. A complaint from a customer with an allergy, or from the shop that bought your bottles, brings an inspector who reads labels and asks for the license. Penalties are set under Agriculture and Markets Law §39 and can be settled with the department before they reach the attorney general.",
+      "source": "https://agriculture.ny.gov/food-business-licensing"
     }
   ],
   "violations": [
@@ -4734,8 +4906,8 @@
       "closureDays": 0,
       "reputationHit": 0.03,
       "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/foam-containers.page",
-      "confidence": "verified",
-      "note": "DSNY's page for businesses: $150 for the first offense, $250 for the second and $500 for the third and later, per Notice of Violation inside 12 months; the city ban has been enforced since July 1, 2019. The text of Local Law 142 itself says $250, $500 and $1,000, and the state law (in force January 1, 2022) says up to $250, $500 and $1,000 in a calendar year: I use the lower schedule the department publishes. Game formula: $150 in the first month, $250 in the second, capped at $500. A shop with under $500,000 of yearly income can ask for a 12-month hardship waiver instead."
+      "confidence": "estimate",
+      "note": "Read through search limited to nyc.gov (the site refuses automated requests). DSNY's page for businesses: $150 for the first offense, $250 for the second and $500 for the third and later, per Notice of Violation inside 12 months; the city ban has been enforced since July 1, 2019. The text of Local Law 142 itself says $250, $500 and $1,000, and the state law (in force January 1, 2022) says up to $250, $500 and $1,000 in a calendar year: I use the lower schedule the department publishes. Game formula: $150 in the first month, $250 in the second, capped at $500. A shop with under $500,000 of yearly income can ask for a 12-month hardship waiver instead."
     },
     {
       "id": "plastic_stirrers_straws",
@@ -4776,8 +4948,8 @@
       "closureDays": 0,
       "reputationHit": 0.01,
       "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
-      "confidence": "verified",
-      "note": "DSNY's page: $50 for a first violation, $150 for a second and $250 for a third and later inside 12 months; in effect since July 31, 2023, warnings until June 30, 2024, fines since July 1, 2024. Covers utensils, condiment packets, napkins and extra containers in takeout and delivery orders; a self-serve station inside the shop is allowed. For orders that come through a delivery app, relying on what the app says the customer asked for is a complete defense. Game formula: $50 a month of violation up to $250, a little gentler than the real ladder."
+      "confidence": "estimate",
+      "note": "The rule was opened at NYC311 on November 14, 2026 (in effect July 31, 2023; utensils, condiment packets, napkins, extra containers; self-serve stations exempt; a sign is recommended). The amounts were read through search limited to nyc.gov: DSNY's page gives $50 for a first violation, $150 for a second and $250 for a third and later inside 12 months; in effect since July 31, 2023, warnings until June 30, 2024, fines since July 1, 2024. Covers utensils, condiment packets, napkins and extra containers in takeout and delivery orders; a self-serve station inside the shop is allowed. For orders that come through a delivery app, relying on what the app says the customer asked for is a complete defense. Game formula: $50 a month of violation up to $250, a little gentler than the real ladder."
     },
     {
       "id": "no_private_carter",
@@ -4818,8 +4990,8 @@
       "closureDays": 0,
       "reputationHit": 0.04,
       "source": "https://www.nyc.gov/site/dsny/what-we-do/cleaning/litter-baskets.page",
-      "confidence": "verified",
-      "note": "DSNY's litter basket page: misusing a public basket can be fined up to $350; baskets are not for household or commercial waste. DSNY's printed summary of rules (2015) gives the ladder for storekeepers: $100, then $250, then $350. Agents open bags and read the cups and receipts inside. Game formula: $100 in the first month, $175 in the second, capped at $350."
+      "confidence": "estimate",
+      "note": "Opened at NYC311: baskets cannot be used for household or commercial waste, and a business must use a private carter or haul its own waste to an authorized site. The amounts were read through search limited to nyc.gov. DSNY's litter basket page: misusing a public basket can be fined up to $350; baskets are not for household or commercial waste. DSNY's printed summary of rules (2015) gives the ladder for storekeepers: $100, then $250, then $350. Agents open bags and read the cups and receipts inside. Game formula: $100 in the first month, $175 in the second, capped at $350."
     },
     {
       "id": "recycling_not_separated",
@@ -4839,13 +5011,13 @@
       "closureDays": 0,
       "reputationHit": 0.02,
       "source": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
-      "confidence": "verified",
-      "note": "DSNY's set-out rules page for businesses: $100 for the first offense, $200 for the second, $400 for the third and later. Every business must recycle; a food business separates metal, glass, plastic, cartons, foil and cardboard from trash. A cafe throws out a lot of cardboard (milk and cup cases) and milk jugs. Food scraps: only shops of 7,000 sq ft or more, or chains with two or more city locations totalling 8,000 sq ft, must separate them, so a single small cafe is exempt."
+      "confidence": "estimate",
+      "note": "Read through search limited to nyc.gov: DSNY's set-out rules page for businesses gives $100 for the first offense, $200 for the second, $400 for the third and later. Opened at NYC311: every business must recycle metal, glass, rigid plastic, cartons and paper, post recycling signs and label its containers. Every business must recycle; a food business separates metal, glass, plastic, cartons, foil and cardboard from trash. A cafe throws out a lot of cardboard (milk and cup cases) and milk jugs. Food scraps: only shops of 7,000 sq ft or more, or chains with two or more city locations totalling 8,000 sq ft, must separate them, so a single small cafe is exempt."
     },
     {
       "id": "resale_certificate_misuse",
       "name": "Resale certificate used for things you do not resell",
-      "law": "NY Tax Law §1145(a)(6), §1132(c); 20 NYCRR §528.20",
+      "law": "NY Tax Law §1145(a)(5), §1132(c)",
       "official": "tax_auditor",
       "foundBy": [
         "audit"
@@ -4861,7 +5033,7 @@
       "criminal": "Issuing a false or fraudulent resale certificate with intent to evade tax can be prosecuted as a felony, and the state can revoke the Certificate of Authority, which shuts the register.",
       "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_and_use_tax_penalties.htm",
       "confidence": "verified",
-      "note": "NY Tax Department penalty bulletin and Form ST-120: misuse costs $50 for each document plus 100% of the tax due, on top of the tax itself. The restaurant purchases bulletin draws the line: cups, lids, carry-out bags, sleeves, plates and wrappers go to the customer with the food and may be bought tax-free with Form ST-120; napkins, straws, stirrers and plastic utensils, cleaning supplies and equipment may not. Game formula: the unpaid tax back, the same amount again, and $50 for each month's invoice."
+      "note": "NY Tax Department penalty bulletin, opened November 14, 2026: issuing a false or fraudulent resale certificate with intent to evade tax costs '$50 for each document misused, plus 100% of the tax due had there been no misuse' (Tax Law §1145(a)(5)), on top of the tax itself. The restaurant purchases bulletin draws the line: cups, lids, carry-out bags, sleeves, plates and wrappers go to the customer with the food and may be bought tax-free with Form ST-120; napkins, straws, stirrers and plastic utensils, cleaning supplies and equipment may not. Game formula: the unpaid tax back, the same amount again, and $50 for each month's invoice."
     },
     {
       "id": "adulterated_drink_additive",
@@ -4926,6 +5098,48 @@
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/adulterated-foods.pdf",
       "confidence": "estimate",
       "note": "NYC Health's guidance on adulterated food: the inspector has the product discarded and writes a summons with points toward the letter grade; the department's workshop slide gives a penalty of up to $1,200, and repeated violations can close the shop. A recall-specific line of the penalty schedule was not found; the $600 start is my game formula. The reputation hit stands for the news story, not the fine."
+    },
+    {
+      "id": "allergen_label_missing",
+      "name": "Grab-and-go food with no allergen label",
+      "law": "NY Agriculture and Markets Law §199-g (effective November 12, 2026), §39",
+      "official": "ag_markets_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 600,
+        "pctOfSaved": 0,
+        "max": 1200
+      },
+      "closureDays": 0,
+      "reputationHit": 0.08,
+      "source": "https://www.nysenate.gov/legislation/laws/AGM/199-G",
+      "confidence": "verified",
+      "note": "Both sections opened on the State Senate site on November 14, 2026. §199-g: 'Every food establishment shall label all prepackaged food with a written notification on the package or on a label attached to the package identifying any ingredient with which a product is made that constitutes a major food allergen'; prepackaged food is 'prepared, prepacked, and offered or sold to customers on the same premises' and excludes food 'packaged after a customer has ordered'; 'Effective November 12, 2026'. §39: 'not more than six hundred dollars for the first violation, nor more than one thousand two hundred dollars for the second and each subsequent violation', and the sale of each package is a separate violation. Game formula: $600 in the first month, $1,200 after. Which agency will check restaurants in the city was not found; the state department is assumed."
+    },
+    {
+      "id": "unlicensed_food_processing",
+      "name": "Bottling or roasting for other stores with no state license",
+      "law": "NY Agriculture and Markets Law Article 20-C, §39",
+      "official": "ag_markets_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 600,
+        "pctOfSaved": 0,
+        "max": 1200
+      },
+      "closureDays": 0,
+      "reputationHit": 0.04,
+      "source": "https://agriculture.ny.gov/food-business-licensing",
+      "confidence": "verified",
+      "note": "NYS Agriculture and Markets licensing page, opened November 14, 2026: an Article 20-C license is needed for, among others, 'Bottling oils or drinks including soft drinks, shakes, fresh fruit juices, coffee, teas' and 'Roasting meats, coffee, nuts'; the listed exemptions (farm wineries, honey, maple, home processors and a few others) do not include cafes. §39 of the same law, opened the same day: up to $600 for a first violation, up to $1,200 for each later one, each day of production counting separately. The license fee ($175 for an independent business with fewer than ten employees, $400 otherwise) is from a search capture of the application form. Game formula: $600 in the first month, $1,200 after."
     }
   ],
   "shortcuts": [
@@ -5018,6 +5232,16 @@
         "amount": 150
       },
       "violation": "recalled_product_sold"
+    },
+    {
+      "id": "wholesale_without_state_license",
+      "name": "Bottle cold brew for the deli next door",
+      "what": "Thirty bottles a day to two neighboring shops adds about 2% to sales. Your city permit covers only your own counter: selling bottled drinks to other stores needs a state food processing license. Up to $600, then $1,200, and each day counts.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.02
+      },
+      "violation": "unlicensed_food_processing"
     }
   ],
   "reports": [
@@ -5044,6 +5268,16 @@
         "deceptive_menu_claims",
         "adulterated_drink_additive"
       ]
+    },
+    {
+      "id": "report_unlabelled_food",
+      "name": "Report packaged food with no allergen label, or bottles sold without a state license",
+      "text": "The state food inspector reads the labels in the fridge and asks for the processing license. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "allergen_label_missing",
+        "unlicensed_food_processing"
+      ]
     }
   ],
   "ruleCards": [
@@ -5068,7 +5302,7 @@
     {
       "id": "no_private_carter",
       "title": "You must hire a carter",
-      "text": "The city does not pick up business trash. In a live waste zone you choose among three authorized carters; miss the sign-up deadline and you are assigned one at the maximum rate. Citywide caps: $26.87 per cubic yard or $17.64 per 100 lb.",
+      "text": "The city does not pick up business trash: hire a private carter or register as a self-hauler. In a live waste zone you choose among three carters; miss the deadline and one is assigned at the maximum rate. Caps: $26.87 per cubic yard or $17.64 per 100 lb.",
       "source": "https://www.nyc.gov/site/bic/industries/maximum-rates.page"
     },
     {
@@ -5086,8 +5320,8 @@
     {
       "id": "trash_setout",
       "title": "Bins with lids, after 8 pm",
-      "text": "Since March 1, 2024 every business puts trash out in bins with secure lids, not loose bags: one hour before closing or after 8 pm, back inside before you reopen. Fines start at $50-$100 and reach $200-$400.",
-      "source": "https://www.nyc.gov/site/dsny/businesses/setup-operations/setout.page"
+      "text": "Since March 1, 2024 every business puts trash out in bins with secure lids, not loose bags: one hour before closing or after 8 pm. Fines: $50, then $100, then $200. Post your carter's decal with its name and pickup days.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01787"
     },
     {
       "id": "resale_certificate_misuse",
@@ -5140,7 +5374,7 @@
     {
       "id": "allergen_labels_prepacked",
       "title": "Labels on what you pack ahead",
-      "text": "Since November 12, 2026 food you make, pack and sell on the premises needs a label naming any of the 9 major allergens in it: milk, eggs, fish, shellfish, tree nuts, peanuts, wheat, soy, sesame. Food wrapped after the order is exempt.",
+      "text": "Since November 12, 2026 food you make, pack ahead and sell on the premises needs a label naming any of the 9 major allergens in it. Food wrapped after the order is exempt. State penalty: up to $600, then up to $1,200, and each package counts.",
       "source": "https://www.nysenate.gov/legislation/laws/AGM/199-G"
     },
     {
@@ -5148,6 +5382,30 @@
       "title": "Chains only: calories, salt, sugar",
       "text": "A shop that is one of 15 or more under the same name must post calories, a salt warning and, since October 4, 2025, an icon on items with 50 g or more of added sugars. Each is a $200 summons. One independent shop is exempt.",
       "source": "https://www.nyc.gov/site/doh/about/press/pr2025/new-added-sugars-warning-rule-goes-into-effect-2025.page"
+    },
+    {
+      "id": "paper_bag_fee",
+      "title": "Five cents a paper bag",
+      "text": "Hand a customer a paper carryout bag for beans, bottles or packaged goods and you collect 5 cents, shown as its own line with the number of bags. A bag holding only food sliced or prepared to order is exempt. The fee goes in with your sales tax return.",
+      "source": "https://www.tax.ny.gov/bus/st/paper-carryout-bag-fee.htm"
+    },
+    {
+      "id": "unlicensed_food_processing",
+      "title": "State license to bottle or roast",
+      "text": "Bottling coffee or roasting beans for sale beyond your own counter needs a state Article 20-C license. Without it: up to $600 for a first violation and up to $1,200 for each later one, and every day of production counts separately.",
+      "source": "https://agriculture.ny.gov/food-business-licensing"
+    },
+    {
+      "id": "carter_sharing",
+      "title": "Small trash, shared carter",
+      "text": "A business that throws out less than 20 gallons of garbage a week may share a private carter's service with a neighbor, under a written contract with its own decal. A cafe with 200 orders a day is far above that.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01787"
+    },
+    {
+      "id": "comped_drinks_use_tax",
+      "title": "Free drinks and use tax",
+      "text": "Taxable goods you bought tax-free for resale and then gave away, such as a bottled soda for a guest or a staff meal, owe use tax on your cost. A two-for-one special does not.",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/purchases_by_restaurants.htm"
     }
   ],
   "levers": [
@@ -5409,7 +5667,7 @@
       "tier": "deep",
       "source": "https://www.webstaurantstore.com/ecochoice-12-oz-white-compostable-paper-hot-cup-case/50012PLAGRN.html",
       "confidence": "estimate",
-      "note": "About 6,660 cups a month. Compostable: the hot cup alone is 8.2 cents against 4.6 (both seen), and I take 4.5 cents more per set: $300. Custom print: about 4 cents more per cup at small runs (my estimate): $265. Printers' terms seen: one case of 500-1,000 with 3-4 weeks' lead time at one supplier; 50 cases and 14-19 weeks at another; 30,000 paper cups and 12 weeks at a third. A sticker or stamp on a stock cup is the cheap version. Compostable cups in New York end up in the trash unless the carter collects organics."
+      "note": "About 6,660 cups a month. Compostable: the hot cup alone is 7.8 cents against 4.6 (both pages opened), and with a compostable lid I take 4.5 cents more per set: $300. Custom print: about 4 cents more per cup at small runs (my estimate): $265. Printers' terms seen: one case of 500-1,000 with 3-4 weeks' lead time at one supplier; 50 cases and 14-19 weeks at another; 30,000 paper cups and 12 weeks at a third. A sticker or stamp on a stock cup is the cheap version. Compostable cups in New York end up in the trash unless the carter collects organics."
     },
     {
       "id": "takeout_packing",
@@ -5605,12 +5863,21 @@
           "effects": {
             "capacity": 0.02
           }
+        },
+        {
+          "id": "prepacked_unlabelled",
+          "label": "Packed in the morning, no labels",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.02
+          },
+          "causes": "allergen_label_missing"
         }
       ],
       "tier": "deep",
       "source": "https://www.nysenate.gov/legislation/laws/AGM/199-G",
       "confidence": "estimate",
-      "note": "NY Agriculture and Markets Law §199-g (in force November 12, 2026 according to secondary sources): food prepared, packed and sold on the same premises must carry a label naming any major allergen; food packed after the order is exempt. $35 a month is label stock and ten minutes each morning (my estimate). A third real option, prepacked with no label, is not offered because the penalty was not found; add it as a violation once the penalty is known."
+      "note": "NY Agriculture and Markets Law §199-g, opened on the State Senate site on November 14, 2026 ('Effective November 12, 2026'): food prepared, prepacked and sold on the same premises must carry a label naming any major food allergen; food packaged after the customer has ordered is not covered. $35 a month is label stock and ten minutes each morning (my estimate). Packing ahead with no label is the third option and the violation allergen_label_missing."
     }
   ],
   "setup": [
@@ -5624,7 +5891,7 @@
       "qualityBonus": 0.01,
       "source": "https://www.webstaurantstore.com/avantco-co-28m-half-size-countertop-convection-oven-2-3-cu-ft-208-240v-2100-2800w/177CO28M.html",
       "confidence": "verified",
-      "note": "WebstaurantStore: Avantco CO-28M half-size electric countertop convection oven, 208/240 V, $459.99. Range on the same page family: Galaxy $329.99 (120 V), Waring WCO500X $859.00, steam-injection models $1,000-$2,500, Moffat turbofan above $5,000. A 208/240 V oven needs its own circuit; ask the Fire Department and your architect whether your model needs a hood. Lifespan is my estimate for a light-duty unit."
+      "note": "WebstaurantStore, page opened November 14, 2026: Avantco CO-28M half-size electric countertop convection oven, 208/240 V, $459.99 ($409.99 for paying members). From search captures: Galaxy $329.99 (120 V), Waring WCO500X $859.00, steam-injection models $1,000-$2,500, Moffat turbofan above $5,000. A 208/240 V oven needs its own circuit; ask the Fire Department and your architect whether your model needs a hood. Lifespan is my estimate for a light-duty unit."
     },
     {
       "id": "pastry_freezer",
@@ -5635,7 +5902,7 @@
       "lifespanMonths": 120,
       "source": "https://www.webstaurantstore.com/true-t12fhc-25-one-section-solid-door-reachin-freezer-with-led-lighting/200T12FHC.html",
       "confidence": "verified",
-      "note": "WebstaurantStore: True T-12F-HC 25-inch one-section reach-in freezer $3,653.60. Budget Galaxy GRI-18-FW $1,199.00 (rated 1 of 5 by buyers); scratch-and-dent True T-19FZ-HC $2,584.00; Beverage-Air FB27HC 30-inch $5,415.65. A case of 80 croissants is about a week of sales at the reference volume. Lifespan is my estimate."
+      "note": "WebstaurantStore, page opened November 14, 2026: True T-12F-HC 25-inch one-section reach-in freezer $3,653.60, with the notice 'this price will increase by 4.00% on 01/01/27'. From search captures: budget Galaxy GRI-18-FW $1,199.00 (rated 1 of 5 by buyers); scratch-and-dent True T-19FZ-HC $2,584.00; Beverage-Air FB27HC 30-inch $5,415.65. A case of 80 croissants is about a week of sales at the reference volume. Lifespan is my estimate."
     }
   ],
   "monthlyCosts": [
@@ -5647,7 +5914,7 @@
       "amount": 0.17,
       "source": "https://www.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
       "confidence": "estimate",
-      "note": "Kept at $0.17; now built bottom-up. Seen at WebstaurantStore: hot set 11.1 cents (12 oz cup $45.99 per 1,000, lid $30.49 per 1,000, sleeve $41.49 per 1,200), cold set 10.4 cents (16 oz PET cup $59.49, strawless lid $44.49 per 1,000). With 111 drinks and 35 food items per 100 orders the packaging that leaves with the customer is 13.3 cents an order; napkins, wooden stirrers, sugar and straws on request add about 3.5 cents (my estimate). If the engine starts costing the menu item by item (extra.menu), cups are already inside each item's cogs: drop this line then, or it is counted twice."
+      "note": "Kept at $0.17; now built bottom-up. Opened at WebstaurantStore on November 14, 2026: hot set 11.7 cents (12 oz cup $45.99 per 1,000, lid $34.99 per 1,000, sleeve $43.49 per 1,200), cold set 9.8 cents (16 oz PET cup $59.49, strawless lid $38.49 per 1,000). With 111 drinks and 35 food items per 100 orders the packaging that leaves with the customer is 13.7 cents an order; napkins, wooden stirrers, sugar and straws on request add about 3.5 cents (my estimate). If the engine starts costing the menu item by item (extra.menu), cups are already inside each item's cogs: drop this line then, or it is counted twice."
     }
   ],
   "events": [
@@ -5662,7 +5929,7 @@
       "months": 6,
       "source": "https://fred.stlouisfed.org/series/APU0000717311",
       "confidence": "estimate",
-      "note": "Correction of the existing event. Share: in the costed menu (extra.menu) coffee is 34% of cost of goods, not 25%: 20% x 34% = +6.8%. Size: the BLS shelf price of ground coffee was $9.139 per lb in September 2025 and $9.332 in September 2026 after peaking at $9.72 in April 2026; the exchange price doubled between late 2023 and February 2025 ($4.2995 per lb). A 2025 trade advisory told roasters that $2-$4 more per lb would cover the rise in green coffee: on a $16 lb that is 12%-25%. Duration: roasters buy months ahead, so a new list stays for two quarters, not one."
+      "note": "Correction of the existing event. Share: in the costed menu (extra.menu) coffee is 34% of cost of goods, not 25%: 20% x 34% = +6.8%. Size: the BLS shelf price of ground coffee went from $7.019 per lb in January 2025 to $9.723 in April 2026 (+38.5% in fifteen months) and stood at $9.249 in October 2026 (FRED table opened November 14, 2026); the exchange set a record of $4.2995 per lb in February 2025. A 2025 trade advisory told roasters that $2-$4 more per lb would cover the rise in green coffee: on a $16 lb that is 12%-25%. Duration: roasters buy months ahead, so a new list stays for two quarters, not one."
     },
     {
       "id": "milk_price_up",
@@ -5673,9 +5940,9 @@
         "mult": 1.01
       },
       "months": 2,
-      "source": "https://fred.stlouisfed.org/series/APU0000709112",
+      "source": "https://www.ams.usda.gov/mnreports/dymadvancedprices.pdf",
       "confidence": "estimate",
-      "note": "Correction of the existing event. Share: in the costed menu dairy milk is 9.9% of cost of goods (226 gallons, about $1,200 a month), not 30%: 10% x 9.9% = +1%. With oat milk the whole 'milk' line is 15%. Size: the federal Class I base price went from $18.88 per cwt in October 2026 to $20.27 in November (+7.4% in one month); the shelf price moved between $4.026 and $4.317 a gallon inside 2026 (7%)."
+      "note": "Correction of the existing event. Share: in the costed menu dairy milk is 9.9% of cost of goods (226 gallons, about $1,200 a month), not 30%: 10% x 9.9% = +1%. With oat milk the whole 'milk' line is 15%. Size: the federal Class I base price ran from $14.70 per cwt in February 2026 to $22.18 in June (+51%) and was $20.27 for November, up 7.4% in one month (USDA announcement opened November 14, 2026); the shelf price moved only between $4.026 and $4.317 a gallon inside 2026 (7%, FRED)."
     }
   ],
   "roadmap": [
@@ -5689,7 +5956,7 @@
       "id": "open_supplier_accounts",
       "title": "Open supplier accounts and file your resale certificate",
       "kind": "supplier",
-      "text": "Each supplier wants a credit application, often with a personal guarantee, and your Certificate of Authority number. New accounts usually pay on delivery for the first orders. Give Form ST-120 only for goods that leave with the customer: cups, lids, bags.",
+      "text": "Each supplier wants a credit application, often with a personal guarantee, and your Certificate of Authority number. New accounts usually pay on delivery for the first orders. Give Form ST-120 only for goods that leave with the customer: cups, lids, bags, wrappers.",
       "link": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/purchases_by_restaurants.htm"
     },
     {
@@ -5750,7 +6017,7 @@
       "failureModes": "You order tomorrow's pastry before you know tomorrow's weather; no returns of unsold goods; bakeries close on major holidays, and a bakery that is kosher but not kosher for Passover may stop for the week",
       "source": "https://www.balthazarbakery.com/wholesale/faq",
       "confidence": "verified",
-      "note": "Correction of the existing entry: terms added. Balthazar Bakery's wholesale FAQ: minimum order $30 in Manhattan, $40 everywhere else; baguette orders until noon the day before delivery; delivery every night to Manhattan, Brooklyn, Queens, the Bronx and parts of New Jersey, Westchester and Rockland. Its wholesale menus of 2020 list a $1.00 delivery charge. The croissant price is my estimate (see extra.ingredients). Other names are well-known examples from general knowledge, not checked."
+      "note": "Correction of the existing entry: terms added. Balthazar Bakery's wholesale FAQ, opened November 14, 2026: 'We ask for a $30 minimum order in Manhattan, and $40 everywhere else'; baguette orders until noon the day before delivery; delivery every night to Manhattan, Brooklyn, Queens, the Bronx and parts of Westchester, Rockland and New Jersey. Its wholesale menus of 2020 list a $1.00 delivery charge (search capture). The croissant price is my estimate (see extra.ingredients). Other names are well-known examples from general knowledge, not checked."
     },
     {
       "id": "disposables",
@@ -5759,7 +6026,7 @@
       "whereToFind": "Order online by the case, or carry cases out of a cash-and-carry warehouse. Before you order a pallet, check that the lid fits the cup: lids of one brand often do not fit cups of another.",
       "examples": "WebstaurantStore, Restaurant Depot, Imperial Dade, Odeko",
       "link": "https://www.webstaurantstore.com/plus/",
-      "priceAnchor": "Hot set 11.1 cents (12 oz cup, lid, sleeve); cold set 10.4 cents (16 oz cup, strawless lid); compostable hot cup 8.2 cents alone",
+      "priceAnchor": "Hot set 11.7 cents (12 oz cup, lid, sleeve); cold set 9.8 cents (16 oz cup, strawless lid); compostable hot cup 7.8 cents alone",
       "minimumOrder": "One case of 1,000; free shipping needs a $99 a month membership and $29 of eligible goods per order",
       "paymentTerms": "Card at checkout",
       "leadTime": "Two to five days by parcel; a case of 1,000 cups is the size of a filing cabinet drawer, and a week of cups for a busy shop is seven of them",
@@ -5767,7 +6034,7 @@
       "monthlyVolume": "About 6,660 cups at 6,000 orders a month",
       "source": "https://www.webstaurantstore.com/plus/",
       "confidence": "verified",
-      "note": "Correction of the existing entry: terms added. WebstaurantStore: WebstaurantPlus costs $99 a month ($49 for each extra address) and gives free shipping on orders with at least $29 of eligible items; cup, lid and sleeve prices are in extra.ingredients. The lid-fit problem was the lesson of the 2021 cup shortage (Wall Street Journal via trade press)."
+      "note": "Correction of the existing entry: terms added. WebstaurantStore, membership page opened November 14, 2026: $99 a month after a trial, free shipping from $29 of eligible items ($49 for each extra address is from a search capture); cup, lid and sleeve prices are in extra.ingredients. The lid-fit problem was the lesson of the 2021 cup shortage (Wall Street Journal via trade press)."
     },
     {
       "id": "waste_carter",
@@ -5782,8 +6049,8 @@
       "leadTime": "Sign before your zone's deadline (Brooklyn North and Upper Manhattan: November 30, 2026) or be assigned a carter at the maximum rate",
       "failureModes": "A missed pickup leaves your bins on the sidewalk past opening, which is your violation, not the carter's; coffee grounds are heavy and you pay by weight",
       "source": "https://www.nyc.gov/site/bic/industries/maximum-rates.page",
-      "confidence": "verified",
-      "note": "Correction of the existing entry: prices added. Business Integrity Commission: maximum $26.87 per cubic yard of loose refuse or $17.64 per 100 lb. City Comptroller's review of the zone contracts: the monthly maximum for five-day service runs from $110 to $353 by zone, and the bill is the frequency charge plus pounds times the per-100-lb rate. DSNY rollout page: sign-up in Brooklyn North and Upper Manhattan from October 1 to November 30, 2026; Brooklyn East and Manhattan Northeast from January 1 to March 1, 2027; Manhattan West and Queens West from April 1 to June 1, 2027. A worked example (my arithmetic, zone rates per 100 lb not seen): 40 lb a day x 30 = 1,200 lb x $17.64 / 100 = $212, plus $110 = $322 a month in Brooklyn North at the caps, against the pack's $250."
+      "confidence": "estimate",
+      "note": "Correction of the existing entry: prices added. Read through search limited to nyc.gov and the Comptroller's site (nyc.gov refuses automated requests). Business Integrity Commission: maximum $26.87 per cubic yard of loose refuse or $17.64 per 100 lb. City Comptroller's review of the zone contracts: the monthly maximum for five-day service runs from $110 to $353 by zone, and the bill is the frequency charge plus pounds times the per-100-lb rate. DSNY rollout page: sign-up in Brooklyn North and Upper Manhattan from October 1 to November 30, 2026; Brooklyn East and Manhattan Northeast from January 1 to March 1, 2027; Manhattan West and Queens West from April 1 to June 1, 2027. A worked example (my arithmetic, zone rates per 100 lb not seen): 40 lb a day x 30 = 1,200 lb x $17.64 / 100 = $212, plus $110 = $322 a month in Brooklyn North at the caps, against the pack's $250."
     },
     {
       "id": "cafe_distributor",
@@ -5848,7 +6115,7 @@
       "monthlyVolume": "About 188 cartons (16 cases) at 6,000 orders a month",
       "source": "https://www.webstaurantstore.com/oatly-barista-edition-oat-milk-32-fl-oz-case/110OTBAROAT.html",
       "confidence": "verified",
-      "note": "WebstaurantStore: Oatly Barista Edition $39.99 per case of 12 (lots of 85 cases: $35.49). Through search: Starbucks ran out of oat milk in April 2021, a month after its national launch; Lyons Magnus recalled 53 products including Oatly Barista Edition sold to foodservice in 2022; trade press of November 2, 2026: Oatly will raise US prices in 2027 to offset diesel costs."
+      "note": "WebstaurantStore, page opened November 14, 2026: Oatly Barista Edition $39.99 per case of 12 ($38.99 for two cases, $35.99 for 85). Through search: Starbucks ran out of oat milk in April 2021, a month after its national launch; Lyons Magnus recalled 53 products including Oatly Barista Edition sold to foodservice in 2022; trade press of November 2, 2026: Oatly will raise US prices in 2027 to offset diesel costs."
     },
     {
       "id": "syrups_tea_matcha",
@@ -5857,14 +6124,14 @@
       "whereToFind": "Online by the case or through your cafe distributor. For matcha, ask the importer about purchase limits and how long today's price holds.",
       "examples": "Monin, Torani, Ghirardelli, Tazo, Oregon Chai, David Rio, Harney & Sons, Jade Leaf, Ippodo, Sugimoto",
       "link": "https://www.webstaurantstore.com/monin-premium-vanilla-flavoring-syrup-750-ml-case/544SYPAR045CS.html",
-      "priceAnchor": "Syrup $84.99 per case of twelve 750 mL bottles (21 cents a drink); chocolate sauce $118.49 per case of six 64 oz jugs; chai $35.49 per case of six cartons; barista matcha $139.83 per lb (92 cents a drink)",
+      "priceAnchor": "Syrup $84.99 per case of twelve 750 mL bottles (21 cents a drink); chocolate sauce $118.49 per case of six 64 oz jugs; chai $35.49 per case of six cartons; barista matcha $119.99 per lb (79 cents a drink)",
       "minimumOrder": "One bottle; cases are 20-30% cheaper per unit",
       "paymentTerms": "Card at checkout",
       "leadTime": "Two to five days; matcha from Japan one to six months when supply is tight",
       "failureModes": "Matcha: purchase limits and waits that grew from one or two months to six in 2025; seasonal syrups bought in September are dead stock in January",
       "source": "https://www.webstaurantstore.com/monin-premium-vanilla-flavoring-syrup-750-ml-case/544SYPAR045CS.html",
       "confidence": "verified",
-      "note": "All four prices seen at WebstaurantStore (see extra.ingredients). Matcha waits and purchase limits: Supply Chain Dive, 2025, through search."
+      "note": "All four prices read on WebstaurantStore's pages on November 14, 2026 (see extra.ingredients). Matcha waits and purchase limits: Supply Chain Dive, 2025, through search."
     },
     {
       "id": "frozen_bakeoff",
@@ -5880,7 +6147,7 @@
       "failureModes": "A freezer failure loses the whole stock; a croissant baked from frozen is good, not great, and regulars can tell",
       "source": "https://www.webstaurantstore.com/bridor-ready-to-bake-perfect-croissant-2-8-oz-case/108BRI59103.html",
       "confidence": "verified",
-      "note": "WebstaurantStore: Bridor ready-to-bake croissant 2.8 oz 80/case $109.99 ($72.99 for paying members); Bridor raw butter croissant 160/case $113.99; Orange Bakery almond croissant 80/case $96.99; Pillsbury freezer-to-oven dough 100/case $77.37."
+      "note": "WebstaurantStore, page opened November 14, 2026: Bridor ready-to-bake croissant 2.8 oz 80/case $109.99 ($76.99 for paying members). From search captures of the same store: Bridor raw butter croissant 160/case $113.99; Orange Bakery almond croissant 80/case $96.99; Pillsbury freezer-to-oven dough 100/case $77.37."
     },
     {
       "id": "custom_cups",
@@ -5944,7 +6211,20 @@
       "failureModes": "Selling deposit bottles makes you a 'dealer': anyone may bring you up to 240 empties a day of the brands you sell, and you need the signs and somewhere to keep the bags",
       "source": "https://dec.ny.gov/environmental-protection/recycling-composting/bottle-bill/redemption-center-dealer-requirements",
       "confidence": "verified",
-      "note": "NYS DEC dealer requirements: refunds in all business hours except the first and last for a shop open less than 24 hours; containers of the brand, size and shape the dealer sells, wherever bought; a dealer may limit returns to no fewer than 240 containers per person a day if it posts the limit; the 'Redemption Warning' and 'Bottle Bill of Rights' signs are required."
+      "note": "NYS DEC dealer requirements, page opened November 14, 2026: refunds in all business hours except the first and last for a shop open less than 24 hours; containers of the brand, size and shape the dealer sells, wherever bought; a dealer may limit returns to no fewer than 240 containers per person a day if it posts the limit; the 'Redemption Warning' and 'Bottle Bill of Rights' signs are required."
+    }
+  ],
+  "taxes": [
+    {
+      "id": "paper_bag_fee",
+      "name": "Paper carryout bag fee",
+      "base": "fixed",
+      "rate": 0.05,
+      "due": "quarterly",
+      "appliesIf": "per paper carryout bag handed to a customer in New York City, except a bag that holds only food sliced or prepared to order; customers paying with SNAP or WIC are exempt",
+      "source": "https://www.tax.ny.gov/bus/st/paper-carryout-bag-fee.htm",
+      "confidence": "verified",
+      "note": "NY Tax Department page, opened November 14, 2026: the five-cent fee applies to each paper carryout bag provided by a sales tax vendor of tangible personal property, whether or not the goods are taxable; exempt bags include one 'used solely to contain food sliced or prepared to order' and a plastic bag from a restaurant for carry-out or delivery; the fee is a separate line on the receipt with the number of bags, is not itself taxed, and is remitted with the sales tax return on Schedule E. The customer pays it, so it is a pass-through, not a cost: the cost is a register that cannot print the line. A bag charged above five cents is a taxable sale of a bag. NYC311, opened the same day: city businesses must collect the fee."
     }
   ]
 }
