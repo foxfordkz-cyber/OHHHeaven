@@ -2820,7 +2820,11 @@
         "effects": [
           {
             "field": "cogs",
-            "mult": 0.985
+            "mult": 0.92
+          },
+          {
+            "field": "ticket",
+            "mult": 0.974
           },
           {
             "field": "demand",
@@ -2847,7 +2851,7 @@
         "tier": "core",
         "source": "https://freshcup.com/cold-coffees-rise-shows-no-signs-of-slowing-nca-report-finds/",
         "confidence": "estimate",
-        "note": "If cold drinks go from 24 to 45 of 111 drinks per 100 orders, replacing hot lattes and drip: an iced latte costs $1.15 against $1.23 and sells for 50 cents more, cold brew costs $0.81 against $0.90 for drip and sells for $2 more. Cost of goods as a share of sales falls about 1.5%. The 70°F threshold and the 45 are my estimates; no public series of hot against iced orders by temperature was found."
+        "note": "Summer mix (extra.seasonality): cold drinks 43% of drinks instead of 22%, two fewer croissants and one fewer muffin per 100 orders. Cost per order falls from $2.01 to $1.86 (x0.92) and sales per order from $7.75 to $7.55 (x0.974): the cost share drops from 26.0% to 24.6%, but the margin per order is flat ($5.74 against $5.69) because the pastry leaves the ticket. If the engine has no ticket field, apply neither multiplier. The 70°F threshold and the mix are my estimates; no public series of hot against iced orders by temperature was found."
       },
       {
         "id": "pumpkin_season",
@@ -3283,6 +3287,117 @@
         "source": "https://www.nycfoodpolicy.org/community-spotlight-too-good-to-go/",
         "confidence": "estimate",
         "note": "A bag sold at a third of the shelf price returns about 50 cents on each dollar of pastry cost after the fee: ordering extra to fill bags loses money on every one. +0.5% of cost of goods is my figure for a shop that lets it drift."
+      },
+      {
+        "id": "bakery_new_price_list",
+        "name": "Your bakery's new price list",
+        "text": "Flour, butter, wages, tolls: the wholesale bakery raises every line by about 8% from the first of the month.",
+        "scale": "point",
+        "months": [
+          1,
+          9
+        ],
+        "realSignal": "The bakery's written notice of new wholesale prices, typically in January or after the summer",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.024,
+            "ingredient": "bakery",
+            "ingredientMult": 1.08
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "pastry_program"
+          },
+          {
+            "kind": "lever",
+            "id": "ordering_par"
+          },
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          },
+          {
+            "kind": "price"
+          }
+        ],
+        "realFrequency": "Yearly. Bakery is 30% of a cafe's cost of goods, second only to coffee, and nothing on it is quoted on an exchange.",
+        "tier": "core",
+        "source": "https://www.balthazarbakery.com/wholesale/faq",
+        "confidence": "estimate",
+        "note": "No published wholesale bakery list was found, so 8% is my figure for a year in which food-away-from-home prices rose 3.4% and butter and eggs fell. 8% x 29.6% = +2.4% of cost of goods: the same hit as an ordinary roaster increase, and far less noticed."
+      },
+      {
+        "id": "allergen_label_law",
+        "name": "Allergen labels on grab-and-go food",
+        "text": "From November 12, 2026 anything you make, pack and put in the fridge for sale must carry a label naming the major allergens in it.",
+        "scale": "country",
+        "months": [
+          11,
+          12
+        ],
+        "scaleNote": "New York State",
+        "realSignal": "The effective date of NY Agriculture and Markets Law §199-g (signed in 2025, in force November 12, 2026)",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.003,
+            "appliesIf": "grab_and_go = prepacked"
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "grab_and_go"
+          },
+          {
+            "kind": "lever",
+            "id": "pastry_program"
+          }
+        ],
+        "realFrequency": "Once. Nine major allergens: milk, eggs, fish, shellfish, tree nuts, peanuts, wheat, soybeans, sesame. Food packed after the customer orders is not covered.",
+        "tier": "core",
+        "source": "https://www.nysenate.gov/legislation/laws/AGM/199-G",
+        "confidence": "estimate",
+        "note": "The statute's wording was read through search: every food establishment labels prepackaged food (prepared, packed and sold on the same premises) with any major allergen it is made with. The effective date comes from secondary sources, and no penalty was found. Label stock and ten minutes a morning: about $35 a month, 0.3% of cost of goods."
+      },
+      {
+        "id": "bottle_deposit_bill",
+        "name": "Bigger bottle bill in Albany",
+        "text": "A bill would raise the deposit from 5 to 10 cents and add juice, tea and sports drinks. Your fridge of bottled drinks would mean twice the cash held and more empties at the door.",
+        "scale": "country",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "scaleNote": "New York State",
+        "realSignal": "Passage of the bottle bill expansion by both houses (introduced in 2022 as A10184; reintroduced since)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "supply_route"
+          }
+        ],
+        "realFrequency": "Proposed every session since 2022; I could not confirm its 2026 status.",
+        "tier": "exotic",
+        "source": "https://legislation.nysenate.gov/pdf/bills/2021/A10184",
+        "confidence": "estimate",
+        "note": "No money effect is modelled: the deposit is passed through to the customer. Kept in the catalog so the host can announce it; the player's only decision is whether bottled drinks are worth being a return point."
       }
     ],
     "shelfLife": {
@@ -3799,6 +3914,21 @@
         "text": "An auditor can rebuild your sales from what you bought.",
         "why": "Where register records are missing, New York auditors apply a markup to purchases and have watched a shop for days to set it; cup and coffee invoices become the evidence.",
         "source": "https://www.dta.ny.gov/pdf/archive/stc/50551.pdf"
+      },
+      {
+        "text": "Since November 12, 2026 a sandwich wrapped in the morning needs an allergen label; the same sandwich wrapped after the order does not.",
+        "why": "New York's new law covers food prepared, packed and sold on the same premises. Grab-and-go saves time at the bar and now costs a label.",
+        "source": "https://www.nysenate.gov/legislation/laws/AGM/199-G"
+      },
+      {
+        "text": "In the iced season the cost share falls and the profit per order does not.",
+        "why": "Cold drinks are cheaper to make, but the pastry leaves the ticket: $5.69 of margin per order against $5.74.",
+        "source": "https://www.ncausa.org/Newsroom/Specialty-Coffee-Consumption-Remains-at-Record-High"
+      },
+      {
+        "text": "The bakery's price list is your second-biggest price risk and nobody publishes it.",
+        "why": "Bakery is 30% of cost of goods. Coffee has an exchange and a news cycle; the croissant has a letter in January.",
+        "source": "https://www.balthazarbakery.com/wholesale/faq"
       }
     ],
     "failureStories": [
@@ -3832,7 +3962,163 @@
         "lesson": "Costs and traffic move together: the months when inputs rise are the months when customers trade down.",
         "source": "https://whatnow.com/?p=403722"
       }
-    ]
+    ],
+    "seasonality": {
+      "mixes": {
+        "annual": {
+          "coldShareOfDrinks": 0.216,
+          "salesPerOrder": 7.75,
+          "cogsPerOrder": 2.011,
+          "cogsPct": 0.26
+        },
+        "summer": {
+          "months": [
+            6,
+            7,
+            8
+          ],
+          "coldShareOfDrinks": 0.43,
+          "salesPerOrder": 7.55,
+          "cogsPerOrder": 1.857,
+          "cogsPct": 0.246,
+          "changesPer100Orders": {
+            "iced_latte_16": 24,
+            "cold_brew_16": 22,
+            "latte_12": 8,
+            "drip_coffee_12": 13,
+            "vanilla_latte_12": 4,
+            "oat_latte_12": 7,
+            "hot_tea_12": 2,
+            "hot_chocolate_12": 0,
+            "pumpkin_spice_latte_12": 0,
+            "croissant_bought": 11,
+            "muffin": 6
+          }
+        },
+        "winter": {
+          "months": [
+            12,
+            1,
+            2
+          ],
+          "coldShareOfDrinks": 0.101,
+          "salesPerOrder": 7.45,
+          "cogsPerOrder": 1.982,
+          "cogsPct": 0.266,
+          "changesPer100Orders": {
+            "iced_latte_16": 6,
+            "cold_brew_16": 5,
+            "latte_12": 20,
+            "drip_coffee_12": 24,
+            "hot_chocolate_12": 4,
+            "hot_tea_12": 6,
+            "mocha_12": 4,
+            "pumpkin_spice_latte_12": 0
+          }
+        }
+      },
+      "coldShareByMonth": {
+        "1": 0.1,
+        "2": 0.1,
+        "3": 0.15,
+        "4": 0.22,
+        "5": 0.3,
+        "6": 0.4,
+        "7": 0.45,
+        "8": 0.45,
+        "9": 0.35,
+        "10": 0.22,
+        "11": 0.15,
+        "12": 0.1
+      },
+      "calendar": [
+        {
+          "months": [
+            1
+          ],
+          "what": "Resolutions: fewer pastries, more plant milk; seasonal stock written off"
+        },
+        {
+          "months": [
+            3,
+            4
+          ],
+          "what": "Passover week: some route bakeries stop; first iced orders on warm days"
+        },
+        {
+          "months": [
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "what": "Iced season: cold brew decided a day ahead, ice and cold cups run short first"
+        },
+        {
+          "months": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "what": "Fall menus launch in the last week of August; pumpkin drinks through Thanksgiving"
+        },
+        {
+          "months": [
+            11,
+            12
+          ],
+          "what": "Holiday drinks from the first week of November; gift bags of beans; bakeries closed on Thanksgiving, Christmas and New Year"
+        }
+      ],
+      "confidence": "estimate",
+      "source": "https://www.ncausa.org/Newsroom/Specialty-Coffee-Consumption-Remains-at-Record-High",
+      "note": "The three mixes are computed from extra.menu; the monthly cold share is my interpolation between them. Measured anchors: cold coffee is 17% of all US cups in the winter survey and 21% in the summer one (NCA, 2026); 60% of specialty drinkers had a cold specialty coffee in the past week; Starbucks sells 75% of its US drinks cold over the year. A young Manhattan block will run above this table and a commuter block below it."
+    },
+    "openingOrder": {
+      "lines": [
+        {
+          "what": "Espresso and house blend, one week (62 lb)",
+          "cost": 955
+        },
+        {
+          "what": "Milk, three days (22 gallons)",
+          "cost": 116
+        },
+        {
+          "what": "Oat milk, four cases",
+          "cost": 160
+        },
+        {
+          "what": "Hot cups, lids and sleeves, two cases each",
+          "cost": 236
+        },
+        {
+          "what": "Cold cups and lids, one case each",
+          "cost": 104
+        },
+        {
+          "what": "Syrup, chocolate sauce and chai (one case each), tea (two cases)",
+          "cost": 288
+        },
+        {
+          "what": "Matcha, 1 lb",
+          "cost": 162
+        },
+        {
+          "what": "First morning of pastry and bagels",
+          "cost": 120
+        },
+        {
+          "what": "Retail bags of beans, 24",
+          "cost": 276
+        }
+      ],
+      "total": 2417,
+      "confidence": "estimate",
+      "note": "Priced from extra.ingredients. Confirms the pack's opening_inventory of $3,000: the difference is cleaning chemicals, gloves and the drinks poured away while the team trains. Nothing here is more than a week of stock except matcha and syrups."
+    }
   },
   "sources": [
     {
@@ -4389,6 +4675,26 @@
       "url": "https://dailycoffeenews.com/2025/02/21/coffee-roasters-are-or-should-be-raising-prices-heres-some-advice-on-how",
       "title": "Daily Coffee News: roasters are or should be raising prices, February 2025",
       "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/laws/AGM/199-G",
+      "title": "NY Agriculture and Markets Law §199-g: allergen labeling of prepackaged food",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.allergicliving.com/2025/11/13/ny-law-brings-allergen-labeling-to-deli-bakery-packaged-foods/",
+      "title": "Allergic Living: New York law brings allergen labeling to deli and bakery packaged foods",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/doh/about/press/pr2025/new-added-sugars-warning-rule-goes-into-effect-2025.page",
+      "title": "NYC Health: added sugars warning rule in effect, October 2025",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://legislation.nysenate.gov/pdf/bills/2021/A10184",
+      "title": "NY Assembly bill A10184: bottle bill expansion",
+      "checked": "2026-11-14"
     }
   ],
   "officials": [
@@ -4830,6 +5136,18 @@
       "title": "When a product is recalled",
       "text": "A recall names brands, sizes and lot codes. Check your shelves the same day, pull what matches, keep the supplier's credit note. Food under recall is adulterated food: a summons of up to $1,200 and points toward your grade.",
       "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/adulterated-foods.pdf"
+    },
+    {
+      "id": "allergen_labels_prepacked",
+      "title": "Labels on what you pack ahead",
+      "text": "Since November 12, 2026 food you make, pack and sell on the premises needs a label naming any of the 9 major allergens in it: milk, eggs, fish, shellfish, tree nuts, peanuts, wheat, soy, sesame. Food wrapped after the order is exempt.",
+      "source": "https://www.nysenate.gov/legislation/laws/AGM/199-G"
+    },
+    {
+      "id": "chain_menu_labels",
+      "title": "Chains only: calories, salt, sugar",
+      "text": "A shop that is one of 15 or more under the same name must post calories, a salt warning and, since October 4, 2025, an icon on items with 50 g or more of added sugars. Each is a $200 summons. One independent shop is exempt.",
+      "source": "https://www.nyc.gov/site/doh/about/press/pr2025/new-added-sugars-warning-rule-goes-into-effect-2025.page"
     }
   ],
   "levers": [
@@ -5267,6 +5585,32 @@
       "source": "https://cdn.shopify.com/s/files/1/0566/9385/0289/files/Cold_Brew_Recipe_-_Full_Sheet.pdf",
       "confidence": "estimate",
       "note": "Cold brew steeps 12 to 24 hours, so tomorrow's supply is decided today. A measured daily batch runs out on the first hot afternoon; big batches never run out but about one batch in ten is poured away when it passes its week (12 servings x 81 cents x 4.5 = $45 a month, my arithmetic). In the iced season the event iced_season penalises the daily batch."
+    },
+    {
+      "id": "grab_and_go",
+      "name": "Sandwiches, parfaits and bottled cold brew",
+      "options": [
+        {
+          "id": "made_to_order",
+          "label": "Everything is made and wrapped after the customer orders",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": -0.01
+          }
+        },
+        {
+          "id": "prepacked",
+          "label": "Packed in the morning for the fridge, each with an allergen label",
+          "monthlyCost": 35,
+          "effects": {
+            "capacity": 0.02
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nysenate.gov/legislation/laws/AGM/199-G",
+      "confidence": "estimate",
+      "note": "NY Agriculture and Markets Law §199-g (in force November 12, 2026 according to secondary sources): food prepared, packed and sold on the same premises must carry a label naming any major allergen; food packed after the order is exempt. $35 a month is label stock and ten minutes each morning (my estimate). A third real option, prepacked with no label, is not offered because the penalty was not found; add it as a violation once the penalty is known."
     }
   ],
   "setup": [
