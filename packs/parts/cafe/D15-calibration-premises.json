@@ -4944,134 +4944,2767 @@
     ],
     "confidence": "verified",
     "note": "1 RCNY §102-04(b)(4) (opened): work after hours without a variance permit $6,000 in a building other than a one- or two-family home. DEP schedule (opened): unreasonable construction noise §24-228, $560 first offense. Variance fee $500 is my estimate."
-   }
-  ],
-  "notCalibrated": [
+   },
    {
     "id": "gas_turn_on_wait",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "utilities",
+    "name": "Waiting for the gas to be turned on",
+    "text": "The piping is in and tested, but the utility has not come to set the meter. Without gas the water heater and the oven are dead.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "decision: utility_concept = gas_equipment (gas water heater, oven or range) in a space without live gas service",
+    "realSignal": "Utility gas service request pending after the Buildings Department gas authorization",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 68
+     },
+     {
+      "field": "setupRentDays",
+      "add": 68,
+      "appliesIf": "free months already used",
+      "note": "68 x $200 = $13,600 of rent with no sales"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "utility_concept",
+      "optionId": "all_electric",
+      "label": "All-electric bar: electric water heater and oven",
+      "cost": {
+       "setupCost": 2000,
+       "utilitiesMult": 1.05
+      },
+      "result": "event cannot happen"
+     },
+     {
+      "kind": "roadmap",
+      "id": "check_gas_before_lease",
+      "label": "Ask Con Edison about gas at the address before signing",
+      "cost": {
+       "cash": 0
+      },
+      "result": "known before the lease"
+     }
+    ],
+    "realFrequency": "82.1% of restaurants surveyed in 2017 were delayed",
+    "source": "https://www.nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+    "supportingSources": [
+     "https://thenycalliance.org/news-item/Con-Edison-Gas-Service"
+    ],
+    "confidence": "verified",
+    "note": "NYS Senate report (opened): 82.1% of surveyed restaurants had a gas delay, only 17% got service on time, the average wait was about 68 days, one respondent over a year; losses averaged $140,000 per business. Survey from 2017; no newer measurement found. An all-electric coffee bar skips the event. The 68-day delay is verified; the all-electric cost and the utilities multiplier are my estimates."
+   },
+   {
+    "id": "gas_connection_wait",
+    "sourceFragment": "D14",
+    "group": "utilities",
+    "name": "Waiting for Con Edison gas",
+    "text": "Your space never had gas. Con Edison has to bring a line from the street before the stoves can be inspected.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "as gas_turn_on_wait",
+    "realSignal": "Con Edison gas availability answer for the address",
+    "mergedWith": "gas_turn_on_wait",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 68
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "utility_concept",
+      "optionId": "all_electric",
+      "label": "All-electric",
+      "cost": {
+       "setupCost": 2000
+      },
+      "result": "no wait"
+     }
+    ],
+    "realFrequency": "See gas_turn_on_wait",
+    "source": "https://www.nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "D14 duplicate. NYS Senate report (opened): 82.1% of surveyed restaurants had a gas delay, only 17% got service on time, the average wait was about 68 days, one respondent over a year; losses averaged $140,000 per business. Survey from 2017; no newer measurement found. An all-electric coffee bar skips the event."
+   },
+   {
+    "id": "d00_premises_gas_sequence",
+    "sourceFragment": "D00",
+    "group": "utilities",
+    "name": "Cooking gas waits for separate agency inspections",
+    "text": "The utility cannot supply the planned cooking service before required approvals.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "state: gas piping done, waiting for DOB gas authorization and the utility",
+    "realSignal": "FDNY or DOB inspection for the gas cooking installation remains outstanding.",
+    "mergedWith": "gas_turn_on_wait",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 68
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "utility_concept",
+      "optionId": "all_electric",
+      "label": "All-electric",
+      "cost": {
+       "setupCost": 2000
+      },
+      "result": "no wait"
+     }
+    ],
+    "realFrequency": "See gas_turn_on_wait",
+    "source": "https://www.nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "Same wait seen as a sequence of approvals. NYS Senate report (opened): 82.1% of surveyed restaurants had a gas delay, only 17% got service on time, the average wait was about 68 days, one respondent over a year; losses averaged $140,000 per business. Survey from 2017; no newer measurement found. An all-electric coffee bar skips the event."
+   },
+   {
+    "id": "gas_red_tag",
+    "sourceFragment": "D10",
+    "group": "utilities",
+    "name": "Gas shut off to the building",
+    "text": "The utility finds a leak and locks the building's gas. Restoring it takes a plumber, a Buildings Department permit, a pressure test and an inspection.",
+    "tier": "core",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "announced: building gas shut off after a failed leak test (inspection year of the building's community district)",
+    "realSignal": "Building's Local Law 152 gas piping inspection cycle: Cycle 2 due in 2026 for community districts 4, 6, 8, 9, 16; in 2027 for 11, 12, 14, 15, 17",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 3,
+      "appliesIf": "cafe can switch to electric hot water"
+     },
+     {
+      "field": "closureDays",
+      "add": 60,
+      "appliesIf": "hot water or oven only on gas",
+      "note": "estimate: News 12 reported Riverdale shops without gas for months"
+     },
+     {
+      "field": "setupCost",
+      "add": 1500,
+      "appliesIf": "emergency electric water heater"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "utility_concept",
+      "optionId": "all_electric",
+      "label": "All-electric from day one",
+      "cost": {
+       "setupCost": 2000
+      },
+      "result": "unaffected"
+     },
+     {
+      "kind": "choice",
+      "id": "point_of_use_heater",
+      "label": "Install an electric water heater the same week",
+      "cost": {
+       "cash": 1500
+      },
+      "result": "3 days closed instead of 60"
+     },
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "abatement_clause",
+      "label": "Rent abates while building service is off",
+      "cost": {
+       "lawyerHours": 1
+      },
+      "result": "no rent while closed"
+     }
+    ],
+    "realFrequency": "DOB issued about 40,000 more violations in FY2026 for missing gas piping inspection certificates (MMR); the penalty is the owner's: $5,000",
+    "source": "https://www.nyc.gov/assets/buildings/pdf/gas_piping-sn.pdf",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2026/dob.pdf",
+     "https://brooklyn.news12.com/riverdale-businesses-struggle-without-gas-for-months"
+    ],
+    "confidence": "estimate",
+    "note": "DOB service notice (opened): failure to submit the gas piping inspection certification by the cycle deadline brings a $5,000 penalty for buildings other than 3-family homes; the cycle table by community district is in the notice. MMR FY2026 (opened): the jump in DOB violations is mostly LL152. Without hot water a food shop cannot operate (Health Code). Closure lengths are estimates."
    },
    {
     "id": "gas_shut_off_in_building",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "utilities",
+    "name": "The gas to the building is shut off",
+    "text": "A routine utility inspection found a leak in the building's piping. Gas is off for every tenant until the landlord's plumber repairs it and the city passes it.",
+    "tier": "exotic",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "as gas_red_tag",
+    "realSignal": "Utility leak finding on the building's gas piping (periodic inspections under Local Law 152)",
+    "mergedWith": "gas_red_tag",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 3
+     },
+     {
+      "field": "setupCost",
+      "add": 1500
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "point_of_use_heater",
+      "label": "Electric water heater",
+      "cost": {
+       "cash": 1500
+      },
+      "result": "3 days"
+     }
+    ],
+    "realFrequency": "See gas_red_tag",
+    "source": "https://www.nyc.gov/assets/buildings/pdf/gas_piping-sn.pdf",
+    "supportingSources": [
+     "https://brooklyn.news12.com/riverdale-businesses-struggle-without-gas-for-months"
+    ],
+    "confidence": "estimate",
+    "note": "D01 duplicate."
+   },
+   {
+    "id": "building_gas_shutoff",
+    "sourceFragment": "D02",
+    "group": "utilities",
+    "name": "The building's gas is locked off",
+    "text": "The utility found a leak in the building's piping and shut the meter. Gas returns only after the landlord's plumber passes a pressure test.",
+    "tier": "deep",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "trigger": "as gas_red_tag",
+    "realSignal": "Con Edison shutoff notice for the building",
+    "mergedWith": "gas_red_tag",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 3
+     },
+     {
+      "field": "setupCost",
+      "add": 1500
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "point_of_use_heater",
+      "label": "Electric water heater",
+      "cost": {
+       "cash": 1500
+      },
+      "result": "3 days"
+     }
+    ],
+    "realFrequency": "See gas_red_tag",
+    "source": "https://www.nyc.gov/assets/buildings/pdf/gas_piping-sn.pdf",
+    "supportingSources": [
+     "https://brooklyn.news12.com/riverdale-businesses-struggle-without-gas-for-months"
+    ],
+    "confidence": "estimate",
+    "note": "Same id in D02 and D13; one calibration."
    },
    {
     "id": "electrical_service_too_small",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "utilities",
+    "name": "The panel cannot carry the equipment",
+    "text": "The electrician adds up the espresso machine, the ice machine, the fridges and the air conditioning. The old panel is too small, and a bigger service needs Con Edison.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "attribute: building service below the kit's load (espresso machine 30-40 A, dishwasher, ice machine) in a former retail or salon space",
+    "realSignal": "Existing electrical service of the space against the equipment load (visible on a walk-through with an electrician)",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 10000,
+      "note": "panel and feeder upgrade inside the building, estimate"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 20,
+      "note": "Con Edison load letter review"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 84,
+      "appliesIf": "utility-side upgrade needed",
+      "note": "12 weeks, contractor guides 4-24 weeks"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "load_letter_before_lease",
+      "label": "Electrician's load calculation before signing",
+      "cost": {
+       "cash": 750
+      },
+      "result": "choose a space with enough power"
+     },
+     {
+      "kind": "choice",
+      "id": "lean_kit_power",
+      "label": "Two-group machine, no dishwasher",
+      "cost": {
+       "quality": -0.02
+      },
+      "result": "fits the existing service"
+     }
+    ],
+    "realFrequency": "Common in spaces that never had food service",
+    "source": "https://www.nyc.gov/assets/hpd/downloads/pdfs/services/hpd-pilot-coned-load-letter.pdf",
+    "supportingSources": [
+     "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/",
+     "https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/"
+    ],
+    "confidence": "estimate",
+    "note": "HPD guidance (opened): Con Edison needs about 20 days to evaluate and confirm available service capacity once the load letter is filed. Utility-side upgrade 4-12 or 12-24 weeks (contractor guides, D02); 84 days = 12 weeks. Panel cost and load calculation price are my estimates."
+   },
+   {
+    "id": "service_upgrade_wait",
+    "sourceFragment": "D02",
+    "group": "utilities",
+    "name": "Waiting for Con Edison",
+    "text": "The new machine is in the box. It stays there until the utility finishes the service upgrade.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "decision: ordered an electrical service upgrade",
+    "realSignal": "Con Edison case status: load letter, layout drawings, inspection, connection",
+    "mergedWith": "electrical_service_too_small",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 84
+     },
+     {
+      "field": "setupRentDays",
+      "add": 84,
+      "appliesIf": "before opening, free months used",
+      "note": "$16,800"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "load_letter_before_lease",
+      "label": "Check the load first",
+      "cost": {
+       "cash": 750
+      },
+      "result": "avoid"
+     }
+    ],
+    "realFrequency": "See electrical_service_too_small",
+    "source": "https://www.nyc.gov/assets/hpd/downloads/pdfs/services/hpd-pilot-coned-load-letter.pdf",
+    "supportingSources": [
+     "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/"
+    ],
+    "confidence": "estimate",
+    "note": "D02 value of 12 weeks kept; HPD's 20-day load letter review is the first part of it."
+   },
+   {
+    "id": "breaker_trips_at_peak",
+    "sourceFragment": "D02",
+    "group": "utilities",
+    "name": "The breaker trips at 8:40",
+    "text": "Espresso machine, dishwasher and ice maker all draw at once. The bar goes dark for ten minutes in the middle of the rush.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: a bigger machine, dishwasher or second fridge added without a new circuit",
+    "realSignal": "Amps on the panel against the sum of the equipment nameplates",
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.95
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "dedicated_espresso_circuit",
+      "label": "Dedicated 30-40 A circuit",
+      "cost": {
+       "cash": 1200
+      },
+      "result": "event cannot happen"
+     }
+    ],
+    "realFrequency": "Not found",
+    "source": "https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Vendor: a two-group machine wants its own 30 A 208-240 V circuit, a three-group about 40 A (D02). Circuit price is my estimate; 0.95 is D02's game value."
    },
    {
     "id": "utility_deposit_demand",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "utilities",
+    "name": "Con Edison asks for a deposit",
+    "text": "Your business has no payment history. The utility wants a security deposit before it opens the account.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "state: new nonresidential account without credit history",
+    "realSignal": "New non-residential account with no billing history",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1800,
+      "refundable": true,
+      "note": "up to twice average monthly usage: 2 x $900 electricity"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "pay_in_installments",
+      "label": "Pay in three installments",
+      "cost": {},
+      "result": "half now, the rest over two months (offered to existing customers)"
+     }
+    ],
+    "realFrequency": "Common for new businesses",
+    "source": "https://d1tvxue8o4w0fl.cloudfront.net/regulation/new-york-codes-rules-and-regulations/title-16-department-of-public-service/chapter-i-rules-of-procedure/subchapter-b-procedures-and-requirements-concerning-consumer-protections/part-13-rules-governing-the-provision-of-service-by-gas-electric-and-steam-corporations-to-nonresidential-customers/section-137-security-deposits",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "16 NYCRR §13.7 (regulation text via a mirror, search excerpt): a nonresidential deposit may not exceed twice the customer's average monthly usage. $900 of the pack's $1,100 utilities is electricity: my split. The pack already holds $1,500 in insurance_utility_deposits."
+   },
+   {
+    "id": "d00_premises_utility_deposit",
+    "sourceFragment": "D00",
+    "group": "utilities",
+    "name": "Ready wiring still waits for customer paperwork",
+    "text": "The utility needs complete applications, certifications and deposits before final service.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "as utility_deposit_demand",
+    "realSignal": "Project Center shows outstanding customer-side documentation.",
+    "mergedWith": "utility_deposit_demand",
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1800,
+      "refundable": true
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "pay_in_installments",
+      "label": "Installments",
+      "cost": {},
+      "result": "spread over 3 months"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://d1tvxue8o4w0fl.cloudfront.net/regulation/new-york-codes-rules-and-regulations/title-16-department-of-public-service/chapter-i-rules-of-procedure/subchapter-b-procedures-and-requirements-concerning-consumer-protections/part-13-rules-governing-the-provision-of-service-by-gas-electric-and-steam-corporations-to-nonresidential-customers/section-137-security-deposits",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Same as utility_deposit_demand."
+   },
+   {
+    "id": "d00_premises_utility_extra",
+    "sourceFragment": "D00",
+    "group": "utilities",
+    "name": "Chosen service design triggers extra utility charges",
+    "text": "A nonstandard entry or excess service request changes the connection cost.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: service design beyond the utility's standard (new entry, excess capacity)",
+    "realSignal": "Con Edison identifies a tariff-covered nonstandard service request.",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 5000,
+      "note": "estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "standard_service",
+      "label": "Stay within the existing service",
+      "cost": {},
+      "result": "no charge"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://www.nyc.gov/assets/hpd/downloads/pdfs/services/hpd-pilot-coned-load-letter.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate; the utility's own charge was not found."
+   },
+   {
+    "id": "d00_premises_meter_not_live",
+    "sourceFragment": "D00",
+    "group": "utilities",
+    "name": "The new meter is not yet turned on",
+    "text": "Final connections and activation remain after preparation work.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: wiring complete, electrical sign-off and meter set pending",
+    "realSignal": "Utility case lacks final turn-on confirmation.",
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "file_signoff_early",
+      "label": "Electrician files the sign-off the day work ends",
+      "cost": {},
+      "result": "7 days instead of 14"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://www.nyc.gov/assets/hpd/downloads/pdfs/services/hpd-pilot-coned-load-letter.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   },
+   {
+    "id": "d00_premises_backflow_install",
+    "sourceFragment": "D00",
+    "group": "utilities",
+    "name": "Water protection device needs a separate approval",
+    "text": "The premises needs an approved backflow installation.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: DEP requires a backflow device for the premises (cross-connection hazard)",
+    "realSignal": "DEP or licensed professional identifies required protection not installed.",
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 4000,
+      "note": "engineer's plan, device and licensed plumber, estimate"
+     },
+     {
+      "field": "permitWaitDays",
+      "add": 30,
+      "note": "DEP plan approval, estimate"
+     },
+     {
+      "field": "monthlyFees",
+      "add": 13,
+      "note": "annual test about $150, estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "optionId": "check_backflow",
+      "label": "Ask if the building already has an approved device",
+      "cost": {},
+      "result": "often already installed in former food spaces"
+     }
+    ],
+    "realFrequency": "Food establishments with hazards",
+    "source": "https://www.nyc.gov/site/dep/about/cross-connection-controls.page",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "DEP (search excerpt): a PE or RA prepares a backflow plan for DEP approval; initial test reports need the PE/RA stamp and a Licensed Master Plumber seal; an annual test report is due within 12 months; missing tests can bring fines or disconnection. Prices and the approval time were not found: estimates."
+   },
+   {
+    "id": "peak_kw_bill_jump",
+    "sourceFragment": "D02",
+    "group": "utilities",
+    "name": "The electric bill jumps without more use",
+    "text": "The new oven pushed your peak load over the line. The utility now bills you for your highest 30 minutes as well as for what you use.",
+    "tier": "exotic",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "decision: added load pushes peak demand above the utility's small-customer limit",
+    "realSignal": "Peak kW on the Con Edison bill",
+    "effects": [
+     {
+      "field": "utilities",
+      "mult": 1.1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "stagger_equipment",
+      "label": "Run the dishwasher outside the morning peak",
+      "cost": {
+       "capacity": 0
+      },
+      "result": "multiplier 1.0"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://nectarclimate.com/rates/consolidated-edison-coned",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D02 value kept: demand charges about $34-$44 per kW (third-party summary); threshold not confirmed."
+   },
+   {
+    "id": "takeover_listing",
+    "sourceFragment": "D14",
+    "group": "entry",
+    "name": "A cafe on your map is for sale",
+    "text": "An established cafe is for sale: the room, the machines and most regulars (about 7 in 10 stay with a new owner). Asking price is about twice its yearly earnings.",
+    "tier": "core",
+    "scale": "block",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: a place with forSale on the map (keen-cray) or a resident's shop offered for sale",
+    "realSignal": "a resident business with 3 months of losses lists itself, or a forSale place in data/places.json",
+    "effects": [
+     {
+      "field": "askingPrice",
+      "formula": "2.2 x yearly owner earnings, floor 0.5 x replacement cost, cap 0.57 x yearly sales",
+      "note": "reference shop: 2.2 x $116,654 = $256,600; ask $285,000"
+     },
+     {
+      "field": "awareness",
+      "set": 0.7,
+      "appliesIf": "name kept"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 30,
+      "note": "closing on the later of the bulk-sale notice (10), own Health permit (22) and landlord consent (30)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Financial and legal review",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "overstated sales, liens and tax claims found before closing"
+     },
+     {
+      "kind": "lever",
+      "id": "takeover_terms",
+      "optionId": "seller_note",
+      "label": "Seller finances up to half",
+      "cost": {
+       "monthly": 2362,
+       "months": 60
+      },
+      "result": "$116,500 at 8% over 60 months (D14)"
+     },
+     {
+      "kind": "choice",
+      "id": "build_instead",
+      "label": "Lease an empty space and build",
+      "cost": {
+       "see": "free_rent_runs_out"
+      },
+      "result": "cheaper, 50-200 days later"
+     }
+    ],
+    "realFrequency": "BizBuySell lists cafes for sale in NYC every week",
+    "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/TAX/1141",
+     "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+     "https://www.startlandnews.com/2024/03/kc-small-biz-new-owners"
+    ],
+    "confidence": "estimate",
+    "note": "BizBuySell coffee shops and cafes (search excerpt): median sale price $150,000 on median owner earnings of $78,780; average earnings multiple 2.20x and revenue multiple 0.46x; median sale price $176,500 in 2025. D14 uses 2.0 x earnings with an ask at price/0.9. I take 2.2 (BizBuySell's average) for the asking side and keep D14's acceptance at 90% of ask: 0.9 x $285,000 = $256,500 = 2.2 x earnings. 7 in 10 regulars kept: SBDC adviser (secondary). Tax Law §1141(c) (opened): the buyer must notify the Tax Department at least 10 days before taking possession or paying; within 90 days of the notice the Department names the seller's tax; until then the buyer must withhold that amount; a buyer who does not notify is personally liable for the seller's sales tax up to the price or fair market value of the assets. TB-ST-70 (search excerpt): the Department answers within five business days with a release (AU-197.1) or a notice of claim (AU-196.2)."
    },
    {
     "id": "sellers_tax_claim",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "entry",
+    "name": "The state claims the seller's unpaid sales tax",
+    "text": "Five days after your bulk-sale notice, the Tax Department answers with a Notice of Claim. The seller owes sales tax. The purchase money must sit in escrow until the state names the amount.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "attribute: seller owes sales tax at the time of the bulk-sale notice",
+    "realSignal": "Seller's sales-tax account with the state at the time of the bulk-sale notice (Form AU-196.2 instead of a release)",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "escrowHeld",
+      "add": 13578,
+      "durationDays": 90,
+      "note": "one quarter of the seller's sales tax: 3 x $4,526"
+     },
+     {
+      "field": "closingDelayDays",
+      "add": 0,
+      "note": "closing can proceed if the claimed amount stays in escrow"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Ask for the seller's filed returns",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "amount known; price adjusted"
+     },
+     {
+      "kind": "shortcut",
+      "id": "skip_bulk_sale_notice",
+      "label": "Skip the notice",
+      "cost": {
+       "riskLiability": 13578
+      },
+      "result": "see sellers_tax_debt_inherited"
+     }
+    ],
+    "realFrequency": "Steady docket at the Division of Tax Appeals (D01)",
+    "source": "https://www.nysenate.gov/legislation/laws/TAX/1141",
+    "supportingSources": [
+     "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    ],
+    "confidence": "verified",
+    "note": "Tax Law §1141(c) (opened): the buyer must notify the Tax Department at least 10 days before taking possession or paying; within 90 days of the notice the Department names the seller's tax; until then the buyer must withhold that amount; a buyer who does not notify is personally liable for the seller's sales tax up to the price or fair market value of the assets. TB-ST-70 (search excerpt): the Department answers within five business days with a release (AU-197.1) or a notice of claim (AU-196.2). The seller's quarter of $13,578 = 3 months of the reference shop's collected sales tax ($4,526): my assumption of what an owner in trouble falls behind."
+   },
+   {
+    "id": "bulk_sale_claim",
+    "sourceFragment": "D14",
+    "group": "entry",
+    "name": "The state claims the seller's sales tax",
+    "text": "New York answered your bulk-sale notice: the seller owes sales tax. That amount is held back from the price and paid to the state.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "as sellers_tax_claim",
+    "realSignal": "Form AU-196.2 within 5 business days of AU-196.10",
+    "appliesTo": [
+     "takeover"
+    ],
+    "mergedWith": "sellers_tax_claim",
+    "effects": [
+     {
+      "field": "escrowHeld",
+      "add": 13578,
+      "durationDays": 90
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Review",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "priced in"
+     }
+    ],
+    "realFrequency": "See sellers_tax_claim",
+    "source": "https://www.nysenate.gov/legislation/laws/TAX/1141",
+    "supportingSources": [
+     "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    ],
+    "confidence": "verified",
+    "note": "D14 duplicate. Tax Law §1141(c) (opened): the buyer must notify the Tax Department at least 10 days before taking possession or paying; within 90 days of the notice the Department names the seller's tax; until then the buyer must withhold that amount; a buyer who does not notify is personally liable for the seller's sales tax up to the price or fair market value of the assets. TB-ST-70 (search excerpt): the Department answers within five business days with a release (AU-197.1) or a notice of claim (AU-196.2)."
+   },
+   {
+    "id": "d00_premises_seller_tax_claim",
+    "sourceFragment": "D00",
+    "group": "entry",
+    "name": "Seller tax claim holds up closing",
+    "text": "A tax claim interrupts the asset purchase before funds can be released.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "as sellers_tax_claim",
+    "realSignal": "Buyer receives Notice of Claim to Purchaser.",
+    "appliesTo": [
+     "takeover"
+    ],
+    "mergedWith": "sellers_tax_claim",
+    "effects": [
+     {
+      "field": "escrowHeld",
+      "add": 13578,
+      "durationDays": 90
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Review",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "priced in"
+     }
+    ],
+    "realFrequency": "See sellers_tax_claim",
+    "source": "https://www.nysenate.gov/legislation/laws/TAX/1141",
+    "supportingSources": [
+     "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    ],
+    "confidence": "verified",
+    "note": "D00 duplicate. Tax Law §1141(c) (opened): the buyer must notify the Tax Department at least 10 days before taking possession or paying; within 90 days of the notice the Department names the seller's tax; until then the buyer must withhold that amount; a buyer who does not notify is personally liable for the seller's sales tax up to the price or fair market value of the assets. TB-ST-70 (search excerpt): the Department answers within five business days with a release (AU-197.1) or a notice of claim (AU-196.2)."
    },
    {
     "id": "sellers_tax_debt_inherited",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "entry",
+    "name": "A tax bill arrives for the previous owner's sales",
+    "text": "A notice from the Tax Department: the shop's previous owner under-reported sales for three years. No bulk-sale notice was filed, so the debt is now yours.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: shortcut skip_bulk_sale_notice; the seller owed sales tax",
+    "realSignal": "State sales-tax audit of the seller after a purchase closed with no Form AU-196.10",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "liability",
+      "add": 13578,
+      "note": "seller's unpaid quarter"
+     },
+     {
+      "field": "liability",
+      "mult": 1.145,
+      "note": "plus interest at 14.5% a year or more for a year, plus penalties"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "file_au196_10",
+      "label": "File Form AU-196.10 ten days ahead",
+      "cost": {
+       "cash": 0,
+       "days": 10
+      },
+      "result": "no personal liability"
+     }
+    ],
+    "realFrequency": "See sellers_tax_claim",
+    "source": "https://www.nysenate.gov/legislation/laws/TAX/1141",
+    "supportingSources": [
+     "https://www.nysenate.gov/legislation/laws/TAX/1145"
+    ],
+    "confidence": "verified",
+    "note": "Tax Law §1141(c) (opened): the buyer must notify the Tax Department at least 10 days before taking possession or paying; within 90 days of the notice the Department names the seller's tax; until then the buyer must withhold that amount; a buyer who does not notify is personally liable for the seller's sales tax up to the price or fair market value of the assets. TB-ST-70 (search excerpt): the Department answers within five business days with a release (AU-197.1) or a notice of claim (AU-196.2). Tax Law §1145 (opened): interest at 14.5% a year or the commissioner's rate, whichever is greater. Liability is capped at the price paid."
+   },
+   {
+    "id": "seller_tax_debt_surfaces",
+    "sourceFragment": "D14",
+    "group": "entry",
+    "name": "The seller's tax debt is now yours",
+    "text": "You paid the seller without notifying the state. The Tax Department bills you for the seller's unpaid sales tax.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "as sellers_tax_debt_inherited",
+    "realSignal": "buyer skipped AU-196.10; the seller had unpaid sales tax",
+    "appliesTo": [
+     "takeover"
+    ],
+    "mergedWith": "sellers_tax_debt_inherited",
+    "effects": [
+     {
+      "field": "liability",
+      "add": 13578
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "file_au196_10",
+      "label": "File the notice",
+      "cost": {
+       "days": 10
+      },
+      "result": "no liability"
+     }
+    ],
+    "realFrequency": "See sellers_tax_claim",
+    "source": "https://www.nysenate.gov/legislation/laws/TAX/1141",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "D14 duplicate."
    },
    {
     "id": "overstated_cash_sales",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "entry",
+    "name": "The sales were never what the listing said",
+    "text": "The seller swore the shop did a third more in cash than the books showed. Your first month matches the books, not the story.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "attribute: listing earnings above the seller's tax returns",
+    "realSignal": "Gap between the listing's stated sales and the register reports, bank deposits and filed sales-tax returns",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.8,
+      "note": "real sales vs the story"
+     },
+     {
+      "field": "overpaid",
+      "add": 46600,
+      "note": "20% of a $233,000 price set on overstated earnings"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Price on the tax returns, not the story",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "price 20% lower"
+     }
+    ],
+    "realFrequency": "The most named red flag in cafe sales",
+    "source": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
+    "supportingSources": [
+     "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    ],
+    "confidence": "estimate",
+    "note": "D01 values kept."
+   },
+   {
+    "id": "d00_world_event_seller_addbacks_unverified",
+    "sourceFragment": "D00",
+    "group": "entry",
+    "name": "The acquisition earnings depend on unverified add-backs",
+    "text": "A seller’s earnings presentation removes expenses the new owner may still incur.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "attribute: seller's earnings add back costs the buyer will still pay",
+    "realSignal": "The proposed purchase model includes disputed add-backs without underlying invoices or a replacement-cost plan.",
+    "appliesTo": [
+     "takeover"
+    ],
+    "mergedWith": "overstated_cash_sales",
+    "effects": [
+     {
+      "field": "ownerEarnings",
+      "mult": 0.85,
+      "note": "estimate"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Recast the add-backs",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "price on true earnings"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+    "supportingSources": [
+     "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/"
+    ],
+    "confidence": "estimate",
+    "note": "Estimate: 15% of claimed earnings are add-backs that continue."
    },
    {
     "id": "equipment_lien_surprise",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "entry",
+    "name": "The espresso machine belongs to a lender",
+    "text": "A finance company writes: the machine and the grinders were leased, and the seller stopped paying. Pay off the balance or they collect the equipment.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "attribute: seller's machines financed or leased",
+    "realSignal": "UCC financing statement or equipment lease on the seller's assets (public lien search)",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "cash",
+      "add": -6000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Lien search on the seller",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "payoff deducted from the price"
+     }
+    ],
+    "realFrequency": "Common in equipment-heavy sales",
+    "source": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01 value kept."
    },
    {
     "id": "permit_gap_at_closing",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "entry",
+    "name": "Closed for 22 days after the handover",
+    "text": "The seller's Health permit ended with the sale and yours is not issued yet. The law lets you open on the 22nd day after you applied, and you applied today.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: buyer applies for the Health permit on closing day",
+    "realSignal": "Date of the buyer's own permit application against the closing date",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 22,
+      "note": "22 x $1,200 contribution = $26,400 lost while rent runs"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "apply_before_closing",
+      "label": "Apply 22 days before closing",
+      "cost": {
+       "cash": 280
+      },
+      "result": "open on the day you take over"
+     }
+    ],
+    "realFrequency": "Every takeover where the buyer waits",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article5.pdf"
+    ],
+    "confidence": "verified",
+    "note": "NYC Business (opened): you can open 22 days after you submit the application; fee $280. The permit does not pass to a buyer (Health Code Article 5, read by D01 in an extract)."
+   },
+   {
+    "id": "d00_premises_permit_transfer",
+    "sourceFragment": "D00",
+    "group": "entry",
+    "name": "Seller credentials do not transfer",
+    "text": "An operating shop changes hands but the buyer still needs its own registrations.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "as permit_gap_at_closing",
+    "realSignal": "Proposed purchase relies on seller licenses without transfer approval.",
+    "appliesTo": [
+     "takeover"
+    ],
+    "mergedWith": "permit_gap_at_closing",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 22
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "apply_before_closing",
+      "label": "Apply early",
+      "cost": {
+       "cash": 280
+      },
+      "result": "no gap"
+     }
+    ],
+    "realFrequency": "Every takeover",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "supportingSources": [
+     "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article5.pdf"
+    ],
+    "confidence": "verified",
+    "note": "Same as permit_gap_at_closing."
    },
    {
     "id": "sellers_unpaid_health_fines",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "entry",
+    "name": "The seller left unpaid Health Department fines",
+    "text": "Your permit application is on hold: the records show violations and penalties the previous owner never settled. The city wants proof that you bought the shop at arm's length.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "attribute: seller has unpaid Health Department penalties",
+    "realSignal": "Outstanding violations or unpaid penalties of the seller in Health Department and hearing-office records",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "prove_arms_length",
+      "label": "Show the arm's-length purchase contract",
+      "cost": {},
+      "result": "permit issued"
+     },
+     {
+      "kind": "choice",
+      "id": "pay_from_price",
+      "label": "Seller pays from the price",
+      "cost": {},
+      "result": "no hold"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article5.pdf",
+    "supportingSources": [
+     "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    ],
+    "confidence": "estimate",
+    "note": "NYC Business (opened): pay all outstanding Health Code fines before you apply for a permit. Health Code Article 5 (D01, extract): no new permit on a change of ownership with unpaid penalties unless the sale is at arm's length. 14 days is D01's estimate."
    },
    {
     "id": "inherited_unemployment_rate",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "regulars_test_new_owner",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "old_equipment_gives_out",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "equity_injection_gap",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "acquisition_tax_at_closing",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "franchise_cooling_off",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "franchise_royalty_bite",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "franchise_buildout_not_yours",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "young_franchise_system",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "supervisory_licenses_released",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "commissary_has_no_room",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "market_season_ends",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "host_ends_the_arrangement",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "parks_kiosk_rfp",
-    "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "entry",
+    "name": "You inherit the seller's unemployment-insurance record",
+    "text": "The Labor Department moved the previous owner's account to you. He laid off staff twice; your contribution rate is recalculated from the day you took over.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1
+    ],
+    "durationMonths": 12,
+    "trigger": "decision: buyer keeps substantially the same staff and the goodwill",
+    "realSignal": "Seller's unemployment-insurance experience account balance at transfer (NY Labor Law §581)",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "payrollTax",
+      "add": 0.02,
+      "base": "first $17,600 of each worker's wages",
+      "note": "about $350 a worker a year"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "new_staff",
+      "label": "Hire new staff instead",
+      "cost": {
+       "hiringPerWorker": 1000
+      },
+      "result": "new-employer rate; but the regulars lose familiar faces"
+     }
+    ],
+    "realFrequency": "Every acquisition of a going business",
+    "source": "https://www.nysenate.gov/legislation/laws/LAB/581",
+    "supportingSources": [
+     "https://dol.ny.gov/transfers-business-and-your-contribution-rate"
+    ],
+    "confidence": "estimate",
+    "note": "Labor Law §581(4) (opened): no transfer of experience only if the buyer took none of the obligations, none of the goodwill, did not continue the business and did not employ substantially the same workers. +2 points is D01's design value."
    },
    {
     "id": "inherited_sick_leave_balances",
     "sourceFragment": "D01",
-    "reason": "not reached in this session"
+    "group": "entry",
+    "name": "The staff you kept arrive with sick days owed",
+    "text": "The baristas who stayed through the sale still hold the paid sick hours they earned under the old owner. They are yours to pay now.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "decision: buyer keeps the seller's workers",
+    "realSignal": "Unused safe and sick leave balances of retained employees on the closing date",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "liability",
+      "add": 2720,
+      "note": "4 baristas x 40 hours x $17"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_terms",
+      "optionId": "credit_for_accruals",
+      "label": "Deduct accrued sick time from the price",
+      "cost": {},
+      "result": "seller pays for it"
+     }
+    ],
+    "realFrequency": "Every takeover with kept staff",
+    "source": "https://www.lawandtheworkplace.com/2023/10/new-york-city-adopts-final-rule-amending-the-earned-safe-and-sick-time-act/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "NYC final rule, October 2023 (law firm summary): balances are not affected by a sale; original and successor employers are jointly liable. 40 hours is the cap for employers with 99 or fewer workers (pack)."
    },
+   {
+    "id": "regulars_test_new_owner",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The regulars notice the new owner",
+    "text": "New name on the door, new beans, strangers behind the counter. Some regulars try you once and go back to the place around the corner.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "decision: takeover closes",
+    "realSignal": "Changes made in the first month after a purchase",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "awareness",
+      "set": 0.7,
+      "note": "keep the name; regrows on the pack's 75-day ramp"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_transition",
+      "optionId": "seller_stays_two_weeks",
+      "label": "Seller works the bar for two weeks",
+      "cost": {
+       "cash": 2000
+      },
+      "result": "awareness 0.8 instead of 0.7, estimate"
+     },
+     {
+      "kind": "choice",
+      "id": "keep_staff",
+      "label": "Keep the baristas",
+      "cost": {
+       "see": "inherited_sick_leave_balances"
+      },
+      "result": "familiar faces"
+     }
+    ],
+    "realFrequency": "Every change of owner",
+    "source": "https://www.startlandnews.com/2024/03/kc-small-biz-new-owners",
+    "supportingSources": [
+     "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    ],
+    "confidence": "estimate",
+    "note": "SBDC adviser (Startland News 2024, secondary): about 30% of a small business's customers do not come back after a change of owner. Seller-stays option is my estimate."
+   },
+   {
+    "id": "rebrand_loses_regulars",
+    "sourceFragment": "D14",
+    "group": "entry",
+    "name": "Regulars do not know the new name",
+    "text": "You renamed the cafe. Many regulars think the old place closed: the crowd starts again from a third, not from 70%.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "decision: takeover with a new name",
+    "realSignal": "player chose rebrand on purchase",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "awareness",
+      "set": 0.35
+     },
+     {
+      "field": "setupCost",
+      "add": 5000,
+      "note": "new sign, menus, cups"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "keep_name",
+      "label": "Keep the name for a year",
+      "cost": {},
+      "result": "awareness 0.7"
+     }
+    ],
+    "realFrequency": "When buyers rebrand",
+    "source": "https://www.startlandnews.com/2024/03/kc-small-biz-new-owners",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D14 values kept."
+   },
+   {
+    "id": "d00_world_event_predecessor_brand_confusion",
+    "sourceFragment": "D00",
+    "group": "entry",
+    "name": "Customers mistake your shop for its predecessor",
+    "text": "A takeover address retains outdated signage or directory associations.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "trigger": "decision: rebrand while old listings and signage remain",
+    "realSignal": "Customer inquiries and listings identify the former operator as current.",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "reputation",
+      "add": -0.02,
+      "note": "reviews of the old shop land on you"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "update_listings",
+      "label": "Update map listings on day one",
+      "cost": {
+       "cash": 0
+      },
+      "result": "no confusion"
+     }
+    ],
+    "realFrequency": "Rebrands",
+    "source": "https://www.startlandnews.com/2024/03/kc-small-biz-new-owners",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   },
+   {
+    "id": "old_equipment_gives_out",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The machine you bought with the shop dies",
+    "text": "The espresso machine came with the business and with its years. It fails in the morning rush, months after the seller's promises ended.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: bought machine reaches its lifespan (84 months for the two-group machine)",
+    "realSignal": "Age of the equipment at purchase against its service life (seven years for an espresso machine in the pack)",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "cash",
+      "add": -7600
+     },
+     {
+      "field": "closureDays",
+      "add": 2
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Price the machine's age",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "price reduced by the remaining-life share"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01 values (pack prices)."
+   },
+   {
+    "id": "equity_injection_gap",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The bank wants 10% of your own money",
+    "text": "You planned to buy the shop on a loan and a seller note. The SBA rules require a tenth of the whole project from you, and a seller note counts only if the seller waits ten years to be paid.",
+    "tier": "deep",
+    "scale": "country",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: finance a purchase with an SBA 7(a) loan",
+    "realSignal": "SBA Standard Operating Procedure 50 10 8 (June 1, 2025) and 50 10 8.1 (applications from October 1, 2026)",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "minOwnCashShare",
+      "add": 0.1,
+      "note": "$30,000 of own cash on a $300,000 project"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_terms",
+      "optionId": "seller_note_standby",
+      "label": "Seller note on full standby",
+      "cost": {},
+      "result": "covers at most half of the 10%"
+     }
+    ],
+    "realFrequency": "Every SBA acquisition loan",
+    "source": "https://www.whitefordlaw.com/news-events/client-alert-sba-issues-sop-50-10-8-key-changes-impacting-sba-7a-lending",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01 values; SOP 50 10 8 via law firm."
+   },
+   {
+    "id": "acquisition_tax_at_closing",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "Sales tax is due on the equipment you bought",
+    "text": "Buying a business is also buying its chairs, fridges and machines. The state taxes that part of the price at 8.875%.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: takeover closes",
+    "realSignal": "Allocation of the purchase price to tangible personal property in the contract",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "cash",
+      "add": -3550,
+      "note": "8.875% x $40,000 allocated to furniture, fixtures and equipment"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_terms",
+      "optionId": "price_allocation",
+      "label": "Allocate the price with the accountant",
+      "cost": {
+       "cash": 500
+      },
+      "result": "fair allocation; goodwill and the lease are not taxed"
+     }
+    ],
+    "realFrequency": "Every asset purchase",
+    "source": "https://tax.ny.gov/pdf/current_forms/st/au196_10.pdf",
+    "supportingSources": [
+     "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    ],
+    "confidence": "estimate",
+    "note": "Form AU-196.10 and TB-ST-70 (search excerpts): the buyer in a bulk sale pays sales tax on tangible personal property acquired (furniture, fixtures, supplies). Allocation of $40,000 is D01's assumption."
+   },
+   {
+    "id": "d00_premises_takeover_asset_list",
+    "sourceFragment": "D00",
+    "group": "entry",
+    "name": "The seller offers selected assets rather than a turnkey business",
+    "text": "A purchase proposal leaves the buyer to establish its own operating arrangements.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "attribute: seller offers selected assets, not the whole working shop",
+    "realSignal": "Seller presents an asset list with exclusions while buyer assumes full business transfer.",
+    "appliesTo": [
+     "takeover"
+    ],
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 8000,
+      "note": "missing grinder, fridge and smallwares at pack prices, estimate"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "takeover_due_diligence",
+      "optionId": "full_review",
+      "label": "Itemized asset list in the contract",
+      "cost": {
+       "cash": 7500
+      },
+      "result": "price reduced by what is missing"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://robinpzander.com/lessons-learned-building-and-selling-robins-cafe/",
+    "supportingSources": [
+     "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    ],
+    "confidence": "estimate",
+    "note": "Grinder $2,099 + refrigeration $2,628 + smallwares $2,000 + delivery = about $8,000 (pack)."
+   },
+   {
+    "id": "buyer_makes_an_offer",
+    "sourceFragment": "D09",
+    "group": "entry",
+    "name": "A broker brings a buyer",
+    "text": "After six profitable months a buyer offers two times your yearly earnings.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "state: six profitable months in a row",
+    "realSignal": "BizBuySell: sold coffee shops went for a median of 2.00 x owner earnings (middle half 1.50-2.55) and 0.41 x yearly sales (0.30-0.57)",
+    "effects": [
+     {
+      "field": "salePrice",
+      "formula": "2.2 x owner earnings of the last 12 months",
+      "note": "sale at 90% of ask: 2.0 x"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "accept",
+      "label": "Sell",
+      "cost": {
+       "see": "landlord_blocks_the_sale"
+      },
+      "result": "cash minus the lease consent costs"
+     },
+     {
+      "kind": "choice",
+      "id": "decline",
+      "label": "Keep running",
+      "cost": {},
+      "result": "no change"
+     }
+    ],
+    "realFrequency": "Brokers call successful shops",
+    "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "BizBuySell coffee shops and cafes (search excerpt): median sale price $150,000 on median owner earnings of $78,780; average earnings multiple 2.20x and revenue multiple 0.46x; median sale price $176,500 in 2025. D14 uses 2.0 x earnings with an ask at price/0.9."
+   },
+   {
+    "id": "franchise_cooling_off",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "Fourteen days with the disclosure document",
+    "text": "The franchisor may not take your signature or your money until you have had its disclosure document for 14 calendar days.",
+    "tier": "deep",
+    "scale": "country",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: entry_mode = franchise",
+    "realSignal": "FTC Franchise Rule, 16 CFR Part 436",
+    "effects": [
+     {
+      "field": "leaseSigningDelayDays",
+      "add": 14,
+      "note": "federal 14 calendar days; New York: at the first personal meeting or 10 business days before signing, whichever is earlier"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "read_fdd",
+      "label": "Use the days to call existing franchisees",
+      "cost": {},
+      "result": "fewer surprises (see young_franchise_system)"
+     }
+    ],
+    "realFrequency": "Every franchise purchase",
+    "source": "https://www.nysenate.gov/legislation/laws/GBS/683",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "GBL §683(8) (opened): a franchise subject to registration may not be sold without the prospectus delivered at the earlier of the first personal meeting, ten business days before a binding agreement, or ten days before any payment. The federal rule's 14 days (D01) applies alongside."
+   },
+   {
+    "id": "franchise_royalty_bite",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The royalty comes off the top",
+    "text": "Before rent, wages or milk, 8.5% of every sale goes to the franchisor: 6% royalty and 2.5% for marketing.",
+    "tier": "core",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "decision: entry_mode = franchise",
+    "realSignal": "Item 6 of the franchise disclosure document",
+    "effects": [
+     {
+      "field": "revenueShare",
+      "mult": 0.92,
+      "note": "6% royalty + 2% marketing fund"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "independent",
+      "label": "Stay independent",
+      "cost": {
+       "awareness": "start at 0.35"
+      },
+      "result": "keep all sales"
+     }
+    ],
+    "realFrequency": "Every franchise",
+    "source": "https://www.franchisechatter.com/2026/09/26/scooters-coffee-franchise-review-2026-costs-fees-news-average-revenues-and-or-profits/",
+    "supportingSources": [
+     "https://franchiseoverview.com/company/dunn-brothers-coffee"
+    ],
+    "confidence": "estimate",
+    "note": "2026 coffee franchise disclosures (aggregators): royalties 3-8% (Scooter's 6%, Biggby 6%, Dunn Brothers 5%), marketing funds 1-3% (Dunn Brothers 3% + 1%, PJ's 2%). 6% + 2% = 8% of sales = $4,080 a month on the reference shop."
+   },
+   {
+    "id": "franchise_buildout_not_yours",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The franchisor dictates the build-out",
+    "text": "The design, the equipment list and the suppliers are in the manual. The lean kit is not an option: you build what the brand specifies.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 0,
+    "trigger": "decision: entry_mode = franchise",
+    "realSignal": "Item 7 (initial investment) and Item 8 (required suppliers) of the disclosure document",
+    "effects": [
+     {
+      "field": "setupCost",
+      "mult": 2.05
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "independent",
+      "label": "Stay independent",
+      "cost": {},
+      "result": "lean kit allowed"
+     }
+    ],
+    "realFrequency": "Every franchise",
+    "source": "https://dailycoffeenews.com/2026/02/18/backed-by-craveworthy-gregorys-coffee-launches-franchising",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01: lowest disclosed Gregorys investment $459,150 / the pack's $224,000 = 2.05."
+   },
+   {
+    "id": "young_franchise_system",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The brand has never had a franchisee",
+    "text": "You would be among the first franchisees. The disclosure document has no track record of franchised shops: nobody to call, no closures to count.",
+    "tier": "exotic",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "attribute: franchisor with no operating franchisees",
+    "realSignal": "Item 20 of the disclosure document (franchised outlets opened, transferred and closed)",
+    "effects": [
+     {
+      "field": "awareness",
+      "mult": 0.9
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "established_brand",
+      "label": "Choose an older system",
+      "cost": {},
+      "result": "references to call"
+     }
+    ],
+    "realFrequency": "New systems",
+    "source": "https://dailycoffeenews.com/2026/02/18/backed-by-craveworthy-gregorys-coffee-launches-franchising",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01 design value."
+   },
+   {
+    "id": "supervisory_licenses_released",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The city releases 2,200 new cart licenses",
+    "text": "A new fiscal year starts and the Health Department offers 2,200 supervisory licenses to people on the waiting list. Only a current licensed vendor can be on it.",
+    "tier": "core",
+    "scale": "city",
+    "months": [
+     7
+    ],
+    "durationMonths": 12,
+    "trigger": "schedule: July 1 each year 2026-2030",
+    "realSignal": "Health Department waiting-list offers under Local Law 18 of 2021 and Local Laws 54 and 59 of 2026 (2,200 a year, fiscal 2027-2031, from July 1, 2026)",
+    "effects": [
+     {
+      "field": "cartPermitWaitMonths",
+      "add": -12
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "join_waiting_list",
+      "label": "Get a vendor license and join the list",
+      "cost": {
+       "cash": 50
+      },
+      "result": "place in line"
+     },
+     {
+      "kind": "shortcut",
+      "id": "rent_a_permit",
+      "label": "Rent someone's permit",
+      "cost": {
+       "monthly": 1000
+      },
+      "result": "illegal; see permit_holder_takes_back_permit"
+     }
+    ],
+    "realFrequency": "Yearly, July 1",
+    "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+    "supportingSources": [],
+    "confidence": "verified",
+    "note": "DOHMH (opened): beginning July 1, 2026, 2,200 new supervisory licenses each year for 5 years (Local Laws 54 and 59 of 2026); applications go first to people on the waiting lists created in 2022. License fee $50 and permit rent are estimates."
+   },
+   {
+    "id": "commissary_has_no_room",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "No commissary has a space for your cart",
+    "text": "Without a commissary agreement you cannot pass the pre-permit inspection, and the garages near your corner are full.",
+    "tier": "deep",
+    "scale": "city",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: entry_mode = cart",
+    "realSignal": "Capacity of Health Department-permitted commissaries",
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 30
+     },
+     {
+      "field": "monthlyFees",
+      "add": 300
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "farther_commissary",
+      "label": "Take a depot farther away",
+      "cost": {
+       "monthly": 300
+      },
+      "result": "permit proceeds"
+     }
+    ],
+    "realFrequency": "Common in busy districts",
+    "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "DOHMH (opened): a permitted cart or truck must be cleaned, serviced and stored at an approved commissary or depot and returned at least once a day. Fees are D01's design values."
+   },
+   {
+    "id": "commissary_rent_hike",
+    "sourceFragment": "D13",
+    "group": "entry",
+    "name": "Your commissary raises its fee",
+    "text": "Your depot raises the monthly fee by a third. Carts cannot legally operate without a commissary.",
+    "tier": "deep",
+    "scale": "city",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "trigger": "announced: depot raises fees",
+    "realSignal": "Commissary price lists; DOHMH requirement of an approved commissary for every unit",
+    "effects": [
+     {
+      "field": "monthlyFees",
+      "mult": 1.33
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "switch_depot",
+      "label": "Move to another depot",
+      "cost": {
+       "days": 7
+      },
+      "result": "old fee"
+     }
+    ],
+    "realFrequency": "Not measured",
+    "source": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D13 value; requirement verified at DOHMH."
+   },
+   {
+    "id": "market_season_ends",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The market season ends",
+    "text": "The open-air food markets close for the winter. A stand that lives on weekend crowds has nowhere to stand until April.",
+    "tier": "core",
+    "scale": "city",
+    "months": [
+     11,
+     12,
+     1,
+     2,
+     3
+    ],
+    "durationMonths": 5,
+    "trigger": "calendar: outdoor market season ends in late fall",
+    "realSignal": "Operating calendar of the seasonal markets (Smorgasburg's 16th season opened in April 2026 at three sites)",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.0,
+      "appliesTo": "market stall only"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "holiday_market",
+      "label": "Holiday market stall in Nov-Dec",
+      "cost": {
+       "monthly": 3000
+      },
+      "result": "trades two more months, estimate"
+     },
+     {
+      "kind": "choice",
+      "id": "shop_in_shop",
+      "label": "Winter corner in a host shop",
+      "cost": {
+       "see": "host_ends_the_arrangement"
+      },
+      "result": "all year"
+     }
+    ],
+    "realFrequency": "Every year",
+    "source": "https://www.6sqft.com/smorgasburg-returns-for-16th-year-this-april-with-new-vendors/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01: April opening reported; the closing month is my estimate."
+   },
+   {
+    "id": "host_ends_the_arrangement",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The host wants the corner back",
+    "text": "The shop that housed your coffee counter is changing its layout. You worked under its permit and its lease: you have 30 days to leave.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "schedule: end of the shop-in-shop agreement",
+    "realSignal": "Terms of the written agreement with the host",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 30
+     },
+     {
+      "field": "awareness",
+      "mult": 0.7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_negotiation",
+      "optionId": "renewal_right",
+      "label": "Renewal right in the agreement",
+      "cost": {},
+      "result": "stays"
+     }
+    ],
+    "realFrequency": "Common",
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01 design values."
+   },
+   {
+    "id": "parks_kiosk_rfp",
+    "sourceFragment": "D01",
+    "group": "entry",
+    "name": "The Parks Department asks for kiosk proposals",
+    "text": "A request for proposals is out for food kiosks in a park. Proposals are due in five weeks; the winner pays the city a guaranteed minimum or a share of sales, whichever is higher.",
+    "tier": "exotic",
+    "scale": "city",
+    "months": [
+     5,
+     6
+    ],
+    "durationMonths": 2,
+    "trigger": "announced: Parks request for proposals",
+    "realSignal": "NYC Parks concession solicitations in the City Record (Battery kiosks: issued May 5, 2026, due June 12, 2026)",
+    "effects": [
+     {
+      "field": "rent",
+      "add": 3333,
+      "note": "greater of $40,000 a year or 4% of gross (2024 award)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "bid",
+      "label": "Bid",
+      "cost": {
+       "cash": 1500
+      },
+      "result": "license if won"
+     }
+    ],
+    "realFrequency": "Occasional",
+    "source": "https://a856-cityrecord.nyc.gov/RequestDetail/20240628149",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D01 numbers (City Record page opened by D01)."
+   },
+   {
+    "id": "shared_kitchen_lockout",
+    "sourceFragment": "D13",
+    "group": "entry",
+    "name": "Your shared kitchen shuts overnight",
+    "text": "The kitchen operator emails tenants that it is closing today. Your stock is inside and orders are queued.",
+    "tier": "deep",
+    "scale": "city",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "announced a month ahead: the shared kitchen's operator misses payments",
+    "realSignal": "Operator insolvency; Pilotworks Brooklyn closed with hours of notice in October 2019 (175 businesses)",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "second_kitchen",
+      "label": "Line up a backup kitchen",
+      "cost": {
+       "monthly": 200
+      },
+      "result": "demand 0.9"
+     }
+    ],
+    "realFrequency": "Rare",
+    "source": "https://thecounter.org/major-food-incubator-closes-suddenly-leaves-175-companies-kitchenless/",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D13 value."
+   },
+   {
+    "id": "transit_stall_rfp",
+    "sourceFragment": "D13",
+    "group": "entry",
+    "name": "Station stalls up for bid",
+    "text": "MTA Real Estate releases individual requests for proposals for food stalls in a busy terminal: one-year licenses paid as a share of sales.",
+    "tier": "deep",
+    "scale": "city",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "announced: MTA stall RFP",
+    "realSignal": "MTA Real Estate RFPs and board staff summaries (Grand Central Madison moved from one master vendor to individual stall RFPs)",
+    "effects": [
+     {
+      "field": "rent",
+      "formula": "15% of gross sales",
+      "note": "2025 one-year Grand Central Madison license"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "bid",
+      "label": "Bid",
+      "cost": {
+       "cash": 1000
+      },
+      "result": "license if won"
+     }
+    ],
+    "realFrequency": "Occasional",
+    "source": "https://www.amny.com/transit/mta-master-vendor-grand-central-madison-retail",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "D13 value."
+   },
+   {
+    "id": "permit_holder_takes_back_permit",
+    "sourceFragment": "D13",
+    "group": "entry",
+    "name": "Your permit holder wants it back",
+    "text": "The person whose permit you rent wants double, or plans to sell it to someone else at the end of the two-year cycle.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "decision: shortcut rent_a_permit; the holder ends it",
+    "realSignal": "Two-year permit cycle; Queens Eagle reports of $14,000-$25,000 per cycle",
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.0
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "own_license",
+      "label": "Wait for your own supervisory license",
+      "cost": {},
+      "result": "legal"
+     }
+    ],
+    "realFrequency": "Common in the black market",
+    "source": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+    "supportingSources": [
+     "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page"
+    ],
+    "confidence": "estimate",
+    "note": "D13 value."
+   },
+   {
+    "id": "d00_world_event_planned_pop_up_end",
+    "sourceFragment": "D00",
+    "group": "entry",
+    "name": "A pop-up reaches its planned end",
+    "text": "The fixed term ends while customers still want the concept.",
+    "tier": "deep",
+    "scale": "point",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "trigger": "schedule: end of a fixed-term pop-up",
+    "realSignal": "The player-selected pop-up contract reaches its declared end.",
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "extend_early",
+      "label": "Negotiate the extension two months ahead",
+      "cost": {
+       "rentMult": 1.1
+      },
+      "result": "stays open"
+     }
+    ],
+    "realFrequency": "Every pop-up",
+    "source": "https://www.nyc.gov/assets/sbs/downloads/pdf/about/reports/commercial-lease-guide-accessible.pdf",
+    "supportingSources": [],
+    "confidence": "estimate",
+    "note": "Estimate."
+   }
+  ],
+  "notCalibrated": [
    {
     "id": "saturday_room_full",
     "sourceFragment": "D02",
@@ -5094,21 +7727,6 @@
    },
    {
     "id": "seat_count_at_inspection",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "service_upgrade_wait",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "breaker_trips_at_peak",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "building_gas_shutoff",
     "sourceFragment": "D02",
     "reason": "not reached in this session"
    },
@@ -5148,11 +7766,6 @@
     "reason": "not reached in this session"
    },
    {
-    "id": "peak_kw_bill_jump",
-    "sourceFragment": "D02",
-    "reason": "not reached in this session"
-   },
-   {
     "id": "tight_tables_reviews",
     "sourceFragment": "D02",
     "reason": "not reached in this session"
@@ -5163,32 +7776,7 @@
     "reason": "not reached in this session"
    },
    {
-    "id": "gas_connection_wait",
-    "sourceFragment": "D14",
-    "reason": "not reached in this session"
-   },
-   {
     "id": "permit_ready_after_buildout",
-    "sourceFragment": "D14",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "takeover_listing",
-    "sourceFragment": "D14",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "bulk_sale_claim",
-    "sourceFragment": "D14",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "seller_tax_debt_surfaces",
-    "sourceFragment": "D14",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "rebrand_loses_regulars",
     "sourceFragment": "D14",
     "reason": "not reached in this session"
    },
@@ -5203,73 +7791,8 @@
     "reason": "not reached in this session"
    },
    {
-    "id": "buyer_makes_an_offer",
-    "sourceFragment": "D09",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "gas_red_tag",
-    "sourceFragment": "D10",
-    "reason": "not reached in this session"
-   },
-   {
     "id": "garden_complaint",
     "sourceFragment": "D10",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "commissary_rent_hike",
-    "sourceFragment": "D13",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "shared_kitchen_lockout",
-    "sourceFragment": "D13",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "transit_stall_rfp",
-    "sourceFragment": "D13",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "permit_holder_takes_back_permit",
-    "sourceFragment": "D13",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_seller_tax_claim",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_permit_transfer",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_gas_sequence",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_backflow_install",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_utility_deposit",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_utility_extra",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_premises_meter_not_live",
-    "sourceFragment": "D00",
     "reason": "not reached in this session"
    },
    {
@@ -5308,27 +7831,7 @@
     "reason": "not reached in this session"
    },
    {
-    "id": "d00_premises_takeover_asset_list",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
     "id": "d00_premises_exit_storage",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_world_event_predecessor_brand_confusion",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_world_event_seller_addbacks_unverified",
-    "sourceFragment": "D00",
-    "reason": "not reached in this session"
-   },
-   {
-    "id": "d00_world_event_planned_pop_up_end",
     "sourceFragment": "D00",
     "reason": "not reached in this session"
    },
@@ -5364,8 +7867,26 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://tax.ny.gov/pdf/current_forms/st/au196_10.pdf",
+   "title": "NYS DTF, Form AU-196.10 instructions",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://blog.bizben.com/how-to-buy-a-coffee-shop-5-red-flags-you-must-avoid/",
+   "title": "BizBen, red flags when buying a coffee shop",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
    "title": "BizBuySell, coffee shop and cafe valuation benchmarks",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+   "title": "NYS DTF, Tax Bulletin Bulk Sales (TB-ST-70)",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -5376,8 +7897,20 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://a856-cityrecord.nyc.gov/RequestDetail/20240628149",
+   "title": "City Record, Parks concession award for a park cafe (2024)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://commercialobserver.com/2013/08/weighing-in-on-key-money-deals/",
    "title": "Commercial Observer, key money deals",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/site/dep/about/cross-connection-controls.page",
+   "title": "DEP, Cross Connection Controls",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -5408,6 +7941,12 @@
   {
    "url": "https://www.nyc.gov/site/buildings/property-or-business-owner/certificate-of-occupancy.page",
    "title": "DOB, Certificate of Occupancy",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/buildings/pdf/gas_piping-sn.pdf",
+   "title": "DOB service notice, gas piping periodic inspection (Local Law 152), September 26, 2025",
    "checked": "2026-11-14",
    "confidence": "verified"
   },
@@ -5454,6 +7993,42 @@
    "confidence": "verified"
   },
   {
+   "url": "https://www.nyc.gov/site/doh/business/food-operators/mobile-and-temporary-food-vendors.page",
+   "title": "DOHMH, Mobile food vendors",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://dol.ny.gov/transfers-business-and-your-contribution-rate",
+   "title": "NYS DOL, transfers of business and your contribution rate",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
+   "title": "1st-line, commercial espresso machine electrical requirements",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.lawandtheworkplace.com/2023/10/new-york-city-adopts-final-rule-amending-the-earned-safe-and-sick-time-act/",
+   "title": "Proskauer, NYC final rule amending ESSTA (successor employers), 2023",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://franchiseoverview.com/company/dunn-brothers-coffee",
+   "title": "Franchise Overview, Dunn Brothers Coffee fees",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.franchisechatter.com/2026/09/26/scooters-coffee-franchise-review-2026-costs-fees-news-average-revenues-and-or-profits/",
+   "title": "Franchise Chatter, Scooter's Coffee 2026 FDD fees",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.cushmanwakefield.com/en/united-states/insights/retail-fit-out-cost-guide",
    "title": "Cushman & Wakefield, retail fit-out cost guide",
    "checked": "2026-11-14",
@@ -5466,8 +8041,44 @@
    "confidence": "verified"
   },
   {
+   "url": "https://www.nysenate.gov/legislation/laws/GBS/683",
+   "title": "NY General Business Law §683, franchise registration and disclosure",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://www.amny.com/transit/mta-master-vendor-grand-central-madison-retail",
+   "title": "amNY, MTA retail at Grand Central Madison",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://dailycoffeenews.com/2026/02/18/backed-by-craveworthy-gregorys-coffee-launches-franchising",
+   "title": "Daily Coffee News, Gregorys Coffee launches franchising, February 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article5.pdf",
+   "title": "NYC Health Code Article 5 (permits; change of ownership)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.thehabitatgroup.com/articles/9654-require-tenants-to-pay-maximum-premium-rent-for-long-holdovers",
    "title": "Habitat, holdover rent premiums enforced by NY courts",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nyc.gov/assets/hpd/downloads/pdfs/services/hpd-pilot-coned-load-letter.pdf",
+   "title": "HPD, The Con Edison load letter",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://thecounter.org/major-food-incubator-closes-suddenly-leaves-175-companies-kitchenless/",
+   "title": "The Counter, food incubator closes suddenly",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -5478,10 +8089,22 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://nectarclimate.com/rates/consolidated-edison-coned",
+   "title": "Nectar, Con Edison rate summary (demand charges)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.nysenate.gov/legislation/laws/LAB/240",
    "title": "NY Labor Law §240 (scaffold law)",
    "checked": "2026-11-14",
    "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/LAB/581",
+   "title": "NY Labor Law §581, transfer of unemployment experience",
+   "checked": "2026-11-14",
+   "confidence": "verified"
   },
   {
    "url": "https://www.nysenate.gov/legislation/laws/LIE/10",
@@ -5526,8 +8149,32 @@
    "confidence": "verified"
   },
   {
+   "url": "https://thenycalliance.org/news-item/Con-Edison-Gas-Service",
+   "title": "NYC Hospitality Alliance, Con Edison gas service check before a lease",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://d1tvxue8o4w0fl.cloudfront.net/regulation/new-york-codes-rules-and-regulations/title-16-department-of-public-service/chapter-i-rules-of-procedure/subchapter-b-procedures-and-requirements-concerning-consumer-protections/part-13-rules-governing-the-provision-of-service-by-gas-electric-and-steam-corporations-to-nonresidential-customers/section-137-security-deposits",
+   "title": "16 NYCRR §13.7, security deposits of nonresidential utility customers",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://citylandnyc.org/unlicensed-plumber-fined",
    "title": "CityLand, unlicensed plumber fined",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://robinpzander.com/lessons-learned-building-and-selling-robins-cafe/",
+   "title": "Robin Zander, lessons from selling a cafe",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://queenseagle.com/all/2025/4/18/roosevelt-ave-crackdown-pushes-street-vendors-toward-pricey-black-market-permits",
+   "title": "Queens Eagle, black-market vending permits (2025)",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -5540,6 +8187,12 @@
   {
    "url": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
    "title": "Mayor's Office, Open for Small Business reforms, July 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://brooklyn.news12.com/riverdale-businesses-struggle-without-gas-for-months",
+   "title": "News 12, Riverdale businesses without gas for months (December 2024)",
    "checked": "2026-11-14",
    "confidence": "estimate"
   },
@@ -5592,10 +8245,46 @@
    "confidence": "verified"
   },
   {
+   "url": "https://www.nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+   "title": "NYS Senate, Cooking Without Gas (2017)",
+   "checked": "2026-11-14",
+   "confidence": "verified"
+  },
+  {
+   "url": "https://nyc-business.nyc.gov/nycbusiness/description/shared-kitchens/about",
+   "title": "NYC Business, shared kitchens",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.6sqft.com/smorgasburg-returns-for-16th-year-this-april-with-new-vendors/",
+   "title": "6sqft, Smorgasburg season",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.whitefordlaw.com/news-events/client-alert-sba-issues-sop-50-10-8-key-changes-impacting-sba-7a-lending",
+   "title": "Whiteford, SBA SOP 50 10 8 key changes (equity injection)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://tax.ny.gov/pubs_and_bulls/tg_bulletins/st/capital_improvements.htm",
    "title": "NYS DTF, Tax Bulletin Capital Improvements (TB-ST-104)",
    "checked": "2026-11-14",
    "confidence": "estimate"
+  },
+  {
+   "url": "https://www.startlandnews.com/2024/03/kc-small-biz-new-owners",
+   "title": "Startland News 2024, SBDC adviser on customers lost after a change of owner",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.nysenate.gov/legislation/laws/TAX/1141",
+   "title": "NY Tax Law §1141(c), bulk sale notice",
+   "checked": "2026-11-14",
+   "confidence": "verified"
   },
   {
    "url": "https://www.nysenate.gov/legislation/laws/TAX/1145",
@@ -5610,8 +8299,20 @@
    "confidence": "estimate"
   },
   {
+   "url": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/",
+   "title": "Triumph Electric, Con Edison service upgrade guide 2026",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
    "url": "https://www.commercialsearch.com/news/will-construction-costs-go-up-in-2026/",
    "title": "CommercialSearch on 2026 construction cost outlook (Turner & Townsend 4.25%, JLL)",
+   "checked": "2026-11-14",
+   "confidence": "estimate"
+  },
+  {
+   "url": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+   "title": "WebstaurantStore, two-group espresso machine price",
    "checked": "2026-11-14",
    "confidence": "estimate"
   }
