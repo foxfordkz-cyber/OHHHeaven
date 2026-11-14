@@ -5,8 +5,8 @@ import { pendingNotices, readInbox } from './actions';
 import { AwayCard } from './AwayCard';
 import { BooksTab } from './BooksTab';
 import type { BizDeps, BizTabId, ExtraTab } from './deps';
-import { dayLabel, plural, shortDate } from './format';
-import { changeList } from './forecast';
+import { dayLabel, plural, shortDate, signedUsd } from './format';
+import { changeList, deltaOf } from './forecast';
 import { outlookFrom, unitOf, useOutlook } from './Outlook';
 import { reportDayFor, savePromise } from './promise';
 import { Header } from './Header';
@@ -104,6 +104,11 @@ export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { de
   const draftKey = draft ? JSON.stringify(draft) : '';
   const showSave = Object.keys(diff).length > 0 && savedKey !== draftKey;
   const pair = useOutlook(deps, diff, !!b && b.status !== 'bankrupt' && (tab === 'manage' || showSave));
+  const effect = (() => {
+    const unit = unitOf(deps);
+    const now = outlookFrom(pair.base, unit), next = outlookFrom(pair.next, unit);
+    return now && next && pair.changed && pair.next.forKey === JSON.stringify(diff) ? deltaOf(now, next) : null;
+  })();
 
   if (!b) return <div className="bz-root"><NoBusiness onOpen={() => deps.navigate?.('/start')} /></div>;
 
@@ -219,12 +224,15 @@ export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { de
         <div className="bz-savebar">
           <div className="bz-savebar-inner">
             <div className="bz-between bz-small">
-              <span>{plural(Object.keys(diff).length, 'change')} · start {dayLabel(v.world.day + 1)}</span>
-              {tab !== 'manage' && <button type="button" className="bz-linkbtn" onClick={() => setTab('manage')}>Review</button>}
+              <span>
+                {pick(`${plural(Object.keys(diff).length, 'change')} · start ${dayLabel(v.world.day + 1)}`, `Изменений: ${Object.keys(diff).length} · с ${dayLabel(v.world.day + 1)}`)}
+                {effect && <>{' · '}<span className={effect.profit > 0 ? 'bz-good-text' : effect.profit < 0 ? 'bz-bad-text' : ''}>{signedUsd(effect.profit)}</span>{pick(' profit / 30 days', ' прибыли за 30 дней')}</>}
+              </span>
+              {tab !== 'manage' && <button type="button" className="bz-linkbtn" onClick={() => setTab('manage')}>{pick('Review', 'Посмотреть')}</button>}
             </div>
             {saveMsg && !saveMsg.ok && <span className="bz-small bz-bad-text" role="alert">{saveMsg.text}</span>}
             <div className="bz-btn-row">
-              <Button onClick={() => { reset(); setSaveMsg(null); }} disabled={saving}>Discard</Button>
+              <Button onClick={() => { reset(); setSaveMsg(null); }} disabled={saving}>{pick('Discard', 'Отменить')}</Button>
               <Button variant="primary" onClick={save} disabled={saving || !deps.online}>{!deps.online ? 'Waiting for connection…' : saving ? 'Applying…' : 'Apply'}</Button>
             </div>
           </div>

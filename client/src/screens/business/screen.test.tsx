@@ -83,6 +83,19 @@ describe('main scenario: look at what happened, apply the advice', () => {
     await screen.findAllByText(/Applied ✓/);
   });
 
+  it('Apply on a change of standing orders keeps its forecast: Today shows "Your change" at once', async () => {
+    const view = fixture('open');
+    const { deps, sent } = makeDeps(view);
+    render(<BusinessScreen deps={deps} />);
+    const price = topRecommendations(view.recommendations).find((r) => r.id === 'rec_price')!;
+    const card = screen.getByText(price.title).closest('.bz-card') as HTMLElement;
+    fireEvent.click(within(card).getByRole('button', { name: 'Apply' }));
+    await waitFor(() => expect(sent).toEqual([price.suggested]));
+    await screen.findByText('Your change');
+    expect(screen.getByText(/Price \$6\.50 → \$6\.90/)).toBeTruthy();
+    expect(screen.getByText(/Forecast: about \d+ a day \(was \d+\)/)).toBeTruthy();
+  });
+
   it('Apply sends exactly the suggested action of that card', async () => {
     const view = fixture('open');
     const { deps, sent } = makeDeps(view);
