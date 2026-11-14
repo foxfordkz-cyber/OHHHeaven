@@ -4,6 +4,7 @@ and packs/_common.json. Each patch keeps the record id; the fragment holds full 
 Also prints the "was -> now -> source" table for the report.
 Run from the repo root:  python3 packs/parts/cafe/D12-src/D12-build.py"""
 import json, subprocess, copy, sys, os
+sys.dont_write_bytecode = True
 
 SRC = os.path.dirname(os.path.abspath(__file__))
 HERE = os.path.dirname(SRC)

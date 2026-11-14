@@ -331,3 +331,15 @@ EXTRA_MECHANICS = [
 for _p in CAFE_PATCHES:
     if _p.get('id') in ('pest_activity', 'spoiled_food'):
         _p['set']['source'] = RULES21
+
+DCWP26 = 'https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DCWP-NOA-Rules-Relating-to-Earned-Safe-and-Sick-Time-Act.pdf'
+COMMON_PATCHES += [
+    {'section': 'violations', 'id': 'sick_leave_denied', 'why': 'правила DCWP, вступившие 23.07.2026: при «политике или практике» не давать больничные каждый работник получает $500 за каждый календарный год (Admin Code §20-924(d)(v)); статьи закона теперь увидены',
+     'set': {'law': 'NYC Administrative Code §§20-912, 20-913, 20-924 (Earned Safe and Sick Time Act); 6 RCNY Chapter 7 (protected time off rules, effective July 23, 2026)',
+             'source': DCWP26,
+             'note': 'DCWP notice of adoption, rules effective July 23, 2026 (seen on rules.cityofnewyork.us): "protected time off" replaces "safe/sick time"; since the 2025 amendment employers also give 32 hours of unpaid protected time off on the first day of work and on the first day of each calendar year; where an employer has an official or unofficial policy or practice of not providing protected time off, each employee is entitled to $500 per calendar year the policy remains in effect (§20-924(d)(v)), on top of the hours owed and other relief. First pass (DCWP FAQ, nyc.gov, not reopened): three times the wages that should have been paid or $250, whichever is greater, per instance, and $500 for each unlawful denial. Game formula: $500 + 3 x what was kept; with more than one worker the real per-employee $500 is higher: needs fine.perStaff.'}},
+]
+for _p in CAFE_PATCHES:
+    if _p.get('id') == 'sick_leave_cover':
+        _p['set']['note'] = _p['set']['note'].replace('(law-firm alerts on the ESSTA amendments; the DCWP page could not be opened from this session)', '(DCWP adopted rules effective July 23, 2026, seen on rules.cityofnewyork.us)')
+NEW_SOURCES.append({'url': DCWP26, 'title': 'DCWP: notice of adoption, protected time off rules, effective July 23, 2026'})

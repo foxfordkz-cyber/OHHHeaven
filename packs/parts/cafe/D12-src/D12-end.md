@@ -7,7 +7,8 @@
 4. **Пересчитать `extra.referenceMonth`** движком после ставки $18 и проверить, не стала ли игра снова слишком мягкой (прибыль эталонного месяца +$2,100). Если стала, рычаг — цена и спрос, а не завышенная зарплата.
 5. **Дать сети сессии исследователей nyc.gov** или зеркало: 19 ссылок пакета отвечают 403 на автоматический запрос, и числа DOHMH, DCWP, DOF, DOB, DSNY нельзя открыть заново. Временный путь — rules.cityofnewyork.us (тексты правил, открывается) и nyc-business.nyc.gov (открывается).
 6. **Жалоба 311 на просроченные леса** (`report_shed_to_dob`) — новый `reports` для события `sidewalk_shed_rules_2026`; id предложен, записи нет.
-7. **Штраф по уровню нарушения.** В Appendix 23-C у одного кода пять сумм по уровням I–V; формула `base + perMonth × месяцев` выражает их грубо. Поле `fine.byCondition: [200, 200, 250, 300, 350]` и выбор уровня по запущенности дадут точное число.
+7. **Штраф на каждого работника** (`fine.perStaff`). Правило DCWP 2026 года: при политике «не давать больничные» каждому работнику положено $500 за каждый год; общий `sick_leave_denied` сейчас даёт $500 на всё заведение.
+8. **Штраф по уровню нарушения.** В Appendix 23-C у одного кода пять сумм по уровням I–V; формула `base + perMonth × месяцев` выражает их грубо. Поле `fine.byCondition: [200, 200, 250, 300, 350]` и выбор уровня по запущенности дадут точное число.
 
 ## 6. Не найдено
 
@@ -17,7 +18,7 @@
 - **NYSERDA, средняя цена электричества для бизнеса 2026** — 403; заметки (22.3¢ январь, 24.2¢ июль, 23.1¢ август) не перепроверены. Опора FRED: электричество для жителей NYC 25–29¢ в 2024 году (ряд закончился в декабре 2024).
 - **Аренда по коридорам: REBNY 2025 и Cushman & Wakefield Q3 2026** — страница REBNY без чисел, сервер C&W вне сети. Через поиск подтверждён только порядок: C&W Q2 2026 Flatiron $306, SoHo $393; Q3 средняя по Манхэттену $730.
 - **Депозит по аренде** (справочник SBS на nyc.gov) — 403.
-- **Правила DCWP о больничных, DOB о вывесках и лесах, DOF о CRT и UBT, DOHMH о туалете при 20 местах** — nyc.gov 403; числа оставлены с первого прохода, через поиск расхождений не нашёл (CRT: $250,000 и кредит до $500,000 аренды и $5 млн дохода подтверждены вторичными источниками).
+- **DOB о вывесках и лесах, DOF о CRT и UBT, DOHMH о туалете при 20 местах** — nyc.gov 403; числа оставлены с первого прохода, через поиск расхождений не нашёл (CRT: $250,000 и кредит до $500,000 аренды и $5 млн дохода подтверждены вторичными источниками).
 - **Цены, которые первая попытка брала из заметок:** Atosa MGF8401GR $1,429, картридж Everpure $192.94, Manitowoc UYF0140A $3,479, Square Register $899 (через поиск $799–899) — страницы вне сети или 429.
 - **Доля невыходов работников общепита в сезон гриппа** — не найдена.
 - **Эффект Restaurant Week для кофейни** — измерений нет.
@@ -42,6 +43,7 @@
 - NYSIF, ставки DBL 2026 — https://ww3.nysif.com/-/media/Files/DISABILITY_BENEFITS/PDF/UDB-SOC_2026.pdf ; PFL 2026 — https://paidfamilyleave.ny.gov/2026
 - NYS DOS, LLC — https://dos.ny.gov/node/35506 ; LLC Publishers, цены по округам — https://www.llcpublishers.com/pricing
 - IRS: Pub 15 (2026) — https://www.irs.gov/publications/p15 ; Topic 759 — https://www.irs.gov/taxtopics/tc759 ; неподача деклараций — https://www.irs.gov/payments/failure-to-file-penalty
+- DCWP, правила о protected time off (с 23.07.2026) — https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DCWP-NOA-Rules-Relating-to-Earned-Safe-and-Sick-Time-Act.pdf
 - US DOL, итоговые снижения кредита FUTA 2026 — https://oui.doleta.gov/unemploy/futa_credit.asp (файл final_credit_states_2026.xlsx)
 - eCFR, 28 CFR 85.5 (штрафы I-9 с 3.07.2025) — https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5
 - FRED: кофе — https://fred.stlouisfed.org/series/APU0000717311 ; молоко — https://fred.stlouisfed.org/series/APU0000709112 ; арабика IMF — https://fred.stlouisfed.org/series/PCOFFOTMUSDM ; электричество NYC (BLS) — https://fred.stlouisfed.org/series/APUS12A72610
@@ -59,7 +61,6 @@
 - Правила лесов 2026 (Local Laws 48 и 51 of 2025) — https://www.nyc.gov/mayors-office/news/2026/08/mamdani-administration-taking-down-sidewalk-sheds-and-improving- ; https://www.nyc.gov/assets/buildings/local_laws/ll48of2025.pdf
 - BizBuySell, кофейни — https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/ ; Insight Report — https://www.bizbuysell.com/insight-report/
 - NYCIRB −21.9% с 1.10.2026 — https://www.insurancejournal.com/news/east/2026/07/17/877978.htm
-- ESSTA, поправки с 22.02.2026 — https://www.mcdermottlaw.com/insights/nyc-expands-earned-safe-and-sick-time-act/
 - Gusto, цены 2026 — https://tech.co/hr-software/gusto-payroll-pricing
 - Square, цена Plus и Register — https://www.nerdwallet.com/article/small-business/square-fees
 - Cushman & Wakefield, Manhattan retail — https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail

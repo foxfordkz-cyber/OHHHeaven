@@ -20,7 +20,7 @@
 | `roadmap` | 1 | — | срок FSE 22 дня |
 | `staff` | 2 | — | бариста $18 по NY DOL; бригадир $24 подтверждён (`verified`) |
 | `monthlyCosts` | 1 | — | больничные $60 и новые 32 часа неоплачиваемого отпуска с 22.02.2026 |
-| `violations` | 4 | 3 | дезинсекция (28-06 $200), FPC (три разных числа), испорченная еда ($600 потолок), уличные столики (статьи закона); I-9, неподача деклараций, нет workers' comp (уголовная часть) |
+| `violations` | 4 | 4 | дезинсекция (28-06 $200), FPC (три разных числа), испорченная еда ($600 потолок), уличные столики (статьи закона); I-9, неподача деклараций, нет workers' comp (уголовная часть), больничные ($500 на работника в год по правилам DCWP 2026) |
 | `taxes` | — | 4 | FUTA 2026 подтверждён, workers' comp (−21.9% с 1.10.2026), UI (доля при $18), DBL/PFL (минимум $60) |
 | `events` | 4 | — | строительные леса (исследование 2024), Restaurant Week 2027, кофе (сигнал — арабика IMF), молоко |
 | `levers` | 5 рычагов, 8 вариантов | — | у каждого числа источник и расчёт; `hours.long` $2,000 |
@@ -29,7 +29,7 @@
 | `extra.eventCatalog` | 3 | — | предложение $17.60 с 1 марта 2027, новые правила лесов, снижение стоимости workers' comp |
 | `extra.mechanics` | 3 | — | налоги с потолком на работника, облагаемая доля продаж, округ публикации LLC |
 | `extra.d12CheckedUnchanged` | 32 | — | перепроверенные числа: где, значение, ссылка, что увидено |
-| `sources` | 12 | — | новые первоисточники |
+| `sources` | 13 | — | новые первоисточники |
 
 ## 3. Пятнадцать самых неочевидных находок
 
@@ -47,7 +47,7 @@
 12. **Стоимость workers' comp в штате упала на 21.9% с 1 октября 2026** (решение DFS по заявке NYCIRB). Срезать этот угол стало ещё менее выгодно.
 13. **Не всё в кофейне облагается налогом:** булочки целиком и зерно в пачке «с собой» в виде, как в магазине, не облагаются; кофе с собой, всё подогретое, сэндвичи и всё съеденное в зале — облагается (бюллетень TB-ST-806, пример с бейгл-шопом).
 14. **Публикация LLC стоит $1,475 в Бруклине и $395 в Олбани** — зависит от округа офиса, указанного в учредительных документах. Законно только с настоящим адресом офиса в этом округе.
-15. **Наличные: магазин обязан их принимать, но может не брать купюры больше $20** (страница NYC Business, 6 RCNY §6-72); а неработающий терминал обязан сопровождаться табличкой, что наличные принимаются и жалобы — в 311.
+15. **«Нет больничных» как правило заведения стоит $500 на каждого работника за каждый год**, сверх оплаты пропущенных часов (правила DCWP о protected time off, в силе с 23.07.2026). И ещё с 2026 года каждому работнику положено 32 часа неоплачиваемого отпуска с первого дня работы и с каждого 1 января. (Попутно: магазин обязан брать наличные, но может не брать купюры больше $20 — 6 RCNY §6-72.)
 
 ## 4. Исправления существующего пакета
 
@@ -86,6 +86,7 @@
 | _common: `taxes[futa]` |  |  | estimate | https://www.irs.gov/taxtopics/tc759 | финальный список штатов со сниженным кредитом FUTA на 2026 год (US DOL, 12.11.2026): только Калифорния и Виргинские острова; для Нью-Йорка 0.6% подтверждено и на 2026 год |
 | _common: `taxes[workers_comp]` |  |  | estimate | https://www.wcb.ny.gov/content/main/Employers/workers-compensation-insurance.jsp | ставки для кода ресторанов Нью-Йорка не найдено; найдено снижение базовых loss costs на 21.9% с 1 октября 2026 года |
 | _common: `taxes[ny_unemployment]` |  |  | estimate | https://dol.ny.gov/bizserve/ui/prg/rate | ставка и база 2026 года открыты напрямую; ставка не меняется, потому что общий файл служит всем нишам, но при ставке бариста $18 настоящая доля — 2.09% |
+| _common: `violations[sick_leave_denied]` | law="NYC Administrative Code §20-913, §20-924 (Earned Safe and Sick Time Act)"; source="https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page" | law="NYC Administrative Code §§20-912, 20-913, 20-924 (Earned Safe and Sick Time Act); 6 RCNY Chapter 7 (protected time off rules, effective July 23, 2026)"; source="https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DCWP-NOA-Rules-Relating-to-Earned-Safe-and-Sick-Time-Act.pdf" | verified | https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DCWP-NOA-Rules-Relating-to-Earned-Safe-and-Sick-Time-Act.pdf | правила DCWP, вступившие 23.07.2026: при «политике или практике» не давать больничные каждый работник получает $500 за каждый календарный год (Admin Code §20-924(d)(v)); статьи закона теперь увидены |
 
 
 ### Последствия исправлений, которые считает ведущий
@@ -262,7 +263,8 @@
 4. **Пересчитать `extra.referenceMonth`** движком после ставки $18 и проверить, не стала ли игра снова слишком мягкой (прибыль эталонного месяца +$2,100). Если стала, рычаг — цена и спрос, а не завышенная зарплата.
 5. **Дать сети сессии исследователей nyc.gov** или зеркало: 19 ссылок пакета отвечают 403 на автоматический запрос, и числа DOHMH, DCWP, DOF, DOB, DSNY нельзя открыть заново. Временный путь — rules.cityofnewyork.us (тексты правил, открывается) и nyc-business.nyc.gov (открывается).
 6. **Жалоба 311 на просроченные леса** (`report_shed_to_dob`) — новый `reports` для события `sidewalk_shed_rules_2026`; id предложен, записи нет.
-7. **Штраф по уровню нарушения.** В Appendix 23-C у одного кода пять сумм по уровням I–V; формула `base + perMonth × месяцев` выражает их грубо. Поле `fine.byCondition: [200, 200, 250, 300, 350]` и выбор уровня по запущенности дадут точное число.
+7. **Штраф на каждого работника** (`fine.perStaff`). Правило DCWP 2026 года: при политике «не давать больничные» каждому работнику положено $500 за каждый год; общий `sick_leave_denied` сейчас даёт $500 на всё заведение.
+8. **Штраф по уровню нарушения.** В Appendix 23-C у одного кода пять сумм по уровням I–V; формула `base + perMonth × месяцев` выражает их грубо. Поле `fine.byCondition: [200, 200, 250, 300, 350]` и выбор уровня по запущенности дадут точное число.
 
 ## 6. Не найдено
 
@@ -272,7 +274,7 @@
 - **NYSERDA, средняя цена электричества для бизнеса 2026** — 403; заметки (22.3¢ январь, 24.2¢ июль, 23.1¢ август) не перепроверены. Опора FRED: электричество для жителей NYC 25–29¢ в 2024 году (ряд закончился в декабре 2024).
 - **Аренда по коридорам: REBNY 2025 и Cushman & Wakefield Q3 2026** — страница REBNY без чисел, сервер C&W вне сети. Через поиск подтверждён только порядок: C&W Q2 2026 Flatiron $306, SoHo $393; Q3 средняя по Манхэттену $730.
 - **Депозит по аренде** (справочник SBS на nyc.gov) — 403.
-- **Правила DCWP о больничных, DOB о вывесках и лесах, DOF о CRT и UBT, DOHMH о туалете при 20 местах** — nyc.gov 403; числа оставлены с первого прохода, через поиск расхождений не нашёл (CRT: $250,000 и кредит до $500,000 аренды и $5 млн дохода подтверждены вторичными источниками).
+- **DOB о вывесках и лесах, DOF о CRT и UBT, DOHMH о туалете при 20 местах** — nyc.gov 403; числа оставлены с первого прохода, через поиск расхождений не нашёл (CRT: $250,000 и кредит до $500,000 аренды и $5 млн дохода подтверждены вторичными источниками).
 - **Цены, которые первая попытка брала из заметок:** Atosa MGF8401GR $1,429, картридж Everpure $192.94, Manitowoc UYF0140A $3,479, Square Register $899 (через поиск $799–899) — страницы вне сети или 429.
 - **Доля невыходов работников общепита в сезон гриппа** — не найдена.
 - **Эффект Restaurant Week для кофейни** — измерений нет.
@@ -297,6 +299,7 @@
 - NYSIF, ставки DBL 2026 — https://ww3.nysif.com/-/media/Files/DISABILITY_BENEFITS/PDF/UDB-SOC_2026.pdf ; PFL 2026 — https://paidfamilyleave.ny.gov/2026
 - NYS DOS, LLC — https://dos.ny.gov/node/35506 ; LLC Publishers, цены по округам — https://www.llcpublishers.com/pricing
 - IRS: Pub 15 (2026) — https://www.irs.gov/publications/p15 ; Topic 759 — https://www.irs.gov/taxtopics/tc759 ; неподача деклараций — https://www.irs.gov/payments/failure-to-file-penalty
+- DCWP, правила о protected time off (с 23.07.2026) — https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DCWP-NOA-Rules-Relating-to-Earned-Safe-and-Sick-Time-Act.pdf
 - US DOL, итоговые снижения кредита FUTA 2026 — https://oui.doleta.gov/unemploy/futa_credit.asp (файл final_credit_states_2026.xlsx)
 - eCFR, 28 CFR 85.5 (штрафы I-9 с 3.07.2025) — https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5
 - FRED: кофе — https://fred.stlouisfed.org/series/APU0000717311 ; молоко — https://fred.stlouisfed.org/series/APU0000709112 ; арабика IMF — https://fred.stlouisfed.org/series/PCOFFOTMUSDM ; электричество NYC (BLS) — https://fred.stlouisfed.org/series/APUS12A72610
@@ -314,7 +317,6 @@
 - Правила лесов 2026 (Local Laws 48 и 51 of 2025) — https://www.nyc.gov/mayors-office/news/2026/08/mamdani-administration-taking-down-sidewalk-sheds-and-improving- ; https://www.nyc.gov/assets/buildings/local_laws/ll48of2025.pdf
 - BizBuySell, кофейни — https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/ ; Insight Report — https://www.bizbuysell.com/insight-report/
 - NYCIRB −21.9% с 1.10.2026 — https://www.insurancejournal.com/news/east/2026/07/17/877978.htm
-- ESSTA, поправки с 22.02.2026 — https://www.mcdermottlaw.com/insights/nyc-expands-earned-safe-and-sick-time-act/
 - Gusto, цены 2026 — https://tech.co/hr-software/gusto-payroll-pricing
 - Square, цена Plus и Register — https://www.nerdwallet.com/article/small-business/square-fees
 - Cushman & Wakefield, Manhattan retail — https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail
