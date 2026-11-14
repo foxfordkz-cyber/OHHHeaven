@@ -39,7 +39,9 @@ async function walk(browser, width) {
   const phone = width < 700;
   const W = ack(await call('POST', '/api/worlds', { name: 'Demo City' }), 'create demo city').id;
   ack(await call('POST', `/api/worlds/${W}/clock`, { paused: true }), 'pause clock');
-  const ctx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS ? 2 : 1, isMobile: phone, hasTouch: phone });
+  // Retina only on the phone: a full-page 2× shot of the desktop home stretches the WebGL map to ~2880×6000 and headless
+  // Chromium (software GL) stops drawing the page. A test artifact, not a player's problem; desktop shots stay 1×.
+  const ctx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS && phone ? 2 : 1, isMobile: phone, hasTouch: phone });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(`pageerror: ${String(e).slice(0, 200)}`));
@@ -182,13 +184,15 @@ async function walk(browser, width) {
   // 4. Plan
   await step('plan', 'Opening plan: steps with agency, fee, days and official links', async () => {
     const next = await visible(btn(/See what to buy|Go on with this address/), 10000);
+    const t = await text();
     const links = await page.getByRole('link', { name: /Official page/ }).count();
-    const steps = await page.locator('main ol > li').count();
-    const head = (await text()).match(/Longest wait \S+ \S+/)?.[0] ?? '';
+    // The first plan is a list of steps; after B07 it is grouped by day and a day opens on a tap.
+    const steps = Number(t.match(/Steps (\d+)/)?.[1] ?? 0) || await page.locator('main ol > li').count();
+    const head = t.match(/Longest wait \S+ \S+|\d+ days from the lease to open doors/)?.[0] ?? '';
     await sleep(500);
     await shot('plan');
     await next.click();
-    return `${steps} steps, ${links} official links${steps && links < steps ? ` (${steps - links} without a link)` : ''}${head ? `; header "${head}"` : ''}`;
+    return `${steps} steps, ${links} official links on screen without a tap${head ? `; header "${head}"` : ''}`;
   });
 
   // 5. Join
@@ -439,6 +443,8 @@ async function walk(browser, width) {
   {
     const j = ack(await call('POST', `/api/worlds/${W}/join`, { name: 'Sam', kind: 'owner' }), 'join rival');
     rival.token = j.token;
+    // After B14 a free player may open only a cafe; the rival takes Pro in test mode (no Stripe key: nothing is charged).
+    await call('POST', `/api/worlds/${W}/billing/checkout`, { interval: 'month' }, rival.token);
     const places = unwrap(await call('GET', '/api/places'));
     const me = places.find((p) => p.id === state.biz.placeId);
     const taken = new Set(((await view()).businesses ?? []).map((b) => b.placeId));
@@ -500,7 +506,7 @@ async function walk(browser, width) {
   // 10b. The official's desk in its own browser: the case from the report is in the queue, the inspector takes it
   await step('desk', 'City official desk: the report is in the case queue; "Take" starts an inspection', async () => {
     if (!state.official) throw new Error('no official (the report step failed)');
-    const octx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS ? 2 : 1, isMobile: phone, hasTouch: phone });
+    const octx = await browser.newContext({ viewport: { width, height: phone ? 812 : 900 }, deviceScaleFactor: SHOTS && phone ? 2 : 1, isMobile: phone, hasTouch: phone });
     try {
       await octx.addInitScript((s) => {
         localStorage.setItem('ohh.sessions.v1', JSON.stringify({ [`remote:${s.worldId}`]: s }));
@@ -527,6 +533,25 @@ async function walk(browser, width) {
     } finally { await octx.close(); }
   });
 
+  // 10c. Coming back after three weeks (B13): /brief — cash then and now, one decision, the rival, the next report.
+  // The server sends the "while you were away" summary once, in the first view after the gap: no API view() before the page.
+  await step('brief', 'Back after 3 weeks: /brief shows cash then → now, one decision, the rival and the next report', async () => {
+    ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 21 }), 'advance');
+    await page.goto(`${base.url}/brief?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await sleep(2500);
+    const t = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+    if (/page not found|on its way/i.test(t)) return 'no /brief on this build (before B13): skipped';
+    const found = {
+      cash: /\$[\d,]+\s*(→|->|to)\s*\$[\d,]+/.test(t),
+      decision: (await page.locator('main button:not([disabled])').count()) > 1,
+      rival: /above you|ahead of you|behind you|rival/i.test(t),
+      next: /next report|report (on|in)/i.test(t),
+    };
+    await shot('brief');
+    const missing = Object.entries(found).filter(([, v]) => !v).map(([k]) => k);
+    return `${missing.length ? `MISSING on screen: ${missing.join(', ')}; ` : 'cash then → now, a decision, the rival and the next report are on screen; '}"${t.slice(0, 150)}"`;
+  });
+
   // 11. A month passes: the month report shows in Books
   await step('month', 'A month passes: the month report appears in Books', async () => {
     ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 32 }), 'advance');
@@ -542,6 +567,51 @@ async function walk(browser, width) {
     if (!h.length) throw new Error('no month in business.history after 32 days');
     const last = h[h.length - 1];
     return `${h.length} month(s); last: revenue ${Math.round(last.revenue ?? 0)}, profit ${Math.round(last.profit ?? 0)}, cash ${Math.round(v.business.cash)}; status ${v.business.status}`;
+  });
+
+  // 11b. The free month is over (B14): decisions are refused, /pro offers Pro, Get Pro (test mode) gives the controls back
+  await step('pro', 'After the free month: a saved change is refused → /pro → "Get Pro" (test) → the change goes through', async () => {
+    const billing = async () => unwrap(await call('GET', `/api/worlds/${W}/billing`, undefined, state.token));
+    let st = await billing();
+    if (!st || st.ok === false || st.canManage === undefined) return 'no billing on this build (before B14): skipped';
+    for (let i = 0; i < 12 && st.canManage; i++) { ack(await call('POST', `/api/worlds/${W}/clock`, { advanceDays: 10 }), 'advance'); st = await billing(); }
+    if (st.canManage) throw new Error(`still free to manage on day ${(await view()).world.day} (free ends ${st.freeEndsDay})`);
+    const day = (await view()).world.day;
+    // A player changes the price and presses the save button.
+    await page.goto(`${base.url}/biz?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await visible(page.getByRole('tablist', { name: 'My business' }), 15000);
+    await dismissAway();
+    await page.getByRole('tab', { name: /^Manage/ }).first().click({ timeout: 8000 });
+    const p0 = (await view()).business.orders.price;
+    await page.getByRole('button', { name: /^(More|Increase) price$/ }).first().click({ timeout: 8000 });
+    await saveBtn().click({ timeout: 5000 });
+    await sleep(1200);
+    const refusedText = ((await page.locator('body').innerText()).replace(/\s+/g, ' ').match(/[^.]*\b(Pro|subscription|free month)\b[^.]*\./i) ?? [''])[0];
+    const seePro = await page.getByRole('button', { name: /Pro/ }).or(page.getByRole('link', { name: /Pro/ })).count();
+    await shot('pro-refused');
+    const p1 = (await view()).business.orders.price;
+    if (p1 !== p0) throw new Error(`the change went through on day ${day} without Pro (${p0} → ${p1})`);
+    // The tariff screen.
+    await page.goto(`${base.url}/pro?world=${W}`, { waitUntil: 'domcontentloaded' });
+    const buy = await visible(btn(/^Get Pro/), 15000);
+    await sleep(500);
+    const offer = ((await page.locator('main').first().innerText()).replace(/\s+/g, ' ')).slice(0, 160);
+    await shot('pro');
+    await buy.click();
+    for (let i = 0; i < 20 && !(await billing())?.pro; i++) await sleep(300);
+    const after = await billing();
+    if (!after?.pro) throw new Error('"Get Pro" did not give Pro');
+    // The same change again.
+    await page.goto(`${base.url}/biz?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await visible(page.getByRole('tablist', { name: 'My business' }), 15000);
+    await dismissAway();
+    await page.getByRole('tab', { name: /^Manage/ }).first().click({ timeout: 8000 });
+    await page.getByRole('button', { name: /^(More|Increase) price$/ }).first().click({ timeout: 8000 });
+    await saveBtn().click({ timeout: 5000 });
+    await sleep(1000);
+    const p2 = (await view()).business.orders.price;
+    if (p2 === p0) throw new Error('Pro is on, but the change still does not go through');
+    return `day ${day}: refused${refusedText ? ` ("${refusedText.trim().slice(0, 110)}")` : ' with no word about Pro on screen'}; ${seePro ? 'a Pro button/link next to it' : 'NO button to /pro next to the refusal'}; /pro: "${offer.slice(0, 90)}"; after Get Pro (${after.pro.via}) price ${p0} → ${p2}`;
   });
 
   // 12. End of season → debrief → personal plan
