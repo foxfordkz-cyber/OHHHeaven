@@ -255,7 +255,1192 @@
         "confidence": "estimate",
         "note": "Read through search: Global Japanese Tea Association report for May 2026 (secondary; I did not find the market's own release). 8,235 / 2.7 = about 4,862 yen for 2024 is my arithmetic from 'a 170% increase'."
       }
-    ]
+    ],
+    "ingredients": [
+      {
+        "id": "espresso_beans",
+        "name": "Espresso blend, wholesale, 5 lb bags",
+        "pack": "5 lb bag",
+        "packPrice": 80,
+        "unit": "g",
+        "costPerUnit": 0.0353,
+        "signal": "ice_coffee_c",
+        "source": "https://www.faire.com/product/p_e3sufx7spz",
+        "confidence": "estimate",
+        "note": "Joe Coffee (New York) lists its Waverly espresso blend to wholesale buyers on Faire at $80 for 5 lb = $16.00 per lb (search summary of the Faire listing; I could not open the roaster's own wholesale price list, which sits behind a login). Cross-checks: Atomic house blend $86 for 5 lb = $17.20 per lb (research notes); Dilworth 5 lb espresso blends $11.75 and $15.25 per lb."
+      },
+      {
+        "id": "drip_beans",
+        "name": "House blend for drip and cold brew, wholesale",
+        "pack": "5 lb bag",
+        "packPrice": 70,
+        "unit": "g",
+        "costPerUnit": 0.0309,
+        "signal": "ice_coffee_c",
+        "source": "https://pro.dilworthcoffee.com/products/dilworth-coffee-espresso-blend-5lb-bulk-bag",
+        "confidence": "estimate",
+        "note": "Planning value $14.00 per lb: between the two posted Dilworth 5 lb wholesale prices ($11.75 and $15.25 per lb) and below the $16.00 espresso blend. A batch-brew blend is usually the cheapest coffee on a roaster's list."
+      },
+      {
+        "id": "whole_milk",
+        "name": "Whole milk, gallon, delivered",
+        "pack": "gallon",
+        "packPrice": 5.28,
+        "unit": "fl oz",
+        "costPerUnit": 0.0413,
+        "signal": "usda_class_i",
+        "source": "https://pos.toasttab.com/blog/on-the-line/milk-prices",
+        "confidence": "estimate",
+        "note": "Toast, from restaurant and coffee shop invoices: a gallon of whole milk averaged $5.28 nationally in July (the page does not state the year); low-fat $4.34. The supermarket shelf price in October 2026 was $4.10 (BLS). A New York dairy route with a small drop is likely above the national figure."
+      },
+      {
+        "id": "oat_milk",
+        "name": "Oat milk, barista edition, 32 fl oz carton",
+        "pack": "case of 12 x 32 fl oz",
+        "packPrice": 39.99,
+        "unit": "fl oz",
+        "costPerUnit": 0.1041,
+        "source": "https://www.webstaurantstore.com/oatly-barista-edition-oat-milk-32-fl-oz-case/110OTBAROAT.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: Oatly Barista Edition 12/case $39.99 ($0.10 per fl oz); lots of 85 cases $35.49. Shelf-stable until opened. 2.5 times the price of dairy per ounce."
+      },
+      {
+        "id": "hot_cup_12",
+        "name": "12 oz paper hot cup",
+        "pack": "case of 1,000",
+        "packPrice": 45.99,
+        "unit": "each",
+        "costPerUnit": 0.046,
+        "signal": "packaging",
+        "source": "https://www.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: Choice white poly paper cup $45.99 per 1,000. Same page family: kraft $48.99, compostable EcoChoice $82.49, Solo brand $72.49."
+      },
+      {
+        "id": "hot_lid",
+        "name": "Travel lid for 10-24 oz hot cups",
+        "pack": "case of 1,000",
+        "packPrice": 30.49,
+        "unit": "each",
+        "costPerUnit": 0.0305,
+        "signal": "packaging",
+        "source": "https://www.webstaurantstore.com/choice-8-oz-squat-to-24-oz-white-hot-paper-cup-travel-lid-case/500L1020W.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: $30.49 per 1,000."
+      },
+      {
+        "id": "sleeve",
+        "name": "Kraft cup sleeve",
+        "pack": "case of 1,200",
+        "packPrice": 41.49,
+        "unit": "each",
+        "costPerUnit": 0.0346,
+        "signal": "packaging",
+        "source": "https://www.webstaurantstore.com/ecochoice-10-24-oz-kraft-coffee-cup-sleeve-jacket-clutch-case/500COLLARBR.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: EcoChoice 10-20 oz kraft sleeve $41.49 per 1,200."
+      },
+      {
+        "id": "cold_cup_16",
+        "name": "16 oz clear PET cold cup",
+        "pack": "case of 1,000",
+        "packPrice": 59.49,
+        "unit": "each",
+        "costPerUnit": 0.0595,
+        "signal": "packaging",
+        "source": "https://www.webstaurantstore.com/choice-16-oz-clear-pet-plastic-cold-cup-case/500CC16.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: $59.49 per 1,000 ($53.49 from four cases). Other captures of the same page show $54.99 and $57.99."
+      },
+      {
+        "id": "cold_sip_lid",
+        "name": "Strawless sip lid for cold cups",
+        "pack": "case of 1,000",
+        "packPrice": 44.49,
+        "unit": "each",
+        "costPerUnit": 0.0445,
+        "signal": "packaging",
+        "source": "https://www.webstaurantstore.com/choice-9-12-16-20-and-24-oz-clear-sip-through-lid-with-extra-wide-opening-case/500LSTRWLW.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: Choice strawless sip lid $44.49 per 1,000 (another capture $35.49); flat lid with straw slot $31.99. The strawless lid costs 1.25 cents more than a flat lid but needs no straw, which New York lets you hand out only on request."
+      },
+      {
+        "id": "vanilla_syrup",
+        "name": "Flavoring syrup, 750 mL bottle",
+        "pack": "case of 12 x 750 mL",
+        "packPrice": 84.99,
+        "unit": "fl oz",
+        "costPerUnit": 0.2793,
+        "source": "https://www.webstaurantstore.com/monin-premium-vanilla-flavoring-syrup-750-ml-case/544SYPAR045CS.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: Monin vanilla $84.99 per case of 12 ($9.79 a single bottle); Torani vanilla bean $79.99 per case. 750 mL = 25.36 fl oz."
+      },
+      {
+        "id": "chocolate_sauce",
+        "name": "Chocolate sauce, 64 fl oz",
+        "pack": "case of 6 x 64 fl oz",
+        "packPrice": 118.49,
+        "unit": "fl oz",
+        "costPerUnit": 0.3086,
+        "signal": "ice_cocoa",
+        "source": "https://www.webstaurantstore.com/ghirardelli-black-label-chocolate-flavoring-sauce-64-fl-oz-case/40862057CS.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: Ghirardelli Black Label $118.49 per case of 6 ($23.49 a single jug)."
+      },
+      {
+        "id": "chai_concentrate",
+        "name": "Chai concentrate 1:1, 32 fl oz carton",
+        "pack": "case of 6 x 32 fl oz",
+        "packPrice": 35.49,
+        "unit": "fl oz",
+        "costPerUnit": 0.1848,
+        "source": "https://www.webstaurantstore.com/tazo-32-fl-oz-chai-tea-latte-1-1-concentrate-case/711TAZ1733CS.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: Tazo chai 1:1 concentrate $35.49 per case of 6; Oregon Chai $36.99; David Rio $37.49."
+      },
+      {
+        "id": "matcha",
+        "name": "Matcha, ceremonial barista grade, 1 lb bag",
+        "pack": "case of 6 x 1 lb",
+        "packPrice": 839,
+        "unit": "g",
+        "costPerUnit": 0.3083,
+        "signal": "kyoto_tencha_auction",
+        "source": "https://www.webstaurantstore.com/jade-leaf-ceremonial-barista-edition-matcha-powder-1-lb-454g/999JLCRBARL.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: Jade Leaf Ceremonial Barista Edition $839.00 per case of six 1 lb bags ($139.83 per lb; $162.49 a single bag). Culinary grade $456.49 per case ($76 per lb); ceremonial teahouse grade $1,069 per case ($178 per lb). Some listing captures are old; matcha was re-priced across the trade in 2025 and 2026."
+      },
+      {
+        "id": "tea_bag",
+        "name": "Tea bag, foodservice",
+        "pack": "case of 96",
+        "packPrice": 24.49,
+        "unit": "each",
+        "costPerUnit": 0.2551,
+        "source": "https://www.webstaurantstore.com/45177/tea.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: Tazo 96-count case $24.49 (25.5 cents a bag); Harney & Sons 50-count box $15.99 (32 cents); Bigelow Ceylon 1,000-count case $67.99 (7 cents)."
+      },
+      {
+        "id": "croissant_bought",
+        "name": "Butter croissant, baked, from a wholesale bakery",
+        "pack": "standing daily order",
+        "packPrice": 2.1,
+        "unit": "each",
+        "costPerUnit": 2.1,
+        "source": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
+        "confidence": "estimate",
+        "note": "A national trade guide gives $1.25-$2.00 wholesale against $3.50-$4.50 retail. New York retail is $4.00-$5.49 (research notes, 2026), so I scale the wholesale price to $2.10: about 44% of a $4.75 shelf price, the usual half-of-retail rule. No New York wholesale bakery publishes its price sheet; ask for it."
+      },
+      {
+        "id": "croissant_bakeoff",
+        "name": "Butter croissant, frozen ready-to-bake",
+        "pack": "case of 80",
+        "packPrice": 109.99,
+        "unit": "each",
+        "costPerUnit": 1.3749,
+        "signal": "cme_butter",
+        "source": "https://www.webstaurantstore.com/bridor-ready-to-bake-perfect-croissant-2-8-oz-case/108BRI59103.html",
+        "confidence": "verified",
+        "note": "WebstaurantStore: Bridor ready-to-bake croissant 2.8 oz, 80/case $109.99 ($1.37 each; $72.99 with the paid membership = $0.91). Raw dough that needs a proofer: Bridor 160/case $113.99 ($0.71 each). Almond-filled 80/case $96.99 ($1.21)."
+      },
+      {
+        "id": "muffin_bought",
+        "name": "Muffin, baked, from a wholesale bakery",
+        "pack": "standing daily order",
+        "packPrice": 1.75,
+        "unit": "each",
+        "costPerUnit": 1.75,
+        "source": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
+        "confidence": "estimate",
+        "note": "No published price found. Same half-of-retail rule as the croissant, a little lower because a muffin has cheaper ingredients: $1.75 against a $4.25 shelf price (41%)."
+      },
+      {
+        "id": "cookie_bought",
+        "name": "Cookie, baked, from a wholesale bakery",
+        "pack": "standing daily order",
+        "packPrice": 1.25,
+        "unit": "each",
+        "costPerUnit": 1.25,
+        "source": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
+        "confidence": "estimate",
+        "note": "No published price found. $1.25 against a $3.75 shelf price (33%): cookies keep two days, so bakeries price them lower and shops waste fewer."
+      },
+      {
+        "id": "bagel",
+        "name": "Hand-rolled bagel, wholesale",
+        "pack": "12 dozen",
+        "packPrice": 169,
+        "unit": "each",
+        "costPerUnit": 1.1736,
+        "source": "https://www.newyorkerbagels.com/pages/order-wholesale-bagels",
+        "confidence": "estimate",
+        "note": "New Yorker Bagels wholesale page (search summary): 12 dozen for $169 with shipping = $1.17 each; another page of the same seller shows $149-$239 by zone. A local route bakery is usually cheaper than shipped boxes."
+      },
+      {
+        "id": "cream_cheese",
+        "name": "Cream cheese, bulk",
+        "pack": "30 lb case",
+        "packPrice": 119.7,
+        "unit": "oz",
+        "costPerUnit": 0.2494,
+        "source": "https://www.foodomarket.com/en-us/products/cheese/cream-cheese",
+        "confidence": "estimate",
+        "note": "Foodomarket, New York wholesale quote updated June 1, 2026: $3.99 per lb in a 30 lb case (search summary). Costco business price for a 3 lb tub: about $7-$8."
+      },
+      {
+        "id": "egg",
+        "name": "Egg, Grade A large",
+        "pack": "dozen",
+        "packPrice": 2.32,
+        "unit": "each",
+        "costPerUnit": 0.1933,
+        "signal": "bls_eggs",
+        "source": "https://fred.stlouisfed.org/series/APU0000708111",
+        "confidence": "verified",
+        "note": "BLS average shelf price, October 2026: $2.32 a dozen. It was $6.23 in March 2025."
+      }
+    ],
+    "packagingSets": {
+      "hot12": 0.111,
+      "cold16": 0.104,
+      "note": "Hot: cup 4.6 cents + lid 3.0 + sleeve 3.5 = 11.1 cents. Cold: cup 5.9 + strawless lid 4.4 = 10.4 cents. Compostable hot cup instead: 8.2 cents for the cup alone, a set of 14.8 cents."
+    },
+    "menu": [
+      {
+        "id": "drip_coffee_12",
+        "name": "Drip coffee, 12 oz",
+        "group": "coffee",
+        "menuPrice": 3.5,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "House blend for drip and cold brew, wholesale",
+            "qty": 24,
+            "unit": "g",
+            "cost": 0.741
+          },
+          {
+            "item": "milk and sugar at the condiment bar",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.05
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 0.79,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 0.9,
+        "cogsPct": 0.258,
+        "grossPerItem": 2.6,
+        "tier": "core",
+        "source": "https://pro.dilworthcoffee.com/products/dilworth-coffee-espresso-blend-5lb-bulk-bag",
+        "confidence": "estimate",
+        "note": "21 g of coffee for 12 oz (1:17), plus about 13% of every batch poured out when it goes stale = 24 g. Menu price: aggregator listings put a New York drip at about $3.00-$3.25; $3.50 is my 2026 planning price."
+      },
+      {
+        "id": "espresso_double",
+        "name": "Double espresso",
+        "group": "coffee",
+        "menuPrice": 3.75,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Espresso blend, wholesale, 5 lb bags",
+            "qty": 20,
+            "unit": "g",
+            "cost": 0.705
+          },
+          {
+            "item": "small cup and lid",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.06,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 0.71,
+        "unsoldShare": 0,
+        "packagingCost": 0.06,
+        "cogs": 0.77,
+        "cogsPct": 0.204,
+        "grossPerItem": 2.98,
+        "tier": "core",
+        "source": "https://www.faire.com/product/p_e3sufx7spz",
+        "confidence": "estimate",
+        "note": "One 20 g dose. Recipe is trade practice: an 18 g double shot plus about 10% lost to morning dial-in, purging and remakes = 20 g; a pound gives about 22 doubles."
+      },
+      {
+        "id": "americano_12",
+        "name": "Americano, 12 oz",
+        "group": "coffee",
+        "menuPrice": 4.25,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Espresso blend, wholesale, 5 lb bags",
+            "qty": 20,
+            "unit": "g",
+            "cost": 0.705
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 0.71,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 0.82,
+        "cogsPct": 0.192,
+        "grossPerItem": 3.43,
+        "tier": "core",
+        "source": "https://www.faire.com/product/p_e3sufx7spz",
+        "confidence": "estimate",
+        "note": "A double shot and hot water: the best gross margin on the bar. Recipe is trade practice: an 18 g double shot plus about 10% lost to morning dial-in, purging and remakes = 20 g; a pound gives about 22 doubles."
+      },
+      {
+        "id": "cappuccino_8",
+        "name": "Cappuccino, 8 oz",
+        "group": "coffee",
+        "menuPrice": 5.5,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Espresso blend, wholesale, 5 lb bags",
+            "qty": 20,
+            "unit": "g",
+            "cost": 0.705
+          },
+          {
+            "item": "Whole milk, gallon, delivered",
+            "qty": 5.5,
+            "unit": "fl oz",
+            "cost": 0.227
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 0.93,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 1.04,
+        "cogsPct": 0.19,
+        "grossPerItem": 4.46,
+        "tier": "core",
+        "source": "https://citiesinsider.com/country/united-states/new-york-city/local-food-and-dining/en",
+        "confidence": "estimate",
+        "note": "A double shot and 5.5 fl oz of milk (5 in the cup, half an ounce left in the pitcher). Seen: a Manhattan cappuccino averages $5.88 in a 2026 city price guide."
+      },
+      {
+        "id": "latte_12",
+        "name": "Latte, 12 oz",
+        "group": "coffee",
+        "menuPrice": 6,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Espresso blend, wholesale, 5 lb bags",
+            "qty": 20,
+            "unit": "g",
+            "cost": 0.705
+          },
+          {
+            "item": "Whole milk, gallon, delivered",
+            "qty": 10,
+            "unit": "fl oz",
+            "cost": 0.413
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.12,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 1.23,
+        "cogsPct": 0.205,
+        "grossPerItem": 4.77,
+        "tier": "core",
+        "source": "https://citiesinsider.com/country/united-states/new-york-city/cafes-and-coffee-shops/en",
+        "confidence": "estimate",
+        "note": "A double shot and 10 fl oz of milk (9 in the cup, 1 lost in the pitcher). Menu price: a basic New York latte runs $6.00-$7.50 in a 2026 city guide; the research notes saw $4.25-$6.99. Recipe is trade practice: an 18 g double shot plus about 10% lost to morning dial-in, purging and remakes = 20 g; a pound gives about 22 doubles."
+      },
+      {
+        "id": "oat_latte_12",
+        "name": "Oat milk latte, 12 oz, $1 upcharge",
+        "group": "coffee",
+        "menuPrice": 7,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Espresso blend, wholesale, 5 lb bags",
+            "qty": 20,
+            "unit": "g",
+            "cost": 0.705
+          },
+          {
+            "item": "Oat milk, barista edition, 32 fl oz carton",
+            "qty": 10,
+            "unit": "fl oz",
+            "cost": 1.041
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.75,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 1.86,
+        "cogsPct": 0.265,
+        "grossPerItem": 5.14,
+        "tier": "core",
+        "source": "https://www.webstaurantstore.com/oatly-barista-edition-oat-milk-32-fl-oz-case/110OTBAROAT.html",
+        "confidence": "estimate",
+        "note": "Same recipe with oat milk: the milk alone costs $1.04 instead of $0.41, a gap of 63 cents. With the $1 upcharge the drink earns more than a dairy latte; without it the same drink costs 31% of a $6 price. Starbucks dropped its 70-80 cent upcharge on November 7, 2024."
+      },
+      {
+        "id": "vanilla_latte_12",
+        "name": "Vanilla latte, 12 oz",
+        "group": "coffee",
+        "menuPrice": 6.75,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Espresso blend, wholesale, 5 lb bags",
+            "qty": 20,
+            "unit": "g",
+            "cost": 0.705
+          },
+          {
+            "item": "Whole milk, gallon, delivered",
+            "qty": 9.5,
+            "unit": "fl oz",
+            "cost": 0.392
+          },
+          {
+            "item": "Flavoring syrup, 750 mL bottle",
+            "qty": 0.75,
+            "unit": "fl oz",
+            "cost": 0.209
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.31,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 1.42,
+        "cogsPct": 0.21,
+        "grossPerItem": 5.33,
+        "tier": "core",
+        "source": "https://www.webstaurantstore.com/monin-premium-vanilla-flavoring-syrup-750-ml-case/544SYPAR045CS.html",
+        "confidence": "estimate",
+        "note": "Three pumps of syrup (0.75 fl oz) cost 21 cents and sell for 75 cents."
+      },
+      {
+        "id": "mocha_12",
+        "name": "Mocha, 12 oz",
+        "group": "coffee",
+        "menuPrice": 6.75,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Espresso blend, wholesale, 5 lb bags",
+            "qty": 20,
+            "unit": "g",
+            "cost": 0.705
+          },
+          {
+            "item": "Whole milk, gallon, delivered",
+            "qty": 9,
+            "unit": "fl oz",
+            "cost": 0.371
+          },
+          {
+            "item": "Chocolate sauce, 64 fl oz",
+            "qty": 1,
+            "unit": "fl oz",
+            "cost": 0.309
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.39,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 1.5,
+        "cogsPct": 0.222,
+        "grossPerItem": 5.25,
+        "tier": "core",
+        "source": "https://www.webstaurantstore.com/ghirardelli-black-label-chocolate-flavoring-sauce-64-fl-oz-case/40862057CS.html",
+        "confidence": "estimate",
+        "note": "One fluid ounce of chocolate sauce. Cocoa set records in 2024; the sauce price follows it with a lag."
+      },
+      {
+        "id": "iced_latte_16",
+        "name": "Iced latte, 16 oz",
+        "group": "cold",
+        "menuPrice": 6.5,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Espresso blend, wholesale, 5 lb bags",
+            "qty": 20,
+            "unit": "g",
+            "cost": 0.705
+          },
+          {
+            "item": "Whole milk, gallon, delivered",
+            "qty": 8,
+            "unit": "fl oz",
+            "cost": 0.33
+          },
+          {
+            "item": "ice from the shop machine",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.01
+          },
+          {
+            "item": "16 oz cold cup and strawless lid",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.104,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.05,
+        "unsoldShare": 0,
+        "packagingCost": 0.1,
+        "cogs": 1.15,
+        "cogsPct": 0.177,
+        "grossPerItem": 5.35,
+        "tier": "core",
+        "source": "https://www.faire.com/product/p_e3sufx7spz",
+        "confidence": "estimate",
+        "note": "Ice takes the place of 2 fl oz of milk, and the cold cup set costs about the same as the hot one: an iced latte costs less to make than a hot one and sells for 50 cents more. Recipe is trade practice: an 18 g double shot plus about 10% lost to morning dial-in, purging and remakes = 20 g; a pound gives about 22 doubles."
+      },
+      {
+        "id": "cold_brew_16",
+        "name": "Cold brew, 16 oz",
+        "group": "cold",
+        "menuPrice": 5.5,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "House blend for drip and cold brew, wholesale",
+            "qty": 22.7,
+            "unit": "g",
+            "cost": 0.701
+          },
+          {
+            "item": "ice from the shop machine",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.01
+          },
+          {
+            "item": "16 oz cold cup and strawless lid",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.104,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 0.71,
+        "unsoldShare": 0,
+        "packagingCost": 0.1,
+        "cogs": 0.81,
+        "cogsPct": 0.148,
+        "grossPerItem": 4.69,
+        "tier": "core",
+        "source": "https://pro.dilworthcoffee.com/products/dilworth-coffee-espresso-blend-5lb-bulk-bag",
+        "confidence": "estimate",
+        "note": "One pound of coffee steeped in a gallon of water gives about 100 fl oz of concentrate; cut 1:1 it fills twenty 16 oz cups over ice (10 fl oz of liquid each): 22.7 g of coffee a cup. Steeps 12-24 hours, so tomorrow's sales are decided today."
+      },
+      {
+        "id": "matcha_latte_12",
+        "name": "Matcha latte, 12 oz",
+        "group": "tea",
+        "menuPrice": 6.75,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Matcha, ceremonial barista grade, 1 lb bag",
+            "qty": 3,
+            "unit": "g",
+            "cost": 0.925
+          },
+          {
+            "item": "Whole milk, gallon, delivered",
+            "qty": 10,
+            "unit": "fl oz",
+            "cost": 0.413
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.34,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 1.45,
+        "cogsPct": 0.215,
+        "grossPerItem": 5.3,
+        "tier": "core",
+        "source": "https://www.webstaurantstore.com/jade-leaf-ceremonial-barista-edition-matcha-powder-1-lb-454g/999JLCRBARL.html",
+        "confidence": "estimate",
+        "note": "3 g of barista-grade matcha at $139.83 per lb = 92 cents: more than the coffee in a latte. With culinary grade ($76 per lb) the powder costs 50 cents. Aggregators list a chain matcha latte in New York at about $5.50."
+      },
+      {
+        "id": "chai_latte_12",
+        "name": "Chai latte, 12 oz",
+        "group": "tea",
+        "menuPrice": 6,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Chai concentrate 1:1, 32 fl oz carton",
+            "qty": 5,
+            "unit": "fl oz",
+            "cost": 0.924
+          },
+          {
+            "item": "Whole milk, gallon, delivered",
+            "qty": 5.5,
+            "unit": "fl oz",
+            "cost": 0.227
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.15,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 1.26,
+        "cogsPct": 0.21,
+        "grossPerItem": 4.74,
+        "tier": "core",
+        "source": "https://www.webstaurantstore.com/tazo-32-fl-oz-chai-tea-latte-1-1-concentrate-case/711TAZ1733CS.html",
+        "confidence": "estimate",
+        "note": "Half concentrate, half milk."
+      },
+      {
+        "id": "hot_tea_12",
+        "name": "Hot tea, 12 oz",
+        "group": "tea",
+        "menuPrice": 3.75,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Tea bag, foodservice",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.255
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 0.26,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 0.37,
+        "cogsPct": 0.098,
+        "grossPerItem": 3.38,
+        "tier": "core",
+        "source": "https://www.webstaurantstore.com/45177/tea.html",
+        "confidence": "estimate",
+        "note": "One bag and hot water: the cup set costs almost half as much as the tea."
+      },
+      {
+        "id": "hot_chocolate_12",
+        "name": "Hot chocolate, 12 oz",
+        "group": "other",
+        "menuPrice": 5,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Chocolate sauce, 64 fl oz",
+            "qty": 1.5,
+            "unit": "fl oz",
+            "cost": 0.463
+          },
+          {
+            "item": "Whole milk, gallon, delivered",
+            "qty": 10,
+            "unit": "fl oz",
+            "cost": 0.413
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 0.88,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 0.99,
+        "cogsPct": 0.197,
+        "grossPerItem": 4.01,
+        "tier": "core",
+        "source": "https://www.webstaurantstore.com/ghirardelli-black-label-chocolate-flavoring-sauce-64-fl-oz-case/40862057CS.html",
+        "confidence": "estimate",
+        "note": "A winter and children's drink; no coffee in it."
+      },
+      {
+        "id": "pumpkin_spice_latte_12",
+        "name": "Seasonal latte (pumpkin spice), 12 oz",
+        "group": "seasonal",
+        "menuPrice": 7.25,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Espresso blend, wholesale, 5 lb bags",
+            "qty": 20,
+            "unit": "g",
+            "cost": 0.705
+          },
+          {
+            "item": "Whole milk, gallon, delivered",
+            "qty": 9,
+            "unit": "fl oz",
+            "cost": 0.371
+          },
+          {
+            "item": "1 fl oz pumpkin sauce",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.35
+          },
+          {
+            "item": "spice topping",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.03
+          },
+          {
+            "item": "12 oz cup, lid and sleeve",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.111,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.46,
+        "unsoldShare": 0,
+        "packagingCost": 0.11,
+        "cogs": 1.57,
+        "cogsPct": 0.216,
+        "grossPerItem": 5.68,
+        "tier": "deep",
+        "source": "https://www.placer.ai/anchor/articles/psl-day-2026-gives-starbucks-its-biggest-tuesday-of-the-year",
+        "confidence": "estimate",
+        "note": "Seasonal sauce is priced like chocolate sauce plus a premium (35 cents an ounce is my estimate). The drink carries a $1.25 premium over a plain latte for 38 cents of extra ingredients. Chains list seasonal lattes at $5.50-$6.50 in New York."
+      },
+      {
+        "id": "croissant_bought",
+        "name": "Butter croissant, delivered baked",
+        "group": "pastry",
+        "menuPrice": 4.75,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Butter croissant, baked, from a wholesale bakery",
+            "qty": 1,
+            "unit": "each",
+            "cost": 2.1
+          },
+          {
+            "item": "pastry bag or tissue and napkin",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.04,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 2.1,
+        "unsoldShare": 0.12,
+        "packagingCost": 0.04,
+        "cogs": 2.43,
+        "cogsPct": 0.511,
+        "grossPerItem": 2.32,
+        "tier": "core",
+        "source": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
+        "confidence": "estimate",
+        "note": "Bought at $2.10; about 12% of a daily order goes unsold (the trade guide gives 10-15%), so each one sold carries $2.39 of pastry. New York shelf price $4.00-$5.49 (research notes). Taxable as sold by a restaurant-type shop."
+      },
+      {
+        "id": "croissant_bakeoff",
+        "name": "Butter croissant, baked in the shop from frozen",
+        "group": "pastry",
+        "menuPrice": 4.75,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Butter croissant, frozen ready-to-bake",
+            "qty": 1,
+            "unit": "each",
+            "cost": 1.375
+          },
+          {
+            "item": "pastry bag or tissue and napkin",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.04,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.37,
+        "unsoldShare": 0.06,
+        "packagingCost": 0.04,
+        "cogs": 1.5,
+        "cogsPct": 0.316,
+        "grossPerItem": 3.25,
+        "tier": "deep",
+        "source": "https://www.webstaurantstore.com/bridor-ready-to-bake-perfect-croissant-2-8-oz-case/108BRI59103.html",
+        "confidence": "estimate",
+        "note": "Frozen ready-to-bake at $1.37; baked in small batches through the morning, so only about 6% is left over (my estimate: half the waste of a fixed morning delivery). Needs a convection oven, a hood check, freezer space and 30-40 minutes of staff time a day."
+      },
+      {
+        "id": "muffin",
+        "name": "Muffin",
+        "group": "pastry",
+        "menuPrice": 4.25,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Muffin, baked, from a wholesale bakery",
+            "qty": 1,
+            "unit": "each",
+            "cost": 1.75
+          },
+          {
+            "item": "pastry bag or tissue and napkin",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.04,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.75,
+        "unsoldShare": 0.12,
+        "packagingCost": 0.04,
+        "cogs": 2.03,
+        "cogsPct": 0.477,
+        "grossPerItem": 2.22,
+        "tier": "core",
+        "source": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
+        "confidence": "estimate",
+        "note": "Same 12% unsold share as the croissant."
+      },
+      {
+        "id": "cookie",
+        "name": "Cookie",
+        "group": "pastry",
+        "menuPrice": 3.75,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Cookie, baked, from a wholesale bakery",
+            "qty": 1,
+            "unit": "each",
+            "cost": 1.25
+          },
+          {
+            "item": "pastry bag or tissue and napkin",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.04,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.25,
+        "unsoldShare": 0.06,
+        "packagingCost": 0.04,
+        "cogs": 1.37,
+        "cogsPct": 0.365,
+        "grossPerItem": 2.38,
+        "tier": "core",
+        "source": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
+        "confidence": "estimate",
+        "note": "Keeps two days, so half the waste of a croissant."
+      },
+      {
+        "id": "bagel_cream_cheese",
+        "name": "Bagel with cream cheese",
+        "group": "food",
+        "menuPrice": 5,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Hand-rolled bagel, wholesale",
+            "qty": 1,
+            "unit": "each",
+            "cost": 1.174
+          },
+          {
+            "item": "Cream cheese, bulk",
+            "qty": 1.5,
+            "unit": "oz",
+            "cost": 0.374
+          },
+          {
+            "item": "deli paper and napkin",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.05,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.55,
+        "unsoldShare": 0.1,
+        "packagingCost": 0.05,
+        "cogs": 1.77,
+        "cogsPct": 0.354,
+        "grossPerItem": 3.23,
+        "tier": "core",
+        "source": "https://www.newyorkerbagels.com/pages/order-wholesale-bagels",
+        "confidence": "estimate",
+        "note": "A plain, unsliced bagel to go is not taxed in New York; sliced, toasted or with cream cheese it is prepared food and taxed at 8.875%."
+      },
+      {
+        "id": "egg_cheese_sandwich",
+        "name": "Egg and cheese on a roll",
+        "group": "food",
+        "menuPrice": 7.5,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "Egg, Grade A large",
+            "qty": 2,
+            "unit": "each",
+            "cost": 0.387
+          },
+          {
+            "item": "cheese slice",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.22
+          },
+          {
+            "item": "roll",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.55
+          },
+          {
+            "item": "butter, salt, pepper",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.06
+          },
+          {
+            "item": "foil wrap and napkin",
+            "qty": 1,
+            "unit": "set",
+            "cost": 0.06,
+            "packaging": true
+          }
+        ],
+        "ingredientCost": 1.22,
+        "unsoldShare": 0.05,
+        "packagingCost": 0.06,
+        "cogs": 1.34,
+        "cogsPct": 0.179,
+        "grossPerItem": 6.16,
+        "tier": "deep",
+        "source": "https://fred.stlouisfed.org/series/APU0000708111",
+        "confidence": "estimate",
+        "note": "Eggs at the October 2026 shelf price ($2.32 a dozen); in March 2025 the same two eggs cost $1.04. Cheese, roll and butter are my estimates. Cooking eggs to order needs a griddle and usually a hood; many small cafes heat pre-cooked egg patties in a speed oven instead."
+      },
+      {
+        "id": "avocado_toast",
+        "name": "Avocado toast",
+        "group": "food",
+        "menuPrice": 11,
+        "salesTaxable": true,
+        "recipe": [
+          {
+            "item": "half an avocado",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.9
+          },
+          {
+            "item": "thick slice of sourdough",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.6
+          },
+          {
+            "item": "oil, lemon, chili, salt",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.2
+          },
+          {
+            "item": "egg or seeds on top",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.25
+          }
+        ],
+        "ingredientCost": 1.95,
+        "unsoldShare": 0.15,
+        "packagingCost": 0,
+        "cogs": 2.29,
+        "cogsPct": 0.209,
+        "grossPerItem": 8.71,
+        "tier": "deep",
+        "source": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
+        "confidence": "estimate",
+        "note": "All four lines are my estimates: no price was checked. Avocados ripen and brown in days: 15% of them never reach a plate. Plated, so no packaging."
+      },
+      {
+        "id": "bottled_water",
+        "name": "Bottled water, 16.9 oz",
+        "group": "retail",
+        "menuPrice": 3,
+        "salesTaxable": false,
+        "recipe": [
+          {
+            "item": "bottle, by the case",
+            "qty": 1,
+            "unit": "each",
+            "cost": 0.4
+          }
+        ],
+        "ingredientCost": 0.4,
+        "unsoldShare": 0,
+        "packagingCost": 0,
+        "cogs": 0.4,
+        "cogsPct": 0.133,
+        "grossPerItem": 2.6,
+        "bottleDeposit": 0.05,
+        "tier": "deep",
+        "source": "https://dec.ny.gov/environmental-protection/recycling-composting/bottle-bill",
+        "confidence": "estimate",
+        "note": "Estimate, no price checked. Add the 5-cent New York deposit, which the shop collects and must refund on empties of brands it sells. Bottled water sold to go is not taxed; drunk in the shop it is."
+      },
+      {
+        "id": "retail_beans_12oz",
+        "name": "Bag of beans to take home, 12 oz",
+        "group": "retail",
+        "menuPrice": 18,
+        "salesTaxable": false,
+        "recipe": [
+          {
+            "item": "12 oz retail bag from the roaster",
+            "qty": 1,
+            "unit": "each",
+            "cost": 11.5
+          }
+        ],
+        "ingredientCost": 11.5,
+        "unsoldShare": 0,
+        "packagingCost": 0,
+        "cogs": 11.5,
+        "cogsPct": 0.639,
+        "grossPerItem": 6.5,
+        "tier": "deep",
+        "source": "https://mycoffeeexplorer.com/coffee-price-index",
+        "confidence": "estimate",
+        "note": "A 2026 industry index puts the median bag of specialty coffee at $18; roasters sell retail bags to shops at roughly 35% off the shelf price, hence $11.50 (my estimate). Not taxed: food for home use. Beans go stale: a bag older than four to six weeks from roast should come off the shelf."
+      }
+    ],
+    "menuMix": {
+      "per100Orders": {
+        "drip_coffee_12": 20,
+        "espresso_double": 3,
+        "americano_12": 6,
+        "cappuccino_8": 6,
+        "latte_12": 16,
+        "oat_latte_12": 10,
+        "vanilla_latte_12": 6,
+        "mocha_12": 3,
+        "iced_latte_16": 12,
+        "cold_brew_16": 12,
+        "matcha_latte_12": 5,
+        "chai_latte_12": 4,
+        "hot_tea_12": 4,
+        "hot_chocolate_12": 2,
+        "pumpkin_spice_latte_12": 2,
+        "croissant_bought": 13,
+        "muffin": 7,
+        "cookie": 5,
+        "bagel_cream_cheese": 6,
+        "egg_cheese_sandwich": 0,
+        "avocado_toast": 0,
+        "bottled_water": 3,
+        "retail_beans_12oz": 1,
+        "croissant_bakeoff": 0
+      },
+      "itemsPer100Orders": 146,
+      "drinksPer100Orders": 111,
+      "salesPerOrder": 7.75,
+      "cogsPerOrder": 2.01,
+      "ofWhichPackaging": 0.13,
+      "ingredientsPerOrder": 1.88,
+      "cogsPct": 0.26,
+      "taxableShareOfSales": 0.965,
+      "shrinkAllowancePctOfSales": 0.02,
+      "cogsPctWithShrink": 0.28,
+      "confidence": "estimate",
+      "note": "Shares are my planning mix for a New York counter cafe, annual average, not a statistic: 111 drinks and 35 food or retail items per 100 orders. Anchors: lattes are the most ordered drink in 44 of 50 states (Square and SCA); whole milk is in 44% of orders with milk, oat in 33%, almond in 10% (Square, 2024); cold coffee is 17% of cups in winter and 21% in summer for all US coffee drinkers (NCA, 2026), far higher among young city customers (Starbucks: 75% of US beverage sales are cold). The mix gives $7.75 per order, 9% under the pack's $8.50: to reach $8.50 with these prices about half of all orders must carry a food item, or a third of drinks must be sold a size up. Cost of goods comes to 26.0% before shrink and 28.0% with a 2% allowance for staff drinks, comps and remakes. The pack's 28% (26% ingredients + 2% cups) stands as an estimate.",
+      "source": "https://squareup.com/us/en/press/national-coffee-day-2024"
+    }
   },
   "sources": [
     {
