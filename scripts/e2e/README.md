@@ -1,0 +1,38 @@
+# Browser walk of the whole game
+
+`journey.mjs` plays First Year in Chromium the way a new player does, from the landing page to the personal plan at the end of the season, on a phone (375 px) and on a desktop (1440 px).
+
+```bash
+node scripts/e2e/journey.mjs                    # starts its own server on a free port
+node scripts/e2e/journey.mjs --url https://…    # the same walk against a deployed game
+scripts/e2e/cycle.sh <branch>                   # a fresh worktree of a branch: install, build, walk
+```
+
+Options: `--widths 375,1440`, `--out <dir>`, `--shots <dir>` (retina screenshots of what the player sees, for the deck), `--no-end` (stop before the season ends), `--root <checkout>` (serve the game from another checkout).
+
+## What it does
+
+Each run creates its own demo city through the API and pauses its clock, so the walk does not depend on who else is in the shared demo city; game days are moved forward through the demo clock endpoint.
+
+| Step | Through the UI | Checked |
+|---|---|---|
+| home | type an idea, "See my plan" | lands on the wizard |
+| idea | niche and business name | the idea is recognised |
+| place | the cheapest affordable storefront, "Open here" | button enabled within budget |
+| plan | read the opening plan | steps and official links counted |
+| join | name, test payment | a session is saved |
+| setup | "Open with recommended setup" | the business exists in the engine |
+| permits | wait (5 game days at a time), "Open doors" | open; days of rent before the first sale |
+| biz, tab-* | the five tabs of My business | each has content, no placeholder |
+| whatif | price +$0.50 | the forecast changes before saving; the engine gets the price; Today the next day |
+| advice | "Apply" on the first advice on Today | orders or size change in the engine |
+| live-edit | edit the price while the city runs | the unsaved edit survives new days |
+| deal | cross-promo to a neighbour from the Network tab | the neighbour accepts, the deal is active |
+| report | report the neighbour | the case is in the inspector's queue |
+| desk | an inspector's own browser at /desk | the case is listed and can be taken |
+| month | 32 days later, Books | a month report exists |
+| end, plan-final | season over, "Open my plan" | rank, debrief, plan with links and print |
+
+On every step: a full-page screenshot, horizontal overflow, page errors, console errors, failed requests and 5xx answers from the API. A step that fails in the UI is written down with a screenshot and then done through the API, so one broken button does not hide everything after it. Exit code 1 when any UI step failed.
+
+Output: `RUN.md` (one line per step) and `results.json` in `docs/qa/runs/<time>/` (not committed). Findings live in `docs/qa/BUGS.md`; whether each screen gives the player a decision, a visible consequence and a reason to come back is in `docs/qa/HOOK.md`.
