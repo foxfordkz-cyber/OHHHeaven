@@ -1,1 +1,581 @@
-{}
+{
+  "id": "cafe",
+  "fragment": "D01-entry-preopening",
+  "researcher": "D01",
+  "checked": "2026-11-14",
+  "setup": [
+    {
+      "id": "dob_alteration_filing_fee",
+      "name": "Department of Buildings alteration filing fee",
+      "kind": "permit",
+      "cost": 915,
+      "required": true,
+      "waitDays": 21,
+      "agency": "NYC Department of Buildings (DOB NOW)",
+      "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/do-i-need-a-permit.page",
+      "withoutItViolation": "work_without_permit",
+      "costBasis": "dob_alteration_formula",
+      "formula": {
+        "minimumFee": 225,
+        "coversFirstDollarsOfCost": 3000,
+        "perAdditionalThousand": 10.3
+      },
+      "appliesTo": [
+        "scratch",
+        "takeover_with_renovation",
+        "franchise"
+      ],
+      "phase": "design_and_permits",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-156650",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYC Admin. Code §28-112.2 fee table (also in Local Law 77 of 2023, nyc.gov): alterations in buildings other than 1-3 family homes, under 7 stories and 100,000 sq ft: Alteration Type 2 minimum filing fee $225 for the first $3,000 of cost plus $10.30 for each additional $1,000 (Type 1: $280; Type 3 and Limited Alteration Application: $195). $70,000 light renovation: 225 + 67 x 10.30 = $915; $180,000: $2,048; $320,000: $3,490. waitDays: NYS Comptroller audit (July 2026): in 2025 DOB took 20.3 days on average from application to approval, 23.6 days in the first four months of FY2026; first plan review alone 3.7 business days. The engine should compute the fee from the build-out cost of the address."
+    },
+    {
+      "id": "asbestos_survey_acp5",
+      "name": "Asbestos investigation (ACP-5) before the permit",
+      "kind": "permit",
+      "cost": 900,
+      "required": true,
+      "waitDays": 7,
+      "agency": "NYC Department of Environmental Protection (certified asbestos investigator)",
+      "link": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+      "appliesTo": [
+        "scratch",
+        "takeover_with_renovation",
+        "franchise"
+      ],
+      "phase": "design_and_permits",
+      "exemptIf": "building built after April 1, 1987 (ASB4 exemption)",
+      "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Rule seen in the DOB page extract: an ACP-5 (not an asbestos project) or other asbestos form must be submitted before a DOB permit may be issued; work in buildings built after April 1, 1987 may use the ASB4 exemption. Only a DEP-certified asbestos investigator can file it. Price is my estimate: secondary guides quote $400-$1,500 for an NYC ACP-5 survey plus $25-$150 per lab sample; $900 is the midpoint for a small storefront with a handful of samples. No official price exists. The 7 days are my estimate for scheduling, sampling and lab results."
+    },
+    {
+      "id": "lpc_storefront_permit",
+      "name": "Landmarks permit for storefront work (historic districts only)",
+      "kind": "permit",
+      "cost": 0,
+      "required": false,
+      "waitDays": 21,
+      "agency": "NYC Landmarks Preservation Commission",
+      "link": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+      "withoutItViolation": "work_without_permit",
+      "appliesIf": "address is in a historic district or the building is a landmark",
+      "phase": "design_and_permits",
+      "source": "https://www.nyc.gov/assets/lpc/downloads/pdf/Storefronts_in_Historic_Districts_Fact_Sheet.pdf",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "LPC storefront fact sheet (2019) seen in extract: a complete storefront application gets a staff permit within 10 business days through FasTrack, otherwise within 15 business days (about 21 calendar days); incomplete applications are returned. LPC said in April 2025 that 95% of its approvals are issued at staff level. Any exterior storefront change in a historic district (sign, awning, door, window) needs the permit, and DOB will not issue its permit without it. Proposals that go to the full Commission take months (one architect guide: 90 business days or more). Cost shown as 0: the fee LPC charges on jobs that also need a DOB permit was not confirmed in this session."
+    },
+    {
+      "id": "letter_of_no_objection",
+      "name": "Letter of No Objection for an old building without a Certificate of Occupancy",
+      "kind": "permit",
+      "cost": 0,
+      "required": false,
+      "waitDays": 30,
+      "agency": "NYC Department of Buildings, borough office",
+      "link": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+      "appliesIf": "building built or altered before 1938 with no Certificate of Occupancy on file",
+      "phase": "before_lease",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "DOB page seen in extract: for buildings built or altered before 1938, when no Certificate of Occupancy was required, a Letter of No Objection confirms the legal use. For a cafe it has to say \"eating and drinking establishment\". Wait: one architecture firm says at least one month in a clear case; requests can be denied until related applications are signed off. The DOB fee for the letter was not found in this session, so cost is 0 plus the expediter time already inside architect_expediter."
+    },
+    {
+      "id": "contingency_reserve",
+      "name": "Build-out contingency reserve",
+      "kind": "other",
+      "cost": 10500,
+      "required": false,
+      "reserve": true,
+      "costBasis": "pct_of_buildout",
+      "rate": 0.15,
+      "phase": "construction",
+      "source": "https://blueberrybuilders.com/resources/cost-overruns-in-construction/",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "15% of a $70,000 light renovation. NYC contractors recommend a contingency of 10-15% of hard costs (another Brooklyn contractor says 5-10% is typical); change orders rushed through without a reserve carry a 15-30% premium. The research notes budget $9,500 for the same scenario. This is a reserve, not a purchase: money not eaten by the events of extra.eventCatalog (hidden conditions, change orders, failed inspections) stays in the bank."
+    },
+    {
+      "id": "sales_tax_on_buildout_labor",
+      "name": "Sales tax on the contractor's bill (if the work is not a capital improvement)",
+      "kind": "other",
+      "cost": 3700,
+      "required": false,
+      "costBasis": "pct_of_buildout",
+      "rate": 0.053,
+      "phase": "construction",
+      "avoidableBy": "lease clause that makes the improvements the landlord's property on installation, plus Form ST-124 given to the contractor",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/advisory_opinions/sales/24-54s.htm",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYS Tax Department advisory opinion TSB-A-24(54)S and the Capital Improvements bulletin, seen in extract: installations made by or for a tenant are presumed temporary, so they are not capital improvements unless the lease shows permanence; without a properly completed Form ST-124 the contractor must collect tax on the charges. Materials are taxed either way. Calculation: 8.875% on the labor-and-markup share of the bill (my assumption: 60%) x $70,000 = $3,728; on the full $70,000 the tax would be $6,212."
+    },
+    {
+      "id": "con_ed_security_deposit",
+      "name": "Con Edison security deposit for a new business account",
+      "kind": "deposit",
+      "cost": 1600,
+      "required": false,
+      "phase": "utilities",
+      "replacesPartOf": "insurance_utility_deposits",
+      "source": "https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Con Edison's rights document for non-residential customers, seen in extract: the deposit may not be more than two times the average monthly bill for the previous calendar year (two times peak-season usage for seasonal businesses), and the customer may ask for a review. For a new shop the utility estimates from a similar business. Calculation: electricity taken as $800 of the pack's $1,100 utilities line x 2 = $1,600. Already counted inside the existing insurance_utility_deposits item ($1,500): do not charge both."
+    },
+    {
+      "id": "electrical_service_upgrade",
+      "name": "Electrical service upgrade for espresso, ice and refrigeration loads",
+      "kind": "buildout",
+      "cost": 9000,
+      "required": false,
+      "lifespanMonths": 360,
+      "leadTimeDays": 42,
+      "phase": "utilities",
+      "appliesIf": "space class is standard or heavy, or the panel cannot carry the equipment load",
+      "source": "https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "Weak estimate, quote-only in real life. NYC electricians advertise $3,500-$10,000 for a 100 to 200 amp panel upgrade in a home; a commercial three-phase service costs more, so the top of that range is used. Any service change needs Con Edison coordination, which adds two to six weeks (contractor guides); Con Edison's own 2021 sheet for fleet chargers says utility-side upgrades can run 6 to 24 months depending on the existing service and the requested load. Con Edison's guide describes the path: a licensed contractor files the request, the utility issues a service layout, then inspections."
+    },
+    {
+      "id": "consultative_inspection",
+      "name": "Health Department consultative inspection (optional, ungraded)",
+      "kind": "other",
+      "cost": 100,
+      "required": false,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://portal.311.nyc.gov/article/?kanumber=KA-02955",
+      "phase": "opening",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter21.pdf",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYC Health Code Chapter 21 and NYC311, seen in extract: an applicant for a new permit may request a consultative inspection before the first graded inspection for $100 (only after the shop has begun serving food); for an existing establishment between cycles the fee is $400. The inspector issues no violations and no points, but a public health hazard must be fixed before the inspector leaves or the shop can be closed. Game use: paying it lowers the points found at the first graded inspection."
+    },
+    {
+      "id": "acquisition_sales_tax_ffe",
+      "name": "Sales tax on the furniture and equipment bought with a business",
+      "kind": "other",
+      "cost": 3550,
+      "required": false,
+      "costBasis": "pct_of_ffe_allocation",
+      "rate": 0.08875,
+      "appliesTo": [
+        "takeover",
+        "asset_sale"
+      ],
+      "phase": "closing",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYS Tax Bulletin TB-ST-70 (Bulk Sales), seen in extract: the purchaser owes sales tax on the tangible personal property bought in a bulk sale (furniture, fixtures, supplies), except inventory for resale; the tax is paid to the seller with the seller's final return or directly to the Tax Department. Calculation: 8.875% x $40,000 of the price allocated to furniture, fixtures and equipment (my allocation for a small cafe; goodwill and the lease are not taxed) = $3,550."
+    },
+    {
+      "id": "franchise_initial_fee",
+      "name": "Franchise fee (example: Gregorys Coffee)",
+      "kind": "license",
+      "cost": 35000,
+      "required": false,
+      "appliesTo": [
+        "franchise"
+      ],
+      "phase": "before_lease",
+      "agency": "Franchisor; the offering must be registered with the NYS Attorney General",
+      "link": "https://ag.ny.gov/sites/default/files/publications/franchise_booklet.pdf",
+      "source": "https://franchise.gregoryscoffee.com/",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Gregorys Coffee franchise site, seen in extract: initial franchise fee $35,000, training fee $0-$3,000, royalty 6% of gross sales; a franchise directory adds a 2.5% marketing fund and a total initial investment of $459,150-$946,000 from the disclosure document (another summary: $424,000-$903,000); the brand asks for $200,000 in liquid assets and $500,000 net worth. Franchising launched in early 2026 with Craveworthy Brands (Daily Coffee News, Feb 18, 2026). Dunkin' for comparison: franchise fee $40,000-$90,000, royalty 5.9%, advertising 5%, total $443,000-$1,832,500 (Inspire Brands site, disclosure document of March 26, 2026)."
+    },
+    {
+      "id": "franchise_training_fee",
+      "name": "Franchise training fee and pre-opening travel",
+      "kind": "other",
+      "cost": 3000,
+      "required": false,
+      "appliesTo": [
+        "franchise"
+      ],
+      "phase": "pre_opening",
+      "source": "https://franchise.gregoryscoffee.com/",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Gregorys Coffee franchise site, seen in extract: initial training fee $0 to $3,000; the top of the range is used. Travel and wages during training are on the franchisee."
+    },
+    {
+      "id": "mobile_food_vending_license",
+      "name": "Mobile Food Vending License (the vendor's personal license)",
+      "kind": "license",
+      "cost": 50,
+      "required": false,
+      "waitDays": 30,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license",
+      "withoutItViolation": "unlicensed_mobile_vending",
+      "appliesTo": [
+        "cart"
+      ],
+      "phase": "permits",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-license",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYC Business and NYC311 (KA-01830), seen in extract: the two-year license costs $50; veterans are exempt. It is needed before applying for a unit permit, and only current license holders may join the waiting lists for supervisory licenses. The 30 days are my estimate for the food protection course for mobile vendors, the application and the ID card; no official processing time was seen."
+    },
+    {
+      "id": "mobile_food_unit_permit",
+      "name": "Mobile Food Vending Unit permit (the cart's decal)",
+      "kind": "permit",
+      "cost": 200,
+      "required": false,
+      "waitDays": 180,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
+      "withoutItViolation": "unlicensed_mobile_vending",
+      "appliesTo": [
+        "cart"
+      ],
+      "phase": "permits",
+      "capped": true,
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/mobile-food-vending-unit-permit-full-term",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYC Business, seen in extract: the two-year full-term permit costs $200 for a processing unit and $75 for a non-processing unit (seasonal: $35 and $15); veterans pay nothing. Two weeks after applying you call for a pre-permit inspection and must pass it within six months, in person, with a commissary agreement in hand: the 180 days are that outer limit. The real gate is the cap: a year-round permit now requires a supervisory license, and Local Laws 54 and 59 of 2026 add 2,200 of those a year from fiscal 2027 to 2031 (311 KA-03354) against a waiting list that advocates put above 20,000. Whether a coffee cart counts as processing was not confirmed; the higher fee is used."
+    },
+    {
+      "id": "coffee_cart_unit",
+      "name": "Coffee cart built to Health Department specifications",
+      "kind": "equipment",
+      "cost": 16500,
+      "required": false,
+      "lifespanMonths": 84,
+      "appliesTo": [
+        "cart"
+      ],
+      "phase": "equipment",
+      "source": "https://reach.dog/shop/vertical-ledge/products/full-service-mobile-coffee-cart",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "One current listing for a full-service stainless coffee cart: $16,500. For scale: a New York-built stainless hot dog cart starts at $5,790 (800 Buy Cart, Model 201), and licensed used carts resell for $8,000-$25,000 according to one vendor guide. No price list for a cart pre-approved by the Health Department was found. Lifespan is my estimate."
+    },
+    {
+      "id": "tfse_permit",
+      "name": "Temporary Food Service Establishment permit (markets, street fairs, pop-ups)",
+      "kind": "permit",
+      "cost": 70,
+      "required": false,
+      "waitDays": 30,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-food-service-establishment-permit",
+      "withoutItViolation": "no_temporary_food_permit",
+      "appliesTo": [
+        "popup"
+      ],
+      "phase": "permits",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01825",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYC311 and NYC Business, seen in extract: the permit costs $70 a year (plus $25 if you make frozen desserts), covers events that last 14 days or less, and one permit serves one event at a time: a second simultaneous event needs a second permit. Event organizers must notify the Health Department 30 days before the event with the list of vendors and their permit numbers; that notice period is used as the wait. A vendor without a valid permit faces a summons of $200-$2,000 and immediate closing of the stand."
+    }
+  ],
+  "officials": [
+    {
+      "id": "dob_inspector",
+      "name": "Buildings inspector",
+      "agency": "NYC Department of Buildings (DOB)",
+      "role": "inspector",
+      "checks": [
+        "work_without_permit",
+        "stop_work_order_violation",
+        "unlicensed_trade_work"
+      ],
+      "realProcess": "Most visits start with a 311 complaint from a neighbor or a competitor about noise, dust or a dumpster. The inspector checks the posted permits against the work in progress. Work with no permit gets a violation and a Stop Work Order; the order is lifted only after the permit is obtained and the civil penalties are paid.",
+      "source": "https://www.nyc.gov/site/buildings/safety/swo.page"
+    },
+    {
+      "id": "vending_enforcement_officer",
+      "name": "Street vending enforcement officer",
+      "agency": "NYC Department of Sanitation, Office of Vending Enforcement, with NYPD and DOHMH",
+      "role": "inspector",
+      "checks": [
+        "unlicensed_mobile_vending",
+        "no_temporary_food_permit"
+      ],
+      "realProcess": "Officers walk vending corridors and answer 311 complaints from storefront businesses. They ask for the vendor's license and check the permit decal on the cart. A vendor with neither gets a summons returnable to the city's hearings office, and a cart with no licensed person at it can be seized.",
+      "source": "https://nyc.gov/VendorEnforcement"
+    }
+  ],
+  "violations": [
+    {
+      "id": "work_without_permit",
+      "name": "Construction work without a Department of Buildings permit",
+      "law": "NYC Admin. Code §28-105.1 (permit required), §28-213.1 (civil penalty for work without a permit), §28-207.2 (stop work orders)",
+      "official": "dob_inspector",
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 6000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 15000
+      },
+      "closureDays": 30,
+      "reputationHit": 0.02,
+      "fineFormula": "21 x the permit fee, minimum $6,000, maximum $15,000 (buildings other than 1-2 family homes); the permit must still be obtained",
+      "criminal": "Knowingly continuing work without a permit or against a Stop Work Order can be prosecuted as a misdemeanor under Title 28.",
+      "source": "https://www.nyc.gov/assets/buildings/pdf/ll156_sn.pdf",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "DOB service notices on Local Law 156 of 2017, seen in extract: the civil penalty for work without a permit on buildings other than one- or two-family homes is 21 times the permit fee, minimum $6,000, maximum $15,000 (homes: 6 times, $600-$10,000). An older rule text (1 RCNY 102-04: 14 times or $5,000) still circulates; the 2017 law superseded it. With the $915 fee of a $70,000 job, 21 x 915 = $19,215, capped at $15,000; the base here is the legal minimum. On top comes a separate hearing-office violation, and the permit, drawings and fees still have to be paid for. closureDays is not a legal figure: it is my estimate of the standstill while plans are drawn, filed and approved under a Stop Work Order (application-to-approval averaged 20.3 days in 2025, plus drawings)."
+    },
+    {
+      "id": "stop_work_order_violation",
+      "name": "Working against a Stop Work Order",
+      "law": "NYC Admin. Code §28-207.2.2 and §28-207.2.6 (civil penalties for violating a stop work order)",
+      "official": "dob_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 6000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 14,
+      "reputationHit": 0.03,
+      "fineFormula": "$6,000 for the first offense, $12,000 for each subsequent offense; the order is not rescinded until the penalty is paid",
+      "criminal": "Violating a Stop Work Order is a misdemeanor; DOB publishes offenders in its monthly enforcement bulletin.",
+      "source": "https://www.nyc.gov/site/buildings/safety/swo.page",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "DOB Stop Work Order page, seen in extract: \"First Offense - $6,000; Subsequent Offenses - $12,000\"; the Department will not rescind a Stop Work Order until these civil penalties have been paid; work that fixes an unsafe condition is exempt. DOB enforcement bulletins show much larger totals when unpermitted work continues against an order (one 2020s case: $188,750 for one site). closureDays is my estimate of the extra standstill."
+    },
+    {
+      "id": "unlicensed_trade_work",
+      "name": "Plumbing or electrical work by an unlicensed person",
+      "law": "NYC Admin. Code §28-408.1 (plumbing only by a licensed master plumber), §28-410.1, §27-3017 (electrical work only by a licensed electrician); Local Law 46 of 2017",
+      "official": "dob_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 5000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 14,
+      "reputationHit": 0.02,
+      "criminal": "Unlicensed plumbing or electrical work is a misdemeanor under Title 28; the work has to be opened up, redone by a licensed firm and inspected.",
+      "source": "https://citylandnyc.org/unlicensed-plumber-fined",
+      "confidence": "estimate",
+      "seenIn": "secondary_search_extract",
+      "note": "Local Law 46 of 2017 (nyc.gov) sets minimum civil penalties for unlicensed plumbing and fire suppression work; the figures were cut off in the extract. The base is one reported hearing-office case (CityLand, 2022): a plumber working with no licensed master plumber supervising was fined $5,000. The real cost is larger: the utility and DOB will not sign off work that no licensed firm filed, so it is redone. closureDays is my estimate for the redo and re-inspection."
+    },
+    {
+      "id": "unlicensed_mobile_vending",
+      "name": "Vending food from a cart with no license or no unit permit",
+      "law": "NYC Admin. Code §17-307(a)(1) (license) and §17-307(b) (unit permit); forfeiture under §17-321 and §17-322",
+      "official": "vending_enforcement_officer",
+      "foundBy": [
+        "inspection",
+        "complaint",
+        "sting"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 7,
+      "reputationHit": 0.02,
+      "criminal": "Unlicensed vending has also been charged as a misdemeanor; a 2025-2026 Council bill to repeal the criminal penalties was pending when checked. A cart with no licensed vendor at it can be seized and forfeited.",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/mobile-food-vending-unit-penalty-schedule-for-administrative-code.pdf",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "Health Department penalty schedule and the city's vending enforcement page, seen in extract: unlicensed mobile food vendor in a public space $1,000; a unit with no permit $1,000; \"fines start at $1,000 for mobile food vendors\". Seizure and forfeiture of the cart come from Admin. Code §17-321/322 (court decision seen in extract). closureDays is my estimate for getting a seized cart back or replacing it."
+    },
+    {
+      "id": "no_temporary_food_permit",
+      "name": "Selling food at a market or pop-up without a temporary permit",
+      "law": "NYC Health Code §88.05 and Article 5 (permit required for a temporary food service establishment)",
+      "official": "health_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 200,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 2000
+      },
+      "closureDays": 1,
+      "reputationHit": 0.02,
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/temporary-food-service-establishments.page",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYC Health page on food vending at temporary events, seen in extract: vendors without a valid permit can receive a summons subject to fines of $200 to $2,000 and the stand can be closed immediately. The base is the bottom of that range; closureDays 1 = the event day lost. The Health Code section number is from my reading of Article 88 and should be checked against the code text."
+    },
+    {
+      "id": "bulk_sale_not_notified",
+      "name": "Bought a business without notifying the Tax Department (bulk sale)",
+      "law": "NY Tax Law §1141(c); 20 NYCRR Part 537; Form AU-196.10",
+      "official": "tax_auditor",
+      "foundBy": [
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 1,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0,
+      "fineFormula": "the seller's unpaid sales tax, penalty and interest, up to the purchase price or the fair market value of the assets, whichever is higher; not a fine but an inherited debt",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+      "confidence": "estimate",
+      "seenIn": "primary_search_extract",
+      "note": "NYS Tax Bulletin TB-ST-70 and Form AU-196.10, seen in extract: the purchaser must file Form AU-196.10 at least 10 days before paying for or taking possession of the assets; within 5 business days the Department answers with a release (AU-197.1) or a Notice of Claim (AU-196.2), and within 90 days states the amount; a purchaser who does not file, or files late, is personally liable for the seller's sales tax up to the higher of the purchase price or fair market value, whether or not money was withheld from the seller. Division of Tax Appeals cases against delis and restaurants show the Department using this (Bernard & Varecha Deli, 1646 Kosher Deli). Game reading: \"saved\" is the seller's hidden sales-tax debt carried by the listing, so pctOfSaved 1 means the buyer pays that debt in full. The debt per listing is a design value, not a statistic."
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "build_without_permit",
+      "name": "Renovate without filing plans",
+      "what": "Skip the architect, the asbestos report and the Buildings permit and start demolition next week. You save the fees and about a month. One 311 call brings an inspector: Stop Work Order, a penalty of at least $6,000, and you still have to file.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 8800
+      },
+      "violation": "work_without_permit",
+      "phase": "construction",
+      "savesNote": "architect_expediter $7,000 + dob_alteration_filing_fee $915 + asbestos_survey_acp5 $900 = $8,815, plus about 30 days of rent ($6,000) not counted here",
+      "source": "https://www.nyc.gov/assets/buildings/pdf/ll156_sn.pdf"
+    },
+    {
+      "id": "ignore_stop_work_order",
+      "name": "Keep the crew working under a Stop Work Order",
+      "what": "The inspector taped a Stop Work Order to the door, but every idle week is $1,400 of rent. Work at night and hope nobody calls. If caught: $6,000, then $12,000 each time after, and the order stays until you pay.",
+      "saves": {
+        "basis": "pct_rent",
+        "amount": 0.5
+      },
+      "violation": "stop_work_order_violation",
+      "phase": "construction",
+      "savesNote": "two weeks of rent that would otherwise be paid on an idle site = half a month of rent",
+      "source": "https://www.nyc.gov/site/buildings/safety/swo.page"
+    },
+    {
+      "id": "handyman_plumbing_electric",
+      "name": "Let a handyman do the plumbing and wiring",
+      "what": "A licensed plumber and electrician quote twice what the handyman does. Unlicensed work cannot be filed or inspected: if anyone looks, it is torn out and redone by a licensed firm, with a fine on top.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 6000
+      },
+      "violation": "unlicensed_trade_work",
+      "phase": "construction",
+      "savesNote": "my estimate: licensed plumbing and electrical hookups are about $12,000 of a $70,000 light renovation; a handyman halves that",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/do-i-need-a-permit.page"
+    },
+    {
+      "id": "trade_on_sellers_permit",
+      "name": "Keep trading on the seller's Health permit",
+      "what": "You bought the shop on Friday and want to sell coffee on Monday. The seller's permit died with the sale: permits cannot be transferred. Until yours is issued, or 22 days after you applied, you are running a restaurant with no permit.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.5
+      },
+      "violation": "no_fse_permit",
+      "phase": "closing",
+      "appliesTo": [
+        "takeover"
+      ],
+      "savesNote": "three weeks of sales kept in the takeover month, net of cost of goods: roughly half a month of revenue; applies once",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-44016"
+    },
+    {
+      "id": "skip_bulk_sale_notice",
+      "name": "Close the purchase without the bulk-sale notice",
+      "what": "The seller wants the money this week and the notice to the Tax Department adds at least 10 days, maybe 90. Skip it and every dollar of sales tax the seller never paid becomes your personal debt, up to the price you paid.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 2000
+      },
+      "violation": "bulk_sale_not_notified",
+      "phase": "closing",
+      "appliesTo": [
+        "takeover",
+        "asset_sale"
+      ],
+      "savesNote": "my estimate: ten days of rent on a shop you cannot yet take over ($2,000 at $6,000 a month); the legal fee for the filing is small",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    },
+    {
+      "id": "vend_without_permit",
+      "name": "Roll the cart out without a permit",
+      "what": "The waiting list for a cart permit is years long. Vend anyway and each stop by an enforcement officer costs $1,000 or more; a cart with no licensed vendor can be seized.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 833
+      },
+      "violation": "unlicensed_mobile_vending",
+      "appliesTo": [
+        "cart"
+      ],
+      "savesNote": "the alternative to waiting is renting someone else's permit, reported at $20,000-$25,000 for two years, about $833-$1,040 a month (secondary sources); renting is itself illegal because permits are not transferable",
+      "source": "https://nyc.gov/VendorEnforcement"
+    },
+    {
+      "id": "popup_without_temp_permit",
+      "name": "Run a pop-up stand with no temporary permit",
+      "what": "The market is this weekend and the paperwork wants 30 days of notice. Set up anyway: if an inspector walks the market, the stand is closed on the spot and the summons runs $200 to $2,000.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 70
+      },
+      "violation": "no_temporary_food_permit",
+      "appliesTo": [
+        "popup"
+      ],
+      "savesNote": "the $70 permit fee; the real gain is the weekend's sales",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/temporary-food-service-establishments.page"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_illegal_construction",
+      "name": "Report construction without a permit (311)",
+      "text": "The Department of Buildings sends an inspector to check the posted permits against the work. If there is no permit, the site is stopped and fined. If the work is legal, you get a warning for a false complaint.",
+      "role": "inspector",
+      "checks": [
+        "work_without_permit",
+        "stop_work_order_violation",
+        "unlicensed_trade_work"
+      ]
+    },
+    {
+      "id": "report_unlicensed_vendor",
+      "name": "Report an unlicensed food cart or stand (311)",
+      "text": "Vending enforcement checks the vendor's license and the cart's permit decal. No license or no permit means a $1,000 summons and possibly a seized cart. If the papers are in order, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "unlicensed_mobile_vending",
+        "no_temporary_food_permit"
+      ]
+    }
+  ],
+  "extra": {}
+}
