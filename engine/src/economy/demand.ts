@@ -1,7 +1,7 @@
 // Share-of-market model from research/reports/43-economy-sim.md (section 1), generalised to any niche pack.
 // One segment, logit with an outside option ("buy elsewhere"). Weights come from pack.market.weights,
 // location from place.footTraffic. The step is a month here; the day step divides by 30 and applies daily multipliers.
-import type { Pack } from '../../../shared/src/types';
+import type { Pack } from '@ohh/shared';
 
 export interface DemandInput {
   id: string;

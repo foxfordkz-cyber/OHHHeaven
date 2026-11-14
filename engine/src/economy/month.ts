@@ -1,14 +1,14 @@
 // Month close: build/CONTRACT.md, section 3, step 5 (economy part). Every dollar is a PnlLine;
 // the lines of a month add up to the change of cash over that month.
-import type { BusinessState, FeedItem, InboxItem, MonthReport, Pack, PnlLine, ViolationTrail, WorldState } from '../../../shared/src/types';
-import { dateOf, RULES } from '../../../shared/src/rules';
+import type { BusinessState, FeedItem, InboxItem, MonthReport, Pack, PnlLine, ViolationTrail, WorldState } from '@ohh/shared';
+import { dateOf, RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { payDue } from './day';
 import { shortcutSavings } from './deps';
 import { defaultLeverOption } from './effects';
 import { hooksFor } from './hooks';
 import { netWorthOf } from './networth';
-import { accrue, applicableTaxes, dueDayFor, isSalesTax } from './taxes';
+import { accrue, applicableTaxes, dueDayFor, isSalesTax, wageBase } from './taxes';
 import { addLine, econOf, emptyMtd, placeOf, placeRentMonth, round2, withEcon, type EconExtra } from './util';
 
 const BOOK_KINDS = new Set<PnlLine['kind']>(['revenue', 'cogs', 'payroll', 'rent', 'opex', 'deal', 'other']);
@@ -49,9 +49,11 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
     cash = round2(cash + amount);
   };
 
-  // rent runs from the first day, open or not
+  // rent runs from the day the lease is signed (the business is created), open or not
+  const monthStart = (month - 1) * D + 1;
+  const rentDays = Math.max(0, day - Math.max(b.createdDay, monthStart) + 1);
   const rentMult = m.daysAlive > 0 ? m.rentMultSum / m.daysAlive : 1;
-  const rent = round2(monthlyRentOf(b, pack, ctx) * rentMult * (m.daysAlive / D));
+  const rent = round2(monthlyRentOf(b, pack, ctx) * rentMult * (rentDays / D));
   add({ id: 'rent', label: 'Rent', kind: 'rent', amount: -rent });
 
   // payroll from worker-days actually employed this month
@@ -95,8 +97,9 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
     if (!opt || opt.monthlyCost <= 0 || m.daysOpen === 0) continue;
     add({ id: `lever_${lever.id}`, label: `${lever.name}: ${opt.label}`, kind: 'opex', amount: -opt.monthlyCost * openShare });
   }
-  if (b.orders.blockFund && m.daysOpen > 0) {
-    add({ id: 'block_fund', label: 'Block fund contribution', kind: 'deal', amount: -RULES.BLOCK_FUND_FEE_MONTH });
+  // block fund fee (contract §3 step 5); the id contains "blockfund" so the deals module does not charge it twice
+  if (b.orders.blockFund && m.daysOpen > 0 && cash >= RULES.BLOCK_FUND_FEE_MONTH) {
+    add({ id: 'blockfund', label: 'Block fund fee (cleaning and lights)', kind: 'deal', amount: -RULES.BLOCK_FUND_FEE_MONTH });
   }
   for (const l of hooksFor(b.niche).extraLines?.(b, pack, month) ?? []) add(l);
 
@@ -110,12 +113,17 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
   const books = lines.filter((l) => BOOK_KINDS.has(l.kind)).reduce((a, l) => a + l.amount, 0);
   let accruedOther = 0;
   const taxes = applicableTaxes(ctx, pack);
+  const taxYtd = { ...(econ.taxYtd ?? {}) };
+  const maxStaff = Math.max(econ.maxStaff ?? 0, peakStaff(b, m));
   for (const t of taxes) {
     if (isSalesTax(t) || t.base === 'profit') continue;
     const periods = t.due === 'monthly' ? 1 : t.due === 'quarterly' ? 3 : 12;
     const base = t.base === 'payroll' ? payroll : t.base === 'rent' ? rent : t.base === 'revenue' ? m.revenue : 0;
-    const amt = round2(t.base === 'fixed' ? (m.daysOpen > 0 ? t.rate / periods : 0) : t.rate * base);
+    let amt = round2(t.base === 'fixed' ? (m.daysOpen > 0 ? t.rate / periods : 0) : t.rate * base);
+    const wb = t.base === 'payroll' ? wageBase(ctx, t.id) : null;
+    if (wb !== null) amt = round2(Math.max(0, Math.min(amt, t.rate * wb * maxStaff - (taxYtd[t.id] ?? 0))));
     if (amt <= 0) continue;
+    taxYtd[t.id] = round2((taxYtd[t.id] ?? 0) + amt);
     accruedOther = round2(accruedOther + amt);
     liabilities = accrue(liabilities, t.id, amt, dueDayFor(t, month, ctx));
   }
@@ -150,7 +158,7 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
     taxesAccrued: round2(m.salesTax + accruedOther + accruedProfit), taxesPaid: round2(m.taxesPaid + paidNow),
     fines: round2(-sumKinds('fine')), quality: b.quality, reputation: b.reputation, netWorth: 0, rankInNiche: 0,
   };
-  const econNext: EconExtra = { ...econ, lossCarry: carry, cashStart: cash, mtd: emptyMtd() };
+  const econNext: EconExtra = { ...econ, lossCarry: carry, cashStart: cash, mtd: emptyMtd(), taxYtd, maxStaff };
   const closed: BusinessState = withEcon({
     ...paidState,
     history: [...b.history, report],
@@ -158,6 +166,28 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
   }, econNext);
   report.netWorth = netWorthOf(closed, ctx);
   return closed;
+}
+
+/**
+ * After the whole month close (deals and law may add lines and move cash), the next month starts from the cash that
+ * is left minus the lines already written into the new month: then the lines of every month add up to its change of cash.
+ */
+export function syncMonthStart(w: WorldState): WorldState {
+  return {
+    ...w,
+    businesses: w.businesses.map((b) => {
+      const econ = econOf(b);
+      const start = round2(b.cash - b.mtd.lines.reduce((a, l) => a + l.amount, 0));
+      return econ.cashStart === start ? b : withEcon(b, { ...econ, cashStart: start });
+    }),
+  };
+}
+
+/** Most workers on staff at once this month: the orders now, or the average if it was higher. */
+function peakStaff(b: BusinessState, m: EconExtra['mtd']): number {
+  const now = Object.values(b.orders.staff).reduce((a, n) => a + Math.max(0, n), 0);
+  const avg = m.daysOpen > 0 ? Object.values(m.staffDays).reduce((a, n) => a + n, 0) / m.daysOpen : 0;
+  return m.daysOpen > 0 ? Math.max(now, Math.ceil(avg)) : 0;
 }
 
 function mergeTrails(old: readonly ViolationTrail[], updated: readonly ViolationTrail[]): ViolationTrail[] {

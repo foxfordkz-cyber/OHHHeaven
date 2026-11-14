@@ -1,5 +1,5 @@
-import type { BusinessState, Money, Pack } from '../../../shared/src/types';
-import { RULES } from '../../../shared/src/rules';
+import type { BusinessState, Money, Pack } from '@ohh/shared';
+import { RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { round2 } from './util';
 

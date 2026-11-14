@@ -1,6 +1,6 @@
 // One game day for every business: build/CONTRACT.md, section 3, step 4.
-import type { BusinessState, DayReport, FeedItem, InboxItem, NicheId, Pack, Place, PnlLine, TaxLiability, WorldState } from '../../../shared/src/types';
-import { dateOf, RULES } from '../../../shared/src/rules';
+import type { BusinessState, DayReport, FeedItem, InboxItem, NicheId, Pack, Place, PnlLine, TaxLiability, WorldState } from '@ohh/shared';
+import { dateOf, RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { monthlyDemand, marketParams, type DemandInput } from './demand';
 import { activeEvents, eventMult, itemsQuality, leverEffects, MARKETING_DECAY_DAY, TRAINING_DECAY_DAY, trainingBoost, weekdayMult } from './effects';
@@ -138,10 +138,9 @@ function tradeDay(c: Calc, w: WorldState, ctx: EngineCtx, day: number, month: nu
   if (cogs !== 0) { lines = addLine(lines, { id: 'cogs', label: `Cost of goods (${pack.unit.name}s)`, kind: 'cogs', amount: -cogs }); cash = round2(cash - cogs); }
   let salesTax = 0;
   if (revenue > 0) {
-    const share = taxableShare(pack);
     for (const t of applicableTaxes(ctx, pack)) {
       if (!isSalesTax(t)) continue;
-      const amt = round2(revenue * share * t.rate);
+      const amt = round2(revenue * taxableShare(pack, t.id) * t.rate);
       if (amt <= 0) continue;
       salesTax = round2(salesTax + amt);
       liabilities = accrue(liabilities, t.id, amt, dueDayFor(t, month, ctx));

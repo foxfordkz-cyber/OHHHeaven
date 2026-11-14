@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { RULES } from '../../../shared/src/rules';
+import { RULES } from '@ohh/shared';
 
 describe('economy skeleton', () => {
   it('reads shared rules', () => {

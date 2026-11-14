@@ -1,6 +1,6 @@
 // Stub of engine/src/deals/index.ts (agent 13). Same signatures as build/CONTRACT.md, section 3.
 // Multipliers are 1, no deals, standings by net worth inside a niche, the season simply ends.
-import type { Action, ActionResult, Standing, WorldState } from '../../../shared/src/types';
+import type { Action, ActionResult, Standing, WorldState } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { netWorthOf } from '../economy/networth';
 

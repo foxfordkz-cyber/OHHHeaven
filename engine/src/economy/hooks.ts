@@ -1,6 +1,5 @@
-// One place where the economy reads niche hooks. When agent 01's engine/src/niches/index.ts lands,
-// switch this import to it; everything else stays.
-import type { NicheId } from '../../../shared/src/types';
+// The economy reads niche hooks only through this file (registry: engine/src/niches/index.ts, agent 01).
+import type { NicheId } from '@ohh/shared';
 import { nicheHooks, type NicheHooks } from '../niches/index';
 
 export type { NicheHooks };

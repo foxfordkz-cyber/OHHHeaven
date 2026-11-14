@@ -1,8 +1,8 @@
 // Demo: six cafes on one block for 60 game days, with both month closes.
 // Run from the repository root: npx tsx engine/src/economy/demo.ts
 // Uses the test fixtures until packs/cafe.json and data/places.json land in the main branch.
-import type { Action, DayWeather, GameEvent, Place, WorldState } from '../../../shared/src/types';
-import { dateOf } from '../../../shared/src/rules';
+import type { Action, DayWeather, GameEvent, Place, WorldState } from '@ohh/shared';
+import { dateOf } from '@ohh/shared';
 import { applyAction, createWorld, tickDay, type EngineCtx } from '../index';
 import { packs } from '../../test/fixtures/common';
 import { config, owner, place } from '../../test/fixtures/world';
@@ -52,9 +52,9 @@ console.log('Plan: Luna standard; Brew & Co cheap ($5.25, 12 seats); Cafe Blue p
 console.log('Morning Owl only 2 baristas; Corner Cup pays cash wages and skimps on cleaning; Daily Grind opens on day 5, before its permits.\n');
 console.log('day  date          weather | ' + cafes.map((c) => short(c.name)).join(' '));
 
-for (let step = 1; step <= 60; step++) {
+while (w.day < 60) {
   if (w.day === 5) act('pl6', { type: 'launch' });
-  if (w.day === 21) for (const c of cafes.slice(0, 5)) act(c.who, { type: 'launch' });
+  if (w.day === 22) for (const c of cafes.slice(0, 5)) act(c.who, { type: 'launch' });
   if (w.day === 35) act('pl1', { type: 'spend', kind: 'marketing', amount: 2000 });
   w = tickDay(w, ctx);
   const date = dateOf(w.day);

@@ -1,5 +1,5 @@
 // Minimal second niche for tests (competition stays inside a niche). Not real data.
-import type { Pack } from '../../../shared/src/types';
+import type { Pack } from '@ohh/shared';
 import { cafePack } from './cafe';
 
 export const barbershopPack: Pack = {

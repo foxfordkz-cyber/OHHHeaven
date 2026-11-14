@@ -1,4 +1,4 @@
-import type { BusinessState, Money, NicheId, Pack, PackSetupItem, Place, PnlLine, WorldState } from '../../../shared/src/types';
+import type { BusinessState, Money, NicheId, Pack, PackSetupItem, Place, PnlLine, WorldState } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 
 export const round2 = (x: number): number => Math.round((x + Number.EPSILON) * 100) / 100;
@@ -19,6 +19,8 @@ export interface EconExtra {
   lossCarry: Money;      // tax loss carried forward
   cashStart: Money;      // cash at the start of the current month
   mtd: EconMtd;
+  taxYtd?: Record<string, Money>;   // tax id → amount accrued this season (for taxes with a wage base per worker)
+  maxStaff?: number;                // most workers employed at once this season (wage bases are per person)
 }
 export type EBusiness = BusinessState & { extra?: Record<string, unknown> & { econ?: EconExtra } };
 

@@ -1,9 +1,9 @@
 // Engine entry (agent 02). Assembles the modules in the fixed order of build/CONTRACT.md, section 3.
 // Law (03) and deals (13) come from stubs with the same signatures until their modules land:
 // then replace the two '__stubs__' imports below and in economy/deps.ts.
-import type { Action, ActionResult, BusinessState, Money, PackSet, Place, WorldConfig, WorldState } from '../../shared/src/types';
-import { isMonthEnd, RULES } from '../../shared/src/rules';
-import { economyActions, economyDay, economyMonthClose, netWorthOf } from './economy/index';
+import type { Action, ActionResult, BusinessState, Money, PackSet, Place, WorldConfig, WorldState } from '@ohh/shared';
+import { isMonthEnd, RULES } from '@ohh/shared';
+import { economyActions, economyDay, economyMonthClose, netWorthOf, syncMonthStart } from './economy/index';
 import { lawActions, lawDay, lawMonthClose } from './law/index';
 import { computeStandings, dealActions, dealsDay, dealsMonthClose, finalizeSeason } from './deals/index';
 
@@ -13,7 +13,7 @@ export * from './economy/index';
 
 export function createWorld(config: WorldConfig): WorldState {
   return {
-    config, phase: 'running', day: 0, version: 1, bank: 0,
+    config, phase: 'running', day: 1, version: 1, bank: 0,
     players: [], businesses: [], officials: [], deals: [], cases: [], blockFunds: [],
     weather: [], events: [], feed: [], standings: [],
   };
@@ -41,7 +41,7 @@ export function tickDay(w0: WorldState, ctx: EngineCtx): WorldState {
     w = lawMonthClose(w, ctx);
     w = bankruptcies(w, day);
     const standings = computeStandings(w, ctx);
-    w = { ...w, standings, businesses: w.businesses.map((b) => withRank(b, standings, day)) };
+    w = syncMonthStart({ ...w, standings, businesses: w.businesses.map((b) => withRank(b, standings, day)) });
   }
   if (day >= w.config.seasonMonths * RULES.DAYS_PER_MONTH) w = finalizeSeason(w, ctx);
   return { ...w, version: w0.version + 1 };

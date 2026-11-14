@@ -1,7 +1,7 @@
 // Test pack for a small NYC coffee shop until agent 14's packs/cafe.json lands in the main branch.
 // Market and capacity follow research/reports/43-economy-sim.md (section 7), scaled to a NYC storefront;
 // money numbers are NYC 2026 estimates (confidence: 'estimate', reasoning in `note`). Not a source of truth for the game.
-import type { Pack } from '../../../shared/src/types';
+import type { Pack } from '@ohh/shared';
 
 const EST = 'estimate' as const;
 const DOL = 'https://dol.ny.gov/minimum-wage-0';

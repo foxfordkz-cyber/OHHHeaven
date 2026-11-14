@@ -1,4 +1,4 @@
-import type { BusinessState, EffectTarget, GameEvent, NicheId, Pack, Place, WorldState } from '../../../shared/src/types';
+import type { BusinessState, EffectTarget, GameEvent, NicheId, Pack, Place, WorldState } from '@ohh/shared';
 import { clamp } from './util';
 
 export const DEFAULT_WEEKDAY_MULT = [1, 1, 1, 1, 1, 1.15, 0.9]; // Mon..Sun (shared/src/rules.ts: day 1 is a Monday)
