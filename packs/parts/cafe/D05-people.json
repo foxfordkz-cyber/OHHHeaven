@@ -1,0 +1,1307 @@
+{
+  "id": "cafe",
+  "part": "D05",
+  "topic": "people",
+  "checked": "2026-11-14",
+  "staff": [
+    {
+      "id": "barista",
+      "name": "Barista",
+      "hourlyWage": 21,
+      "tipped": true,
+      "cashWage": 21,
+      "hoursPerMonth": 160,
+      "licenseRequired": null,
+      "source": "https://culinaryagents.com/jobs/716734-Barista",
+      "confidence": "estimate",
+      "note": "Value kept from the pack ($21, the research notes planning wage); the evidence is new. Search-seen (secondary): New York City barista postings in 2026 list $17.00, $18.50, $20.00 and $22.75 an hour plus tips, so $21 sits in the upper part of the market, not at its middle. Search-seen (primary, bls.gov): fast food and counter workers, the group that holds baristas, averaged $16.85 an hour in the New York metro in May 2023 and $15.46 nationally in May 2025. Tips add about $3.10 an hour on top (extra.tips). A barista is a manual worker and must be paid weekly (Labor Law 191). No tip credit is taken, so the cash wage equals the wage."
+    },
+    {
+      "id": "shift_lead",
+      "name": "Shift lead",
+      "hourlyWage": 24,
+      "tipped": true,
+      "cashWage": 24,
+      "hoursPerMonth": 160,
+      "licenseRequired": "NYC Food Protection Certificate (free online course, $24 exam)",
+      "source": "https://nycourts.gov/REPORTER/3dseries/2013/2013_04754.htm",
+      "confidence": "estimate",
+      "note": "Value kept from the pack ($3 over the barista wage, the pack author's estimate). New: a shift lead who mostly serves customers and only runs the shift may stay in the tip pool; someone with real authority over the others (hiring, firing, discipline, setting schedules) may not. Search-seen (secondary summaries of Barenboim v. Starbucks, NY Court of Appeals 2013): workers with \"limited supervisory responsibilities\" may share tips, those with \"meaningful authority or control over subordinates\" may not. Give the lead keys and a checklist, not the power to hire and fire, or take the lead out of the pool and raise the wage."
+    },
+    {
+      "id": "trainee_barista",
+      "name": "New barista (first 90 days)",
+      "hourlyWage": 18,
+      "tipped": true,
+      "cashWage": 18,
+      "hoursPerMonth": 120,
+      "licenseRequired": null,
+      "source": "https://culinaryagents.com/jobs/716734-Barista",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): 2026 postings start at $17.00 (the legal minimum) and $18.50 plus tips; $18 is my midpoint for a hire with little bar experience. 120 hours is 28 hours a week, my assumption for a new hire still on register and bar-back shifts. Works at 40% to 85% of a trained barista's speed (extra.staffModel.skillRamp). Shares in the tip pool from the first paid shift."
+    },
+    {
+      "id": "part_time_barista",
+      "name": "Part-time barista (20 hours a week)",
+      "hourlyWage": 19,
+      "tipped": true,
+      "cashWage": 19,
+      "hoursPerMonth": 87,
+      "licenseRequired": null,
+      "source": "https://culinaryagents.com/jobs/716734-Barista",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): postings at $18.50 to $20.00 plus tips; $19 is my pick for a trained part-timer, often a student. 20 hours x 4.33 weeks = 87 hours. Part-timers count as employees for every headcount rule: the fifth person on payroll, even at 10 hours a week, turns the 40 hours of sick leave from unpaid to paid for everyone (extra.thresholds)."
+    },
+    {
+      "id": "counter_cashier",
+      "name": "Counter and register",
+      "hourlyWage": 17.5,
+      "tipped": true,
+      "cashWage": 17.5,
+      "hoursPerMonth": 140,
+      "licenseRequired": null,
+      "source": "https://www.bls.gov/oes/2023/May/oes_35620.htm",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, bls.gov): cashiers in the New York metro averaged $17.67 an hour in May 2023; search-seen (secondary, BLS May 2025 data republished by WageDex): New York State cashiers, median $35,500 a year = $17.07 an hour. $17.50 is my rounding, 50 cents above the 2026 city minimum of $17.00. Takes orders and payment, plates pastries; does not pull shots, so peak drink output does not rise (extra.staffModel.stations). Serves customers, so shares in the tip pool."
+    },
+    {
+      "id": "dishwasher_porter",
+      "name": "Dishwasher and porter",
+      "hourlyWage": 17.25,
+      "tipped": false,
+      "hoursPerMonth": 100,
+      "licenseRequired": null,
+      "source": "https://www.bls.gov/oes/2023/May/oes_35620.htm",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, BLS May 2025 data republished by WageDex): dishwashers in the New York metro, median $35,670 a year = $17.15 an hour; search-seen (primary, bls.gov): $16.75 median in May 2023. $17.25 is my rounding. Back-of-house: no customer service, so not eligible for the tip pool under the Hospitality Wage Order (12 NYCRR 146-2.14). 100 hours covers the midday rush and closing six days a week (my assumption)."
+    },
+    {
+      "id": "baker_prep",
+      "name": "Baker and food prep",
+      "hourlyWage": 20,
+      "tipped": false,
+      "hoursPerMonth": 140,
+      "licenseRequired": null,
+      "source": "https://www.bls.gov/oes/2023/May/oes_35620.htm",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, bls.gov): bakers in the New York metro, median $18.00 an hour in May 2023. The city minimum wage rose from $15.00 in 2023 to $17.00 in 2026 (+13%); $18.00 x 1.11 = $20, my estimate for 2026. Needed only if you bake or make sandwiches in-house; starts at 4 or 5 am. Not customer-facing, so outside the tip pool."
+    },
+    {
+      "id": "assistant_manager",
+      "name": "Assistant manager (hourly)",
+      "hourlyWage": 27,
+      "tipped": false,
+      "hoursPerMonth": 173,
+      "licenseRequired": "NYC Food Protection Certificate (free online course, $24 exam)",
+      "source": "https://www.proskauer.com/blog/new-york-state-minimum-wage-and-exempt-salary-updates-for-2026",
+      "confidence": "estimate",
+      "note": "My estimate: between the shift lead ($24) and the lowest overtime-exempt salary in New York City in 2026, $1,275 a week, which is $31.88 an hour over 40 hours (search-seen, secondary, several law firms agree). Paid hourly because the salary is under that threshold: every hour over 40 in a week costs $40.50. 173 hours = 40 hours x 4.33 weeks. Hires, schedules and disciplines, so may not take any share of the tips (Labor Law 196-d; 29 U.S.C. 203(m)(2)(B))."
+    }
+  ],
+  "manager": {
+    "monthlySalary": 5525,
+    "source": "https://www.proskauer.com/blog/new-york-state-minimum-wage-and-exempt-salary-updates-for-2026",
+    "confidence": "estimate",
+    "note": "Correction: was $4,800 (160 h x $30). A manager who runs the shop while the owner is away works well over 40 hours a week. In New York City in 2026 a manager is exempt from overtime only on a salary of at least $1,275 a week ($66,300 a year), and only if managing is the main duty (search-seen, secondary: Proskauer, Seyfarth, Fox Rothschild give the same figure; 12 NYCRR 146-3.2). $1,275 x 52 / 12 = $5,525 a month. Below that the manager is hourly: 50 hours a week at $30 costs 40 x $30 + 10 x $45 = $1,650 a week, $7,145 a month. Search-seen (primary, bls.gov): food service managers in the New York metro averaged $93,730 a year in May 2025, so $66,300 is the legal floor, not the market middle."
+  },
+  "setup": [
+    {
+      "id": "job_ads_opening",
+      "name": "Job ads for the opening team",
+      "kind": "other",
+      "cost": 300,
+      "required": false,
+      "source": "https://100hires.com/indeed-job-posting-cost.html",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): a sponsored job on Indeed needs a budget reported as $5 to $25 a day. My estimate: $25 a day for 12 days = $300 to fill four barista jobs. Free routes exist (a sign in the window, Instagram, asking your roaster) but take longer. Every ad must state the pay range (NYC Administrative Code 8-107(32) for employers of 4 or more, counting the owner)."
+    },
+    {
+      "id": "paid_working_interviews",
+      "name": "Paid working interviews (trial shifts)",
+      "kind": "other",
+      "cost": 410,
+      "required": false,
+      "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+      "confidence": "estimate",
+      "note": "Arithmetic: 8 candidates x 3 hours x $17.00 = $408. A trial shift is work: search-seen (primary, NY DOL Hospitality Wage Order FAQ and Part 146): anyone who reports for duty at your request is owed at least 3 hours (or the scheduled shift if shorter) under 12 NYCRR 146-1.5. Eight candidates for four jobs is my assumption."
+    },
+    {
+      "id": "extra_food_protection_certs",
+      "name": "Food Protection Certificates for two shift leads",
+      "kind": "license",
+      "cost": 770,
+      "required": false,
+      "waitDays": 14,
+      "agency": "NYC Health Academy (DOHMH)",
+      "link": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+      "withoutItViolation": "no_food_protection_cert",
+      "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+      "confidence": "estimate",
+      "note": "Arithmetic: 2 leads x ($24 exam + 15 paid hours x $24) = $768. The exam fee and the 15 lessons are in the existing pack (seen there at NYC Health); one paid hour per lesson is my assumption, and study time you require is paid time. One certificate covers one person on one shift: a shop open 84 hours a week needs at least three holders (owner plus two) so that sickness or a day off never leaves a shift uncovered."
+    },
+    {
+      "id": "handbook_and_policies",
+      "name": "Staff handbook and required written policies",
+      "kind": "other",
+      "cost": 600,
+      "required": false,
+      "source": "https://www.ny.gov/sites/default/files/2023-04/Worker_Toolkit.pdf",
+      "confidence": "estimate",
+      "note": "My estimate: two hours of an employment lawyer at $300 to adapt free state and city templates (harassment prevention policy, sick leave policy, tip pool rules, lactation policy). The $300 rate is a planning figure, not a quote. New York requires every employer, whatever its size, to adopt a harassment prevention policy and hand it over at hire (Labor Law 201-g); the state publishes a free model policy."
+    },
+    {
+      "id": "aprons_and_shirts",
+      "name": "Aprons and shirts for the team",
+      "kind": "other",
+      "cost": 300,
+      "required": false,
+      "lifespanMonths": 12,
+      "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+      "confidence": "estimate",
+      "note": "My estimate: 5 people x (2 aprons at $18 + 2 shirts at $12) = $300; prices are planning figures. Search-seen (primary, Part 146 and the DOL FAQ): the employer pays for required uniforms, and owes weekly uniform maintenance pay unless the uniform is wash-and-wear and enough pieces are supplied; two sets per person is the usual way to meet that exception."
+    },
+    {
+      "id": "labor_law_posters",
+      "name": "Required workplace posters and notices",
+      "kind": "other",
+      "cost": 40,
+      "required": false,
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/about/PaidSafeSickLeave-MandatoryNotice-English.pdf",
+      "confidence": "estimate",
+      "note": "The posters themselves are free downloads from the agencies (minimum wage, Protected Time Off notice, workers' compensation and disability coverage notices, harassment policy); $40 is my estimate for printing and laminating. The city's Notice of Employee Rights must also be handed to each new hire."
+    },
+    {
+      "id": "first_harassment_training",
+      "name": "Harassment prevention training for the opening team",
+      "kind": "other",
+      "cost": 105,
+      "required": false,
+      "source": "https://newyork.public.law/laws/n.y._labor_law_section_201-g",
+      "confidence": "estimate",
+      "note": "Arithmetic: 5 people x 1 paid hour x $21 = $105. The state's model training is free; the cost is the paid hour. Search-seen (secondary): Labor Law 201-g requires every employer to train every employee each year and to give the policy and training materials in writing at hire."
+    }
+  ],
+  "monthlyCosts": [
+    {
+      "id": "turnover_replacement",
+      "name": "Replacing staff who leave",
+      "kind": "other",
+      "basis": "per_staff",
+      "amount": 113,
+      "source": "https://blackboxintelligence.com/blog/state-of-the-restaurant-workforce-employee-turnover/",
+      "confidence": "estimate",
+      "note": "Arithmetic: 50% of the team leaves in a year x $2,706 to replace one hourly worker / 12 = $113 per worker a month. Search-seen (secondary): Black Box Intelligence 2025 puts the hard cost (separation, recruiting, training) at $2,706 per hourly restaurant worker, up from about $2,300 in 2024, and yearly turnover of limited-service hourly staff near 110%. Search-seen (primary, bls.gov JOLTS): the monthly quits rate in accommodation and food services ran 3.6% to 5.0% between June and September 2026, 43% to 60% a year. I take 50% for a small owner-run shop. A fuller count that includes lost output is $5,864 (Cornell Center for Hospitality Research, older study). The engine should replace this flat line with extra.mechanics.turnover_and_replacement."
+    },
+    {
+      "id": "absence_cover_premium",
+      "name": "Overtime premiums for covering absences",
+      "kind": "other",
+      "basis": "per_staff",
+      "amount": 34,
+      "source": "https://www.deputy.com/blog/restaurant-no-shows-what-they-cost-and-how-to-cover",
+      "confidence": "estimate",
+      "note": "Arithmetic: 4.0% of 160 hours = 6.4 hours a worker misses each month; if half of them are covered by a colleague already at 40 hours, 3.2 h x $10.50 (the half-time premium on $21) = $34. Search-seen (secondary, quoting BLS): food preparation and serving workers had a 4.0% absence rate in 2025, against 3.2% for all workers. The 50% share is my assumption."
+    },
+    {
+      "id": "staff_shift_drinks",
+      "name": "Shift drinks for staff",
+      "kind": "supplies",
+      "basis": "per_staff",
+      "amount": 36,
+      "source": "https://dol.ny.gov/hospitality-wage-order-faq",
+      "confidence": "estimate",
+      "note": "My estimate: 2 drinks a shift x 20 shifts x $0.90 of ingredients = $36 per worker a month. A free coffee is not a \"meal\" under the Hospitality Wage Order, so nothing can be taken off wages for it (12 NYCRR 146-1.9 allows a credit only for a full meal)."
+    },
+    {
+      "id": "scheduling_time_clock",
+      "name": "Scheduling and time clock app",
+      "kind": "fees",
+      "basis": "fixed",
+      "amount": 30,
+      "source": "https://www.joinhomebase.com/compare/homebase-vs-7shifts",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, vendor comparison checked October 2026): Homebase Basic is free for one location, Essentials is $30 a month, Plus $70. The app keeps the time records that New York requires you to hold for six years (12 NYCRR 146-2.1); with no records, the worker's own account of hours is believed."
+    },
+    {
+      "id": "annual_training_hours",
+      "name": "Paid yearly trainings",
+      "kind": "other",
+      "basis": "per_staff",
+      "amount": 5,
+      "source": "https://newyork.public.law/laws/n.y._labor_law_section_201-g",
+      "confidence": "estimate",
+      "note": "Arithmetic: 3 paid hours a year x $21 / 12 = $5.25 per worker a month: one hour of harassment prevention training (required every year, Labor Law 201-g) and two hours of food safety and allergen refreshers (my assumption)."
+    }
+  ],
+  "levers": [
+    {
+      "id": "scheduling",
+      "name": "Scheduling",
+      "options": [
+        {
+          "id": "two_weeks_fixed",
+          "label": "Schedule posted two weeks ahead, steady shifts",
+          "monthlyCost": 400,
+          "effects": {
+            "capacity": 0.02,
+            "quality": 0.01
+          }
+        },
+        {
+          "id": "week_by_week",
+          "label": "Schedule sent out week by week",
+          "monthlyCost": 0
+        },
+        {
+          "id": "night_before",
+          "label": "Shifts texted the night before",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": -0.05,
+            "quality": -0.03
+          }
+        }
+      ]
+    },
+    {
+      "id": "training",
+      "name": "Training new hires",
+      "options": [
+        {
+          "id": "structured",
+          "label": "30 paid training hours with a checklist and sign-off",
+          "monthlyCost": 110
+        },
+        {
+          "id": "shadow_only",
+          "label": "Shadow a coworker for two shifts",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.03,
+            "capacity": -0.02
+          }
+        },
+        {
+          "id": "barista_school",
+          "label": "Roaster lab day and monthly tastings on top",
+          "monthlyCost": 330,
+          "effects": {
+            "quality": 0.04,
+            "capacity": 0.02
+          }
+        }
+      ]
+    },
+    {
+      "id": "tipping_setup",
+      "name": "Tips",
+      "options": [
+        {
+          "id": "screen_prompt",
+          "label": "Tip screen on the card reader (15 / 20 / 25%)",
+          "monthlyCost": 0
+        },
+        {
+          "id": "jar_only",
+          "label": "Cash jar only, no tip screen",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": -0.03,
+            "reputation": 0.01
+          }
+        },
+        {
+          "id": "no_tipping",
+          "label": "No tipping; wages $3 an hour higher",
+          "monthlyCost": 2140,
+          "effects": {
+            "capacity": 0.04,
+            "reputation": 0.01
+          }
+        }
+      ]
+    },
+    {
+      "id": "tip_pool_rules",
+      "name": "Who shares the tips",
+      "options": [
+        {
+          "id": "service_staff_by_hours",
+          "label": "Baristas, counter and leads, split by hours, sheet on the wall",
+          "monthlyCost": 0
+        },
+        {
+          "id": "each_shift_own_jar",
+          "label": "No pool: each shift keeps its own tips",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.01
+          }
+        },
+        {
+          "id": "whole_team",
+          "label": "Everyone gets a cut, dishwasher and manager included",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": 0.01
+          },
+          "causes": "tip_pool_ineligible"
+        }
+      ]
+    },
+    {
+      "id": "staff_benefits",
+      "name": "Benefits",
+      "options": [
+        {
+          "id": "legal_minimum",
+          "label": "Only what the law requires",
+          "monthlyCost": 0
+        },
+        {
+          "id": "health_stipend",
+          "label": "Health stipend of $250 a month for full-timers",
+          "monthlyCost": 1000,
+          "effects": {
+            "capacity": 0.04
+          }
+        },
+        {
+          "id": "stipend_and_vacation",
+          "label": "Stipend plus one paid week off a year",
+          "monthlyCost": 1350,
+          "effects": {
+            "capacity": 0.05,
+            "quality": 0.02
+          }
+        }
+      ]
+    },
+    {
+      "id": "bench_depth",
+      "name": "Roster depth",
+      "options": [
+        {
+          "id": "exact",
+          "label": "Exactly the people the schedule needs",
+          "monthlyCost": 0
+        },
+        {
+          "id": "one_extra",
+          "label": "One extra trained part-timer kept on the roster",
+          "monthlyCost": 660,
+          "effects": {
+            "capacity": 0.04
+          }
+        },
+        {
+          "id": "stretch_the_team",
+          "label": "No bench: the same people work seven days when someone is out",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.02,
+            "quality": -0.02
+          },
+          "causes": "no_day_of_rest"
+        }
+      ]
+    },
+    {
+      "id": "owner_hours",
+      "name": "Your own hours",
+      "options": [
+        {
+          "id": "forty",
+          "label": "You manage 40 hours a week; leads open and close",
+          "monthlyCost": 0
+        },
+        {
+          "id": "sixty",
+          "label": "You work the bar 60 hours a week",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.08
+          }
+        },
+        {
+          "id": "eighty",
+          "label": "You open and close every day, 80 hours a week",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.15,
+            "quality": -0.03
+          }
+        }
+      ]
+    },
+    {
+      "id": "cash_controls",
+      "name": "Cash and register controls",
+      "options": [
+        {
+          "id": "pins_and_counts",
+          "label": "Personal PINs, daily cash count, void report",
+          "monthlyCost": 60
+        },
+        {
+          "id": "trust",
+          "label": "One shared login; cash counted when you remember",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.02
+          }
+        },
+        {
+          "id": "cameras_and_stock",
+          "label": "Plus a camera over the register and weekly stock counts",
+          "monthlyCost": 160,
+          "effects": {
+            "demand": 0.005
+          }
+        }
+      ]
+    },
+    {
+      "id": "harassment_prevention",
+      "name": "Harassment prevention",
+      "options": [
+        {
+          "id": "policy_and_training",
+          "label": "Written policy and one paid training hour a year",
+          "monthlyCost": 10
+        },
+        {
+          "id": "nothing",
+          "label": "No policy, no training",
+          "monthlyCost": 0,
+          "causes": "no_harassment_policy_training"
+        }
+      ]
+    },
+    {
+      "id": "complaint_handling",
+      "name": "When staff complain about each other",
+      "options": [
+        {
+          "id": "investigate",
+          "label": "Listen, write it down, act within a week",
+          "monthlyCost": 0
+        },
+        {
+          "id": "sort_it_out",
+          "label": "Tell them to sort it out themselves",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.02
+          },
+          "causes": "harassment_complaint_ignored"
+        }
+      ]
+    },
+    {
+      "id": "job_ads",
+      "name": "How you hire",
+      "options": [
+        {
+          "id": "paid_posts_with_range",
+          "label": "Paid job-board posts that state the pay range",
+          "monthlyCost": 60
+        },
+        {
+          "id": "word_of_mouth",
+          "label": "Sign in the window and word of mouth",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": -0.02
+          }
+        },
+        {
+          "id": "vague_ads",
+          "label": "Paid posts with \"competitive pay\" and no range",
+          "monthlyCost": 60,
+          "causes": "job_ad_no_pay_range"
+        }
+      ]
+    },
+    {
+      "id": "interview_screening",
+      "name": "Screening candidates",
+      "options": [
+        {
+          "id": "paid_trial_and_references",
+          "label": "Paid trial shift and two references",
+          "monthlyCost": 50,
+          "effects": {
+            "quality": 0.01
+          }
+        },
+        {
+          "id": "ask_everything",
+          "label": "Ask about arrests, credit and last pay before any offer",
+          "monthlyCost": 0,
+          "causes": "illegal_hiring_questions"
+        }
+      ]
+    },
+    {
+      "id": "sick_call_policy",
+      "name": "Sick calls",
+      "options": [
+        {
+          "id": "we_cover",
+          "label": "Stay home; the shift lead finds cover",
+          "monthlyCost": 0
+        },
+        {
+          "id": "find_your_own_cover",
+          "label": "No replacement, no day off",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0.02,
+            "quality": -0.02
+          },
+          "causes": "sick_leave_denied"
+        }
+      ]
+    },
+    {
+      "id": "epli_cover",
+      "name": "Employment practices insurance",
+      "options": [
+        {
+          "id": "none",
+          "label": "No policy",
+          "monthlyCost": 0
+        },
+        {
+          "id": "policy",
+          "label": "Employment practices liability policy",
+          "monthlyCost": 150
+        }
+      ]
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "pay_every_two_weeks",
+      "name": "Pay staff every two weeks",
+      "what": "Half as many payroll runs and a week of wages stays in your account: about $60 a month. Baristas are manual workers and must be paid every week. A first finding costs interest; after one, each late dollar is owed twice.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 60
+      },
+      "violation": "pay_frequency_violation"
+    },
+    {
+      "id": "skip_hiring_paperwork",
+      "name": "Hire on a handshake: no pay notice, no pay stubs",
+      "what": "No forms, no stubs, start tomorrow: saves about $12 per worker a month. A worker who never got a pay notice can claim $50 a work day, and $250 a work day for missing pay stubs, up to $5,000 each.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 12
+      },
+      "violation": "no_wage_notice_statements"
+    },
+    {
+      "id": "send_home_no_call_in_pay",
+      "name": "Send staff home on slow days, pay only minutes worked",
+      "what": "Rain kills the afternoon, so you cut the shift after an hour: about $68 per worker a month. Anyone who reports for a shift is owed at least 3 hours of pay. Unpaid call-in pay is owed back double.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 68
+      },
+      "violation": "call_in_pay_unpaid"
+    },
+    {
+      "id": "solo_shifts_no_break",
+      "name": "One person per shift, no meal break",
+      "what": "You never schedule a second person to give breaks: about $630 a month. A shift of more than 6 hours across lunchtime carries a 30-minute meal period, and a worker who asks for an uninterrupted one must get it.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 630
+      },
+      "violation": "meal_period_denied"
+    },
+    {
+      "id": "dock_pay_for_shortages",
+      "name": "Take register shortages and breakage out of pay",
+      "what": "A short drawer, a broken pitcher, a walkout: the worker pays, about $40 each a month. New York bans these deductions outright. Every dollar taken is owed back double.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 40
+      },
+      "violation": "illegal_deductions"
+    },
+    {
+      "id": "staff_pay_for_uniforms",
+      "name": "Staff buy the logo shirts and wash them at home",
+      "what": "You require the branded shirt and apron but supply none: about $86 per worker a month. The employer must pay for a required uniform and, unless it supplies enough wash-and-wear sets, $19.85 a week to keep it clean.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 86
+      },
+      "violation": "uniform_costs_unpaid"
+    },
+    {
+      "id": "manager_in_tip_pool",
+      "name": "Give the manager a share of the tips",
+      "what": "A fifth share of the tip pool, about $400 a month, tops up the manager instead of your payroll. Managers and owners may not take any part of staff tips. The tips are owed back double, plus a federal penalty.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 400
+      },
+      "violation": "tip_pool_ineligible"
+    },
+    {
+      "id": "tip_credit_no_notice",
+      "name": "Pay the $11.35 tipped wage with no notice or tip records",
+      "what": "You count $5.65 an hour of tips toward the wage: about $904 per worker a month. The credit is legal only with a written notice, tip records, and tips that really cover it. Without them the full $17.00 was due all along, doubled.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 904
+      },
+      "violation": "invalid_tip_credit"
+    },
+    {
+      "id": "flat_salary_no_overtime",
+      "name": "Flat weekly salary for the shift lead, 50-hour weeks",
+      "what": "$1,100 a week instead of $1,320 on the clock: about $950 a month. Under $1,275 a week nobody is exempt from overtime, and restaurant staff must be paid by the hour. The back pay is figured on $27.50 an hour, then doubled.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 950
+      },
+      "violation": "exempt_misclassification"
+    },
+    {
+      "id": "punish_the_complainer",
+      "name": "Cut the hours of the worker who asked about pay",
+      "what": "The questions stop and you skip about $150 a month of corrections. Punishing a worker for a wage complaint, even a mistaken one, is a separate violation: a penalty of $1,000 to $10,000, lost pay, and up to $20,000 in damages.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 150
+      },
+      "violation": "retaliation"
+    },
+    {
+      "id": "minors_no_papers",
+      "name": "Hire 16-year-olds with no working papers and let them close",
+      "what": "A high-school student takes $17 where a trained barista wants $21: about $320 a month. Under 18 means working papers, 4 hours on a school night and no work after 10 pm. Fines now reach $10,000 for a first violation.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 320
+      },
+      "violation": "child_labor"
+    },
+    {
+      "id": "free_help_from_friends",
+      "name": "Friends and family work the counter for free",
+      "what": "Ten unpaid hours a week on the register saves about $760 a month. A for-profit shop cannot have volunteers: they are employees owed the minimum wage, doubled, and they are not covered if they get burned.",
+      "saves": {
+        "basis": "fixed",
+        "amount": 760
+      },
+      "violation": "unpaid_volunteer_labor"
+    },
+    {
+      "id": "unreported_cash_tips",
+      "name": "Split the cash jar at closing and report nothing",
+      "what": "Cash tips never touch payroll, so you skip your 7.65% on them: about 0.15% of sales. The IRS can bill your share later, and since 2025 staff lose their tax deduction on any tip that is not reported.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.0015
+      },
+      "violation": "unreported_tips"
+    },
+    {
+      "id": "fire_union_organizers",
+      "name": "Fire the baristas who started a union petition",
+      "what": "The petition dies and you avoid a raise worth about $240 per worker a month. Firing someone for organizing is an unfair labor practice: the labor board orders them rehired with full back pay and interest.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 240
+      },
+      "violation": "unfair_labor_practice"
+    },
+    {
+      "id": "skip_disability_pfl_insurance",
+      "name": "Skip disability and Paid Family Leave insurance",
+      "what": "The policy costs only about $2 per worker a month, so skipping it saves almost nothing. Without it you pay any claim yourself: 12 weeks of family leave can reach $14,742, and you cannot even apply for the food permit.",
+      "saves": {
+        "basis": "per_staff",
+        "amount": 2
+      },
+      "violation": "no_disability_pfl_coverage"
+    }
+  ],
+  "violations": [
+    {
+      "id": "pay_frequency_violation",
+      "name": "Manual workers not paid weekly",
+      "law": "NY Labor Law §191(1)(a), §198(1-a) as amended May 9, 2025; §218",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 21,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://www.mayerbrown.com/en/insights/publications/2025/07/new-york-amends-labor-law-to-limit-damages-for-late-payments-to-manual-workers",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, law firms): Labor Law 191(1)(a) requires manual workers to be paid weekly, not later than seven days after the week ends; the Labor Department treats anyone doing physical tasks more than 25% of the time as a manual worker, which covers baristas. Since May 9, 2025 a first violation by an employer who paid in full at least twice a month costs lost interest only (16% a year); after a prior finding, liquidated damages of 100% of the late wages. Arithmetic: half of a $13,440 monthly payroll is paid a week late: $6,720 x 16% x 7/365 = $21 a month. Base $1,000 is the top civil penalty for a first non-wage violation under Labor Law 218 (from the user's research report). A second finding would cost about $6,720 for each month: the engine needs a repeat multiplier (extra.mechanics.repeat_offense_ladder)."
+    },
+    {
+      "id": "no_wage_notice_statements",
+      "name": "No pay notice at hire, no pay stubs",
+      "law": "NY Labor Law §195(1), §195(3), §198(1-b), §198(1-d) (Wage Theft Prevention Act); 12 NYCRR §146-2.2, §146-2.3",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 5000,
+        "perMonth": 5000,
+        "pctOfSaved": 0,
+        "max": 50000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, nysenate.gov, Labor Law 198): damages for missing wage statements are $250 for each work day, not more than $5,000 per worker. The user's research report cites the same statute for the hiring notice: $50 for each work day, up to $5,000 per worker. These are damages paid to the worker, not a fine. A worker passes the $5,000 pay-stub cap in 20 work days. Game formula for a five-person team: $5,000 at once, $5,000 for each further month, capped at $50,000 (5 x $10,000). In hospitality the notice must also be given again before any change in the pay rate (12 NYCRR 146-2.2), including the January minimum wage step."
+    },
+    {
+      "id": "call_in_pay_unpaid",
+      "name": "Call-in pay not paid",
+      "law": "12 NYCRR §146-1.5; NY Labor Law §198(1-a)",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, NY DOL Part 146 and Hospitality Wage Order FAQ): an employee who reports for duty at the employer's request must be paid at least three hours for one shift, or the scheduled shift if shorter; six hours for two shifts totalling six hours or less. The FAQ example: sent home after one hour of an eight-hour shift = the hour worked plus two call-in hours at the minimum wage. Arithmetic for the saving: 2 send-homes a month x 2 unpaid hours x $17.00 = $68 per worker. Owed back with 100% liquidated damages (Labor Law 198): 2.0 x what was withheld. It also applies when you close early for a snowstorm after people have arrived."
+    },
+    {
+      "id": "meal_period_denied",
+      "name": "Meal period not given",
+      "law": "NY Labor Law §162, §218",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 250,
+        "pctOfSaved": 0,
+        "max": 3000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://dol.ny.gov/ls443-guidelines-meal-periods",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, NY DOL meal period guidelines LS 443): at least 30 minutes for a shift of more than six hours that spans 11 am to 2 pm. Where only one person is on duty the Department accepts eating on the job if the worker voluntarily consents, but an uninterrupted meal period must be given to any worker who asks. The statute sets no dollar amount of its own; the game uses Labor Law 218: up to $1,000 for a first violation, $2,000 for a second, $3,000 after that (from the user's research report). Arithmetic for the saving: one hour a day of break relief x 30 days x $21 = $630."
+    },
+    {
+      "id": "illegal_deductions",
+      "name": "Unlawful deductions from wages",
+      "law": "NY Labor Law §193, §198(1-a); 12 NYCRR §146-2.7",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.04,
+      "source": "https://dol.ny.gov/illegal-deductions",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, NY DOL \"Illegal Deductions\" page): breakages, cash shortages, fines and losses to the business may not be deducted from wages; only deductions required by law or authorized in writing for the worker's own benefit are allowed. Owed back with 100% liquidated damages: 2.0 x what was taken. The $40 per worker a month is my estimate of small drawer shortages and broken glass. Making the worker pay you back in cash \"by separate transaction\" is banned too."
+    },
+    {
+      "id": "uniform_costs_unpaid",
+      "name": "Required uniform not paid for or maintained",
+      "law": "12 NYCRR §146-1.7, §146-1.8; NY Labor Law §198(1-a)",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://forms.labor.ny.gov/WP/CR146.pdf",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, NY DOL Part 146, rates from January 1, 2026, New York City): uniform maintenance pay is $19.85 a week for more than 30 hours, $15.80 for more than 20 and up to 30, $9.55 for 20 hours or fewer; none is due for wash-and-wear uniforms supplied in sufficient number. Arithmetic: $19.85 x 4.33 weeks = $86 a month for a full-timer. The purchase cost of a required uniform is the employer's as well (146-1.8). A plain black shirt the worker could wear anywhere is not a uniform; a shirt with your logo is. 2.0 x what was withheld."
+    },
+    {
+      "id": "tip_pool_ineligible",
+      "name": "Managers or back-of-house staff in the tip pool",
+      "law": "NY Labor Law §196-d; 12 NYCRR §146-2.14 to §146-2.17; 29 U.S.C. §203(m)(2)(B), §216(b), §216(e)(2)",
+      "official": "wage_hour_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 1100,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.06,
+      "source": "https://www.dol.gov/agencies/whd/flsa/tipsFAQ",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, dol.gov): an employer may not keep employees' tips or let managers or supervisors keep them; a manager may keep only tips for service he or she \"directly and solely\" provides (opinion letter FLSA2026-13, September 2026). The employer owes the tips kept plus an equal amount as liquidated damages, and a civil money penalty of up to $1,100 per violation in the statute (adjusted upward each year; the 2026 figure was not in the results). Search-seen (secondary): New York's wage order limits tip pools to workers whose principal duty is personal service to customers, so a dishwasher or baker cannot be put in a required pool even though federal law would allow it when no tip credit is taken. Arithmetic: one of five shares of $2,000 in card tips = $400 a month. In April 2026 the US Labor Department recovered $85,000 for 36 workers at a coffee bar near Austin over tip pool violations."
+    },
+    {
+      "id": "invalid_tip_credit",
+      "name": "Tip credit taken without notice, records or enough tips",
+      "law": "12 NYCRR §146-1.3, §146-2.2, §146-2.9; NY Labor Law §652, §198(1-a)",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.05,
+      "source": "https://dol.ny.gov/minimum-wage-tipped-workers-p717-english",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, NY DOL): food service workers in New York City in 2026 may be paid a cash wage of $11.35 with a tip credit of $5.65 toward the $17.00 minimum; the 2027 figures are reported unchanged. The credit holds only if the worker got written notice of it before starting, records are kept, and tips really bring the hour up to $17.00; otherwise the employer makes up the gap. Arithmetic: $5.65 x 160 hours = $904 per worker a month. A cafe's tips run about $3.10 an hour (extra.tips), so even a properly noticed credit could lawfully save about $3.10, not $5.65. A day with more than 2 hours or 20% of the shift on untipped work loses the credit for that day (146-2.9, as cited in the existing pack). 2.0 x the credit taken, with a six-year reach."
+    },
+    {
+      "id": "exempt_misclassification",
+      "name": "Hourly worker put on a salary to avoid overtime",
+      "law": "12 NYCRR §146-1.4, §146-2.5, §146-3.2, §146-3.5; 29 CFR §541.100; NY Labor Law §198(1-a)",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 3.75,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.04,
+      "source": "https://www.proskauer.com/blog/new-york-state-minimum-wage-and-exempt-salary-updates-for-2026",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, several law firms): the executive and administrative exemptions need a salary of at least $1,275 a week in New York City in 2026 and a real management job. From memory of the Hospitality Wage Order (page not opened): 146-2.5 requires non-exempt staff to be paid hourly rates, and 146-3.5 sets the regular rate of a salaried non-exempt worker at weekly pay divided by the lesser of 40 and the hours worked. Arithmetic: $1,100 / 40 = $27.50; overtime owed 10 h x $41.25 = $412.50 a week, against $220 a week saved ($1,320 - $1,100); doubled by liquidated damages = $825, which is 3.75 x the saving."
+    },
+    {
+      "id": "retaliation",
+      "name": "Retaliation against a worker who complained",
+      "law": "NY Labor Law §215; NYC Administrative Code §20-918, §20-924",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint"
+      ],
+      "fine": {
+        "base": 5000,
+        "perMonth": 3400,
+        "pctOfSaved": 0,
+        "max": 30000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.08,
+      "source": "https://dol.ny.gov/wages-and-hours-frequently-asked-questions",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, NY DOL FAQ): employers who retaliate \"can be fined up to $20,000\". From memory of Labor Law 215 (page not opened): a civil penalty of $1,000 to $10,000, up to $20,000 for a repeat within six years, plus lost pay, reinstatement and liquidated damages of up to $20,000. Game formula, my estimate: $5,000 (middle of the first-violation range) plus $3,400 for each month of lost pay (160 h x $21), capped at $30,000 ($10,000 + $20,000). Search-seen (primary, nyc.gov): under the city Protected Time Off Law retaliation costs full compensation plus $500, or $2,500 if the worker was fired. Threatening to call immigration authorities counts as retaliation."
+    },
+    {
+      "id": "child_labor",
+      "name": "Minor working without papers or outside legal hours",
+      "law": "NY Labor Law §§130-133, §§142-143, §141 as amended May 9, 2025; 29 CFR Part 570",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "inspection"
+      ],
+      "fine": {
+        "base": 3000,
+        "perMonth": 1000,
+        "pctOfSaved": 0,
+        "max": 10000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.08,
+      "source": "https://www.littler.com/news-analysis/asap/new-york-enacts-sweeping-amendments-child-labor-laws",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary, Littler and Proskauer on the 2025 state budget): since May 9, 2025 Labor Law 141 allows up to $10,000 for a first violation, $2,000 to $25,000 for a second and $10,000 to $55,000 after that; before, the caps were $1,000 to $3,000. Search-seen (primary, NY DOL hours chart): every worker under 18 needs an employment certificate; at 16 and 17, while school is in session, 4 hours on a day before a school day, 8 hours on other days, between 6 am and 10 pm. Game formula is my spread of the first-violation range: $4,000 in the first month up to $10,000. The saving assumes one student for 80 hours at $17 instead of $21."
+    },
+    {
+      "id": "unpaid_volunteer_labor",
+      "name": "Unpaid \"volunteers\" doing staff work",
+      "law": "NY Labor Law §652, §198(1-a); 12 NYCRR §146-1.2; 29 U.S.C. §206; NY Workers' Compensation Law §52",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 2,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "confidence": "estimate",
+      "note": "A for-profit business may not accept free labor: anyone it \"suffers or permits to work\" is an employee owed at least $17.00 an hour (rate seen in the existing pack at NY DOL). Arithmetic: 40 hours a month x $17.00 x 1.1158 (employer payroll taxes) = $759. Owed back with 100% liquidated damages. The helper is also outside your workers' compensation policy until put on payroll, so an injury becomes an uninsured claim. Narrow exceptions exist for a sole proprietor's own spouse; I could not open a source that states them for a New York LLC, so do not rely on one."
+    },
+    {
+      "id": "unreported_tips",
+      "name": "Cash tips kept off payroll",
+      "law": "26 U.S.C. §6053(a), §3111, §3121(q); NY Labor Law §195(4); 12 NYCRR §146-2.1",
+      "official": "irs_tip_examiner",
+      "foundBy": [
+        "audit"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 0,
+        "pctOfSaved": 1,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0,
+      "source": "https://www.irs.gov/irm/part4/irm_04-023-007",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, irs.gov, Internal Revenue Manual 4.23.7 and Form 941 instructions): when workers report tips to the IRS but not to the employer, the IRS issues a Section 3121(q) Notice and Demand for the employer share of Social Security and Medicare tax; the employer owes it from the date of the notice, with no earlier penalty, and reports it on Form 941 line 5f. So the game charges 1.0 x the tax skipped. The workers carry the larger risk (tax plus a penalty on their own return). Arithmetic: $1,000 of cash tips x 7.65% = $77 a month = 0.15% of $51,000 sales; the $1,000 is my assumption (half the card tips). Since tax year 2025 only reported tips qualify for the workers' federal deduction of up to $25,000, so staff now ask for tips to be on the W-2."
+    },
+    {
+      "id": "unfair_labor_practice",
+      "name": "Firing or threatening workers for organizing",
+      "law": "29 U.S.C. §157, §158(a)(1), §158(a)(3), §160(c) (National Labor Relations Act)",
+      "official": "nlrb_agent",
+      "foundBy": [
+        "complaint"
+      ],
+      "fine": {
+        "base": 0,
+        "perMonth": 6800,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.12,
+      "source": "https://www.buchalter.com/blogs/recreational-equipment-inc-and-united-food-commercial-workers-local-555-nlrb-alj-finds-unlawful-discharge-during-organizing-drive-but-denies-gissel-bargaining-order/",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): the labor board's remedies are make-whole, not fines: reinstatement, back pay with interest, and a posted or read notice (January 2026 judge's decision in a retail organizing case). Game formula: back pay for two organizers, 2 x 160 h x $21 = $6,720 a month, rounded to $6,800, running until they are rehired. The Act protects any two workers who act together about pay or conditions, union or not, and it covers a shop of five. Search-seen (secondary): a Brooklyn coffee shop's staff filed for a union unanimously in November 2022 after hours and pay were cut and won the first contract at an independent New York coffee shop."
+    },
+    {
+      "id": "no_day_of_rest",
+      "name": "No day of rest in the week",
+      "law": "NY Labor Law §161, §218",
+      "official": "hospitality_wage_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 250,
+        "pctOfSaved": 0,
+        "max": 3000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://dol.ny.gov/one-day-rest-seven-section-161-new-york-state-labor-law-ls611",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, NY DOL form LS 611 and Labor Law 161): an employer operating a restaurant must give every employee at least 24 consecutive hours of rest in each calendar week (Sunday to Saturday) and name the day in advance. The game uses the Labor Law 218 ladder: up to $1,000, $2,000, $3,000 (from the user's research report). A worker who agrees to a seventh day is not a defence without a Labor Department variance."
+    },
+    {
+      "id": "no_disability_pfl_coverage",
+      "name": "No disability and Paid Family Leave insurance",
+      "law": "NY Workers' Compensation Law §211, §213, §220",
+      "official": "benefits_coverage_investigator",
+      "foundBy": [
+        "audit",
+        "complaint"
+      ],
+      "fine": {
+        "base": 500,
+        "perMonth": 67,
+        "pctOfSaved": 0,
+        "max": null
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "criminal": "Failure to secure the coverage is a misdemeanor: a fine of $100 to $500 or up to one year in jail, or both (Workers' Compensation Board).",
+      "source": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, wcb.ny.gov): an employer without disability and Paid Family Leave coverage faces penalties and pays any claim that arises in the uninsured period; sole proprietors and partners can be held personally liable; it is a misdemeanor with a fine of $100 to $500. From memory of Section 220 (text not opened): a penalty of up to 0.5% of the payroll for the uninsured period plus up to $500. Arithmetic: 0.5% x $13,440 = $67 a month. The real cost is the claim: search-seen (primary, paidfamilyleave.ny.gov): in 2026 Paid Family Leave pays 67% of pay up to $1,228.53 a week for up to 12 weeks, $14,742.36 in all."
+    },
+    {
+      "id": "no_harassment_policy_training",
+      "name": "No harassment prevention policy or yearly training",
+      "law": "NY Labor Law §201-g; NY Executive Law §296(1)(h)",
+      "official": "human_rights_investigator",
+      "foundBy": [
+        "complaint",
+        "audit"
+      ],
+      "fine": {
+        "base": 400,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 400
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "source": "https://newyork.public.law/laws/n.y._labor_law_section_201-g",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): Labor Law 201-g makes every New York employer, whatever its size, adopt a written sexual harassment prevention policy, train every employee each year, and hand over the policy and the training materials at hire and at each training. The section names no dollar fine, and I found none. Game value is my estimate of the fix when a complaint exposes the gap: one lawyer hour ($300) plus the paid training hour for five people ($105). The real price is that a shop with no policy loses its best defence if a harassment claim follows."
+    },
+    {
+      "id": "harassment_complaint_ignored",
+      "name": "Harassment complaint ignored",
+      "law": "NY Executive Law §296(1)(h), §297; NYC Administrative Code §8-107, §8-126",
+      "official": "human_rights_investigator",
+      "foundBy": [
+        "complaint"
+      ],
+      "fine": {
+        "base": 27000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 54000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.12,
+      "source": "https://www.munichre.com/hsb/en/products/specialty-liability-insurance/epl-plus.html",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): since February 8, 2020 the New York State Human Rights Law covers every employer regardless of size, and harassment is anything above \"petty slights or trivial inconveniences\"; the federal law starts at 15 employees. Harassment by customers counts when the owner knew and did nothing. Search-seen (secondary, an insurer's figure): employment claims cost small businesses $27,000 to $54,000 a case on average; the game uses that band. The city Commission on Human Rights may add a civil penalty of up to $125,000, or $250,000 for a willful violation (search-seen, secondary). An employment practices policy pays the defence and the settlement above its deductible, not the lost staff."
+    },
+    {
+      "id": "job_ad_no_pay_range",
+      "name": "Job ad without a pay range",
+      "law": "NYC Administrative Code §8-107(32), §8-126; NY Labor Law §194-b",
+      "official": "human_rights_investigator",
+      "foundBy": [
+        "complaint",
+        "sting"
+      ],
+      "fine": {
+        "base": 1000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 1000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "source": "https://pillsburylaw.com/en/news-and-insights/nyc-pay-transparency-law.html",
+      "confidence": "estimate",
+      "note": "Search-seen (secondary): employers with four or more workers, counting the owner and contractors, must state the minimum and maximum pay in every job ad, including a sign in the window or a social media post. The city commission may fine up to $250,000, but a first violation costs nothing if the ad is fixed within 30 days of the notice. The state law (in force since September 17, 2023) covers the same employers; its penalty amounts were not in the results. Game value $1,000 is my estimate for an ad left unfixed."
+    },
+    {
+      "id": "illegal_hiring_questions",
+      "name": "Asking about arrests, credit or past pay before an offer",
+      "law": "NYC Administrative Code §8-107(10), §8-107(11-a), §8-107(24), §8-107(25), §8-126",
+      "official": "human_rights_investigator",
+      "foundBy": [
+        "complaint",
+        "sting"
+      ],
+      "fine": {
+        "base": 5000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 125000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.03,
+      "source": "https://www.nyc.gov/site/cchr/media/fair-chance-faqs.page",
+      "confidence": "estimate",
+      "note": "Search-seen (primary, NYC Commission on Human Rights Fair Chance FAQ): employers with four or more workers, the owner and contractors included, may not ask about criminal history until after a conditional job offer, and must give a written analysis and a chance to respond before taking the offer back. Search-seen (secondary): the same law bans credit checks for most jobs and questions about past pay; the Commission may impose up to $125,000, or $250,000 for a willful violation. The Commission also sends testers who pose as applicants. Game value $5,000 is my estimate of a small-employer settlement; I found no published average."
+    }
+  ],
+  "officials": [
+    {
+      "id": "hospitality_wage_investigator",
+      "name": "Labor standards investigator (restaurants)",
+      "agency": "NYS Department of Labor, Division of Labor Standards",
+      "role": "tax_auditor",
+      "checks": [
+        "pay_frequency_violation",
+        "no_wage_notice_statements",
+        "call_in_pay_unpaid",
+        "meal_period_denied",
+        "illegal_deductions",
+        "uniform_costs_unpaid",
+        "invalid_tip_credit",
+        "exempt_misclassification",
+        "retaliation",
+        "child_labor",
+        "unpaid_volunteer_labor",
+        "no_day_of_rest"
+      ],
+      "realProcess": "Almost every case starts with one worker's complaint, often filed after quitting. The investigator asks for six years of schedules, time records, pay stubs, pay notices and tip sheets for the whole staff, not just the complainant. Where records are missing the worker's account of hours stands.",
+      "source": "https://dol.ny.gov/wages-and-hours-frequently-asked-questions"
+    },
+    {
+      "id": "wage_hour_investigator",
+      "name": "Federal wage and hour investigator",
+      "agency": "U.S. Department of Labor, Wage and Hour Division",
+      "role": "tax_auditor",
+      "checks": [
+        "tip_pool_ineligible"
+      ],
+      "realProcess": "Investigators visit unannounced or after a complaint, interview staff in private and review two to three years of payroll and tip records. They recover tips and back wages for every affected worker and can add a civil money penalty for repeated or willful violations.",
+      "source": "https://www.dol.gov/agencies/whd/flsa/tipsFAQ"
+    },
+    {
+      "id": "irs_tip_examiner",
+      "name": "Tip compliance examiner",
+      "agency": "Internal Revenue Service",
+      "role": "tax_auditor",
+      "checks": [
+        "unreported_tips"
+      ],
+      "realProcess": "The IRS compares card tips on merchant statements and the tips workers declare on their own returns with the tips on the employer's payroll filings, then sends a notice and demand for the employer share of the tax on the difference.",
+      "source": "https://www.irs.gov/irm/part4/irm_04-023-007"
+    },
+    {
+      "id": "nlrb_agent",
+      "name": "Labor board agent",
+      "agency": "National Labor Relations Board, Region 2 (Manhattan) and Region 29 (Brooklyn)",
+      "role": "tax_auditor",
+      "checks": [
+        "unfair_labor_practice"
+      ],
+      "realProcess": "A fired worker files a charge within six months. A board agent takes sworn statements; if the charge has merit the region seeks a settlement with reinstatement and back pay, or issues a complaint and tries the case before an administrative law judge.",
+      "source": "https://www.nlrb.gov/case/02-RC-380277"
+    },
+    {
+      "id": "human_rights_investigator",
+      "name": "Human rights investigator",
+      "agency": "NYC Commission on Human Rights; NYS Division of Human Rights",
+      "role": "inspector",
+      "checks": [
+        "no_harassment_policy_training",
+        "harassment_complaint_ignored",
+        "job_ad_no_pay_range",
+        "illegal_hiring_questions"
+      ],
+      "realProcess": "Complaints come from workers and applicants, and the city commission also sends testers who answer job ads. The agency asks for the ad, the application form, the policy and the training records, tries to settle, and otherwise brings the case to a hearing.",
+      "source": "https://www.nyc.gov/site/cchr/media/fair-chance-faqs.page"
+    },
+    {
+      "id": "benefits_coverage_investigator",
+      "name": "Disability and Paid Family Leave compliance officer",
+      "agency": "NYS Workers' Compensation Board",
+      "role": "tax_auditor",
+      "checks": [
+        "no_disability_pfl_coverage"
+      ],
+      "realProcess": "The Board matches employer records against active disability and Paid Family Leave policies and writes to employers with none on file. A worker whose claim is refused for lack of coverage triggers the same check, and the employer is billed for the claim.",
+      "source": "https://www.wcb.ny.gov/content/main/DisabilityBenefits/penalties-no-coverage.jsp"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_pay_rules",
+      "name": "Report pay practices (NYS Department of Labor)",
+      "text": "In real life: a labor standards complaint, which any worker or member of the public can file. An investigator asks for schedules, time records, pay stubs and pay notices for the whole staff, going back up to six years. If you are wrong, you get a warning.",
+      "role": "tax_auditor",
+      "checks": [
+        "pay_frequency_violation",
+        "no_wage_notice_statements",
+        "call_in_pay_unpaid",
+        "meal_period_denied",
+        "illegal_deductions",
+        "uniform_costs_unpaid",
+        "invalid_tip_credit",
+        "exempt_misclassification",
+        "no_day_of_rest",
+        "unpaid_volunteer_labor"
+      ]
+    },
+    {
+      "id": "report_tip_pool",
+      "name": "Report managers taking tips (US Department of Labor)",
+      "text": "In real life: a confidential complaint to the Wage and Hour Division, by phone or online. Investigators interview the staff and check who really shares the tips and what was reported to the IRS. If you are wrong, you get a warning.",
+      "role": "tax_auditor",
+      "checks": [
+        "tip_pool_ineligible",
+        "unreported_tips"
+      ]
+    },
+    {
+      "id": "report_child_labor",
+      "name": "Report a minor working late or without papers",
+      "text": "In real life: a child labor complaint to the NYS Department of Labor. An investigator checks working papers and the schedule of every worker under 18. If you are wrong, you get a warning.",
+      "role": "tax_auditor",
+      "checks": [
+        "child_labor"
+      ]
+    },
+    {
+      "id": "report_retaliation",
+      "name": "Report a worker punished for speaking up",
+      "text": "In real life: a retaliation complaint to the NYS Department of Labor, or a charge at the National Labor Relations Board when workers acted together. The agency compares the dates of the complaint and of the firing or cut hours. If you are wrong, you get a warning.",
+      "role": "tax_auditor",
+      "checks": [
+        "retaliation",
+        "unfair_labor_practice"
+      ]
+    },
+    {
+      "id": "report_hiring_practices",
+      "name": "Report an illegal job ad or hiring question (NYC Commission on Human Rights)",
+      "text": "In real life: an online complaint or tip to the Commission. It checks the ad for a pay range and the application for questions about arrests, credit or past pay, and may send a tester. If you are wrong, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "job_ad_no_pay_range",
+        "illegal_hiring_questions",
+        "no_harassment_policy_training",
+        "harassment_complaint_ignored"
+      ]
+    },
+    {
+      "id": "report_no_disability_cover",
+      "name": "Report missing disability and family leave insurance",
+      "text": "In real life: a non-compliance report to the Workers' Compensation Board. The Board looks up the policy on file and writes to the employer. If you are wrong, you get a warning.",
+      "role": "tax_auditor",
+      "checks": [
+        "no_disability_pfl_coverage"
+      ]
+    }
+  ]
+}
