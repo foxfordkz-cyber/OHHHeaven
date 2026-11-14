@@ -1,725 +1,585 @@
-"""Street War MVP rules engine and balance check (researcher 42).
+"""Street War MVP rules - reference implementation (researcher 42, see 42-game-rules.md).
 
-Run:  python3 42-rules-sim.py            # example match + balance tables (~2.5 min)
-      python3 42-rules-sim.py --example  # only the 6-round example match from 42-game-rules.md
-      python3 42-rules-sim.py --quick    # fewer matches
+Run (Python 3.9+, no dependencies):
+    python3 42-rules-sim.py example      # the 6-round, 4-player example from the report, round by round
+    python3 42-rules-sim.py check        # recomputes the example independently from the rule tables
+    python3 42-rules-sim.py tournament   # bot strategies on random streets: is any strategy dominant?
 
-Implements the rules in 42-game-rules.md exactly: 4 shops on one street,
-three levers (price, tier, staff), one attack card (Poach: only a shop that was
-full last round can lose a barista; the target has already paid that barista's
-wage this round), one price pact with a $500 deposit, event cards, overdraft
-and bankruptcy. Every number is a game-design assumption, not a fact about real
-coffee shops. Only the standard library. Output of a full run is saved in
-42-rules-sim-output.txt.
+resolve_round() is the spec for the TypeScript engine: pure and deterministic (no randomness inside).
+Every number below is a game-design assumption, not a fact about real coffee shops.
 """
 import math
 import random
+import statistics
 import sys
 from decimal import Decimal, ROUND_HALF_UP
-from fractions import Fraction
 
-# ------------------------------- constants -----------------------------------
-TRAFFIC = 12000                 # potential customers per month on the street
-ELSEWHERE = 2.0                 # appeal of "buy elsewhere / skip", per segment
-PRICES = [x / 2 for x in range(6, 19)]          # $3.00 .. $9.00, step $0.50
-TIERS = {   # unit cost, staff wage, appeal for Bargain, appeal for Quality
-    "eco":  dict(cost=1.00, wage=2000, qb=1.0, qq=0.6),
-    "std":  dict(cost=1.50, wage=2000, qb=1.0, qq=1.0),
-    "prem": dict(cost=2.50, wage=2400, qb=1.0, qq=1.8),
+# ======================= config: one file in the real build =======================
+PRICES = [2.0 + 0.5 * k for k in range(17)]                 # $2.00 .. $10.00, step $0.50
+ELASTICITY = {"student": 3.2, "mixed": 3.0, "office": 2.8}  # street profile -> price sensitivity e
+QUALITY = {"eco": 0.70, "std": 1.00, "prem": 1.90}          # quality factor in appeal
+WAGE = {"eco": 1800, "std": 2000, "prem": 2400}             # per barista per round
+TIER_RANK = {"eco": 0, "std": 1, "prem": 2}
+COST = {"eco": (0.45, 0.60), "std": (0.60, 0.80), "prem": (0.90, 1.60)}   # unit cost = a + b * N
+OUTSIDE = {3: 1.00, 4: 1.33, 5: 1.67, 6: 2.00}              # "buy nothing on this street" weight
+SPOTS = {   # (name, traffic weight, rent per round); players pick a spot in the lobby
+    3: [("Corner", 1.00, 3700), ("Middle", 0.88, 3000), ("Edge", 0.76, 1500)],
+    4: [("Corner", 1.00, 3700), ("Middle", 0.88, 3000), ("Middle", 0.88, 3000), ("Edge", 0.76, 1500)],
+    5: [("Corner", 1.00, 3700), ("Middle", 0.88, 3000), ("Middle", 0.88, 3000), ("Edge", 0.76, 1500),
+        ("Edge", 0.76, 1500)],
+    6: [("Corner", 1.00, 3700), ("Corner", 1.00, 3700), ("Middle", 0.88, 3000), ("Middle", 0.88, 3000),
+        ("Edge", 0.76, 1500), ("Edge", 0.76, 1500)],
 }
-SPOTS = [  # name, location weight, rent per month
-    ("Corner", 1.2, 3800),
-    ("Middle A", 1.0, 2400),
-    ("Middle B", 1.0, 2400),
-    ("Far end", 0.8, 1900),
-]
-OWNER_CAP, STAFF_CAP = 500, 1000
-MAX_STAFF, MAX_STAFF_CHANGE = 6, 2
-HIRE_FEE = FIRE_FEE = 500
-MISC = 500
-START_CASH, START_STAFF = 8000, 1
-POACH_FEE, POACH_FROM_ROUND = 1500, 2
-POACH_PREPAID = True           # True: the target has already paid this month's wage of the poached barista
-POACH_RULE = "overworked"      # "overworked": only a shop that was full last round can lose staff; "premium": Premium is immune
-PACT_ESCROW, PACT_ROUNDS = 500, 3
-OVERDRAFT_LIMIT, OVERDRAFT_RATE = 5000, 0.10
-SPILL = 0.5
+CFG = dict(
+    market_per_shop=2600, market_base=2000,   # M = 2600 * n + 2000 potential customers per round
+    owner_cap=500, barista_cap=1100, max_staff=6,
+    hire=400, fire=1000, tier_switch=500, misc=500,
+    retain=0.40, spill=0.5,
+    overdraft_limit=-6000, overdraft_rate=0.03,
+    poach_fee=1500, first_attack_round=3,
+    pact_rounds=3, pact_penalty=1000,
+    start_cash=12000, start_staff=1, start_tier="std", start_price=6.00,
+)
 
 
-def _q(x, places):  # round half up (paper rule); exact for Fractions and ints
-    if isinstance(x, Fraction):
-        d = Decimal(x.numerator) / Decimal(x.denominator)
-    else:
-        d = Decimal(repr(x))
-    return float(d.quantize(Decimal(places), rounding=ROUND_HALF_UP))
+def money(x):
+    """Dollars, rounded half up."""
+    return int(Decimal(repr(x)).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
 
 
-def r3(x):          # appeal values: 3 decimals
-    return _q(x, "0.001")
+def r2(x):
+    return float(Decimal(repr(x)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
 
 
-def r2(x):          # unit costs: cents
-    return _q(x, "0.01")
+def r3(x):
+    return float(Decimal(repr(x)).quantize(Decimal("0.001"), rounding=ROUND_HALF_UP))
 
 
-def r0(x):          # money: whole dollars
-    return int(_q(x, "1"))
+def price_factor(profile, p):
+    return r2((6.0 / p) ** ELASTICITY[profile])
 
 
-def mult_bargain(p):        # (6/p)^3, rounded to 3 decimals: the paper table
-    return r3((Fraction(6) / Fraction(str(p))) ** 3)
+def unit_cost(tier, n_index):
+    a, b = COST[tier]
+    return r2(a + b * n_index)
 
 
-def mult_quality(p):        # 6/p, rounded to 3 decimals
-    return r3(Fraction(6) / Fraction(str(p)))
+def capacity(staff):
+    return CFG["owner_cap"] + CFG["barista_cap"] * staff
 
 
-# ------------------------------- one match ------------------------------------
-class Match:
-    def __init__(self, names, spots, bargain_share=0.5, events=None, rounds=6, log=False):
-        self.n_rounds = rounds
-        self.bshare = bargain_share
-        self.events = events or []      # dicts: kind, m, start, length, title
-        self.log = log
-        self.players = []
-        for i, name in enumerate(names):
-            s = spots[i]
-            self.players.append(dict(id=i, name=name, spot=s, weight=SPOTS[s][1], rent=SPOTS[s][2],
-                                     cash=START_CASH, staff=START_STAFF, price=6.0, tier="std",
-                                     out=False, out_round=None, served_total=0, broke_deal=False, was_full=False,
-                                     last_demand=None, hist=[]))
-        self.pacts = []                 # dict(a, b, floor, start, end, status)
-        self.round = 0
-        self.records = []
+# ======================= match state =======================
+def new_match(names, profile="mixed", spots=None, events=None):
+    """spots: index into SPOTS[n] for each player (lobby choice). events: {round: {"N": x} or {"traffic": y}}."""
+    n = len(names)
+    spots = spots or list(range(n))
+    players = []
+    for i, nm in enumerate(names):
+        sname, w, rent = SPOTS[n][spots[i]]
+        players.append(dict(id=i, name=nm, spot=sname, w=w, rent=rent, cash=CFG["start_cash"],
+                            staff=CFG["start_staff"], tier=CFG["start_tier"], price=CFG["start_price"],
+                            served_prev=0, a_prev=None, out=False, out_round=None, marks=0))
+    return dict(n=n, profile=profile, players=players, round=0,
+                m0=CFG["market_per_shop"] * n + CFG["market_base"], outside=OUTSIDE[n],
+                events=events or {}, pacts=[], log=[])
 
-    # ---- world state for the round
-    def world(self, t):
-        cost_mult = {k: 1.0 for k in TIERS}
-        traffic, bshare, wage_add = TRAFFIC, self.bshare, 0
-        active = []
-        for e in self.events:
-            if e["start"] <= t < e["start"] + e["length"]:
-                active.append(e)
-                if e["kind"] == "cost":
-                    for k in e.get("tiers", list(TIERS)):
-                        cost_mult[k] *= 1 + e["m"]
-                elif e["kind"] == "traffic":
-                    traffic = r0(Fraction(traffic) * (1 + Fraction(str(e["m"]))))
-                elif e["kind"] == "squeeze":
-                    bshare = min(0.8, max(0.2, round(bshare + e["m"], 4)))     # share stays within 20-80%
-                elif e["kind"] == "wage":
-                    wage_add += e["m"]
-        unit = {k: r2(Fraction(str(TIERS[k]["cost"])) * Fraction(str(round(cost_mult[k], 6)))) for k in TIERS}
-        wage = {k: TIERS[k]["wage"] + wage_add for k in TIERS}
-        return dict(unit=unit, wage=wage, traffic=traffic, bshare=bshare, active=active)
 
-    def forecast(self, t):
-        return [e for e in self.events if e["start"] == t + 1]
+def resolve_round(st, moves, pact_offers=()):
+    """One round. moves: {player_id: {"price", "tier", "staff", "poach": target_id|None}}.
+    pact_offers: [(from_id, to_id, floor_price, accepted_bool)] made during this round's OPEN phase."""
+    st["round"] += 1
+    t = st["round"]
+    ev = st["events"].get(t, {})
+    n_index, traffic = ev.get("N", 1.00), ev.get("traffic", 1.00)          # step 1: event
+    alive = [p for p in st["players"] if not p["out"]]
+    rec = dict(round=t, N=n_index, traffic=traffic, rows={}, notes=[])
+    cost = {p["id"]: dict(hire=0, fire=0, switch=0, poach=0, pact=0) for p in alive}
 
-    def alive(self):
-        return [p for p in self.players if not p["out"]]
+    # step 2: lock moves; a missing move repeats last round's levers with no card
+    for p in alive:
+        mv = moves.get(p["id"], {})
+        price, tier = mv.get("price", p["price"]), mv.get("tier", p["tier"])
+        target = mv.get("staff", p["staff"])
+        assert price in PRICES and tier in QUALITY and 0 <= target <= CFG["max_staff"]
+        if tier != p["tier"] and t > 1:
+            cost[p["id"]]["switch"] = CFG["tier_switch"]
+        p["price"], p["tier"] = price, tier
+        p["_target"] = target
+        p["_poach"] = mv.get("poach") if t >= CFG["first_attack_round"] else None
 
-    def view(self, p):
-        """What a player legally sees when deciding round t (public info + own state)."""
-        rivals = [dict(id=q["id"], name=q["name"], price=q["price"], tier=q["tier"], staff=q["staff"],
-                       served=q["hist"][-1]["served"] if q["hist"] else None, badge=self.badge(q),
-                       was_full=q["was_full"])
-                  for q in self.alive() if q is not p]
-        last_poach = self.records[-1]["poach"] if self.records else []
-        return dict(round=self.round + 1, me=p, rivals=rivals, forecast=self.forecast(self.round + 1),
-                    last_poach=last_poach,
-                    world=self.world(self.round + 1), pacts=[x for x in self.pacts if x["status"] == "active"
-                                                              and p["id"] in (x["a"], x["b"])])
+    # step 3: price pacts - a price below the floor in a pact round is a breach
+    for pact in st["pacts"]:
+        if pact["status"] != "active" or not (pact["start"] <= t <= pact["end"]):
+            continue
+        a, b = st["players"][pact["a"]], st["players"][pact["b"]]
+        if a["out"] or b["out"]:
+            pact["status"] = "ended"
+            continue
+        breakers = [x for x in (a, b) if x["price"] < pact["floor"]]
+        for x in breakers:
+            other = b if x is a else a
+            cost[x["id"]]["pact"] += CFG["pact_penalty"]
+            cost[other["id"]]["pact"] -= CFG["pact_penalty"]
+            x["marks"] += 1
+            rec["notes"].append(f"{x['name']} broke the price pact with {other['name']} (floor ${pact['floor']:.2f}): "
+                                f"pays ${CFG['pact_penalty']:,} to {other['name']}")
+        if breakers:
+            pact["status"] = "broken"
+        elif t == pact["end"]:
+            pact["status"] = "kept"
 
-    def badge(self, p):
-        if p["out"]:
-            return "Bankrupt"
-        fixed = p["staff"] * TIERS[p["tier"]]["wage"] + p["rent"] + MISC
-        if p["cash"] < 0:
-            return "Critical"
-        if p["cash"] < fixed:
-            return "Strained"
-        return "Healthy"
+    # step 4: hiring and firing
+    for p in alive:
+        diff = p["_target"] - p["staff"]
+        if diff > 0:
+            cost[p["id"]]["hire"] = CFG["hire"] * diff
+        elif diff < 0:
+            cost[p["id"]]["fire"] = CFG["fire"] * -diff
+        p["staff"] = p["_target"]
 
-    # ---- play one round with locked decisions {id: dict(price, tier, staff, poach, pact_offer, pact_accept)}
-    def play_round(self, dec):
-        self.round += 1
-        t = self.round
-        w = self.world(t)
-        alive = self.alive()
-        rec = dict(round=t, world=w, rows={}, poach=[], pact_events=[], spill=0, lost=0, bankrupt=[])
-        # 0. decisions become public; validate
-        for p in alive:
-            d = dec[p["id"]]
-            assert d["price"] in PRICES and d["tier"] in TIERS
-            assert 0 <= d["staff"] <= MAX_STAFF and abs(d["staff"] - p["staff"]) <= MAX_STAFF_CHANGE
-            row = dict(start_cash=p["cash"], price=d["price"], tier=d["tier"], staff_before=p["staff"],
-                       hire=max(0, d["staff"] - p["staff"]), fire=max(0, p["staff"] - d["staff"]),
-                       poach_fee=0, escrow=0, interest=0)
-            p["price"], p["tier"], p["staff"] = d["price"], d["tier"], d["staff"]
-            row["staff_paid"] = d["staff"]          # wages are paid on this count (before poaching)
-            rec["rows"][p["id"]] = row
-        # 1. interest on overdraft carried in from last round
-        for p in alive:
-            if p["cash"] < 0:
-                rec["rows"][p["id"]]["interest"] = r0(Fraction(-p["cash"]) * Fraction(str(OVERDRAFT_RATE)))
-        # 2. poach: fee always paid; one success per target max; fails on Premium
-        attempts = [(p, dec[p["id"]].get("poach")) for p in alive if dec[p["id"]].get("poach") is not None]
-        targets = {}
-        for p, tid in attempts:
-            assert t >= POACH_FROM_ROUND and tid != p["id"]
-            targets.setdefault(tid, []).append(p)
-        before = {p["id"]: p["staff"] for p in alive}      # every condition uses staff before any poach
-        successes = []
-        for tid, attackers in targets.items():
-            tgt = self.players[tid]
-            for a in attackers:
-                rec["rows"][a["id"]]["poach_fee"] = POACH_FEE
-                if tgt["out"]:
-                    why = "target closed"
-                elif len(attackers) > 1:
-                    why = "two poachers, both fail"
-                elif POACH_RULE == "premium" and tgt["tier"] == "prem":
-                    why = "Premium staff are loyal"
-                elif POACH_RULE == "overworked" and not tgt["was_full"]:
-                    why = "target was not full last round: staff are happy"
-                elif before[tid] < 1:
-                    why = "no staff to poach"
-                elif before[a["id"]] >= MAX_STAFF:
-                    why = "attacker is full"
-                else:
-                    why = None
-                    successes.append((a, tgt))
-                rec["poach"].append(dict(by=a["name"], target=tgt["name"], ok=why is None, why=why or "success"))
-        for a, tgt in successes:                             # then all successes apply at once
+    # step 5: Poach cards
+    by_target = {}
+    for p in alive:
+        if p["_poach"] is not None:
+            by_target.setdefault(p["_poach"], []).append(p)
+    for tid, attackers in by_target.items():
+        tgt = st["players"][tid]
+        if len(attackers) > 1:
+            rec["notes"].append(f"{' and '.join(a['name'] for a in attackers)} all targeted {tgt['name']}: "
+                                f"void, fees refunded")
+            continue
+        a = attackers[0]
+        if tgt["out"] or tgt is a or tgt["staff"] < 1 or a["staff"] >= CFG["max_staff"]:
+            rec["notes"].append(f"{a['name']} -> {tgt['name']}: void (no barista to take / staff cap), fee refunded")
+            continue
+        cost[a["id"]]["poach"] = CFG["poach_fee"]
+        if TIER_RANK[a["tier"]] >= TIER_RANK[tgt["tier"]]:
             tgt["staff"] -= 1
             a["staff"] += 1
-        # 3. pacts: breaches checked against this round's prices
-        for x in self.pacts:
-            if x["status"] != "active" or not (x["start"] <= t <= x["end"]):
-                continue
-            a, b = self.players[x["a"]], self.players[x["b"]]
-            if a["out"] or b["out"]:
-                x["status"] = "ended"
-                for q in (a, b):
-                    if not q["out"]:
-                        rec["rows"][q["id"]]["escrow"] += PACT_ESCROW       # refund
-                rec["pact_events"].append(f"pact {a['name']}-{b['name']} ended: partner closed, escrow refunded")
-                continue
-            ba, bb = a["price"] < x["floor"], b["price"] < x["floor"]
-            if ba and bb:
-                x["status"] = "broken by both"
-                a["broke_deal"] = b["broke_deal"] = True
-                rec["pact_events"].append(f"pact {a['name']}-{b['name']} broken by both: escrows burned")
-            elif ba or bb:
-                traitor, victim = (a, b) if ba else (b, a)
-                x["status"] = f"broken by {traitor['name']}"
-                traitor["broke_deal"] = True
-                rec["rows"][victim["id"]]["escrow"] += 2 * PACT_ESCROW      # own refund + traitor's escrow
-                rec["pact_events"].append(f"{traitor['name']} broke the pact: {victim['name']} receives "
-                                          f"${2 * PACT_ESCROW:,} (own ${PACT_ESCROW:,} back + ${PACT_ESCROW:,})")
-            elif t == x["end"]:
-                x["status"] = "kept"
-                rec["rows"][a["id"]]["escrow"] += PACT_ESCROW
-                rec["rows"][b["id"]]["escrow"] += PACT_ESCROW
-                rec["pact_events"].append(f"pact {a['name']}-{b['name']} kept: escrows refunded")
-        # new pacts agreed this round start next round; escrow paid now
-        for p in alive:
-            off = dec[p["id"]].get("pact_offer")
-            if not off:
-                continue
-            q = self.players[off["to"]]
-            busy = any(x["status"] == "active" and (x["end"] >= t + 1) and
-                       ({p["id"], q["id"]} & {x["a"], x["b"]}) for x in self.pacts)
-            if dec[q["id"]].get("pact_accept") == p["id"] and not busy and not q["out"] and t < self.n_rounds:
-                end = min(self.n_rounds, t + PACT_ROUNDS)
-                self.pacts.append(dict(a=p["id"], b=q["id"], floor=off["floor"], start=t + 1, end=end,
-                                       status="active"))
-                rec["rows"][p["id"]]["escrow"] -= PACT_ESCROW
-                rec["rows"][q["id"]]["escrow"] -= PACT_ESCROW
-                rec["pact_events"].append(f"pact {p['name']}-{q['name']}: price >= ${off['floor']:.2f} "
-                                          f"in rounds {t + 1}-{end}, escrow ${PACT_ESCROW:,} each")
-        # 4. demand: two segments, share = appeal / (sum of appeals + Elsewhere)
-        seg_total = {"bargain": r0(Fraction(w["traffic"]) * Fraction(str(w["bshare"])))}
-        seg_total["quality"] = w["traffic"] - seg_total["bargain"]
-        appeal = {}
-        for p in alive:
-            tb = TIERS[p["tier"]]
-            ab = r3(Fraction(str(p["weight"])) * Fraction(str(mult_bargain(p["price"]))) * Fraction(str(tb["qb"])))
-            aq = r3(Fraction(str(p["weight"])) * Fraction(str(mult_quality(p["price"]))) * Fraction(str(tb["qq"])))
-            appeal[p["id"]] = (ab, aq)
-        sum_b = r3(sum(Fraction(str(a[0])) for a in appeal.values()))
-        sum_q = r3(sum(Fraction(str(a[1])) for a in appeal.values()))
-        rec["sum_b"], rec["sum_q"], rec["seg_total"] = sum_b, sum_q, seg_total
-        demand, cap, served = {}, {}, {}
-        for p in alive:
-            ab, aq = appeal[p["id"]]
-            db = math.floor(seg_total["bargain"] * Fraction(str(ab)) / (Fraction(str(sum_b)) + Fraction(str(ELSEWHERE))))
-            dq = math.floor(seg_total["quality"] * Fraction(str(aq)) / (Fraction(str(sum_q)) + Fraction(str(ELSEWHERE))))
-            demand[p["id"]] = (db, dq)
-            cap[p["id"]] = OWNER_CAP + STAFF_CAP * p["staff"]
-            served[p["id"]] = min(db + dq, cap[p["id"]])
-        excess = sum(demand[i][0] + demand[i][1] - served[i] for i in served)
-        pool = math.floor(SPILL * excess)
-        spare_ids = [p["id"] for p in alive if cap[p["id"]] - served[p["id"]] > 0]
-        got_spill = {i: 0 for i in served}
-        if pool and spare_ids:
-            tot = Fraction(0)
-            for i in spare_ids:
-                tot += Fraction(str(appeal[i][0])) + Fraction(str(appeal[i][1]))
-            for i in spare_ids:
-                share = math.floor(pool * (Fraction(str(appeal[i][0])) + Fraction(str(appeal[i][1]))) / tot)
-                got_spill[i] = min(share, cap[i] - served[i])
-        rec["spill"], rec["excess"] = pool, excess
-        rec["lost"] = excess - sum(got_spill.values())
-        # 5. money
-        for p in alive:
-            i = p["id"]
-            row = rec["rows"][i]
-            sv = served[i] + got_spill[i]
-            unit = w["unit"][p["tier"]]
-            row.update(appeal_b=appeal[i][0], appeal_q=appeal[i][1], demand_b=demand[i][0], demand_q=demand[i][1],
-                       capacity=cap[i], staff=p["staff"], served_own=served[i], spill_in=got_spill[i], served=sv,
-                       revenue=r0(sv * Fraction(str(p["price"]))), unit=unit,
-                       ingredients=r0(sv * Fraction(str(unit))),
-                       wages=(row["staff_paid"] if POACH_PREPAID else p["staff"]) * w["wage"][p["tier"]],
-                       rent=p["rent"], misc=MISC,
-                       fees=row["hire"] * HIRE_FEE + row["fire"] * FIRE_FEE)
-            row["profit"] = (row["revenue"] - row["ingredients"] - row["wages"] - row["rent"] - row["misc"]
-                             - row["fees"] - row["poach_fee"] - row["interest"])
-            p["cash"] = row["start_cash"] + row["profit"] + row["escrow"]
-            row["end_cash"] = p["cash"]
-            p["served_total"] += sv
-            p["was_full"] = sv >= cap[i]
-            p["last_demand"] = demand[i][0] + demand[i][1]
-            p["hist"].append(dict(served=sv, cash=p["cash"]))
-        # 6. bankruptcy
-        for p in alive:
-            if p["cash"] < -OVERDRAFT_LIMIT:
-                p["out"], p["out_round"] = True, t
-                rec["bankrupt"].append(p["name"])
-        for p in alive:
-            rec["rows"][p["id"]]["badge"] = self.badge(p)
-        self.records.append(rec)
-        return rec
-
-    def standings(self):
-        surv = sorted([p for p in self.players if not p["out"]], key=lambda p: (-p["cash"], -p["served_total"]))
-        dead = sorted([p for p in self.players if p["out"]], key=lambda p: -p["out_round"])
-        return surv + dead
-
-    def over(self):
-        return self.round >= self.n_rounds or len(self.alive()) <= 1
-
-
-# ------------------------------- bots ----------------------------------------
-def staff_for(expected, cur, margin=4.5, wage=2000):
-    """Staff count with the best expected profit this round (what a sensible player does)."""
-    best, best_k = None, cur
-    for k in range(max(0, cur - MAX_STAFF_CHANGE), min(MAX_STAFF, cur + MAX_STAFF_CHANGE) + 1):
-        served = min(expected, OWNER_CAP + STAFF_CAP * k)
-        fee = (k - cur) * HIRE_FEE if k > cur else (cur - k) * FIRE_FEE
-        value = served * margin - k * wage - fee
-        if best is None or value > best + 1e-9:
-            best, best_k = value, k
-    return best_k
-
-
-def poach_targets(v):
-    """Rivals a poach can succeed against, judged from public information only."""
-    if POACH_RULE == "premium":
-        return [r for r in v["rivals"] if r["tier"] != "prem" and r["staff"] >= 1]
-    return [r for r in v["rivals"] if r["was_full"] and r["staff"] >= 1]
-
-
-def snap(price):
-    price = min(9.0, max(3.0, price))
-    return math.floor(price * 2 + 0.5) / 2
-
-
-def first_estimate(p):
-    return 2000 * p["weight"]
-
-
-class Bot:
-    tier = "std"
-    base_price = 6.0
-    poacher = False
-
-    def __init__(self, rnd):
-        self.rnd = rnd
-
-    def price(self, v):
-        w = v["world"]
-        shift = w["unit"][self.tier] - TIERS[self.tier]["cost"]       # pass cost shocks into price
-        return snap(self.base_price + shift)
-
-    slack_left = 0
-
-    def decide(self, v):
-        p = v["me"]
-        exp = p["last_demand"] if p["last_demand"] is not None else first_estimate(p)
-        price = self.price(v)
-        w = v["world"]
-        margin = price - w["unit"][self.tier]
-        if any(x["ok"] and x["target"] == p["name"] for x in v["last_poach"]):
-            self.slack_left = 2                     # was poached: keep spare capacity for two rounds
-        staff = staff_for(exp, p["staff"], margin, w["wage"][self.tier])
-        if self.slack_left > 0:
-            self.slack_left -= 1
-            if OWNER_CAP + STAFF_CAP * staff <= exp and staff < min(MAX_STAFF, p["staff"] + MAX_STAFF_CHANGE):
-                staff += 1
-        d = dict(price=price, tier=self.tier, staff=staff, poach=None)
-        if self.poacher and v["round"] >= POACH_FROM_ROUND:
-            # public info: a rival whose customers last round reached its capacity had a queue
-            cands = poach_targets(v)
-            if cands and d["staff"] >= 1:
-                d["poach"] = self.rnd.choice(cands)["id"]
-                d["staff"] = max(p["staff"] - MAX_STAFF_CHANGE, d["staff"] - 1)   # the poached barista replaces a hire
-        return d
-
-
-class Balanced(Bot):
-    pass
-
-
-class Discounter(Bot):
-    tier, base_price = "eco", 5.0
-
-
-class Premium(Bot):
-    tier, base_price = "prem", 7.5
-
-
-class Dumper(Bot):                       # always $0.50 under the cheapest rival, eco beans
-    tier = "eco"
-
-    def price(self, v):
-        prices = [r["price"] for r in v["rivals"]]
-        return snap(min(prices) - 0.5) if prices else 5.0
-
-
-class DeepDumper(Bot):                   # price war at $4.00 from round 1
-    tier, base_price = "eco", 4.0
-
-
-class Poacher(Bot):
-    poacher = True
-
-
-class Adaptive(Bot):                     # reads the street: crowded niche -> other niche; poaches volume shops
-    poacher = True
-
-    def decide(self, v):
-        tiers = [r["tier"] for r in v["rivals"]]
-        if tiers.count("eco") >= 2:
-            self.tier, self.base_price = "prem", 7.5
-        elif tiers.count("prem") >= 2:
-            self.tier, self.base_price = "eco", 5.0
+            rec["notes"].append(f"{a['name']} poached a barista from {tgt['name']} (fee ${CFG['poach_fee']:,})")
         else:
-            self.tier, self.base_price = "std", 6.0
-        self.poacher = False
-        d = super().decide(v)
-        cands = poach_targets(v)
-        if cands and v["round"] >= POACH_FROM_ROUND and d["staff"] >= 1:
-            d["poach"] = self.rnd.choice(cands)["id"]
-            d["staff"] = max(v["me"]["staff"] - MAX_STAFF_CHANGE, d["staff"] - 1)
-        return d
+            rec["notes"].append(f"{a['name']} tried to poach from {tgt['name']}: FAILED "
+                                f"({tgt['name']} pays better), fee lost")
+
+    # steps 6-10: capacity, appeal, regulars, demand split, queues and spill-over
+    for p in alive:
+        p["_cap"] = capacity(p["staff"])
+        p["_pf"] = price_factor(st["profile"], p["price"])
+        p["_A"] = r3(p["w"] * p["_pf"] * QUALITY[p["tier"]])
+        p["_keep"] = 1.0 if p["a_prev"] is None else r2(min(1.0, p["_A"] / p["a_prev"]))
+        p["_reg"] = math.floor(CFG["retain"] * p["served_prev"] * p["_keep"] + 1e-9)
+    m_t = math.floor(st["m0"] * traffic + 1e-9)
+    reg_sum = sum(p["_reg"] for p in alive)
+    free = max(0, m_t - reg_sum)
+    sum_a = r3(sum(p["_A"] for p in alive))
+    denom = r3(st["outside"] + sum_a)
+    for p in alive:
+        p["_new"] = math.floor(free * p["_A"] / denom + 1e-9)
+        p["_dem"] = p["_reg"] + p["_new"]
+        p["_served"] = min(p["_dem"], p["_cap"])
+        p["_lost"] = p["_dem"] - p["_served"]
+        p["_extra"] = 0
+    lost_sum = sum(p["_lost"] for p in alive)
+    spill = math.floor(CFG["spill"] * lost_sum + 1e-9)
+    elig = [p for p in alive if p["_cap"] > p["_served"]]
+    w_el = r3(sum(p["_A"] for p in elig))
+    for p in elig:
+        p["_extra"] = min(p["_cap"] - p["_served"], math.floor(spill * p["_A"] / w_el + 1e-9))
+        p["_served"] += p["_extra"]
+    rec.update(m_t=m_t, reg_sum=reg_sum, free=free, sum_a=sum_a, denom=denom,
+               lost_sum=lost_sum, spill=spill, w_el=w_el)
+
+    # step 11: money
+    for p in alive:
+        c = cost[p["id"]]
+        uc = unit_cost(p["tier"], n_index)
+        rev = money(p["_served"] * p["price"])
+        cogs = money(p["_served"] * uc)
+        wages = p["staff"] * WAGE[p["tier"]]
+        interest = money(CFG["overdraft_rate"] * -p["cash"]) if p["cash"] < 0 else 0
+        start = p["cash"]
+        p["cash"] = (start + rev - cogs - wages - p["rent"] - CFG["misc"] - interest
+                     - c["hire"] - c["fire"] - c["switch"] - c["poach"] - c["pact"])
+        rec["rows"][p["id"]] = dict(name=p["name"], spot=p["spot"], price=p["price"], tier=p["tier"],
+                                    target=p["_target"], staff=p["staff"], cap=p["_cap"], pf=p["_pf"],
+                                    A=p["_A"], keep=p["_keep"], reg=p["_reg"], new=p["_new"], dem=p["_dem"],
+                                    lost=p["_lost"], extra=p["_extra"], served=p["_served"], uc=uc, rev=rev,
+                                    cogs=cogs, wages=wages, rent=p["rent"], misc=CFG["misc"],
+                                    interest=interest, start=start, cash=p["cash"], **c)
+
+    # step 12: bankruptcy
+    for p in alive:
+        if p["cash"] < CFG["overdraft_limit"]:
+            p["out"], p["out_round"] = True, t
+            rec["notes"].append(f"{p['name']} is BANKRUPT (cash ${p['cash']:,} < ${CFG['overdraft_limit']:,})")
+
+    # step 13: pacts accepted this round start next round
+    for (a, b, floor, accepted) in pact_offers:
+        pa, pb = st["players"][a], st["players"][b]
+        busy = any(pk["status"] == "active" and ({pk["a"], pk["b"]} & {a, b}) for pk in st["pacts"])
+        if accepted and not busy and not pa["out"] and not pb["out"]:
+            st["pacts"].append(dict(a=a, b=b, floor=floor, start=t + 1, end=t + CFG["pact_rounds"], status="active"))
+            rec["notes"].append(f"Pact {pa['name']}-{pb['name']}: floor ${floor:.2f}, rounds {t + 1}-"
+                                f"{t + CFG['pact_rounds']} (visible to the two of them only)")
+
+    # step 14: carry over
+    for p in alive:
+        p["served_prev"] = 0 if p["out"] else p["_served"]
+        p["a_prev"] = p["_A"]
+    st["log"].append(rec)
+    return rec
 
 
-class Cartel(Balanced):                  # agrees a price floor with one partner and keeps it
-    floor = 6.5
-    partner = None
-    traitor = False
-
-    def decide(self, v):
-        d = super().decide(v)
-        me, t, last = v["me"], v["round"], self.n_rounds
-        covering = [x for x in v["pacts"] if x["start"] <= t <= x["end"]]
-        if covering:
-            d["price"] = max(d["price"], covering[0]["floor"])
-            if self.traitor and t == last:                          # betray in the final round:
-                d["price"] = snap(covering[0]["floor"] - 1.0)      # $1 under the floor, staff for +40%
-                d["staff"] = staff_for((me["last_demand"] or 2000) * 1.4, me["staff"],
-                                       d["price"] - v["world"]["unit"][self.tier], v["world"]["wage"][self.tier])
-        future = [x for x in v["pacts"] if x["end"] >= t + 1]
-        if self.partner is not None and not future and t < last:
-            if me["id"] < self.partner:
-                d["pact_offer"] = dict(to=self.partner, floor=self.floor)
-            else:
-                d["pact_accept"] = self.partner
-        return d
+def standings(st):
+    alive = sorted([p for p in st["players"] if not p["out"]], key=lambda p: -p["cash"])
+    dead = sorted([p for p in st["players"] if p["out"]], key=lambda p: (-p["out_round"], -p["cash"]))
+    return alive + dead
 
 
-class Traitor(Cartel):
-    traitor = True
+# ======================= bots for balance tests (not the MVP bots: see report 52) =======================
+def forecast(st, me, price, tier):
+    """What the UI forecast shows: rivals repeat their last revealed price and tier."""
+    alive = [p for p in st["players"] if not p["out"]]
+
+    def appeal(p, pr, ti):
+        return r3(p["w"] * price_factor(st["profile"], pr) * QUALITY[ti])
+
+    def reg(p, a_now):
+        keep = 1.0 if p["a_prev"] is None else min(1.0, a_now / p["a_prev"])
+        return math.floor(CFG["retain"] * p["served_prev"] * keep)
+
+    a_me = appeal(me, price, tier)
+    others = [(p, appeal(p, p["price"], p["tier"])) for p in alive if p is not me]
+    sum_a = a_me + sum(a for _, a in others)
+    reg_sum = reg(me, a_me) + sum(reg(p, a) for p, a in others)
+    free = max(0, st["m0"] - reg_sum)
+    return reg(me, a_me) + free * a_me / (st["outside"] + sum_a)
 
 
-class Rookie(Bot):                       # a first-time player: random but plausible moves, no planning
-    def decide(self, v):
-        r, p = self.rnd, v["me"]
-        tier = r.choice(["eco", "std", "std", "prem"])
-        price = r.choice(PRICES[2:11])                  # $4.00 .. $8.00
-        staff = max(0, min(MAX_STAFF, p["staff"] + r.choice([-1, 0, 0, 1, 2])))
-        poach = None
-        if v["round"] >= POACH_FROM_ROUND and v["rivals"] and r.random() < 0.25:
-            poach = r.choice(v["rivals"])["id"]
-        return dict(price=price, tier=tier, staff=staff, poach=poach)
+def best_staff(demand, tier, staff_now, price, n_index):
+    margin = price - unit_cost(tier, n_index)
+    best = None
+    for s in range(CFG["max_staff"] + 1):
+        gain = (min(demand, capacity(s)) * margin - s * WAGE[tier]
+                - CFG["hire"] * max(0, s - staff_now) - CFG["fire"] * max(0, staff_now - s))
+        if best is None or gain > best[0] + 1e-9:
+            best = (gain, s)
+    return best[1]
 
 
-STRATS = dict(Balanced=Balanced, Discounter=Discounter, Premium=Premium, Dumper=Dumper,
-              DeepDumper=DeepDumper, Poacher=Poacher, Adaptive=Adaptive, Rookie=Rookie,
-              Cartel=Cartel, Traitor=Traitor)
-SANE = ["Balanced", "Discounter", "Premium", "Poacher", "Adaptive"]
-ALL7 = ["Balanced", "Discounter", "Premium", "Dumper", "DeepDumper", "Poacher", "Adaptive"]
+class Fixed:
+    tier, price = "std", 6.0
+
+    def decide(self, st, me, n_index):
+        fc = forecast(st, me, self.price, self.tier)
+        return dict(price=self.price, tier=self.tier, staff=best_staff(fc, self.tier, me["staff"], self.price, n_index))
+
+
+class Balanced(Fixed):
+    tier, price = "std", 6.0
+
+
+class Discounter(Fixed):
+    tier, price = "eco", 5.0
+
+
+class Premium(Fixed):
+    tier, price = "prem", 8.5
+
+
+class Dumper(Fixed):            # permanent price war
+    tier, price = "eco", 3.0
+
+
+class Undercutter(Fixed):       # always $0.50 below the cheapest rival's last price, never below $3.00
+    def decide(self, st, me, n_index):
+        rivals = [p["price"] for p in st["players"] if not p["out"] and p is not me]
+        self.price = max(3.0, min(rivals) - 0.5) if st["round"] >= 1 else 5.5
+        return super().decide(st, me, n_index)
+
+
+class Poacher(Balanced):        # Balanced + Poach on the busiest rival it can legally hit, every other round
+    def decide(self, st, me, n_index):
+        mv = super().decide(st, me, n_index)
+        t = st["round"] + 1
+        if t >= CFG["first_attack_round"] and t % 2 == 1:
+            cands = [p for p in st["players"] if not p["out"] and p is not me and p["staff"] >= 1
+                     and TIER_RANK[p["tier"]] <= TIER_RANK[self.tier]]
+            if cands:
+                mv["poach"] = max(cands, key=lambda p: p["served_prev"])["id"]
+                if mv["staff"] > me["staff"]:
+                    mv["staff"] -= 1     # the poached barista replaces a planned hire
+        return mv
+
+
+class Adaptive:                 # myopic best response over tier x price
+    def decide(self, st, me, n_index):
+        best = None
+        for tier in QUALITY:
+            for price in PRICES:
+                if price < 3.0:
+                    continue
+                fc = forecast(st, me, price, tier)
+                s = best_staff(fc, tier, me["staff"], price, n_index)
+                gain = (min(fc, capacity(s)) * (price - unit_cost(tier, n_index)) - s * WAGE[tier]
+                        - CFG["hire"] * max(0, s - me["staff"]) - CFG["fire"] * max(0, me["staff"] - s)
+                        - (CFG["tier_switch"] if (tier != me["tier"] and st["round"] >= 1) else 0))
+                if best is None or gain > best[0]:
+                    best = (gain, dict(price=price, tier=tier, staff=s))
+        return best[1]
+
+
+BOTS = dict(Balanced=Balanced, Discounter=Discounter, Premium=Premium, Dumper=Dumper,
+            Undercutter=Undercutter, Poacher=Poacher, Adaptive=Adaptive)
 
 
 def random_events(rnd, rounds):
-    """Two (6 rounds) or three (8 rounds) event cards at rounds 3, 5, 7, two rounds each."""
-    kinds = [("cost", 0.25), ("cost", 0.40), ("cost", -0.20), ("traffic", 0.15), ("traffic", -0.15),
-             ("squeeze", 0.10), ("wage", 200), ("costprem", 0.30)]
-    out = []
-    for start in range(3, rounds + 1, 2):
-        k, m = rnd.choice(kinds)
-        e = dict(kind="cost" if k == "costprem" else k, m=m, start=start, length=2, title=k)
-        if k == "costprem":
-            e["tiers"] = ["prem"]
-        out.append(e)
-    return out
+    ev = {}
+    for s in ([3, 5] if rounds == 6 else [3, 6, 9, 11]):
+        kind = rnd.choice(["cost_up", "cost_up", "cost_down", "traffic_up", "traffic_down"])
+        val = {"cost_up": dict(N=rnd.choice([1.20, 1.35])), "cost_down": dict(N=0.85),
+               "traffic_up": dict(traffic=1.10), "traffic_down": dict(traffic=0.90)}[kind]
+        for k in range(2):
+            if s + k <= rounds:
+                ev[s + k] = val
+    return ev
 
 
-def play(field, seed, rounds=8):
+def play(field, seed, rounds=12, profile=None):
     rnd = random.Random(seed)
-    spots = list(range(4))
+    n = len(field)
+    profile = profile or rnd.choice(["student", "mixed", "office"])
+    spots = list(range(n))
     rnd.shuffle(spots)
-    m = Match(field, spots, bargain_share=rnd.uniform(0.35, 0.65), events=random_events(rnd, rounds),
-              rounds=rounds)
-    bots = [STRATS[s](rnd) for s in field]
-    pact_ids = [i for i, b in enumerate(bots) if isinstance(b, Cartel)]
-    for b in bots:
-        b.n_rounds = rounds
-    if len(pact_ids) == 2:
-        bots[pact_ids[0]].partner, bots[pact_ids[1]].partner = pact_ids[1], pact_ids[0]
-    while not m.over():
-        dec = {}
-        for p in m.alive():
-            dec[p["id"]] = bots[p["id"]].decide(m.view(p))
-        m.play_round(dec)
-    st = m.standings()
-    top = [p for p in st if not p["out"] and p["cash"] == st[0]["cash"] and p["served_total"] == st[0]["served_total"]]
-    return m, (rnd.choice(top)["id"] if len(top) > 1 else st[0]["id"])
-
-
-def tournament(matches, rounds=8, seed0=1, names=None):
-    names = names or ALL7
-    rnd = random.Random(seed0)
-    stats = {s: dict(games=0, wins=0.0, out=0, cash=[]) for s in names}
-    snow = 0
-    for k in range(matches):
-        field = [rnd.choice(names) for _ in range(4)]
-        m, win = play(field, 1000 + k, rounds)
-        lead3 = max(range(4), key=lambda i: (m.players[i]["hist"][2]["cash"] if len(m.players[i]["hist"]) > 2
-                                             else -10 ** 9, -i))
-        snow += field[lead3] == field[win]
-        winners = [i for i in range(4) if field[i] == field[win]]
-        for i, s in enumerate(field):
-            stats[s]["games"] += 1
-            stats[s]["out"] += m.players[i]["out"]
-            if not m.players[i]["out"]:
-                stats[s]["cash"].append(m.players[i]["cash"])
-        for i in winners:
-            stats[field[i]]["wins"] += 1 / len(winners)
-    stats["_snow"] = snow / matches
-    return stats
-
-
-def one_vs_three(hero, foe, matches, rounds=8):
-    wins = outs = 0
-    for k in range(matches):
-        m, win = play([hero, foe, foe, foe], 50000 + k, rounds)
-        wins += win == 0
-        outs += m.players[0]["out"]
-    return wins / matches, outs / matches
-
-
-def mirror(strategy, matches, rounds=8):
-    outs, cash = 0, []
-    for k in range(matches):
-        m, _ = play([strategy] * 4, 90000 + k, rounds)
-        outs += sum(p["out"] for p in m.players)
-        cash += [p["cash"] for p in m.players if not p["out"]]
-    cash.sort()
-    return outs / (4 * matches), (cash[len(cash) // 2] if cash else float("nan"))
-
-
-# ------------------------------- the example ----------------------------------
-EXAMPLE_EVENTS = [
-    dict(kind="cost", m=0.25, start=3, length=2, title="Coffee bean cost +25% (illustrative)"),
-    dict(kind="traffic", m=0.15, start=5, length=2, title="Heatwave: street traffic +15% (illustrative)"),
-]
-# Ana: Premium. Max: price war. Lena: middle price, proposes a pact. Dan: far end, poaches.
-EXAMPLE_NAMES = ["Ana", "Max", "Lena", "Dan"]
-EXAMPLE_SPOTS = [1, 0, 2, 3]       # Ana Middle A, Max Corner, Lena Middle B, Dan Far end
-A, M, L, D = 0, 1, 2, 3
-EXAMPLE_MOVES = {
-    1: {A: dict(price=7.5, tier="prem", staff=2), M: dict(price=5.0, tier="eco", staff=3),
-        L: dict(price=6.0, tier="std", staff=2), D: dict(price=6.0, tier="std", staff=1)},
-    2: {A: dict(price=7.5, tier="prem", staff=2), M: dict(price=4.0, tier="eco", staff=3),
-        L: dict(price=6.0, tier="std", staff=2, pact_offer=dict(to=D, floor=6.0)),
-        D: dict(price=6.0, tier="std", staff=1, pact_accept=L)},
-    3: {A: dict(price=8.0, tier="prem", staff=2), M: dict(price=4.0, tier="eco", staff=4, poach=A),
-        L: dict(price=6.5, tier="std", staff=2), D: dict(price=6.5, tier="std", staff=1, poach=M)},
-    4: {A: dict(price=8.0, tier="prem", staff=2), M: dict(price=3.5, tier="eco", staff=5),
-        L: dict(price=6.5, tier="std", staff=1, poach=M), D: dict(price=6.5, tier="std", staff=1)},
-    5: {A: dict(price=8.0, tier="prem", staff=2), M: dict(price=3.0, tier="eco", staff=6),
-        L: dict(price=5.5, tier="std", staff=2), D: dict(price=6.5, tier="std", staff=1)},
-    6: {A: dict(price=8.0, tier="prem", staff=3), L: dict(price=6.0, tier="std", staff=3),
-        D: dict(price=6.5, tier="std", staff=2)},
-}
-
-
-def run_example(moves=None, verbose=True):
-    moves = moves or EXAMPLE_MOVES
-    m = Match(EXAMPLE_NAMES, EXAMPLE_SPOTS, bargain_share=0.5, events=EXAMPLE_EVENTS, rounds=6)
-    for t in range(1, 7):
-        if m.over():
+    st = new_match([f"{s}{i}" for i, s in enumerate(field)], profile=profile, spots=spots,
+                   events=random_events(rnd, rounds))
+    bots = [BOTS[s]() for s in field]
+    for t in range(1, rounds + 1):
+        alive = [p for p in st["players"] if not p["out"]]
+        if len(alive) <= 1:
             break
-        dec = {}
-        for p in m.alive():
-            d = dict(moves[t][p["id"]])
-            d.setdefault("poach", None)
-            dec[p["id"]] = d
-        rec = m.play_round(dec)
-        if verbose:
-            print_round(m, rec)
-    if verbose:
-        print("\nFinal standings:")
-        for k, p in enumerate(m.standings(), 1):
-            print(f"  {k}. {p['name']:5s} cash ${p['cash']:,}  served {p['served_total']:,}"
-                  f"{'  BANKRUPT in round ' + str(p['out_round']) if p['out'] else ''}")
-    return m
+        n_index = st["events"].get(t, {}).get("N", 1.0)
+        resolve_round(st, {p["id"]: bots[p["id"]].decide(st, p, n_index) for p in alive})
+    return dict(profile=profile, winner=standings(st)[0]["id"], players=st["players"])
 
 
-def print_round(m, rec):
-    w = rec["world"]
-    print(f"\n=== Round {rec['round']} === traffic {w['traffic']:,} (bargain {rec['seg_total']['bargain']:,} / "
-          f"quality {rec['seg_total']['quality']:,}), unit cost eco ${w['unit']['eco']:.2f} std ${w['unit']['std']:.2f} "
-          f"prem ${w['unit']['prem']:.2f}; sums of appeal B {rec['sum_b']} Q {rec['sum_q']}")
-    for e in m.forecast(rec["round"]):
-        print(f"  FORECAST for next round: {e['title']}")
-    for x in rec["poach"]:
-        print(f"  POACH {x['by']} -> {x['target']}: {x['why']}")
-    for s in rec["pact_events"]:
-        print(f"  PACT {s}")
-    print(f"  excess demand {rec['excess']}, spill pool {rec['spill']}, lost {rec['lost']}")
-    cols = ("name price tier staff aB aQ dB dQ cap own spill served revenue ingr wages rent misc fees poach int "
-            "escrow profit cash badge").split()
-    print("  " + " ".join(f"{c:>7s}" for c in cols))
-    for p in m.players:
-        if p["id"] not in rec["rows"]:
-            continue
-        r = rec["rows"][p["id"]]
-        vals = [p["name"], f"{r['price']:.2f}", r["tier"], r["staff"], r["appeal_b"], r["appeal_q"], r["demand_b"],
-                r["demand_q"], r["capacity"], r["served_own"], r["spill_in"], r["served"], r["revenue"],
-                r["ingredients"], r["wages"], r["rent"], r["misc"], r["fees"], r["poach_fee"], r["interest"],
-                r["escrow"], r["profit"], r["end_cash"], r["badge"]]
-        print("  " + " ".join(f"{str(v):>7s}" for v in vals))
-    if rec["bankrupt"]:
-        print("  BANKRUPT: " + ", ".join(rec["bankrupt"]))
+def tournament(matches, rounds, seed0=1):
+    rnd = random.Random(seed0)
+    stats = {s: dict(g=0, w=0.0, fair=0.0, out=0, cash=[]) for s in BOTS}
+    by_street = {}
+    for m in range(matches):
+        n = rnd.choice([3, 4, 4, 5, 6])
+        field = [rnd.choice(list(BOTS)) for _ in range(n)]
+        r = play(field, seed=10_000 + m, rounds=rounds)
+        win_s = field[r["winner"]]
+        for i, s in enumerate(field):
+            stt = stats[s]
+            stt["g"] += 1
+            stt["fair"] += 1 / n
+            stt["out"] += r["players"][i]["out"]
+            if not r["players"][i]["out"]:
+                stt["cash"].append(r["players"][i]["cash"])
+            c = by_street.setdefault(r["profile"], {}).setdefault(s, [0, 0])
+            c[1] += 1
+        stats[win_s]["w"] += 1
+        by_street[r["profile"]][win_s][0] += 1
+    return stats, by_street
 
 
-def check_example(m):
-    """Every money row must add up; customers must be conserved."""
-    for rec in m.records:
-        tot = rec["seg_total"]["bargain"] + rec["seg_total"]["quality"]
-        assert tot == rec["world"]["traffic"]
+def one_vs_three(hero, foe, rounds, matches=250):
+    w = o = 0
+    for m in range(matches):
+        r = play([hero, foe, foe, foe], seed=70_000 + m, rounds=rounds)
+        w += r["winner"] == 0
+        o += r["players"][0]["out"]
+    return w / matches, o / matches
+
+
+# ======================= the worked example (report section 7) =======================
+ANA, KAI, LENA, DAN = 0, 1, 2, 3
+EXAMPLE_EVENTS = {3: dict(N=1.35), 4: dict(N=1.35), 5: dict(traffic=1.10), 6: dict(traffic=1.10)}
+EXAMPLE_MOVES = {   # price, tier, staff target, poach target
+    1: {ANA: (8.5, "prem", 1, None), KAI: (6.0, "std", 2, None), LENA: (6.0, "std", 2, None), DAN: (3.5, "eco", 4, None)},
+    2: {ANA: (8.5, "prem", 1, None), KAI: (6.0, "std", 2, None), LENA: (6.0, "std", 2, None), DAN: (3.5, "eco", 4, None)},
+    3: {ANA: (9.0, "prem", 1, None), KAI: (6.5, "std", 1, None), LENA: (6.5, "std", 1, None), DAN: (3.5, "eco", 4, ANA)},
+    4: {ANA: (9.0, "prem", 1, None), KAI: (6.5, "std", 1, None), LENA: (6.5, "std", 1, None), DAN: (3.0, "eco", 4, None)},
+    5: {ANA: (8.5, "prem", 1, None), KAI: (5.5, "std", 1, LENA), LENA: (6.5, "std", 1, None), DAN: (3.0, "eco", 4, None)},
+    6: {ANA: (8.5, "prem", 1, None), KAI: (5.5, "std", 2, None), LENA: (5.5, "std", 1, KAI), DAN: (3.0, "eco", 4, None)},
+}
+EXAMPLE_PACTS = {2: [(KAI, LENA, 6.0, True)]}
+
+
+def run_example(moves=EXAMPLE_MOVES):
+    st = new_match(["Ana", "Kai", "Lena", "Dan"], profile="mixed", spots=[0, 1, 2, 3], events=EXAMPLE_EVENTS)
+    for t in range(1, 7):
+        mv = {pid: dict(price=m[0], tier=m[1], staff=m[2], poach=m[3]) for pid, m in moves[t].items()
+              if not st["players"][pid]["out"]}
+        resolve_round(st, mv, EXAMPLE_PACTS.get(t, []))
+    return st
+
+
+def print_example(st):
+    for rec in st["log"]:
+        print(f"\nRound {rec['round']}: N={rec['N']} traffic x{rec['traffic']} M={rec['m_t']} regulars={rec['reg_sum']} "
+              f"free={rec['free']} sumA={rec['sum_a']} O+sumA={rec['denom']} lost={rec['lost_sum']} "
+              f"spill={rec['spill']} (split by A over {rec['w_el']})")
         for r in rec["rows"].values():
-            assert r["profit"] == (r["revenue"] - r["ingredients"] - r["wages"] - r["rent"] - r["misc"]
-                                   - r["fees"] - r["poach_fee"] - r["interest"])
-            assert r["end_cash"] == r["start_cash"] + r["profit"] + r["escrow"]
-            assert r["served"] == r["served_own"] + r["spill_in"] <= r["capacity"]
-        served = sum(r["served_own"] + r["spill_in"] for r in rec["rows"].values())
-        demand = sum(r["demand_b"] + r["demand_q"] for r in rec["rows"].values())
-        assert served + rec["lost"] == demand, (served, rec["lost"], demand)
-    return True
+            print(f"  {r['name']:5s} {r['spot']:6s} ${r['price']:.2f} {r['tier']:4s} staff {r['target']}->{r['staff']} "
+                  f"cap {r['cap']:5d} A {r['A']:.3f} reg {r['reg']:5d} (keep {r['keep']:.2f}) new {r['new']:5d} "
+                  f"demand {r['dem']:5d} served {r['served']:5d} (+{r['extra']}) | rev {r['rev']} cogs {r['cogs']} "
+                  f"wages {r['wages']} rent {r['rent']} misc {r['misc']} hire {r['hire']} fire {r['fire']} "
+                  f"switch {r['switch']} poach {r['poach']} pact {r['pact']} interest {r['interest']} | "
+                  f"cash {r['start']} -> {r['cash']}")
+        for note in rec["notes"]:
+            print("   *", note)
+    print("\nStandings:", [(p["name"], p["cash"]) for p in standings(st)])
 
 
-def print_pool(title, st):
-    print(title)
-    print(f"  {'strategy':11s} {'games':>6s} {'win %':>6s} {'bankrupt %':>10s} {'median cash':>12s}")
-    for name, v in st.items():
-        if name.startswith("_"):
-            continue
-        c = sorted(v["cash"])
-        print(f"  {name:11s} {v['games']:6d} {100 * v['wins'] / v['games']:6.1f} {100 * v['out'] / v['games']:10.1f} "
-              f"{(c[len(c) // 2] if c else float('nan')):12,.0f}")
-    print(f"  leader after round 3 is the winning strategy in {100 * st['_snow']:.0f}% of matches")
+def paper_check():
+    """Independent recomputation from the printed rule tables only (no engine functions)."""
+    pf = {2.0: 27.0, 2.5: 13.82, 3.0: 8.0, 3.5: 5.04, 4.0: 3.38, 4.5: 2.37, 5.0: 1.73, 5.5: 1.30, 6.0: 1.00,
+          6.5: 0.79, 7.0: 0.63, 7.5: 0.51, 8.0: 0.42, 8.5: 0.35, 9.0: 0.30, 9.5: 0.25, 10.0: 0.22}   # mixed street
+    qf = {"eco": 0.70, "std": 1.00, "prem": 1.90}
+    wage = {"eco": 1800, "std": 2000, "prem": 2400}
+    uc = {1.00: {"eco": 1.05, "std": 1.40, "prem": 2.50}, 1.35: {"eco": 1.26, "std": 1.68, "prem": 3.06}}
+    rank = {"eco": 0, "std": 1, "prem": 2}
+    spot = [(1.00, 3700), (0.88, 3000), (0.88, 3000), (0.76, 1500)]
+    S = [dict(cash=12000, staff=1, served=0, a=None) for _ in range(4)]
+    pact_live = False
+    rows = {}
+    for t in range(1, 7):
+        N, tr = {3: (1.35, 1.0), 4: (1.35, 1.0), 5: (1.0, 1.1), 6: (1.0, 1.1)}.get(t, (1.0, 1.0))
+        mv = EXAMPLE_MOVES[t]
+        extra = [0] * 4
+        if t == 3:
+            pact_live = True
+        if pact_live and 3 <= t <= 5:
+            for x, y in ((KAI, LENA), (LENA, KAI)):
+                if mv[x][0] < 6.0:
+                    extra[x] += 1000
+                    extra[y] -= 1000
+                    pact_live = False
+        staff = []
+        for i in range(4):
+            extra[i] += 400 * max(0, mv[i][2] - S[i]["staff"]) + 1000 * max(0, S[i]["staff"] - mv[i][2])
+            staff.append(mv[i][2])
+        for i in range(4):
+            if mv[i][3] is not None:
+                j = mv[i][3]
+                extra[i] += 1500
+                if rank[mv[i][1]] >= rank[mv[j][1]]:
+                    staff[j] -= 1
+                    staff[i] += 1
+        A = [round(spot[i][0] * pf[mv[i][0]] * qf[mv[i][1]], 3) for i in range(4)]
+        reg = [math.floor(0.4 * S[i]["served"] * (1.0 if S[i]["a"] is None else min(1.0, round(A[i] / S[i]["a"], 2))) + 1e-9)
+               for i in range(4)]
+        free = math.floor(12400 * tr + 1e-9) - sum(reg)
+        den = round(1.33 + sum(A), 3)
+        cap = [500 + 1100 * s for s in staff]
+        dem = [reg[i] + math.floor(free * A[i] / den + 1e-9) for i in range(4)]
+        srv = [min(dem[i], cap[i]) for i in range(4)]
+        sp = math.floor(0.5 * sum(dem[i] - srv[i] for i in range(4)) + 1e-9)
+        el = [i for i in range(4) if cap[i] > srv[i]]
+        wel = round(sum(A[i] for i in el), 3)
+        for i in el:
+            srv[i] += min(cap[i] - srv[i], math.floor(sp * A[i] / wel + 1e-9))
+        for i in range(4):
+            rev = math.floor(srv[i] * mv[i][0] + 0.5)
+            cogs = math.floor(srv[i] * uc[N][mv[i][1]] + 0.5)
+            S[i]["cash"] += rev - cogs - staff[i] * wage[mv[i][1]] - spot[i][1] - 500 - extra[i]
+            S[i].update(staff=staff[i], served=srv[i], a=A[i])
+            rows[(t, i)] = (A[i], reg[i], dem[i], srv[i], rev, cogs, S[i]["cash"])
+    return rows
+
+
+def spot_test(rounds, matches=600, fields=None):
+    """Mean final cash by spot in mixed fields: rents are tuned so that no spot is a free win."""
+    fields = fields or [["Balanced"] * 4, ["Adaptive"] * 4, ["Balanced", "Discounter", "Premium", "Adaptive"]]
+    acc = {}
+    for m in range(matches):
+        r = play(fields[m % len(fields)], seed=30_000 + m, rounds=rounds)
+        for p in r["players"]:
+            acc.setdefault(p["spot"], []).append(p["cash"])
+    return {k: round(statistics.mean(v)) for k, v in acc.items()}
+
+
+def pact_test(floor, drop=None, matches=400):
+    """Two Balanced shops make a pact (rounds 3-5) in a 6-round match vs two random rivals.
+    drop: player 0 betrays in round 5 by pricing floor - drop."""
+    res = {"A": [], "B": [], "others": []}
+    for m in range(matches):
+        rnd = random.Random(60_000 + m)
+        spots = list(range(4))
+        rnd.shuffle(spots)
+        st = new_match(["A", "B", "C", "D"], profile=rnd.choice(["student", "mixed", "office"]), spots=spots,
+                       events=random_events(rnd, 6))
+        bots = [Balanced(), Balanced(), BOTS[rnd.choice(["Discounter", "Premium", "Adaptive"])](),
+                BOTS[rnd.choice(["Discounter", "Premium", "Adaptive"])]()]
+        for t in range(1, 7):
+            n_index = st["events"].get(t, {}).get("N", 1.0)
+            moves = {}
+            for p in st["players"]:
+                if p["out"]:
+                    continue
+                mv = bots[p["id"]].decide(st, p, n_index)
+                if floor is not None and p["id"] in (0, 1) and 3 <= t <= 5:
+                    mv["price"] = max(mv["price"], floor)
+                    if drop is not None and p["id"] == 0 and t == 5:
+                        mv["price"] = floor - drop
+                    mv["staff"] = best_staff(forecast(st, p, mv["price"], mv["tier"]), mv["tier"], p["staff"],
+                                             mv["price"], n_index)
+                moves[p["id"]] = mv
+            resolve_round(st, moves, [(0, 1, floor, True)] if (floor is not None and t == 2) else [])
+        res["A"].append(st["players"][0]["cash"])
+        res["B"].append(st["players"][1]["cash"])
+        res["others"] += [st["players"][2]["cash"], st["players"][3]["cash"]]
+    return {k: round(statistics.mean(v)) for k, v in res.items()}
 
 
 if __name__ == "__main__":
-    quick = "--quick" in sys.argv
-    print("EXAMPLE MATCH (6 rounds, 4 players)")
-    ex = run_example()
-    print("example arithmetic check:", check_example(ex))
-    if "--example" in sys.argv:
-        sys.exit()
-    N = 800 if quick else 4000
-    K = 100 if quick else 400
-    for rounds in (8, 6):
-        print_pool(f"\nA. SANE POOL {SANE}, {N} random 4-bot matches, {rounds} rounds (fair = 25%)",
-                   tournament(N, rounds, names=SANE))
-    print_pool(f"\nB. FULL POOL with price-war bots {ALL7}, {N} matches, 8 rounds",
-               tournament(N, 8, names=ALL7))
-    print(f"\nC. ONE HERO vs THREE COPIES, {K} matches, 8 rounds: hero win % (hero bankrupt %); fair = 25%")
-    print("  hero \\ foe   " + " ".join(f"{f:>12s}" for f in ALL7))
-    for h in ALL7:
-        cells = []
-        for f in ALL7:
-            if h == f:
-                cells.append(f"{'-':>12s}")
-                continue
-            wv, o = one_vs_three(h, f, K)
-            cells.append(f"{100 * wv:5.0f}% ({100 * o:3.0f}%)")
-        print(f"  {h:11s} " + " ".join(cells))
-    print(f"\nD. MIRROR: 4 copies, {K} matches, 8 rounds")
-    for name in ALL7:
-        o, c = mirror(name, K)
-        print(f"  {name:11s} bankrupt {100 * o:5.1f}%  median cash of survivors ${c:,.0f}")
-    print(f"\nE. VALUE OF THE POACH CARD: same std/$6 player with and without Poach vs 3 copies of a foe, {K} matches")
-    for foe in ("Dumper", "DeepDumper", "Discounter", "Premium", "Balanced"):
-        w1, _ = one_vs_three("Poacher", foe, K)
-        w0, _ = one_vs_three("Balanced", foe, K)
-        print(f"  vs 3 {foe:10s}: with Poach {100 * w1:4.0f}%   without {100 * w0:4.0f}%")
-    print(f"\nG. PRICE PACT (floor $6.50, deposit ${PACT_ESCROW}), {K} matches each, 8 rounds: win % per seat (fair = 25%)")
-    for field in (["Balanced", "Balanced", "Discounter", "Discounter"], ["Cartel", "Cartel", "Discounter", "Discounter"],
-                  ["Cartel", "Traitor", "Discounter", "Discounter"], ["Balanced", "Balanced", "Balanced", "Balanced"],
-                  ["Cartel", "Cartel", "Balanced", "Balanced"], ["Cartel", "Traitor", "Balanced", "Balanced"]):
-        wins_by = {}
-        for k in range(K):
-            m, win = play(field, 170000 + k, 8)
-            for i, name in enumerate(field):
-                wins_by.setdefault(name, [0, 0])
-                wins_by[name][1] += 1
-                wins_by[name][0] += win == i
-        print("  " + " + ".join(field) + ": " + ", ".join(
-            f"{n} {100 * a / b:.0f}%" for n, (a, b) in wins_by.items()))
-    S = 300 if quick else 1500
-    for label, fixed in (("sane random fields", None), ("4x Balanced, no attackers", ["Balanced"] * 4)):
-        cash = {i: [] for i in range(4)}
-        wins_spot = {i: 0 for i in range(4)}
-        rnd = random.Random(5)
-        for k in range(S):
-            field = fixed or [rnd.choice(SANE) for _ in range(4)]
-            m, win = play(field, 7000 + k, 8)
-            for pl in m.players:
-                cash[pl["spot"]].append(pl["cash"])
-            wins_spot[m.players[win]["spot"]] += 1
-        print(f"\nH. SPOTS, {label}, {S} matches, 8 rounds: mean cash (win %)  " + ", ".join(
-            f"{SPOTS[i][0]} ${sum(c) / len(c):,.0f} ({100 * wins_spot[i] / S:.0f}%)" for i, c in cash.items()))
-    outs = wins = 0
-    for k in range(2 * K):
-        m, win = play(["Rookie", "Balanced", "Discounter", "Premium"], 150000 + k, 8)
-        outs += m.players[0]["out"]
-        wins += win == 0
-    print(f"\nF. ROOKIE (random plausible moves) vs Balanced, Discounter, Premium, {2 * K} matches, 8 rounds: "
-          f"bankrupt {100 * outs / (2 * K):.0f}%, wins {100 * wins / (2 * K):.0f}%")
+    mode = sys.argv[1] if len(sys.argv) > 1 else "example"
+    if mode == "spots":
+        for rounds in (6, 12):
+            print(rounds, "rounds, mean final cash by spot, mixed fields:", spot_test(rounds))
+            print(rounds, "rounds, mean final cash by spot, 4 x Balanced:", spot_test(rounds, 400, [["Balanced"] * 4]))
+            for s in ("Balanced", "Poacher"):
+                cash = [p["cash"] for m in range(300) for p in play([s] * 4, seed=90_000 + m, rounds=rounds)["players"]]
+                print(rounds, f"rounds, everyone plays {s}: mean final cash {statistics.mean(cash):,.0f}")
+    if mode == "pact":
+        print("no pact            ", pact_test(None))
+        for floor in (6.5, 7.0, 7.5):
+            print(f"floor ${floor:.2f} kept    ", pact_test(floor))
+            for drop in (0.5, 1.0):
+                print(f"floor ${floor:.2f} betray -{drop:.2f}", pact_test(floor, drop))
+    if mode == "example":
+        print_example(run_example())
+    elif mode == "check":
+        st = run_example()
+        eng = {(rec["round"], pid): (r["A"], r["reg"], r["dem"], r["served"], r["rev"], r["cogs"], r["cash"])
+               for rec in st["log"] for pid, r in rec["rows"].items()}
+        paper = paper_check()
+        bad = [k for k in eng if eng[k] != paper[k]]
+        print(f"rows compared: {len(eng)}, mismatches: {len(bad)}")
+        for k in bad:
+            print(k, eng[k], paper[k])
+    elif mode == "tournament":
+        for rounds, matches in ((6, 3000), (12, 2000)):
+            stats, by_street = tournament(matches, rounds)
+            print(f"\nRandom fields of 3-6 bots, {matches} matches, {rounds} rounds")
+            print(f"{'strategy':12s} {'win %':>6s} {'fair %':>7s} {'bankrupt %':>11s} {'median cash':>12s}")
+            for s, x in stats.items():
+                med = statistics.median(x["cash"]) if x["cash"] else float("nan")
+                print(f"{s:12s} {100 * x['w'] / x['g']:6.1f} {100 * x['fair'] / x['g']:7.1f} "
+                      f"{100 * x['out'] / x['g']:11.1f} {med:12,.0f}")
+            for prof in ("student", "mixed", "office"):
+                row = by_street[prof]
+                print(f"  {prof:8s} " + "  ".join(f"{s[:6]} {100 * row[s][0] / row[s][1]:3.0f}%" for s in BOTS))
+            S = ["Balanced", "Discounter", "Premium", "Dumper", "Poacher"]
+            print(f"  one vs three, hero win % / hero bankrupt % ({rounds} rounds, fair 25%)")
+            print(f"  {'hero':11s} " + " ".join(f"{f:>12s}" for f in S))
+            for h in S:
+                cells = []
+                for f in S:
+                    w, o = one_vs_three(h, f, rounds)
+                    cells.append(f"{100 * w:5.0f}/{100 * o:3.0f}%")
+                print(f"  {h:11s} " + " ".join(f"{c:>12s}" for c in cells))
