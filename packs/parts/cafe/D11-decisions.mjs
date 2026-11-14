@@ -300,7 +300,10 @@ export const override = {
   setup: {
     con_ed_security_deposit: { appendNote: "D11 check (search-seen, Con Edison nonresidential rights brochure, coned.com non-res-rights-english.pdf): the deposit may not exceed twice the average monthly bill, or twice the peak-season average when use swings; it is refunded when the account closes with nothing owed. With the pack utilities line of $1,100 that caps it near $2,200, so D01 $1,600 and D09 $1,800 both fit." },
   },
-  monthlyCosts: {},
+  monthlyCosts: {
+    waste: { appendNote: "D11 check (search-seen): the Business Integrity Commission customer guide (November 2024) lists maximum carter rates of $26.87 per cubic yard and $17.64 per 100 lb of trash, with mandatory discounts for recyclables and organics; carters must pick up trash at least twice a week. About 2 cubic yards a week (8.7 a month) at the cap is $234 before recycling and organics, so $250 is in range. Commercial Waste Zones: Queens Central from January 3, 2025, the Bronx from December 1, 2025, Staten Island and Midtown South noticed in August 2026, Brooklyn East, Manhattan Northeast, Queens West and Manhattan West in a 2026 rule; the whole city by the end of 2027 (DSNY waste equity report 2025). In a zone the shop must use the zone carter." },
+    rent: { appendNote: "D11 check (search-seen): REBNY Brooklyn retail report, first half of 2025, average asking rent on Smith Street $90 per sq ft (down 5%), Court Street $115; CoStar via Matthews puts the Brooklyn average at $54.60 in the second quarter of 2026. $90 is a corridor rent; a true side street is usually lower." },
+  },
   staff: {
     trainee_barista: { hourlyWage: 17, cashWage: 17, note: 'D11: D05 set the pay ladder against a $21 barista (trainee $18, part-time $19). D12 moved the barista to $18 (NY DOL OEWS Q1 2026, NYC, SOC 35-3023: median $17.57, entry $17.07). The ladder is kept in order: a new barista starts at the NYC minimum wage, $17.00 (NY DOL; no increase on January 1, 2027).' },
     part_time_barista: { hourlyWage: 18, cashWage: 18, note: 'D11: D05 had $19 against a $21 barista; with the D12 barista wage of $18 a part-timer is paid the same hourly rate (part-time work in New York carries no separate minimum).' },
