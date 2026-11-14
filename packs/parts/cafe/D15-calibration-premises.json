@@ -8105,6 +8105,2881 @@
     "cashExampleUSD": -5060,
     "tier": "core",
     "name": "Health permit ready"
+   },
+   {
+    "id": "saturday_room_full",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "seat utilization > 0.9 (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.95
+     },
+     {
+      "field": "quality",
+      "add": -0.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "seating_layout",
+      "label": "Tighter layout",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "+2-3 seats at quality -0.03.",
+      "optionId": "tight"
+     },
+     {
+      "kind": "lever",
+      "id": "outdoor_seating",
+      "label": "Sidewalk cafe in season",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 60,
+       "days": 0
+      },
+      "result": "+10 seats April-October.",
+      "optionId": "sidewalk_cafe"
+     },
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "label": "Laptop limits at peak",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Demand -2% from lost laptop guests; seats turn faster.",
+      "optionId": "peak_limits"
+     }
+    ],
+    "source": "https://www.npr.org/blogs/alltechconsidered/2014/04/10/300518819/no-laptops-no-wi-fi-how-one-cafe-fired-up-sales",
+    "confidence": "estimate",
+    "note": "Kept: fires when seat utilization is above the sizing crowd threshold (0.9) on weekends.",
+    "cashExampleUSD": -471.75,
+    "tier": "core",
+    "name": "No free table"
+   },
+   {
+    "id": "no_seat_left",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "seat utilization > 0.9 (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.95
+     },
+     {
+      "field": "quality",
+      "add": -0.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "label": "Laptop limits at peak",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Demand -2%; seats turn faster."
+     },
+     {
+      "kind": "lever",
+      "id": "seat_density",
+      "label": "Tight seating",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "More seats, quality -0.04."
+     }
+    ],
+    "source": "https://www.swinburne.edu.au/news/2023/01/Youre-about-to-see-a-growing-trend-of-laptop-workers-in-cafes-new-research-reveals-why/",
+    "confidence": "estimate",
+    "note": "Same calibration as D02 saturday_room_full so both fragments agree.",
+    "cashExampleUSD": -471.75,
+    "tier": "deep",
+    "name": "Every seat taken"
+   },
+   {
+    "id": "laptop_camp",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "cold months (calendar)",
+    "months": [
+     1,
+     2,
+     3,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "seatTurns",
+      "mult": 0.85
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "label": "Laptop limits at peak",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Turns back to x1.0; demand -2%.",
+      "optionId": "peak_limits"
+     },
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "label": "No Wi-Fi",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Turns x1.0; demand -4%.",
+      "optionId": "no_wifi"
+     }
+    ],
+    "source": "https://bloomintelligence.com/coffee-shop-marketing/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -260.1,
+    "tier": "core",
+    "name": "The room turns into an office"
+   },
+   {
+    "id": "solo_guests_hold_big_tables",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "two-top layout at peak (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "seats",
+      "mult": 0.75
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "seating_layout",
+      "label": "Communal tables and a bar ledge",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Seats used x0.95 instead of x0.75; quality -0.01 (furniture cost my estimate).",
+      "optionId": "communal"
+     }
+    ],
+    "source": "https://www.yahoo.com/lifestyle/heres-exactly-long-sit-coffee-070007503.html",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "core",
+    "name": "One person, four chairs"
+   },
+   {
+    "id": "morning_line_out_the_door",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "queue longer than the room (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.95
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "queue_setup",
+      "label": "Organized line",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 40,
+       "days": 0
+      },
+      "result": "Demand +2%.",
+      "optionId": "organized"
+     },
+     {
+      "kind": "lever",
+      "id": "queue_setup",
+      "label": "Order ahead",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 90,
+       "days": 0
+      },
+      "result": "Demand +4%, capacity -3%.",
+      "optionId": "order_ahead"
+     },
+     {
+      "kind": "staff",
+      "id": "barista",
+      "label": "Second barista 7-11 a.m.",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 1848,
+       "days": 0
+      },
+      "result": "Capacity +60-80 drinks an hour."
+     }
+    ],
+    "source": "https://pubsonline.informs.org/doi/abs/10.1287/mnsc.1120.1686",
+    "confidence": "estimate",
+    "note": "Kept. Peak barista cost = 4 h x 22 days x $21 = $1,848 a month.",
+    "cashExampleUSD": -1887.0,
+    "tier": "core",
+    "name": "The line reaches the door"
+   },
+   {
+    "id": "line_out_the_door",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "queue longer than the room (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.95
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "staff",
+      "label": "Extra barista at the peak",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 1848,
+       "days": 0
+      },
+      "result": "Line shortens; demand recovers."
+     },
+     {
+      "kind": "lever",
+      "id": "mobile_order_ahead",
+      "label": "Order ahead",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 90,
+       "days": 0
+      },
+      "result": "Demand +4%, capacity -3%."
+     }
+    ],
+    "source": "https://knowledge.wharton.upenn.edu/article/losing-patience-and-patients-what-makes-people-wait-in-line-or-decide-to-bail/",
+    "confidence": "estimate",
+    "note": "Same calibration as D02 morning_line_out_the_door.",
+    "cashExampleUSD": -1887.0,
+    "tier": "core",
+    "name": "Line out the door at 8 am"
+   },
+   {
+    "id": "seat_count_at_inspection",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "inspection with 20+ seats (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violation",
+      "id": "no_patron_toilet",
+      "note": "10 points and $300 each time"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "customer_restroom",
+      "label": "Build the patron restroom",
+      "cost": {
+       "usd": 12000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Compliant at 20+ seats."
+     },
+     {
+      "kind": "shortcut",
+      "id": "squeeze_extra_seats",
+      "label": "Keep the extra seats",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "3% more sales; violation found at each inspection."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
+    "confidence": "estimate",
+    "note": "Kept: 20 seats need a patron toilet (NYC Health).",
+    "cashExampleUSD": -300,
+    "tier": "core",
+    "name": "The inspector counts chairs"
+   },
+   {
+    "id": "seat_20_restroom_line",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "player sets seats >= 20 (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violation",
+      "id": "no_patron_toilet",
+      "onlyIf": "seats >= 20 and no patron restroom"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "resize",
+      "label": "Stay at 19 seats",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No restroom needed."
+     },
+     {
+      "kind": "setup",
+      "id": "customer_restroom",
+      "label": "Build the restroom",
+      "cost": {
+       "usd": 12000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Seats -3 for the room; 20+ seats legal."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
+    "confidence": "estimate",
+    "note": "Same calibration as D02 seat_count_at_inspection; outdoor seats count toward the line (NYC Health via D02).",
+    "cashExampleUSD": -12000,
+    "tier": "core",
+    "name": "The 20th seat needs a restroom"
+   },
+   {
+    "id": "tight_tables_reviews",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "tight layout for 2 months (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "reputation",
+      "add": -0.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "seating_layout",
+      "label": "Comfortable layout",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Fewer seats, no penalty.",
+      "optionId": "comfortable"
+     }
+    ],
+    "source": "https://www.hospitalitynet.org/news/4039649.html",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "\"We sat in a stranger's lap\""
+   },
+   {
+    "id": "quiet_room_afternoons",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "seat utilization < 0.4 (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.98
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "laptop_policy",
+      "label": "Invite laptops in the afternoon",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Room looks alive; demand back to x1.0.",
+      "optionId": "open"
+     },
+     {
+      "kind": "lever",
+      "id": "seating_layout",
+      "label": "Lounge layout",
+      "cost": {
+       "usd": 2000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Quality +0.03 (furniture my estimate).",
+      "optionId": "lounge"
+     }
+    ],
+    "source": "https://www.mdpi.com/2071-1050/17/18/8400",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -754.8,
+    "tier": "deep",
+    "name": "Dead room at 3pm"
+   },
+   {
+    "id": "order_ahead_flood",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "order-ahead option on (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.95
+     },
+     {
+      "field": "quality",
+      "add": -0.02
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "queue_setup",
+      "label": "Throttle order-ahead at peak",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Back to single line.",
+      "optionId": "single_line"
+     }
+    ],
+    "source": "https://www.customerexperiencedive.com/news/4-takeaways-starbucks-customer-experience/756355/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "Phone orders bury the bar"
+   },
+   {
+    "id": "accessibility_suit_wave",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "revised",
+    "trigger": "announced suit wave on the avenue",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -10000,
+      "onlyIf": "an entrance step or route barrier remains",
+      "note": "plaintiff's attorneys' fees in a settlement"
+     },
+     {
+      "field": "setupCost",
+      "add": 6500,
+      "onlyIf": "barrier remains",
+      "note": "ramp required by the settlement"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "step_at_the_door",
+      "label": "Portable ramp and call bell",
+      "cost": {
+       "usd": 600,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Readily achievable fix; exposure removed for entrance claims (my estimate of the kit).",
+      "optionId": "ramp_and_bell"
+     },
+     {
+      "kind": "setup",
+      "id": "automatic_door_operator",
+      "label": "Automatic door operator",
+      "cost": {
+       "usd": 3000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Entrance claim removed (my estimate)."
+     },
+     {
+      "kind": "choice",
+      "id": "permanent_ramp",
+      "label": "Permanent ramp",
+      "cost": {
+       "usd": 6500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Middle of the $3,000-$10,000 range in an S.D.N.Y. record."
+     }
+    ],
+    "source": "https://www.adatitleiii.com/wp-content/uploads/sites/25/2025/02/2-NATOSHA-DUNSTON-Plaintiff-v-243-DEKALB-AVE-LLC-and-243-DEKALB-AVE-REST-CORP_-003.pdf",
+    "confidence": "estimate",
+    "note": "Revised: the D02 effect only flagged the violation. NYC restaurant settlements in the records found pay $10,000 in attorneys' fees plus a ramp and restroom changes (E.D.N.Y. and S.D.N.Y. cases); a permanent ramp cost $3,000-$10,000 in a 2012 S.D.N.Y. record; courts have grown skeptical of serial suits. Announced a month ahead so the player can fix the door.",
+    "cashExampleUSD": -16500,
+    "supportingSources": [
+     "https://law.justia.com/cases/federal/district-courts/new-york/nysdce/1:2010cv07592/369172/53"
+    ],
+    "previousEffects": [
+     {
+      "field": "violation",
+      "id": "accessibility_barrier"
+     }
+    ],
+    "tier": "core",
+    "name": "Accessibility suits reach your avenue"
+   },
+   {
+    "id": "d00_premises_entrance_step",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "access survey (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationExposure",
+      "id": "accessibility_barrier"
+     },
+     {
+      "field": "demand",
+      "mult": 0.99,
+      "note": "customers who cannot enter"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "feasible_access_work",
+      "label": "Build a compliant ramp where feasible",
+      "cost": {
+       "usd": 6500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Exposure removed (S.D.N.Y. record range $3,000-$10,000)."
+     },
+     {
+      "kind": "lever",
+      "id": "step_at_the_door",
+      "label": "Portable ramp and bell while planning",
+      "cost": {
+       "usd": 600,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Readily achievable alternative service.",
+      "optionId": "ramp_and_bell"
+     }
+    ],
+    "source": "https://www.ada.gov/resources/title-iii-primer/",
+    "confidence": "estimate",
+    "note": "ADA Title III: remove barriers where readily achievable, offer alternatives otherwise. Exposure links to accessibility_suit_wave ($10,000 + ramp).",
+    "cashExampleUSD": -4528.799999999999,
+    "supportingSources": [
+     "https://law.justia.com/cases/federal/district-courts/new-york/nysdce/1:2010cv07592/369172/53",
+     "https://www.adatitleiii.com/wp-content/uploads/sites/25/2025/02/2-NATOSHA-DUNSTON-Plaintiff-v-243-DEKALB-AVE-LLC-and-243-DEKALB-AVE-REST-CORP_-003.pdf"
+    ],
+    "tier": "core",
+    "name": "An entrance step excludes customers"
+   },
+   {
+    "id": "d00_premises_access_route",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "layout change blocks the route (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationExposure",
+      "id": "accessibility_barrier"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "reconfigure",
+      "label": "Reconfigure furniture to restore a 36-inch route",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Seats -2 (my estimate).",
+      "resultEffects": [
+       {
+        "field": "seats",
+        "add": -2
+       }
+      ]
+     },
+     {
+      "kind": "choice",
+      "id": "move_storage",
+      "label": "Move stock out of the route",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 100,
+       "days": 0
+      },
+      "result": "Off-site or cellar storage time."
+     }
+    ],
+    "source": "https://www.ada.gov/law-and-regs/design-standards/2010-stds/",
+    "confidence": "estimate",
+    "note": "2010 ADA Standards: 36-inch clear routes (32 inches for at most 24 inches of length), 5% of dining seats accessible, a 36-inch-high counter section.",
+    "cashExampleUSD": 0,
+    "tier": "core",
+    "name": "Extra seating blocks the accessible route"
+   },
+   {
+    "id": "aisle_too_narrow",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "tight layout (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "exposure",
+      "id": "accessibility_barrier"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "seating_layout",
+      "label": "Comfortable layout",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "36-inch route restored; fewer seats.",
+      "optionId": "comfortable"
+     }
+    ],
+    "source": "https://www.ada.gov/law-and-regs/design-standards/2010-stds/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "The route to the counter is 28 inches"
+   },
+   {
+    "id": "winter_draft_at_the_door",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "December-February (calendar)",
+    "months": [
+     12,
+     1,
+     2
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "seats",
+      "mult": 0.9
+     },
+     {
+      "field": "quality",
+      "add": -0.02
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "entrance_winter",
+      "label": "Air curtain",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 25,
+       "days": 0
+      },
+      "result": "Draft cut; seats back.",
+      "optionId": "air_curtain"
+     },
+     {
+      "kind": "lever",
+      "id": "entrance_winter",
+      "label": "Winter vestibule",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 375,
+       "days": 0
+      },
+      "result": "Quality +0.02; must come down by April 15.",
+      "optionId": "vestibule"
+     }
+    ],
+    "source": "https://achrnews.com/articles/159663-michigan-eatery-eliminates-cold-complaints-with-air-curtains",
+    "confidence": "estimate",
+    "note": "Kept: two of 18 seats lost.",
+    "cashExampleUSD": -128.316,
+    "tier": "core",
+    "name": "Cold blast at every door swing"
+   },
+   {
+    "id": "sidewalk_cafe_season",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "April-October (calendar)",
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "durationMonths": 7,
+    "effects": [
+     {
+      "field": "seats",
+      "add": 10
+     },
+     {
+      "field": "demand",
+      "mult": 1.03
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "outdoor_seating",
+      "label": "Sidewalk cafe",
+      "cost": {
+       "usd": 2550,
+       "usdMonthly": 60,
+       "days": 0
+      },
+      "result": "+10 seats; license fee from the pack; 240-day wait for a new license.",
+      "optionId": "sidewalk_cafe"
+     },
+     {
+      "kind": "shortcut",
+      "id": "sidewalk_tables",
+      "label": "Tables without a license",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Violation unlicensed_sidewalk_cafe."
+     }
+    ],
+    "source": "https://www.diningoutnyc.info/apply/fees",
+    "confidence": "estimate",
+    "note": "Kept. Benefit has a price: license fee and the 240-day wait.",
+    "cashExampleUSD": 7925.400000000001,
+    "tier": "core",
+    "name": "Outdoor season"
+   },
+   {
+    "id": "community_board_review",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "sidewalk cafe application (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -900,
+      "onlyIf": "the player goes to the hearing"
+     },
+     {
+      "field": "waitDays",
+      "add": 60,
+      "onlyIf": "hearing"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "trim_the_plan",
+      "label": "Trim the plan",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Fewer tables, no hearing."
+     }
+    ],
+    "source": "https://www.diningoutnyc.info/apply/publichearing",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -900,
+    "tier": "deep",
+    "name": "The community board reads your sidewalk plan"
+   },
+   {
+    "id": "roadway_cafes_go_year_round",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced",
+    "months": [
+     9
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "roadwayMonthsActive",
+      "set": 12
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "roadway_cafe_license",
+      "label": "Upgrade to a year-round roadway license",
+      "cost": {
+       "usd": 1000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Higher fee ($6-$31 per sq ft instead of $5-$25); structure stays up (upgrade fee my estimate)."
+     }
+    ],
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -1000,
+    "tier": "deep",
+    "name": "Roadway cafes may stay all winter"
+   },
+   {
+    "id": "outdoor_setup_out_of_bounds",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "inspection (state)",
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violation",
+      "id": "outdoor_cafe_noncompliant"
+     },
+     {
+      "field": "seats",
+      "add": -4
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "shortcut",
+      "id": "sidewalk_cafe_creep",
+      "label": "Stay inside the line",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No violation; 4 fewer seats."
+     }
+    ],
+    "source": "https://www.diningoutnyc.info/enforcement",
+    "confidence": "verified",
+    "note": "Kept: corrective action with 30 days, then $200 first and $500 later offenses (Dining Out NYC enforcement page).",
+    "cashExampleUSD": -200,
+    "tier": "deep",
+    "name": "Your tables are over the line"
+   },
+   {
+    "id": "d00_premises_outdoor_heater",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "player buys a heater (state)",
+    "months": [
+     10,
+     11,
+     12,
+     1,
+     2,
+     3
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -500,
+      "note": "heater bought but unusable until approved"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "approved_heater",
+      "label": "Get the heater reviewed and approved",
+      "cost": {
+       "usd": 300,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "Outdoor season extended into autumn (my estimate)."
+     },
+     {
+      "kind": "choice",
+      "id": "no_heater",
+      "label": "Operate without it",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Outdoor seats used less in cold months."
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-145866",
+    "confidence": "estimate",
+    "note": "My estimates.",
+    "cashExampleUSD": -500,
+    "tier": "deep",
+    "name": "A purchased patio heater is not yet approved for this location"
+   },
+   {
+    "id": "d00_premises_outdoor_floor",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "inspection (state)",
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violation",
+      "id": "outdoor_cafe_noncompliant"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "cleanable_design",
+      "label": "Redesign for cleaning access",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Compliant."
+     },
+     {
+      "kind": "choice",
+      "id": "remove_decking",
+      "label": "Remove the decking",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Compliant; less comfort."
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-145866",
+    "confidence": "estimate",
+    "note": "Fines as D02 outdoor violations ($200/$500).",
+    "cashExampleUSD": -200,
+    "tier": "deep",
+    "name": "Decking conceals a dirty outdoor-dining floor"
+   },
+   {
+    "id": "d00_premises_wine_layout",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "alteration of licensed premises (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 45,
+      "note": "SLA alteration approval for the new area"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "file_alteration",
+      "label": "File the SLA alteration with notice",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 45
+      },
+      "result": "New area licensed."
+     },
+     {
+      "kind": "choice",
+      "id": "keep_layout",
+      "label": "Keep the licensed layout",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No new area."
+     }
+    ],
+    "source": "https://sla.ny.gov/change-your-license",
+    "confidence": "estimate",
+    "note": "45 days from the 2025 outdoor-dining reporting (45-60 day SLA process, D13).",
+    "cashExampleUSD": -1500,
+    "tier": "deep",
+    "name": "A wine-serving cafe changes its licensed footprint"
+   },
+   {
+    "id": "d00_premises_odor_home",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "documented odor complaint (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -2000,
+      "note": "DEP violation (my estimate)"
+     },
+     {
+      "field": "inspections",
+      "mult": 1.2
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "fix_discharge",
+      "label": "Professional inspection and a carbon filter or relocated discharge",
+      "cost": {
+       "usd": 8000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Complaint resolved (my estimate of the work)."
+     },
+     {
+      "kind": "choice",
+      "id": "suspend_process",
+      "label": "Suspend the cooking process causing it",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Hot menu off: demand x0.95 until fixed.",
+      "resultEffects": [
+       {
+        "field": "demand",
+        "mult": 0.95
+       }
+      ]
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/oath/downloads/pdf/oath-ecb-boardmeeting-12082022.pdf",
+    "confidence": "estimate",
+    "note": "DEP pursues repeated restaurant odor complaints up to cease-and-desist orders at OATH (2022 board meeting); a state DEC smoke and odor case against a pizzeria ended in a $25,300 civil penalty with part suspended for relocating vents. City Air Code fine amounts not found: $2,000 is my estimate.",
+    "cashExampleUSD": -10000,
+    "supportingSources": [
+     "https://extapps.dec.ny.gov/docs/legal_protection_pdf/originalpizzao.pdf"
+    ],
+    "tier": "core",
+    "name": "Cafe exhaust enters a neighboring home"
+   },
+   {
+    "id": "d00_premises_ac_neighbor",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "DEP complaint (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -220,
+      "note": "first offense; default $875; second $440; third $660"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "isolation_or_relocation",
+      "label": "Vibration isolation, a barrier or relocation",
+      "cost": {
+       "usd": 4000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Below 42 dBA in the apartment; no further summonses (cost my estimate)."
+     },
+     {
+      "kind": "choice",
+      "id": "change_operation",
+      "label": "Run the condenser only in opening hours",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Night complaints stop; heat in the room on hot evenings."
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-30850",
+    "confidence": "verified",
+    "note": "Noise penalty schedule: circulation devices over 42 dB(A), 24-227(a): first offense $220 (default $875), second $440 ($1,750), third $660 ($2,625). DEP fact sheet: limit measured in the dwelling. Mitigation cost is my estimate.",
+    "cashExampleUSD": -220,
+    "supportingSources": [
+     "https://www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-code-fact-sheet.pdf"
+    ],
+    "tier": "core",
+    "name": "The rooftop condenser is noisy in an apartment"
+   },
+   {
+    "id": "neighbor_noise_complaint",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "311 noise complaint (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violation",
+      "id": "commercial_noise"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "music_tempo",
+      "label": "Calm music, limiter",
+      "cost": {
+       "usd": 300,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Under 42 dBA; first violation mitigated to $0 if the fix is proven (DEP).",
+      "optionId": "calm"
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf",
+    "confidence": "estimate",
+    "note": "Kept; limiter cost my estimate.",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "The apartment upstairs calls 311"
+   },
+   {
+    "id": "d00_premises_noise_test_shutdown",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "DEP noise inspection (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -100,
+      "note": "product at risk during the shutdown"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "schedule_safe_window",
+      "label": "Schedule the test at closing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No loss."
+     },
+     {
+      "kind": "choice",
+      "id": "alternative_window",
+      "label": "Ask for another window",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 7
+      },
+      "result": "Test a week later."
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/dep/downloads/pdf/air/hospitality-industry-guide-environmental-compliance.pdf",
+    "confidence": "estimate",
+    "note": "My estimate.",
+    "cashExampleUSD": -100,
+    "tier": "deep",
+    "name": "Noise inspection needs equipment switched off briefly"
+   },
+   {
+    "id": "d00_world_event_roast_odor_complaint",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "player moves roasting in-house (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.2
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "roaster_afterburner",
+      "label": "Ventilation and an afterburner for the roaster",
+      "cost": {
+       "usd": 10000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Complaint resolved (my estimate)."
+     },
+     {
+      "kind": "choice",
+      "id": "external_roasting",
+      "label": "Roast at an outside facility",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 400,
+       "days": 0
+      },
+      "result": "Toll roasting fee (my estimate)."
+     }
+    ],
+    "source": "https://www.indailysa.com.au/citymag/food-drink/2024/05/21/bitter-brew-cbd-coffee-spot-to-close-doors",
+    "confidence": "estimate",
+    "note": "My estimates.",
+    "cashExampleUSD": -10000,
+    "tier": "deep",
+    "name": "Moving the roaster creates a neighbor complaint"
+   },
+   {
+    "id": "d00_world_event_fan_setting_recheck",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "follow-up measurement fails (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -220
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "next_acoustic_fix",
+      "label": "Commission the next fix",
+      "cost": {
+       "usd": 3000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Compliant."
+     },
+     {
+      "kind": "choice",
+      "id": "reduce_hours",
+      "label": "Run the fan fewer hours",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Capacity x0.95 on hot days."
+     }
+    ],
+    "source": "https://www.lgo.org.uk/decisions/environment-and-regulation/noise/22-016-501",
+    "confidence": "estimate",
+    "note": "Penalty from the NYC schedule (first offense $220).",
+    "cashExampleUSD": -3220,
+    "supportingSources": [
+     "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-30850"
+    ],
+    "tier": "deep",
+    "name": "The first extractor adjustment does not solve the complaint"
+   },
+   {
+    "id": "d00_world_event_furniture_impact_noise",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "acoustic inspection (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "reputation",
+      "add": -0.01
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "isolation_pads",
+      "label": "Felt pads and floor isolation",
+      "cost": {
+       "usd": 800,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Complaint resolved (my estimate)."
+     },
+     {
+      "kind": "choice",
+      "id": "new_furniture_routine",
+      "label": "Change furniture and cleaning routine",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Quieter chairs."
+     }
+    ],
+    "source": "https://www.europeanacustica.com/insonorizar-cafeteria/",
+    "confidence": "estimate",
+    "note": "My estimates.",
+    "cashExampleUSD": -800,
+    "tier": "deep",
+    "name": "Furniture movement disturbs the upstairs neighbor"
+   },
+   {
+    "id": "d00_premises_exit_storage",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "player orders beyond storage (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationExposure",
+      "id": "blocked_egress"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "move_goods",
+      "label": "Move goods into proper storage",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "1-2 staff hours; violation removed."
+     },
+     {
+      "kind": "choice",
+      "id": "smaller_delivery",
+      "label": "Order smaller deliveries",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Lose a bulk discount of about 3% on that order (my estimate)."
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCadmin/0-0-0-144597",
+    "confidence": "estimate",
+    "note": "FDNY penalty schedule (3 RCNY 109-03) prices egress violations by tier; the exact row was not readable. Uses the D02 violation blocked_egress.",
+    "cashExampleUSD": 0,
+    "supportingSources": [
+     "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
+    ],
+    "tier": "core",
+    "name": "Bulk supplies consume the exit passage"
+   },
+   {
+    "id": "d00_premises_pest_door_gap",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "daily inspection finds the gap (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.1
+     },
+     {
+      "field": "violationExposure",
+      "id": "pest_activity"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "door_sweep",
+      "label": "Fit a door sweep and seal the gap",
+      "cost": {
+       "usd": 150,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Entry route closed (my estimate)."
+     },
+     {
+      "kind": "choice",
+      "id": "change_delivery_access",
+      "label": "Use the front door for deliveries while repairing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Morning service slowed: capacity x0.98 for a week."
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46269",
+    "confidence": "estimate",
+    "note": "My estimates; pest violation from the cafe pack.",
+    "cashExampleUSD": -150,
+    "tier": "core",
+    "name": "A delivery-door gap defeats pest treatment"
+   },
+   {
+    "id": "d00_premises_hood_rearrange",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "player moves equipment under the hood (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 2500,
+      "note": "suppression redesign and FDNY retest"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "revise_protection",
+      "label": "Licensed contractor revises the suppression system",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Coverage matches the new layout."
+     },
+     {
+      "kind": "choice",
+      "id": "keep_layout",
+      "label": "Keep the approved arrangement",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No change."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/rangehood-fire-suppression-systems",
+    "confidence": "estimate",
+    "note": "Suppression installs and changes are tested with an FDNY inspector by a licensed contractor (NYC Business). $2,500 is my estimate; only formats with a hood (D13).",
+    "cashExampleUSD": -2500,
+    "tier": "core",
+    "name": "Moving a griddle changes suppression coverage"
+   },
+   {
+    "id": "d00_premises_event_capacity",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "event over 74 people (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violationExposure",
+      "id": "overcrowding_over_occupancy"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "cap_bookings",
+      "label": "Cap the booking at the legal capacity",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Smaller event."
+     },
+     {
+      "kind": "setup",
+      "id": "temporary_place_of_assembly",
+      "label": "Temporary Place of Assembly certificate",
+      "cost": {
+       "usd": 250,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Legal for the event."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+    "confidence": "estimate",
+    "note": "D02: standing guests count at 5 sq ft each; penalty $2,500 ($12,500 on default); temporary certificate $250.",
+    "cashExampleUSD": -250,
+    "tier": "deep",
+    "name": "A private event changes the occupancy plan"
+   },
+   {
+    "id": "open_mic_over_capacity",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "event over capacity (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violation",
+      "id": "overcrowding_over_occupancy"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "temporary_place_of_assembly",
+      "label": "Temporary certificate",
+      "cost": {
+       "usd": 250,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Legal."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/temporary-place-of-assembly-certificate-of-operation",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -2500,
+    "tier": "deep",
+    "name": "Eighty people for the open mic"
+   },
+   {
+    "id": "d00_world_event_layout_crossflow",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "plan review (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "redesign_workflow",
+      "label": "Redesign workflow and equipment positions",
+      "cost": {
+       "usd": 5000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Separate raw and ready-to-eat flows (my estimate)."
+     },
+     {
+      "kind": "choice",
+      "id": "simplify_menu",
+      "label": "Simplify the menu",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Demand x0.97."
+     }
+    ],
+    "source": "https://www.kommersant.ru/doc/9077653",
+    "confidence": "estimate",
+    "note": "My estimates.",
+    "cashExampleUSD": -5000,
+    "tier": "deep",
+    "name": "The kitchen layout creates cross-flow"
+   },
+   {
+    "id": "sign_complaint_wave",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "complaint wave (announced)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.3
+     },
+     {
+      "field": "violation",
+      "id": "sign_without_permit"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "shortcut",
+      "id": "unpermitted_sign",
+      "label": "Permit the sign",
+      "cost": {
+       "usd": 800,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No violation; penalty $1,250 standard, $6,250 default otherwise."
+     }
+    ],
+    "source": "https://brooklynreporter.com/2018/12/hard-stop-on-signage-fees-as-city-council-secures-new-awning-act/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -1250,
+    "tier": "deep",
+    "name": "Somebody is reporting every sign on the strip"
+   },
+   {
+    "id": "ac_fails_in_heat_wave",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "heat wave on an unserviced unit (state + calendar)",
+    "months": [
+     7,
+     8
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.9
+     },
+     {
+      "field": "cash",
+      "add": -15000,
+      "onlyIf": "the unit has to be replaced"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "hvac_care",
+      "label": "Service contract",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 100,
+       "days": 0
+      },
+      "result": "Failure only at end of life (12+ years).",
+      "optionId": "contract"
+     }
+    ],
+    "source": "https://www.vincomechanical.com/hvac-replacement-cost-nyc",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -18774.0,
+    "tier": "core",
+    "name": "The air conditioning dies in a heat wave"
+   },
+   {
+    "id": "cloudburst_floods_cellar",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced flash flood warning",
+    "months": [
+     7,
+     8,
+     9
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1500
+     },
+     {
+      "field": "closureDays",
+      "add": 2
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "carry_the_stock_upstairs",
+      "label": "Keep stock on shelves 18 inches up",
+      "cost": {
+       "usd": 300,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Loss cut to $300 (my estimate)."
+     },
+     {
+      "kind": "choice",
+      "id": "backwater_valve",
+      "label": "Install a backwater valve",
+      "cost": {
+       "usd": 3000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Sewer cannot back up into the cellar (my estimate)."
+     }
+    ],
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02997",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -4016,
+    "tier": "core",
+    "name": "Cloudburst: the sewer comes up through the cellar"
+   },
+   {
+    "id": "grease_backup",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "3 months without trap cleaning (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 1
+     },
+     {
+      "field": "violation",
+      "id": "grease_interceptor_neglect"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "shortcut",
+      "id": "skip_grease_trap_cleaning",
+      "label": "Keep the cleaning schedule",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No backup."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/dep/water/disposing-of-grease-as-a-business.page",
+    "confidence": "estimate",
+    "note": "Kept: fires 3 months after skipping cleaning.",
+    "cashExampleUSD": -1258,
+    "tier": "core",
+    "name": "The floor drain comes back up"
+   },
+   {
+    "id": "storefront_glass_broken",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced break-in wave",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1150
+     },
+     {
+      "field": "closureDays",
+      "add": 1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "see_through_security_grille",
+      "label": "See-through security grille",
+      "cost": {
+       "usd": 6500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Break-ins deterred (D02 grille price)."
+     }
+    ],
+    "source": "https://www.insightglass.com/how-much-do-storefront-windows-cost/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -2408,
+    "tier": "deep",
+    "name": "Break-ins on the avenue"
+   },
+   {
+    "id": "d00_closures_nyc_event_sprinkler_stock",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "building sprinkler incident (announced)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -3000
+     },
+     {
+      "field": "closureDays",
+      "add": 3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "remediation_scope",
+      "label": "Separate contaminated stock and get a remediation scope",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Reopen in 3 days."
+     },
+     {
+      "kind": "choice",
+      "id": "insurance_claim",
+      "label": "Claim on the property policy",
+      "cost": {
+       "usd": 1000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Deductible; payout later (cash frozen 60-90 days)."
+     }
+    ],
+    "source": "https://tollbit.gothamist.com/2017/05/24/kushner_evict_pudge_knuckles.php",
+    "confidence": "estimate",
+    "note": "My estimates.",
+    "cashExampleUSD": -6774,
+    "tier": "deep",
+    "name": "Sprinkler water reaches stock and walls"
+   },
+   {
+    "id": "d00_closures_nyc_event_shared_basement",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "repeated pest findings (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.2
+     },
+     {
+      "field": "violationExposure",
+      "id": "pest_activity"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "coordinated_remediation",
+      "label": "Building-wide remediation with the landlord",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Findings stop after one cycle."
+     },
+     {
+      "kind": "choice",
+      "id": "pause_basement_use",
+      "label": "Stop using the basement",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 200,
+       "days": 0
+      },
+      "result": "Storage moved upstairs; seats -3 (D02 cellar math)."
+     }
+    ],
+    "source": "https://www.bkmag.com/2024/03/11/the-setting-of-the-sun-is-a-difficult-time-for-all-fish-the-rise-and-fall-of-littleneck/",
+    "confidence": "estimate",
+    "note": "My estimates.",
+    "cashExampleUSD": -1500,
+    "tier": "deep",
+    "name": "Pests cross the landlord’s basement"
+   },
+   {
+    "id": "d00_closures_nyc_event_reopen_after_peak",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "contractor revises completion past the peak (state)",
+    "months": [
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 45
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "reforecast",
+      "label": "Reforecast the reopening menu and cash",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Smaller staff on return."
+     },
+     {
+      "kind": "choice",
+      "id": "renegotiate_reopening",
+      "label": "Negotiate rent abatement until reopening",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Rent abated (lease or settlement)."
+     }
+    ],
+    "source": "https://tollbit.gothamist.com/2017/05/24/kushner_evict_pudge_knuckles.php",
+    "confidence": "estimate",
+    "note": "45 days x ($1,258 + $200) = $65,610; my estimate.",
+    "cashExampleUSD": -65610,
+    "tier": "deep",
+    "name": "Repairs consume the busy season"
+   },
+   {
+    "id": "d00_world_event_snowmelt_counter_damage",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "announced thaw with an unresolved leak",
+    "months": [
+     2,
+     3
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -7600,
+      "note": "espresso machine replaced"
+     },
+     {
+      "field": "closureDays",
+      "add": 5
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "repair_roof_first",
+      "label": "Have the landlord fix the known leak before the thaw",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Event removed (notice letter, lease repair clause)."
+     },
+     {
+      "kind": "choice",
+      "id": "move_equipment",
+      "label": "Move equipment to a dry area",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Loss limited to the counter."
+     }
+    ],
+    "source": "https://www.lehighvalleypublicmedia.org/news/parkland-east-penn/a-bit-overwhelming-nowhere-coffee-co-temporarily-closed-in-emmaus-following-heavy-losses-from-water-damage/",
+    "confidence": "estimate",
+    "note": "Machine price from the pack.",
+    "cashExampleUSD": -13890,
+    "tier": "deep",
+    "name": "A known roof leak reaches the coffee counter"
+   },
+   {
+    "id": "d00_world_event_storefront_collision",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "announced non-injury incident",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 3
+     },
+     {
+      "field": "cash",
+      "add": -1000,
+      "note": "insurance deductible"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "professional_assessment",
+      "label": "Close the frontage for assessment",
+      "cost": {
+       "usd": 1000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Reopen in 3 days; the driver's insurer pays the rest."
+     },
+     {
+      "kind": "choice",
+      "id": "side_entrance",
+      "label": "Serve from a side entrance",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Capacity x0.7 for 3 days instead of closing."
+     }
+    ],
+    "source": "https://www.kbtx.com/2023/07/09/college-station-coffee-cafe-closed-after-vehicle-hits-building/",
+    "confidence": "estimate",
+    "note": "My estimates.",
+    "cashExampleUSD": -4774,
+    "tier": "deep",
+    "name": "A vehicle damages the closed storefront"
+   },
+   {
+    "id": "restroom_out_of_order",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "skipped upkeep (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "reputation",
+      "add": -0.02
+     },
+     {
+      "field": "violation",
+      "id": "toilet_not_supplied"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "restroom_access",
+      "label": "Keep upkeep",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 60,
+       "days": 0
+      },
+      "result": "No violation.",
+      "optionId": "customers_only"
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-43593",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "\"Restroom out of order\""
+   },
+   {
+    "id": "restroom_line_of_passers_by",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "open-to-all option (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -150,
+      "onlyIf": "restroom open to all"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "restroom_access",
+      "label": "Customers only",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No extra cleaning.",
+      "optionId": "customers_only"
+     }
+    ],
+    "source": "https://www.cnn.com/2025/01/14/food/starbucks-restroom-policy",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -1800,
+    "tier": "deep",
+    "name": "Everybody's restroom"
+   },
+   {
+    "id": "backflow_notice",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "annual test due (calendar)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "violation",
+      "id": "backflow_not_tested"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "shortcut",
+      "id": "skip_backflow_test",
+      "label": "Do the annual test",
+      "cost": {
+       "usd": 250,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Report filed with DEP (test fee my estimate)."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/dep/about/backflow-prevention-frequently-asked-questions.page",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -250,
+    "tier": "deep",
+    "name": "Letter from DEP: where is your backflow test?"
+   },
+   {
+    "id": "cellar_stairs_tax",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "cellar storage chosen (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.97
+     },
+     {
+      "field": "seats",
+      "add": 3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "cellar_storage_or_ground_floor",
+      "label": "Store on the ground floor",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No stair trips; 3 seats fewer."
+     }
+    ],
+    "source": "https://alataucitybank.kz/business/osim/articles/sem-fundamentalnykh-printsipov-proektirovki-kofeynogo-bara",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "Every gallon of milk climbs the stairs"
+   },
+   {
+    "id": "cellar_hatch_left_open",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "unguarded delivery (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "inspections",
+      "mult": 1.1
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "post_a_person_at_the_hatch",
+      "label": "Guard the hatch during deliveries",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Lawful (311)."
+     }
+    ],
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02292",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "The sidewalk hatch stands open"
+   },
+   {
+    "id": "milk_drinks_change_the_cart_class",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "cart adds milk drinks (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 5000
+     },
+     {
+      "field": "permitWaitDays",
+      "add": 21
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "sourcing",
+      "label": "Keep a brewed-coffee and tea menu",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Class D non-processing unit ($75 permit)."
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter6.pdf",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -5000,
+    "tier": "exotic",
+    "name": "Lattes change the class of your cart"
    }
   ],
   "mechanics": [],
