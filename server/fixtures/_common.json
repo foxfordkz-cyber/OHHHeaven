@@ -1,0 +1,23 @@
+{
+  "id": "_common",
+  "version": 0,
+  "name": "Laws and taxes for every business in NYC (server fixture)",
+  "taxes": [
+    { "id": "employer_fica", "name": "Employer Social Security and Medicare", "base": "payroll", "rate": 0.0765, "due": "monthly", "source": "server fixture", "confidence": "estimate" },
+    { "id": "ny_unemployment", "name": "NY unemployment insurance", "base": "payroll", "rate": 0.04, "due": "quarterly", "source": "server fixture", "confidence": "estimate" },
+    { "id": "income_tax", "name": "Income taxes on profit", "base": "profit", "rate": 0.25, "due": "annual", "source": "server fixture", "confidence": "estimate", "note": "Blended placeholder for federal, state and city taxes on business profit." }
+  ],
+  "shortcuts": [],
+  "violations": [],
+  "officials": [],
+  "reports": [],
+  "ruleCards": [
+    { "id": "payroll_taxes", "title": "Payroll taxes", "text": "On top of wages you pay Social Security, Medicare and unemployment insurance for every employee.", "source": "server fixture" }
+  ],
+  "roadmap": [
+    { "id": "form_llc", "title": "Form an LLC", "text": "File articles of organization with New York State.", "kind": "legal", "agency": "NYS Department of State" },
+    { "id": "get_ein", "title": "Get an EIN", "text": "Free tax ID from the IRS; you need it to hire.", "kind": "legal", "agency": "IRS" },
+    { "id": "sales_tax_certificate", "title": "Register for sales tax", "text": "Get a Certificate of Authority before your first sale.", "kind": "legal", "agency": "NYS Department of Taxation and Finance" }
+  ],
+  "sources": [ { "url": "packs/_common.json", "title": "Server fixture: replaced by the real common pack from agent 14", "checked": "2026-11-14" } ]
+}
