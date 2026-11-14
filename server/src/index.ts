@@ -112,7 +112,8 @@ export class GameServer {
     const restarted: string[] = [];
     for (const [id, rt] of [...this.runtimes]) {
       const w = rt.world;
-      if (!w.config.demo || w.phase === 'running') { this.endedAt.delete(id); continue; }
+      // город показа возвращает в начало только ведущий (команда reset): у него стартовая копия и коды
+      if (!w.config.demo || w.phase === 'running' || id === this.pitch?.id) { this.endedAt.delete(id); continue; }
       const since = this.endedAt.get(id);
       if (since === undefined) { this.endedAt.set(id, now); continue; }
       if (!this.demoRestartMs || now - since < this.demoRestartMs) continue;
