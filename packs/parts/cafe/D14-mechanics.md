@@ -30,8 +30,9 @@
 | `extra.winterDoor` | 1 блок | | климат, окно уборки, варианты уборки, штрафы, проверка DSNY, порог иска, страховка |
 | `extra.eventCatalog` | 19 | | все со `realSignal` и ходом игрока |
 | `extra.mechanics` | 6 | | четыре основных, §195, рассрочка продавца |
+| `extra.failureStories` | 8 | | настоящие случаи по трём механикам: Artisanal ($24 млн аренды), 75 Second Ave, The Clam, Delancey Street, Bocca di Bacco, перепродажа кофейни, долг продавца, Angen v De Jesus |
 
-## 3. Неочевидные находки (16)
+## 3. Неочевидные находки (18)
 
 1. **Бесплатная аренда — это заём арендодателя.** Ставку поднимают так, чтобы за 10 лет он получил столько же: при 6 бесплатных месяцах $6,158 вместо $6,000. В сезоне из 12 месяцев остаток договора не виден, и больше бесплатных месяцев выигрывает всегда — если не учесть договор в итоговом счёте.
 2. **Бесплатный период обычно начинается с подписания, а не с разрешений.** Медленное разрешение съедает бесплатные месяцы ещё до начала стройки. Опытный арендатор пишет в договор «позднее из даты и выдачи разрешений плюс 90–150 дней».
@@ -47,7 +48,9 @@
 12. **Смена вывески после покупки — худший путь.** Постоянные клиенты думают, что кафе закрылось: известность падает с 0.7 до 0.35. За 3 месяца −$178,301 кассы против −$156,584 у того, кто сохранил имя.
 13. **Очередь возникает только в самые плотные четверти часа.** При 200 заказах в день и двух людях на пике очереди нет. С одним — 4 человека, 9 минут, 5 ушедших в день. Второй человек на 7–10 утра стоит $1,890 в месяц: при 200 заказах он возвращает только $860 маржи, а при 442 заказах третий человек возвращает $2,580. Совет «поставь ещё человека на пик» верен не везде.
 14. **20-е место стоит больше одного стула.** На 20 местах нужен туалет на 56 кв. футов — это почти 4 места при 15 кв. футах на место. Каждое место ещё и забирает площадь у очереди: при тесной посадке очередь раньше выходит на улицу.
-15. **Эспрессо-бару не нужен газ.** Только 17% бизнесов в опросе Сената 2017 года получили газ вовремя, потери в среднем $140,000. Кафе без кухни просто обходит эту проблему, а Con Edison до подписания аренды говорит, есть ли газ по адресу и сколько стоит его провести (платна ли проверка — не нашёл).
+15. **Эспрессо-бару не нужен газ.** В опросе 2017 года у 82% ресторанов была задержка с газом — в среднем 68 дней, до года, потери около $140,000. Кафе без кухни просто обходит эту проблему, а Con Edison до подписания аренды говорит, есть ли газ по адресу и сколько стоит его провести (платна ли проверка — не нашёл).
+17. **Плохая уборка хуже, чем никакая — для иска.** Без закона и договора арендатор не обязан убирать снег. Но если его работники убрали плохо и всё замёрзло, он отвечает сам (Angen v De Jesus, 2025). Поэтому вариант `staff` в игре включает соль после лопаты.
+18. **Договор аренды переживает план.** Сыроварня-бистро Artisanal на Park Avenue South так и не открылась, а суд присудил арендодателю около $24 млн аренды до 2031 года. Гарантия «good guy» ограничивает личный долг владельца; полная гарантия — нет.
 16. **Сравнение с другими странами.** В Германии работники переходят к покупателю бизнеса по закону (BGB §613a); в Нью-Йорке нет. В России «арендные каникулы» на ремонт обычно 1–2 месяца и закон их не определяет; в Нью-Йорке 3–6 месяцев, при тяжёлом ремонте до 12.
 
 ## 4. Исправления существующего пакета
@@ -89,7 +92,7 @@
 - Доля уходящих из уличной очереди за кофе; в мороз и без мороза.
 - Исследование доли клиентов, остающихся при смене владельца: есть только оценка консультанта SBDC (уходят около 30%) и правило оценщиков (скидка 20–50%).
 - Срок и плата за согласие арендодателя на переуступку договора.
-- Свежие (2025–2026) сроки подключения газа Con Edison; есть только данные 2015–2017.
+- Свежие (2025–2026) сроки подключения газа Con Edison; есть только опрос 2017 года (68 дней в среднем) и случаи 2015 года.
 - Доплата за налог на недвижимость в первый год маленькой витрины — по практике 0, числа нет.
 - Надбавка подрядчика за ночные смены.
 
@@ -106,6 +109,8 @@
 - Комитет Совета по санитарии, январь 2025: https://citymeetings.nyc/city-council/2025-01-22-1000-am-committee-on-sanitation-and-solid-waste-management/chapter/snow-removal-violation-statistics-for-recent-snow-seasons
 - Ответственность арендатора и владельца (§7-210): https://www.newyorkappellatedigest.com/2019/10/24/pursuant-to-the-nyc-administrative-code-out-of-possession-landlords-are-responsible-for-the-removal-of-ice-and-snow-from-the-abutting-city-sidewalks-notwithstanding-an-agreement-making-the-tenant-re/
 - Cruz v Heights Broadway (2023): https://nycourts.gov/reporter/3dseries/2023/2023_02612.htm
+- Angen v De Jesus (2025): https://www.nycourts.gov/reporter/3dseries/2025/2025_06802.htm
+- Dembele v 373-381 Park Ave S. (2020): https://www.newyorkappellatedigest.com/2020/04/09/notwithstanding-the-tenants-lease-obligation-to-keep-the-sidewalk-free-of-ice-and-snow-the-landlord-had-the-nondelegable-duty-to-keep-a-ramp-leading-to-the-sidewalk-in-a-safe-condition-in-this-slip/
 - «Буря ещё идёт», 12 часов: https://www.newyorkappellatedigest.com/2017/07/19/storm-in-progress-rule-did-not-apply-storm-stopped-12-hours-before-the-slip-and-fall-2nd-dept/
 - The Hartford, 2025, через Insurance Journal: https://www.insurancejournal.com/news/national/2025/12/10/850545.htm
 - Avero, шторм Stella: https://averoinc.com/avero-index-snowstorm-stella-and-restaurant-sales/
@@ -126,6 +131,9 @@
 - Приказ об остановке работ: https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page
 - Штраф за работу без разрешения, 1 RCNY §102-04: https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf
 - Сенат штата, «Cooking without gas»: https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf
+- amNY об опросе 2017 года: https://www.amny.com/news/gas-service-delays-burden-city-restaurants-force-layoffs-study-1-14409788
+- Artisanal, $24 млн аренды: https://therealdeal.com/2018/05/02/cheese-restaurant-owes-tf-cornerstone-24m-on-387-pas-space
+- 75 Second Ave: https://evgrieve.com/2022/04/owner-citys-bureaucratic-red-tape.html
 - Con Edison, проверка газа до аренды: https://thenycalliance.org/news-item/Con-Edison-Gas-Service
 - NBAT, открытие на 75 дней раньше: https://www.nyc.gov/office-of-the-mayor/news/327-14/de-blasio-administration-celebrates-grand-opening-2-000th-food-establishment-open-with
 - Налог на коммерческую аренду, отчёт DOF 2025: https://www.nyc.gov/assets/finance/downloads/pdf/25pdf/2025-crt-report.pdf

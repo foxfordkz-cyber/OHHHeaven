@@ -745,7 +745,7 @@
     {
       "id": "gas_before_lease",
       "title": "Check the gas before you sign",
-      "text": "In a 2017 State Senate survey only 17% of businesses got gas service on time; delays cost them $140,000 on average. Con Edison checks gas at an address before you sign a lease.",
+      "text": "In a 2017 survey 82% of restaurants had a gas delay: 68 days on average, up to a year, about $140,000 lost each. Con Edison checks gas at an address before you sign. An espresso bar needs none.",
       "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf"
     },
     {
@@ -930,14 +930,14 @@
       },
       "gas": {
         "needsGas": false,
-        "connectDays": 120,
+        "connectDays": 68,
         "appliesWhenFormerUse": [
           "retail",
           "salon"
         ],
         "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
         "confidence": "estimate",
-        "note": "An espresso bar runs on electricity, so the pack default needs no gas. If a concept adds a gas kitchen in a space that never had food service, Con Edison must bring service from the street. NYS Senate 2017 survey: 17% got gas on time, $140,000 lost per business on average; reported cases of 4 months (DNAinfo 2015). 120 days is the 4-month case, an estimate."
+        "note": "An espresso bar runs on electricity, so the pack default needs no gas. If a concept adds a gas kitchen in a space that never had food service, Con Edison must bring service from the street. 2017 survey by Sen. Hoylman and the NYC Hospitality Alliance (quoted in search excerpts): 82.1% of members had some delay getting gas turned on, upgraded or adjusted; the average wait was 68 days and up to a year; losses about $140,000 per business. Reported cases: 4 months (The Clam, Greenwich Village), 7 months (Delancey Street, 2015). No 2025-26 figures found. 68 days = the survey average."
       },
       "buildRush": {
         "costMult": 1.15,
@@ -1176,7 +1176,7 @@
         "confidence": "estimate",
         "note": "BOP for coffee shops at $1M/$2M limits with a $1,000 deductible (QuoteSweep from Insureon data, quoted in a search excerpt). One claim raises the renewal 10-30% or 20-40% (broker guides); 25% from the next month on the insurance line."
       },
-      "leaseIndemnity": "Most store leases make the tenant clear the sidewalk and indemnify the landlord, so the landlord passes the claim to the tenant; under §7-210 the injured person sues the owner. Cruz v Heights Broadway (2023): a tenant whose lease did not cover the sidewalk was not liable.",
+      "leaseIndemnity": "Most store leases make the tenant clear the sidewalk and indemnify the landlord, so the landlord passes the claim to the tenant; under §7-210 the injured person sues the owner. Cruz v Heights Broadway (2023): a tenant whose lease did not cover the sidewalk was not liable. Angen v De Jesus (1st Dept 2025): a store whose lease required snow removal faces trial over whether its employees made the ice worse while clearing it; a tenant is liable when its own snow work makes natural conditions more hazardous. Dembele v 373-381 Park Ave S. Assoc. (1st Dept 2020): whatever the restaurant's lease says, the building owner keeps a nondelegable duty for the sidewalk. In the game the 'staff' option includes salt after shovelling, so it does not create this risk; a future 'shovel only, no salt' option would.",
       "insideExposure": {
         "note": "Wet floors inside on snow days: served orders on snow and ice days without entrance mats count toward the same claim threshold at 1 pass per order. Design value."
       },
@@ -1266,7 +1266,7 @@
         "months": [],
         "realSignal": "Con Edison gas availability answer for the address",
         "effects": [],
-        "durationMonths": 4,
+        "durationMonths": 2,
         "playerMoves": [
           {
             "kind": "lever",
@@ -1277,7 +1277,7 @@
             "id": "check_gas_before_lease"
           }
         ],
-        "realFrequency": "NYS Senate 2017: 83% of surveyed businesses did not get gas on time",
+        "realFrequency": "2017 survey: 82.1% had a delay, 68 days on average, up to a year",
         "tier": "deep",
         "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
         "confidence": "estimate"
@@ -1871,6 +1871,64 @@
           }
         ],
         "tier": "deep"
+      }
+    ],
+    "failureStories": [
+      {
+        "what": "Artisanal Fromagerie Bistro, 387 Park Avenue South",
+        "cause": "Signed a long lease for a space it never opened; the landlord sued for the rent.",
+        "lesson": "The lease outlives the plan: a Manhattan judge ordered about $24 million of rent through 2031. A good guy guaranty caps what the owner personally owes; a full guaranty does not.",
+        "source": "https://therealdeal.com/2018/05/02/cheese-restaurant-owes-tf-cornerstone-24m-on-387-pas-space",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "A shop at 75 Second Avenue, East Village (2022)",
+        "cause": "Took possession and paid rent while city approvals dragged on; closed before it ever opened.",
+        "lesson": "Tie the start of rent to the permits, not to the signing date.",
+        "source": "https://evgrieve.com/2022/04/owner-citys-bureaucratic-red-tape.html",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "The Clam, Greenwich Village",
+        "cause": "Con Edison shut its gas line shortly before opening; it ran four months without gas.",
+        "lesson": "Ask Con Edison about gas at the address before signing; a cafe without a kitchen avoids the problem.",
+        "source": "https://thenycalliance.org/news-item/Con-Edison-Gas-Service",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "A Delancey Street restaurant (2015)",
+        "cause": "Waited seven months for Con Edison to turn on its gas after a backlog that followed two fatal gas explosions.",
+        "lesson": "Utility timelines are outside your control and outside the free-rent clock.",
+        "source": "https://www.amny.com/news/gas-service-delays-burden-city-restaurants-force-layoffs-study-1-14409788",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "Bocca di Bacco, Upper West Side (2014)",
+        "cause": "The restaurant group dropped the location after permit and compliance costs piled up.",
+        "lesson": "Price the permit path before the lease, not after.",
+        "source": "https://www.westsiderag.com/2014/03/27/bocca-di-bye-bye-restaurant-backs-out-because-of-red-tape",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "A coffee shop bought for $440,000 (forum post)",
+        "cause": "Bought on claimed sales of $1.2 million and $250,000 net; the new owner tried to resell it within the year for $360,000.",
+        "lesson": "Verify the seller's numbers against tax returns before paying; one anecdote, not a statistic.",
+        "source": "https://www.coffeeforums.com/threads/questions-and-advice-on-buying-an-existing-coffee-shop.15433",
+        "mechanic": "buy_existing_business"
+      },
+      {
+        "what": "Buyers held liable for a seller's sales tax (NYS Tax Appeals, recurring)",
+        "cause": "Paid for a business without filing Form AU-196.10 ten days ahead; one filed three months late.",
+        "lesson": "File the bulk-sale notice; the seller's unpaid sales tax otherwise becomes yours.",
+        "source": "https://www.aprio.com/insights-events/bulk-sales-in-new-york-how-a-purchaser-was-left-responsible-for-a-sellers-sales-tax-liability-ins-article-tax/",
+        "mechanic": "buy_existing_business"
+      },
+      {
+        "what": "A store tenant in Angen v De Jesus (1st Dept 2025)",
+        "cause": "A pedestrian fell on ice in front of a store whose lease required snow removal; the question is whether the staff's clearing made it worse.",
+        "lesson": "Clear the full path and salt it: half-done shovelling that refreezes is the tenant's own liability.",
+        "source": "https://www.nycourts.gov/reporter/3dseries/2025/2025_06802.htm",
+        "mechanic": "winter_at_the_door"
       }
     ]
   }
