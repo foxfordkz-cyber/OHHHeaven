@@ -380,11 +380,10 @@ export function viewFor(w: WorldState, ctx: EngineCtx, playerId: string | null, 
 // ───────────── запросы ─────────────
 
 /** Синхронные запросы. Ошибка ввода — HostError. advisor, idea и debrief обслуживает сервер через @ohh/ai. */
-export function answer(w: WorldState, ctx: EngineCtx, playerId: string, q: Query): unknown {
+export function answer(w: WorldState, ctx: EngineCtx, playerId: string | null, q: Query): unknown {
   if (!isObj(q) || typeof q.type !== 'string') throw new HostError('Query must have a type');
-  const p = w.players.find((x) => x.id === playerId);
-  if (!p) throw new HostError('Unknown player');
-  const b = managedBy(w, playerId) ?? null;
+  if (playerId !== null && !w.players.some((x) => x.id === playerId)) throw new HostError('Unknown player');
+  const b = playerId ? managedBy(w, playerId) ?? null : null;
   const needNiche = (n: unknown): NicheId => {
     if (typeof n !== 'string' || !ctx.packs.niches[n as NicheId]) throw new HostError('Unknown niche');
     return n as NicheId;
@@ -423,8 +422,8 @@ export type AiRequest =
   | { kind: 'debrief'; input: { business: BusinessState; analytics: Analytics; plan: RealWorldPlan; rank: number } };
 
 /** Собирает вход для асинхронных запросов к @ohh/ai из мира. */
-export function aiRequest(w: WorldState, ctx: EngineCtx, playerId: string, q: Query): AiRequest {
-  const b = managedBy(w, playerId) ?? null;
+export function aiRequest(w: WorldState, ctx: EngineCtx, playerId: string | null, q: Query): AiRequest {
+  const b = playerId ? managedBy(w, playerId) ?? null : null;
   if (q.type === 'idea') {
     if (typeof q.text !== 'string' || !q.text.trim()) throw new HostError('Describe your idea');
     return { kind: 'idea', input: { text: q.text.slice(0, 500), packs: ctx.packs } };
