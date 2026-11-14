@@ -12,6 +12,7 @@ describe('end of season', () => {
     render(<MemoryRouter><EndScreen view={cafeEndedView} ask={ask} cards={RULE_CARDS} /></MemoryRouter>);
     expect(screen.getByLabelText('Place 2')).toBeTruthy();
     expect(screen.getByText('of 20 coffee shops')).toBeTruthy();
+    expect(screen.getByText('2nd of 10 run by players · prizes go to the top 3 of them')).toBeTruthy();
     const hero = screen.getByLabelText('Place 2').closest('section')!;
     expect(within(hero).getByText('$13.50')).toBeTruthy();
     expect(within(hero).getByText(/You won/)).toBeTruthy();

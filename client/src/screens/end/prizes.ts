@@ -143,7 +143,11 @@ export function officialsBoard(world: OwnerView['world'], ranking: { name: strin
   return { pool: officialsC / 100, rows };
 }
 
-export interface MyResult { niche: NicheId; rank: number; of: number; payout: number; final: boolean }
+export interface MyResult {
+  niche: NicheId; rank: number; of: number; payout: number; final: boolean;
+  /** Place among the businesses run by people, and how many there are: prizes go by this place. */
+  humanRank: number; humans: number;
+}
 
 /** My result: place among all businesses of the niche and my payout (the money paid, once the season is over). */
 export function myResult(v: OwnerView): MyResult | null {
@@ -152,9 +156,12 @@ export function myResult(v: OwnerView): MyResult | null {
   const board = nicheBoard(v, b.niche);
   const me = board.mine;
   if (!me) return null;
-  const of = Math.max(board.rows.length, nicheMembers(v, b.niche).total, me.rank);
+  const members = nicheMembers(v, b.niche);
+  const of = Math.max(board.rows.length, members.total, me.rank);
+  const humanRank = board.rows.filter((r) => !r.isAi && r.rank <= me.rank).length;
+  const place = { niche: b.niche, rank: me.rank, of, humanRank, humans: Math.max(members.humans, humanRank) };
   const paid = v.world.phase === 'ended' && v.payouts ? v.payouts.filter((p) => p.playerId === v.me.id && p.kind === 'owner') : null;
-  if (paid) return { niche: b.niche, rank: me.rank, of, payout: r2(paid.reduce((s, p) => s + p.amount, 0)), final: true };
+  if (paid) return { ...place, payout: r2(paid.reduce((s, p) => s + p.amount, 0)), final: true };
   const share = b.owners.find((o) => o.playerId === v.me.id)?.share ?? 1;
-  return { niche: b.niche, rank: me.rank, of, payout: r2((me.prize ?? 0) * share), final: false };
+  return { ...place, payout: r2((me.prize ?? 0) * share), final: false };
 }

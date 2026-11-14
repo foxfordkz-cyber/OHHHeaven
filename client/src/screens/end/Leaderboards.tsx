@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import type { NicheId, OwnerView } from '@ohh/shared/types';
 import { AiBadge, Badge, Card, Icon, NICHE_ICON, SegmentedControl } from '../../ui';
-import { compactMoney, money, nicheName, nicheShort } from '../insights/format';
-import { allBoards, officialsBoard, type BoardRow, type NicheBoard } from './prizes';
+import { compactMoney, money, nicheName, nicheShort, ordinal } from '../insights/format';
+import { allBoards, myResult, officialsBoard, type BoardRow, type NicheBoard } from './prizes';
 import './end.css';
 
 export type RankingRow = { name: string; points: number; isAi: boolean };
@@ -105,9 +105,12 @@ export function LeaderboardCard({ view, onOpen }: { view: OwnerView; onOpen?: ()
   const niche = view.business?.niche;
   const board = allBoards(view).find((b) => b.niche === niche);
   if (!board) return null;
-  const mine = board.mine;
+  const me = myResult(view);
+  const subtitle = me
+    ? `#${me.rank} of ${me.of} ${nicheName(board.niche).toLowerCase()}${me.humans > 0 && me.humans < me.of ? ` · ${ordinal(me.humanRank)} of ${me.humans} run by players` : ''}`
+    : nicheName(board.niche);
   return (
-    <Card title="Leaderboard" subtitle={mine ? `#${mine.rank} of ${board.rows.length} ${nicheName(board.niche).toLowerCase()}` : nicheName(board.niche)}
+    <Card title="Leaderboard" subtitle={subtitle}
       action={onOpen ? <button type="button" className="chip" onClick={onOpen}>All <Icon name="chevronRight" size={14} /></button> : undefined}>
       <NicheTable board={board} testMoney={view.world.config.demo} limit={3} />
     </Card>

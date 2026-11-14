@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compactMoney, money, pct, toFraction, unitWord } from './format';
+import { compactMoney, money, ordinal, pct, toFraction, unitWord } from './format';
 
 describe('money and shares as an owner reads them', () => {
   it('shows cents only when a small amount has them, or when asked', () => {
@@ -25,6 +25,9 @@ describe('money and shares as an owner reads them', () => {
     expect(pct(22)).toBe('22%');
     expect(pct(-0.001)).toBe('0%');
     expect(toFraction(22)).toBe(0.22);
+  });
+  it('says places as ordinals', () => {
+    expect([1, 2, 3, 4, 11, 12, 13, 21, 22, 103].map(ordinal)).toEqual(['1st', '2nd', '3rd', '4th', '11th', '12th', '13th', '21st', '22nd', '103rd']);
   });
   it('names the unit of a niche', () => {
     expect(unitWord('cafe', 1)).toBe('order');

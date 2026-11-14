@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Debrief, OwnerView, PackRuleCard, Query } from '@ohh/shared/types';
 import { Badge, Button, Card, Icon, MoneyText, RuleCard, Skeleton } from '../../ui';
 import { useGame, useOwnerView } from '../../app/store';
-import { money, nicheName } from '../insights/format';
+import { money, nicheName, ordinal } from '../insights/format';
 import { OriginBadge } from '../insights/Advisor';
 import { Leaderboards } from './Leaderboards';
 import { myResult } from './prizes';
@@ -59,9 +59,10 @@ export function EndScreen({ view, ask, cards, planHref = '/end/plan' }: { view: 
           <>
             <div className="end-place num" aria-label={`Place ${result.rank}`}>#{result.rank}</div>
             <div className="h3">of {result.of} {nicheName(result.niche).toLowerCase()}</div>
+            {result.humans > 0 && result.humans < result.of && <div className="small muted">{ordinal(result.humanRank)} of {result.humans} run by players · prizes go to the top 3 of them</div>}
             <p className="muted" style={{ margin: 'var(--s-2) 0 0' }}>
               {result.payout > 0
-                ? <>{result.final ? 'You won' : 'Prize at this place'} <strong className="num">{money(result.payout, { cents: true })}</strong>{testMoney ? ' in test money' : ''}.</>
+                ? <>{result.final ? 'You won' : ended ? 'Your prize:' : 'Prize at this place'} <strong className="num">{money(result.payout, { cents: true })}</strong>{testMoney ? ' in test money' : ''}.</>
                 : result.final ? 'No prize this season: only the top 3 human businesses of a niche win.' : 'Top 3 human businesses of each niche win a prize.'}
             </p>
             {!ended && <p className="xsmall faint" style={{ margin: 'var(--s-1) 0 0' }}>The table can still change until the last day of the season.</p>}

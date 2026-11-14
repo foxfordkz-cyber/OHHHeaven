@@ -118,7 +118,7 @@ describe('officials and my result', () => {
   });
   it('my result at the end is the money paid to me', () => {
     const r = myResult(cafeEndedView)!;
-    expect(r).toEqual({ niche: 'cafe', rank: 2, of: 20, payout: 13.5, final: true });
-    expect(myResult(cafeView)).toMatchObject({ rank: 3, of: 20, payout: 13.5, final: false });
+    expect(r).toEqual({ niche: 'cafe', rank: 2, of: 20, humanRank: 2, humans: 10, payout: 13.5, final: true });
+    expect(myResult(cafeView)).toMatchObject({ rank: 3, of: 20, humanRank: 2, humans: 10, payout: 13.5, final: false });
   });
 });

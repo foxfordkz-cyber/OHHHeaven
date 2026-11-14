@@ -34,7 +34,7 @@ describe('Insights tab', () => {
     expect(screen.getByText('Your cash ($103,321) covers it.')).toBeTruthy();
     expect(screen.getByText('No open violations: an inspection would find nothing.')).toBeTruthy();
     expect(screen.getByText(/orders lost in the last 30 days/)).toBeTruthy();
-    expect(screen.getByText('#3 of 20 coffee shops')).toBeTruthy();
+    expect(screen.getByText('#3 of 20 coffee shops · 2nd of 10 run by players')).toBeTruthy();
   });
   it('warns when the cash does not cover the next tax', () => {
     show(cafeStrugglingView);
