@@ -1,0 +1,1367 @@
+{
+ "version": 1,
+ "updated": "2026-11-14",
+ "cards": [
+  {
+   "id": "winter_storm_warning",
+   "theme": "snowstorm",
+   "kind": "weather",
+   "title": "Winter storm warning",
+   "text": "The National Weather Service warns of heavy snow for New York City. Some staff can't make it in, and more people order in.",
+   "when": {
+    "months": [
+     12,
+     1,
+     2,
+     3
+    ],
+    "weather": [
+     "snow",
+     "storm"
+    ]
+   },
+   "days": 2,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "staffAvailability",
+     "mult": 0.8
+    },
+    {
+     "target": "deliveryShare",
+     "mult": 1.2
+    }
+   ],
+   "source": "https://www.weather.gov/okx/",
+   "sourceTitle": "National Weather Service, New York NY office",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 21,
+   "weight": 3
+  },
+  {
+   "id": "cold_snap",
+   "theme": "cold_snap",
+   "kind": "weather",
+   "title": "Arctic cold snap",
+   "text": "Arctic air settles over the city and daytime highs stay near freezing. Fewer people stroll, but hot coffee sells.",
+   "when": {
+    "months": [
+     12,
+     1,
+     2
+    ],
+    "maxTempF": 32
+   },
+   "days": 3,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 0.95
+    },
+    {
+     "target": "demand",
+     "mult": 1.05,
+     "niches": [
+      "cafe"
+     ]
+    }
+   ],
+   "source": "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMaxTNormals.pdf",
+   "sourceTitle": "NWS: Central Park daily maximum temperature normals",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 21,
+   "weight": 2
+  },
+  {
+   "id": "heat_advisory",
+   "theme": "heat_wave",
+   "kind": "weather",
+   "title": "Heat emergency plan activated",
+   "text": "The city activates its heat emergency plan and opens cooling centers. Air conditioning runs all day and the midday rush thins out.",
+   "when": {
+    "months": [
+     6,
+     7,
+     8
+    ],
+    "weather": [
+     "heat"
+    ]
+   },
+   "days": 3,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "utilities",
+     "mult": 1.15
+    },
+    {
+     "target": "footTraffic",
+     "mult": 0.95
+    },
+    {
+     "target": "staffAvailability",
+     "mult": 0.95
+    }
+   ],
+   "source": "https://www.nyc.gov/mayors-office/news/2026/05/mayor-mamdani-activates-city-s-heat-emergency-plan-ahead-of-unse",
+   "sourceTitle": "NYC Mayor's Office: heat emergency plan activated, May 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 21,
+   "weight": 3
+  },
+  {
+   "id": "heavy_rain_day",
+   "theme": "heavy_rain",
+   "kind": "weather",
+   "title": "All-day soaking rain",
+   "text": "A soaking rain is forecast for the whole day. Walk-ins drop and delivery orders pick up.",
+   "when": {
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "weather": [
+     "rain",
+     "storm"
+    ]
+   },
+   "days": 1,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "deliveryShare",
+     "mult": 1.15
+    },
+    {
+     "target": "footTraffic",
+     "mult": 0.95
+    }
+   ],
+   "source": "https://foursquare.com/resources/blog/data/fair-weather-foodies/",
+   "sourceTitle": "Foursquare and AccuWeather: heavy rain and restaurant foot traffic",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 35,
+   "weight": 2
+  },
+  {
+   "id": "summer_thunderstorms",
+   "theme": "thunderstorms",
+   "kind": "weather",
+   "title": "Severe thunderstorms expected",
+   "text": "Strong thunderstorms are expected in the afternoon. Commutes run late and some staff arrive behind schedule.",
+   "when": {
+    "months": [
+     6,
+     7,
+     8
+    ],
+    "weather": [
+     "storm"
+    ]
+   },
+   "days": 1,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "staffAvailability",
+     "mult": 0.9
+    },
+    {
+     "target": "deliveryShare",
+     "mult": 1.1
+    }
+   ],
+   "source": "https://www.weather.gov/okx/",
+   "sourceTitle": "National Weather Service, New York NY office",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 14,
+   "weight": 2
+  },
+  {
+   "id": "first_warm_weekend",
+   "theme": "nice_weather",
+   "kind": "weather",
+   "title": "First warm weekend of spring",
+   "text": "The first warm, sunny weekend of spring brings New Yorkers outside. Sidewalks and parks fill up.",
+   "when": {
+    "months": [
+     4,
+     5
+    ],
+    "weather": [
+     "clear"
+    ],
+    "minTempF": 65,
+    "startWeekday": 5
+   },
+   "days": 2,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.1
+    }
+   ],
+   "source": "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMaxTNormals.pdf",
+   "sourceTitle": "NWS: Central Park daily maximum temperature normals",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 60
+  },
+  {
+   "id": "noreaster",
+   "theme": "noreaster",
+   "kind": "weather",
+   "title": "Nor'easter on the way",
+   "text": "A nor'easter brings wind-driven rain to the coast. Commutes run slow and the heat runs longer.",
+   "when": {
+    "months": [
+     3,
+     10,
+     11
+    ],
+    "weather": [
+     "storm",
+     "rain"
+    ]
+   },
+   "days": 2,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "staffAvailability",
+     "mult": 0.9
+    },
+    {
+     "target": "utilities",
+     "mult": 1.05
+    }
+   ],
+   "source": "https://www.weather.gov/okx/",
+   "sourceTitle": "National Weather Service, New York NY office",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 30
+  },
+  {
+   "id": "subway_weekend_closure",
+   "theme": "subway_closure",
+   "kind": "traffic",
+   "title": "Weekend subway shutdown",
+   "text": "The MTA suspends subway service at the station near {block} for weekend track work. Fewer riders walk past the shops.",
+   "when": {
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "startWeekday": 4
+   },
+   "days": 3,
+   "scope": "block",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 0.85
+    }
+   ],
+   "source": "https://www.mta.info/article/mta-weekender-october-30-november-2-2026",
+   "sourceTitle": "MTA Weekender: planned weekend service changes",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 28,
+   "weight": 2
+  },
+  {
+   "id": "street_works_closure",
+   "theme": "street_works",
+   "kind": "traffic",
+   "title": "Street work closes the block",
+   "text": "A utility crew closes part of {block} for planned street work this week. Detours keep some shoppers and couriers away.",
+   "when": {
+    "months": [
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ]
+   },
+   "days": 5,
+   "scope": "block",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 0.9
+    },
+    {
+     "target": "deliveryShare",
+     "mult": 0.9
+    }
+   ],
+   "source": "https://www.nyc.gov/html/dot/html/motorist/wkndtraf.shtml",
+   "sourceTitle": "NYC DOT: Weekend Traffic Advisory (planned construction closures)",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 35,
+   "weight": 2
+  },
+  {
+   "id": "unga_gridlock",
+   "theme": "gridlock",
+   "kind": "traffic",
+   "title": "UN General Assembly week",
+   "text": "UN General Assembly week brings road closures across Midtown East. Deliveries crawl and commutes take longer.",
+   "when": {
+    "date": {
+     "month": 9,
+     "from": 21,
+     "to": 26
+    }
+   },
+   "days": 6,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "deliveryShare",
+     "mult": 0.85
+    },
+    {
+     "target": "staffAvailability",
+     "mult": 0.95
+    }
+   ],
+   "source": "https://ny1.com/nyc/all-boroughs/transit/2026/09/18/new-york-city-unveils-gridlock-alert-days-through-end-of-2026",
+   "sourceTitle": "NY1: NYC Gridlock Alert Days through the end of 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "holiday_gridlock",
+   "theme": "gridlock",
+   "kind": "traffic",
+   "title": "Holiday Gridlock Alert Days",
+   "text": "The city declares Gridlock Alert Days for the holiday season. Streets are packed with shoppers and deliveries slow down.",
+   "when": {
+    "date": {
+     "month": 12,
+     "from": 2,
+     "to": 15
+    }
+   },
+   "days": 14,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "deliveryShare",
+     "mult": 0.9
+    },
+    {
+     "target": "footTraffic",
+     "mult": 1.05,
+     "tiers": [
+      "prime"
+     ]
+    }
+   ],
+   "source": "https://ny1.com/nyc/all-boroughs/transit/2026/09/18/new-york-city-unveils-gridlock-alert-days-through-end-of-2026",
+   "sourceTitle": "NY1: NYC Gridlock Alert Days through the end of 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "congestion_zone_deliveries",
+   "theme": "delivery_costs",
+   "kind": "traffic",
+   "title": "Congestion toll surcharge",
+   "text": "Trucks entering Manhattan below 60th Street pay the congestion relief toll. Some suppliers pass it on with a delivery surcharge.",
+   "when": {
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ]
+   },
+   "days": 30,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "cogs",
+     "mult": 1.02,
+     "tiers": [
+      "prime"
+     ]
+    }
+   ],
+   "source": "https://www.mta.info/press-release/mta-board-approves-phasing-congestion-relief-zone-toll",
+   "sourceTitle": "MTA: Board approves phasing of the Congestion Relief Zone toll",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120
+  },
+  {
+   "id": "summer_streets",
+   "theme": "car_free_street",
+   "kind": "traffic",
+   "title": "Summer Streets goes car-free",
+   "text": "Summer Streets closes {block} to cars for the morning. Walkers and cyclists stream past the shops.",
+   "when": {
+    "date": {
+     "month": 8,
+     "from": 1,
+     "to": 15
+    },
+    "startWeekday": 5
+   },
+   "days": 1,
+   "scope": "block",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.15
+    }
+   ],
+   "source": "https://www.nyc.gov/html/dot/html/pr2026/summer-streets-to-return-to-all-five-boroughs.shtml",
+   "sourceTitle": "NYC DOT: Summer Streets returns to all five boroughs, 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "open_streets_weekend",
+   "theme": "car_free_street",
+   "kind": "traffic",
+   "title": "Open Streets weekend",
+   "text": "{block} becomes a car-free Open Street for the weekend. A DOT study found businesses on open streets did better than nearby blocks with traffic.",
+   "when": {
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "startWeekday": 5
+   },
+   "days": 2,
+   "scope": "block",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.1
+    }
+   ],
+   "source": "https://www.nyc.gov/html/dot/downloads/pdf/streets-for-recovery.pdf",
+   "sourceTitle": "NYC DOT: Streets for Recovery, economic impact of Open Streets",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 35
+  },
+  {
+   "id": "marathon_sunday",
+   "theme": "big_event",
+   "kind": "city",
+   "title": "NYC Marathon day",
+   "text": "The New York City Marathon runs through all five boroughs. Crowds line the course, but many roads are closed to traffic.",
+   "when": {
+    "date": {
+     "month": 11,
+     "from": 1,
+     "to": 1
+    }
+   },
+   "days": 1,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.1
+    },
+    {
+     "target": "deliveryShare",
+     "mult": 0.8
+    }
+   ],
+   "source": "https://www.fox5ny.com/news/sign-up-nyc-marathon-2026",
+   "sourceTitle": "FOX 5 NY: 2026 NYC Marathon on Sunday, Nov. 1",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "pride_march",
+   "theme": "parade",
+   "kind": "city",
+   "title": "NYC Pride March",
+   "text": "The NYC Pride March fills lower Fifth Avenue. Streets close along the route and the crowds stay for the day.",
+   "when": {
+    "date": {
+     "month": 6,
+     "from": 28,
+     "to": 28
+    }
+   },
+   "days": 1,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.1,
+     "tiers": [
+      "prime"
+     ]
+    },
+    {
+     "target": "deliveryShare",
+     "mult": 0.9
+    }
+   ],
+   "source": "https://www.nyc.gov/assets/cecm/downloads/pdf/pride-street-closures-info-2026.pdf",
+   "sourceTitle": "NYC CECM: Pride March street closures, 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "july4_fireworks",
+   "theme": "big_event",
+   "kind": "city",
+   "title": "Fourth of July fireworks",
+   "text": "Macy's Fourth of July fireworks light up the East River. Waterfront streets close early and many staff ask for the night off.",
+   "when": {
+    "date": {
+     "month": 7,
+     "from": 4,
+     "to": 4
+    }
+   },
+   "days": 1,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.08,
+     "tiers": [
+      "prime"
+     ]
+    },
+    {
+     "target": "staffAvailability",
+     "mult": 0.9
+    }
+   ],
+   "source": "https://www.fox5ny.com/news/nyc-macys-fireworks-show-2026-july-4th-brooklyn-east-hudson-river-new-york-city",
+   "sourceTitle": "FOX 5 NY: Macy's 4th of July Fireworks 2026, street closures",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "arabica_spike",
+   "theme": "coffee_prices",
+   "kind": "supply",
+   "title": "Coffee bean prices jump",
+   "text": "Arabica coffee hit record prices in 2025, according to the World Bank. Your roaster raises wholesale bean prices.",
+   "when": {
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ]
+   },
+   "days": 30,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "cogs",
+     "mult": 1.08,
+     "niches": [
+      "cafe"
+     ]
+    }
+   ],
+   "source": "https://blogs.worldbank.org/en/opendata/beverage-prices-soften-but-risks-are-brewing",
+   "sourceTitle": "World Bank Data Blog: beverage prices, arabica record in early 2025",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120,
+   "weight": 2
+  },
+  {
+   "id": "arabica_relief",
+   "theme": "coffee_prices",
+   "kind": "supply",
+   "title": "Coffee prices ease",
+   "text": "The World Bank expects arabica prices to fall in 2026 after the 2025 spike. Roasters trim wholesale bean prices.",
+   "when": {
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ]
+   },
+   "days": 30,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "cogs",
+     "mult": 0.96,
+     "niches": [
+      "cafe"
+     ]
+    }
+   ],
+   "source": "https://blogs.worldbank.org/en/opendata/-beverage-prices-moderate-as-coffee-and-cocoa-supply-recover",
+   "sourceTitle": "World Bank Data Blog: beverage prices moderate as coffee and cocoa supply recover",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120
+  },
+  {
+   "id": "dairy_auction_up",
+   "theme": "dairy_prices",
+   "kind": "supply",
+   "title": "Milk costs more",
+   "text": "Global dairy prices rose 3% at the Global Dairy Trade auction on November 3, 2026. Milk for lattes costs more this month.",
+   "when": {
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ]
+   },
+   "days": 21,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "cogs",
+     "mult": 1.04,
+     "niches": [
+      "cafe"
+     ]
+    }
+   ],
+   "source": "https://ukragroconsult.com/en/news/global-dairy-prices-rise-3-at-gdt-auction/",
+   "sourceTitle": "UkrAgroConsult: global dairy prices rise 3% at GDT auction",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120
+  },
+  {
+   "id": "egg_prices_up",
+   "theme": "food_prices",
+   "kind": "supply",
+   "title": "Egg prices climb",
+   "text": "The U.S. egg price index rose 4.3% in June 2026, BLS reports. Baked goods cost a bit more to make.",
+   "when": {
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ]
+   },
+   "days": 21,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "cogs",
+     "mult": 1.03,
+     "niches": [
+      "cafe",
+      "bodega"
+     ]
+    }
+   ],
+   "source": "https://www.bls.gov/news.release/archives/cpi_07142026.htm",
+   "sourceTitle": "BLS: Consumer Price Index, June 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120
+  },
+  {
+   "id": "sugar_up",
+   "theme": "food_prices",
+   "kind": "supply",
+   "title": "Sugar prices rise",
+   "text": "The FAO sugar price index rose 6.6% in October 2026. Syrups and pastries cost a little more.",
+   "when": {
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ]
+   },
+   "days": 21,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "cogs",
+     "mult": 1.02,
+     "niches": [
+      "cafe"
+     ]
+    }
+   ],
+   "source": "https://www.fao.org/worldfoodsituation/foodpricesindex/en/",
+   "sourceTitle": "FAO Food Price Index",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120
+  },
+  {
+   "id": "menu_inflation",
+   "theme": "food_prices",
+   "kind": "supply",
+   "title": "Food costs keep rising",
+   "text": "Prices for food away from home in the New York area are up 3.6% over the year, BLS reports. Suppliers pass on part of the increase.",
+   "when": {
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ]
+   },
+   "days": 30,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "cogs",
+     "mult": 1.02,
+     "niches": [
+      "cafe",
+      "bodega"
+     ]
+    }
+   ],
+   "source": "https://www.bls.gov/regions/northeast/news-release/2026/consumerpriceindex_newyork_20261014.htm",
+   "sourceTitle": "BLS: Consumer Price Index, New York area, September 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120
+  },
+  {
+   "id": "con_ed_rates",
+   "theme": "energy_prices",
+   "kind": "supply",
+   "title": "New Con Edison rates",
+   "text": "State regulators approved a new Con Edison rate plan in January 2026. For a typical commercial account the delivery bill rises 5.1% in the first year.",
+   "when": {
+    "months": [
+     1,
+     2
+    ]
+   },
+   "days": 30,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "utilities",
+     "mult": 1.05
+    }
+   ],
+   "source": "https://dps.ny.gov/system/files/documents/2026/01/con-edison-electric-rate-case-summary.pdf",
+   "sourceTitle": "NY Department of Public Service: Con Edison electric rate case summary",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "summer_power_bills",
+   "theme": "energy_prices",
+   "kind": "supply",
+   "title": "Summer power bills",
+   "text": "Air conditioning season starts and the new Con Edison rates apply. Expect a higher power bill this month.",
+   "when": {
+    "months": [
+     6,
+     7,
+     8
+    ]
+   },
+   "days": 30,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "utilities",
+     "mult": 1.08
+    }
+   ],
+   "source": "https://dps.ny.gov/system/files/documents/2026/01/con-edison-electric-rate-case-summary.pdf",
+   "sourceTitle": "NY Department of Public Service: Con Edison electric rate case summary",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120
+  },
+  {
+   "id": "diesel_surcharge",
+   "theme": "fuel_prices",
+   "kind": "supply",
+   "title": "Fuel surcharge on deliveries",
+   "text": "U.S. diesel prices stayed above $5 a gallon for months in 2026, EIA data show. Food distributors add a fuel surcharge.",
+   "when": {
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ]
+   },
+   "days": 21,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "cogs",
+     "mult": 1.02
+    }
+   ],
+   "source": "https://www.eia.gov/petroleum/gasdiesel/",
+   "sourceTitle": "U.S. EIA: Gasoline and Diesel Fuel Update",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120
+  },
+  {
+   "id": "restaurant_week_winter",
+   "theme": "dining_promo",
+   "kind": "city",
+   "title": "NYC Restaurant Week",
+   "text": "NYC Restaurant Week brings diners out across the five boroughs. More people walk the commercial strips at lunch and dinner.",
+   "when": {
+    "date": {
+     "month": 1,
+     "from": 20,
+     "to": 20
+    }
+   },
+   "days": 21,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.05
+    }
+   ],
+   "source": "https://downtownny.com/news/nyc-restaurant-week-winter-2026/",
+   "sourceTitle": "Downtown Alliance: NYC Restaurant Week Winter 2026, Jan 20 - Feb 12",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "restaurant_week_summer",
+   "theme": "dining_promo",
+   "kind": "city",
+   "title": "Summer Restaurant Week",
+   "text": "Summer Restaurant Week runs with more than 600 restaurants across the five boroughs. Diners fill the commercial strips.",
+   "when": {
+    "date": {
+     "month": 7,
+     "from": 20,
+     "to": 20
+    }
+   },
+   "days": 21,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.05
+    }
+   ],
+   "source": "https://business.nyctourism.com/press-media/press-releases/nyc-restaurant-week-summer-2026",
+   "sourceTitle": "NYC Tourism + Conventions: NYC Restaurant Week Summer 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "summer_tourist_peak",
+   "theme": "tourism",
+   "kind": "city",
+   "title": "Peak tourist season",
+   "text": "Peak tourist season is here, and NYC Tourism expects about 66 million visitors in 2026. Busy blocks near transit get the most foot traffic.",
+   "when": {
+    "months": [
+     6,
+     7,
+     8
+    ]
+   },
+   "days": 30,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.08,
+     "tiers": [
+      "prime"
+     ]
+    }
+   ],
+   "source": "https://business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+   "sourceTitle": "NYC Tourism + Conventions: annual report, March 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 120
+  },
+  {
+   "id": "world_cup_crowds",
+   "theme": "tourism",
+   "kind": "city",
+   "title": "World Cup visitors",
+   "text": "FIFA World Cup 26 matches in the New York area draw fans from around the world. NYC Tourism expects about 1.2 million visitors for the games.",
+   "when": {
+    "months": [
+     6,
+     7
+    ]
+   },
+   "days": 30,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.08,
+     "tiers": [
+      "prime",
+      "mid"
+     ]
+    },
+    {
+     "target": "demand",
+     "mult": 1.05,
+     "niches": [
+      "cafe"
+     ]
+    }
+   ],
+   "source": "https://business.nyctourism.com/press-media/press-releases/NYC-Tourism-Annual-Report-March-2026",
+   "sourceTitle": "NYC Tourism + Conventions: annual report, March 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "us_open_fortnight",
+   "theme": "big_event",
+   "kind": "city",
+   "title": "US Open in town",
+   "text": "The US Open draws record crowds to Flushing Meadows, with 1.2 million fans in 2026. Visitors fill trains and cafes across the city.",
+   "when": {
+    "date": {
+     "month": 8,
+     "from": 23,
+     "to": 23
+    }
+   },
+   "days": 21,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.03
+    }
+   ],
+   "source": "https://qns.com/2026/09/us-open-record-breaking-crowds/",
+   "sourceTitle": "QNS: record-breaking crowds at the 2026 US Open",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "holiday_markets",
+   "theme": "holiday_season",
+   "kind": "city",
+   "title": "Holiday markets open",
+   "text": "Holiday markets open, led by Bryant Park's Winter Village. Shoppers and tourists crowd the busiest blocks.",
+   "when": {
+    "date": {
+     "month": 10,
+     "from": 28,
+     "to": 28
+    }
+   },
+   "days": 30,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.08,
+     "tiers": [
+      "prime"
+     ]
+    }
+   ],
+   "source": "https://www.6sqft.com/bryant-parks-winter-village-opens-for-the-2026-holiday-season/",
+   "sourceTitle": "6sqft: Bryant Park's Winter Village opens for the 2026 holiday season",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "holiday_shopping",
+   "theme": "holiday_season",
+   "kind": "city",
+   "title": "Holiday shopping rush",
+   "text": "Holiday shopping peaks in December, and the city flags it with Gridlock Alert Days. Busy sidewalks mean more walk-in sales.",
+   "when": {
+    "date": {
+     "month": 12,
+     "from": 1,
+     "to": 1
+    }
+   },
+   "days": 24,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "demand",
+     "mult": 1.06,
+     "niches": [
+      "bodega",
+      "cafe"
+     ]
+    },
+    {
+     "target": "footTraffic",
+     "mult": 1.05
+    }
+   ],
+   "source": "https://ny1.com/nyc/all-boroughs/transit/2026/09/18/new-york-city-unveils-gridlock-alert-days-through-end-of-2026",
+   "sourceTitle": "NY1: NYC Gridlock Alert Days through the end of 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "back_to_school",
+   "theme": "school_calendar",
+   "kind": "city",
+   "title": "Back to school",
+   "text": "NYC public schools open on September 10. Student staff go back to class and morning routines change.",
+   "when": {
+    "date": {
+     "month": 9,
+     "from": 10,
+     "to": 10
+    }
+   },
+   "days": 7,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "staffAvailability",
+     "mult": 0.95
+    },
+    {
+     "target": "footTraffic",
+     "mult": 1.03
+    }
+   ],
+   "source": "https://www.fox5ny.com/news/nyc-public-schools-calendar-first-day",
+   "sourceTitle": "FOX 5 NY: NYC public schools first day on September 10",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "street_fair",
+   "theme": "street_fair",
+   "kind": "city",
+   "title": "Street fair on the block",
+   "text": "A permitted street fair takes over {block} on Saturday. Vendors draw crowds, and nearby shops get extra walk-ins.",
+   "when": {
+    "months": [
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "startWeekday": 5
+   },
+   "days": 1,
+   "scope": "block",
+   "effects": [
+    {
+     "target": "footTraffic",
+     "mult": 1.2
+    }
+   ],
+   "source": "https://www.nyc.gov/site/cecm/permitting/permit-types/street-festivals.page",
+   "sourceTitle": "NYC Street Activity Permit Office: street festivals",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 35,
+   "weight": 2
+  },
+  {
+   "id": "outdoor_dining_season",
+   "theme": "outdoor_dining",
+   "kind": "city",
+   "title": "Outdoor dining season opens",
+   "text": "Dining Out NYC roadway seating returns on April 1. Cafes with outdoor seats attract more guests on mild days.",
+   "when": {
+    "date": {
+     "month": 4,
+     "from": 1,
+     "to": 1
+    }
+   },
+   "days": 14,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "demand",
+     "mult": 1.04,
+     "niches": [
+      "cafe"
+     ]
+    }
+   ],
+   "source": "https://secretnyc.co/nyc-outdoor-dining-returns-april-1-2026-dining-out-program/",
+   "sourceTitle": "Secret NYC: Dining Out NYC returns April 1, 2026",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300
+  },
+  {
+   "id": "minimum_wage_17",
+   "theme": "labor_rules",
+   "kind": "regulation",
+   "title": "Minimum wage is now $17.00",
+   "text": "New York City's minimum wage is $17.00 an hour from January 1, 2026. Payroll in the game already uses the new rate.",
+   "when": {
+    "date": {
+     "month": 1,
+     "from": 1,
+     "to": 1
+    }
+   },
+   "days": 7,
+   "scope": "city",
+   "effects": [],
+   "source": "https://dol.ny.gov/minimum-wage",
+   "sourceTitle": "New York State Department of Labor: minimum wage",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 300,
+   "note": "Informational: there is no wage effect target in EffectTarget; packs already use $17.00."
+  },
+  {
+   "id": "inspection_reminder",
+   "theme": "health_rules",
+   "kind": "regulation",
+   "title": "Health inspections are unannounced",
+   "text": "The Health Department inspects restaurants unannounced at least once a year. A restaurant gets two chances to earn an A in each inspection cycle.",
+   "when": {
+    "months": [
+     2,
+     5,
+     8,
+     11
+    ]
+   },
+   "days": 7,
+   "scope": "city",
+   "effects": [],
+   "source": "https://www.nyc.gov/site/doh/services/restaurant-grades.page",
+   "sourceTitle": "NYC Health: food establishment inspections and letter grades",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 90,
+   "note": "Informational until EffectTarget gets an inspection-rate target (request to the lead)."
+  },
+  {
+   "id": "trash_bins_rule",
+   "theme": "sanitation_rules",
+   "kind": "regulation",
+   "title": "Trash must go in lidded bins",
+   "text": "Since March 1, 2024, every NYC business must set out trash in bins with secure lids. Loose bags on the curb can bring a fine.",
+   "when": {
+    "months": [
+     3,
+     9
+    ]
+   },
+   "days": 7,
+   "scope": "city",
+   "effects": [],
+   "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
+   "sourceTitle": "DSNY: starting March 1, all NYC businesses must put trash in lidded bins",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 150,
+   "note": "Informational."
+  },
+  {
+   "id": "flu_season",
+   "theme": "sick_season",
+   "kind": "staff",
+   "title": "Flu season hits staff",
+   "text": "Flu season is in full swing across New York State. More staff call in sick for the next two weeks.",
+   "when": {
+    "months": [
+     12,
+     1,
+     2
+    ]
+   },
+   "days": 14,
+   "scope": "city",
+   "effects": [
+    {
+     "target": "staffAvailability",
+     "mult": 0.9
+    }
+   ],
+   "source": "https://www.fox5ny.com/news/new-york-reports-highest-number-flu-cases-ever-recorded-single-week",
+   "sourceTitle": "FOX 5 NY: New York flu cases, December 2025",
+   "checked": "2026-11-14",
+   "confidence": "verified",
+   "effectNote": "estimate: effect sizes are game design values; agent 07 tunes balance",
+   "cooldownDays": 60,
+   "weight": 2
+  }
+ ]
+}
