@@ -12,6 +12,12 @@ import { accrue, applicableTaxes, dueDayFor, isSalesTax, wageBase } from './taxe
 import { addLine, econOf, emptyMtd, placeOf, placeRentMonth, round2, withEcon, type EconExtra } from './util';
 
 const BOOK_KINDS = new Set<PnlLine['kind']>(['revenue', 'cogs', 'payroll', 'rent', 'opex', 'deal', 'other']);
+/**
+ * Money that changes hands as financing is neither income nor expense: loan principal either way, a stake bought or
+ * sold, an early payoff. It moves cash and stays out of profit and of the profit tax.
+ */
+const FINANCING_LINE = /^deal:.+:(loan_in|loan_out|stake_in|stake_out|early|p\d+:principal)$/;
+export const isFinancingLine = (l: PnlLine): boolean => l.kind === 'deal' && FINANCING_LINE.test(l.id);
 
 export function economyMonthClose(w: WorldState, ctx: EngineCtx): WorldState {
   const day = w.day;
@@ -95,8 +101,13 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
   }
   for (const lever of pack.levers) {
     const opt = lever.options.find((o) => o.id === b.orders.levers[lever.id]) ?? defaultLeverOption(lever.options);
-    if (!opt || opt.monthlyCost <= 0 || m.daysOpen === 0) continue;
-    add({ id: `lever_${lever.id}`, label: `${lever.name}: ${opt.label}`, kind: 'opex', amount: -opt.monthlyCost * openShare });
+    if (m.daysOpen === 0) continue;
+    // charged for the days each option was on (accrued in day.ts): switching to the free option before the close saves nothing
+    const atClose = opt && opt.monthlyCost > 0 ? opt.monthlyCost * openShare : 0;
+    const due = m.leverCost ? m.leverCost[lever.id] ?? 0 : atClose;
+    if (due <= 0) continue;
+    const sameAllMonth = opt !== undefined && Math.abs(due - atClose) < 0.005;
+    add({ id: `lever_${lever.id}`, label: sameAllMonth ? `${lever.name}: ${opt.label}` : `${lever.name}: charged for the days each option was on`, kind: 'opex', amount: -due });
   }
   // block fund fee (contract §3 step 5); the id contains "blockfund" so the deals module does not charge it twice
   if (b.orders.blockFund && m.daysOpen > 0 && cash >= RULES.BLOCK_FUND_FEE_MONTH) {
@@ -111,7 +122,7 @@ function closeBusiness(b: BusinessState, pack: Pack, ctx: EngineCtx, day: number
 
   // taxes accrue into liabilities; profit tax uses the books (no savings, no fines) and carries losses forward
   let liabilities = b.liabilities;
-  const books = lines.filter((l) => BOOK_KINDS.has(l.kind)).reduce((a, l) => a + l.amount, 0);
+  const books = lines.filter((l) => BOOK_KINDS.has(l.kind) && !isFinancingLine(l)).reduce((a, l) => a + l.amount, 0);
   let accruedOther = 0;
   const taxes = applicableTaxes(ctx, pack);
   const taxYtd = { ...(econ.taxYtd ?? {}) };

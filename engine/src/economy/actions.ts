@@ -3,7 +3,8 @@ import type { Action, ActionResult, BusinessState, Money, Pack, PermitState, Pla
 import { asEstablishedPlace, buildoutOf, buildoutRules, isTakeover, openingCost, RULES, takeoverRules } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { defaultLeverOption, standardKitBonus } from './effects';
-import { activeBusinessOf, addLine, clamp, econOf, emptyMtd, itemDef, maxSizeFor, placeOf, replaceBusiness, round2, staffCount, withEcon, type EconExtra } from './util';
+import { netWorthOf } from './networth';
+import { activeBusinessOf, addLine, clamp, econOf, emptyMtd, itemDef, lastBankruptOf, maxSizeFor, placeOf, replaceBusiness, round2, staffCount, withEcon, type EconExtra } from './util';
 
 const ECONOMY_ACTIONS = new Set(['open_business', 'launch', 'set_orders', 'buy_item', 'sell_item', 'resize', 'read_inbox']);
 const fail = (w: WorldState, error: string): ActionResult => ({ world: w, error });
@@ -143,8 +144,15 @@ function openBusiness(w: WorldState, ctx: EngineCtx, player: Player, a: Extract<
   const seatRule = seatRuleBroken(pack, size, items);
   if (seatRule) return fail(w, seatRule);
   const cost = itemsCost(pack, items, size, place);
-  const cash = round2(pack.startCapital - cost);
-  if (cash < 0) return fail(w, `Not enough money: this setup costs $${Math.round(cost).toLocaleString('en-US')}, you have $${pack.startCapital.toLocaleString('en-US')}`);
+  // capital belongs to the owner, not to the business: the first business starts from the pack's capital,
+  // one opened after a bankruptcy starts from what the bankrupt business was still worth. Reopening creates no money.
+  const failed = lastBankruptOf(w, player.id);
+  const capital = failed ? Math.max(0, netWorthOf(failed, ctx)) : pack.startCapital;
+  const cash = round2(capital - cost);
+  if (cash < 0) {
+    const have = `you have $${Math.round(capital).toLocaleString('en-US')}`;
+    return fail(w, `Not enough money: this setup costs $${Math.round(cost).toLocaleString('en-US')}, ${failed ? `${have} left after ${failed.name} went bankrupt` : have}`);
+  }
   const name = a.name.trim().slice(0, 40);
   if (!name) return fail(w, 'Give your business a name');
 
@@ -162,7 +170,7 @@ function openBusiness(w: WorldState, ctx: EngineCtx, player: Player, a: Extract<
     if (it.qty > 0) quality += def.qualityBonus ?? 0;
   }
   const id = `biz_${w.businesses.length + 1}`;
-  const econ: EconExtra = { marketing: 0, training: 0, lossCarry: 0, cashStart: pack.startCapital, mtd: emptyMtd() };
+  const econ: EconExtra = { marketing: 0, training: 0, lossCarry: 0, cashStart: capital, mtd: emptyMtd() };
   if (takeover) econ.awareness0 = takeoverRules(pack)!.awareness;   // most regulars stay with the new owner
   if (established) econ.awareness0 = 1;
   const b: BusinessState = withEcon({

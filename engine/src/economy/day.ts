@@ -3,7 +3,7 @@ import type { BusinessState, DayReport, FeedItem, InboxItem, NicheId, Pack, Plac
 import { anchorDayMult, awarenessAt, dateOf, footfallParams, RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
 import { footfallDemand, monthlyDemand, marketParams, type DemandInput, type FootfallInput, fairPrice } from './demand';
-import { activeEvents, eventMult, itemsQuality, leverEffects, MARKETING_DECAY_DAY, TRAINING_DECAY_DAY, trainingBoost, weekdayMult } from './effects';
+import { activeEvents, defaultLeverOption, eventMult, itemsQuality, leverEffects, MARKETING_DECAY_DAY, TRAINING_DECAY_DAY, trainingBoost, weekdayMult } from './effects';
 import { dealModifiers } from './deps';
 import { hooksFor } from './hooks';
 import { accrue, applicableTaxes, dueDayFor, isSalesTax, taxableShare, taxDef, taxName } from './taxes';
@@ -211,6 +211,12 @@ function tradeDay(c: Calc, ctx: EngineCtx, day: number, month: number, eventTitl
   let workers = 0;
   for (const [role, n] of Object.entries(b.orders.staff)) if (n > 0) { staffDays[role] = (staffDays[role] ?? 0) + n; workers += n; }
   const wagesExtra = (m.wagesExtra ?? 0) + workers * (c.wagesMult - 1);
+  // paid lever options are charged for the days they were on, not for the setting on the closing day
+  const leverCost = { ...(m.leverCost ?? {}) };
+  for (const lever of pack.levers) {
+    const opt = lever.options.find((o) => o.id === b.orders.levers[lever.id]) ?? defaultLeverOption(lever.options);
+    if (opt && opt.monthlyCost > 0) leverCost[lever.id] = (leverCost[lever.id] ?? 0) + opt.monthlyCost / RULES.DAYS_PER_MONTH;
+  }
   const capUnits = Number.isFinite(c.capacity) ? c.capacity : c.demand;
   const econNext: EconExtra = {
     ...econ,
@@ -220,7 +226,7 @@ function tradeDay(c: Calc, ctx: EngineCtx, day: number, month: number, eventTitl
       ...m, revenue: round2(m.revenue + revenue), cogs: round2(m.cogs + cogs), salesTax: round2(m.salesTax + salesTax),
       capacityUnits: m.capacityUnits + capUnits, utilSum: m.utilSum + util, utilDays: m.utilDays + 1,
       daysAlive: m.daysAlive + 1, daysOpen: m.daysOpen + 1, managerDays: m.managerDays + (b.orders.autopilot === 'manager' ? 1 : 0),
-      rentMultSum: m.rentMultSum + c.rentMult, utilitiesMultSum: m.utilitiesMultSum + c.utilitiesMult, staffDays,
+      rentMultSum: m.rentMultSum + c.rentMult, utilitiesMultSum: m.utilitiesMultSum + c.utilitiesMult, staffDays, leverCost,
       ...(wagesExtra !== 0 ? { wagesExtra } : {}),
     },
   };

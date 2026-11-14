@@ -13,6 +13,7 @@ export interface EconMtd {
   rentMultSum: number; utilitiesMultSum: number;
   staffDays: Record<string, number>;   // role id → worker-days this month (open days only)
   wagesExtra?: number;                 // Σ over open days of workers × (wages event multiplier − 1); absent = 0
+  leverCost?: Record<string, Money>;   // lever id → cost accrued day by day for the option that was on that day; absent — a month saved before this field
 }
 export interface EconExtra {
   marketing: Money;      // decaying stock of ad spend
@@ -85,6 +86,15 @@ export function activeBusinessOf(w: WorldState, playerId: string): BusinessState
   for (let i = w.businesses.length - 1; i >= 0; i--) {
     const b = w.businesses[i];
     if (b.managerPlayerId === playerId && b.status !== 'bankrupt') return b;
+  }
+  return undefined;
+}
+
+/** The last business this player ran into bankruptcy, if any. */
+export function lastBankruptOf(w: WorldState, playerId: string): BusinessState | undefined {
+  for (let i = w.businesses.length - 1; i >= 0; i--) {
+    const b = w.businesses[i];
+    if (b.managerPlayerId === playerId && b.status === 'bankrupt') return b;
   }
   return undefined;
 }
