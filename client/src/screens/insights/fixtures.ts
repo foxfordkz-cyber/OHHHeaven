@@ -393,7 +393,7 @@ function finalPayouts(v: OwnerView): Payout[] {
     const nichePool = (pool * humans(niche).length) / total;
     eligible.slice(0, 3).forEach((s, i) => {
       const owner = s.businessId === MY_BUSINESS_ID ? MY_PLAYER_ID : `owner-${s.businessId}`;
-      out.push({ playerId: owner, kind: 'owner', amount: r2(nichePool * v.world.config.nichePrizeTable[i]), niche, rank: s.rank });
+      out.push({ playerId: owner, kind: 'owner', amount: r2(nichePool * v.world.config.nichePrizeTable[i]), niche, rank: i + 1 });   // place among winners, as finalizeSeason
     });
   }
   out.push({ playerId: 'official-rivera', kind: 'official', amount: r2(v.world.bank * v.world.config.officialsShare), rank: 1 });

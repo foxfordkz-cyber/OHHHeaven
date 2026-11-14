@@ -53,3 +53,19 @@ describe('officials and my result', () => {
     expect(myResult(cafeView)!.final).toBe(false);
   });
 });
+
+describe('same rule as finalizeSeason (agent 13)', () => {
+  it('a niche where nobody can win hands its fund to the others, so the whole fund is still shown', () => {
+    const v = structuredClone(cafeView);
+    v.leaderboards.barbershop = v.leaderboards.barbershop!.map((s) => (s.isAi ? s : { ...s, bankrupt: true }));
+    const pools = nichePools(v);
+    expect(pools.barbershop).toBe(0);
+    expect(Math.round(pools.cafe! * 100)).toBe(Math.round(v.world.bank * 0.9 * 100));
+  });
+  it('final payouts are matched by place among winners, even when an AI business sits in between', () => {
+    const v = structuredClone(cafeEndedView);
+    const board = nicheBoard(v, 'cafe');
+    const third = board.rows.find((r) => r.podium === 3)!;
+    expect(third.prize).toBe(v.extra!.payouts!.find((p) => p.niche === 'cafe' && p.rank === 3)!.amount);
+  });
+});

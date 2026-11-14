@@ -12,31 +12,52 @@ export interface BoardRow {
 export interface NicheBoard { niche: NicheId; pool: number; rows: BoardRow[]; mine: BoardRow | null }
 
 const r2 = (v: number) => Math.round(v * 100) / 100;
+const toCents = (v: number) => Math.round(v * 100);
 
-/** Prize fund of each niche: the bank's prize share, weighted by human (paying) owners in that niche. */
+/** Split whole cents by weights, largest remainder first — the same rule as finalizeSeason (agent 13). */
+export function splitCents(totalCents: number, weights: number[]): number[] {
+  const sum = weights.reduce((s, x) => s + Math.max(0, x), 0);
+  if (totalCents <= 0 || sum <= 0) return weights.map(() => 0);
+  const exact = weights.map((x) => (Math.max(0, x) / sum) * totalCents);
+  const base = exact.map((x) => Math.floor(x));
+  let left = totalCents - base.reduce((s, x) => s + x, 0);
+  const order = exact.map((x, i) => ({ i, frac: x - Math.floor(x) })).sort((a, b) => b.frac - a.frac || a.i - b.i);
+  for (let j = 0; left > 0; j = (j + 1) % order.length) {
+    if (weights[order[j].i] > 0) { base[order[j].i] += 1; left -= 1; }
+  }
+  return base;
+}
+
+/**
+ * Prize fund of each niche, as finalizeSeason would split it today: the bank's prize share by paying human owners
+ * in the niche (human businesses stand in for them), and a niche with nobody who can win hands its part to the others.
+ */
 export function nichePools(v: Pick<OwnerView, 'world' | 'leaderboards'>): Partial<Record<NicheId, number>> {
-  const fund = v.world.bank * v.world.config.prizeShare;
-  const entries = Object.entries(v.leaderboards) as [NicheId, Standing[]][];
-  const humans = entries.map(([n, s]) => [n, s.filter((x) => !x.isAi).length] as const);
-  const total = humans.reduce((s, [, k]) => s + k, 0);
+  const cfg = v.world.config;
+  const [prizeC] = splitCents(toCents(v.world.bank), [cfg.prizeShare, cfg.officialsShare, cfg.platformShare]);
+  const entries = (Object.entries(v.leaderboards) as [NicheId, Standing[]][]).filter(([, s]) => s.some((x) => !x.isAi));
+  const weights = entries.map(([, s]) => s.filter((x) => !x.isAi).length);
+  const pools = splitCents(prizeC, weights);
+  const canWin = entries.map(([, s]) => s.some((x) => !x.isAi && !x.bankrupt));
+  const orphan = pools.reduce((sum, c, i) => sum + (canWin[i] ? 0 : c), 0);
+  const winners = entries.map((_, i) => i).filter((i) => canWin[i]);
+  const extra = orphan > 0 && winners.length ? splitCents(orphan, winners.map((i) => weights[i])) : [];
   const out: Partial<Record<NicheId, number>> = {};
-  for (const [n, k] of humans) out[n] = total > 0 ? r2((fund * k) / total) : 0;
+  entries.forEach(([n], i) => {
+    const plus = winners.indexOf(i) >= 0 && extra.length ? extra[winners.indexOf(i)] : 0;
+    out[n] = canWin[i] ? (pools[i] + plus) / 100 : 0;
+  });
   return out;
 }
 
 /**
  * Prize for each place inside a niche. If fewer human businesses are eligible than there are prize places,
- * their shares are scaled up so the niche fund is still paid out in full.
+ * their shares are scaled up so the niche fund is still paid out in full (as in finalizeSeason).
  */
 export function placePrizes(pool: number, table: number[], eligible: number): number[] {
   const places = table.slice(0, Math.max(0, eligible));
-  const sum = places.reduce((s, x) => s + x, 0);
-  if (sum <= 0) return [];
-  const raw = places.map((x) => (pool * x) / sum);
-  const rounded = raw.map(r2);
-  const drift = r2(pool - rounded.reduce((s, x) => s + x, 0));     // keep the cents exact on the first place
-  if (rounded.length) rounded[0] = r2(rounded[0] + drift);
-  return rounded;
+  if (places.reduce((s, x) => s + x, 0) <= 0) return [];
+  return splitCents(toCents(pool), places).map((c) => c / 100);
 }
 
 export function nicheBoard(v: OwnerView & { extra?: { payouts?: Payout[] } }, niche: NicheId): NicheBoard {
@@ -50,7 +71,8 @@ export function nicheBoard(v: OwnerView & { extra?: { payouts?: Payout[] } }, ni
   const rows = standings.map((s) => {
     const place = eligible.findIndex((e) => e.businessId === s.businessId);
     const projected = place >= 0 && place < prizes.length ? prizes[place] : null;
-    const finalPrize = final?.find((p) => p.rank === s.rank)?.amount;
+    // Payout.rank is the place among prize winners (1–3), not the row in the table; co-owners split one prize
+    const finalPrize = final && place >= 0 && place < 3 ? r2(final.filter((p) => p.rank === place + 1).reduce((sum, p) => sum + p.amount, 0)) || undefined : undefined;
     const pub = byId.get(s.businessId);
     const mine = s.businessId === myId;
     return {
@@ -73,17 +95,16 @@ export interface OfficialRow { name: string; points: number; isAi: boolean; rank
 
 /** Officials share bank × officialsShare by points; AI officials and non-positive points get nothing. */
 export function officialsBoard(world: OwnerView['world'], ranking: { name: string; points: number; isAi: boolean }[]): { pool: number; rows: OfficialRow[] } {
-  const pool = r2(world.bank * world.config.officialsShare);
+  const cfg = world.config;
+  const [, officialsC] = splitCents(toCents(world.bank), [cfg.prizeShare, cfg.officialsShare, cfg.platformShare]);
   const sorted = [...ranking].sort((a, b) => b.points - a.points);
-  const paid = sorted.filter((r) => !r.isAi && r.points > 0);
-  const totalPoints = paid.reduce((s, r) => s + r.points, 0);
-  const rows: OfficialRow[] = sorted.map((r, i) => ({
-    ...r, rank: i + 1,
-    prize: !r.isAi && r.points > 0 && totalPoints > 0 ? r2((pool * r.points) / totalPoints) : null,
-  }));
-  const first = rows.find((r) => r.prize !== null);
-  if (first) first.prize = r2(first.prize! + pool - rows.reduce((s, r) => s + (r.prize ?? 0), 0));   // keep the cents exact
-  return { pool, rows };
+  const paidIdx = sorted.map((r, i) => (!r.isAi && r.points > 0 ? i : -1)).filter((i) => i >= 0);
+  const parts = splitCents(officialsC, paidIdx.map((i) => sorted[i].points));
+  const rows: OfficialRow[] = sorted.map((r, i) => {
+    const k = paidIdx.indexOf(i);
+    return { ...r, rank: i + 1, prize: k >= 0 && officialsC > 0 ? parts[k] / 100 : null };
+  });
+  return { pool: officialsC / 100, rows };
 }
 
 /** My result at the end: place among all businesses of the niche and the payout (final if known). */
