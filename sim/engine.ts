@@ -43,15 +43,16 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** Real engine if agent 02's engine/src/index.ts is in the repo; otherwise the stub. */
 export async function loadEngine(prefer: 'auto' | 'stub' = 'auto'): Promise<EngineApi> {
   const enginePath = join(ROOT, 'engine/src/index.ts');
-  if (prefer === 'stub' || !existsSync(enginePath)) return stubApi;
+  const isStub = (p: string) => !existsSync(p) || readFileSync(p, 'utf8').slice(0, 200).includes('@ohh-stub');
+  if (prefer === 'stub' || isStub(enginePath)) return stubApi;
   try {
     const eng = await import(pathToFileURL(enginePath).href);
     const hostPath = join(ROOT, 'host/src/index.ts');
-    const host = existsSync(hostPath) ? await import(pathToFileURL(hostPath).href) : null;
+    const host = !isStub(hostPath) ? await import(pathToFileURL(hostPath).href) : null;
     const analyticsPath = join(ROOT, 'engine/src/analytics/index.ts');
-    const analytics = existsSync(analyticsPath) ? await import(pathToFileURL(analyticsPath).href) : null;
+    const analytics = !isStub(analyticsPath) ? await import(pathToFileURL(analyticsPath).href) : null;
     const aiPath = join(ROOT, 'ai/src/index.ts');
-    const ai = existsSync(aiPath) ? await import(pathToFileURL(aiPath).href) : null;
+    const ai = !isStub(aiPath) ? await import(pathToFileURL(aiPath).href) : null;
     return {
       source: 'real',
       createWorld: eng.createWorld,

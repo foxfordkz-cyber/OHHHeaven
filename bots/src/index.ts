@@ -10,3 +10,5 @@ export { mulberry32, hashStr, rngFor, seedFor, shuffle } from './rng';
 import { createBotBrain } from './brain';
 /** Default brain for the host (agent 06): `HostDeps.bots`. */
 export const bots = createBotBrain();
+/** Name used by agent 01's skeleton and the host: `import { botBrain } from '@ohh/bots'`. */
+export const botBrain = bots;

@@ -153,7 +153,7 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
   }
 
   function ownerActions(w: WorldState, ctx: EngineCtx, playerId: string): Action[] {
-    if (w.phase !== 'running') return [];
+    if (!w?.players || w.phase !== 'running') return [];
     const sight = ownerSight(w, playerId);
     if (!sight) return [];
     if (!sight.me.isAi && !opts.strategyOf?.(sight.me)) return []; // humans play themselves
@@ -194,7 +194,7 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
   }
 
   function officialActions(w: WorldState, ctx: EngineCtx, playerId: string): Action[] {
-    if (w.phase !== 'running') return [];
+    if (!w?.players || w.phase !== 'running') return [];
     const sight = officialSight(w, playerId);
     if (!sight) return [];
     if (sight.official.exposed && (sight.official.suspendedUntilDay ?? 0) > w.day) return [];
