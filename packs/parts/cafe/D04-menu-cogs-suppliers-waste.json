@@ -1440,7 +1440,44 @@
       "confidence": "estimate",
       "note": "Shares are my planning mix for a New York counter cafe, annual average, not a statistic: 111 drinks and 35 food or retail items per 100 orders. Anchors: lattes are the most ordered drink in 44 of 50 states (Square and SCA); whole milk is in 44% of orders with milk, oat in 33%, almond in 10% (Square, 2024); cold coffee is 17% of cups in winter and 21% in summer for all US coffee drinkers (NCA, 2026), far higher among young city customers (Starbucks: 75% of US beverage sales are cold). The mix gives $7.75 per order, 9% under the pack's $8.50: to reach $8.50 with these prices about half of all orders must carry a food item, or a third of drinks must be sold a size up. Cost of goods comes to 26.0% before shrink and 28.0% with a 2% allowance for staff drinks, comps and remakes. The pack's 28% (26% ingredients + 2% cups) stands as an estimate.",
       "source": "https://squareup.com/us/en/press/national-coffee-day-2024"
-    }
+    },
+    "cogsShares": {
+      "perOrder": {
+        "coffee": 0.684,
+        "bakery": 0.594,
+        "dairy_milk": 0.199,
+        "packaging": 0.133,
+        "retail_beans": 0.115,
+        "oat_milk": 0.104,
+        "syrups_tea_chocolate": 0.086,
+        "matcha": 0.046,
+        "other": 0.049
+      },
+      "shareOfCogs": {
+        "coffee": 0.34,
+        "bakery": 0.296,
+        "dairy_milk": 0.099,
+        "packaging": 0.066,
+        "retail_beans": 0.057,
+        "oat_milk": 0.052,
+        "syrups_tea_chocolate": 0.043,
+        "matcha": 0.023,
+        "other": 0.025
+      },
+      "monthlyVolumesAt6000Orders": {
+        "coffeeLb": 269,
+        "dairyMilkGallons": 226,
+        "oatMilkCartons": 188,
+        "cups": 6660,
+        "bakeryItemsSold": 1860,
+        "bakeryItemsUnsold": 223
+      },
+      "confidence": "estimate",
+      "note": "Computed from extra.menu and extra.menuMix. This is the table that turns a price signal into a cost multiplier: an ingredient that rises by x% raises cost of goods by x% times its share. Two existing events used the wrong shares (coffee 25%, dairy 30%); they are corrected in this fragment."
+    },
+    "taxableShare": 0.965,
+    "taxableShareNote": "Correction, estimate. With the menu mix of extra.menuMix, 96.5% of sales are taxable: bags of beans and bottled water sold to go are not. The pack treats every order as taxable (1.0). The difference is $160 of sales tax a month on $51,000 of sales that the shop should not collect.",
+    "leverNotes": "A negative monthlyCost is a saving. Options carry extra keys the engine does not read yet: requiresSetup (ids of setup items the option needs), locksIngredient and lockMonths (the option freezes an ingredient price), shieldsFrom (tag of events the option cancels). Effects on demand, quality, reputation and capacity are design values."
   },
   "sources": [
     {
@@ -1636,6 +1673,61 @@
     {
       "url": "https://agriculture.ny.gov/food-business-licensing",
       "title": "NYS Agriculture and Markets: food business licensing, Article 20-C",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/bridor-ready-to-bake-perfect-croissant-2-8-oz-case/108BRI59103.html",
+      "title": "WebstaurantStore: Bridor ready-to-bake croissant, 80/case",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/avantco-co-28m-half-size-countertop-convection-oven-2-3-cu-ft-208-240v-2100-2800w/177CO28M.html",
+      "title": "WebstaurantStore: Avantco CO-28M countertop convection oven",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.webstaurantstore.com/true-t12fhc-25-one-section-solid-door-reachin-freezer-with-led-lighting/200T12FHC.html",
+      "title": "WebstaurantStore: True T-12F-HC reach-in freezer",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://about.starbucks.com/press/2024/starbucks-announces-removal-of-extra-charge-for-non-dairy-milk-starting-nov-7/",
+      "title": "Starbucks: removal of the extra charge for non-dairy milk, November 7, 2024",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://squareup.com/us/en/press/national-coffee-day-2024",
+      "title": "Square: National Coffee Day 2024 report (milk choices)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.toogoodtogo.com/en-us/b2b/restaurant-food-waste-management",
+      "title": "Too Good To Go: how the surplus bag works for businesses",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.usda.gov/foodlossandwaste/donating",
+      "title": "USDA: donating food, liability protection and tax deduction",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://odeko.com/pages/faqs",
+      "title": "Odeko: FAQ for cafes (overnight delivery, minimums, fees)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.placer.ai/anchor/articles/psl-day-2026-gives-starbucks-its-biggest-tuesday-of-the-year",
+      "title": "Placer.ai: fall menu launch day 2026 at Starbucks",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
+      "title": "My Coffee Explorer: coffee shop margins, wholesale pastry prices and waste",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.restroworks.com/blog/restaurant-employee-theft-statistics/",
+      "title": "Restroworks: restaurant employee theft statistics (secondary)",
       "checked": "2026-11-14"
     }
   ],
@@ -2040,6 +2132,432 @@
       "title": "Bottling for other shops",
       "text": "Your city permit covers what you sell at your own counter. Bottling cold brew or roasting coffee to sell to other stores needs a state Article 20-C food processing license: $175 a year for a small independent, $400 otherwise.",
       "source": "https://agriculture.ny.gov/food-business-licensing"
+    }
+  ],
+  "levers": [
+    {
+      "id": "pastry_program",
+      "name": "Pastry",
+      "options": [
+        {
+          "id": "delivered",
+          "label": "Baked pastries delivered before opening",
+          "monthlyCost": 0
+        },
+        {
+          "id": "bake_off",
+          "label": "Bake frozen pastry in the shop through the morning",
+          "monthlyCost": -900,
+          "effects": {
+            "quality": 0.02
+          },
+          "requiresSetup": [
+            "bakeoff_oven",
+            "pastry_freezer"
+          ]
+        },
+        {
+          "id": "scratch",
+          "label": "Hire a baker and bake from scratch",
+          "monthlyCost": 1500,
+          "effects": {
+            "quality": 0.05,
+            "demand": 0.03
+          }
+        },
+        {
+          "id": "none",
+          "label": "Drinks only, no food",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.05
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.webstaurantstore.com/bridor-ready-to-bake-perfect-croissant-2-8-oz-case/108BRI59103.html",
+      "confidence": "estimate",
+      "note": "At the reference month (6,000 orders): 780 croissants, 420 muffins, 300 cookies and 360 bagels sold, $3,564 of bakery bought, $394 of it thrown away. Bake-off: a delivered croissant costs $2.43 per one sold after 12% waste, a frozen ready-to-bake one $1.50 after 6% waste (price seen at WebstaurantStore), so croissants alone save $725 a month; muffin batter and cookie dough are assumed to save another $600 (not checked). Against that: 45 minutes of staff time a day ($420 a month with payroll taxes) and about $80 of electricity and parchment. Net about -$900. Scratch baking: ingredients fall to about a quarter of the shelf price (saves about $1,400 on $8,400 of bakery sales) but a baker at $22 an hour for 120 hours costs $2,900 with payroll taxes: net +$1,500, and it needs a kitchen the notes' format does not have. A negative monthlyCost is a saving. 'Drinks only' removes about 16% of sales (bakery is $1.40 of a $7.75 order); the engine has no field for ticket size, so it is written as -5% demand."
+    },
+    {
+      "id": "alt_milk_pricing",
+      "name": "Oat and almond milk",
+      "options": [
+        {
+          "id": "upcharge",
+          "label": "$1 extra for plant milk",
+          "monthlyCost": 0
+        },
+        {
+          "id": "free",
+          "label": "Plant milk at no extra charge",
+          "monthlyCost": 1050,
+          "effects": {
+            "demand": 0.02,
+            "reputation": 0.01
+          }
+        },
+        {
+          "id": "dairy_only",
+          "label": "Dairy only",
+          "monthlyCost": -150,
+          "effects": {
+            "demand": -0.06,
+            "reputation": -0.02
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://about.starbucks.com/press/2024/starbucks-announces-removal-of-extra-charge-for-non-dairy-milk-starting-nov-7/",
+      "confidence": "estimate",
+      "note": "Oat milk costs 10.4 cents an ounce against 4.1 for dairy (both seen): 63 cents more per 12 oz latte. With the upcharge, 10 of 100 orders are oat drinks. Without it I assume oat rises to a third of milk drinks (Square, 2024: oat is in 33% of orders with milk), 22 of 100 orders: 600 lost upcharges ($600) plus 720 more oat drinks at 63 cents ($454) = $1,050 a month at 6,000 orders. Starbucks dropped its 70-80 cent charge on November 7, 2024 and said nearly half of its US customers order plant milk, so a customer now meets the charge mostly at independents. Dairy only: no cartons to waste (-$150) but every tenth order walks."
+    },
+    {
+      "id": "day_end_surplus",
+      "name": "Unsold food at closing",
+      "options": [
+        {
+          "id": "toss",
+          "label": "Throw it away",
+          "monthlyCost": 0
+        },
+        {
+          "id": "surprise_bags",
+          "label": "Sell it in surprise bags through a surplus-food app",
+          "monthlyCost": -225,
+          "effects": {
+            "reputation": 0.01
+          }
+        },
+        {
+          "id": "donate",
+          "label": "Donate it to a food rescue group",
+          "monthlyCost": 0,
+          "effects": {
+            "reputation": 0.02
+          }
+        },
+        {
+          "id": "staff_take_home",
+          "label": "Staff take it home",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": 0.01
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.toogoodtogo.com/en-us/b2b/restaurant-food-waste-management",
+      "confidence": "estimate",
+      "note": "About 223 unsold items a month with a shelf value of $900. Too Good To Go: the shop packs surplus into a bag priced at a third of its value ($300 a month) and pays an annual fee plus a fee per bag; the only US figure found is 'about 25%' (2023 press), so $225 is kept. Payouts come quarterly. Donation: the federal Good Samaritan Food Donation Act shields a good-faith donor from liability unless grossly negligent, and Internal Revenue Code §170(e)(3) gives an enhanced deduction; the money value of the deduction is left out. The fourth real option, selling it tomorrow, is the existing shortcut keep_old_food."
+    },
+    {
+      "id": "ordering_par",
+      "name": "How much fresh food to order",
+      "options": [
+        {
+          "id": "standard",
+          "label": "Enough for a normal day: about one in eight left over",
+          "monthlyCost": 0
+        },
+        {
+          "id": "tight",
+          "label": "Order to sell out by mid-afternoon",
+          "monthlyCost": -270,
+          "effects": {
+            "demand": -0.015,
+            "reputation": -0.01
+          }
+        },
+        {
+          "id": "abundant",
+          "label": "A full case until closing",
+          "monthlyCost": 500,
+          "effects": {
+            "demand": 0.01,
+            "quality": 0.01
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://mycoffeeexplorer.com/blog/coffee-shop-profit-margins-guide",
+      "confidence": "estimate",
+      "note": "Standard: 12% of bakery unsold (trade guide: 10-15%), $394 a month at cost. Tight: 4% unsold saves $270, but an empty case after 2 pm loses about 8% of $8,415 bakery sales: $673 of sales, $337 of margin. The saving and the loss are nearly equal, which is the lesson: wasted pastry is cheap, a missed sale is not. Abundant: 22% unsold, $894 thrown away, $500 more than standard. Demand effects are design values."
+    },
+    {
+      "id": "bean_contract",
+      "name": "Coffee price",
+      "options": [
+        {
+          "id": "price_list",
+          "label": "Pay the roaster's current price list",
+          "monthlyCost": 0
+        },
+        {
+          "id": "fixed_12_months",
+          "label": "Lock today's price for 12 months against a volume commitment",
+          "monthlyCost": 0,
+          "locksIngredient": "roasted_coffee",
+          "lockMonths": 12
+        }
+      ],
+      "tier": "core",
+      "source": "https://freshcup.com/we-asked-13-roasters-how-theyre-navigating-green-coffee-costs-heres-what-they-said/",
+      "confidence": "estimate",
+      "note": "The reference shop buys about 269 lb of coffee a month ($4,150), a third of its cost of goods. A lock is free to sign and cuts both ways: someone who locked in late 2025, with the exchange near $3.90 a lb, was still paying that level in November 2026 with the exchange at $2.80. Roasters themselves buy forward; whether a given roaster will hold a price for a small cafe is a matter of negotiation, not a published tariff. Engine: while the lock runs, coffee events in either direction do not touch this shop."
+    },
+    {
+      "id": "supply_route",
+      "name": "How supplies reach the shop",
+      "options": [
+        {
+          "id": "cafe_distributor",
+          "label": "One cafe distributor delivers overnight",
+          "monthlyCost": 0
+        },
+        {
+          "id": "cash_and_carry",
+          "label": "Owner drives to the cash-and-carry warehouse every week",
+          "monthlyCost": -40,
+          "effects": {
+            "capacity": -0.02
+          }
+        },
+        {
+          "id": "second_supplier",
+          "label": "Keep a second supplier on every key item",
+          "monthlyCost": 120,
+          "shieldsFrom": "supplier_failure"
+        }
+      ],
+      "tier": "core",
+      "source": "https://odeko.com/pages/faqs",
+      "confidence": "estimate",
+      "note": "Dry goods, plant milk and disposables are about $2,200 a month at the reference volume. Cash-and-carry: I assume 8% cheaper ($177) against four trips at about $34 each for the $9 congestion toll, fuel and parking ($136): the trip saves almost nothing in cash and costs the owner 12 hours a month off the floor. Second supplier: split orders lose volume discounts and meet two minimums; $120 is my estimate. In exchange, events tagged supplier_failure do not empty the shelves."
+    },
+    {
+      "id": "inventory_control",
+      "name": "Counting stock",
+      "options": [
+        {
+          "id": "monthly",
+          "label": "Count once a month",
+          "monthlyCost": 0
+        },
+        {
+          "id": "weekly",
+          "label": "Weekly count against the register, recipes in the POS",
+          "monthlyCost": -250,
+          "effects": {
+            "quality": 0.01
+          }
+        },
+        {
+          "id": "none",
+          "label": "Order by eye, never count",
+          "monthlyCost": 1020
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.restroworks.com/blog/restaurant-employee-theft-statistics/",
+      "confidence": "estimate",
+      "note": "Shrink (free drinks for friends, unrecorded staff drinks, remakes, over-pouring, product that walks out the back) is taken as 2% of sales with a monthly count, 1% with a weekly count and 4% with none. On $51,000 of sales: weekly saves $510 and costs $260 of a shift lead's time, net -$250; no counting costs $1,020 more. The 4% is the figure the trade repeats and attributes to the National Restaurant Association (theft about 4% of sales, employees behind about 75% of inventory shortages); I found it only in vendor blogs, so all three levels are estimates."
+    },
+    {
+      "id": "cup_program",
+      "name": "Cups",
+      "options": [
+        {
+          "id": "stock",
+          "label": "Plain stock cups",
+          "monthlyCost": 0
+        },
+        {
+          "id": "custom_printed",
+          "label": "Custom-printed cups with your logo",
+          "monthlyCost": 265,
+          "effects": {
+            "demand": 0.01,
+            "reputation": 0.01
+          }
+        },
+        {
+          "id": "compostable",
+          "label": "Compostable cups and lids",
+          "monthlyCost": 300,
+          "effects": {
+            "reputation": 0.02
+          }
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.webstaurantstore.com/ecochoice-12-oz-white-compostable-paper-hot-cup-case/50012PLAGRN.html",
+      "confidence": "estimate",
+      "note": "About 6,660 cups a month. Compostable: the hot cup alone is 8.2 cents against 4.6 (both seen), and I take 4.5 cents more per set: $300. Custom print: about 4 cents more per cup at small runs (my estimate): $265. Printers' terms seen: one case of 500-1,000 with 3-4 weeks' lead time at one supplier; 50 cases and 14-19 weeks at another; 30,000 paper cups and 12 weeks at a third. A sticker or stamp on a stock cup is the cheap version. Compostable cups in New York end up in the trash unless the carter collects organics."
+    },
+    {
+      "id": "takeout_packing",
+      "name": "Napkins, stirrers and cutlery",
+      "options": [
+        {
+          "id": "on_request",
+          "label": "Only when the customer asks; self-serve station in the shop",
+          "monthlyCost": 0
+        },
+        {
+          "id": "in_every_bag",
+          "label": "Staff drop a set into every bag",
+          "monthlyCost": 90,
+          "effects": {
+            "capacity": 0.01
+          },
+          "causes": "unrequested_takeout_extras"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/site/dsny/businesses/materials-handling/utensils-condiments-napkins.page",
+      "confidence": "estimate",
+      "note": "The old habit is faster at the register and costs about 1.5 cents an order in napkins and cutlery nobody asked for ($90 at 6,000 orders, my estimate). Since July 2024 it is a violation for takeout and delivery orders."
+    },
+    {
+      "id": "seasonal_menu",
+      "name": "Seasonal drinks",
+      "options": [
+        {
+          "id": "core_only",
+          "label": "Same menu all year",
+          "monthlyCost": 0
+        },
+        {
+          "id": "seasonal",
+          "label": "A seasonal special every quarter",
+          "monthlyCost": 250,
+          "effects": {
+            "demand": 0.03
+          }
+        }
+      ],
+      "tier": "core",
+      "source": "https://www.placer.ai/anchor/articles/psl-day-2026-gives-starbucks-its-biggest-tuesday-of-the-year",
+      "confidence": "estimate",
+      "note": "$250 a month for sauces, toppings, a menu reprint and the unsold seasonal stock written off when the season ends (my estimate). The 3% is a design value; the only measured figure is for a chain with national advertising: Starbucks visits on its fall launch day, August 25, 2026, were 25.7% above its daily average for the year (Placer.ai). A seasonal latte sells for $1.25 more than a plain one with 34 cents of extra ingredients."
+    },
+    {
+      "id": "condiment_milk",
+      "name": "Milk for drip coffee",
+      "options": [
+        {
+          "id": "staff_adds",
+          "label": "Staff add milk behind the counter",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": -0.01
+          }
+        },
+        {
+          "id": "timed_carafes",
+          "label": "Self-serve carafes, time-labelled and swapped every 4 hours",
+          "monthlyCost": 45
+        },
+        {
+          "id": "out_all_day",
+          "label": "Carafes sit on the bar from open to close",
+          "monthlyCost": 0,
+          "causes": "spoiled_food"
+        }
+      ],
+      "tier": "deep",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/article81-factsheet.pdf",
+      "confidence": "estimate",
+      "note": "NYC Health: cold food may be held without temperature control for 4 hours if labelled with the time it came out and the time to discard it, and must then be thrown away. Three swaps a day waste about a pint of milk and half-and-half each: 36 cents a pint x 3 x 30 = $32, plus labels: $45 (my arithmetic). Carafes left out all day are the existing violation spoiled_food ($250-$600)."
+    }
+  ],
+  "setup": [
+    {
+      "id": "bakeoff_oven",
+      "name": "Countertop convection oven for bake-off pastry",
+      "kind": "equipment",
+      "cost": 460,
+      "required": false,
+      "lifespanMonths": 60,
+      "qualityBonus": 0.01,
+      "source": "https://www.webstaurantstore.com/avantco-co-28m-half-size-countertop-convection-oven-2-3-cu-ft-208-240v-2100-2800w/177CO28M.html",
+      "confidence": "verified",
+      "note": "WebstaurantStore: Avantco CO-28M half-size electric countertop convection oven, 208/240 V, $459.99. Range on the same page family: Galaxy $329.99 (120 V), Waring WCO500X $859.00, steam-injection models $1,000-$2,500, Moffat turbofan above $5,000. A 208/240 V oven needs its own circuit; ask the Fire Department and your architect whether your model needs a hood. Lifespan is my estimate for a light-duty unit."
+    },
+    {
+      "id": "pastry_freezer",
+      "name": "One-section reach-in freezer for frozen pastry",
+      "kind": "equipment",
+      "cost": 3654,
+      "required": false,
+      "lifespanMonths": 120,
+      "source": "https://www.webstaurantstore.com/true-t12fhc-25-one-section-solid-door-reachin-freezer-with-led-lighting/200T12FHC.html",
+      "confidence": "verified",
+      "note": "WebstaurantStore: True T-12F-HC 25-inch one-section reach-in freezer $3,653.60. Budget Galaxy GRI-18-FW $1,199.00 (rated 1 of 5 by buyers); scratch-and-dent True T-19FZ-HC $2,584.00; Beverage-Air FB27HC 30-inch $5,415.65. A case of 80 croissants is about a week of sales at the reference volume. Lifespan is my estimate."
+    }
+  ],
+  "monthlyCosts": [
+    {
+      "id": "supplies",
+      "name": "Cups, lids, sleeves, napkins, bags",
+      "kind": "supplies",
+      "basis": "per_unit",
+      "amount": 0.17,
+      "source": "https://www.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
+      "confidence": "estimate",
+      "note": "Kept at $0.17; now built bottom-up. Seen at WebstaurantStore: hot set 11.1 cents (12 oz cup $45.99 per 1,000, lid $30.49 per 1,000, sleeve $41.49 per 1,200), cold set 10.4 cents (16 oz PET cup $59.49, strawless lid $44.49 per 1,000). With 111 drinks and 35 food items per 100 orders the packaging that leaves with the customer is 13.3 cents an order; napkins, wooden stirrers, sugar and straws on request add about 3.5 cents (my estimate). If the engine starts costing the menu item by item (extra.menu), cups are already inside each item's cogs: drop this line then, or it is counted twice."
+    }
+  ],
+  "events": [
+    {
+      "id": "coffee_price_spike",
+      "name": "Wholesale coffee up 20%",
+      "text": "Your roaster's new price list passes on higher green coffee prices. Beans are about a third of what an order costs you to make.",
+      "effect": {
+        "field": "cogs",
+        "mult": 1.07
+      },
+      "months": 6,
+      "source": "https://fred.stlouisfed.org/series/APU0000717311",
+      "confidence": "estimate",
+      "note": "Correction of the existing event. Share: in the costed menu (extra.menu) coffee is 34% of cost of goods, not 25%: 20% x 34% = +6.8%. Size: the BLS shelf price of ground coffee was $9.139 per lb in September 2025 and $9.332 in September 2026 after peaking at $9.72 in April 2026; the exchange price doubled between late 2023 and February 2025 ($4.2995 per lb). Roasters surveyed by Fresh Cup raised wholesale lists by roughly $1-$4 per lb in 2025: on a $16 lb that is 6%-25%. Duration: roasters buy months ahead, so a new list stays for two quarters, not one."
+    },
+    {
+      "id": "milk_price_up",
+      "name": "Milk up 10%",
+      "text": "Your dairy distributor re-prices from the monthly federal milk price. Milk goes into most of the drinks you sell, but it is a smaller bill than the coffee.",
+      "effect": {
+        "field": "cogs",
+        "mult": 1.01
+      },
+      "months": 2,
+      "source": "https://fred.stlouisfed.org/series/APU0000709112",
+      "confidence": "estimate",
+      "note": "Correction of the existing event. Share: in the costed menu dairy milk is 9.9% of cost of goods (226 gallons, about $1,200 a month), not 30%: 10% x 9.9% = +1%. With oat milk the whole 'milk' line is 15%. Size: the federal Class I base price went from $18.88 per cwt in October 2026 to $20.27 in November (+7.4% in one month); the shelf price moved between $4.026 and $4.317 a gallon inside 2026 (7%)."
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "cost_the_menu",
+      "title": "Cost every item before you print the menu",
+      "kind": "idea",
+      "text": "Write the recipe of each drink in grams and ounces, price each line from a supplier quote, add the cup and lid, and add what you expect to throw away. A latte should cost you about a fifth of its price; a bought-in croissant about half."
+    },
+    {
+      "id": "open_supplier_accounts",
+      "title": "Open supplier accounts and file your resale certificate",
+      "kind": "supplier",
+      "text": "Each supplier wants a credit application, often with a personal guarantee, and your Certificate of Authority number. New accounts usually pay on delivery for the first orders. Give Form ST-120 only for goods that leave with the customer: cups, lids, bags.",
+      "link": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/purchases_by_restaurants.htm"
+    },
+    {
+      "id": "plan_packaging_and_trash",
+      "title": "Check packaging and trash rules for your address",
+      "kind": "legal",
+      "text": "No foam, no plastic stirrers, straws and cutlery only on request. Find your commercial waste zone and its sign-up deadline, pick one of the three carters, and buy lidded bins before the first night.",
+      "agency": "NYC Department of Sanitation",
+      "link": "https://www.nyc.gov/site/dsny/businesses/cwz/rollout-schedule.page"
     }
   ]
 }
