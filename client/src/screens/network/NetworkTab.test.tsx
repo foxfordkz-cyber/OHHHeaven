@@ -1,0 +1,252 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import type { Action, Deal, OwnerView } from '../../../../shared/src/types';
+import { NetworkTab } from './NetworkTab';
+import { MY_ID, ownerView, ownerViewBusyWeek, ownerViewSetup, packs, places, TODAY } from './fixtures';
+
+afterEach(cleanup);
+
+function setup(view: OwnerView = ownerView) {
+  const onAct = vi.fn<(a: Action) => unknown>();
+  render(<NetworkTab view={view} places={places} packs={packs} onAct={onAct} />);
+  return onAct;
+}
+
+const openNeighbor = (name: string) => {
+  fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${name}`) }));
+  return screen.getByRole('dialog', { name });
+};
+
+const openDealSheet = (name: string) => {
+  fireEvent.click(within(openNeighbor(name)).getByRole('button', { name: /Propose a deal/ }));
+  return screen.getByRole('dialog', { name: `Deal with ${name}` });
+};
+
+const kind = (sheet: HTMLElement, title: string) => within(sheet).getByRole('radio', { name: new RegExp(`^${title}`) });
+
+describe('Network tab: neighbors', () => {
+  it('lists neighbors with niche, distance, price, place in niche, deal record and the AI mark', () => {
+    setup();
+    const row = screen.getByRole('button', { name: /^Tompkins Grind/ });
+    expect(row.textContent).toMatch(/Cafe · \d+ m · \$5\.50 · #6 in cafes/);
+    expect(row.textContent).toContain('kept 4 · broke 1');
+    expect(within(row).getByText('AI')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: /^Luna Cafe/ })).toBeNull();
+  });
+
+  it('switches to the map and back', () => {
+    setup();
+    fireEvent.click(screen.getByRole('button', { name: 'Map' }));
+    expect(screen.getByRole('img', { name: 'Map of the neighborhood' })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'List' }));
+    expect(screen.getByRole('button', { name: /^Fade Factory/ })).toBeTruthy();
+  });
+
+  it('shows open data and partners in the profile', () => {
+    setup();
+    const profile = openNeighbor('Cuppa Joe East');
+    expect(profile.textContent).toContain('Run by Maya R.');
+    expect(profile.textContent).toContain('Health grade A');
+    expect(profile.textContent).toContain('kept 3 · broke 0');
+    expect(profile.textContent).toContain('Active partners');
+    expect(within(profile).getByRole('button', { name: /Report to the city/ })).toBeTruthy();
+  });
+});
+
+describe('Network tab: propose a deal builds the right Action', () => {
+  it('joint purchasing with a cafe', () => {
+    const onAct = setup();
+    const sheet = openDealSheet('Tompkins Grind');
+    expect(kind(sheet, 'Joint purchasing').getAttribute('aria-checked')).toBe('true');
+    expect(sheet.textContent).toContain('Ingredients −6% for both while the deal lasts');
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Increase Months' }));
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Send offer' }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'propose_deal', toBusinessId: 'b_tompkins', terms: { type: 'joint_purchase', months: 4 } });
+    expect(within(screen.getByRole('dialog', { name: 'Deal with Tompkins Grind' })).getByRole('status').textContent).toContain('Offer sent');
+  });
+
+  it('cross-promo with a corner store 290 m away', () => {
+    const onAct = setup();
+    const sheet = openDealSheet('Avenue A Deli & Grocery');
+    expect(kind(sheet, 'Cross-promo').getAttribute('aria-checked')).toBe('true');
+    expect(sheet.textContent).toContain('About +6% customers for both, small discount');
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Decrease Months' }));
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Send offer' }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'propose_deal', toBusinessId: 'b_avea', terms: { type: 'cross_promo', months: 2 } });
+  });
+
+  it('loan: amount, monthly interest, term and the payment schedule', () => {
+    const onAct = setup();
+    const sheet = openDealSheet('Cuppa Joe East');
+    expect(kind(sheet, 'Loan').getAttribute('aria-checked')).toBe('true');
+    fireEvent.change(within(sheet).getByRole('spinbutton', { name: 'Amount to lend' }), { target: { value: '2500' } });
+    fireEvent.change(within(sheet).getByRole('spinbutton', { name: 'Interest per month' }), { target: { value: '2.5' } });
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Increase Months' }));
+    const schedule = within(sheet).getByRole('table', { name: 'Payment schedule' });
+    expect(schedule.querySelectorAll('tbody tr')).toHaveLength(7);
+    expect(sheet.textContent).toContain('If they go bankrupt, the money left in the deal is lost');
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Send offer' }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'propose_deal', toBusinessId: 'b_cuppa', terms: { type: 'loan', amount: 2500, monthlyRatePct: 2.5, months: 7 } });
+  });
+
+  it('partner up: amount and share', () => {
+    const onAct = setup();
+    const sheet = openDealSheet('Cuppa Joe East');
+    fireEvent.click(kind(sheet, 'Partner up'));
+    fireEvent.change(within(sheet).getByRole('spinbutton', { name: 'Amount to invest' }), { target: { value: '4000' } });
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Increase Your share' }));
+    expect(sheet.textContent).toMatch(/11%/);
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Send offer' }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'propose_deal', toBusinessId: 'b_cuppa', terms: { type: 'partnership', amount: 4000, sharePct: 11 } });
+  });
+
+  it('does not send a loan above the interest limit', () => {
+    const onAct = setup();
+    const sheet = openDealSheet('Cuppa Joe East');
+    fireEvent.change(within(sheet).getByRole('spinbutton', { name: 'Interest per month' }), { target: { value: '6' } });
+    expect(within(sheet).getByRole('alert').textContent).toBe('Interest is 0–5% a month');
+    const send = within(sheet).getByRole('button', { name: 'Send offer' }) as HTMLButtonElement;
+    expect(send.disabled).toBe(true);
+    fireEvent.click(send);
+    expect(onAct).not.toHaveBeenCalled();
+  });
+});
+
+describe('Network tab: unavailable deal kinds follow CONTRACT §4', () => {
+  it('same niche: cross-promo is greyed with the reason and cannot be picked', () => {
+    setup();
+    const sheet = openDealSheet('Cuppa Joe East');
+    const cross = kind(sheet, 'Cross-promo');
+    expect(cross.getAttribute('aria-disabled')).toBe('true');
+    expect(cross.textContent).toContain('Cross-promo needs a different niche within 400 m');
+    fireEvent.click(cross);
+    expect(cross.getAttribute('aria-checked')).toBe('false');
+    expect(kind(sheet, 'Joint purchasing').textContent).toContain('You already have a joint purchasing deal with them');
+  });
+
+  it('different niche too far away: no cross-promo; different niche: no joint purchasing', () => {
+    setup();
+    const sheet = openDealSheet('Bowery Cuts');
+    expect(kind(sheet, 'Cross-promo').getAttribute('aria-disabled')).toBe('true');
+    expect(kind(sheet, 'Cross-promo').textContent).toMatch(/within 400 m — they are \d+ m away/);
+    expect(kind(sheet, 'Joint purchasing').getAttribute('aria-disabled')).toBe('true');
+    expect(kind(sheet, 'Joint purchasing').textContent).toContain('Joint purchasing needs the same niche');
+    expect(kind(sheet, 'Loan').getAttribute('aria-disabled')).toBe('false');
+  });
+
+  it('a business closed by the city: every kind is off and nothing can be sent', () => {
+    setup();
+    const sheet = openDealSheet('Ninth & Second Coffee');
+    for (const t of ['Joint purchasing', 'Cross-promo', 'Loan', 'Partner up']) {
+      expect(kind(sheet, t).getAttribute('aria-disabled')).toBe('true');
+      expect(kind(sheet, t).textContent).toContain('They are closed by the city right now');
+    }
+    expect(within(sheet).queryByRole('button', { name: 'Send offer' })).toBeNull();
+  });
+
+  it('four active deals is the maximum', () => {
+    const active = (id: string, to: string): Deal => ({ id, fromBusinessId: MY_ID, toBusinessId: to, terms: { type: 'loan', amount: 500, monthlyRatePct: 1, months: 3 }, status: 'active', proposedDay: 30, expiresDay: 33, startDay: 31 });
+    const view: OwnerView = { ...ownerView, deals: [active('x1', 'b_cuppa'), active('x2', 'b_fade'), active('x3', 'b_avea'), active('x4', 'b_bowery')] };
+    setup(view);
+    const sheet = openDealSheet('Tompkins Grind');
+    expect(kind(sheet, 'Joint purchasing').textContent).toContain('You already have 4 active deals, the maximum');
+    expect(kind(sheet, 'Partner up').getAttribute('aria-disabled')).toBe('true');
+  });
+});
+
+describe('Network tab: offers, my deals, block fund', () => {
+  it('accepts and declines incoming offers', () => {
+    const onAct = setup();
+    const offers = screen.getByRole('region', { name: 'Offers for you' });
+    const fromFade = offers.querySelector<HTMLElement>('[data-deal="d1"]')!;
+    expect(fromFade.textContent).toContain('Fade Factory');
+    expect(fromFade.textContent).toContain('kept 1 · broke 0');
+    fireEvent.click(within(fromFade).getByRole('button', { name: 'Accept' }));
+    expect(onAct).toHaveBeenLastCalledWith({ type: 'answer_deal', dealId: 'd1', accept: true });
+    fireEvent.click(within(offers.querySelector<HTMLElement>('[data-deal="d2"]')!).getByRole('button', { name: 'Decline' }));
+    expect(onAct).toHaveBeenLastCalledWith({ type: 'answer_deal', dealId: 'd2', accept: false });
+  });
+
+  it('ends a deal early only after the trust warning', () => {
+    const onAct = setup();
+    const deals = screen.getByRole('region', { name: 'My deals' });
+    expect(deals.textContent).toContain('2 of 4 active');
+    fireEvent.click(within(deals.querySelector<HTMLElement>('[data-deal="d3"]')!).getByRole('button', { name: 'End early' }));
+    const confirm = screen.getByRole('dialog', { name: 'End this deal early?' });
+    expect(confirm.textContent).toContain('Your record becomes kept 2 · broke 2');
+    expect(onAct).not.toHaveBeenCalled();
+    fireEvent.click(within(confirm).getByRole('button', { name: 'End early' }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'cancel_deal', dealId: 'd3' });
+  });
+
+  it('shows finished and broken deals with their status', () => {
+    setup();
+    const deals = screen.getByRole('region', { name: 'My deals' });
+    expect(deals.textContent).toContain('Completed');
+    expect(deals.textContent).toContain('Broken');
+    expect(deals.textContent).toContain('Waiting for an answer');
+  });
+
+  it('block fund: how many chip in, what is missing, the toggle sends set_orders', () => {
+    const onAct = setup();
+    const fund = screen.getByRole('region', { name: 'Block fund' });
+    expect(fund.textContent).toContain('2 of 7');
+    expect(fund.textContent).toContain('3 more neighbors needed');
+    fireEvent.click(within(fund).getByRole('switch', { name: /Chip in \$300\/month/ }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'set_orders', orders: { blockFund: true } });
+  });
+
+  it('block fund active: the bonus line, and the toggle turns paying off', () => {
+    const onAct = setup(ownerViewBusyWeek);
+    const fund = screen.getByRole('region', { name: 'Block fund' });
+    expect(fund.textContent).toContain('Active this month: +10% foot traffic for the whole block');
+    fireEvent.click(within(fund).getByRole('switch', { name: /Chip in/ }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'set_orders', orders: { blockFund: false } });
+  });
+});
+
+describe('Network tab: report to the city', () => {
+  it('reports a business picked in the sheet', () => {
+    const onAct = setup();
+    const card = screen.getByRole('region', { name: 'Report to the city' });
+    expect(card.textContent).toContain('Tompkins Grind');
+    expect(card.textContent).toContain('Nothing found — warning');
+    fireEvent.click(within(card).getByRole('button', { name: /Report a business/ }));
+    const sheet = screen.getByRole('dialog', { name: 'Report to the city' });
+    fireEvent.change(within(sheet).getByRole('combobox', { name: 'Business' }), { target: { value: 'b_fade' } });
+    fireEvent.click(within(sheet).getByRole('radio', { name: /Report off-the-books wages/ }));
+    expect(sheet.textContent).toContain('Checked by: Tax auditor');
+    expect(sheet.textContent).toContain('You already have a warning');
+    fireEvent.click(within(sheet).getByRole('button', { name: /Send report/ }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'report', targetBusinessId: 'b_fade', reportId: 'report_cash_wages' });
+  });
+
+  it('reports from a neighbor profile', () => {
+    const onAct = setup();
+    fireEvent.click(within(openNeighbor('Avenue A Deli & Grocery')).getByRole('button', { name: /Report to the city/ }));
+    const sheet = screen.getByRole('dialog', { name: 'Report to the city' });
+    expect(sheet.textContent).toContain('About Avenue A Deli & Grocery');
+    fireEvent.click(within(sheet).getByRole('button', { name: /Send report/ }));
+    expect(onAct).toHaveBeenCalledWith({ type: 'report', targetBusinessId: 'b_avea', reportId: 'report_unsanitary' });
+  });
+
+  it('one report a week: the button is off with the date of the next one', () => {
+    setup(ownerViewBusyWeek);
+    const card = screen.getByRole('region', { name: 'Report to the city' });
+    expect((within(card).getByRole('button', { name: /Report a business/ }) as HTMLButtonElement).disabled).toBe(true);
+    expect(card.textContent).toMatch(/One report a week\. Your next report: \w{3}, Feb \d+/);
+    const profile = openNeighbor('Fade Factory');
+    expect((within(profile).getByRole('button', { name: /Report to the city/ }) as HTMLButtonElement).disabled).toBe(true);
+  });
+});
+
+describe('Network tab: before the doors open', () => {
+  it('lets the owner look around but not deal yet', () => {
+    const onAct = setup(ownerViewSetup);
+    expect(ownerViewSetup.world.day).toBe(TODAY);
+    const sheet = openDealSheet('Cuppa Joe East');
+    expect(kind(sheet, 'Loan').textContent).toContain('Open your doors first');
+    expect(within(sheet).queryByRole('button', { name: 'Send offer' })).toBeNull();
+    expect(onAct).not.toHaveBeenCalled();
+  });
+});
