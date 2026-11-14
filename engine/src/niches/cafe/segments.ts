@@ -1,7 +1,7 @@
 // Cafe model, part "segments": who comes to this door today and how well the offer suits them (build/FORMATS.md, section 2; task B02).
 // Four groups — commuters, residents, students, visitors — come in shares set by what stands near the door (subway, college,
 // museum, park) and by the day of the week and the month. Each group minds price, quality, seats and the line differently,
-// so the same cafe sells more by a college at $6.50 and more by a museum at $11. Numbers: pack.extra.guestSegments.
+// so a low price pays off best by a college and a high one hurts least by a museum. Numbers: pack.extra.guestSegments.
 // Pure: no state, no randomness. Without pack.extra.guestSegments the part changes nothing.
 import { dateOf, type BusinessState, type DayReport, type GameDate, type NicheKpi, type Pack, type Place, type PlaceTier } from '@ohh/shared';
 import { weekdayMult } from '../../economy/effects';
@@ -284,7 +284,6 @@ const HEADS_UP = 0.05;
  * so wiring it would hide them. Request to the lead in agents/r3-B02.md.
  */
 export function segmentKpis(b: BusinessState, pack: Pack): NicheKpi[] {
-  // one number per group: how much of this offer the group buys against an average coffee buyer (100%)
   return offerByGroup(b, pack).map((g) => {
     const who = shortName(g.id, g.name);
     return { id: `guest_fit_${g.id}`, label: `${who.charAt(0).toUpperCase()}${who.slice(1)} vs. an average buyer`, value: Math.round(g.fit * 100), unit: '%' };
