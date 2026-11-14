@@ -1,0 +1,663 @@
+{
+  "auditDate": "2026-11-14",
+  "baseline": "packs/cafe.json",
+  "scope": "setup indices 17 through 32 inclusive; numerical fields and numerical claims in notes",
+  "method": "Live web search and opening each cited URL. Prices are observed listings, not checkout quotes or guaranteed availability. Field-level status is not inherited from row confidence. No baseline or shard edits.",
+  "records": [
+    {
+      "record": "setup.table_share",
+      "source": "https://www.webstaurantstore.com/lancaster-table-seating-24-x-24-reversible-walnut-oak-laminated-standard-height-table-top-and-base-kit-with-17-base/349C24SW17RS.html",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 35,
+          "evidence": "Seller lists the specific table kit at $69.99 and seating capacity 2. Half is $34.995; rounding to $35 per seat is arithmetic, not a separately quoted unit price.",
+          "status": "supported_calculation"
+        },
+        {
+          "field": "note.tablePrice",
+          "value": 69.99,
+          "evidence": "Matching seller product page explicitly displays $69.99 each.",
+          "status": "confirmed_listing"
+        },
+        {
+          "field": "note.seatsPerTable",
+          "value": 2,
+          "evidence": "Matching product page specifies seating capacity 2.",
+          "status": "confirmed_specification"
+        },
+        {
+          "field": "note.priorBudgetPerTable",
+          "value": 150,
+          "evidence": "The cited product page does not substantiate the earlier research-note budget.",
+          "status": "unsupported_prior_allowance"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 72,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Price basis and per-seat arithmetic supported; fixed lifespan not verified.",
+      "note": "Shipping, sales tax and actual order quantity are not established by this listing."
+    },
+    {
+      "record": "setup.opening_inventory",
+      "source": "https://catalog.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 3000,
+          "evidence": "A cups product page does not establish a complete opening basket or this total.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.cupCasePrice",
+          "value": 45.99,
+          "evidence": "Matching seller page shows $45.99 for one case of Choice 12 oz white poly paper cups.",
+          "status": "confirmed_listing"
+        },
+        {
+          "field": "note.cupsPerCase",
+          "value": 1000,
+          "evidence": "Matching page specifies 1,000 cups per case.",
+          "status": "confirmed_specification"
+        },
+        {
+          "field": "note.fullBasket",
+          "value": 5000,
+          "evidence": "The stated components sum to $5,000, but the cited source prices only cups; no quantities or quotes validate the basket.",
+          "status": "arithmetic_only"
+        },
+        {
+          "field": "note.basketComponents",
+          "value": {
+            "beans": 1000,
+            "teaSyrups": 600,
+            "milkFood": 900,
+            "cupsLids": 1200,
+            "chemicals": 500,
+            "testWaste": 800
+          },
+          "evidence": "These category allowances are not established by the cited cup listing.",
+          "status": "unsupported_allowance"
+        }
+      ],
+      "verdict": "Cup price confirmed; both opening-stock totals remain unvalidated allowances.",
+      "note": "Do not infer a safe storage duration for milk/pastries from a packaging listing."
+    },
+    {
+      "record": "setup.hiring_training",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "access": "opened_primary_redirect",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 4000,
+          "evidence": "Cited DOL URL redirects to current minimum wage guidance; it does not quote this recruiting/training budget.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.trainingHours",
+          "value": 190,
+          "evidence": "No roster or training plan supports the assumed hours.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "note.hourlyWage",
+          "value": 21,
+          "evidence": "The current primary page states NYC minimum wage $17, not a required $21 training wage; $21 is the pack planning assumption.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "note.baristas",
+          "value": 4,
+          "evidence": "The source supplies no prescribed staffing count for this opening.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "note.hoursTimesRate",
+          "value": 3990,
+          "evidence": "190 x $21 equals $3,990. This explains rounding toward $4,000 but verifies neither the inputs nor separate recruiting expense.",
+          "status": "arithmetic_only"
+        }
+      ],
+      "verdict": "Retain as owner budget estimate; no independently priced training package.",
+      "note": "Resolved primary URL: https://dol.ny.gov/minimum-wage . DOL Fact Sheet 22 search excerpt supports compensability of job-related required training; attempted direct open returned 403, so that auxiliary page is not marked opened.",
+      "additionalSources": [
+        {
+          "url": "https://dol.ny.gov/minimum-wage",
+          "access": "opened_primary",
+          "evidence": "Current NYC wage floor displayed; no training-budget quote."
+        },
+        {
+          "url": "https://www.dol.gov/agencies/whd/fact-sheets/22-flsa-hours-worked",
+          "access": "search_excerpt_open_blocked_403",
+          "evidence": "Search excerpt gives conditions for training not to count as work; direct open failed."
+        }
+      ]
+    },
+    {
+      "record": "setup.insurance_utility_deposits",
+      "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 1500,
+          "evidence": "Insureon publishes policy-customer cost benchmarks, not this combined premium/utility/security/hookup sum.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.bopMonthly",
+          "value": 126,
+          "evidence": "The broker page displays $126 monthly for cafe BOP policies purchased by its customers.",
+          "status": "confirmed_publisher_benchmark"
+        },
+        {
+          "field": "note.workersCompMonthly",
+          "value": 88,
+          "evidence": "The broker page displays $88 monthly for cafe workers compensation policies.",
+          "status": "confirmed_publisher_benchmark"
+        }
+      ],
+      "verdict": "Published insurance benchmark amounts confirmed; combined opening cash allowance not verified.",
+      "note": "Page calls values average in its headings but explicitly says figures derive from median costs of its customers policies. Describe as Insureon customer median benchmarks, not a representative NYC quote. Utility deposits need a utility/account-specific source."
+    },
+    {
+      "record": "setup.fse_permit",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 280,
+          "evidence": "NYC Business explicitly lists most FSE permit fees as $280 annually, with an extra $25 for making frozen desserts.",
+          "status": "confirmed_fee_conditional"
+        },
+        {
+          "field": "waitDays",
+          "value": 21,
+          "evidence": "The source says operation may begin 22 days after application, even if the permit has not arrived. It does not state a 21-day permit-issuance guarantee.",
+          "status": "not_supported_as_written"
+        },
+        {
+          "field": "note.annualFee",
+          "value": 280,
+          "evidence": "Annual fee directly displayed.",
+          "status": "confirmed_fee"
+        },
+        {
+          "field": "note.openAfterApplicationDays",
+          "value": 22,
+          "evidence": "The application guidance explicitly states 22 days after submission; other agency requirements still apply.",
+          "status": "confirmed_conditional_rule"
+        }
+      ],
+      "verdict": "Base fee confirmed. Separate operating eligibility from document issuance; current waitDays has no literal source match.",
+      "note": "Do not use the application wait as an unconditional lawful opening or automatic permit grant."
+    },
+    {
+      "record": "setup.food_protection_cert",
+      "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 24,
+          "evidence": "NYC Health explicitly identifies $24 as the base final-exam price after its free online course.",
+          "status": "confirmed_base_fee"
+        },
+        {
+          "field": "waitDays",
+          "value": 14,
+          "evidence": "Course is self-paced and the exam appointment is scheduled afterward; no guaranteed 14-day interval is published.",
+          "status": "unsupported_timing_estimate"
+        },
+        {
+          "field": "note.onlineLessons",
+          "value": 15,
+          "evidence": "The cited page explicitly specifies 15 lessons.",
+          "status": "confirmed_course_detail"
+        },
+        {
+          "field": "note.classroomCost",
+          "value": 114,
+          "evidence": "Supplementary NYC Business certificate page states the classroom course and exam cost $114.",
+          "status": "confirmed_fee"
+        },
+        {
+          "field": "note.certificateExpiry",
+          "value": null,
+          "evidence": "Supplementary NYC Business certificate page states the certificate does not expire.",
+          "status": "confirmed_rule"
+        }
+      ],
+      "verdict": "Exam fee confirmed; completion/appointment wait remains an estimate.",
+      "note": "Current NYC Health page additionally discloses a $0.60 credit/debit payment charge at Health Academy and directs Staten Island applicants to location-specific fees. The $24 is a base price, not every-location all-in price.",
+      "additionalSources": [
+        {
+          "url": "https://nyc-business.nyc.gov/nycbusiness/description/food-protection-certificate",
+          "access": "opened_primary",
+          "evidence": "Classroom price, online base exam price, self-paced lessons and no-expiration statement directly observed."
+        }
+      ]
+    },
+    {
+      "record": "setup.batch_brewer",
+      "source": "https://www.katom.com/021-230010006.html",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 1780,
+          "evidence": "The full bundle is $980 brewer plus an assumed $800 grinder/airpot allowance. No complete bundle offer was observed.",
+          "status": "unsupported_bundle_allowance"
+        },
+        {
+          "field": "note.brewerPrice",
+          "value": 980,
+          "evidence": "A follow-up find on the exact opened KaTom URL directly displayed $980.00 each for model 23001.0006. Airpots are sold separately.",
+          "status": "confirmed_listing"
+        },
+        {
+          "field": "note.accessoryAllowance",
+          "value": 800,
+          "evidence": "No cited quotes establish the bulk-grinder and airpot allowance.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 84,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.01,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Brewer-only price confirmed; complete bundle, fixed lifespan and quality effect remain estimates.",
+      "note": "This audit successfully opened KaTom and located its price after an initially incomplete extraction. Earlier note about refused access no longer describes this audit. Manufacturer warranty terms are not an 84-month service-life measurement."
+    },
+    {
+      "record": "setup.decaf_grinder",
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 2099,
+          "evidence": "Visions category page directly displays Mahlkonig E65S Grind-by-Time at $2,099, with the product card marked sold out/out of stock and discontinued.",
+          "status": "confirmed_listing_unavailable"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 72,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.01,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Listed price confirmed; current purchasability not established. Lifespan and quality remain assumptions.",
+      "note": "The category page also has prose suggesting old models remain on the shelf; this conflicts with the specific product card. Use explicit out-of-stock caveat and obtain a live SKU quote before purchase."
+    },
+    {
+      "record": "setup.ice_machine",
+      "source": "https://oswaltsupply.com/uyf0140a-ice-maker-137-lb",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 3500,
+          "evidence": "The seller lists a clearance unit at $3,479.40, not an all-in $3,500 installed package. The pack value is a rounded allowance.",
+          "status": "partially_supported_allowance"
+        },
+        {
+          "field": "note.clearancePrice",
+          "value": 3479.4,
+          "evidence": "Matching Oswalt UYF0140A page explicitly displays $3,479.40 each, clearance and limited remaining stock.",
+          "status": "confirmed_clearance_listing"
+        },
+        {
+          "field": "note.currentModelListPrice",
+          "value": 6392,
+          "evidence": "No specific current-model SKU or supporting list-price document is cited in the record; this claim was not corroborated by the opened clearance page.",
+          "status": "unsupported_comparison_price"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 84,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.01,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Clearance reference price confirmed; installed cost and general replacement price unverified.",
+      "note": "Availability is limited and the source warns inventory can change before refresh. Do not apply the clearance price as a permanent procurement offer."
+    },
+    {
+      "record": "setup.dishwasher",
+      "source": "https://catalog.webstaurantstore.com/noble-warewashing-ht-uc24-select-high-temperature-undercounter-dishwasher-with-booster-heater-208-240v-1-phase/495HTUC24.html",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 4449,
+          "evidence": "The matching Noble HT-UC24 seller page directly displays $4,449.00.",
+          "status": "confirmed_listing"
+        },
+        {
+          "field": "note.voltage",
+          "value": "208/240V",
+          "evidence": "The product title explicitly specifies 208/240V single phase.",
+          "status": "confirmed_specification"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 96,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.01,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Listed machine price confirmed; lifespan and quality effect unsupported.",
+      "note": "This is the listed unit price, not installation/tax/plumbing/chemistry cost. The legal alternative of manual washing is not established by a seller product listing and needs separate Health Code support if retained."
+    },
+    {
+      "record": "setup.decor_lighting",
+      "source": "https://www.alphacontractorsny.com/guides/commercial-build-out-cost-nyc",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 2000,
+          "evidence": "The contractor guide opened, but it supplies no itemized quote for this cafe decor/lighting/menu-board package.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 60,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.02,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "All numerical fields remain budget/model assumptions.",
+      "note": "A general contractor cost guide is not a priced bill of materials for the chosen decor. No substitute amount is proposed."
+    },
+    {
+      "record": "setup.signage",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-signs.page",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 1500,
+          "evidence": "DOB source explains permit and trades requirements; it does not quote fabrication, design or installation at $1,500.",
+          "status": "unsupported_allowance"
+        },
+        {
+          "field": "note.wallSignPermitExemptionSqFt",
+          "value": 6,
+          "evidence": "DOB explicitly lists wall signs of six square feet or less as exempt from the sign permit, with other laws and filing duties preserved.",
+          "status": "confirmed_conditional_rule"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 120,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.01,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Conditional permit threshold confirmed; sign budget, lifespan and quality effect unverified.",
+      "note": "The note that bigger signs need a licensed sign hanger is broadly directionally correct but the source itself includes exceptions and separate electrical work; do not make size the only eligibility test."
+    },
+    {
+      "record": "setup.premium_espresso_machine",
+      "source": "https://www.webstaurantstore.com/search/nuova-simonelli-appia-life-3-group.html",
+      "access": "blocked_original_additional_primary_opened",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 4100,
+          "evidence": "$11,700 minus $7,600 equals $4,100. Both list inputs were located on opened seller pages; this is a difference between purchase prices, not a trade-in/upgrade offer.",
+          "status": "supported_price_difference_only"
+        },
+        {
+          "field": "note.threeGroupPrice",
+          "value": 11700,
+          "evidence": "Opened seller 3-group category page shows SKU 238APLV3 Appia Life Three Group Volumetric at $11,700 each.",
+          "status": "confirmed_listing_additional_source"
+        },
+        {
+          "field": "note.baseTwoGroupPrice",
+          "value": 7600,
+          "evidence": "Opened baseline seller product page SKU 238APLCV2 displays $7,600 each.",
+          "status": "confirmed_listing_additional_source"
+        },
+        {
+          "field": "note.voltage",
+          "value": 220,
+          "evidence": "Opened seller category identifies the specific three-group model as 220V.",
+          "status": "confirmed_specification_additional_source"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 96,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.04,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Price subtraction supported through replacement source URLs, not the inaccessible original search URL; total upgrade cash and quality/life assumptions not verified.",
+      "note": "If buying this instead of the base machine, a difference is a planning convention; if replacing an already-purchased machine, $4,100 is not the cash needed without resale evidence. Required service-plan selections, electrical work and tax need separate quotes.",
+      "additionalSources": [
+        {
+          "url": "https://www.webstaurantstore.com/search/nuova-simonelli-appia-life-3-group.html",
+          "access": "blocked",
+          "evidence": "Tool reported URL not accessible."
+        },
+        {
+          "url": "https://catalog.webstaurantstore.com/espresso-machine-3gr-appi/238APLV3.html",
+          "access": "search_excerpt_open_blocked",
+          "evidence": "Search returned exact model and price; attempted direct open was inaccessible."
+        },
+        {
+          "url": "https://www.webstaurantstore.com/13977/cappuccino-espresso-machines.html?filter=number-of-groups:3-groups",
+          "access": "opened_primary",
+          "evidence": "Resolved category URL directly displays matching SKU 238APLV3 at $11,700 and 220V."
+        },
+        {
+          "url": "https://www.webstaurantstore.com/espresso-machine-2gr-appi/238APLCV2.html",
+          "access": "opened_primary",
+          "evidence": "Matching compact two-group model directly displays $7,600; listed model is 110V."
+        }
+      ]
+    },
+    {
+      "record": "setup.premium_grinder",
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 3899,
+          "evidence": "Opened Visions category page directly displays Mahlkonig EK43 Allround at $3,899.",
+          "status": "confirmed_listing"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 96,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.02,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Listed grinder price confirmed; lifespan and quality coefficient remain unsupported.",
+      "note": "Model/color/options and actual checkout taxes or delivery were not quoted. Vendor claims of quality do not calibrate the pack qualityBonus."
+    },
+    {
+      "record": "setup.customer_restroom",
+      "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 12000,
+          "evidence": "NYC Health operating guidance gives no construction quote for converting this toilet.",
+          "status": "unsupported_quote_only_allowance"
+        },
+        {
+          "field": "note.customerToiletSeatThreshold",
+          "value": 20,
+          "evidence": "Supplementary opened Health Code 81.22 requires patron toilets at 20 or more seats, subject to specified pre-1977-premises exception and renovation condition.",
+          "status": "confirmed_conditional_rule"
+        },
+        {
+          "field": "name.unqualifiedTwentySeatRule",
+          "value": "needed for20 or more seats",
+          "evidence": "Unqualified heading omits the Code exception; premises history and permitted renovation matter.",
+          "status": "overbroad_as_written"
+        },
+        {
+          "field": "lifespanMonths",
+          "value": 180,
+          "evidence": "The opened pricing/guidance source supplies no evidence for this fixed service life.",
+          "status": "unsupported_model_assumption"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.01,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Construction price/lifespan/quality not verified; seating threshold needs its statutory conditions.",
+      "note": "Original general operating page did not expose a toilet passage in this retrieval; detailed support came from the separately opened Code. Employee-toilet duties remain independent. Do not turn $12,000 into an official accessibility-compliance price.",
+      "additionalSources": [
+        {
+          "url": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+          "access": "opened_primary",
+          "evidence": "Employee and patron toilet duties, exception for premises with a permitted FSE on/before December 5, 1977, and construction-permit renovation rule directly read."
+        }
+      ]
+    },
+    {
+      "record": "setup.sidewalk_cafe_license",
+      "source": "https://www.diningoutnyc.info/apply/fees",
+      "access": "opened_primary",
+      "checkedFields": [
+        {
+          "field": "cost",
+          "value": 2550,
+          "evidence": "Current program fee page lists $1,050 license fee and $1,500 refundable sidewalk security deposit; their sum is $2,550 but excludes annual consent and conditional other charges.",
+          "status": "supported_initial_cash_sum"
+        },
+        {
+          "field": "waitDays",
+          "value": 240,
+          "evidence": "No guaranteed240-day waiting period is stated by the fee source. The Comptroller describes communicated estimates and observed historical delays; eight calendar months is not an exact statutory 240 days.",
+          "status": "unsupported_fixed_wait"
+        },
+        {
+          "field": "note.licenseFee",
+          "value": 1050,
+          "evidence": "Fee table directly lists $1,050 for sidewalk dining.",
+          "status": "confirmed_fee"
+        },
+        {
+          "field": "note.refundableDeposit",
+          "value": 1500,
+          "evidence": "Fee table directly lists $1,500 sidewalk refundable security deposit.",
+          "status": "confirmed_refundable_deposit"
+        },
+        {
+          "field": "note.licenseTermYears",
+          "value": 4,
+          "evidence": "Page states license/public-hearing fees paid once per four-year license term.",
+          "status": "confirmed_rule"
+        },
+        {
+          "field": "note.annualConsentRatesPerSqFt",
+          "value": [
+            6,
+            10,
+            18,
+            31
+          ],
+          "evidence": "Current table directly lists these sidewalk rates by sector.",
+          "status": "confirmed_conditional_fee_schedule"
+        },
+        {
+          "field": "note.historicalWaitOverMonths",
+          "value": 19,
+          "evidence": "Supplementary Comptroller report states more than half of issued licenses in its historical dataset took over 19 months. This is issued-license evidence, not the expected wait of every applicant.",
+          "status": "confirmed_historical_observation"
+        },
+        {
+          "field": "note.communicatedEstimateMonths",
+          "value": 8,
+          "evidence": "Comptroller summary refers to an eight-month communicated timeline; body also reports DOT 4–6 and Commission sidewalk 6–8 month estimates. It is not a service guarantee.",
+          "status": "confirmed_reported_estimate_only"
+        },
+        {
+          "field": "qualityBonus",
+          "value": 0.02,
+          "evidence": "No measured causal quality effect is supplied by the cited source; this is a game parameter.",
+          "status": "unsupported_model_assumption"
+        }
+      ],
+      "verdict": "Fee/deposit components confirmed; fixed waiting period and quality effect are model assumptions.",
+      "note": "Track refundable security separately from consumed fees. The historical licensed subset excludes pending applications and does not establish a universal future distribution. No replacement wait is invented.",
+      "additionalSources": [
+        {
+          "url": "https://comptroller.nyc.gov/reports/investigation-of-processing-times-in-dots-dining-out-nyc-program/",
+          "access": "opened_primary",
+          "evidence": "October 27, 2026 investigation distinguishes timing estimates, issued-license historical delay and unresolved pending applications."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1935 @@
+{
+  "id": "cafe",
+  "fragment": "D14-mechanics",
+  "basedOn": {
+    "main": "f64ca4b (claude/global-entrepreneur-product-133cix)",
+    "keenCray": "2b2521f (claude/keen-cray-yytcbp: extra.buildout, extra.takeover, extra.footfall, Place.formerUse/forSale/pedestriansPerDay/corner)",
+    "note": "Four user examples written as engine mechanics: D14-mechanics-spec.md. Every number has source and confidence. Web pages could not be opened directly in this session (nyc.gov, amlegal.com, bizbuysell.com and tax.ny.gov refused the fetch); numbers were read in web-search excerpts that quote the page. Those are marked estimate with 'Quoted in a search excerpt' in the note, so D12/D11 can open the page and upgrade them to verified."
+  },
+  "setup": [
+    {
+      "id": "dob_alteration_permit",
+      "name": "Buildings Department alteration permit (filing fee)",
+      "kind": "permit",
+      "cost": 970,
+      "required": true,
+      "waitDays": 20,
+      "agency": "NYC Department of Buildings (DOB NOW)",
+      "link": "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf",
+      "withoutItViolation": "work_without_permit",
+      "costBasis": "pct_of_buildout",
+      "rate": 0.0139,
+      "source": "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf",
+      "confidence": "estimate",
+      "note": "Quoted in a search excerpt of the DOB 2026 fee update: alteration in a building under 7 floors = $280 for the first $3,000 of construction cost + $10.30 per $1,000 above. For a $70,000 light build-out: 280 + 67 x 10.30 = $970 (rate 0.0139 of the build-out reproduces it at $70,000; extra.preOpening.dobFee keeps the exact formula). Wait: the Mayor's Management Report gives 20 days on average from filing to approval in DOB NOW, all applications, FY2025 (https://www.nyc.gov/assets/operations/downloads/pdf/mmr2025/dob.pdf). The wait runs before construction may start; keen-cray's build-out days already include the permit path for a light job, so the engine should not add it twice (see extra.preOpening.dobPermitDays).",
+      "includedInTakeover": true
+    },
+    {
+      "id": "ice_melt_and_shovels",
+      "name": "Snow shovels, spreader and ice melt for the season",
+      "kind": "equipment",
+      "cost": 180,
+      "required": false,
+      "lifespanMonths": 36,
+      "source": "https://www.webstaurantstore.com/snow-joe-melt50eb-premium-environmentally-friendly-blend-ice-melt-with-cma-and-resealable-bag-50-lb/200MELT50EB.html",
+      "confidence": "estimate",
+      "note": "Quoted in a search excerpt of WebstaurantStore: 50 lb bag of ice melt $19.99 ($0.40 a lb). Two shovels and a hand spreader about $60 (my estimate) + six 50 lb bags $120 = $180. Without it the 'staff' snow-clearing option cannot be chosen."
+    },
+    {
+      "id": "takeover_due_diligence",
+      "name": "Accountant and lawyer review before buying a business",
+      "kind": "other",
+      "cost": 7500,
+      "required": false,
+      "source": "https://www.peony.ink/blog/due-diligence-cost-breakdown",
+      "confidence": "estimate",
+      "note": "Only for buying an operating business. Quoted in search excerpts: a light verification review of a small deal $2,000-$5,000 (Peony 2026); legal review from $5,000 (same). $2,500 accountant + $5,000 lawyer for the asset purchase agreement and the lease assignment = $7,500, my estimate. Buys the true numbers of the seller: tax-return sales, hidden violations, unpaid sales tax."
+    },
+    {
+      "id": "lease_assignment_consent",
+      "name": "Landlord's consent to assign the lease (landlord's legal fee)",
+      "kind": "other",
+      "cost": 2500,
+      "required": false,
+      "waitDays": 30,
+      "source": "https://commercialobserver.com/2013/08/weighing-in-on-key-money-deals/",
+      "confidence": "estimate",
+      "note": "Only for buying an operating business. Key money deals assign the existing lease to the buyer, usually with the landlord's consent; landlords may ask for a rent bump, a higher deposit or a new guaranty (Commercial Observer, quoted in a search excerpt). No public figure for the fee or the time: $2,500 and 30 days are my estimates."
+    },
+    {
+      "id": "bulk_sale_notice",
+      "name": "Notice of a bulk sale to New York State (Form AU-196.10)",
+      "kind": "permit",
+      "cost": 0,
+      "required": false,
+      "waitDays": 10,
+      "agency": "NYS Department of Taxation and Finance",
+      "link": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+      "confidence": "estimate",
+      "note": "Only for buying an operating business. Quoted in search excerpts of NYS Tax Appeals determinations and the DTF bulletin: under Tax Law 1141(c) the buyer files AU-196.10 at least 10 days before paying for or taking possession of the business assets; the state answers within 5 business days (AU-196.2) and may claim the seller's unpaid sales tax within 90 days. A buyer who skips it becomes personally liable for the seller's unpaid sales tax."
+    },
+    {
+      "id": "fse_permit",
+      "name": "Food Service Establishment Permit",
+      "kind": "permit",
+      "cost": 280,
+      "required": true,
+      "waitDays": 22,
+      "agency": "NYC Department of Health and Mental Hygiene (DOHMH)",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "withoutItViolation": "no_fse_permit",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "confidence": "verified",
+      "note": "NYC Business: the permit fee is $280.00 a year; you can open 22 days after you submit the application even if no pre-permit inspection has taken place. The application asks for proof of workers' compensation and disability insurance, a Food Protection Certificate or course registration, and the sales tax Certificate of Authority. Correction (D14): waitDays 21 -> 22. The engine sets readyDay = appliedDay + waitDays, and the page says the doors may open 22 days after the application is submitted; with 21 the game opens one day early. keen-cray's afterBuildout keeps working."
+    }
+  ],
+  "kits": [
+    {
+      "id": "lean",
+      "name": "Lean start",
+      "size": 12,
+      "items": [
+        {
+          "id": "security_deposit",
+          "qty": 1
+        },
+        {
+          "id": "buildout",
+          "qty": 1
+        },
+        {
+          "id": "architect_expediter",
+          "qty": 1
+        },
+        {
+          "id": "lease_lawyer",
+          "qty": 1
+        },
+        {
+          "id": "llc_and_publication",
+          "qty": 1
+        },
+        {
+          "id": "espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "grinder",
+          "qty": 1
+        },
+        {
+          "id": "water_filtration",
+          "qty": 1
+        },
+        {
+          "id": "refrigeration",
+          "qty": 1
+        },
+        {
+          "id": "pastry_case",
+          "qty": 1
+        },
+        {
+          "id": "sinks",
+          "qty": 1
+        },
+        {
+          "id": "prep_table_shelving",
+          "qty": 1
+        },
+        {
+          "id": "pos",
+          "qty": 1
+        },
+        {
+          "id": "smallwares",
+          "qty": 1
+        },
+        {
+          "id": "safety_kit",
+          "qty": 1
+        },
+        {
+          "id": "equipment_delivery_tax",
+          "qty": 1
+        },
+        {
+          "id": "chair",
+          "qty": 12
+        },
+        {
+          "id": "table_share",
+          "qty": 12
+        },
+        {
+          "id": "opening_inventory",
+          "qty": 1
+        },
+        {
+          "id": "hiring_training",
+          "qty": 1
+        },
+        {
+          "id": "insurance_utility_deposits",
+          "qty": 1
+        },
+        {
+          "id": "fse_permit",
+          "qty": 1
+        },
+        {
+          "id": "food_protection_cert",
+          "qty": 1
+        },
+        {
+          "id": "dob_alteration_permit",
+          "qty": 1
+        }
+      ],
+      "pitch": "The legal minimum in a small room: 12 seats, one grinder, hand-washed cups, no sign. Cheapest way to open, but the room fills up at 170 orders a day.",
+      "note": "Correction, same id: adds the required dob_alteration_permit to the kit (D14)."
+    },
+    {
+      "id": "standard",
+      "name": "Standard",
+      "size": 18,
+      "items": [
+        {
+          "id": "security_deposit",
+          "qty": 1
+        },
+        {
+          "id": "buildout",
+          "qty": 1
+        },
+        {
+          "id": "architect_expediter",
+          "qty": 1
+        },
+        {
+          "id": "lease_lawyer",
+          "qty": 1
+        },
+        {
+          "id": "llc_and_publication",
+          "qty": 1
+        },
+        {
+          "id": "espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "grinder",
+          "qty": 1
+        },
+        {
+          "id": "water_filtration",
+          "qty": 1
+        },
+        {
+          "id": "refrigeration",
+          "qty": 1
+        },
+        {
+          "id": "pastry_case",
+          "qty": 1
+        },
+        {
+          "id": "sinks",
+          "qty": 1
+        },
+        {
+          "id": "prep_table_shelving",
+          "qty": 1
+        },
+        {
+          "id": "pos",
+          "qty": 1
+        },
+        {
+          "id": "smallwares",
+          "qty": 1
+        },
+        {
+          "id": "safety_kit",
+          "qty": 1
+        },
+        {
+          "id": "equipment_delivery_tax",
+          "qty": 1
+        },
+        {
+          "id": "chair",
+          "qty": 18
+        },
+        {
+          "id": "table_share",
+          "qty": 18
+        },
+        {
+          "id": "opening_inventory",
+          "qty": 1
+        },
+        {
+          "id": "hiring_training",
+          "qty": 1
+        },
+        {
+          "id": "insurance_utility_deposits",
+          "qty": 1
+        },
+        {
+          "id": "fse_permit",
+          "qty": 1
+        },
+        {
+          "id": "food_protection_cert",
+          "qty": 1
+        },
+        {
+          "id": "batch_brewer",
+          "qty": 1
+        },
+        {
+          "id": "ice_machine",
+          "qty": 1
+        },
+        {
+          "id": "signage",
+          "qty": 1
+        },
+        {
+          "id": "dob_alteration_permit",
+          "qty": 1
+        }
+      ],
+      "pitch": "The usual neighborhood cafe: 18 seats, drip coffee and iced drinks, a proper sign. Sized for 200 orders a day with room to spare.",
+      "note": "Correction, same id: adds the required dob_alteration_permit to the kit (D14)."
+    },
+    {
+      "id": "premium",
+      "name": "Premium",
+      "size": 24,
+      "items": [
+        {
+          "id": "security_deposit",
+          "qty": 1
+        },
+        {
+          "id": "buildout",
+          "qty": 1
+        },
+        {
+          "id": "architect_expediter",
+          "qty": 1
+        },
+        {
+          "id": "lease_lawyer",
+          "qty": 1
+        },
+        {
+          "id": "llc_and_publication",
+          "qty": 1
+        },
+        {
+          "id": "espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "grinder",
+          "qty": 1
+        },
+        {
+          "id": "water_filtration",
+          "qty": 1
+        },
+        {
+          "id": "refrigeration",
+          "qty": 1
+        },
+        {
+          "id": "pastry_case",
+          "qty": 1
+        },
+        {
+          "id": "sinks",
+          "qty": 1
+        },
+        {
+          "id": "prep_table_shelving",
+          "qty": 1
+        },
+        {
+          "id": "pos",
+          "qty": 1
+        },
+        {
+          "id": "smallwares",
+          "qty": 1
+        },
+        {
+          "id": "safety_kit",
+          "qty": 1
+        },
+        {
+          "id": "equipment_delivery_tax",
+          "qty": 1
+        },
+        {
+          "id": "chair",
+          "qty": 24
+        },
+        {
+          "id": "table_share",
+          "qty": 24
+        },
+        {
+          "id": "opening_inventory",
+          "qty": 1
+        },
+        {
+          "id": "hiring_training",
+          "qty": 1
+        },
+        {
+          "id": "insurance_utility_deposits",
+          "qty": 1
+        },
+        {
+          "id": "fse_permit",
+          "qty": 1
+        },
+        {
+          "id": "food_protection_cert",
+          "qty": 1
+        },
+        {
+          "id": "batch_brewer",
+          "qty": 1
+        },
+        {
+          "id": "decaf_grinder",
+          "qty": 1
+        },
+        {
+          "id": "ice_machine",
+          "qty": 1
+        },
+        {
+          "id": "dishwasher",
+          "qty": 1
+        },
+        {
+          "id": "decor_lighting",
+          "qty": 1
+        },
+        {
+          "id": "signage",
+          "qty": 1
+        },
+        {
+          "id": "premium_espresso_machine",
+          "qty": 1
+        },
+        {
+          "id": "premium_grinder",
+          "qty": 1
+        },
+        {
+          "id": "customer_restroom",
+          "qty": 1
+        },
+        {
+          "id": "dob_alteration_permit",
+          "qty": 1
+        }
+      ],
+      "pitch": "24 seats, a three-group machine, top grinders, a dishwasher and a customer restroom (required from 20 seats). Higher quality, about $29,000 more up front, and more seats to fill.",
+      "note": "Correction, same id: adds the required dob_alteration_permit to the kit (D14)."
+    }
+  ],
+  "levers": [
+    {
+      "id": "snow_clearing",
+      "name": "Snow and ice at your door",
+      "options": [
+        {
+          "id": "staff",
+          "label": "Staff shovel and salt within the legal window",
+          "monthlyCost": 0
+        },
+        {
+          "id": "contractor",
+          "label": "Snow contractor on call",
+          "monthlyCost": 0,
+          "effects": {
+            "capacity": 0
+          }
+        },
+        {
+          "id": "none",
+          "label": "Leave it to the weather",
+          "monthlyCost": 0,
+          "causes": "sidewalk_snow_not_cleared"
+        }
+      ],
+      "note": "Costs are per snow day, not per month: extra.winterDoor.clearingOptions. monthlyCost stays 0 until the engine supports a cost per weather day (request in the report)."
+    },
+    {
+      "id": "entrance_mats",
+      "name": "Entrance mats in winter",
+      "options": [
+        {
+          "id": "rented",
+          "label": "Rented mats, swapped weekly (Dec-Mar)",
+          "monthlyCost": 43
+        },
+        {
+          "id": "none",
+          "label": "No mats",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.01
+          }
+        }
+      ],
+      "note": "Two 3x5 ft mats at about $5 a mat a week (vendor estimate quoted in a search excerpt, https://chainstoreage.com/news/reducing-slips-trips-and-falls-retail-environment-0): 2 x 5 x 52 / 12 = $43 a month. Real rentals run year-round on 3-year contracts; the winter-only option is a simplification. Inside slips are covered by extra.winterDoor.insideExposure."
+    },
+    {
+      "id": "seat_density",
+      "name": "How tight the tables are",
+      "options": [
+        {
+          "id": "standard",
+          "label": "Standard: about 15 sq ft a seat",
+          "monthlyCost": 0
+        },
+        {
+          "id": "spacious",
+          "label": "Spacious: about 20 sq ft a seat",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": 0.03
+          }
+        },
+        {
+          "id": "tight",
+          "label": "Tight: about 12 sq ft a seat",
+          "monthlyCost": 0,
+          "effects": {
+            "quality": -0.04
+          }
+        }
+      ],
+      "note": "Square feet per seat in the dining area: 12-15 typical, 10-12 tight quick service, 20-25 premium (Toast, quoted in a search excerpt: https://pos.toasttab.com/blog/on-the-line/average-restaurant-square-footage). The density sets how many seats fit (extra.floorZones); the quality effect is a design value. Changing it is a refit: furniture is bought or sold through `resize`."
+    },
+    {
+      "id": "laptop_policy",
+      "name": "Laptops and long stays",
+      "options": [
+        {
+          "id": "welcome",
+          "label": "Laptops welcome all day",
+          "monthlyCost": 0
+        },
+        {
+          "id": "peak_limits",
+          "label": "No laptops 8-11 am and weekends",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.02,
+            "reputation": -0.01
+          }
+        }
+      ],
+      "note": "Dwell time drives seat turnover: extra.floorZones.dwellHours. Laptop workers stay 15 minutes to 4 hours (Swinburne University 2023, quoted in a search excerpt: https://www.swinburne.edu.au/news/2023/01/Youre-about-to-see-a-growing-trend-of-laptop-workers-in-cafes-new-research-reveals-why/). The demand and reputation effects are design values."
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "start_work_before_permit",
+      "name": "Start the build-out before the Buildings permit is issued",
+      "what": "Your contractor starts now instead of waiting about 20 days for DOB approval. If an inspector or a neighbor's 311 call catches it, work stops and you pay a penalty.",
+      "saves": {
+        "basis": "pct_rent",
+        "amount": 0.67
+      },
+      "violation": "work_without_permit",
+      "note": "One-time, during setup only: the doors open extra.preOpening.dobPermitDays (20) days sooner. Without free rent that is 20 days of rent with no sales, 20 / 30 = 0.67 of a month's rent; inside free rent the gain is 20 more days of sales instead. The engine should apply it as days, not as a monthly saving (request in the report)."
+    },
+    {
+      "id": "pack_the_line_inside",
+      "name": "Let the morning line pack inside past capacity",
+      "what": "On cold mornings you let everyone squeeze in instead of lining up outside. Fewer people walk on, but the room holds more than the code allows.",
+      "saves": {
+        "basis": "pct_revenue",
+        "amount": 0.003
+      },
+      "violation": "overcrowding",
+      "note": "The real gain comes from the queue model (extra.floorZones): queue room is counted at the 5 sq ft code floor instead of 8.5, so fewer people stand outside. 0.3% of sales is the placeholder the format needs; in the D14 examples the winter outside-line loss is 0.1-0.3% of daily orders. tier: deep."
+    }
+  ],
+  "violations": [
+    {
+      "id": "work_without_permit",
+      "name": "Construction without a Buildings permit",
+      "law": "NYC Admin Code §28-105.1 (permit required); §28-207.2 (stop work order)",
+      "official": "dob_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 5000,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 13580
+      },
+      "closureDays": 20,
+      "reputationHit": 0,
+      "criminal": "Continuing work after a stop work order is a misdemeanor under the Administrative Code; the game stops at the civil penalty.",
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+      "confidence": "estimate",
+      "note": "Quoted in search excerpts of the DOB rule 1 RCNY §102-04: for buildings other than one- and two-family homes, work done entirely without a permit costs 14 times the permit fee or $5,000, whichever is greater, less when only part of the work was unpermitted; a later violation on the same building doubles. Starting 20 of 60 days early is about a third of the work: 14 x $970 x 1/3 = $4,527, so the $5,000 minimum applies; the whole job unpermitted would be 14 x $970 = $13,580 (max). Continuing after a stop work order is a separate $6,000 first offense (DOB stop work order page). closureDays = the 20 saved days come back: work stays stopped until the permit is issued. A forum post claims 21x with a $6,000 minimum (unofficial, conflicts with the rule)."
+    },
+    {
+      "id": "sidewalk_snow_not_cleared",
+      "name": "Snow and ice left on the sidewalk",
+      "law": "NYC Admin Code §16-123; penalty schedule 16 RCNY §19-103",
+      "official": "dsny_enforcement",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 100,
+        "perMonth": 50,
+        "pctOfSaved": 0,
+        "max": 350
+      },
+      "closureDays": 0,
+      "reputationHit": 0.02,
+      "criminal": "None. A fall on the uncleared sidewalk is a civil claim, handled in extra.winterDoor.",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+      "confidence": "estimate",
+      "note": "Quoted in search excerpts: DSNY lists $100 for the first offense, $150 for the second and $250 for the third and later; the Sanitation penalty schedule (16 RCNY §19-103) allows $100-$350, $150-$350 and $250-$350. One notice per uncleared snow day (extra.winterDoor). Section 16-123 binds every owner, lessee, tenant or occupant of the abutting building, so a cafe tenant can be ticketed. perMonth 50 approximates the step from $100 to $150; the engine should use extra.winterDoor.dsnyFines per ticket."
+    },
+    {
+      "id": "overcrowding",
+      "name": "More people inside than the room may hold",
+      "law": "NYC Fire Code §1004 (occupant load); penalty schedule 3 RCNY §109-03, violation category 10",
+      "official": "fdny_inspector",
+      "foundBy": [
+        "inspection",
+        "complaint"
+      ],
+      "fine": {
+        "base": 950,
+        "perMonth": 0,
+        "pctOfSaved": 0,
+        "max": 5000
+      },
+      "closureDays": 0,
+      "reputationHit": 0.01,
+      "criminal": "None for a cafe; repeated overcrowding of a place of assembly can lead to a vacate order.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214",
+      "confidence": "estimate",
+      "note": "Quoted in search excerpts of 3 RCNY §109-03 Appendix A: VC 10 Overcrowding — $950 standard, $475 mitigated, $1,000 default on a first violation; $2,375, $1,185 and $5,000 on a second. Column order read from the schedule's structure (three first-violation amounts, then three for later ones); recheck against the official table. tier: deep."
+    }
+  ],
+  "officials": [
+    {
+      "id": "dsny_enforcement",
+      "name": "Sanitation enforcement agent",
+      "agency": "NYC Department of Sanitation (DSNY)",
+      "role": "inspector",
+      "checks": [
+        "sidewalk_snow_not_cleared"
+      ],
+      "realProcess": "After a storm DSNY agents walk commercial corridors once the clearing window has passed and write summonses on the spot; 311 complaints send them to a given address. After Winter Storm Fern (January 25, 2026) DSNY issued more than 4,500 summonses.",
+      "source": "https://www.nyc.gov/assets/dsny/downloads/about/news/testimony/2026/dsny-oversight-hearing-testimony-022726.pdf"
+    },
+    {
+      "id": "dob_inspector",
+      "name": "Buildings inspector",
+      "agency": "NYC Department of Buildings (DOB)",
+      "role": "inspector",
+      "checks": [
+        "work_without_permit"
+      ],
+      "realProcess": "A 311 complaint about construction without a posted permit sends an inspector, who can issue a stop work order and a violation on the spot. Work resumes only after the permit is issued and the penalties are paid.",
+      "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    },
+    {
+      "id": "fdny_inspector",
+      "name": "Fire inspector",
+      "agency": "FDNY Bureau of Fire Prevention",
+      "role": "inspector",
+      "checks": [
+        "overcrowding"
+      ],
+      "realProcess": "Fire inspectors check eating and drinking places on complaint and on routine visits; more people inside than the room's occupant load is an overcrowding summons heard at OATH, cheaper if corrected and the respondent appears.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
+    }
+  ],
+  "reports": [
+    {
+      "id": "report_unshoveled_sidewalk",
+      "name": "Report an unshoveled sidewalk (311)",
+      "text": "DSNY sends an enforcement agent. If the sidewalk was cleared in time, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "sidewalk_snow_not_cleared"
+      ]
+    },
+    {
+      "id": "report_work_without_permit",
+      "name": "Report construction without a permit (311)",
+      "text": "The Buildings Department sends an inspector to a storefront under construction. If the permit is posted, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "work_without_permit"
+      ]
+    },
+    {
+      "id": "report_overcrowding",
+      "name": "Report an overcrowded cafe (311)",
+      "text": "The Fire Department sends an inspector at the busy hour. If the room is within its occupant load, you get a warning.",
+      "role": "inspector",
+      "checks": [
+        "overcrowding"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "snowstorm_month",
+      "name": "A snowy month",
+      "text": "Several snowfalls are forecast. Every one starts a 4-hour clock to clear your sidewalk, and fewer people walk on slush.",
+      "effect": {
+        "field": "footTraffic",
+        "mult": 0.95
+      },
+      "months": 1,
+      "source": "https://www.fiserv.com/en/insights/small-business-index-resources/winter-storm-fern-fiserv-special-report-january-2026.html",
+      "confidence": "estimate",
+      "note": "Quoted in search excerpts: Fiserv, January 2026: limited-service restaurant sales -3.4% and traffic -5.0% year over year in a month of storms. The snow days themselves come from the weather series (footTrafficMult snow 0.85, storm 0.7 in ai/src/data/nyc-climate.json); this event is the month-wide drag. Monthly 0.95 = the Fiserv traffic figure."
+    }
+  ],
+  "ruleCards": [
+    {
+      "id": "snow_four_hours",
+      "title": "Four hours to clear the snow",
+      "text": "Snow stops 7am-5pm: clear a 4 ft path within 4 hours. Stops 5-9pm: within 14 hours. Stops overnight: by 11am. Ice you cannot lift gets sand or salt. Tickets: $100, $150, then $250.",
+      "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page"
+    },
+    {
+      "id": "sidewalk_liability",
+      "title": "Who pays for a fall on the sidewalk",
+      "text": "NYC Admin Code §7-210 makes the building owner liable for the sidewalk. Most store leases pass snow duty and the defense of claims to the tenant. An average slip-and-fall claim now costs $45,000.",
+      "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm"
+    },
+    {
+      "id": "storm_in_progress",
+      "title": "Storm in progress",
+      "text": "In New York nobody is liable for ice while the storm is still on and for a reasonable time after. A court found 5 hours reasonable; 12 hours after the storm with a freeze was not.",
+      "source": "https://www.newyorkappellatedigest.com/2017/07/19/storm-in-progress-rule-did-not-apply-storm-stopped-12-hours-before-the-slip-and-fall-2nd-dept/"
+    },
+    {
+      "id": "free_rent_buildout",
+      "title": "Free rent for the build-out",
+      "text": "NYC restaurant leases often give 3-6 months of free base rent for construction, up to 12 for a heavy job. The clock usually starts at signing, not when your permits arrive: negotiate it.",
+      "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/"
+    },
+    {
+      "id": "gas_before_lease",
+      "title": "Check the gas before you sign",
+      "text": "In a 2017 survey 82% of restaurants had a gas delay: 68 days on average, up to a year, about $140,000 lost each. Con Edison checks gas at an address before you sign. An espresso bar needs none.",
+      "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf"
+    },
+    {
+      "id": "startup_costs_195",
+      "title": "Costs before opening are not all deductible",
+      "text": "Rent and other costs before the doors open are start-up costs: $5,000 can be deducted in the first year (less above $50,000), the rest over 15 years.",
+      "source": "https://www.everycrsreport.com/reports/IF12970.html"
+    },
+    {
+      "id": "work_without_permit",
+      "title": "Build only with a permit",
+      "text": "Construction in a storefront needs a Buildings Department permit. Work done without one costs 14 times the permit fee, at least $5,000, and stops until the permit is issued.",
+      "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf"
+    },
+    {
+      "id": "bulk_sale_notice",
+      "title": "Buying a business: tell the state first",
+      "text": "File Form AU-196.10 at least 10 days before you pay for a business. Skip it and the seller's unpaid sales tax becomes yours.",
+      "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    },
+    {
+      "id": "permit_not_transferable",
+      "title": "The permit stays with the seller",
+      "text": "A Health Department permit cannot be transferred. The new owner applies again ($280) and may open 22 days after applying: apply before closing.",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    },
+    {
+      "id": "takeover_price",
+      "title": "What a coffee shop sells for",
+      "text": "Coffee shops sold in 2021-2025 went for about 2 times the owner's yearly earnings, or 0.41 times a year of sales (median). Buyers paid about 90% of the asking price.",
+      "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/"
+    },
+    {
+      "id": "occupant_load",
+      "title": "How many people the room may hold",
+      "text": "The Building Code counts 15 sq ft of dining area per person at tables and 5 sq ft per person standing. 75 or more people need a Place of Assembly permit.",
+      "source": "https://www.nyc.gov/assets/buildings/pdf/code_notes_eatinge_drinking_establishment.pdf"
+    },
+    {
+      "id": "queue_room",
+      "title": "Room for the line",
+      "text": "A comfortable line needs about 8.5 sq ft a person. When the line spills out the door, people walk past, and more of them in the cold.",
+      "source": "https://wsdot.wa.gov/publications/manuals/fulltext/M3082/410.pdf"
+    },
+    {
+      "id": "overcrowding",
+      "title": "Too many people inside",
+      "text": "Every room has an occupant load. More people inside than that is an FDNY overcrowding summons: $950 the first time, up to $5,000 after.",
+      "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-102214"
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "check_gas_before_lease",
+      "title": "Ask Con Edison about gas and power before you sign",
+      "kind": "space",
+      "text": "Send the address and your equipment's gas use to Con Edison's pre-lease check. An all-electric espresso bar does not need gas at all."
+    },
+    {
+      "id": "negotiate_free_rent",
+      "title": "Negotiate free rent for the build-out",
+      "kind": "money",
+      "text": "Ask for 3-6 months of free base rent, and for the free period to start when your permits are issued, not at signing."
+    },
+    {
+      "id": "file_dob_alteration",
+      "title": "File the alteration with the Buildings Department",
+      "kind": "permit",
+      "text": "A licensed architect or engineer files in DOB NOW. Approval took 20 days on average in 2025. Construction starts after the permit.",
+      "setupItemId": "dob_alteration_permit",
+      "fee": 970,
+      "waitDays": 20,
+      "agency": "NYC Department of Buildings",
+      "link": "https://www.nyc.gov/site/buildings/index.page"
+    },
+    {
+      "id": "takeover_due_diligence",
+      "title": "Buying a shop: check the books, the lease and the violations",
+      "kind": "money",
+      "text": "Compare the seller's sales with the sales tax returns, read the lease and its assignment clause, look up the inspection history.",
+      "setupItemId": "takeover_due_diligence"
+    },
+    {
+      "id": "takeover_bulk_sale_notice",
+      "title": "Buying a shop: file AU-196.10 ten days before you pay",
+      "kind": "legal",
+      "text": "The state tells you within days whether the seller owes sales tax; that money is held back from the price.",
+      "setupItemId": "bulk_sale_notice",
+      "waitDays": 10,
+      "agency": "NYS Department of Taxation and Finance",
+      "link": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm"
+    },
+    {
+      "id": "takeover_own_permit",
+      "title": "Buying a shop: apply for your own Health permit before closing",
+      "kind": "permit",
+      "text": "The seller's permit dies with the sale. Apply 22 days before closing and you reopen the next morning.",
+      "setupItemId": "fse_permit",
+      "fee": 280,
+      "waitDays": 22,
+      "agency": "NYC DOHMH",
+      "link": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+    },
+    {
+      "id": "takeover_landlord_consent",
+      "title": "Buying a shop: get the landlord's consent to assign the lease",
+      "kind": "space",
+      "text": "Most leases need it. The landlord may ask for a new guaranty or a bigger deposit.",
+      "setupItemId": "lease_assignment_consent",
+      "waitDays": 30
+    },
+    {
+      "id": "winter_ready",
+      "title": "Before December: salt, shovels and a snow plan",
+      "kind": "launch",
+      "text": "Who clears the sidewalk at 6am after an overnight storm? Put it in writing, buy ice melt, check your liability policy.",
+      "setupItemId": "ice_melt_and_shovels"
+    }
+  ],
+  "extra": {
+    "preOpening": {
+      "tier": "core",
+      "termMonths": 120,
+      "leaseOptions": [
+        {
+          "id": "no_free",
+          "label": "No free rent, lower rent",
+          "freeRentMonths": 0,
+          "faceRentMult": 0.975
+        },
+        {
+          "id": "standard",
+          "label": "3 months free for the build-out",
+          "freeRentMonths": 3,
+          "faceRentMult": 1.0
+        },
+        {
+          "id": "long_free",
+          "label": "6 months free, higher rent",
+          "freeRentMonths": 6,
+          "faceRentMult": 1.0263
+        }
+      ],
+      "leaseOptionsNote": "Free months: 3-6 typical for a NYC restaurant build-out, up to 12 for heavy work (JD Supra / DHC Legal, quoted in a search excerpt: https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/). The face rent keeps the landlord's net effective rent equal over a 120-month term, taking 3 free months as the market standard: face = market x (120 - 3) / (120 - free). My derivation, estimate.",
+      "leaseValueInNetWorth": true,
+      "leaseValueNote": "A 12-month season sees only the first year of a 120-month lease, so free months would always win. The score must carry the rest of the lease: netWorth += (marketRent - faceRent) x months left in the term. Free rent then reads as what it is, a loan from the landlord repaid through a higher rent, and a below-market lease is an asset (the thing key money pays for). Undiscounted, my design.",
+      "freeRentStarts": "signing",
+      "freeRentStartsNote": "Default: the free period runs from signing, the common landlord form. A tenant-side clause ties it to the permits (rent commencement 'the later of' a date or permits plus 90-150 days); planned as an option, see the spec.",
+      "additionalRentShare": 0,
+      "additionalRentNote": "Modified gross store leases charge the tenant's share of tax increases over a base year, and practitioners advise that it starts only the year after the base year (Carlton Fields / Metro Manhattan, quoted in search excerpts). So in a first season nothing extra is due during free rent. Kept as a field for net leases. Free rent usually waives only base rent; utilities and other charges stay payable (JD Supra).",
+      "setupCostShares": [
+        {
+          "costId": "insurance",
+          "share": 1.0,
+          "note": "Landlords require liability coverage from possession (lease practice; estimate)."
+        },
+        {
+          "costId": "utilities",
+          "share": 0.3,
+          "note": "Construction power and lights before the equipment runs; my estimate."
+        },
+        {
+          "costId": "internet",
+          "share": 1.0,
+          "note": "Installed for the POS and the alarm before opening; estimate."
+        },
+        {
+          "costId": "accounting",
+          "share": 0.5,
+          "note": "Set-up of books, sales tax registration; estimate."
+        }
+      ],
+      "dobPermitDays": 20,
+      "dobPermitDaysNote": "Average days from filing to approval through DOB NOW, all applications, FY2025, Mayor's Management Report (quoted in a search excerpt: https://www.nyc.gov/assets/operations/downloads/pdf/mmr2025/dob.pdf); the State Comptroller gives 20.3 days for calendar 2025. Light jobs in keen-cray's 60 days include it; it matters as the time a shortcut can skip.",
+      "dobFee": {
+        "base": 280,
+        "firstCost": 3000,
+        "perThousandAbove": 10.3,
+        "source": "https://www.nyc.gov/assets/buildings/pdf/26fee_updates-sn.pdf",
+        "confidence": "estimate",
+        "note": "Alteration, building under 7 floors, DOB 2026 fee update, quoted in a search excerpt."
+      },
+      "gas": {
+        "needsGas": false,
+        "connectDays": 68,
+        "appliesWhenFormerUse": [
+          "retail",
+          "salon"
+        ],
+        "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+        "confidence": "estimate",
+        "note": "An espresso bar runs on electricity, so the pack default needs no gas. If a concept adds a gas kitchen in a space that never had food service, Con Edison must bring service from the street. 2017 survey by Sen. Hoylman and the NYC Hospitality Alliance (quoted in search excerpts): 82.1% of members had some delay getting gas turned on, upgraded or adjusted; the average wait was 68 days and up to a year; losses about $140,000 per business. Reported cases: 4 months (The Clam, Greenwich Village), 7 months (Delancey Street, 2015). No 2025-26 figures found. 68 days = the survey average."
+      },
+      "buildRush": {
+        "costMult": 1.25,
+        "daysMult": 0.75,
+        "confidence": "estimate",
+        "note": "Night and weekend shifts. An older study cited on ProQuest: with the overtime premium and lost productivity, each productive hour gained costs about 300% of the straight-time rate (https://www.proquest.com/docview/220434161, quoted in a search excerpt; date and sample not seen). Labor is roughly half of a fit-out; finishing in 75% of the days moves about a quarter of the hours into overtime: 0.5 x 0.25 x (3 - 1) = +25%. My derivation."
+      },
+      "startupCostDeduction": {
+        "immediate": 5000,
+        "phaseOutFrom": 50000,
+        "amortMonths": 180,
+        "source": "https://www.everycrsreport.com/reports/IF12970.html",
+        "confidence": "estimate",
+        "note": "IRC §195: up to $5,000 of start-up costs deductible in the year the business begins, reduced dollar for dollar above $50,000; the rest amortized over 180 months from the opening month (Congressional Research Service, quoted in a search excerpt). Rent, insurance and utilities paid before opening are start-up costs; equipment is depreciated separately and is out of scope here."
+      },
+      "goodGuyGuaranty": {
+        "noticeMonths": 3,
+        "source": "https://www.metro-manhattan.com/good-guy-guaranty/",
+        "confidence": "estimate",
+        "note": "The owner personally owes rent until the space is surrendered after 3-6 months' notice (90 days typical). Used by the end-of-season personal plan, not by the month."
+      }
+    },
+    "takeoverRules": {
+      "tier": "core",
+      "earningsMultiple": 2.0,
+      "revenueMultipleCap": 0.57,
+      "revenueMultipleMedian": 0.41,
+      "floorShareOfReplacement": 0.5,
+      "saleToAskRatio": 0.9,
+      "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+      "confidence": "estimate",
+      "note": "Quoted in a search excerpt of BizBuySell's coffee shop benchmarks (sold 2021-2025): median earnings multiple 2.00 (quartiles 1.50-2.55), median revenue multiple 0.41 (0.30-0.57), median sale price $150,000 on median revenue $375,000 and owner earnings $78,780; 2025 median sale $176,500 at a sale-to-ask ratio of 0.90. Price = 2.0 x seller's earnings, never below half of what the room and equipment would cost to recreate (my floor: a seller can always sell the second-generation space as key money; NYC listings asked $150,000-$160,000 key money for a cafe or restaurant space, Commercial Observer / listings in a search excerpt) and never above 0.57 x a year of sales. keen-cray's 0.2 x sales (min $80,000, max $200,000) sits under the lower quartile of real sales: replace it.",
+      "bulkSaleNoticeDays": 10,
+      "fsePermitDays": 22,
+      "landlordConsentDays": 30,
+      "dueDiligenceCost": 7500,
+      "awarenessKeepName": 0.7,
+      "awarenessRebrand": 0.35,
+      "rebrandCost": 5000,
+      "awarenessNote": "Keep the name: 0.7 of the regular crowd. A Missouri SBDC advisor: typically about 30% of a small business's customers do not return after a change of ownership (Startland News 2024, quoted in a search excerpt: https://www.startlandnews.com/2024/03/kc-small-biz-new-owners); a vendor rule of thumb discounts an inherited customer base by 20-50%. Replaces keen-cray's 0.9 (no source). Rebrand: the crowd of a new shop (0.35, keen-cray footfall.awarenessStart); sign and menus $5,000, my estimate.",
+      "sellerNote": {
+        "maxShare": 0.5,
+        "annualRate": 0.08,
+        "months": 60,
+        "source": "https://www.bizquest.com/business-for-sale/well-established-coffee-house/BW2498150/",
+        "confidence": "estimate",
+        "note": "A real coffee house listing quoted in a search excerpt: $82,500 down and $82,500 over 60 months at 8%. Another asked 25% at 7% for 3 years. SBA 7(a) for a change of ownership needs at least 10% equity; a seller note on full standby may count for half of it (SOP 50 10 8, June 2025)."
+      },
+      "transfers": {
+        "items": "all equipment and furniture of the seller, with their age",
+        "buildout": true,
+        "reputation": "if the name is kept",
+        "staff": "optional: New York has no automatic transfer of employees (Germany does, BGB §613a)",
+        "trailsThatStay": [
+          "pest_activity",
+          "grease_interceptor_neglect"
+        ],
+        "trailsThatDoNot": "everything that is the seller's conduct: wages, tips, taxes, paperwork, permits",
+        "liabilities": "the seller's unpaid sales tax only if the buyer skipped the bulk-sale notice",
+        "neverTransfers": [
+          "fse_permit",
+          "food_protection_cert",
+          "sales tax certificate of authority",
+          "insurance"
+        ]
+      },
+      "goodwillInNetWorth": {
+        "share": 0.5,
+        "note": "Today netWorth = cash + 0.5 x furniture and equipment - unpaid taxes: the part of a purchase price paid for the regulars (goodwill) vanishes from the score the day the shop is bought. Proposal: count every open business at 0.5 x (2.0 x its last 3 months' earnings annualized), the same rule for bought and built shops, so buying is not punished and building is not either. Design value."
+      }
+    },
+    "floorZones": {
+      "tier": "core",
+      "backOfHouseShare": 0.35,
+      "backOfHouseNote": "Dining room 60%, kitchen and storage 40% is the common rule; coffee-focused shops put 35-45% into the bar and prep (Toast and design guides, quoted in search excerpts). 0.35 for a no-kitchen espresso bar; the bar itself is separate below.",
+      "barSqft": 120,
+      "barSqftNote": "Counter, espresso machine, grinders, pastry case and the register line: 20 ft x 6 ft, my estimate.",
+      "restroomSqft": 56,
+      "restroomNote": "Needed at 20 or more seats (pack extra.seatThresholds, Health Code §81.22). An ADA reference plan fits a single-user room in 35 sq ft (2004 ADAAG minimum, quoted in a search excerpt); design guides suggest about 7'4\" x 6'6\" (48 sq ft). 56 sq ft = 7 x 8 ft with the door, my estimate.",
+      "queueSqftPerPerson": 8.5,
+      "queueNote": "Level of service C for standing and queuing, 8.5 sq ft per person (WSDOT design manual after Fruin, quoted in a search excerpt). The code floor is 5 sq ft per person standing.",
+      "densities": [
+        {
+          "id": "tight",
+          "sqftPerSeat": 12
+        },
+        {
+          "id": "standard",
+          "sqftPerSeat": 15
+        },
+        {
+          "id": "spacious",
+          "sqftPerSeat": 20
+        }
+      ],
+      "occupantLoad": {
+        "tablesAndChairsNetSqft": 15,
+        "standingNetSqft": 5,
+        "placeOfAssemblyAt": 75,
+        "secondExitAbove": 49,
+        "source": "https://www.nyc.gov/assets/buildings/pdf/code_notes_eatinge_drinking_establishment.pdf",
+        "confidence": "estimate",
+        "note": "15 and 5 net sq ft per person: IBC Table 1004.5, which the NYC Building Code numbers 1004.1.3 (quoted in search excerpts; NYC table text not opened). 75: Place of Assembly (pack extra.seatThresholds). Second exit above 49 people: IBC 1006 single-exit limit for assembly, not checked against the NYC text. Building code forum citing the 2020 Building Code of New York State: one exit is allowed for a Group A space of at most 49 occupants with no more than 75 ft of travel to the exit."
+      },
+      "hourProfile": [
+        [
+          7,
+          0.12
+        ],
+        [
+          8,
+          0.15
+        ],
+        [
+          9,
+          0.12
+        ]
+      ],
+      "hourProfileNote": "Share of the day's orders in each hour of the morning rush. One Square coffee shop did 42% of sales 7-9 am (vendor blog); a KPI library claims 50-60% 6-10 am for specialty coffee; neither is a sample. 0.12 + 0.15 + 0.12 = 39% over 7-10 am, my estimate. With keen-cray's anchors the profile should shift: subway stops weigh the rush more. Check: Placer.ai counts 43.1% of US coffee-chain visits between 5 and 11 am (visits, not sales; 7.2% an hour on average over six hours: https://www.placer.ai/anchor/articles/dutch-bros-sets-its-sights-on-the-breakfast-rush). A city commuter cafe peaks harder than that national average and softer than the single Square shop's 42% in two hours; 0.12/0.15/0.12 sits between.",
+      "peak15Factor": 0.75,
+      "peak15Note": "Peak hour factor: the hour's arrivals divided by four times the busiest 15 minutes. Commuter waves off the trains bunch customers; 0.75 means the busiest quarter-hour carries a third of the hour. Traffic engineering uses 0.85-0.95 for cars; for a cafe by a subway exit no number was found: my estimate.",
+      "ordersPerBaristaHourPeak": 25,
+      "machineOrdersPerHour": 90,
+      "throughputNote": "Seattle Coffee Gear: a reasonable target on a 2-group machine is 30 espresso drinks an hour for a barista working alone, 60 for two working together; other guides give 60-80 for one barista who only pulls shots and 100-120 for a 2-group with two people (quoted in search excerpts). On the rush someone also takes orders and payment, so per person on the floor: 30 drinks / 1.2 drinks per order = 25 orders an hour. Machine and grinder cap a 2-group bar at about 110 drinks = 90 orders an hour. 1.2 drinks per order is my estimate (an $8.50 ticket is a drink and sometimes a pastry).",
+      "waitToleranceCdf": [
+        [
+          5,
+          0.34
+        ],
+        [
+          10,
+          0.64
+        ],
+        [
+          15,
+          0.85
+        ],
+        [
+          20,
+          1.0
+        ]
+      ],
+      "waitToleranceNote": "Share of customers whose patience is used up by a wait of N minutes. Waitwhile 2023 survey via White Hutchinson: for fast-casual the most common maximum wait is 5 minutes (34%) or 10 minutes (30%); 70% wait at most 15 minutes in a physical line. 0.85 at 15 and 1.0 at 20 are my rounding. The engine interpolates linearly between the points, from 0 at 0 minutes.",
+      "outsideBalk": {
+        "normal": 0.5,
+        "freezing": 0.8
+      },
+      "outsideBalkNote": "Share of people who walk on when the line is out the door. Field data from an emergency room: each extra person visible in the queue adds about 0.5 percentage point to abandonment (Batt and Terwiesch, Wharton). For a coffee line on the sidewalk no number exists: 0.5, and 0.8 below freezing, my estimates.",
+      "noSeatTakesAway": 0.6,
+      "noSeatNote": "A guest who wanted to sit and finds no seat takes the drink to go in 60% of cases, my estimate. Today the engine loses all of them.",
+      "dwellHours": {
+        "standard": 0.5,
+        "laptops": 1.0
+      },
+      "dwellNote": "Average stay of a guest who sits. Laptop workers 15 min to 4 h (Swinburne 2023); a barista champion's rule of thumb: a $6 drink buys about 90 minutes (HuffPost UK). 0.5 h for a mixed crowd and 1.0 h when laptops are welcome all day, my estimates.",
+      "crowding": {
+        "source": "https://ideas.repec.org/a/eee/jouret/v93y2017i4p541-549.html",
+        "note": "Knoeferle, Paus and Vossen (Journal of Retailing, 2017), 40,000 baskets: social density has an inverted-U effect on spending. The engine's two thresholds (crowdPenaltyAbove 0.9, emptyPenaltyBelow 0.4) are the two arms of that U; the spec moves them from the daily average to the peak hour."
+      },
+      "drinksPerOrder": 1.2
+    },
+    "winterDoor": {
+      "tier": "core",
+      "snowDay": "a day whose weather condition is 'snow', or 'storm' at 34 F or colder",
+      "iceDay": "a day after a snow day while the temperature stays at 32 F or below, up to 3 days in a row",
+      "climate": {
+        "snowDaysPerMonth": {
+          "Dec": 2.1,
+          "Jan": 3.7,
+          "Feb": 3.2,
+          "Mar": 2.0
+        },
+        "freezingDaysPerMonth": {
+          "Dec": 14,
+          "Jan": 21,
+          "Feb": 18,
+          "Mar": 11
+        },
+        "source": "https://www.weather.gov/media/okx/Climate/CentralPark/monthlyseasonalsnowfall.pdf",
+        "confidence": "estimate",
+        "note": "Central Park 1991-2020 normals quoted in search excerpts (Wikipedia and Climate-Zone tables citing NOAA): days with snowfall of 0.1 in or more, and days with a low of 32 F or below. ai/src/data/nyc-climate.json already carries the snow days."
+      },
+      "clearingWindowHours": {
+        "stopsBetween7amAnd5pm": 4,
+        "stopsBetween5pmAnd9pm": 14,
+        "stopsOvernight": "by 11 am"
+      },
+      "clearingWindowSource": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+      "pathWidthFt": 4,
+      "cornerPathToCrosswalk": true,
+      "clearingOptions": [
+        {
+          "id": "staff",
+          "costPerSnowDay": 27,
+          "staffHoursPerSnowDay": 1,
+          "note": "One worker-hour at the $17 NYC minimum wage plus 25 lb of ice melt at $0.40 a lb = $27; icy days after the snow add half again. Estimate from the minimum wage (pack _common) and the WebstaurantStore price."
+        },
+        {
+          "id": "contractor",
+          "costPerSnowDay": 75,
+          "staffHoursPerSnowDay": 0,
+          "note": "Sidewalk-only work at $25-$75 an hour, about 15 minutes a job, plus a call-out minimum (LawnStarter / FridayParts national guides, quoted in search excerpts). NYC storefront contracts were not found; $75 a snow day is my estimate."
+        },
+        {
+          "id": "none",
+          "costPerSnowDay": 0,
+          "staffHoursPerSnowDay": 0
+        }
+      ],
+      "cornerCostMult": 1.5,
+      "dsnyFines": [
+        100,
+        150,
+        250
+      ],
+      "dsnyFinesNote": "DSNY: $100 first, $150 second, $250 third and later (quoted in search excerpts of the DSNY snow-laws page and a January 2026 DSNY advisory). Schedule maximum $350. Sources disagree: a DSNY one-pager says $100 for the first summons and $350 for every one after (https://www.nyc.gov/assets/em/downloads/pdf/dsny_snow_removal_one_pager.pdf). Who is ticketed: a DSNY spokeswoman said the ticket is probably written to the building owner; most commercial leases shift the duty to the tenant, and the owner recovers the fine from the tenant (amNY, Cohen & Jaffe, quoted in search excerpts). In the game the tenant pays either way.",
+      "dsnySweep": {
+        "minPedestriansPerDay": 5000,
+        "note": "Deterministic stand-in for patrols: DSNY walks the busy commercial corridors after every storm. Blocks at or above the map's median footfall (5,140 a day, keen-cray places) are swept the morning after every snow day; quieter blocks only after a 311 report. My rule; the city does not publish patrol routes. In the 2023-24 season DSNY wrote 9,399 snow tickets to residential, 75 to commercial properties and 21 to vacant lots (City Council hearing, January 2025)."
+      },
+      "uncleanedDoorDemandMult": 0.85,
+      "uncleanedDoorNote": "On a snow or ice day an uncleared entrance turns away some of the people who would come in: the user's own example ('people slip at the door and do not want to come here'). No measured number: 0.85 on top of the weather's own 0.85 (snow), my estimate.",
+      "exposureShareOfSnowDay": 0.5,
+      "exposureNote": "Storm in progress: no liability during the storm and a reasonable time after (a court accepted 5 hours; 12 hours after the storm with a freeze was too long). Exposure counts half the snow day's pedestrians (after the clearing window) and all pedestrians of each icy day that follows, only when the sidewalk was not cleared.",
+      "claimExposureThreshold": 40000,
+      "claimNote": "Deterministic stand-in for the chance of a fall: the first claim arrives once uncleared icy pedestrian passes reach 40,000 in a season, then one more for every further 40,000. On a median block (5,140 a day) a whole normal winter of neglect brings one claim; a busy corner (9,000+ a day) brings two; a quiet side street (2,500) brings none, only tickets. Design value: no public rate of falls per pedestrian on icy sidewalks was found.",
+      "claimAverage": 45000,
+      "claimSource": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+      "claimSourceNote": "The Hartford, December 2025, 2020-2024 claims: slip, fall and customer injury average $45,000 (up from $20,000 in its 2015 study), 20% of small-business claims. Quoted in a search excerpt.",
+      "claimDelayDays": 60,
+      "claimDelayNote": "A lawyer's letter typically comes weeks after the fall; New York allows 3 years to sue (CPLR 214). 60 days is a design value so the claim lands inside the season.",
+      "insurance": {
+        "deductible": 1000,
+        "renewalIncrease": 0.25,
+        "source": "https://www.quotesweep.com/blog/coffee-shop-insurance-cost",
+        "confidence": "estimate",
+        "note": "BOP for coffee shops at $1M/$2M limits with a $1,000 deductible (QuoteSweep from Insureon data, quoted in a search excerpt). One claim raises the renewal 10-30% or 20-40% (broker guides); 25% from the next month on the insurance line."
+      },
+      "leaseIndemnity": "Most store leases make the tenant clear the sidewalk and indemnify the landlord, so the landlord passes the claim to the tenant; under §7-210 the injured person sues the owner. Cruz v Heights Broadway (2023): a tenant whose lease did not cover the sidewalk was not liable. Angen v De Jesus (1st Dept 2025): a store whose lease required snow removal faces trial over whether its employees made the ice worse while clearing it; a tenant is liable when its own snow work makes natural conditions more hazardous. Dembele v 373-381 Park Ave S. Assoc. (1st Dept 2020): whatever the restaurant's lease says, the building owner keeps a nondelegable duty for the sidewalk. In the game the 'staff' option includes salt after shovelling, so it does not create this risk; a future 'shovel only, no salt' option would.",
+      "insideExposure": {
+        "note": "Wet floors inside on snow days: served orders on snow and ice days without entrance mats count toward the same claim threshold at 1 pass per order. Design value."
+      },
+      "outsideLine": "On snow and ice days the share of people who walk past a line that spills onto the sidewalk is floorZones.outsideBalk.freezing.",
+      "snowIntoStreet": "DSNY: do not shovel, blow or push snow into the street, a crosswalk or a bike lane; the summons follows the same sanitation schedule ($100-$350). Not modelled as a separate choice: the 'staff' and 'contractor' options are assumed to pile snow on the curb side of the sidewalk."
+    },
+    "eventCatalog": [
+      {
+        "id": "free_rent_ends",
+        "name": "Free rent ends",
+        "text": "Your rent-free months are over: full rent is due from today, open or not.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "rent commencement date in the lease",
+        "effects": [
+          {
+            "field": "rent",
+            "mult": 1.0
+          }
+        ],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "lease_option:long_free"
+          },
+          {
+            "kind": "lever",
+            "id": "rush_build"
+          }
+        ],
+        "realFrequency": "every new lease; 3-6 months after signing for a restaurant build-out",
+        "tier": "core",
+        "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+        "confidence": "estimate",
+        "note": "Announcement, not a multiplier: the engine posts it to the inbox 7 days before freeUntilDay."
+      },
+      {
+        "id": "dob_permit_issued",
+        "name": "Building permit issued",
+        "text": "The Buildings Department approved your plans. The contractor may start.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "DOB NOW approval, 20 days on average after filing (FY2025)",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "start_work_before_permit"
+          }
+        ],
+        "realFrequency": "every build-out",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2025/dob.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "id": "stop_work_order",
+        "name": "Stop work order",
+        "text": "A Buildings inspector found work without a permit and stopped your construction. Pay the penalty and wait for the permit.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "DOB complaint or inspection; penalty 14 x the permit fee or $5,000, whichever is greater (1 RCNY 102-04)",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "answer_notice:pay"
+          },
+          {
+            "kind": "lever",
+            "id": "answer_notice:contest"
+          }
+        ],
+        "realFrequency": "follows only the shortcut start_work_before_permit",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+        "confidence": "estimate"
+      },
+      {
+        "id": "gas_connection_wait",
+        "name": "Waiting for Con Edison gas",
+        "text": "Your space never had gas. Con Edison has to bring a line from the street before the stoves can be inspected.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "Con Edison gas availability answer for the address",
+        "effects": [],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "all_electric_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "check_gas_before_lease"
+          }
+        ],
+        "realFrequency": "2017 survey: 82.1% had a delay, 68 days on average, up to a year",
+        "tier": "deep",
+        "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "id": "permit_ready_after_buildout",
+        "name": "Health permit ready",
+        "text": "22 days after you applied you may open even if the pre-permit inspection has not come.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "FSE permit application date + 22 days",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "shortcut",
+            "id": "open_before_permit"
+          }
+        ],
+        "realFrequency": "every opening",
+        "tier": "core",
+        "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+        "confidence": "estimate"
+      },
+      {
+        "id": "takeover_listing",
+        "name": "A cafe on your map is for sale",
+        "text": "An established cafe is for sale: the room, the machines and most regulars (about 7 in 10 stay with a new owner). Asking price is about twice its yearly earnings.",
+        "scale": "block",
+        "months": [],
+        "realSignal": "a resident business with 3 months of losses lists itself, or a forSale place in data/places.json",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "buy_business"
+          },
+          {
+            "kind": "lever",
+            "id": "takeover_due_diligence"
+          }
+        ],
+        "realFrequency": "BizBuySell lists hundreds of US coffee shops at any time",
+        "tier": "core",
+        "source": "https://www.bizbuysell.com/coffee-shops-and-cafes-for-sale/1",
+        "confidence": "estimate"
+      },
+      {
+        "id": "bulk_sale_claim",
+        "name": "The state claims the seller's sales tax",
+        "text": "New York answered your bulk-sale notice: the seller owes sales tax. That amount is held back from the price and paid to the state.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "Form AU-196.2 within 5 business days of AU-196.10",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bulk_sale_notice"
+          }
+        ],
+        "realFrequency": "whenever a seller has unpaid sales tax",
+        "tier": "deep",
+        "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+        "confidence": "estimate"
+      },
+      {
+        "id": "seller_tax_debt_surfaces",
+        "name": "The seller's tax debt is now yours",
+        "text": "You paid the seller without notifying the state. The Tax Department bills you for the seller's unpaid sales tax.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "buyer skipped AU-196.10; the seller had unpaid sales tax",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "bulk_sale_notice"
+          }
+        ],
+        "realFrequency": "NYS Tax Appeals decisions on 1141(c) every year",
+        "tier": "core",
+        "source": "https://www.aprio.com/insights-events/bulk-sales-in-new-york-how-a-purchaser-was-left-responsible-for-a-sellers-sales-tax-liability-ins-article-tax/",
+        "confidence": "estimate"
+      },
+      {
+        "id": "rebrand_loses_regulars",
+        "name": "Regulars do not know the new name",
+        "text": "You renamed the cafe. Many regulars think the old place closed: the crowd starts again from a third, not from 70%.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "player chose rebrand on purchase",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.5
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "keep_name"
+          }
+        ],
+        "realFrequency": "every rebrand of a bought shop",
+        "tier": "deep",
+        "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+        "confidence": "estimate",
+        "note": "0.35 / 0.7 = 0.5 of the demand a kept name would have on the first day; the ramp of keen-cray closes the gap over months."
+      },
+      {
+        "id": "line_out_the_door",
+        "name": "Line out the door at 8 am",
+        "text": "The morning rush is longer than your bar can pour. Past six people the line is on the sidewalk and half of the newcomers walk on.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "peak-hour arrivals above bar throughput (floorZones)",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "staff"
+          },
+          {
+            "kind": "lever",
+            "id": "seat_density"
+          },
+          {
+            "kind": "lever",
+            "id": "mobile_order_ahead"
+          }
+        ],
+        "realFrequency": "daily in busy shops",
+        "tier": "core",
+        "source": "https://knowledge.wharton.upenn.edu/article/losing-patience-and-patients-what-makes-people-wait-in-line-or-decide-to-bail/",
+        "confidence": "estimate"
+      },
+      {
+        "id": "no_seat_left",
+        "name": "Every seat taken",
+        "text": "Laptops hold the tables. Guests who wanted to sit take it to go, or leave.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "dine-in arrivals x dwell time above seats",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "laptop_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "seat_density"
+          }
+        ],
+        "realFrequency": "common in cafes near offices and colleges",
+        "tier": "deep",
+        "source": "https://www.swinburne.edu.au/news/2023/01/Youre-about-to-see-a-growing-trend-of-laptop-workers-in-cafes-new-research-reveals-why/",
+        "confidence": "estimate"
+      },
+      {
+        "id": "seat_20_restroom_line",
+        "name": "The 20th seat needs a restroom",
+        "text": "Twenty seats, inside and out, require a customer restroom. It takes 56 sq ft of your room.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "seats >= 20 (Health Code 81.22)",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "resize"
+          }
+        ],
+        "realFrequency": "every layout decision",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/doh/business/food-operators/operating-a-restaurant.page",
+        "confidence": "estimate"
+      },
+      {
+        "id": "snowfall_overnight",
+        "name": "Snow overnight",
+        "text": "It stopped snowing at 3 am. Your sidewalk must be clear by 11 am, a 4-foot path, salt on what will not lift.",
+        "scale": "city",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "NWS forecast; weather series condition 'snow'",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.85
+          }
+        ],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "snow_clearing"
+          }
+        ],
+        "realFrequency": "Central Park: 11.4 days a year with 0.1 in or more (1991-2020)",
+        "tier": "core",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+        "confidence": "estimate"
+      },
+      {
+        "id": "freeze_after_snow",
+        "name": "Melt and refreeze",
+        "text": "Yesterday's slush froze overnight. An uncleared sidewalk is now ice, and the storm is over: a fall is your problem.",
+        "scale": "city",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "a day at 32 F or below after a snow day",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "snow_clearing"
+          }
+        ],
+        "realFrequency": "Central Park: 21 freezing days in January (normals)",
+        "tier": "core",
+        "source": "https://www.newyorkappellatedigest.com/2017/07/19/storm-in-progress-rule-did-not-apply-storm-stopped-12-hours-before-the-slip-and-fall-2nd-dept/",
+        "confidence": "estimate"
+      },
+      {
+        "id": "dsny_snow_sweep",
+        "name": "Sanitation agents on your street",
+        "text": "DSNY agents are writing tickets on uncleared sidewalks along the avenue: $100 the first time.",
+        "scale": "block",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "the morning after a snow day, blocks with 5,000+ pedestrians a day",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "snow_clearing"
+          }
+        ],
+        "realFrequency": "4,500+ summonses after the January 25, 2026 storm",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/dsny/downloads/about/news/testimony/2026/dsny-oversight-hearing-testimony-022726.pdf",
+        "confidence": "estimate"
+      },
+      {
+        "id": "slip_claim_letter",
+        "name": "A lawyer's letter about a fall",
+        "text": "A pedestrian fell on the ice in front of your door last month. The landlord forwards the claim to you under your lease.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "realSignal": "uncleared icy pedestrian passes reach the threshold (winterDoor)",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "snow_clearing"
+          },
+          {
+            "kind": "lever",
+            "id": "insurance"
+          }
+        ],
+        "realFrequency": "slip, fall and customer injury: 20% of small-business claims, $45,000 on average (The Hartford 2025)",
+        "tier": "core",
+        "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+        "confidence": "estimate"
+      },
+      {
+        "id": "insurance_renewal_after_claim",
+        "name": "Insurance renewal after a claim",
+        "text": "Your business owner's policy renews 25% higher after last winter's claim.",
+        "scale": "point",
+        "months": [],
+        "realSignal": "a paid liability claim in the last 3 years",
+        "effects": [
+          {
+            "field": "insurance",
+            "mult": 1.25
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "snow_clearing"
+          }
+        ],
+        "realFrequency": "broker guides: one claim +10-30% (or +20-40%) at renewal",
+        "tier": "deep",
+        "source": "https://www.latentinsure.com/blog/restaurant-liability-insurance-cost",
+        "confidence": "estimate"
+      },
+      {
+        "id": "blizzard_travel_ban",
+        "name": "Blizzard: city asks everyone to stay home",
+        "text": "A winter storm warning: transit slows, half the staff cannot make it, delivery orders jump, the street is empty.",
+        "scale": "city",
+        "months": [
+          1,
+          2
+        ],
+        "realSignal": "NWS winter storm warning; DSNY snow alert",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.6
+          },
+          {
+            "field": "staffAvailability",
+            "mult": 0.7
+          },
+          {
+            "field": "deliveryShare",
+            "mult": 1.3
+          }
+        ],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "snow_clearing"
+          }
+        ],
+        "realFrequency": "Avero, storm Stella: about half of restaurants closed; open ones sold 19% less than a year before",
+        "tier": "core",
+        "source": "https://averoinc.com/avero-index-snowstorm-stella-and-restaurant-sales/",
+        "confidence": "estimate",
+        "note": "footTraffic 0.6 is below the engine's 0.5-1.5 clip only for the whole storm day in the weather series (storm 0.7); this event adds nothing but staff and delivery if the weather already marks the day as a storm."
+      },
+      {
+        "id": "wet_floor_inside",
+        "name": "Slush on the floor",
+        "text": "Customers carry snow in. Without mats the floor by the door is wet all day.",
+        "scale": "point",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "snow or ice day",
+        "effects": [],
+        "durationMonths": 0,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "entrance_mats"
+          }
+        ],
+        "realFrequency": "every snow day",
+        "tier": "deep",
+        "source": "https://www.qsrmagazine.com/news/no-slip-and-fall-here-keeping-floors-clean",
+        "confidence": "estimate"
+      }
+    ],
+    "mechanics": [
+      {
+        "id": "pre_opening_months",
+        "title": "Months before opening: rent runs, sales do not",
+        "playerDecision": "Which space (former cafe, food, retail), which lease (0, 3 or 6 free months against the face rent), rush the build-out (+25% cost, -25% days) or not, start work before the permit or not, check gas before signing.",
+        "engineMath": "Rent day by day from signing: base rent = faceRent/30 on days after freeUntilDay; additional rent share every day. Before opening, monthly costs with setupCostShares are charged by setup days. Opening is the later of the build-out end and the permits that wait for it. Pre-opening rent and costs go into a start-up bucket for the profit tax (IRC 195): $5,000 in the opening month (less above $50,000), the rest over 180 months.",
+        "fieldsNeeded": [
+          "extra.preOpening",
+          "Action open_business.leaseOptionId",
+          "Action open_business.rush",
+          "BusinessState.extra.lease {faceRent, freeUntilDay, optionId}",
+          "EconExtra.startupCosts",
+          "PackMonthlyCost.duringSetupShare (or extra.preOpening.setupCostShares)"
+        ],
+        "numbers": [
+          {
+            "what": "free months for a NYC restaurant build-out",
+            "value": "3-6, up to 12",
+            "source": "https://www.jdsupra.com/legalnews/build-out-provisions-in-nyc-restaurant-1727571/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "DOB NOW filing to approval, days",
+            "value": 20,
+            "source": "https://www.nyc.gov/assets/operations/downloads/pdf/mmr2025/dob.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "work without a permit (1 RCNY 102-04): 14 x permit fee, at least",
+            "value": 5000,
+            "source": "https://www.nyc.gov/assets/buildings/rules/1_RCNY_102-04.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "start-up costs deductible at once",
+            "value": 5000,
+            "source": "https://www.everycrsreport.com/reports/IF12970.html",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "buy_existing_business",
+        "title": "Buy an operating cafe or build your own",
+        "playerDecision": "Buy a listed cafe (price, seller note share, due diligence or not, bulk-sale notice or not, keep the name or rebrand, keep the staff or not) or lease an empty space and build.",
+        "engineMath": "Price = clamp(2.0 x seller's yearly earnings, 0.5 x replacement cost of room and equipment, 0.57 x a year of sales); asking = price / 0.9. Closing on the later of: bulk-sale notice + 10 days, own Health permit application + 22 days, landlord consent 30 days. The seller trades and pays rent until closing. Buyer gets items with their age, the build-out, awareness 0.7 if the name is kept (0.35 if rebranded) and the seller's reputation if kept; physical trails transfer, conduct trails do not; the seller's unpaid sales tax transfers only without the notice.",
+        "fieldsNeeded": [
+          "extra.takeoverRules",
+          "Action buy_business {sellerBusinessId|placeId, offer, noteShare, dueDiligence, bulkSaleNotice, keepName, keepStaff}",
+          "BusinessState.items[].boughtDay",
+          "Deal type seller_note",
+          "Place.forSale (keen-cray)"
+        ],
+        "numbers": [
+          {
+            "what": "coffee shop earnings multiple, median 2021-2025",
+            "value": 2.0,
+            "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "revenue multiple, median and Q3",
+            "value": "0.41 / 0.57",
+            "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+            "confidence": "estimate"
+          },
+          {
+            "what": "bulk-sale notice, days before paying",
+            "value": 10,
+            "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/bulk_sales.htm",
+            "confidence": "estimate"
+          },
+          {
+            "what": "open after applying for the FSE permit, days",
+            "value": 22,
+            "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+            "confidence": "verified"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "floor_and_crowding",
+        "title": "Floor area, the morning rush and the line out the door",
+        "playerDecision": "Seats, seat density, queue room, laptop policy, baristas on the morning shift.",
+        "engineMath": "Seats that fit = (sqft - back of house - bar - restroom if 20+ seats - queue room) / sqft per seat. For each rush hour: arrivals = daily demand x hour share; bar = min(machine cap, baristas x 40); excess waits; lost = min(excess, arrivals x tolerance CDF(wait/2) + people beyond the queue room x outside balk). Seats limit only those who want to sit (Little's law: arrivals x dwell); 60% of those without a seat take it to go. Crowding is judged on the peak hour, not the daily average.",
+        "fieldsNeeded": [
+          "extra.floorZones",
+          "NicheHooks.serveDay(b, pack, demand, date, weather) -> {served, lost:{queue, seats, staff, closure}, peakUtil, notes}",
+          "DayReport.lost.queue",
+          "DayReport.lost.seats",
+          "StandingOrders.peakStaff (optional)"
+        ],
+        "numbers": [
+          {
+            "what": "sq ft per seat, standard cafe",
+            "value": "12-15",
+            "source": "https://pos.toasttab.com/blog/on-the-line/average-restaurant-square-footage",
+            "confidence": "estimate"
+          },
+          {
+            "what": "queue space per person, LOS C",
+            "value": 8.5,
+            "source": "https://wsdot.wa.gov/publications/manuals/fulltext/M3082/410.pdf",
+            "confidence": "estimate"
+          },
+          {
+            "what": "drinks an hour, one barista, 2-group",
+            "value": 60,
+            "source": "https://www.seattlecoffeegear.com/blogs/scg-blog/drinks-per-hour",
+            "confidence": "estimate"
+          },
+          {
+            "what": "max wait 5 min / 10 min (share)",
+            "value": "34% / 30%",
+            "source": "https://whitehutchinson.com/news/agrinews/2024/january/article102.shtml",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "winter_at_the_door",
+        "title": "Winter at the door: snow, ice, tickets and a fall",
+        "playerDecision": "Who clears the sidewalk (staff, contractor, nobody), entrance mats, insurance kept or dropped, hours on a storm day.",
+        "engineMath": "On each snow day: cost of the chosen option; nobody -> a DSNY notice the next morning on a busy block (fines $100, $150, $250) or after a 311 report, demand at the door x 0.85 on snow and ice days, and exposure += pedestrians x 0.5 on the snow day + pedestrians on each icy day after. Exposure at 40,000 (and every 40,000 more) -> a claim 60 days later: $45,000, or the $1,000 deductible and +25% insurance with a policy.",
+        "fieldsNeeded": [
+          "extra.winterDoor",
+          "lever snow_clearing",
+          "lever entrance_mats",
+          "PackLeverOption.costPerWeatherDay (or extra)",
+          "EconExtra.winter {tickets, exposure, claims}",
+          "official dsny_enforcement",
+          "violation sidewalk_snow_not_cleared"
+        ],
+        "numbers": [
+          {
+            "what": "hours to clear after daytime snow",
+            "value": 4,
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01397",
+            "confidence": "estimate"
+          },
+          {
+            "what": "DSNY fines 1st/2nd/3rd",
+            "value": "100/150/250",
+            "source": "https://www.nyc.gov/site/dsny/what-we-do/snow-response/snow-laws.page",
+            "confidence": "estimate"
+          },
+          {
+            "what": "average slip-and-fall claim, 2020-2024",
+            "value": 45000,
+            "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+            "confidence": "estimate"
+          },
+          {
+            "what": "DSNY summonses after Winter Storm Fern (Jan 2026)",
+            "value": 4500,
+            "source": "https://www.nyc.gov/assets/dsny/downloads/about/news/testimony/2026/dsny-oversight-hearing-testimony-022726.pdf",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "startup_cost_tax",
+        "title": "Pre-opening costs are start-up costs for the profit tax",
+        "playerDecision": "None directly; it changes the price of a long build-out.",
+        "engineMath": "Months with no open days: rent and opex lines go to econ.startupCosts and do not enter the loss carried forward. In the opening month the tax base gets max(0, 5000 - max(0, startup - 50000)); every later month (startup - that) / 180.",
+        "fieldsNeeded": [
+          "EconExtra.startupCosts",
+          "extra.preOpening.startupCostDeduction"
+        ],
+        "numbers": [
+          {
+            "what": "amortization months",
+            "value": 180,
+            "source": "https://www.everycrsreport.com/reports/IF12970.html",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "seller_note",
+        "title": "Seller financing of a purchase",
+        "playerDecision": "Share of the price left as a note to the seller (0-50%).",
+        "engineMath": "A deal of type loan from the seller (or the bank of the world for a data listing) at 8% a year over 60 months; equal payments at month close; missing one breaks the deal and the seller may take the business back (deep).",
+        "fieldsNeeded": [
+          "DealTerms loan with fromBusinessId = seller",
+          "extra.takeoverRules.sellerNote"
+        ],
+        "numbers": [
+          {
+            "what": "seller note in a real coffee house listing",
+            "value": "50% over 60 months at 8%",
+            "source": "https://www.bizquest.com/business-for-sale/well-established-coffee-house/BW2498150/",
+            "confidence": "estimate"
+          }
+        ],
+        "tier": "deep"
+      }
+    ],
+    "failureStories": [
+      {
+        "what": "Artisanal Fromagerie Bistro, 387 Park Avenue South",
+        "cause": "Signed a long lease for a space it never opened; the landlord sued for the rent.",
+        "lesson": "The lease outlives the plan: a Manhattan judge ordered about $24 million of rent through 2031. A good guy guaranty caps what the owner personally owes; a full guaranty does not.",
+        "source": "https://therealdeal.com/2018/05/02/cheese-restaurant-owes-tf-cornerstone-24m-on-387-pas-space",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "A shop at 75 Second Avenue, East Village (2022)",
+        "cause": "Took possession and paid rent while city approvals dragged on; closed before it ever opened.",
+        "lesson": "Tie the start of rent to the permits, not to the signing date.",
+        "source": "https://evgrieve.com/2022/04/owner-citys-bureaucratic-red-tape.html",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "The Clam, Greenwich Village",
+        "cause": "Con Edison shut its gas line shortly before opening; it ran four months without gas.",
+        "lesson": "Ask Con Edison about gas at the address before signing; a cafe without a kitchen avoids the problem.",
+        "source": "https://thenycalliance.org/news-item/Con-Edison-Gas-Service",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "A Delancey Street restaurant (2015)",
+        "cause": "Waited seven months for Con Edison to turn on its gas after a backlog that followed two fatal gas explosions.",
+        "lesson": "Utility timelines are outside your control and outside the free-rent clock.",
+        "source": "https://www.amny.com/news/gas-service-delays-burden-city-restaurants-force-layoffs-study-1-14409788",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "Bocca di Bacco, Upper West Side (2014)",
+        "cause": "The restaurant group dropped the location after permit and compliance costs piled up.",
+        "lesson": "Price the permit path before the lease, not after.",
+        "source": "https://www.westsiderag.com/2014/03/27/bocca-di-bye-bye-restaurant-backs-out-because-of-red-tape",
+        "mechanic": "pre_opening_months"
+      },
+      {
+        "what": "A coffee shop bought for $440,000 (forum post)",
+        "cause": "Bought on claimed sales of $1.2 million and $250,000 net; the new owner tried to resell it within the year for $360,000.",
+        "lesson": "Verify the seller's numbers against tax returns before paying; one anecdote, not a statistic.",
+        "source": "https://www.coffeeforums.com/threads/questions-and-advice-on-buying-an-existing-coffee-shop.15433",
+        "mechanic": "buy_existing_business"
+      },
+      {
+        "what": "Buyers held liable for a seller's sales tax (NYS Tax Appeals, recurring)",
+        "cause": "Paid for a business without filing Form AU-196.10 ten days ahead; one filed three months late.",
+        "lesson": "File the bulk-sale notice; the seller's unpaid sales tax otherwise becomes yours.",
+        "source": "https://www.aprio.com/insights-events/bulk-sales-in-new-york-how-a-purchaser-was-left-responsible-for-a-sellers-sales-tax-liability-ins-article-tax/",
+        "mechanic": "buy_existing_business"
+      },
+      {
+        "what": "A store tenant in Angen v De Jesus (1st Dept 2025)",
+        "cause": "A pedestrian fell on ice in front of a store whose lease required snow removal; the question is whether the staff's clearing made it worse.",
+        "lesson": "Clear the full path and salt it: half-done shovelling that refreezes is the tenant's own liability.",
+        "source": "https://www.nycourts.gov/reporter/3dseries/2025/2025_06802.htm",
+        "mechanic": "winter_at_the_door"
+      }
+    ]
+  }
+}

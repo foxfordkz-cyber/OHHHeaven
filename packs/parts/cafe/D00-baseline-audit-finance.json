@@ -1,0 +1,909 @@
+{
+  "records": [
+    {
+      "record": "monthlyCosts.rent",
+      "source": "https://www.rebny.com/reports/brooklyn-retail-report-2025/",
+      "access": "opened_primary_landing_and_downloaded_primary_pdf",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.rent.amount",
+          "value": 6000,
+          "status": "calculated_scenario",
+          "observedEvidence": "90 * 800 / 12 = 6000; both unit rent and area are selected assumptions, not quoted premises.",
+          "source": "https://downloads.ctfassets.net/6zi14rd5umxw/2OQPh00FcwumMMHeFzfQ2e/2ff67bb2dd8f58df6e114a21bc8fb6d5/REBNY_Brooklyn_Retail_Report__2025.pdf"
+        },
+        {
+          "field": "monthlyCosts.rent.note.rent_per_square_foot_year",
+          "value": 90,
+          "status": "unverified_assumption",
+          "observedEvidence": "Report does not identify an offered 800-square-foot cafe at this exact rate.",
+          "source": "https://downloads.ctfassets.net/6zi14rd5umxw/2OQPh00FcwumMMHeFzfQ2e/2ff67bb2dd8f58df6e114a21bc8fb6d5/REBNY_Brooklyn_Retail_Report__2025.pdf"
+        },
+        {
+          "field": "monthlyCosts.rent.note.floor_area_square_feet",
+          "value": 800,
+          "status": "unverified_assumption",
+          "observedEvidence": "No address or lease establishes this area."
+        },
+        {
+          "field": "monthlyCosts.rent.note.small_Park_Slope_asking_rent",
+          "value": "under $100/sf",
+          "status": "verified_context_only",
+          "observedEvidence": "Report printed p.29 describes smaller 7th Avenue storefronts toward Union Street below this asking level; this is not the corridor mean or side-street lease evidence.",
+          "source": "https://downloads.ctfassets.net/6zi14rd5umxw/2OQPh00FcwumMMHeFzfQ2e/2ff67bb2dd8f58df6e114a21bc8fb6d5/REBNY_Brooklyn_Retail_Report__2025.pdf"
+        }
+      ],
+      "verdict": "calculation_from_unverified_site_assumptions",
+      "note": "The report supports a broad asking-rent context, not a lease quote or representative cafe rent. PDF was too large for web parser; direct publisher PDF downloaded and read with pdftotext.",
+      "supportingSources": [
+        "https://downloads.ctfassets.net/6zi14rd5umxw/2OQPh00FcwumMMHeFzfQ2e/2ff67bb2dd8f58df6e114a21bc8fb6d5/REBNY_Brooklyn_Retail_Report__2025.pdf"
+      ]
+    },
+    {
+      "record": "monthlyCosts.utilities",
+      "source": "https://www.nyserda.ny.gov/Energy-Prices/Electricity/Monthly-Avg-Electricity-Commercial",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.utilities.amount",
+          "value": 1100,
+          "status": "unverified_allowance",
+          "observedEvidence": "Combined utilities budget is not calculated from itemized bills."
+        },
+        {
+          "field": "monthlyCosts.utilities.note.planning_band",
+          "value": [
+            800,
+            1800
+          ],
+          "status": "unverified_allowance",
+          "observedEvidence": "No source-derived cafe monthly distribution supports the band."
+        },
+        {
+          "field": "monthlyCosts.utilities.note.electricity_cents_per_kWh_August_2026",
+          "value": 23.1,
+          "status": "verified",
+          "observedEvidence": "NYSERDA table last updated 11/12/2026 shows statewide commercial August 2026 average 23.1 cents/kWh; definition is total electricity bill divided by usage."
+        },
+        {
+          "field": "monthlyCosts.utilities.note.monthly_kWh",
+          "value": [
+            3000,
+            5000
+          ],
+          "status": "unverified_assumption",
+          "observedEvidence": "The note explicitly assumes consumption; source is a price series, not cafe load measurements."
+        },
+        {
+          "field": "monthlyCosts.utilities.note.electricity_dollar_band",
+          "value": [
+            693,
+            1155
+          ],
+          "status": "calculated_scenario",
+          "observedEvidence": "3000*0.231=693; 5000*0.231=1155. Does not include gas, water or sewer."
+        }
+      ],
+      "verdict": "allowance_with_verified_electricity_anchor",
+      "note": "No usage measurement or gas/water/sewer billing was supplied; statewide blended electricity average cannot establish a specific NYC commercial tariff.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.insurance",
+      "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "access": "opened_primary_provider_cohort",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.insurance.amount",
+          "value": 250,
+          "status": "unverified_allowance",
+          "observedEvidence": "No policy quote supports the proposed NYC reserve."
+        },
+        {
+          "field": "monthlyCosts.insurance.note.NYC_reserve_band",
+          "value": [
+            150,
+            400
+          ],
+          "status": "unverified_allowance",
+          "observedEvidence": "A broker customer benchmark does not substantiate this NYC range."
+        },
+        {
+          "field": "monthlyCosts.insurance.note.BOP_monthly_benchmark",
+          "value": 126,
+          "status": "verified_with_population_qualification",
+          "observedEvidence": "Insureon coffee-shop customer cohort publishes this monthly BOP figure; methodology says median purchased-policy cost."
+        },
+        {
+          "field": "monthlyCosts.insurance.name",
+          "value": "Business owner's policy: liability, property, interruption",
+          "status": "conditional_coverage",
+          "observedEvidence": "BOP bundles liability and property; source says interruption and equipment-breakdown endorsements are often included, not guaranteed in every contract."
+        }
+      ],
+      "verdict": "allowance_not_verified_premium",
+      "note": "Insureon reports its customers, not a NYC quote or representative census of all US cafes. Its text calls figures averages but expressly says they are sourced from median policy costs.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.supplies",
+      "source": "https://catalog.webstaurantstore.com/choice-12-oz-white-poly-paper-hot-cup-case/50012W.html",
+      "access": "opened_primary_retailer",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.supplies.amount",
+          "value": 0.17,
+          "status": "calculated_scenario",
+          "observedEvidence": "0.02*8.50=0.17; this derives from a chosen revenue share, not observed packaging consumption."
+        },
+        {
+          "field": "monthlyCosts.supplies.note.supplies_sales_share",
+          "value": 0.02,
+          "status": "unverified_assumption",
+          "observedEvidence": "The supplier product page does not establish 2% of cafe revenue."
+        },
+        {
+          "field": "monthlyCosts.supplies.note.order_value",
+          "value": 8.5,
+          "status": "unverified_scenario_input",
+          "observedEvidence": "Selected ticket assumption; not supported by this product page."
+        },
+        {
+          "field": "monthlyCosts.supplies.note.cup_case_price",
+          "value": 45.99,
+          "status": "verified",
+          "observedEvidence": "Page lists Choice 12 oz white hot cup SKU50012W at $45.99 for a single 1,000-cup case; quantity discounts differ."
+        },
+        {
+          "field": "monthlyCosts.supplies.note.cup_unit_cost",
+          "value": 0.046,
+          "status": "rounded_calculation",
+          "observedEvidence": "45.99/1000=0.04599 dollars; quoted 4.6 cents is rounded and excludes other supplies."
+        }
+      ],
+      "verdict": "calculation_plus_unpriced_bundle",
+      "note": "Current cup price is observed; a complete packaging bill of materials, order mix, shipping and tax are not supplied.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.card_fees",
+      "source": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.card_fees.amount",
+          "value": 0.0255,
+          "status": "rounded_calculated_scenario",
+          "observedEvidence": "0.9*0.025*1.08875 + 0.025*2000/51000 = 0.0254772671568627, rounded to 0.0255."
+        },
+        {
+          "field": "monthlyCosts.card_fees.note.Plus_card_present_rate",
+          "value": 0.025,
+          "status": "verified",
+          "observedEvidence": "Square Plus tap/dip/swipe published percentage is 2.5%; fixed 15 cents is separate."
+        },
+        {
+          "field": "monthlyCosts.card_fees.note.Free_card_present_rate",
+          "value": 0.026,
+          "status": "verified",
+          "observedEvidence": "Square Free tap/dip/swipe published percentage is 2.6%."
+        },
+        {
+          "field": "monthlyCosts.card_fees.note.tax_and_tip_in_fee_base",
+          "value": true,
+          "status": "verified",
+          "observedEvidence": "Square says processing fees apply to total transaction including tax and tip."
+        },
+        {
+          "field": "monthlyCosts.card_fees.note.card_share",
+          "value": 0.9,
+          "status": "unverified_assumption",
+          "observedEvidence": "90% of sales on cards is a model input, not evidence from Square."
+        },
+        {
+          "field": "monthlyCosts.card_fees.note.monthly_card_tips",
+          "value": 2000,
+          "status": "unverified_assumption",
+          "observedEvidence": "No actual cafe tip report supplied."
+        },
+        {
+          "field": "monthlyCosts.card_fees.note.monthly_sales",
+          "value": 51000,
+          "status": "unverified_assumption",
+          "observedEvidence": "No actual cafe sales report supplied."
+        },
+        {
+          "field": "monthlyCosts.card_fees.note.sales_tax_multiplier",
+          "value": 1.08875,
+          "status": "conditional_calculation",
+          "observedEvidence": "1+verified NYC rate; assumes all modeled card sales taxable. Actual exempt sales require separate treatment.",
+          "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page"
+        }
+      ],
+      "verdict": "rounded_calculation_with_unverified_mix",
+      "note": "Plan, tender mix, taxable proportion and tips must come from merchant data; amount is not Square’s advertised tariff.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.card_fixed_fee",
+      "source": "https://squareup.com/help/us/en/article/5068-what-are-square-s-fees",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.card_fixed_fee.amount",
+          "value": 0.135,
+          "status": "calculated_scenario",
+          "observedEvidence": "0.15*0.9=0.135 per modeled order."
+        },
+        {
+          "field": "monthlyCosts.card_fixed_fee.note.Plus_card_present_fixed_fee",
+          "value": 0.15,
+          "status": "verified",
+          "observedEvidence": "Square Plus tap/dip/swipe fee includes 15 cents per transaction."
+        },
+        {
+          "field": "monthlyCosts.card_fixed_fee.note.card_order_share",
+          "value": 0.9,
+          "status": "unverified_assumption",
+          "observedEvidence": "Card share is not supplied by the processor source."
+        },
+        {
+          "field": "monthlyCosts.card_fixed_fee.note.total_processing_share_about",
+          "value": 0.041,
+          "status": "rounded_calculated_scenario",
+          "observedEvidence": "0.0255+0.135/8.50=0.0413823529, approximately 4.1%; depends on the other row’s assumptions."
+        }
+      ],
+      "verdict": "calculation_with_unverified_tender_mix",
+      "note": "Per-order equivalent assumes one card transaction per card-paid order; split tenders and transaction mix can alter it.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.tips_payroll_tax",
+      "source": "https://www.irs.gov/publications/p15",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.tips_payroll_tax.amount",
+          "value": 0.003,
+          "status": "calculated_scenario",
+          "observedEvidence": "0.0765*2000/51000=0.003."
+        },
+        {
+          "field": "monthlyCosts.tips_payroll_tax.note.employer_FICA_rate",
+          "value": 0.0765,
+          "status": "verified_conditional_sum",
+          "observedEvidence": "2026 IRS Publication15: employer Social Security6.2% plus Medicare1.45%; Social Security stops at its wage base."
+        },
+        {
+          "field": "monthlyCosts.tips_payroll_tax.note.monthly_card_tips",
+          "value": 2000,
+          "status": "unverified_assumption",
+          "observedEvidence": "No tip report supplied; IRS rate does not establish amount tipped."
+        },
+        {
+          "field": "monthlyCosts.tips_payroll_tax.note.monthly_sales",
+          "value": 51000,
+          "status": "unverified_assumption",
+          "observedEvidence": "No sales report supplied."
+        },
+        {
+          "field": "monthlyCosts.tips_payroll_tax.note.monthly_employer_FICA",
+          "value": 153,
+          "status": "calculated_scenario",
+          "observedEvidence": "2000*0.0765=153, assuming covered tips and wages below Social Security wage base."
+        },
+        {
+          "field": "monthlyCosts.tips_payroll_tax.note.tips_are_wages",
+          "value": "Tips are wages for payroll tax",
+          "status": "qualified_legal_statement",
+          "observedEvidence": "IRS says tips generally subject to employer/employee FICA when monthly tips reach $20; written reported tips may also be subject to FUTA. 7.65% is not the entire employer-tax rule."
+        }
+      ],
+      "verdict": "conditional_tax_calculation_not_total_payroll_burden",
+      "note": "Reported card tips are one part of tipped payroll. The label must not imply this amount includes all employer taxes on tips, all cash tips, or available income-tax credits.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.sick_leave_cover",
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.sick_leave_cover.amount",
+          "value": 70,
+          "status": "calculated_scenario",
+          "observedEvidence": "40*21/12=70; full use, $21 wage and spreading expense evenly are assumptions."
+        },
+        {
+          "field": "monthlyCosts.sick_leave_cover.basis",
+          "value": "per_staff",
+          "status": "overgeneralized_cost_basis",
+          "observedEvidence": "Same allowance applied to shift lead at $24 does not reproduce the chosen full-use model:40*24/12=80. Actual coverage cost depends on who works replacement hours."
+        },
+        {
+          "field": "monthlyCosts.sick_leave_cover.note.paid_hours_5_to_99",
+          "value": 40,
+          "status": "verified_with_scope",
+          "observedEvidence": "Current DCWP FAQ provides up to40 paid protected-time-off hours for employers with5–99 employees; employer-size count is nationwide."
+        },
+        {
+          "field": "monthlyCosts.sick_leave_cover.note.complete_leave_scope",
+          "value": "40 paid hours only",
+          "status": "incomplete",
+          "observedEvidence": "Current FAQ also provides32 immediately available unpaid protected-time-off hours and a separate20-hour paid prenatal bank; these have distinct eligibility and timing rules."
+        },
+        {
+          "field": "monthlyCosts.sick_leave_cover.note.wage_input",
+          "value": 21,
+          "status": "unverified_planning_wage",
+          "observedEvidence": "Wage comes from the baseline staffing assumption, not the leave law."
+        }
+      ],
+      "verdict": "partial_allowance_incomplete_leave_scope",
+      "note": "Keep the 70-dollar figure as an explicit scenario only. It is not a legally prescribed monthly charge or a complete leave-cost budget.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.maintenance",
+      "source": "https://www.seattlecoffeegear.com/collections/everpure",
+      "access": "opened_primary_collection_without_prices_and_opened_primary_rules",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.maintenance.amount",
+          "value": 300,
+          "status": "unverified_allowance",
+          "observedEvidence": "No service contract, replacement schedule or equipment-specific repair record supplied."
+        },
+        {
+          "field": "monthlyCosts.maintenance.note.planning_band",
+          "value": [
+            200,
+            500
+          ],
+          "status": "unverified_allowance",
+          "observedEvidence": "No quoted bundle or measured monthly distribution supports this range."
+        },
+        {
+          "field": "monthlyCosts.maintenance.note.backflow_test_frequency",
+          "value": "yearly",
+          "status": "verified_conditional",
+          "observedEvidence": "City page requires a certified tester to test installed backflow prevention devices every year; responsibility for payment still depends on premises/lease.",
+          "source": "https://nyc-business.nyc.gov/nycbusiness/description/application-for-approval-of-backflow-prevention-devices"
+        },
+        {
+          "field": "monthlyCosts.maintenance.note.extinguisher_service",
+          "value": "yearly",
+          "status": "verified",
+          "observedEvidence": "FDNY restaurant guide printed p.13 requires monthly visual inspection and annual servicing by qualified approved-company personnel.",
+          "source": "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf"
+        },
+        {
+          "field": "monthlyCosts.maintenance.note.grease_filter_smallwares_costs",
+          "value": "included in budget",
+          "status": "unpriced_components",
+          "observedEvidence": "No quantity, interval or vendor quote for these components was established by supplied collection URL."
+        }
+      ],
+      "verdict": "unsupported_budget_with_verified_service_obligations",
+      "note": "Everpure collection returned no readable prices and cannot substantiate the whole maintenance bundle. Legal frequency does not establish vendor charges.",
+      "supportingSources": [
+        "https://nyc-business.nyc.gov/nycbusiness/description/application-for-approval-of-backflow-prevention-devices",
+        "https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf"
+      ]
+    },
+    {
+      "record": "monthlyCosts.waste",
+      "source": "https://www.nyc.gov/site/dsny/businesses/commercial-waste-zones.page",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.waste.amount",
+          "value": 250,
+          "status": "unverified_allowance",
+          "observedEvidence": "DSNY does not publish this as a universal cafe bill."
+        },
+        {
+          "field": "monthlyCosts.waste.note.planning_band",
+          "value": [
+            150,
+            400
+          ],
+          "status": "unverified_allowance",
+          "observedEvidence": "No selected maximum-price-calculator inputs or carter quote supports the band."
+        },
+        {
+          "field": "monthlyCosts.waste.note.authorized_carters_per_zone",
+          "value": 3,
+          "status": "verified_with_rollout_condition",
+          "observedEvidence": "DSNY says20 commercial waste zones, each with3 authorized curbside carters; a new zone-authorized agreement is required when the specific zone rolls out."
+        },
+        {
+          "field": "monthlyCosts.waste.note.maximum_price_depends_on_service",
+          "value": true,
+          "status": "verified",
+          "observedEvidence": "DSNY maximum-price calculator estimates a maximum for the selected zone, carter and service; actual signed price can differ."
+        }
+      ],
+      "verdict": "unverified_allowance_with_conditional_zone_rule",
+      "note": "No service volume, container choice, zone, carter or actual contract price was selected.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.internet",
+      "source": "https://www.verizon.com/business/products/internet/",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.internet.amount",
+          "value": 100,
+          "status": "unverified_allowance",
+          "observedEvidence": "No address-qualified Internet-and-phone quote exists in this evidence."
+        },
+        {
+          "field": "monthlyCosts.internet.note.planning_band",
+          "value": [
+            80,
+            150
+          ],
+          "status": "unverified_allowance",
+          "observedEvidence": "The provider starting price does not establish this combined-service range."
+        },
+        {
+          "field": "monthlyCosts.internet.note.base_service_start",
+          "value": 69,
+          "status": "verified_conditional",
+          "observedEvidence": "Verizon lists eligible/select plans starting at$69/month plus taxes, fees, Economic Adjustment Charge and applicable equipment charges; availability varies."
+        },
+        {
+          "field": "monthlyCosts.internet.name",
+          "value": "Internet and phone",
+          "status": "scope_not_verified",
+          "observedEvidence": "Supplied base-price statement does not verify that a separate business phone service is included."
+        }
+      ],
+      "verdict": "allowance_with_conditional_base_price_anchor",
+      "note": "Observed headline is eligible Internet base service, not a universal Internet-plus-phone installed price.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.pos_software",
+      "source": "https://squareup.com/us/en/pricing",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.pos_software.amount",
+          "value": 49,
+          "status": "verified_plan_price",
+          "observedEvidence": "Square Plus monthly plan is$49 per location; actual subscription selection and additional services remain conditional.",
+          "source": "https://squareup.com/us/en/pricing"
+        },
+        {
+          "field": "monthlyCosts.pos_software.note.Free_monthly",
+          "value": 0,
+          "status": "verified_plan_price",
+          "observedEvidence": "Square Free base subscription is$0 per location; processing is not free.",
+          "source": "https://squareup.com/us/en/pricing"
+        },
+        {
+          "field": "monthlyCosts.pos_software.note.Premium_monthly",
+          "value": 149,
+          "status": "verified_plan_price",
+          "observedEvidence": "Square Premium base subscription is$149 per location.",
+          "source": "https://squareup.com/us/en/pricing"
+        },
+        {
+          "field": "monthlyCosts.pos_software.basis",
+          "value": "fixed",
+          "status": "conditional_model_basis",
+          "observedEvidence": "One-location monthly subscription is fixed at selected plan terms; location count, hardware, add-ons and processing are separate.",
+          "source": "https://squareup.com/us/en/pricing"
+        }
+      ],
+      "verdict": "published_plan_component_verified",
+      "note": "The baseline note saying pricing was unreadable is obsolete for this audit: readable current price table was opened. Verification is limited to the selected plan component, not every possible POS cost.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.accounting",
+      "source": "https://www.nerdwallet.com/business/software/learn/quickbooks-live-bookkeeping",
+      "access": "opened_secondary_redirect_and_opened_primary_provider",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.accounting.amount",
+          "value": 400,
+          "status": "unverified_allowance_for_stated_scope",
+          "observedEvidence": "No quote for NYC cafe bookkeeping plus year-end accountant; matching a provider tier numerically does not verify this bundle."
+        },
+        {
+          "field": "monthlyCosts.accounting.note.planning_band",
+          "value": [
+            300,
+            800
+          ],
+          "status": "unverified_allowance",
+          "observedEvidence": "No source-derived full-scope market range verified."
+        },
+        {
+          "field": "monthlyCosts.accounting.name",
+          "value": "Bookkeeping and year-end accountant",
+          "status": "scope_mismatch_with_provider_benchmark",
+          "observedEvidence": "Intuit excludes tax advice, income/sales-tax return filing, payroll and several operational tasks from QuickBooks Live bookkeeping.",
+          "source": "https://quickbooks.intuit.com/learn-support/en-us/help-article/new-subscriptions/learn-quickbooks-live-bookkeeping-service/L5lZiwlRS_US_en_US?uid=lv2s0p5t"
+        },
+        {
+          "field": "monthlyCosts.accounting.note.primary_comparator",
+          "value": "QuickBooks Live conditional $400/month",
+          "status": "verified_comparator_only",
+          "observedEvidence": "Provider published terms list$400 ongoing monthly tier for average monthly expenses$25,001–150,000; requires separate QuickBooks Online subscription and lists$500 initial cleanup/onboarding.",
+          "source": "https://quickbooks.intuit.com/results-save-share/"
+        }
+      ],
+      "verdict": "unverified_full_scope_allowance",
+      "note": "Original NerdWallet link redirects to an online-bookkeeping comparison. Primary Intuit evidence verifies a conditional bookkeeping price, but not the baseline combination with a year-end accountant.",
+      "supportingSources": [
+        "https://quickbooks.intuit.com/results-save-share/",
+        "https://quickbooks.intuit.com/learn-support/en-us/help-article/new-subscriptions/learn-quickbooks-live-bookkeeping-service/L5lZiwlRS_US_en_US?uid=lv2s0p5t"
+      ]
+    },
+    {
+      "record": "monthlyCosts.payroll_service",
+      "source": "https://gusto.com/product/pricing",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.payroll_service.amount",
+          "value": 85,
+          "status": "allowance_not_exact_tariff",
+          "observedEvidence": "With5 billed people the current Simple formula yields79, leaving a discretionary6-dollar buffer."
+        },
+        {
+          "field": "monthlyCosts.payroll_service.note.Simple_monthly_base",
+          "value": 49,
+          "status": "verified",
+          "observedEvidence": "Gusto Simple published base$49/month."
+        },
+        {
+          "field": "monthlyCosts.payroll_service.note.monthly_per_person",
+          "value": 6,
+          "status": "verified",
+          "observedEvidence": "Gusto Simple published per-person charge$6/month."
+        },
+        {
+          "field": "monthlyCosts.payroll_service.note.people_count",
+          "value": 5,
+          "status": "unverified_scenario_input",
+          "observedEvidence": "No actual enrolled payroll roster supplied."
+        },
+        {
+          "field": "monthlyCosts.payroll_service.note.five_person_monthly_total",
+          "value": 79,
+          "status": "calculated_from_verified_tariff",
+          "observedEvidence": "49+6*5=79."
+        },
+        {
+          "field": "monthlyCosts.payroll_service.note.payroll_tax_filings",
+          "value": true,
+          "status": "verified_service_feature",
+          "observedEvidence": "Published Gusto Simple features include tax filings and payments; this is a service feature, not transfer of the employer legal liability.",
+          "source": "https://gusto.com/product/pricing"
+        }
+      ],
+      "verdict": "budget_buffer_above_published_scenario_price",
+      "note": "Do not mark85 verified for five people. It also equals the posted formula for six billed people, but that is not the baseline note’s assumption.",
+      "supportingSources": [
+        "https://www.irs.gov/publications/p15"
+      ]
+    },
+    {
+      "record": "monthlyCosts.marketing",
+      "source": "https://restaurant.org/research-and-media/media/press-releases/new-resource-from-national-restaurant-association-provides-insights-into-operational-realities",
+      "access": "opened_primary_industry_release",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.marketing.amount",
+          "value": 300,
+          "status": "unverified_chosen_budget",
+          "observedEvidence": "Author-selected spend; no observed supplier package or market statistic supports amount."
+        },
+        {
+          "field": "monthlyCosts.marketing.note.planning_band",
+          "value": [
+            100,
+            600
+          ],
+          "status": "unverified_chosen_budget",
+          "observedEvidence": "Range is not established in opened release."
+        },
+        {
+          "field": "monthlyCosts.marketing.name",
+          "value": "Website, listings, menus and printing",
+          "status": "unpriced_components",
+          "observedEvidence": "No website subscription, printing quantity or supplier quote was supplied."
+        }
+      ],
+      "verdict": "unverified_chosen_budget",
+      "note": "The primary industry release says its paid report covers marketing and other costs; it publishes no300-dollar cafe marketing allowance or100–600-dollar range.",
+      "supportingSources": []
+    },
+    {
+      "record": "monthlyCosts.permit_renewals",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "access": "opened_primary",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "monthlyCosts.permit_renewals.amount",
+          "value": 50,
+          "status": "unverified_allowance",
+          "observedEvidence": "No complete permit/entity-specific fee inventory substantiates50/month."
+        },
+        {
+          "field": "monthlyCosts.permit_renewals.note.planning_band",
+          "value": [
+            30,
+            100
+          ],
+          "status": "unverified_allowance",
+          "observedEvidence": "No researched distribution or itemized quote supports this range."
+        },
+        {
+          "field": "monthlyCosts.permit_renewals.note.FSE_annual_fee",
+          "value": 280,
+          "status": "verified",
+          "observedEvidence": "NYC lists280 dollars annually for most food-service establishments; frozen-dessert manufacture adds25 dollars.",
+          "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+        },
+        {
+          "field": "monthlyCosts.permit_renewals.note.FSE_monthly_equivalent",
+          "value": 23,
+          "status": "rounded_calculation",
+          "observedEvidence": "280/12=23.3333;23 is a rounded monthly reserve, not an actual monthly fee.",
+          "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit"
+        },
+        {
+          "field": "monthlyCosts.permit_renewals.note.state_LLC_fee",
+          "value": 25,
+          "status": "conditional_not_universal",
+          "observedEvidence": "IT-204-LL instructions support25 for a disregarded LLC with NY-source items; other LLC classifications use different rules/receipts bands, and corporation-election LLCs do not file this form.",
+          "source": "https://www.tax.ny.gov/forms/html-instructions/2025/it/it204lli-2025.htm"
+        },
+        {
+          "field": "monthlyCosts.permit_renewals.note.scale_and_sign_fees",
+          "value": "remaining reserve",
+          "status": "unverified_components",
+          "observedEvidence": "No applicable scale/sign registrations, fee schedules or renewal cycles established for this cafe."
+        }
+      ],
+      "verdict": "allowance_with_verified_but_conditional_components",
+      "note": "A monthly reserve is a budgeting convention, not statutory payment timing. Food-service permit fee alone does not validate the total.",
+      "supportingSources": [
+        "https://www.tax.ny.gov/forms/html-instructions/2025/it/it204lli-2025.htm"
+      ]
+    },
+    {
+      "record": "staff.barista",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "access": "opened_primary_redirect_and_primary_wage_order",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "staff.barista.hourlyWage",
+          "value": 21,
+          "status": "unverified_planning_wage",
+          "observedEvidence": "No local wage offer/payroll survey supports21; it exceeds the currently published17-dollar NYC floor.",
+          "source": "https://dol.ny.gov/minimum-wage"
+        },
+        {
+          "field": "staff.barista.cashWage",
+          "value": 21,
+          "status": "model_choice_no_tip_credit",
+          "observedEvidence": "Cash wage equals selected gross hourly wage; choosing no tip credit is consistent with paying above legal floor, not a measured hiring rate.",
+          "source": "https://dol.ny.gov/minimum-wage"
+        },
+        {
+          "field": "staff.barista.hoursPerMonth",
+          "value": 160,
+          "status": "unverified_schedule_assumption",
+          "observedEvidence": "No actual roster supports160; month totals do not establish weekly overtime compliance.",
+          "source": "https://forms.labor.ny.gov/WP/CR146.pdf"
+        },
+        {
+          "field": "staff.barista.tipped",
+          "value": true,
+          "status": "conditional_role_assumption",
+          "observedEvidence": "Customer-facing counter service can receive tips; legal rights depend on duties and valid distribution, not merely job title.",
+          "source": "https://forms.labor.ny.gov/WP/CR146.pdf"
+        },
+        {
+          "field": "staff.barista.licenseRequired",
+          "value": null,
+          "status": "role_design_not_coverage_waiver",
+          "observedEvidence": "City requires certified-supervisor presence during operation, not proof that every barista must hold the certificate. Another qualified person must cover if this role is uncertified.",
+          "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page"
+        },
+        {
+          "field": "staff.barista.note.NYC_minimum_2027",
+          "value": 17,
+          "status": "verified_as_currently_published",
+          "observedEvidence": "Redirected NY DOL page explicitly saysNYC17 dollars and no inflation increase onJanuary1,2027 under off-ramp; it also describes a proposal to change the rule.",
+          "source": "https://dol.ny.gov/minimum-wage"
+        },
+        {
+          "field": "staff.barista.note.food_service_cash_and_credit",
+          "value": [
+            11.35,
+            5.65
+          ],
+          "status": "verified_conditional_legal_rates",
+          "observedEvidence": "NY DOL table lists these NYC food-service-worker figures; does not permit every barista/shift/duty to take credit.",
+          "source": "https://dol.ny.gov/minimum-wage"
+        },
+        {
+          "field": "staff.barista.note.written_notice_and_makeup_pay",
+          "value": true,
+          "status": "verified_condition_not_exhaustive",
+          "observedEvidence": "Hospitality Wage Order146-2.2 requires written rate/credit notice and notice of extra pay if tips insufficient. Further classification and nontipped-duty restrictions also apply.",
+          "source": "https://forms.labor.ny.gov/WP/CR146.pdf"
+        }
+      ],
+      "verdict": "planning_compensation_with_verified_legal_floor",
+      "note": "The minimum-wage page establishes a floor, not market-clearing barista pay or monthly hours. Tip-credit wage category and all work conditions still require checking.",
+      "supportingSources": [
+        "https://dol.ny.gov/minimum-wage",
+        "https://forms.labor.ny.gov/WP/CR146.pdf",
+        "https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa",
+        "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page"
+      ]
+    },
+    {
+      "record": "staff.shift_lead",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "access": "opened_primary_redirect_and_primary_training_rules",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "staff.shift_lead.hourlyWage",
+          "value": 24,
+          "status": "unverified_planning_wage",
+          "observedEvidence": "24 is chosen pay, not a NY DOL market benchmark.",
+          "source": "https://dol.ny.gov/minimum-wage"
+        },
+        {
+          "field": "staff.shift_lead.cashWage",
+          "value": 24,
+          "status": "model_choice_no_tip_credit",
+          "observedEvidence": "Chosen cash pay; verified legal floor does not validate compensation market assumption.",
+          "source": "https://dol.ny.gov/minimum-wage"
+        },
+        {
+          "field": "staff.shift_lead.hoursPerMonth",
+          "value": 160,
+          "status": "unverified_schedule_assumption",
+          "observedEvidence": "No roster or weekly allocation is supplied; one nominal160-hour worker does not establish all operating-hours coverage.",
+          "source": "https://forms.labor.ny.gov/WP/CR146.pdf"
+        },
+        {
+          "field": "staff.shift_lead.note.premium_over_barista",
+          "value": 3,
+          "status": "calculation_from_assumptions",
+          "observedEvidence": "24-21=3; no wage survey establishes the premium."
+        },
+        {
+          "field": "staff.shift_lead.tipped",
+          "value": true,
+          "status": "requires_actual_duties_and_tip_source",
+          "observedEvidence": "Federal guidance bars qualifying managers/supervisors from others’ tips or a tip pool even without tip credit; they may retain directly and solely earned tips. Actual duties must be checked.",
+          "source": "https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa"
+        },
+        {
+          "field": "staff.shift_lead.licenseRequired",
+          "value": "NYC Food Protection Certificate (free online course, $24 exam)",
+          "status": "verified_base_course_exam_cost_with_limits",
+          "observedEvidence": "City online course is free and exam base price24 dollars. Manhattan card payment adds0.60; Staten Island location has its own fee information.",
+          "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page"
+        },
+        {
+          "field": "staff.shift_lead.note.certified_supervisor_coverage",
+          "value": "every open hour",
+          "status": "incomplete_timing_description",
+          "observedEvidence": "City rule applies whenever establishment is operating; opening/food preparation/receiving outside advertised public hours must also have certified-supervisor coverage.",
+          "source": "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page"
+        }
+      ],
+      "verdict": "planning_compensation_and_conditional_tip_eligibility",
+      "note": "Food-protection certification and managerial status for tips are different tests. Being called shift lead does not settle either roster coverage or tip-pool eligibility.",
+      "supportingSources": [
+        "https://dol.ny.gov/minimum-wage",
+        "https://forms.labor.ny.gov/WP/CR146.pdf",
+        "https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa",
+        "https://www.nyc.gov/site/doh/business/health-academy/food-protection-online-free.page"
+      ]
+    },
+    {
+      "record": "taxes.sales_tax",
+      "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page",
+      "access": "opened_primary_city_and_state_tax_guidance",
+      "checkedOn": "2026-11-14",
+      "checkedFields": [
+        {
+          "field": "taxes.sales_tax.rate",
+          "value": 0.08875,
+          "status": "verified",
+          "observedEvidence": "NYC Finance publishes4.5%city+4%state+0.375%MCTD=8.875%.",
+          "source": "https://www.nyc.gov/site/finance/business/business-nys-sales-tax.page"
+        },
+        {
+          "field": "taxes.sales_tax.base",
+          "value": "taxable_revenue",
+          "status": "correct_if_taxable_sales_identified",
+          "observedEvidence": "Correct label only if exempt receipts are separated. Prepared/on-premises food generally taxable, while certain grocery-form takeout sales are exempt.",
+          "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_by_restaurants.htm"
+        },
+        {
+          "field": "taxes.sales_tax.due",
+          "value": "quarterly",
+          "status": "conditional_filing_classification",
+          "observedEvidence": "NYS generally starts vendors quarterly; prior-quarter taxable receipts/use-tax purchases etc below300000 and no annual-filer notice are conditions. Monthly/annual and accelerated rules can apply.",
+          "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm"
+        },
+        {
+          "field": "taxes.sales_tax.appliesIf",
+          "value": "coffee and tea served in a cup, food eaten in the shop, heated food and sandwiches",
+          "status": "verified_categories_with_exceptions",
+          "observedEvidence": "NYS restaurant bulletin coverson-premises/heated food and sandwiches; beverage bulletin specifically coverscoffee/tea served in cups. Actual exempt purchasers and other exceptions still require proper treatment.",
+          "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/beverages_sold_by_food_stores.htm"
+        },
+        {
+          "field": "taxes.sales_tax.note.take_home_beans_exemption",
+          "value": true,
+          "status": "verified_conditional",
+          "observedEvidence": "Unheated coffee beans/grounds for off-premises consumption in grocery form fall in nontaxable beverage category.",
+          "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/beverages_sold_by_food_stores.htm"
+        },
+        {
+          "field": "taxes.sales_tax.note.unheated_bakery_exemption",
+          "value": "some items sold to go",
+          "status": "verified_conditional",
+          "observedEvidence": "Restaurant bulletin example contrasts grocery-form bulk takeout bagels with prepared/toasted or on-premises sales; being merely unheated is not sufficient.",
+          "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_by_restaurants.htm"
+        },
+        {
+          "field": "taxes.sales_tax.note.game_taxes_every_order",
+          "value": true,
+          "status": "model_simplification_not_verified_law",
+          "observedEvidence": "A uniform tax on all modeled orders needs an explicit all-taxable assortment assumption; it is not an accurate general rule for beans and qualifying grocery-form takeout.",
+          "source": "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_by_restaurants.htm"
+        },
+        {
+          "field": "taxes.sales_tax.confidence",
+          "value": "verified",
+          "status": "overbroad_record_level_status",
+          "observedEvidence": "Only numerical rate is directly verified without the scenario assumptions; split field-level statuses as recorded here."
+        }
+      ],
+      "verdict": "mixed_record_rate_verified_other_fields_conditional",
+      "note": "Do not retain blanketverified as evidence that quarterly filing or all-order taxation is universally correct. Rate is verified; operational application requires sales classification and filing status.",
+      "supportingSources": [
+        "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/sales_by_restaurants.htm",
+        "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/beverages_sold_by_food_stores.htm",
+        "https://www.tax.ny.gov/pubs_and_bulls/tg_bulletins/st/filing_requirements_for_sales_and_use_tax_returns.htm"
+      ]
+    }
+  ]
+}
