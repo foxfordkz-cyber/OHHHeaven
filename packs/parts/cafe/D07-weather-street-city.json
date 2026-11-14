@@ -259,6 +259,1882 @@
         "confidence": "estimate",
         "evidence": "secondary",
         "note": "The contractor option of snow_ice_plan is immune (the crew brings its own salt). For the staff option the engine adds a second shoveling pass and a marked-up bag: $60 is a planning value. No retail price per 50 lb bag in New York in 2026 was found."
+      },
+      {
+        "id": "shed_goes_up",
+        "name": "A sidewalk shed goes up over your door",
+        "text": "The building has to inspect its facade. A green plywood tunnel now covers your sign and your window. Nobody can tell you when it comes down: the average one in the city has been up for a year and a half.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "NYC Department of Buildings permits for the building's number (open data: 'DOB NOW: Build - Approved Permits', work type Sidewalk Shed); the building's facade inspection (FISP, Local Law 11) filing window: every building over six stories files every five years",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.93
+          }
+        ],
+        "durationMonths": 18,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "shed_response"
+          },
+          {
+            "kind": "shortcut",
+            "id": "sign_in_the_walkway"
+          }
+        ],
+        "realFrequency": "7,427 permitted sheds citywide on August 17, 2026, after more than 1,000 came down in a year; the average shed permit was 557 days old in March 2026 (497 days in July 2023).",
+        "tier": "core",
+        "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
+        "moreSources": [
+          "https://www.nyc.gov/mayors-office/news/2026/08/mamdani-administration-taking-down-sidewalk-sheds-and-improving-",
+          "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Mayor's Office with Mastercard, August 2024: Manhattan businesses under a shed lost $3,900-$9,500 a month in card spending, and restaurants and bars saw weekly transactions fall 3.5-9.7% in the six months after the shed went up; longer sheds hurt most. 0.93 = midpoint. Duration 18 months = 557 days. Not random in the game: the place carries the building's height and filing year, so the player can see it coming before signing the lease."
+      },
+      {
+        "id": "shed_idle_months",
+        "name": "The shed is up and nobody is working",
+        "text": "Three months in, there has not been a single worker on the scaffold. Under the 2025 law the owner now pays the city for every idle month, and that is your one lever to get the work moving.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Buildings Department permit status for the address: shed permit active with no open work permit; 311 complaints about the shed",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.93
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "shed_response"
+          }
+        ],
+        "realFrequency": "More than 300 sheds had been standing over five years in April 2025.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/buildings/local_laws/ll48of2025.pdf",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Local Law 48 of 2025 as quoted by web search: shed permits last 90 days instead of a year and cannot be renewed until penalties are paid; where no work is in progress the owner pays $10 per linear foot of shed per month for a shed under three years old and $100 at three to four years, capped at $6,000 a month. Local Law 51: $5,000-$20,000 if permitted facade repair is not finished within two years. The effect is the same shed penalty continued; the lever option press_the_owner is the response."
+      },
+      {
+        "id": "shed_comes_down",
+        "name": "The shed comes down",
+        "text": "The scaffolding is gone. Daylight hits your window for the first time in a year, and people who walked past every day ask if you are new.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Buildings Department: shed permit expired or signed off for the address; citywide count of permitted sheds",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.03
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "shed_response"
+          },
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          }
+        ],
+        "realFrequency": "About 1,200 fewer sheds between January 1 and October 19, 2026, a 15% decline (Mayor's Office).",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/mayors-office/news/2026/10/mamdani-administration-announces-1-200-sidewalk-sheds-taken-down",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "The penalty ends; the short +3% is my estimate for the reopening effect (a storefront that looks new), no measurement was found."
+      },
+      {
+        "id": "subway_weekend_shutdowns",
+        "name": "No trains at your station on weekends",
+        "text": "The MTA is replacing signals. For the next months there is no service at your stop on most weekends, only shuttle buses that nobody likes. Saturday and Sunday are your best days.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "MTA planned service changes (mta.info 'Planned Work' and the GTFS-realtime alerts feed) for the nearest station; MTA 'Subway Hourly Ridership' open data on data.ny.gov shows the drop",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.97
+          }
+        ],
+        "daily": {
+          "days": 4,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.78
+            }
+          ]
+        },
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Greenpoint, July 2025-July 2026: the G train was out on about 40% of weekends since signal work began in 2024. The MTA cancelled the shutdowns planned for December 2026 after business owners protested.",
+        "tier": "core",
+        "source": "https://brooklyn.news12.com/greenpoint-sales-slump-during-g-train-shutdown",
+        "moreSources": [
+          "https://www.amny.com/news/mta-axes-g-train-shutdowns-planned-for-december-after-outcry-from-small-businesses/"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Shop Small Greenpoint survey of 36 businesses (an interested party): 91% saw sales fall on shutdown weekends, by 20-24% on average; 39% cut shifts. One coffee shop owner: 'A day like today we'd see 200 people, and now we are down to half of that.' Day value 0.78 = 22% drop. Month value: two shutdown weekends (4 days) x 22% / 30 = 3%. Staff who commute on the same line arrive late or not at all."
+      },
+      {
+        "id": "station_closed_for_months",
+        "name": "Your subway station closes for renovation",
+        "text": "The station at your corner shuts completely for a rebuild. The stream of commuters that passed your door twice a day now walks to the next stop, in the other direction.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "MTA capital program station projects and station closure notices; MTA station entries (turnstile data) for the complex",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.72
+          }
+        ],
+        "durationMonths": 8,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Astoria, October 2017-June 2018: the 30th Avenue and 36th Avenue stations were closed for eight months; the next pair on the line followed.",
+        "tier": "deep",
+        "source": "https://qns.com/2018/02/astorias-electeds-call-mta-president-boost-service-provide-relief-business-owners-near-shuttered-n-w-stations",
+        "moreSources": [
+          "https://www.vice.com/en/article/how-one-subway-closure-in-queens-wrecked-a-community"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Owners near the closed Astoria stations told reporters they had lost 25-30% (a grocery) and 30-40% (a gastropub); some shops closed for good. 0.72 = middle of those anecdotes for a shop that lives on station traffic; a shop on a residential side street would lose far less. The engine should scale the loss by the share of the place's footfall that comes from the station (data/open/fit.json has it)."
+      },
+      {
+        "id": "street_dig_long",
+        "name": "The street is dug up for a new water main",
+        "text": "Fences, steel plates and a trench run the length of your block. The crew will be here for a year or more. The sidewalk is open, but nobody wants to walk through a construction site for coffee.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "NYC DOT 'Street Construction Permits' open data for the block; Department of Design and Construction project pages and community construction liaison notices",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.87
+          },
+          {
+            "field": "deliveryShare",
+            "mult": 0.9
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          },
+          {
+            "kind": "lever",
+            "id": "sidewalk_care"
+          },
+          {
+            "kind": "shortcut",
+            "id": "sign_in_the_walkway"
+          }
+        ],
+        "realFrequency": "Routine: water mains from the early 1900s are being replaced block by block. A Myrtle Avenue project in Brooklyn replaced pipes laid in 1908.",
+        "tier": "core",
+        "source": "https://www.amny.com/news/water-pipe-torture-killing-w-10th-st-business",
+        "moreSources": [
+          "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "The only New York figure found for a water main job: a West 10th Street shoe repair shop's receipts fell 10-15%. 0.87 = midpoint. The City's Small Business Services FAQ (2022) says it has no program or grant to reimburse lost revenue from construction; the one exception on record, after the Fulton Street water main, paid $2.50 per square foot per month up to $25,000 in 2007-2008. Dust and mud also mean more sweeping, hence the sidewalk lever."
+      },
+      {
+        "id": "planned_water_shutoff",
+        "name": "Water off on your block, weekdays 8 to 3",
+        "text": "The city is replacing a main and will shut the water two to four days a week for the next five weeks, right through your morning rush. No water means no espresso, no hand washing and no legal way to stay open.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Department of Environmental Protection and Department of Design and Construction shutoff notices posted on the block and sent to the community board",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.8
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Garment District, Manhattan: an emergency main replacement brought shutoffs two to four days a week from 8 a.m. to 3 p.m. for up to five weeks.",
+        "tier": "deep",
+        "source": "https://www.cbsnews.com/newyork/news/garment-district-water-shutdown/",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Three shutoff days a week x 7 of 12 opening hours, weighted to the morning when about two thirds of coffee is sold: roughly 12 lost days of morning trade in a month = -20% (my arithmetic). The Health Code requires running hot and cold water to operate; serving through a shutoff is a closure-level violation that D08 should carry."
+      },
+      {
+        "id": "water_main_break",
+        "name": "Water main breaks on your block",
+        "text": "An old cast-iron main gave way in the cold. The street is a river, the basement is taking water, and the block will have no water until the crew finishes the repair.",
+        "scale": "block",
+        "months": [
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "DEP water main break count (Mayor's Management Report); 311 water main complaints; a run of freeze-thaw days at Central Park",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.95
+          },
+          {
+            "field": "cashOneTime",
+            "add": -1500,
+            "onlyIf": "flood_protection = none"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "flood_protection"
+          }
+        ],
+        "realFrequency": "359 breaks in fiscal 2024, a record low, against a five-year average of 427; breaks rose 54% in fiscal 2025 and stood at 8.2 per 100 miles of main in the latest report. Most happen in winter freeze-thaw cycles.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/operations/downloads/pdf/pmmr2026/dep.pdf",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Rule 4: the engine does not roll for a break. The world schedules a fixed number of breaks per winter from the real count and assigns them to blocks with the oldest mains; the block is told one game day ahead (the street is already leaking). One to two days without water = -5% of a month. $1,500 = spoiled stock and cleanup in an unprotected basement (planning value). Damage from a city main can be claimed from the Comptroller, but a notice of claim must be filed within 90 days."
+      },
+      {
+        "id": "street_resurfacing",
+        "name": "Milling and paving",
+        "text": "No parking on the block from 7 AM. The machines strip the asphalt today and lay new tomorrow. Your delivery cannot stop, and the dust comes in every time the door opens.",
+        "scale": "block",
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "realSignal": "NYC DOT weekly resurfacing schedule by borough; temporary no-parking signs posted 72 hours ahead",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.99
+          }
+        ],
+        "daily": {
+          "days": 2,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.9
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.7
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          },
+          {
+            "kind": "lever",
+            "id": "sidewalk_care"
+          }
+        ],
+        "realFrequency": "DOT repaves in the warm months; each block comes up once in roughly a decade.",
+        "tier": "exotic",
+        "source": "https://www.nyc.gov/html/dot/html/motorist/resurfintro.shtml",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "No measurement found; 10% on two days is my estimate, far below the long-dig figure. The real cost is the missed delivery: order a day early. The once-a-decade frequency is from memory."
+      },
+      {
+        "id": "street_fair_day",
+        "name": "Street fair on your avenue",
+        "text": "Ten blocks of sock stalls, grilled corn and lemonade stand between the crowd and your door. Thousands walk past. Most of them buy their coffee from the cart parked in front of your window.",
+        "scale": "block",
+        "months": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "realSignal": "NYC Street Activity Permit Office calendar ('NYC Permitted Event Information' open data), event type Street Festival",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1
+          }
+        ],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 1.6
+            },
+            {
+              "field": "demand",
+              "mult": 0.7,
+              "onlyIf": "event_day_plan = normal_day"
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.3
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "shortcut",
+            "id": "sign_in_the_walkway"
+          }
+        ],
+        "realFrequency": "The city stopped issuing permits for new street fairs in October 2024 because of police overtime costs; existing fairs continue, one or two Sundays a year on a given avenue.",
+        "tier": "core",
+        "source": "https://api-prod.gothamist.com/news/nyc-wont-issue-permits-for-new-street-fairs-due-to-nypd-overtime-costs",
+        "moreSources": [
+          "https://www.dnainfo.com/new-york/20160609/chelsea/heres-what-future-of-citys-street-fairs-could-look-like"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Correction to the event deck, where a street fair is a flat +20% of foot traffic. Store owners have complained for years that fairs put vendors between the crowd and their doors; some shop owners do well by setting up a table of their own. No measured figure exists. My model: 60% more people on the street, but a shop that does nothing converts 30% fewer of them (stalls block the storefront and sell drinks); with the window menu the shop keeps its conversion and gains. Deliveries cannot reach the block."
+      },
+      {
+        "id": "film_shoot_on_block",
+        "name": "A film crew takes the block",
+        "text": "Orange cones went up last night: 'No parking, film shoot.' Trucks line both curbs for three days, cables cross the sidewalk, and a production assistant asks your customers to wait while they roll.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Mayor's Office of Media and Entertainment 'Film Permits' open data (street segments and dates); no-parking notices posted on the block",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.99
+          }
+        ],
+        "daily": {
+          "days": 3,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.9
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.7
+            },
+            {
+              "field": "demand",
+              "mult": 1.05,
+              "onlyIf": "event_day_plan = staff_up_and_stock"
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          }
+        ],
+        "realFrequency": "Some blocks in SoHo, the Village and Brooklyn Heights are permitted many times a year; most blocks never.",
+        "tier": "deep",
+        "source": "https://www.dnainfo.com/new-york/20151230/soho/incessant-filming-hurts-small-businesses-on-crosby-street-owners-say",
+        "moreSources": [
+          "https://www.nyc.gov/site/mome/industries/info-crews-communities.page"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "There is no city compensation: owners on Crosby Street said frequent shoots cost them walk-in sales and that the film office never answered. The film office limits parking taken and calls it 'an inconvenience'. A production that wants your storefront in the shot pays a negotiated location fee, and a crew of 50-100 buys coffee: +5% for a shop that staffs up is my estimate. 0.9 is an estimate, not measured."
+      },
+      {
+        "id": "open_streets_season",
+        "name": "Your street goes car-free on weekends",
+        "text": "A neighborhood group won an Open Streets permit. From April to October the block is closed to cars on weekends: strollers, chalk, a band on the corner, and room for tables.",
+        "scale": "block",
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "realSignal": "NYC DOT Open Streets locations and hours (open data and nyc.gov/openstreets); the annual application round that closes in winter",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.05
+          },
+          {
+            "field": "deliveryShare",
+            "mult": 0.95
+          }
+        ],
+        "durationMonths": 7,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          }
+        ],
+        "realFrequency": "More than 150 Open Streets at the start of the 2026 season, down from 326 at the 2021 peak and 202 in 2023.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/html/dot/html/pr2022/outdoor-dining.shtml",
+        "moreSources": [
+          "https://www.nyc.gov/html/dot/html/pr2026/nyc-dot-kicks-off-2026-open-streets-season.shtml",
+          "https://www.osc.ny.gov/files/reports/pdf/report-20-2026.pdf"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "DOT's 'Streets for Recovery' (2022, sales-tax data): sales on five Open Streets corridors were 19% above the pre-pandemic baseline while nearby control corridors were 29% below; City Planning (2024) found storefront vacancy 12% lower than the city average. Those are corridor totals driven by restaurants with new outdoor tables and by pandemic conditions; +5% of foot traffic for a counter-service cafe over the whole month is my conservative reading. Deliveries must come before the closure hours. A volunteer group runs it and can lose its funding: the event can end between seasons."
+      },
+      {
+        "id": "crz_foot_traffic",
+        "name": "Congestion Relief Zone: more people on foot",
+        "text": "Fewer cars cross 60th Street, and more people arrive by train and walk. Inside the zone the sidewalks are fuller than last year.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "MTA 'Congestion Relief Zone Vehicle Entries' open data (data.ny.gov); pedestrian counts published by the state and by the Economic Development Corporation",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.02,
+            "tiers": [
+              "prime"
+            ],
+            "onlyIf": "place is in Manhattan south of 60th Street"
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "builtin",
+            "id": "price"
+          }
+        ],
+        "realFrequency": "In force since January 5, 2025. Year one: 27 million fewer vehicles; foot traffic in the zone up 3.4% against 1.4% boroughwide (Governor's office) or 5% against 1% (Economic Development Corporation).",
+        "tier": "deep",
+        "source": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "1.02 = the difference between the zone and the rest of the borough in the more cautious of the two official figures (3.4% - 1.4%). Both figures come from the program's sponsors. Applies only to places inside the zone."
+      },
+      {
+        "id": "crz_delivery_surcharge",
+        "name": "Suppliers add a congestion surcharge",
+        "text": "Your dairy and paper-goods distributors now add a line to every invoice for deliveries below 60th Street. Each truck pays the toll every time it enters the zone.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "MTA Congestion Relief Zone toll schedule; supplier invoices",
+        "effects": [
+          {
+            "field": "cogs",
+            "mult": 1.01,
+            "onlyIf": "place is in Manhattan south of 60th Street"
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "builtin",
+            "id": "price"
+          }
+        ],
+        "realFrequency": "Permanent. Rates are fixed through 2027; in 2028 the car toll rises to $12 and the large-truck toll to $28.80, and in 2031 to $15 and $36.",
+        "tier": "deep",
+        "source": "https://www.freightwaves.com/news/new-york-trucking-group-says-manhattan-tolls-burden-industry",
+        "moreSources": [
+          "https://aiany.org/wp-content/uploads/2025/01/Overview-of-Congestion-Pricing-Toll-Structure.pdf"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Peak tolls with E-ZPass: cars $9 once a day, small trucks $14.40 and large trucks $21.60 on every entry; overnight $2.25, $3.60 and $5.40. Arithmetic: a truck that makes 15 drops in the zone on one entry adds about $1 to $1.50 a drop; five deliveries a week = about $25 a month on roughly $13,000 of goods, so the honest effect is 0.2%. Distributors charge more than cost: a flat $5-$10 per delivery is reported but unsourced; that would be $100-$200 a month, about 1% of cost of goods. The deck uses +2%; I suggest +1%."
+      },
+      {
+        "id": "bike_lane_replaces_parking",
+        "name": "A protected bike lane replaces the parking",
+        "text": "The city is redesigning your avenue: a bike lane at the curb, parking moved out, loading zones on the corners. Half the merchants on the block signed a petition against it.",
+        "scale": "block",
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "realSignal": "NYC DOT street improvement project list and community board presentations for the corridor",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1.03
+          },
+          {
+            "field": "deliveryShare",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          }
+        ],
+        "realFrequency": "DOT builds protected bike lanes on dozens of miles of streets a year.",
+        "tier": "exotic",
+        "source": "https://nyc.gov/html/dot/downloads/pdf/dot-economic-benefits-of-sustainable-streets.pdf",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "DOT, 'The Economic Benefits of Sustainable Streets' (2013, sales-tax data): on Ninth Avenue between 23rd and 31st Streets, sales at local businesses rose up to 49% in the three years after the protected bike lane, against 3% across Manhattan. DOT itself says this does not prove the lane caused it. +3% is my cautious value; the non-obvious part is the sign: merchants expect a loss and the data shows none. One to two months of construction first (use street_resurfacing for those)."
+      },
+      {
+        "id": "coffee_cart_at_the_corner",
+        "name": "A coffee cart parks at your corner",
+        "text": "A cart selling $2 coffee and $1.50 bagels now sets up at the subway stairs every morning at six. It pays no rent, and it catches the commuters before they reach your door.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "New mobile food vending permits issued under Local Laws 54 and 59 of 2026 (Health Department permit data); 311 vending complaints for the block",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.96
+          }
+        ],
+        "durationMonths": 12,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "builtin",
+            "id": "price"
+          }
+        ],
+        "realFrequency": "The 1983-era cap on food vending permits is being lifted in steps: the 2026 laws add 12,780 permits by 2031, on top of 5,100 before the reform.",
+        "tier": "deep",
+        "source": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
+        "moreSources": [
+          "https://immresearch.org/iri-insights/new-street-vendor-reforms-will-dramatically-increase-licenses-in-nyc-a-historic-win-for-entrepreneurs-and-immigrants/"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "No study of what a cart costs a neighboring cafe was found. -4% is my estimate: the cart takes the cheapest drip-coffee orders in the morning rush, not the latte or the seat. Reporting the cart to 311 is possible only if it breaks a placement rule (too close to a crosswalk, a subway entrance or your door); the exact distances were not confirmed in this session. The legal answers are an earlier opening hour, a faster line and a product the cart does not have."
+      },
+      {
+        "id": "marathon_on_your_avenue",
+        "name": "Marathon Sunday on your avenue",
+        "text": "The race runs past your door. From early morning the avenue is fenced, nobody can cross, and deliveries cannot come. On your side of the barrier there are thousands of spectators with cold hands.",
+        "scale": "block",
+        "months": [
+          11
+        ],
+        "realSignal": "New York Road Runners course map and the city street-closure list for the first Sunday of November (November 1, 2026)",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 1
+          }
+        ],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 1.5
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.2
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.9
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "event_day_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "storm_day_policy"
+          }
+        ],
+        "realFrequency": "Once a year on the course: Fourth Avenue and Bedford Avenue in Brooklyn, First Avenue and Fifth Avenue in Manhattan, and shorter stretches in Queens and the Bronx.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/assets/cecm/downloads/pdf/tcs-street-closures-marathon-2026.pdf",
+        "moreSources": [
+          "https://marathonhandbook.com/nyc-marathon-bronx-course-change/"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "The deck has a citywide +10%; on the course itself the day is different. In 2026 the organizers changed the Bronx route for the first time in 15 years, and gave restoring access to local businesses as the main reason: a supermarket and a laundromat had been cut off inside the course. +50% of people at the door for a shop on the spectator side is my estimate; a shop whose regulars live across the avenue loses them for the day. Staff need a route to work that does not cross the course."
+      },
+      {
+        "id": "iced_season_switch",
+        "name": "Iced season starts",
+        "text": "The first run of 70-degree days. By Friday more than half of your orders are iced, the ice bin is empty by two o'clock, and you are out of cold cups.",
+        "scale": "city",
+        "months": [
+          4,
+          5
+        ],
+        "realSignal": "Daily high at Central Park (NWS forecast and GHCN TMAX): the first week with highs of 65°F or more",
+        "effects": [
+          {
+            "field": "icedShare",
+            "mult": 1.4
+          },
+          {
+            "field": "cogs",
+            "mult": 1.01
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "builtin",
+            "id": "price"
+          }
+        ],
+        "realFrequency": "Every year: the normal high passes 62°F in April and 72°F in May.",
+        "tier": "core",
+        "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
+        "moreSources": [
+          "https://www.teaandcoffee.net/blog/39416/as-temperatures-rise-more-uk-consumers-grab-iced-coffees/"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "The share comes from extra.drinkMixByTemperature (April 47%, May 58% against March 32%). Square's own transaction data for a British heatwave weekend in May 2026 showed iced coffee purchases up 137% on the weekend before, and 47% of people it surveyed switch to iced when it is hot. The +1% on cost of goods is my estimate for the plastic cup, lid, straw and ice of an iced drink against a paper cup; D04 owns the exact figure. A shop that has not stocked cold cups or sized its ice machine loses the orders, not just the margin."
+      },
+      {
+        "id": "heat_wave_iced_rush",
+        "name": "Heat wave: everyone wants it iced",
+        "text": "Four days above 90. Nobody orders a hot latte. The line is as long as ever, but every drink needs ice, and your machine makes less of it the hotter the room gets.",
+        "scale": "city",
+        "months": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "realSignal": "NWS Heat Advisory or Extreme Heat Warning for New York City; NYC Emergency Management heat emergency declaration; Central Park daily highs of 90°F or more",
+        "effects": [
+          {
+            "field": "icedShare",
+            "mult": 1.1
+          },
+          {
+            "field": "utilities",
+            "mult": 1.03
+          }
+        ],
+        "daily": {
+          "days": 4,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 1
+            },
+            {
+              "field": "utilities",
+              "mult": 1.2
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cooling_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "shortcut",
+            "id": "ac_with_open_door"
+          }
+        ],
+        "realFrequency": "July averages 7 days at 90°F or more and August 5 (1991-2020). 2025 had 14 such days. On July 2, 2026 Central Park reached 100°F for the first time since July 18, 2012, and a second heat wave followed in mid-July.",
+        "tier": "core",
+        "source": "https://amp.insurancejournal.com/news/east/2026/07/02/876132.htm",
+        "moreSources": [
+          "https://foursquare.com/resources/blog/data/summer-weather-data-reveals-consumer-insights/"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Correction to the deck, which cuts foot traffic 5% in heat: Foursquare with AccuWeather found restaurants lose visits on unusually hot days while coffee shop brands gain slightly, so traffic is held at 1.0 and the mix moves (80% iced at 89°F and above by the formula). Utilities +20% on the hot days is my estimate for an air conditioner and three compressors running flat out; month value 4 days / 30 x 20% = 3%."
+      },
+      {
+        "id": "heat_wave_ac_failure",
+        "name": "The air conditioner dies on the hottest day",
+        "text": "It is 97 outside and 88 inside. The unit that nobody serviced in spring has iced over. Every repair company in the city is booked for three days, and customers walk in, feel the air and walk out.",
+        "scale": "point",
+        "months": [
+          6,
+          7,
+          8
+        ],
+        "realSignal": "Not a public signal: follows from cooling_plan = unserviced during the first declared heat emergency of the summer",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.97
+          },
+          {
+            "field": "cashOneTime",
+            "add": -900
+          }
+        ],
+        "daily": {
+          "days": 3,
+          "effects": [
+            {
+              "field": "demand",
+              "mult": 0.7
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.9
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cooling_plan"
+          },
+          {
+            "kind": "shortcut",
+            "id": "ac_with_open_door"
+          }
+        ],
+        "realFrequency": "Reference only: breakdowns cluster in the first heat wave, when every unit in the city starts at once.",
+        "tier": "deep",
+        "source": "https://amp.insurancejournal.com/news/east/2026/07/02/876132.htm",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "Rule 4: no dice. The failure happens only to a shop that chose unserviced, in the first heat emergency of its summer. $900 = emergency call and a part at peak-season rates (planning value; D03 owns repair prices). -30% on three days is my estimate; month value 3%."
+      },
+      {
+        "id": "voltage_reduction",
+        "name": "Con Edison cuts voltage in your neighborhood",
+        "text": "The grid is at its limit. Con Edison has reduced voltage by 8% in your network and asks everyone to turn things off. Your grinder sounds tired, the fridge compressors run hot, and a full outage is one cable away.",
+        "scale": "block",
+        "months": [
+          6,
+          7,
+          8
+        ],
+        "realSignal": "Con Edison voltage-reduction notices by network and its outage map; New York Independent System Operator peak-load forecast",
+        "effects": [
+          {
+            "field": "utilities",
+            "mult": 1
+          }
+        ],
+        "daily": {
+          "days": 2,
+          "effects": [
+            {
+              "field": "capacity",
+              "mult": 0.9
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cooling_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "June 24, 2025: 8% cut for about 150,200 customers in parts of Brooklyn and Queens; more than 100,000 customers lost power during that heat wave. July 2026: 8% cuts in the Bronx and Westchester, and service shut off to about 9,800 customers in southwest Queens for repairs.",
+        "tier": "deep",
+        "source": "https://abc7ny.com/post/nyc-extreme-heat-coned-reduces-voltage-parts-bronx-westchester-asks-customers-conserve-energy/19436776/",
+        "moreSources": [
+          "https://www.cbsnews.com/amp/newyork/news/extreme-heat-causing-power-outages",
+          "https://portal.311.nyc.gov/article/?kanumber=KA-02283"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Capacity -10% on the affected days is my estimate (slower heat recovery on the espresso machine, staff switching equipment off). If the cut becomes an outage of more than 12 hours caused by Con Edison's local equipment, a business may claim spoiled perishables up to $12,900 within 30 days (311 and Documented, August 2026); the repair and lost sales are D03 and the insurance records of D09."
+      },
+      {
+        "id": "rainy_day_mix",
+        "name": "A soaking rainy day",
+        "text": "Steady rain from morning to night. The passers-by are gone, the regulars still come, and the delivery tablet will not stop.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "NWS forecast for New York City with rain through the day; Central Park daily precipitation of 0.5 inch or more",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.99
+          }
+        ],
+        "daily": {
+          "days": 3,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.9
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 1.15
+            },
+            {
+              "field": "icedShare",
+              "mult": 0.9
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "entrance_floor_safety"
+          },
+          {
+            "kind": "lever",
+            "id": "disruption_playbook"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "About 10 to 11 days with measurable precipitation in every month; two to four of them are all-day rains.",
+        "tier": "core",
+        "source": "https://foursquare.com/resources/blog/data/fair-weather-foodies/",
+        "moreSources": [
+          "https://cdn.nrf.com/sites/default/files/2024-06/ClimateProofingRetail_2024.pdf",
+          "https://about.doordash.com/en-us/news/winter-storm-fern"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "0.9 is the deck's rain value (measured sources listed in weatherDayEffects). The National Retail Federation's 2024 report notes that a missed daily coffee run is never made up later, so the loss is real, not shifted. Delivery +15% is the deck's value; the couriers are the limit. Hot drinks gain share on a cool wet day (-10% iced share is my estimate)."
+      },
+      {
+        "id": "cool_spring_bonus",
+        "name": "A cold, late spring",
+        "text": "May feels like March. The parks are empty, the iced menu sits untouched, and people keep buying hot coffee the way they do in winter.",
+        "scale": "city",
+        "months": [
+          4,
+          5
+        ],
+        "realSignal": "Monthly mean temperature at Central Park two or more degrees below the 1991-2020 normal (NWS monthly climate report)",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.05
+          },
+          {
+            "field": "icedShare",
+            "mult": 0.85
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Reference only: roughly one spring in three runs cooler than normal by this margin (my estimate from the definition of a normal).",
+        "tier": "deep",
+        "source": "https://www.planalytics.com/?p=5995",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "Planalytics with the National Retail Federation: weather swings coffee sales by 5% on average, and 'major markets in the Northeast can experience strong coffee demand of 10 percent above normal levels when cool weather extends into spring months'. +5% is half of that upper figure, for a whole month."
+      },
+      {
+        "id": "arctic_blast",
+        "name": "Arctic blast",
+        "text": "The high today is 19 degrees. Nobody strolls. The ones who come in order the largest hot drink you sell and do not want to leave. Every time the door opens, the three tables next to it empty out.",
+        "scale": "city",
+        "months": [
+          12,
+          1,
+          2
+        ],
+        "realSignal": "NWS Cold Weather Advisory for New York City; Central Park daily high at or below 25°F",
+        "effects": [
+          {
+            "field": "utilities",
+            "mult": 1.04
+          }
+        ],
+        "daily": {
+          "days": 4,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.92
+            },
+            {
+              "field": "icedShare",
+              "mult": 0.75
+            },
+            {
+              "field": "utilities",
+              "mult": 1.3
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "snow_ice_plan"
+          }
+        ],
+        "realFrequency": "The 2025-26 winter was the coldest in 11 years in New York (CBS New York). January's normal high is 39.5°F and normal low 27.8°F.",
+        "tier": "core",
+        "source": "https://www.cbsnews.com/newyork/news/2025-2026-nyc-winter-cold-snow",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "The deck's cold snap gives -5% foot traffic and +5% demand for cafes. Foursquare with AccuWeather found coffee shops lose traffic in extreme cold; 0.92 is my estimate. Heating +30% on those days is an estimate. The frozen-pipe risk belongs to D03."
+      },
+      {
+        "id": "early_dark",
+        "name": "The clocks go back",
+        "text": "Sunset is at 4:50 now. The after-work walk-ins that carried your afternoons since March stop coming: people go straight home in the dark.",
+        "scale": "country",
+        "months": [
+          11,
+          12
+        ],
+        "realSignal": "End of daylight saving time (November 1, 2026); sunset before 5 PM in New York from early November to late January",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.975
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "seasonal_menu"
+          },
+          {
+            "kind": "builtin",
+            "id": "staff"
+          }
+        ],
+        "realFrequency": "Every year on the first Sunday of November.",
+        "tier": "deep",
+        "source": "https://about.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/institute/pdf/jpmc-institute-daylight-savings-report.pdf",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "JPMorgan Chase Institute (2016, card data, Los Angeles against Phoenix, which does not change clocks): daily card spending per person falls 3.5% in the 30 days after the clocks go back; retail -4.8%, grocery -5.9%; Denver -4.9%, San Diego -2.2%. A cafe earns most of its day before noon, so I apply the loss to the afternoon half only: about -2.5%. The study covers 30 days; I extend it to two months as an estimate. Long evening hours (the existing hours lever) earn less in these months."
+      },
+      {
+        "id": "high_wind_day",
+        "name": "Wind advisory",
+        "text": "Gusts of 50 miles an hour between the buildings. Your sandwich board is in the street, an umbrella is two doors down, and the awning is making a noise it should not make.",
+        "scale": "city",
+        "months": [
+          10,
+          11,
+          12,
+          1,
+          2,
+          3,
+          4
+        ],
+        "realSignal": "NWS Wind Advisory or High Wind Warning for New York City; Buildings Department weather advisory to secure sites",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.995
+          }
+        ],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.95
+            },
+            {
+              "field": "outdoorSeats",
+              "mult": 0
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "shortcut",
+            "id": "sign_in_the_walkway"
+          }
+        ],
+        "realFrequency": "Several advisories a year, mostly October to April.",
+        "tier": "exotic",
+        "source": "https://www.weather.gov/okx/",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "No measurement found; all values are estimates. The decision is what is outside: furniture and signs left out on an advisory day are the owner's liability if they hit someone (the same premises-liability logic as the fall claims)."
+      },
+      {
+        "id": "wildfire_smoke_day",
+        "name": "Smoke from Canada",
+        "text": "The sky is orange and the air smells like a campfire. The city tells people to stay inside. Your outdoor tables are empty, the door stays shut, and staff who bike to work are coughing.",
+        "scale": "country",
+        "months": [
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "realSignal": "EPA AirNow Air Quality Index for New York City at 151 or more; NYS Department of Environmental Conservation Air Quality Health Advisory",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.98
+          }
+        ],
+        "daily": {
+          "days": 3,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.8
+            },
+            {
+              "field": "outdoorSeats",
+              "mult": 0
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.9
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 1.1
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "air_quality_plan"
+          },
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "lever",
+            "id": "storm_day_policy"
+          }
+        ],
+        "realFrequency": "June 6-8, 2023: index peaked at 465-484, the worst on record. July 16-19, 2026: peak 289, the second worst.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/em/about/press-releases/20260719_pr_NYCEM-Thanks-New-Yorkers-as-Wildfire-Smoke-Response-Concludes.page",
+        "moreSources": [
+          "https://advocate.nyc.gov/reports/orange-sky-red-alert-review-air-quality-emergencies-nyc",
+          "https://www.restaurantbusinessonline.com/operations/dangerous-smoke-levels-east-spark-calls-more-worker-protections"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "The index figures are from NYC Emergency Management (July 19, 2026) and the Public Advocate's review of 2023. No sales figure was published for either event: in 2023 restaurant groups shut outdoor seating at a dozen places and some closed early. 0.8 is my estimate. With air_quality_plan = filters_and_masks the inside of the shop keeps its customers (apply 0.9 instead of 0.8) and staff availability stays at 1."
+      },
+      {
+        "id": "flash_flood_warning",
+        "name": "Flash flood warning",
+        "text": "Two inches of rain in an hour. The street drains are fountains, the subway is suspended, and water is coming down your basement stairs toward the dry storage.",
+        "scale": "city",
+        "months": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "realSignal": "NWS Flash Flood Warning for New York (Manhattan, Kings or Queens) County; hourly rainfall at Central Park above 1.75 inches; NYC FloodNet street sensors; the city's Stormwater Flood Maps for the address",
+        "effects": [
+          {
+            "field": "cashOneTime",
+            "add": -4000,
+            "onlyIf": "flood_protection = none and the place has a basement in a mapped flood area"
+          },
+          {
+            "field": "cashOneTime",
+            "add": -600,
+            "onlyIf": "flood_protection = basic and the place has a basement in a mapped flood area"
+          }
+        ],
+        "daily": {
+          "days": 1,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.5
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.8
+            },
+            {
+              "field": "closureDays",
+              "mult": 1,
+              "onlyIf": "flood_protection = none and flooded"
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "flood_protection"
+          },
+          {
+            "kind": "lever",
+            "id": "storm_day_policy"
+          }
+        ],
+        "realFrequency": "City sewers handle at most 1.75 inches an hour (1.5 in much of Queens). That was once a five-year storm; in 2023 five storms exceeded it. September 29, 2023: more than 7 inches in Brooklyn in a day. July 14, 2025: 2.07 inches in one hour at Central Park, the second wettest hour on record.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+        "moreSources": [
+          "https://www.nyc.gov/site/em/about/press-releases/20250715_pr_nycem-City-Responds-To-Hstoric-Rainfall-Event.page",
+          "https://www.brownstoner.com/brooklyn-life/brooklyn-businesses-flood-recovery",
+          "https://comptroller.nyc.gov/reports/is-new-york-city-ready-for-rain"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Deterministic: the weather series gives the hour's rainfall, the place gives the basement and the flood-map flag, the lever gives the loss. After the September 2023 storm Brooklyn restaurants and bars reported equipment and produce destroyed and stock lost (Brownstoner); no dollar figures were published. $4,000 = dry goods, paper stock and a week of milk plus a cleanup crew; $600 = the insurance deductible share and labor with racks and a rider. Both are planning values. One closed day while the basement is pumped and sanitized."
+      },
+      {
+        "id": "sewer_backup",
+        "name": "The floor drain runs backwards",
+        "text": "It is not even a big storm. The combined sewer under the street is full, and the lowest drain on the block is the one in your basement. What comes up is not rainwater.",
+        "scale": "point",
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "realSignal": "Hourly rainfall near the sewer limit (1.5-1.75 inches); 311 sewer backup complaints for the block (open data, complaint type Sewer)",
+        "effects": [
+          {
+            "field": "cashOneTime",
+            "add": -2500,
+            "onlyIf": "flood_protection = none"
+          },
+          {
+            "field": "closureDays",
+            "mult": 1,
+            "onlyIf": "flood_protection = none"
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "flood_protection"
+          },
+          {
+            "kind": "shortcut",
+            "id": "skip_grease_trap_cleaning"
+          }
+        ],
+        "realFrequency": "DEP's own description: above the design rainfall 'the system would just back up until it could release itself, like a bathtub.'",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Happens to a shop with flood_protection = none on a block with past sewer complaints, in the first storm of the season near the limit. A shop that skips grease interceptor cleaning (existing shortcut) backs up at lower rainfall: its own line is already narrowed. Sewage in a food room means closing until it is cleaned and sanitized: one day and $2,500 are planning values. The backup rider pays the cleanup; the valve prevents it."
+      },
+      {
+        "id": "tropical_storm_watch",
+        "name": "Tropical storm watch",
+        "text": "A named storm is coming up the coast. The city tells shops to bring in everything loose, clear the catch basin, and expect the subway to stop running above ground.",
+        "scale": "city",
+        "months": [
+          8,
+          9,
+          10
+        ],
+        "realSignal": "National Hurricane Center Tropical Storm Watch or Warning for New York City; NYC Emergency Management coastal storm activation; MTA storm service plan",
+        "effects": [
+          {
+            "field": "footTraffic",
+            "mult": 0.97
+          }
+        ],
+        "daily": {
+          "days": 2,
+          "effects": [
+            {
+              "field": "footTraffic",
+              "mult": 0.5
+            },
+            {
+              "field": "staffAvailability",
+              "mult": 0.7
+            },
+            {
+              "field": "outdoorSeats",
+              "mult": 0
+            },
+            {
+              "field": "deliveryShare",
+              "mult": 0.6
+            }
+          ]
+        },
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "storm_day_policy"
+          },
+          {
+            "kind": "lever",
+            "id": "flood_protection"
+          },
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          }
+        ],
+        "realFrequency": "Reference only: New York is brushed by a tropical system in some years and missed in most; the season runs June to November and peaks in September.",
+        "tier": "deep",
+        "source": "https://www.nhc.noaa.gov/",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "All multipliers are estimates in line with the blizzard event. The game uses the watch and the two disrupted days only; it does not model loss of life or citywide destruction (rule 9). A roadway cafe platform must be secured or emptied; a storm outage is not reimbursed by Con Edison."
+      },
+      {
+        "id": "drought_warning",
+        "name": "Drought warning",
+        "text": "The reservoirs are at 60% when they should be near 80%. The city asks everyone to save water. If it becomes an emergency, hosing the sidewalk is banned and you serve water only when asked.",
+        "scale": "city",
+        "months": [
+          10,
+          11,
+          12
+        ],
+        "realSignal": "NYC Department of Environmental Protection reservoir levels (published daily) and the drought stage: watch, warning, emergency",
+        "effects": [],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sidewalk_care"
+          },
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          }
+        ],
+        "realFrequency": "November 18, 2024: the first drought warning in 22 years (a watch since November 2). The last warning, in early 2002, became an emergency three months later.",
+        "tier": "exotic",
+        "source": "https://amp.insurancejournal.com/news/east/2024/11/19/801851.htm",
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "No money effect at the warning stage: it is information and a reason to choose sweeping over hosing. At the emergency stage restaurants serve water on request only and washing sidewalks with a hose is restricted; the fine amounts were not found. The power-wash option of sidewalk_care should be unavailable during an emergency."
+      },
+      {
+        "id": "summer_rat_peak",
+        "name": "Rat season",
+        "text": "Warm nights, full bins, and a block that puts out food waste three times a week. The rats are at their yearly peak, and the gap under your back door is half an inch.",
+        "scale": "block",
+        "months": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "realSignal": "311 'Rodent' complaints for the community district (NYC Open Data, 311 Service Requests) and the Health Department's Rat Information Portal for the block",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.1
+          }
+        ],
+        "durationMonths": 4,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "rodent_proofing"
+          },
+          {
+            "kind": "lever",
+            "id": "pest_control"
+          },
+          {
+            "kind": "lever",
+            "id": "trash_setup"
+          },
+          {
+            "kind": "shortcut",
+            "id": "bags_on_curb"
+          }
+        ],
+        "realFrequency": "Sightings peak in summer and fall through winter. Citywide 311 rat sightings fell from 25,230 to 20,025 between the twelve months to November 2024 and to November 2025, and a further 22% in the first seven months of 2026; one Lower East Side area rose 37.6% in the same months.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
+        "moreSources": [
+          "https://humanprogress.org/new-york-city-reports-fewer-rat-sightings/"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "The event raises pressure; whether it becomes the existing pest_activity violation depends on three levers. Proposed rule (design): pressure 1 in June-September; +1 if trash_setup is bags or three pickups; +1 if rodent_proofing = none; +1 if pest_control = none. At 3 or more the violation pest_activity is open from the next month. Complaints from neighbors bring more inspections, hence inspections x1.1 (estimate)."
+      },
+      {
+        "id": "demolition_next_door",
+        "name": "The building next door is coming down",
+        "text": "A demolition fence went up next door. When the old building goes, the rats that lived under it need a new address, and yours is the nearest kitchen.",
+        "scale": "point",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Buildings Department demolition and new-building permits for adjacent lots (DOB NOW open data), which must carry a rodent-extermination certification",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.1
+          },
+          {
+            "field": "footTraffic",
+            "mult": 0.97
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "rodent_proofing"
+          },
+          {
+            "kind": "lever",
+            "id": "pest_control"
+          },
+          {
+            "kind": "lever",
+            "id": "sidewalk_care"
+          },
+          {
+            "kind": "lever",
+            "id": "shed_response"
+          }
+        ],
+        "realFrequency": "Reference only: thousands of demolition permits are issued in the city each year; the count was not confirmed in this session.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/buildings/pdf/ll109of22-sn.pdf",
+        "moreSources": [
+          "https://www.constructiondive.com/news/nyc-law-construction-rat-abatement-program/635231/"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Local Law 109 of 2022: an applicant for full demolition, or demolition of more than half a building, must certify that a licensed exterminator treats the site before the permit is issued; a 2023 law extended this to most new construction. The treatment is a permit condition, not a guarantee. Demolition displaces rats by destroying burrows and by vibration. Same pressure rule as the summer peak, +1 for six months. Dust and a sidewalk shed on the neighbor's lot take 3% of traffic (estimate)."
+      },
+      {
+        "id": "mice_move_in",
+        "name": "First cold week: the mice come inside",
+        "text": "The first frost sends every mouse on the block looking for warmth. Your wall backs onto a hundred-year-old basement. Droppings behind the pastry case are a critical violation.",
+        "scale": "point",
+        "months": [
+          10,
+          11
+        ],
+        "realSignal": "First week with lows under 40°F at Central Park (normal low is 51°F in October and 42°F in November)",
+        "effects": [
+          {
+            "field": "inspections",
+            "mult": 1.05
+          }
+        ],
+        "durationMonths": 2,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "rodent_proofing"
+          },
+          {
+            "kind": "lever",
+            "id": "pest_control"
+          },
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          }
+        ],
+        "realFrequency": "Every autumn. Evidence of mice is among the citations inspectors write most often in the city's open restaurant-inspection data; the ranking by month was not computed in this session.",
+        "tier": "deep",
+        "source": "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMinTNormals.pdf",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "Seasonality is common exterminator knowledge, not a figure I found in a source: treat the timing as an estimate. Uses the same pressure rule. The count of code 04L by month can be computed from the open data set DOHMH New York City Restaurant Inspection Results."
+      },
+      {
+        "id": "fruit_fly_summer",
+        "name": "Fruit flies",
+        "text": "A cloud of tiny flies over the syrup pumps and the floor drain. Milk residue, warm weather and a drain nobody scrubs. An inspector counts flies as a critical violation.",
+        "scale": "point",
+        "months": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "realSignal": "Daily highs above 80°F for a week; follows from cleaning = minimal",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.98,
+            "onlyIf": "cleaning = minimal"
+          }
+        ],
+        "durationMonths": 3,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "cleaning"
+          },
+          {
+            "kind": "lever",
+            "id": "pest_control"
+          }
+        ],
+        "realFrequency": "Every summer in a shop that cleans drains and drip trays less than daily.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+        "confidence": "estimate",
+        "evidence": "calc",
+        "note": "Health Department violation code 04N covers filth flies in the establishment and is scored like the other pest items in the pack's inspectionPoints table. The event adds no new fine: with cleaning = minimal it opens the existing dirty_surfaces and pest_activity trails in summer. The quality effect is a design value."
+      },
+      {
+        "id": "trash_piles_after_snow",
+        "name": "No pickup for a week",
+        "text": "The plows come first. Collection is running days behind, the bins are full, and bags are stacked on the snowbank in front of your window.",
+        "scale": "city",
+        "months": [
+          1,
+          2,
+          3
+        ],
+        "realSignal": "DSNY collection-delay notices after a Snow Alert; the private carter's service messages",
+        "effects": [
+          {
+            "field": "quality",
+            "mult": 0.99
+          }
+        ],
+        "durationMonths": 1,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "trash_setup"
+          },
+          {
+            "kind": "lever",
+            "id": "rodent_proofing"
+          },
+          {
+            "kind": "lever",
+            "id": "sidewalk_care"
+          }
+        ],
+        "realFrequency": "After the January 25 and February 22, 2026 storms: city collection ran about 24 hours behind and then days behind; regular collection resumed citywide on February 26.",
+        "tier": "deep",
+        "source": "https://abc7ny.com/post/mamdani-defends-dsny-trash-piles-snowbanks-parts-nyc/18529761/",
+        "moreSources": [
+          "https://www.nyc.gov/site/dsny/news/26-012/dsny-issues-snow-alert-sunday-february-22-2026-6-am"
+        ],
+        "confidence": "estimate",
+        "evidence": "secondary",
+        "note": "The reports are about city (residential) collection; nothing was found on private carters in those weeks, so the effect on a business is my assumption that carters were delayed the same way. Daily pickup buys nothing in that week. The quality effect is a design value; the real risk is the rodent pressure rule (+1 for the month)."
+      },
+      {
+        "id": "outdoor_season_opens",
+        "name": "Outdoor season",
+        "text": "The first evenings above 60 degrees. Every table on the sidewalk is taken, and the shops without tables watch people walk past to the ones that have them.",
+        "scale": "city",
+        "months": [
+          4,
+          5,
+          6,
+          9,
+          10
+        ],
+        "realSignal": "Daily highs between 60°F and 85°F with no rain (NWS forecast); the Dining Out NYC season calendar",
+        "effects": [
+          {
+            "field": "outdoorSeats",
+            "mult": 1
+          }
+        ],
+        "durationMonths": 5,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "shortcut",
+            "id": "sidewalk_tables"
+          }
+        ],
+        "realFrequency": "Every year; under the 2026 law licensed roadway setups no longer have to come down on November 30.",
+        "tier": "core",
+        "source": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm",
+        "moreSources": [
+          "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+          "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Mechanic outdoor_seat_days counts the usable days. The deck's card gives every cafe +4% demand for two weeks from April 1; it should apply only to shops with licensed outdoor seats (or with the existing sidewalk_tables shortcut, at the price of the violation)."
+      },
+      {
+        "id": "roadway_winter_rules_pending",
+        "name": "Keep the roadway cafe up this winter?",
+        "text": "For the first time since the pandemic you may keep your roadway cafe through the winter. The rules for winter-proofing and snow are not written yet, the heaters must be electric, and the plow does not go around you.",
+        "scale": "city",
+        "months": [
+          11,
+          12,
+          1,
+          2,
+          3
+        ],
+        "realSignal": "NYC DOT Dining Out NYC rulemaking notices (rules.cityofnewyork.us) on winterization and snow removal; DSNY Snow Alerts",
+        "effects": [
+          {
+            "field": "outdoorSeats",
+            "mult": 0.2
+          },
+          {
+            "field": "utilities",
+            "mult": 1.03,
+            "onlyIf": "outdoor_seating = roadway_cafe"
+          }
+        ],
+        "durationMonths": 5,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "outdoor_seating"
+          },
+          {
+            "kind": "lever",
+            "id": "snow_ice_plan"
+          }
+        ],
+        "realFrequency": "New in 2026: Intro 655-A, signed August 31, 2026, with a one-year interim license for existing setups.",
+        "tier": "deep",
+        "source": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm",
+        "moreSources": [
+          "https://rules.cityofnewyork.us/wp-content/uploads/2026/10/Notice-of-Public-Hearing-and-Opportunity-to-Comment-DONYC-Rule-Amendments-with-certifications.pdf"
+        ],
+        "confidence": "estimate",
+        "evidence": "official_excerpt",
+        "note": "Winter use of 20% of the seats and +3% utilities for electric heaters are my estimates. Propane heaters are not allowed: the Fire Department's pandemic exception ended in 2021; electric heaters are allowed on sidewalks and roadways. The alternative is the seasonal license: take the platform down (removal and storage were reported at several thousand dollars a year under the old rule; no figure was confirmed here)."
       }
     ],
     "mechanics": [
@@ -338,6 +2214,341 @@
           }
         ],
         "tier": "core"
+      },
+      {
+        "id": "storefront_visibility_stack",
+        "title": "What stands between the street and your door: sheds, trenches, closed stations",
+        "playerDecision": "Before signing a lease the player sees what the public record already shows for the address: the building's height and facade-inspection year, open street-construction permits, planned station work. After opening, a standing order per obstruction (levers shed_response and disruption_playbook) and the usual price, hours and staffing.",
+        "engineMath": "Each place gets a list of obstructions with real start and end dates: {kind: shed | street_dig | station_closed | weekend_shutdown, from, to, footTrafficMult}. The place's daily footfall is multiplied by the product of the active ones, floored at 0.6. A shed is created when the building's facade filing window opens (deterministic from the building's block number and height) and lasts as long as the real average, 557 days, unless the owner is pressed (press_the_owner shortens it by a third - design value). Lever options add back part of the loss (sign_and_lights +3 points) or cut rent. Nothing is rolled: the dates come from the data set loaded with the map.",
+        "fieldsNeeded": [
+          "place.buildingStories",
+          "place.facadeFilingYear",
+          "place.obstructions[] {kind, fromDay, toDay, mult, source}",
+          "place.stationShareOfFootfall",
+          "levers[].showOnlyIf (obstruction kind)",
+          "effect target rent as an option effect"
+        ],
+        "numbers": [
+          {
+            "what": "Weekly transactions lost by restaurants and bars under a shed, first six months, low",
+            "value": 0.035,
+            "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Same, high",
+            "value": 0.097,
+            "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Monthly card spending lost per Manhattan business under a shed, USD, low-high",
+            "value": [
+              3900,
+              9500
+            ],
+            "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Average age of a shed permit, days, March 2026",
+            "value": 557,
+            "source": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Permitted sheds citywide, August 17, 2026",
+            "value": 7427,
+            "source": "https://www.nyc.gov/mayors-office/news/2026/08/mamdani-administration-taking-down-sidewalk-sheds-and-improving-",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Shed permit term under Local Law 48 of 2025, days",
+            "value": 90,
+            "source": "https://www.nyc.gov/assets/buildings/local_laws/ll48of2025.pdf",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Sales lost on weekends without subway service, Greenpoint survey average",
+            "value": 0.22,
+            "source": "https://brooklyn.news12.com/greenpoint-sales-slump-during-g-train-shutdown",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Sales lost near a station closed for eight months, owner reports, low-high",
+            "value": [
+              0.25,
+              0.4
+            ],
+            "source": "https://qns.com/2018/02/astorias-electeds-call-mta-president-boost-service-provide-relief-business-owners-near-shuttered-n-w-stations",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Receipts lost during a water main dig, one shop, low-high",
+            "value": [
+              0.1,
+              0.15
+            ],
+            "source": "https://www.amny.com/news/water-pipe-torture-killing-w-10th-st-business",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "City reimbursement for sales lost to street construction, USD",
+            "value": 0,
+            "source": "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "weather_drink_mix",
+        "title": "Temperature moves the mix, not the count: hot against iced",
+        "playerDecision": "Before the warm months: size the ice machine and stock cold cups (setup and supplies), choose the seasonal menu lever, and set a price for iced drinks. In a heat wave: the cooling plan.",
+        "engineMath": "Each day: icedShare = clamp(0.20 + 0.0122 x (highF - 40), 0.15, 0.80), times event multipliers (rain 0.9, heat 1.1). Orders split into hot and iced. Iced orders use the iced unit cost and price (D04 supplies both; here the placeholder is +1% on cost of goods in iced-heavy months) and draw ice: icedOrders x 0.4 lb against the machine's daily output; orders beyond the ice are lost unless the player buys bagged ice (cash cost). Total orders move only through footTraffic and the weatherDayEffects table. A month's report shows the split so the player learns why July margins differ from January's.",
+        "fieldsNeeded": [
+          "unit.iced {priceDelta, cogsDelta}",
+          "setup ice machine: lbsPerDay",
+          "effect target icedShare",
+          "weather day: highF (exists)",
+          "monthly report: hot and iced order counts"
+        ],
+        "numbers": [
+          {
+            "what": "Cold coffee share gained per +1°C of daily high, percentage points (one London cafe)",
+            "value": 2.2,
+            "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Share of variation in cold coffee sales explained by daily high",
+            "value": 0.92,
+            "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Cold drinks as share of Starbucks US beverage sales, summer 2022",
+            "value": 0.75,
+            "source": "https://worldcoffeeportal.com/Latest/News/2021/August/Starbucks-says-nearly-three-quarters-of-US-beverag",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Cold brew orders in the peak month (July 2025) against the yearly average",
+            "value": 1.35,
+            "source": "https://pos.toasttab.com/blog/data/coffee-prices-trends-by-state",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Average swing in coffee sales due to weather",
+            "value": 0.05,
+            "source": "https://www.planalytics.com/?p=5995",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Coffee demand above normal in Northeast markets in a cool spring",
+            "value": 0.1,
+            "source": "https://www.planalytics.com/?p=5995",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Iced coffee purchases on a heatwave weekend against the weekend before (Square, United Kingdom, May 2026)",
+            "value": 2.37,
+            "source": "https://www.teaandcoffee.net/blog/39416/as-temperatures-rise-more-uk-consumers-grab-iced-coffees/",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Ice per iced drink, pounds (my planning value, not sourced)",
+            "value": 0.4,
+            "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
+            "confidence": "estimate",
+            "evidence": "calc"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "basement_flood_exposure",
+        "title": "The basement is cheap storage until it rains two inches in an hour",
+        "playerDecision": "At lease signing the player sees whether the address has a basement and whether the city's stormwater flood map shades the block. Then a standing order: flood_protection none, basic or full.",
+        "engineMath": "The weather series carries the peak hourly rainfall of each wet day. If peakHourly >= the block's sewer limit (1.75 in, or 1.5 in in most of Queens) and the place is in a mapped flood area with a basement: none -> lose basementStockValue (default 40% of inventory) + cleanup, one closed day; basic -> deductible and labor only; full -> nothing. Blocks outside the map are not flooded by this rule. A separate, smaller rule fires sewer_backup at 85% of the limit for shops with none, and at 70% for shops that also skip grease-interceptor cleaning. All thresholds are fixed numbers, so the same rain gives the same result for every player.",
+        "fieldsNeeded": [
+          "place.hasBasement",
+          "place.stormwaterFloodZone (from the NYC Stormwater Flood Maps layer)",
+          "place.sewerLimitInPerHour",
+          "weather day: peakHourlyRainIn",
+          "business.basementStockShare"
+        ],
+        "numbers": [
+          {
+            "what": "Most rain per hour the sewers are built for, inches",
+            "value": 1.75,
+            "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Same for most sewers in Queens, inches",
+            "value": 1.5,
+            "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Storms above 1.75 inches an hour in 2023",
+            "value": 5,
+            "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Rain in one hour at Central Park on July 14, 2025, inches",
+            "value": 2.07,
+            "source": "https://www.nyc.gov/site/em/about/press-releases/20250715_pr_nycem-City-Responds-To-Hstoric-Rainfall-Event.page",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Water-backup endorsement, USD a year, low-high (consumer policies)",
+            "value": [
+              50,
+              250
+            ],
+            "source": "https://www.nerdwallet.com/insurance/homeowners/learn/water-backup-coverage",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Average small-business water and freezing damage claim (The Hartford 2025 review lists water damage as the most common claim; the dollar figure was not captured)",
+            "value": null,
+            "source": "https://www.insurancejournal.com/news/national/2025/12/10/850545.htm",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          }
+        ],
+        "tier": "core"
+      },
+      {
+        "id": "trash_and_rodent_pressure",
+        "title": "Trash, season and neighbors add up to a rodent score",
+        "playerDecision": "Three standing orders that interact: trash_setup (bins and pickups), rodent_proofing, and the existing pest_control lever.",
+        "engineMath": "pressure = season (1 in June-September, 1 in October-November for mice, else 0) + neighbors (1 while demolition_next_door or trash_piles_after_snow is active) + trash (1 for bags_on_curb, 1 for three pickups in June-September, 0 for daily pickup) + proofing (1 if rodent_proofing = none) + extermination (1 if pest_control = none). At pressure >= 3 the existing violation pest_activity is open from the first day of the next month and stays open until pressure has been below 3 for a full month. No dice. The player sees the score and its parts in the risk panel, so the fix is always visible.",
+        "fieldsNeeded": [
+          "business.rodentPressure (derived, shown in analytics)",
+          "levers[].options[].pressure (integer contribution)",
+          "events[].pressure (integer contribution)"
+        ],
+        "numbers": [
+          {
+            "what": "311 rat sightings, twelve months to November 2025",
+            "value": 20025,
+            "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Same, twelve months to November 2024",
+            "value": 25230,
+            "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Fine steps for bags instead of bins, USD",
+            "value": [
+              50,
+              100,
+              200
+            ],
+            "source": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Threshold of 3 and all weights",
+            "value": 3,
+            "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
+            "confidence": "estimate",
+            "evidence": "calc"
+          }
+        ],
+        "tier": "deep"
+      },
+      {
+        "id": "outdoor_seat_days",
+        "title": "Outdoor seats exist only on the days the weather allows",
+        "playerDecision": "Lever outdoor_seating: none, sidewalk cafe or roadway cafe; in November, keep the roadway setup through winter or take it down.",
+        "engineMath": "usableToday = dry (condition clear or cloudy) and 55 <= highF <= 88 and no smoke, wind or storm event. On usable days the option's addsSeats join the size for the seating calculation; on other days they are zero. In winter months a kept roadway cafe counts 20% of its seats on dry days above 40°F if electric heaters are paid for. Fees are charged every month of the license; the wait for approval (existing rule card: over 19 months for most approved applicants in 2026) delays the first usable day.",
+        "fieldsNeeded": [
+          "levers[].options[].addsSeats",
+          "levers[].options[].activeMonths",
+          "setup or lever waitDays for a license",
+          "effect target outdoorSeats",
+          "place.consentFeePerSqft (by sector)"
+        ],
+        "numbers": [
+          {
+            "what": "License fee for a sidewalk or a roadway cafe, USD for four years",
+            "value": 1050,
+            "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Sidewalk consent fee, USD per sq ft per year, low-high",
+            "value": [
+              6,
+              31
+            ],
+            "source": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Roadway consent fee, USD per sq ft per year, low-high",
+            "value": [
+              5,
+              25
+            ],
+            "source": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants",
+            "confidence": "estimate",
+            "evidence": "secondary"
+          },
+          {
+            "what": "Latest closing hour for roadway and most sidewalk cafes",
+            "value": 23,
+            "source": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm",
+            "confidence": "estimate",
+            "evidence": "official_excerpt"
+          },
+          {
+            "what": "Usable temperature band 55-88°F and the 20% winter share",
+            "value": [
+              55,
+              88
+            ],
+            "source": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm",
+            "confidence": "estimate",
+            "evidence": "calc"
+          }
+        ],
+        "tier": "deep"
       }
     ],
     "howNumbersWereChecked": "This session could run web searches but could not open pages: the cloud environment's network policy refused www.nyc.gov, codelibrary.amlegal.com and every other outside host. So no number here is 'verified' in the strict sense of PACK.md (opened the primary source myself). Every record is 'estimate' and carries an 'evidence' field: 'official_excerpt' = the search tool quoted the number from the official page named in 'source' (agency page, law text, court decision); 'secondary' = news, trade press, insurer or vendor report; 'calc' = my arithmetic or a game-design value, with the calculation in 'note'. A person or an agent with open network access can turn every 'official_excerpt' into 'verified' by opening the link.",
@@ -385,7 +2596,166 @@
     ],
     "fixesExistingIds": [
       "sidewalk_shed"
-    ]
+    ],
+    "monthlyClimate": {
+      "station": "New York Central Park, NOAA 1991-2020 normals",
+      "months": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "normalHighF": [
+        39.5,
+        42.2,
+        49.9,
+        61.8,
+        71.5,
+        79.7,
+        84.8,
+        83.4,
+        76.3,
+        64.5,
+        54.1,
+        44.4
+      ],
+      "snowfallInches": [
+        8.8,
+        10.1,
+        5,
+        0.4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.1,
+        0.5,
+        4.9
+      ],
+      "precipitationInches": [
+        3.6,
+        3.2,
+        4.3,
+        4.1,
+        4,
+        4.5,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "daysAt90F": [
+        0,
+        0,
+        0,
+        0,
+        null,
+        null,
+        7,
+        5,
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "https://www.weather.gov/media/okx/Climate/CentralPark/monthlyseasonalsnowfall.pdf",
+      "confidence": "estimate",
+      "evidence": "secondary",
+      "note": "Highs are the values already verified in ai/src/data/nyc-climate.json. Snowfall: January 8.8, February 10.1, March 5.0, April 0.4 inches and the 29.8-inch season total were quoted by web search from a table of NOAA normals; October-December (0.1, 0.5, 4.9) are from memory and make the sum 29.8. Precipitation January-June and the 90°F days for July-September were quoted the same way; null = not confirmed in this session. Extremes that matter more than normals: 43.4 inches of snow in the 2025-26 winter; 100°F on July 2, 2026; 2.07 inches of rain in one hour on July 14, 2025."
+    },
+    "drinkMixByTemperature": {
+      "formula": "icedShare = clamp(0.20 + 0.0122 x (dailyHighF - 40), 0.15, 0.80)",
+      "icedShareByMonth": [
+        0.19,
+        0.23,
+        0.32,
+        0.47,
+        0.58,
+        0.68,
+        0.75,
+        0.73,
+        0.64,
+        0.5,
+        0.37,
+        0.25
+      ],
+      "slopePerDegreeF": 0.0122,
+      "anchor": {
+        "highF": 40,
+        "icedShare": 0.2
+      },
+      "source": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
+      "confidence": "estimate",
+      "evidence": "secondary",
+      "note": "Slope: an analysis of one coffee shop in King's Cross, London (January-June) found that each +1°C of daily maximum adds 2.2 percentage points to cold coffee's share of sales and that temperature alone explains 92% of the variation: 2.2 / 1.8 = 1.22 points per °F. Anchor and caps are my assumptions, checked against chains: Starbucks said cold drinks were about 75% of its US beverage sales in summer 2022; Dunkin' says more than half of its coffee is iced even in winter, so an independent New York shop may sit above this curve in winter. A US point-of-sale series by month was not found. Total orders move far less than the mix: NRF and Planalytics put the average weather swing in coffee sales at 5%, and a Penn State teaching data set of a campus cafe found temperature significant for the mix but not for total sales."
+    },
+    "weatherDayEffects": {
+      "note": "Proposed refinement of footTrafficMult in ai/src/data/nyc-climate.json. Values marked measured come from the cited studies; the rest are my estimates and say so.",
+      "rows": [
+        {
+          "condition": "light or passing rain",
+          "footTrafficMult": 0.95,
+          "deliveryShareMult": 1.05,
+          "basis": "estimate: half of the measured rainy-day loss"
+        },
+        {
+          "condition": "all-day or heavy rain",
+          "footTrafficMult": 0.9,
+          "deliveryShareMult": 1.15,
+          "basis": "measured: street-front stores lose about 7.4% of traffic on rainy days (Martinez-de-Albeniz and Belkaid); heavy rain cut restaurant visits 10-11% (Foursquare with AccuWeather). Delivery demand can outrun the couriers: DoorDash adds a weather fee and can suspend an area"
+        },
+        {
+          "condition": "first day of snow",
+          "footTrafficMult": 0.85,
+          "deliveryShareMult": 1.2,
+          "basis": "existing deck value; Placer.ai storm-week losses of 8.6% nationally and 20-30% in the hardest-hit states"
+        },
+        {
+          "condition": "ice on the sidewalk after snow, walk not cleared",
+          "footTrafficMult": 0.85,
+          "deliveryShareMult": 1,
+          "basis": "estimate; applies to this door only (see sidewalk_clock)"
+        },
+        {
+          "condition": "bitter cold, high at or below 25°F",
+          "footTrafficMult": 0.92,
+          "deliveryShareMult": 1.1,
+          "basis": "estimate; Foursquare with AccuWeather: coffee shops get less traffic when it rains, snows or gets very cold"
+        },
+        {
+          "condition": "very hot, high at or above 90°F",
+          "footTrafficMult": 1,
+          "deliveryShareMult": 1.05,
+          "basis": "correction: the deck has 0.95 for heat. Foursquare with AccuWeather (New York, Chicago, Atlanta): restaurants as a whole lose traffic on unusually hot days, but coffee shop brands see slightly more. The mix moves to iced drinks instead"
+        },
+        {
+          "condition": "wildfire smoke, AQI above 150",
+          "footTrafficMult": 0.8,
+          "deliveryShareMult": 1.1,
+          "basis": "estimate: no sales figure was published for June 2023 or July 2026; restaurants closed outdoor seating and some closed early"
+        },
+        {
+          "condition": "first warm dry weekend of spring, 65°F or more",
+          "footTrafficMult": 1.1,
+          "deliveryShareMult": 0.9,
+          "basis": "existing deck value, estimate"
+        }
+      ],
+      "source": "https://foursquare.com/resources/blog/data/fair-weather-foodies/",
+      "confidence": "estimate",
+      "evidence": "secondary"
+    }
   },
   "officials": [
     {
@@ -698,6 +3068,158 @@
       "confidence": "estimate",
       "evidence": "calc",
       "note": "Applies on announced event days only. $120 = one extra 7-hour shift at $17.00. Deliveries cannot reach a closed street, so stock arrives the day before. The capacity gains are month-level placeholders; on the day itself the window menu roughly doubles orders per hour (design value). The crowd is only worth what you can serve."
+    },
+    {
+      "id": "outdoor_seating",
+      "name": "Seats outside",
+      "options": [
+        {
+          "id": "none",
+          "label": "No outdoor seats",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "sidewalk_cafe",
+          "label": "Licensed sidewalk cafe: 4 tables against your wall",
+          "monthlyCost": 95,
+          "effects": {
+            "capacity": 0.04,
+            "demand": 0.02
+          },
+          "addsSeats": 8,
+          "activeMonths": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "id": "roadway_cafe",
+          "label": "Licensed roadway cafe in the parking lane, now allowed all year",
+          "monthlyCost": 420,
+          "effects": {
+            "capacity": 0.06,
+            "demand": 0.03
+          },
+          "addsSeats": 12,
+          "activeMonths": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        }
+      ],
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "Sidewalk: license $1,050 for four years ($22 a month) plus the yearly consent fee, $6 a square foot in about 80% of the city (up to $31 in Manhattan below 125th Street): 100 sq ft x $6 / 12 = $50; furniture $1,100 written off over four years = $23. Total $95 at the $6 rate; at $31 the fee alone is $258 a month. Roadway: license $22 a month; consent fee $5-$25 a square foot (160 sq ft x $8 / 12 = $107); a code-compliant platform and barriers of about $7,000 over two years = $290. The roadway numbers other than the fee range are my planning values. Seats count only on dry days between about 55°F and 88°F (extra.mechanics.outdoor_seat_days). The existing rule card says approval took most applicants over 19 months, and outdoor seats count toward the 20-seat bathroom line. Since August 31, 2026 roadway cafes may stay up all year under a separate license; the winter rules are still being written."
+    },
+    {
+      "id": "flood_protection",
+      "name": "Basement and heavy rain",
+      "options": [
+        {
+          "id": "none",
+          "label": "Stock on the basement floor, standard insurance",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "basic",
+          "label": "Stock on racks 6 inches up, water-backup rider on the policy, door dam for flood warnings",
+          "monthlyCost": 35,
+          "effects": {}
+        },
+        {
+          "id": "full",
+          "label": "Backwater valve on the sewer line, sump pump, flood policy",
+          "monthlyCost": 190,
+          "effects": {}
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "basic: water-backup endorsement $50-$250 a year on consumer policies ($15 a month at the middle; no commercial quote was found) + four dunnage racks and a door barrier, about $480 over two years = $20. full: backwater valve installed for about $3,000 and a sump pump for $1,500, written off over five years = $75, plus a commercial flood policy at a planning value of $1,400 a year = $115. A standard business owner's policy covers neither flood nor sewer backup. The lever decides how much the flash_flood_warning and sewer_backup events cost: none = full loss, basic = stock saved and cleanup insured, full = no water."
+    },
+    {
+      "id": "seasonal_menu",
+      "name": "Menu through the year",
+      "options": [
+        {
+          "id": "same_all_year",
+          "label": "One menu all year",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "seasonal_program",
+          "label": "Cold-brew and iced specials in summer, spiced and hot specials from September",
+          "monthlyCost": 150,
+          "effects": {
+            "demand": 0.03
+          }
+        }
+      ],
+      "source": "https://pos.toasttab.com/blog/data/coffee-prices-trends-by-state",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "$150 = menu printing, syrups and a second cold-brew keg (planning value). +3% demand is my estimate: Toast's 2025 data shows cold brew orders peaking in July at 35% above the yearly average and regular coffee peaking in December and March; Placer.ai measured Starbucks' pumpkin-menu launch day on August 25, 2026 at 25.7% above its daily average for the year. A small shop gets a fraction of that, and only if the special exists."
+    },
+    {
+      "id": "air_quality_plan",
+      "name": "Smoke days",
+      "options": [
+        {
+          "id": "none",
+          "label": "Nothing special",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "filters_and_masks",
+          "label": "High-grade filter in the air handler, a portable air cleaner, masks for staff",
+          "monthlyCost": 40,
+          "effects": {}
+        }
+      ],
+      "source": "https://www.nyc.gov/site/em/about/press-releases/20260719_pr_NYCEM-Thanks-New-Yorkers-as-Wildfire-Smoke-Response-Concludes.page",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "$40 = a MERV-13 filter changed quarterly, a $300 HEPA unit over three years and a box of KN95 masks (planning value). On a smoke day the option keeps the room usable: the shop loses street traffic but not the customers already inside, and staff are not sent home. Effects are applied by the wildfire_smoke_day event."
+    },
+    {
+      "id": "rodent_proofing",
+      "name": "Keeping rodents out",
+      "options": [
+        {
+          "id": "none",
+          "label": "Rely on the exterminator",
+          "monthlyCost": 0,
+          "effects": {}
+        },
+        {
+          "id": "sealed",
+          "label": "Door sweeps, sealed pipe gaps, rodent-proof bins, trash out of the shop every night",
+          "monthlyCost": 60,
+          "effects": {
+            "quality": 0.01
+          }
+        }
+      ],
+      "source": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
+      "confidence": "estimate",
+      "evidence": "calc",
+      "note": "$60 = $700 of door sweeps, steel wool, sealant and two steel bins over two years, plus ten minutes of closing labor a day. Works with the existing pest_control lever: an exterminator treats, sealing keeps them out. It decides whether the seasonal pressure events (construction next door, summer peak, first cold week) turn into the existing pest_activity violation."
     }
   ],
   "shortcuts": [
@@ -1055,6 +3577,30 @@
       "title": "Congestion Relief Zone",
       "text": "Below 60th Street in Manhattan cars pay $9 a day at peak hours; delivery trucks pay $14.40 or $21.60 every time they enter. Suppliers pass it on. In year one foot traffic in the zone rose 3.4% against 1.4% for the borough.",
       "source": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational"
+    },
+    {
+      "id": "flood_not_insured",
+      "title": "Rain is not in the policy",
+      "text": "A standard business owner's policy pays for neither flood nor sewer backup. City sewers handle at most 1.75 inches of rain an hour; in 2023 five storms exceeded that. A water-backup rider costs roughly $50-$250 a year. Keep stock off the basement floor.",
+      "source": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection"
+    },
+    {
+      "id": "power_outage_claim",
+      "title": "When the power goes out",
+      "text": "If a failure in Con Edison's local grid leaves you dark for more than 12 hours in a 24-hour period, a business can claim spoiled perishables, up to $12,900, within 30 days. Storm outages are excluded.",
+      "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02283"
+    },
+    {
+      "id": "roadway_cafe_all_year",
+      "title": "Outdoor dining, all year",
+      "text": "Since August 31, 2026 a licensed roadway cafe may stay up all year instead of coming down from November 30 to March 31. A license costs $1,050 for four years, plus a yearly fee of $5-$31 per square foot. Cafes close by 11 PM.",
+      "source": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm"
+    },
+    {
+      "id": "smoke_day",
+      "title": "Smoke days",
+      "text": "An Air Quality Index above 150 is unhealthy for everyone. In July 2026 Canadian wildfire smoke pushed New York City to 289, second only to June 2023. No law makes you close, but outdoor seats are useless and staff should not work outside.",
+      "source": "https://www.nyc.gov/site/em/about/press-releases/20260719_pr_NYCEM-Thanks-New-Yorkers-as-Wildfire-Smoke-Response-Concludes.page"
     }
   ],
   "sources": [
@@ -1101,6 +3647,331 @@
     {
       "url": "https://longisland.news12.com/2026/01/22/hudson-valley-customers-face-ice-melt-shortage-ahead-of-major-snowstorm/1mt40tbth8IHiDHAC6zw1E",
       "title": "News 12: ice melt shortage ahead of the January 2026 storm",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
+      "title": "NYC Mayor's Office: study finds sidewalk sheds cost Manhattan businesses (August 2024)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/mayors-office/news/2026/08/mamdani-administration-taking-down-sidewalk-sheds-and-improving-",
+      "title": "NYC Mayor's Office: taking down sidewalk sheds, 7,427 permitted sheds (August 20, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/mayors-office/news/2026/10/mamdani-administration-announces-1-200-sidewalk-sheds-taken-down",
+      "title": "NYC Mayor's Office: 1,200 sidewalk sheds taken down (October 19, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/local_laws/ll48of2025.pdf",
+      "title": "Local Law 48 of 2025 (sidewalk shed permits and penalties)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.westsiderag.com/2026/04/23/uws-shed-watch-a-new-monthly-column-from-west-side-rag",
+      "title": "West Side Rag: UWS Shed Watch, average shed permit age from DOB data (April 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/buildings/safety/construction-site-signage-requirements.page",
+      "title": "NYC Buildings: construction site signage requirements (temporary business sign on a shed)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://brooklyn.news12.com/greenpoint-sales-slump-during-g-train-shutdown",
+      "title": "News 12 Brooklyn: Greenpoint sales slump during G train shutdown (June 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.amny.com/news/mta-axes-g-train-shutdowns-planned-for-december-after-outcry-from-small-businesses/",
+      "title": "amNewYork: MTA axes G train shutdowns planned for December after outcry from small businesses",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://qns.com/2018/02/astorias-electeds-call-mta-president-boost-service-provide-relief-business-owners-near-shuttered-n-w-stations",
+      "title": "QNS: Astoria electeds ask MTA for relief for businesses near shuttered N/W stations (February 2018)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.vice.com/en/article/how-one-subway-closure-in-queens-wrecked-a-community",
+      "title": "Vice: how one subway closure in Queens wrecked a community",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/ddc/downloads/projects/Outreach-Materials/2022_SBS_FAQs_English_r2.pdf",
+      "title": "NYC DDC / Small Business Services FAQ for businesses near construction (2022)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.amny.com/news/water-pipe-torture-killing-w-10th-st-business",
+      "title": "amNewYork (The Villager): water pipe work on West 10th Street hurting business",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cbsnews.com/newyork/news/garment-district-water-shutdown/",
+      "title": "CBS New York: Garment District business owners irate over water shutdown plan",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/operations/downloads/pdf/pmmr2026/dep.pdf",
+      "title": "Preliminary Mayor's Management Report 2026: Department of Environmental Protection (water main breaks)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/html/dot/html/pr2022/outdoor-dining.shtml",
+      "title": "NYC DOT: Streets for Recovery, the economic benefits of the Open Streets program (October 2022)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/html/dot/html/pr2026/nyc-dot-kicks-off-2026-open-streets-season.shtml",
+      "title": "NYC DOT: 2026 Open Streets season kicks off (May 21, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.osc.ny.gov/files/reports/pdf/report-20-2026.pdf",
+      "title": "NYS Comptroller Report 20-2026: employment outcomes of Open Streets in New York City",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.governor.ny.gov/news/less-traffic-better-transit-its-first-anniversary-governor-hochul-celebrates-transformational",
+      "title": "Governor of New York: first anniversary of congestion pricing (January 5, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.freightwaves.com/news/new-york-trucking-group-says-manhattan-tolls-burden-industry",
+      "title": "FreightWaves: New York trucking group says Manhattan tolls burden industry (toll schedule)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://api-prod.gothamist.com/news/nyc-wont-issue-permits-for-new-street-fairs-due-to-nypd-overtime-costs",
+      "title": "Gothamist: NYC will not issue permits for new street fairs due to NYPD overtime costs (October 2024)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20151230/soho/incessant-filming-hurts-small-businesses-on-crosby-street-owners-say",
+      "title": "DNAinfo: incessant filming hurts small businesses on Crosby Street, owners say",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc.gov/html/dot/downloads/pdf/dot-economic-benefits-of-sustainable-streets.pdf",
+      "title": "NYC DOT: The Economic Benefits of Sustainable Streets (2013)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/cecm/downloads/pdf/tcs-street-closures-marathon-2026.pdf",
+      "title": "NYC: 2026 TCS New York City Marathon street closures",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01830",
+      "title": "NYC311: mobile food vending permits (Local Laws 54 and 59 of 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/setout-rules-businesses.page",
+      "title": "DSNY: setout rules for businesses",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/cleaning-rules-businesses.page",
+      "title": "DSNY: cleaning rules for businesses",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/businesses/rules-reporting/street-sidewalk-rules-businesses.page",
+      "title": "DSNY: sidewalk and street rules for businesses",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/news/24-011/starting-friday-march-1-all-new-york-city-businesses-must-put-trash-lidded-bins-",
+      "title": "DSNY: starting March 1, 2024 all businesses must put trash in lidded bins",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://dsny.cityofnewyork.us/?p=1198",
+      "title": "DSNY: collection and setout laws for businesses (litter baskets)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Business-Flyer-Air-Conditioning-Law.pdf",
+      "title": "DCWP: business flyer, air conditioning law",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dca/news/023-24/shut-front-door-city-reminds-local-businesses-keep-doors-windows-closed-when-running",
+      "title": "DCWP: Shut the Front Door reminder, 2023 inspection counts",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-01980",
+      "title": "NYC311: sidewalk obstruction, A-frame signs within 3 feet",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://intro.nyc/0302-2024",
+      "title": "NYC Council Introduction 302 of 2024 (illegal posting penalties under §10-121)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.dnainfo.com/new-york/20120625/fort-greene/illegal-posters-could-pin-fine-on-hakeem-jeffries-campaign",
+      "title": "DNAinfo: illegal posters, Clinton Hill business fined almost $9,000",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.weather.gov/media/okx/Climate/CentralPark/DailyMaxTNormals.pdf",
+      "title": "NWS New York: Central Park daily maximum temperature normals 1991-2020",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.weather.gov/media/okx/Climate/CentralPark/monthlyseasonalsnowfall.pdf",
+      "title": "NWS New York: Central Park monthly and seasonal snowfall",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://unitedbaristas.com/articles/explainers/cold-coffee-demand-is-more-predictable-than-the-british-weather/",
+      "title": "United Baristas: cold coffee demand is more predictable than the British weather (King's Cross cafe analysis)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.teaandcoffee.net/blog/39416/as-temperatures-rise-more-uk-consumers-grab-iced-coffees/",
+      "title": "Tea & Coffee Trade Journal: Square data on iced coffee in the May 2026 UK heatwave",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.planalytics.com/?p=5995",
+      "title": "Planalytics: how weather impacts your sales (coffee swing 5%, Northeast +10% in a cool spring)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://cdn.nrf.com/sites/default/files/2024-06/ClimateProofingRetail_2024.pdf",
+      "title": "National Retail Federation: Climate-Proofing Retail (2024)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://foursquare.com/resources/blog/data/summer-weather-data-reveals-consumer-insights/",
+      "title": "Foursquare with AccuWeather: summer weather data and restaurant foot traffic",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://foursquare.com/resources/blog/data/fair-weather-foodies/",
+      "title": "Foursquare with AccuWeather: Fair Weather Foodies (rain and restaurant visits)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://pos.toasttab.com/blog/data/coffee-prices-trends-by-state",
+      "title": "Toast: coffee price and order trends 2025 (cold brew peak in July)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://secondmeasure.com/datapoints/does-pumpkin-spice-drive-starbucks-sales/",
+      "title": "Bloomberg Second Measure: does pumpkin spice drive Starbucks sales (January is the lowest month)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.placer.ai/anchor/articles/psl-day-2026-gives-starbucks-its-biggest-tuesday-of-the-year",
+      "title": "Placer.ai: PSL Day 2026 gives Starbucks its biggest Tuesday of the year",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://amp.insurancejournal.com/news/east/2026/07/02/876132.htm",
+      "title": "Insurance Journal: New York City, Northeast swelter in hottest day of the year (July 2, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://abc7ny.com/post/nyc-extreme-heat-coned-reduces-voltage-parts-bronx-westchester-asks-customers-conserve-energy/19436776/",
+      "title": "ABC7: Con Edison reduces voltage in parts of the Bronx and Westchester (July 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.cbsnews.com/amp/newyork/news/extreme-heat-causing-power-outages",
+      "title": "CBS New York: extreme heat causes outages, 8% voltage reduction in Brooklyn and Queens (June 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-02283",
+      "title": "NYC311: Con Edison claims for losses from a power outage",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://documentedny.com/2026/08/14/nyc-power-outage-reimbursement/",
+      "title": "Documented: NYC power outage reimbursement (August 14, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/em/about/press-releases/20260719_pr_NYCEM-Thanks-New-Yorkers-as-Wildfire-Smoke-Response-Concludes.page",
+      "title": "NYC Emergency Management: wildfire smoke response concludes (July 19, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://advocate.nyc.gov/reports/orange-sky-red-alert-review-air-quality-emergencies-nyc",
+      "title": "NYC Public Advocate: Orange Sky, Red Alert - review of air quality emergencies",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/em/about/press-releases/20250715_pr_nycem-City-Responds-To-Hstoric-Rainfall-Event.page",
+      "title": "NYC Emergency Management: city responds to historic rainfall event (July 15, 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.brownstoner.com/brooklyn-life/brooklyn-businesses-flood-recovery",
+      "title": "Brownstoner: Brooklyn businesses struggle to recover after record-breaking rains (2023)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dep/news/042624/testimony-rohit-t-aggarwala-commissioner-new-york-city-department-environmental-protection",
+      "title": "NYC DEP Commissioner testimony on flooding and stormwater infrastructure (April 26, 2024)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://comptroller.nyc.gov/reports/is-new-york-city-ready-for-rain",
+      "title": "NYC Comptroller: Is New York City Ready for Rain?",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/site/dsny/news/25-042/new-york-s-strongest-delivered-cleaner-more-sustainable-city-2025",
+      "title": "DSNY: New York's Strongest delivered a cleaner city in 2025 (rat sighting counts)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/assets/buildings/pdf/ll109of22-sn.pdf",
+      "title": "NYC Buildings: Local Law 109 of 2022 service notice (rodent extermination before demolition)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://abc7ny.com/post/mamdani-defends-dsny-trash-piles-snowbanks-parts-nyc/18529761/",
+      "title": "ABC7: DSNY working to catch up as trash piles up on snowbanks (February 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://amp.insurancejournal.com/news/east/2024/11/19/801851.htm",
+      "title": "Insurance Journal: New York City issues first drought warning in 22 years (November 19, 2024)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://about.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/institute/pdf/jpmc-institute-daylight-savings-report.pdf",
+      "title": "JPMorgan Chase Institute: Shedding Light on Daylight Saving Time (2016)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://portal.311.nyc.gov/article/?kanumber=KA-03604",
+      "title": "NYC311: Dining Out NYC license and fees",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://www.nyc.gov/mayors-office/news/2026/08/mayor-mamdani-signs-bill-making-year-round-outdoor-dining-a-perm",
+      "title": "NYC Mayor's Office: Mayor Mamdani signs bill making year-round outdoor dining permanent (August 31, 2026)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants",
+      "title": "Streetsblog NYC: how much outdoor dining costs restaurants (April 2025)",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://about.doordash.com/en-us/news/winter-storm-fern",
+      "title": "DoorDash: severe weather protocol and weather impact fee (January 2026)",
       "checked": "2026-11-14"
     }
   ],
