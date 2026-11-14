@@ -61,7 +61,9 @@ describe('month close', () => {
     w = run(w, ctx, 10);
     const q1 = w.businesses[0].liabilities.find((l) => l.taxId === 'sales_tax' && l.dueDay === 110)!;
     expect(q1.paid).toBe(true);
-    expect(w.businesses[0].mtd.lines.some((l) => l.id === 'tax_paid_sales_tax_d110')).toBe(true);
+    expect(w.businesses[0].mtd.lines.some((l) => l.id === 'sales_tax_paid_sales_tax_d110')).toBe(true);
+    // every sales tax line says so in its id, whatever the pack calls the tax (agents 10 and 11 filter by it)
+    expect(w.businesses[0].mtd.lines.filter((l) => l.kind === 'tax' && /sales tax/i.test(l.label)).every((l) => l.id.includes('sales_tax'))).toBe(true);
   });
 
   it('a business that spent the sales tax it collected goes bankrupt on the day the tax is due', () => {
@@ -176,5 +178,21 @@ describe("'wages' events and the headcount at the month end", () => {
     expect(pay(plain, 'payroll_manager')).toBeGreaterThan(0);
     expect(pay(raised, 'payroll_manager')).toBe(pay(plain, 'payroll_manager'));
     expect(sumLines(raised.lines)).toBeCloseTo(raised.cashEnd - raised.cashStart, 2);
+  });
+});
+
+describe('the base month of the notes (research_notes/Стоимость кофейни Нью Йорка 2026/economics.md)', () => {
+  it('an honest standard cafe on an average block sells about 200 checks a day at $8.50 and keeps about $4,000 a month', () => {
+    let { w, ctx } = cafeCity(6);
+    w = run(w, ctx, 180 - w.day);
+    const b = w.businesses[0];
+    expect(b.orders.staff).toEqual({ barista: 4, shift_lead: 1 });
+    for (const m of b.history.slice(1)) {   // month 1 is the opening month
+      expect(m.servedUnits / 30).toBeGreaterThan(190);
+      expect(m.servedUnits / 30).toBeLessThan(210);
+      expect(m.avgPrice).toBe(8.5);
+      expect(m.profit).toBeGreaterThan(2_500);
+      expect(m.profit).toBeLessThan(5_500);
+    }
   });
 });

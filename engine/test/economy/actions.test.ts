@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { RULES } from '@ohh/shared';
 import { applyAction, createWorld, tickDay } from '../../src/index';
-import { itemsCost } from '../../src/economy/actions';
+import { itemsCost, resizePlan } from '../../src/economy/actions';
 import { econOf } from '../../src/economy/util';
 import { cafePack } from '../fixtures/cafe';
-import { act, cafeCity, config, ctxWith, owner, place, run } from '../fixtures/world';
+import { act, cafeCity, config, ctxWith, deepFreeze, owner, place, run } from '../fixtures/world';
 
 const fresh = (sqft = 800) => {
   const ctx = ctxWith([place(1, { sqft }), place(2, { sqft })]);
@@ -19,7 +19,8 @@ describe('open_business and launch', () => {
     const b = r.world.businesses[0];
     const kit = cafePack.kits.find((k) => k.id === 'standard')!;
     const cost = itemsCost(cafePack, kit.items, 20);
-    expect(cost).toBe(106_155 - 18 * 220 + 20 * 220);
+    const fixedPart = kit.items.filter((i) => i.id !== 'seat').reduce((a, i) => a + cafePack.setup.find((d) => d.id === i.id)!.cost * i.qty, 0);
+    expect(cost).toBe(fixedPart + 20 * 220);
     expect(b.cash).toBe(cafePack.startCapital - cost);
     expect(b.items.find((i) => i.id === 'seat')!.qty).toBe(20);
     expect(b.status).toBe('setup');
@@ -91,13 +92,29 @@ describe('buying, selling, resizing, spending', () => {
   it('resize buys or sells seats and respects the space', () => {
     const { w, ctx } = cafeCity(1);
     const cash = w.businesses[0].cash;
+    const s0 = w.businesses[0].size;
     const up = act(w, ctx, 'pl1', { type: 'resize', size: 24 }).businesses[0];
     expect(up.size).toBe(24);
-    expect(up.cash).toBe(cash - 6 * 220);
+    expect(up.cash).toBe(cash - (24 - s0) * 220);
     expect(up.items.find((i) => i.id === 'seat')!.qty).toBe(24);
     const down = act(w, ctx, 'pl1', { type: 'resize', size: 12 }).businesses[0];
-    expect(down.cash).toBe(cash + 6 * 220 * RULES.RESALE_SHARE);
+    expect(down.cash).toBeCloseTo(cash + (s0 - 12) * 220 * RULES.RESALE_SHARE, 2);
     expect(applyAction(w, ctx, 'pl1', { type: 'resize', size: 27 }).error).toMatch(/fit in 800 sq ft/);
+  });
+
+  it('resizePlan tells what a resize would do without doing it (for what_if with a size)', () => {
+    const { w, ctx } = cafeCity(1);
+    const b = deepFreeze(structuredClone(w.businesses[0]));
+    const plan = resizePlan(b, ctx, 24);
+    const done = act(w, ctx, 'pl1', { type: 'resize', size: 24 }).businesses[0];
+    expect(plan.ok).toBe(true);
+    if (!plan.ok) return;
+    expect(plan.size).toBe(done.size);
+    expect(plan.items).toEqual(done.items);
+    expect(b.cash + plan.cashDelta).toBeCloseTo(done.cash, 2);
+    expect(done.mtd.lines.at(-1)).toEqual(plan.line);
+    expect(resizePlan(b, ctx, 27)).toEqual({ ok: false, error: 'Only 26 seats fit in 800 sq ft' });
+    expect(resizePlan(b, ctx, b.size)).toMatchObject({ ok: true, cashDelta: 0, line: null });
   });
 
   it('advertising lifts demand and fades; training lifts quality', () => {

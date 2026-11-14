@@ -2,7 +2,7 @@
 import type { BusinessState, DayReport, FeedItem, InboxItem, NicheId, Pack, Place, PnlLine, TaxLiability, WorldState } from '@ohh/shared';
 import { dateOf, RULES } from '@ohh/shared';
 import type { EngineCtx } from '../index';
-import { monthlyDemand, marketParams, type DemandInput } from './demand';
+import { monthlyDemand, marketParams, type DemandInput, fairPrice } from './demand';
 import { activeEvents, eventMult, itemsQuality, leverEffects, MARKETING_DECAY_DAY, TRAINING_DECAY_DAY, trainingBoost, weekdayMult } from './effects';
 import { dealModifiers } from './deps';
 import { hooksFor } from './hooks';
@@ -162,7 +162,7 @@ function tradeDay(c: Calc, ctx: EngineCtx, day: number, month: number, eventTitl
   const empty = b.status === 'open' && util < (pack.sizing.emptyPenaltyBelow ?? 0);
   const qTarget = clamp(0.5 + itemsQuality(b, pack) + lev.quality + trainingBoost(econ.training, c.staffN) - (crowded ? 0.08 : 0) - (c.lost.staff > 0 ? 0.04 : 0), 0, 1);
   const quality = clamp(b.quality + QUALITY_INERTIA * (qTarget - b.quality), 0, 1);
-  const fair = pack.unit.refPrice * (1 + 0.6 * (quality - 0.5));
+  const fair = fairPrice(pack.unit.refPrice, quality);
   const lostN = c.lost.size + c.lost.staff + c.lost.closure;
   const lostShare = c.demand > 0 ? lostN / c.demand : 0;
   const rTarget = clamp(quality + lev.reputation - 0.6 * lostShare - 0.5 * Math.max(0, price / fair - 1.15) - (empty ? 0.1 : 0), 0, 1);
@@ -249,7 +249,9 @@ export function payDue(b: BusinessState, ctx: EngineCtx, pack: Pack, day: number
     const name = taxName(ctx, pack, l.taxId);
     cash = round2(cash - l.amount);
     paid = round2(paid + l.amount);
-    lines = addLine(lines, { id: `tax_paid_${l.taxId}_d${l.dueDay}`, label: `${name} paid`, kind: def?.base === 'payroll' ? 'payroll_tax' : 'tax', amount: -l.amount });
+    // sales tax lines always carry "sales_tax" in the id: screens leave them out of costs (the money only passes through)
+    const prefix = def && isSalesTax(def) ? 'sales_tax_paid' : 'tax_paid';
+    lines = addLine(lines, { id: `${prefix}_${l.taxId}_d${l.dueDay}`, label: `${name} paid`, kind: def?.base === 'payroll' ? 'payroll_tax' : 'tax', amount: -l.amount });
     unpaid.push(`${name} (${'$' + Math.round(l.amount).toLocaleString('en-US')})`);
     return { ...l, paid: true };
   });

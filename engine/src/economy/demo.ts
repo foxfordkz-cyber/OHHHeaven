@@ -33,22 +33,25 @@ const act = (playerId: string, a: Action): void => {
 };
 
 const cafes: { who: string; name: string; kit: 'lean' | 'standard' | 'premium'; size: number }[] = [
-  { who: 'pl1', name: 'Luna Cafe', kit: 'standard', size: 18 },
+  { who: 'pl1', name: 'Luna Cafe', kit: 'standard', size: 20 },
   { who: 'pl2', name: 'Brew & Co', kit: 'lean', size: 12 },
-  { who: 'pl3', name: 'Cafe Blue', kit: 'premium', size: 24 },
-  { who: 'pl4', name: 'Morning Owl', kit: 'standard', size: 18 },
-  { who: 'pl5', name: 'Corner Cup', kit: 'standard', size: 18 },
-  { who: 'pl6', name: 'Daily Grind', kit: 'standard', size: 18 },
+  { who: 'pl3', name: 'Cafe Blue', kit: 'premium', size: 26 },
+  { who: 'pl4', name: 'Morning Owl', kit: 'standard', size: 20 },
+  { who: 'pl5', name: 'Corner Cup', kit: 'standard', size: 20 },
+  { who: 'pl6', name: 'Daily Grind', kit: 'standard', size: 20 },
 ];
 cafes.forEach((c, i) => act(c.who, { type: 'open_business', niche: 'cafe', placeId: placesList[i].id, name: c.name, kitId: c.kit, size: c.size }));
-act('pl2', { type: 'set_orders', orders: { price: 5.25 } });
-act('pl3', { type: 'set_orders', orders: { price: 7.75, levers: { beans: 'specialty' } } });
+const ref = packs.niches.cafe!.unit.refPrice;
+const cheap = Math.round(ref * 0.85 * 4) / 4;
+const premium = Math.round(ref * 1.15 * 4) / 4;
+act('pl2', { type: 'set_orders', orders: { price: cheap } });
+act('pl3', { type: 'set_orders', orders: { price: premium, levers: { beans: 'specialty' } } });
 act('pl4', { type: 'set_orders', orders: { staff: { barista: 2 } } });
 act('pl5', { type: 'set_orders', orders: { shortcuts: ['cash_wages'], levers: { cleaning: 'minimal' } } });
 
 const short = (s: string) => s.slice(0, 11).padEnd(11);
 console.log('Six cafes on one block. Columns: served/lost customers that day; cash at the close of each month.');
-console.log('Plan: Luna standard; Brew & Co cheap ($5.25, 12 seats); Cafe Blue premium ($7.75, specialty beans);');
+console.log(`Plan: Luna standard at $${ref.toFixed(2)}; Brew & Co cheap ($${cheap.toFixed(2)}, 12 seats); Cafe Blue premium ($${premium.toFixed(2)}, specialty beans);`);
 console.log('Morning Owl only 2 baristas; Corner Cup pays cash wages and skimps on cleaning; Daily Grind opens on day 5, before its permits.\n');
 console.log('day  date          weather | ' + cafes.map((c) => short(c.name)).join(' '));
 
