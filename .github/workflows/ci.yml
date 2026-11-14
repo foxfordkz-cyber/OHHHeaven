@@ -1,0 +1,80 @@
+# CI: types, unit tests and the end-to-end smoke on every push (round 3, B05).
+# The same three commands every contributor runs before a push: npm run check, npm test, node scripts/smoke.mjs.
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: check (tsc)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run check
+
+  test:
+    name: test (vitest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+
+  smoke:
+    name: smoke (server end to end)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: node scripts/smoke.mjs
+
+  docker:
+    name: docker image boots and keeps the world
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build the production image
+        run: docker build -t first-year:ci .
+      - name: Run it with a volume; health, the page, a city, an owner, an opening and a month
+        run: |
+          docker volume create fy-ci-data
+          docker run -d --name fy -p 8787:8787 -v fy-ci-data:/data first-year:ci
+          node scripts/prod-check.mjs http://127.0.0.1:8787 --wait 90 --new-city --remember "$RUNNER_TEMP/fy-world.json"
+      - name: Redeploy — a new container on the same volume brings the world, the owner and the cafe back
+        run: |
+          docker stop fy && docker rm fy
+          docker run -d --name fy -p 8787:8787 -v fy-ci-data:/data first-year:ci
+          node scripts/prod-check.mjs http://127.0.0.1:8787 --wait 90 --recall "$RUNNER_TEMP/fy-world.json"
+      - name: Server log
+        if: always()
+        run: docker logs fy 2>&1 | tail -80
