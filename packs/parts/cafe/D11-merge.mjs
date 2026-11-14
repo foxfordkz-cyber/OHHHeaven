@@ -19,7 +19,7 @@ const common = read(path.join(ROOT, 'packs/_common.json'));
 // Фрагменты: основной JSON каждого задания. Служебные файлы D00 (аудит, дедупликация) читаются отдельно.
 const SKIP = /audit|dedup|validation|reference|merge-log|base/;
 const fragFiles = fs.readdirSync(HERE).filter((f) => /^D\d\d-.*\.json$/.test(f) && !SKIP.test(f)).sort();
-const frags = fragFiles.map((f) => ({ tag: f.slice(0, 3), file: f, p: read(path.join(HERE, f)) }));
+const frags = fragFiles.map((f) => ({ tag: f.slice(0, 3), file: f, calib: /calibration/.test(f), p: read(path.join(HERE, f)) }));
 
 const SECTIONS = ['setup', 'monthlyCosts', 'staff', 'taxes', 'levers', 'shortcuts', 'violations', 'officials', 'reports', 'events', 'ruleCards', 'roadmap', 'suppliers'];
 // Владельцы тем: их запись важнее при равной достоверности.
@@ -31,7 +31,14 @@ const OWNER = {
 const GOV = /\b(nyc\.gov|ny\.gov|\.gov\/|\.gov$|irs\.gov|bls\.gov|dol\.gov|sba\.gov|ecfr\.gov|law\.cornell\.edu|codelibrary\.amlegal\.com|nysenate\.gov|govt\.westlaw|rules\.cityofnewyork\.us|nycourts\.gov|legistar)/;
 const isGov = (u) => typeof u === 'string' && GOV.test(u);
 const nameOf = (r) => r.name || r.title || r.category;
-const isPartial = (sec, r) => !nameOf(r) || (sec === 'violations' && !r.law) || (sec === 'levers' && !Array.isArray(r.options));
+// Запись без обязательных полей раздела — это правка (патч) существующей записи, а не новая запись.
+const REQUIRED = {
+  setup: ['name', 'kind', 'cost', 'required'], monthlyCosts: ['name', 'kind', 'basis', 'amount'], staff: ['name', 'hourlyWage', 'hoursPerMonth'],
+  taxes: ['name', 'base', 'rate', 'due'], levers: ['name', 'options'], shortcuts: ['name', 'what', 'saves', 'violation'],
+  violations: ['name', 'law', 'official', 'foundBy', 'fine'], officials: ['name', 'agency', 'role'], reports: ['name', 'text', 'role', 'checks'],
+  events: ['name', 'effect', 'months'], ruleCards: ['title', 'text'], roadmap: ['title', 'text', 'kind'], suppliers: ['category', 'what', 'whereToFind'],
+};
+const isPartial = (sec, r) => (REQUIRED[sec] || ['name']).some((k) => r[k] === undefined || r[k] === null);
 
 const log = { inputs: fragFiles, base: 'D11-base.json', sections: {}, contradictions: [], aliasesApplied: [], moved: [], dropped: [], refFixes: [] };
 
@@ -187,6 +194,19 @@ for (const key of ['unit', 'market', 'capacity', 'sizing', 'benchmarks', 'manage
 }
 for (const sec of SECTIONS) pack[sec] = finalSec[sec];
 
+// ---------- план открытия: один основной путь по порядку, другие пути — отдельно ----------
+const roadmapPaths = {};
+const pathOf = (id) => Object.entries(D.roadmapPaths || {}).find(([, ids]) => ids.includes(id))?.[0];
+const mainSteps = [];
+for (const r of pack.roadmap) { const pth = pathOf(r.id) || (r.path && !['all', 'scratch'].includes(r.path) ? r.path : null); if (pth) (roadmapPaths[pth] ||= []).push(r); else mainSteps.push(r); }
+const ord = new Map((D.roadmapOrder || []).map((id, i) => [id, i]));
+const unordered = mainSteps.filter((r) => !ord.has(r.id));
+if (unordered.length) log.roadmapUnordered = unordered.map((r) => r.id);
+const KIND_ORDER = ['idea', 'money', 'space', 'legal', 'permit', 'supplier', 'people', 'launch'];
+pack.roadmap = mainSteps.sort((a, b) => (ord.has(a.id) ? ord.get(a.id) : 1000 + KIND_ORDER.indexOf(a.kind)) - (ord.has(b.id) ? ord.get(b.id) : 1000 + KIND_ORDER.indexOf(b.kind)))
+  .map(({ order, path: _p, ...r }) => r);
+for (const [k, v] of Object.entries(roadmapPaths)) roadmapPaths[k] = v.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
 // ---------- наборы: все обязательные предметы, бюджет ----------
 const setupById = new Map(pack.setup.map((s) => [s.id, s]));
 const kitSrc = frags.find((f) => Array.isArray(f.p.kits))?.p.kits || base.kits;
@@ -200,7 +220,7 @@ pack.kits = kitSrc.map((k) => {
 
 // ---------- extra ----------
 const extra = structuredClone(base.extra || {});
-const ref = { eventCatalog: [], nonObvious: [], failureStories: [], parts: {} };
+const ref = { eventCatalog: [], eventCatalogFull: [], nonObvious: [], failureStories: [], parts: {} };
 // значения для движка, которые фрагменты уточнили
 const extraOverride = { weekdayMult: 'D06', weekdayMultNote: 'D06', seatThresholds: 'D02', taxableShare: 'D04', taxableShareNote: 'D04' };
 for (const [k, tag] of Object.entries(extraOverride)) { const f = frags.find((x) => x.tag === tag); if (f && f.p.extra && f.p.extra[k] !== undefined) { extra[k] = structuredClone(f.p.extra[k]); topFrom['extra.' + k] = tag; } }
@@ -212,12 +232,13 @@ const toks = (s) => new Set(String(s || '').toLowerCase().replace(/[^a-z0-9 ]+/g
 const jac = (a, b) => { let i = 0; for (const x of a) if (b.has(x)) i++; return i / (a.size + b.size - i || 1); };
 const cat = new Map();
 const hasNums = (e) => Array.isArray(e.effects) && e.effects.length > 0;
-for (const f of frags) for (const e of (f.p.extra && f.p.extra.eventCatalog) || []) {
+for (const f of frags) if (!f.calib) for (const e of (f.p.extra && f.p.extra.eventCatalog) || []) {
   const cid = (D.alias.events && D.alias.events[e.id]) || e.id;
   const rec = { ...e, id: cid, from: [f.tag] };
   if (!cat.has(cid)) { cat.set(cid, rec); continue; }
   const cur = cat.get(cid);
-  const better = (hasNums(rec) && !hasNums(cur)) || (hasNums(rec) === hasNums(cur) && (rec.confidence === 'verified') && cur.confidence !== 'verified');
+  // запись с числами важнее записи без чисел, потом verified
+  const better = (hasNums(rec) && !hasNums(cur)) || (hasNums(rec) === hasNums(cur) && rec.confidence === 'verified' && cur.confidence !== 'verified');
   const moves = [...(cur.playerMoves || []), ...(rec.playerMoves || [])];
   const merged2 = better ? { ...rec, from: [...cur.from, f.tag] } : { ...cur, from: [...cur.from, f.tag] };
   merged2.playerMoves = moves;
@@ -247,9 +268,19 @@ for (let i = 0; i < evs.length; i++) {
 const leverIds = new Set(pack.levers.map((l) => l.id)), shortcutIds = new Set(pack.shortcuts.map((s) => s.id)), commonSc = new Set(common.shortcuts.map((s) => s.id));
 const preIds = new Set((formatRecords.__preOpening || []).map((l) => l.id));
 const catalog = [];
-for (let i = 0; i < evs.length; i++) {
-  if (absorbed.has(i)) continue;
-  const e = evs[i];
+for (let i = 0; i < evs.length; i++) if (!absorbed.has(i)) catalog.push(evs[i]);
+// калибровка D15–D19: числа поверх события с тем же id (или его псевдонимом); калибровка важнее исходной записи
+const byAnyId = new Map(); for (const e of catalog) { byAnyId.set(e.id, e); for (const a of e.aliases || []) byAnyId.set(a, e); }
+log.calibration = { applied: 0, newEvents: 0, files: frags.filter((f) => f.calib).map((f) => f.file) };
+for (const f of frags) if (f.calib) for (const c of (f.p.extra && f.p.extra.eventCatalog) || []) {
+  const t = byAnyId.get(c.id) || byAnyId.get(evAlias[c.id]) || byAnyId.get((D.alias.events || {})[c.id]);
+  if (t) { const { id, ...rest } = c; Object.assign(t, rest, { calibrated: f.tag, from: [...new Set([...(t.from || []), f.tag])] }); log.calibration.applied++; }
+  else { catalog.push({ ...c, from: [f.tag], calibrated: f.tag }); byAnyId.set(c.id, catalog[catalog.length - 1]); log.calibration.newEvents++; }
+}
+// ходы игрока — по новым id; поле эффекта — по словарю синонимов
+const FIELD_SYN = D.effectFieldSynonyms || {};
+const fieldStat = {};
+for (const e of catalog) {
   const seen = new Set();
   e.playerMoves = (e.playerMoves || []).map((m) => {
     if (!m || typeof m !== 'object') return m;
@@ -258,11 +289,28 @@ for (let i = 0; i < evs.length; i++) {
     const where = kind === 'lever' ? (leverIds.has(id) ? 'levers' : preIds.has(id) ? 'extra.preOpeningChoices' : 'missing') : kind === 'shortcut' ? (shortcutIds.has(id) || commonSc.has(id) ? 'shortcuts' : 'missing') : 'other';
     return { ...m, id, ...(where === 'missing' ? { inPack: false } : {}) };
   }).filter((m) => { const k = JSON.stringify([m && m.kind, m && m.id]); if (seen.has(k)) return false; seen.add(k); return true; });
-  catalog.push(e);
+  e.effects = (e.effects || []).map((ef) => {
+    if (!ef || typeof ef !== 'object') return ef;
+    const syn = FIELD_SYN[ef.field];
+    let out = ef;
+    if (syn) { out = { ...ef, field: syn.field }; if (syn.valueToAdd && typeof ef.value === 'number') { out.add = syn.sign * ef.value; delete out.value; } }
+    if (out.field === 'violation' && out.id) out.id = violationAlias(out.id);
+    (fieldStat[out.field] ||= { count: 0, ops: new Set() }).count++;
+    for (const op of ['mult', 'add', 'value', 'formula', 'id']) if (out[op] !== undefined) fieldStat[out.field].ops.add(op);
+    return out;
+  });
 }
-// в пакет — события с числами (движок может их считать) и все core; остальное — в справочник
-const inPack = catalog.filter((e) => hasNums(e) || e.tier === 'core');
-const toRef = catalog.filter((e) => !inPack.includes(e));
+// словарь полей эффектов: что уже понимает движок, что нужно добавить
+const ENGINE_FIELDS = new Set(['demand', 'cogs', 'staffAvailability', 'footTraffic', 'utilities', 'deliveryShare', 'rent', 'wages', 'inspections']);
+const LEVER_FIELDS = new Set(['quality', 'reputation', 'capacity']);
+extra.effectFields = Object.fromEntries(Object.entries(fieldStat).sort((x, y) => y[1].count - x[1].count).map(([k, v]) => [k, { events: v.count, ops: [...v.ops], engine: ENGINE_FIELDS.has(k) ? 'EventEffect target' : LEVER_FIELDS.has(k) ? 'lever effect only' : 'new', ...(D.effectFieldMeaning && D.effectFieldMeaning[k] ? { meaning: D.effectFieldMeaning[k] } : {}) }]));
+// в пакет — события с числами (движок может их считать), в коротком виде; полные записи и события без чисел — в справочник
+const SLIM = ['id', 'name', 'text', 'scale', 'months', 'durationMonths', 'trigger', 'realSignal', 'effects', 'playerMoves', 'realFrequency', 'tier', 'source', 'confidence', 'note', 'aliases', 'calibrated', 'from', 'formats', 'appliesTo', 'downtimeDays', 'oneTimeCost', 'closureDays', 'daily'];
+const slim = (e) => Object.fromEntries(SLIM.filter((k) => e[k] !== undefined && !(Array.isArray(e[k]) && !e[k].length && k === 'aliases')).map((k) => [k, e[k]]));
+const inPack = catalog.filter((e) => hasNums(e) && !(Array.isArray(e.formats) && !e.formats.includes('cafe'))).map(slim);
+const inPackIds = new Set(inPack.map((e) => e.id));
+const toRef = catalog.filter((e) => !inPackIds.has(e.id));
+ref.eventCatalogFull = catalog;
 extra.eventCatalog = inPack;
 ref.eventCatalog = toRef;
 log.eventCatalog = { total: [...cat.values()].length, afterFuzzyDedupe: catalog.length, inPack: inPack.length, inReference: toRef.length, fuzzyAliases: evAlias };
@@ -272,7 +320,9 @@ const mech = [];
 for (const f of frags) for (const m of (f.p.extra && f.p.extra.mechanics) || []) mech.push({ ...m, from: f.tag });
 const mechById = new Map();
 for (const m of mech) { if (!mechById.has(m.id)) mechById.set(m.id, m); else { const cur = mechById.get(m.id); cur.alsoFrom = [...new Set([...(cur.alsoFrom || []), m.from])]; } }
-extra.mechanics = [...mechById.values()];
+ref.mechanics = [...mechById.values()];
+// в пакет — короткая карточка механики; полное описание (формулы, числа) — в справочнике и в MERGE.md
+extra.mechanics = ref.mechanics.map((m) => ({ id: m.id, title: m.title, tier: m.tier, from: m.from, ...(m.alsoFrom ? { alsoFrom: m.alsoFrom } : {}), ...(D.mechanicCluster && D.mechanicCluster[m.id] ? { cluster: D.mechanicCluster[m.id] } : {}) }));
 if (D.mechanicsRanked) extra.mechanicsRanked = D.mechanicsRanked;
 
 // неочевидное и истории закрытий — справочник (по ссылке и началу текста без повторов)
@@ -311,11 +361,14 @@ for (const f of frags) {
   }
 }
 Object.assign(extra, engineData);
-extra.formatRecords = Object.fromEntries(Object.entries(formatRecords).filter(([k]) => !k.startsWith('__')));
+ref.formatRecords = Object.fromEntries(Object.entries(formatRecords).filter(([k]) => !k.startsWith('__')));
+ref.roadmapPaths = roadmapPaths;
+extra.roadmapPaths = Object.fromEntries(Object.entries(roadmapPaths).filter(([k]) => k !== 'formats'));
+extra.formatRecordsIndex = Object.fromEntries(Object.entries(ref.formatRecords).map(([k, v]) => [k, v.map((r) => r.id)]));
 extra.conditionalMonthlyCosts = [...(extra.conditionalMonthlyCosts || []), ...(formatRecords.__conditional || [])];
 extra.preOpeningChoices = formatRecords.__preOpening || [];
 extra.aliases = Object.fromEntries(Object.entries(D.alias).filter(([, v]) => Object.keys(v).length).concat([['eventCatalog', evAlias]]));
-extra.provenance = provenance;
+log.provenance = provenance;
 extra.d11 = {
   builtBy: 'D11 assembler, packs/parts/cafe/D11-merge.mjs',
   builtFrom: fragFiles,
@@ -329,7 +382,13 @@ pack.extra = extra;
 const srcMap = new Map();
 for (const s of base.sources || []) srcMap.set(s.url, s);
 for (const f of frags) for (const s of f.p.sources || []) { const u = typeof s === 'string' ? s : s.url; if (!u) continue; if (!srcMap.has(u)) srcMap.set(u, typeof s === 'string' ? { url: u, title: u, checked: '2026-11-14' } : { url: u, title: s.title || u, checked: s.checked || '2026-11-14' }); }
-pack.sources = [...srcMap.values()];
+// в пакете — источники, на которые ссылаются записи пакета; полный список — в справочнике
+const used = new Set();
+const walk = (o) => { if (!o || typeof o !== 'object') return; if (Array.isArray(o)) return o.forEach(walk); for (const [k, v] of Object.entries(o)) { if (typeof v === 'string' && /^https?:\/\//.test(v) && /source|link|url/i.test(k)) used.add(v); else if (Array.isArray(v) && /sources/i.test(k)) v.forEach((u) => typeof u === 'string' ? used.add(u) : u && u.url && used.add(u.url)); else walk(v); } };
+for (const k of Object.keys(pack)) if (k !== 'sources') walk(pack[k]);
+for (const u of used) if (!srcMap.has(u)) srcMap.set(u, { url: u, title: u, checked: '2026-11-14' });
+ref.sources = [...srcMap.values()];
+pack.sources = ref.sources.filter((s) => used.has(s.url) || (base.sources || []).some((b) => b.url === s.url));
 
 // ---------- запись ----------
 const order = ['id', 'version', 'name', 'tagline', 'startCapital', 'unit', 'market', 'capacity', 'sizing', 'setup', 'kits', 'monthlyCosts', 'staff', 'taxes', 'levers', 'shortcuts', 'violations', 'officials', 'reports', 'events', 'ruleCards', 'benchmarks', 'suppliers', 'roadmap', 'manager', 'sources', 'extra'];
@@ -338,7 +397,7 @@ fs.writeFileSync(path.join(ROOT, 'packs/cafe.next.json'), JSON.stringify(outPack
 fs.writeFileSync(path.join(HERE, 'D11-reference.json'), JSON.stringify(ref, null, 1) + '\n');
 log.counts = Object.fromEntries(SECTIONS.map((s) => [s, outPack[s].length]));
 log.counts.eventCatalog = outPack.extra.eventCatalog.length; log.counts.mechanics = outPack.extra.mechanics.length;
-log.counts.formatRecords = Object.fromEntries(Object.entries(outPack.extra.formatRecords).map(([k, v]) => [k, v.length]));
+log.counts.formatRecords = Object.fromEntries(Object.entries(ref.formatRecords).map(([k, v]) => [k, v.length]));
 log.counts.conditionalMonthlyCosts = outPack.extra.conditionalMonthlyCosts.length; log.counts.preOpeningChoices = outPack.extra.preOpeningChoices.length;
 log.counts.reference = { eventCatalog: ref.eventCatalog.length, nonObvious: ref.nonObvious.length, failureStories: ref.failureStories.length };
 fs.writeFileSync(path.join(HERE, 'D11-merge-log.json'), JSON.stringify(log, null, 1) + '\n');

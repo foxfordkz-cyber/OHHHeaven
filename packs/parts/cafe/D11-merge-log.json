@@ -107,10 +107,10 @@
   "roadmap": {
    "base": 14,
    "candidates": 112,
-   "unique": 109,
-   "fixesOfBase": 0,
-   "newRecords": 95,
-   "multiSource": 3
+   "unique": 96,
+   "fixesOfBase": 1,
+   "newRecords": 82,
+   "multiSource": 14
   },
   "suppliers": {
    "base": 12,
@@ -3616,6 +3616,84 @@
    "from": "queue_room",
    "to": "queue_length",
    "fragment": "D14"
+  },
+  {
+   "section": "roadmap",
+   "from": "check_landmark_and_sign_rules",
+   "to": "landmark_permit",
+   "fragment": "D02"
+  },
+  {
+   "section": "roadmap",
+   "from": "check_water_and_power",
+   "to": "check_power_water_air",
+   "fragment": "D03"
+  },
+  {
+   "section": "roadmap",
+   "from": "check_building_violations",
+   "to": "pull_building_record",
+   "fragment": "D08"
+  },
+  {
+   "section": "roadmap",
+   "from": "negotiate_lease_law_terms",
+   "to": "negotiate_exit_terms",
+   "fragment": "D08"
+  },
+  {
+   "section": "roadmap",
+   "from": "file_sign_permit",
+   "to": "check_sign_rules",
+   "fragment": "D08"
+  },
+  {
+   "section": "roadmap",
+   "from": "test_backflow_device",
+   "to": "backflow_and_extinguishers",
+   "fragment": "D08"
+  },
+  {
+   "section": "roadmap",
+   "from": "tag_fire_extinguishers",
+   "to": "backflow_and_extinguishers",
+   "fragment": "D08"
+  },
+  {
+   "section": "roadmap",
+   "from": "set_up_workplace_notices",
+   "to": "post_workplace_notices",
+   "fragment": "D08"
+  },
+  {
+   "section": "roadmap",
+   "from": "book_practice_inspection",
+   "to": "soft_open_and_consult",
+   "fragment": "D08"
+  },
+  {
+   "section": "roadmap",
+   "from": "check_gas_before_lease",
+   "to": "gas_availability_check",
+   "fragment": "D14"
+  },
+  {
+   "section": "roadmap",
+   "from": "file_dob_alteration",
+   "to": "hire_architect_file_dob",
+   "fragment": "D14"
+  },
+  {
+   "section": "roadmap",
+   "from": "takeover_own_permit",
+   "to": "takeover_new_permits",
+   "fragment": "D14"
+  },
+  {
+   "section": "roadmap",
+   "from": "takeover_landlord_consent",
+   "to": "takeover_lease_assignment",
+   "fragment": "D14"
   }
  ],
  "moved": [
@@ -4458,12 +4536,6 @@
    "id": "tapioca_tariff",
    "to": "extra.formatRecords",
    "why": "another format or entry mode"
-  },
-  {
-   "section": "shortcuts",
-   "id": "home_baked_pastries",
-   "to": "extra.formatRecords",
-   "why": "its violation undefined is not in the cafe pack"
   }
  ],
  "dropped": [
@@ -4682,11 +4754,16 @@
    "added": "asbestos_survey_acp5"
   }
  ],
+ "calibration": {
+  "applied": 0,
+  "newEvents": 0,
+  "files": []
+ },
  "eventCatalog": {
   "total": 899,
   "afterFuzzyDedupe": 886,
-  "inPack": 693,
-  "inReference": 193,
+  "inPack": 484,
+  "inReference": 402,
   "fuzzyAliases": {
    "gas_red_tag": "gas_shut_off_in_building",
    "bulk_sale_claim": "sellers_tax_claim",
@@ -4703,21 +4780,7082 @@
    "big_chain_store_closes": "chain_leaves"
   }
  },
+ "provenance": {
+  "setup": {
+   "security_deposit": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "buildout": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "architect_expediter": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "lease_lawyer": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "llc_and_publication": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "espresso_machine": {
+    "from": [
+     "BASE",
+     "D00",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "grinder": {
+    "from": [
+     "BASE",
+     "D00",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "water_filtration": {
+    "from": [
+     "BASE",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "refrigeration": {
+    "from": [
+     "BASE",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "pastry_case": {
+    "from": [
+     "BASE",
+     "D00",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "sinks": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "prep_table_shelving": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "pos": {
+    "from": [
+     "BASE",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "smallwares": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "safety_kit": {
+    "from": [
+     "BASE",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "equipment_delivery_tax": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "chair": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "table_share": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "opening_inventory": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "hiring_training": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "insurance_utility_deposits": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "fse_permit": {
+    "from": [
+     "BASE",
+     "D00",
+     "D14"
+    ],
+    "chosen": "D14"
+   },
+   "food_protection_cert": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "batch_brewer": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "decaf_grinder": {
+    "from": [
+     "BASE",
+     "D00",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "ice_machine": {
+    "from": [
+     "BASE",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "dishwasher": {
+    "from": [
+     "BASE",
+     "D00",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "decor_lighting": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "signage": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "premium_espresso_machine": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "premium_grinder": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "customer_restroom": {
+    "from": [
+     "BASE",
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "sidewalk_cafe_license": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "dob_alteration_filing_fee": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "dob_alteration_filing_fee",
+     "dob_alteration_permit"
+    ]
+   },
+   "asbestos_survey_acp5": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "landmarks_storefront_permit": {
+    "from": [
+     "D01",
+     "D02"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "lpc_storefront_permit",
+     "landmarks_storefront_permit"
+    ]
+   },
+   "letter_of_no_objection": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "contingency_reserve": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "sales_tax_on_buildout_labor": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "con_ed_security_deposit": {
+    "from": [
+     "D01",
+     "D09"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "con_ed_security_deposit",
+     "utility_deposit"
+    ]
+   },
+   "electrical_service_upgrade": {
+    "from": [
+     "D01",
+     "D02"
+    ],
+    "chosen": "D01"
+   },
+   "consultative_inspection": {
+    "from": [
+     "D01",
+     "D08",
+     "D10"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "consultative_inspection",
+     "consultative_inspection_new"
+    ]
+   },
+   "acquisition_sales_tax_ffe": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "business_purchase_price": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "key_money": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "takeover_due_diligence": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D14",
+    "mergedIds": [
+     "acquisition_legal_and_accounting",
+     "takeover_due_diligence"
+    ]
+   },
+   "asbestos_abatement": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "sba_guaranty_fee": {
+    "from": [
+     "D01",
+     "D09"
+    ],
+    "chosen": "D09",
+    "mergedIds": [
+     "sba_guaranty_fee",
+     "loan_guaranty_fee"
+    ]
+   },
+   "fdny_g46_certificate": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "portable_entrance_ramp": {
+    "from": [
+     "D02",
+     "D10"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "portable_entrance_ramp",
+     "portable_ramp"
+    ]
+   },
+   "automatic_door_operator": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "dedicated_espresso_circuit": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "backflow_preventer": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "grease_interceptor_unit": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "ac_replacement": {
+    "from": [
+     "D02",
+     "D03"
+    ],
+    "chosen": "D03",
+    "mergedIds": [
+     "hvac_replacement",
+     "ac_replacement"
+    ]
+   },
+   "see_through_security_grille": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "storefront_awning": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "winter_vestibule": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "air_curtain": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "roadway_cafe_license": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "roadway_cafe_structure": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "place_of_assembly_certificate": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "temporary_place_of_assembly": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "storefront_glass_panel": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "espresso_machine_used": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "specialty_espresso_machine": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "refrigeration_used": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "grinder_refurbished": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "espresso_install": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "blender": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "hot_water_dispenser": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "undercounter_freezer": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "convection_oven": {
+    "from": [
+     "D03",
+     "D04"
+    ],
+    "chosen": "D03",
+    "mergedIds": [
+     "convection_oven",
+     "bakeoff_oven"
+    ]
+   },
+   "panini_grill": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "commercial_microwave": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "ventless_speed_oven": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "nitro_kegerator": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "temp_sensors": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "backup_card_terminal": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "water_heater": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "dcwp_scale_inspection": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "pastry_freezer": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "state_processing_license": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "job_ads_opening": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "paid_working_interviews": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "extra_food_protection_certs": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "handbook_and_policies": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "aprons_and_shirts": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "labor_law_posters": {
+    "from": [
+     "D05",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "labor_law_posters",
+     "labor_posters_and_notices"
+    ]
+   },
+   "first_harassment_training": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "lidded_trash_bins": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "snow_kit": {
+    "from": [
+     "D07",
+     "D14"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "snow_kit",
+     "ice_melt_and_shovels"
+    ]
+   },
+   "entrance_mats_owned": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "basement_racks": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "health_signs_kit": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "allergen_menu_statement": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "smoking_policy_and_signs": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "open_flame_permit": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "sign_permit_and_hanger": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "backflow_initial_test": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "portable_ramp_and_bell": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "website_accessibility_pass": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "trademark_search_and_filing": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "sales_tax_certificate": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "lease_review": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "lease_assignment_consent": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   },
+   "bulk_sale_notice": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   }
+  },
+  "monthlyCosts": {
+   "rent": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "utilities": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "insurance": {
+    "from": [
+     "BASE",
+     "D00",
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "supplies": {
+    "from": [
+     "BASE",
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "card_fees": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "card_fixed_fee": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "tips_payroll_tax": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "sick_leave_cover": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "maintenance": {
+    "from": [
+     "BASE",
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "waste": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "internet": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "pos_software": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "accounting": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "payroll_service": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "marketing": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "permit_renewals": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "backflow_test": {
+    "from": [
+     "D02",
+     "D03"
+    ],
+    "chosen": "D03",
+    "mergedIds": [
+     "backflow_annual_test",
+     "backflow_test"
+    ]
+   },
+   "grease_interceptor_pumpout": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "repair_reserve": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "fire_extinguisher_service": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "grinder_burrs": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "espresso_cleaning_chemicals": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "smallwares_replacement": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "turnover_replacement": {
+    "from": [
+     "D05",
+     "D10"
+    ],
+    "chosen": "D05",
+    "mergedIds": [
+     "turnover_replacement",
+     "staff_replacement"
+    ]
+   },
+   "absence_cover_premium": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "staff_shift_drinks": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "scheduling_time_clock": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "annual_training_hours": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "bank_fees": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "refunds_and_disputes": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   }
+  },
+  "staff": {
+   "barista": {
+    "from": [
+     "BASE",
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "shift_lead": {
+    "from": [
+     "BASE",
+     "D00",
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "trainee_barista": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "part_time_barista": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "counter_cashier": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "dishwasher_porter": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "baker_prep": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "assistant_manager": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   }
+  },
+  "taxes": {
+   "sales_tax": {
+    "from": [
+     "BASE",
+     "D00",
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "paper_bag_fee": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "mctmt_self_employed": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "nyc_gct_s_corp": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "nys_s_corp_fixed_minimum": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "nys_biennial_statement": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "use_tax_untaxed_purchases": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "sales_tax_on_asset_sale": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "paid_family_leave_withholding": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "gain_on_business_sale": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "cancelled_debt_income": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "nys_ptet_optional": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   }
+  },
+  "levers": {
+   "cleaning": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "sourcing": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "hours": {
+    "from": [
+     "BASE",
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "pest_control": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "staff_pay": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "laptop_policy": {
+    "from": [
+     "D02",
+     "D06",
+     "D10",
+     "D14"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "laptop_policy",
+     "laptop_tables",
+     "wifi_policy"
+    ]
+   },
+   "seating_layout": {
+    "from": [
+     "D02",
+     "D14"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "seating_layout",
+     "seat_density"
+    ]
+   },
+   "queue_setup": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "restroom_access": {
+    "from": [
+     "D02",
+     "D06"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "restroom_access",
+     "restroom_policy"
+    ]
+   },
+   "hvac_service": {
+    "from": [
+     "D02",
+     "D03",
+     "D07"
+    ],
+    "chosen": "D03",
+    "mergedIds": [
+     "hvac_care",
+     "hvac_service",
+     "cooling_plan"
+    ]
+   },
+   "winter_proofing": {
+    "from": [
+     "D02",
+     "D07"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "entrance_winter",
+     "winter_proofing"
+    ]
+   },
+   "outdoor_seating": {
+    "from": [
+     "D02",
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "music_tempo": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "step_at_the_door": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "espresso_service": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "water_treatment": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "refrigeration_care": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "temperature_checks": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "connectivity_backup": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "insurance_package": {
+    "from": [
+     "D03",
+     "D09",
+     "D10"
+    ],
+    "chosen": "D09",
+    "mergedIds": [
+     "equipment_insurance",
+     "insurance_package",
+     "insurance_endorsements"
+    ]
+   },
+   "ice_supply": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "pastry_program": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "alt_milk_pricing": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "day_end_surplus": {
+    "from": [
+     "D04",
+     "D10"
+    ],
+    "chosen": "D04",
+    "mergedIds": [
+     "day_end_surplus",
+     "surplus_app"
+    ]
+   },
+   "ordering_par": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "bean_contract": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "supply_route": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "inventory_control": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "cup_program": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "takeout_packaging": {
+    "from": [
+     "D04",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "takeout_packing",
+     "takeout_packaging"
+    ]
+   },
+   "seasonal_menu": {
+    "from": [
+     "D04",
+     "D06",
+     "D07"
+    ],
+    "chosen": "D04",
+    "mergedIds": [
+     "seasonal_menu",
+     "limited_time_drink"
+    ]
+   },
+   "condiment_milk": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "safety_stock": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "early_deliveries": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "waste_service": {
+    "from": [
+     "D04",
+     "D07"
+    ],
+    "chosen": "D04",
+    "mergedIds": [
+     "waste_service",
+     "trash_setup"
+    ]
+   },
+   "cold_brew_prep": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "grab_and_go": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "scheduling": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "training": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "tipping_setup": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "tip_pool_rules": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "staff_benefits": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "bench_depth": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "owner_schedule": {
+    "from": [
+     "D05",
+     "D10"
+    ],
+    "chosen": "D10",
+    "mergedIds": [
+     "owner_hours",
+     "owner_schedule"
+    ]
+   },
+   "cash_controls": {
+    "from": [
+     "D05",
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "harassment_prevention": {
+    "from": [
+     "D05",
+     "D10"
+    ],
+    "chosen": "D05",
+    "mergedIds": [
+     "harassment_prevention",
+     "harassment_training"
+    ]
+   },
+   "complaint_handling": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "job_ads": {
+    "from": [
+     "D05",
+     "D08"
+    ],
+    "chosen": "D05",
+    "mergedIds": [
+     "job_ads",
+     "hiring_ads"
+    ]
+   },
+   "interview_screening": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "sick_call_policy": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "epli_cover": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "hiring_programs": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "order_ahead": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "delivery_apps": {
+    "from": [
+     "D06",
+     "D13"
+    ],
+    "chosen": "D06",
+    "mergedIds": [
+     "delivery_apps",
+     "delivery_plan"
+    ]
+   },
+   "loyalty": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "reviews": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "peak_schedule": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "ordering_kiosk": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "menu_size": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "catering": {
+    "from": [
+     "D06",
+     "D10"
+    ],
+    "chosen": "D06",
+    "mergedIds": [
+     "catering",
+     "catering_wholesale"
+    ]
+   },
+   "card_pricing": {
+    "from": [
+     "D06",
+     "D09"
+    ],
+    "chosen": "D06",
+    "mergedIds": [
+     "card_pricing",
+     "card_fee_policy"
+    ]
+   },
+   "value_anchor": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "community_nights": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "snow_ice_plan": {
+    "from": [
+     "D07",
+     "D14"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "snow_ice_plan",
+     "snow_clearing"
+    ]
+   },
+   "entrance_floor_safety": {
+    "from": [
+     "D07",
+     "D08",
+     "D14"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "entrance_floor_safety",
+     "floor_safety",
+     "entrance_mats"
+    ]
+   },
+   "storm_day_policy": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "sidewalk_care": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "shed_response": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "disruption_playbook": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "event_day_plan": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "flood_protection": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "air_quality_plan": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "rodent_proofing": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "holiday_hours": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "outage_kit": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "delivery_hatch_rule": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "night_security": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "music": {
+    "from": [
+     "D08",
+     "D10"
+    ],
+    "chosen": "D08"
+   },
+   "mock_inspection": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "food_handling": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "inspector_door_policy": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "worker_complaints": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "legal_help": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "allergen_labels": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "payout_schedule": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "tax_reserve_account": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "estimated_tax_plan": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "owner_health_cover": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "bill_timing": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "cash_reserve": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "cross_training": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "street_presence": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "gift_cards": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "refund_policy": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   }
+  },
+  "shortcuts": {
+   "skip_food_protection_cert": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "keep_old_food": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "home_baked_pastries": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "keep_tips": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "unpaid_trial_shifts": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "no_spread_of_hours": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "sidewalk_tables": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "skip_grease_trap_cleaning": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "build_without_permit": {
+    "from": [
+     "D01",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "work_through_stop_order": {
+    "from": [
+     "D01",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "ignore_stop_work_order",
+     "work_through_stop_order"
+    ]
+   },
+   "handyman_plumbing_electric": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "trade_on_sellers_permit": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "skip_bulk_sale_notice": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "open_in_wrong_use_space": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "squeeze_extra_seats": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "skip_restroom_upkeep": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "big_sign_no_permit": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "unpermitted_sign",
+     "big_sign_no_permit"
+    ]
+   },
+   "a_frame_on_sidewalk": {
+    "from": [
+     "D02",
+     "D07",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "sidewalk_sign_and_bench",
+     "sign_in_the_walkway",
+     "a_frame_on_sidewalk"
+    ]
+   },
+   "stock_in_exit_path": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "stock_in_the_exit_path",
+     "stock_in_exit_path"
+    ]
+   },
+   "skip_backflow_test": {
+    "from": [
+     "D02",
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "overpack_event_nights": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "standing_room_events",
+     "overpack_event_nights"
+    ]
+   },
+   "cellar_seating": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "loud_evening_music": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "sidewalk_cafe_creep": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "keep_food_after_outage": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "skip_extinguisher_service": {
+    "from": [
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "unlicensed_hookup": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "nurse_dying_fridge": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "delay_hot_water_repair": {
+    "from": [
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "run_without_hot_water",
+     "delay_hot_water_repair"
+    ]
+   },
+   "drain_into_bucket": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "foam_cups": {
+    "from": [
+     "D04",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "plastic_stirrers": {
+    "from": [
+     "D04",
+     "D13"
+    ],
+    "chosen": "D04",
+    "mergedIds": [
+     "plastic_stirrers",
+     "plastic_straws_default"
+    ]
+   },
+   "skip_the_carter": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "dump_trash_in_baskets": {
+    "from": [
+     "D04",
+     "D07",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "trash_in_street_basket",
+     "dump_in_litter_basket",
+     "dump_trash_in_baskets"
+    ]
+   },
+   "skip_recycling": {
+    "from": [
+     "D04",
+     "D07"
+    ],
+    "chosen": "D04",
+    "mergedIds": [
+     "one_bag_for_everything",
+     "skip_recycling"
+    ]
+   },
+   "resale_certificate_for_everything": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "cbd_lattes": {
+    "from": [
+     "D04",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "cbd_drinks",
+     "cbd_lattes"
+    ]
+   },
+   "cheap_swap_premium_label": {
+    "from": [
+     "D04",
+     "D06"
+    ],
+    "chosen": "D04",
+    "mergedIds": [
+     "cheap_swap_premium_label",
+     "fake_specialty_claims"
+    ]
+   },
+   "ignore_recall": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "wholesale_without_state_license": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "pay_every_two_weeks": {
+    "from": [
+     "D05",
+     "D09",
+     "D10"
+    ],
+    "chosen": "D09",
+    "mergedIds": [
+     "pay_every_two_weeks",
+     "pay_staff_every_two_weeks",
+     "biweekly_pay"
+    ]
+   },
+   "skip_hiring_paperwork": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "send_home_no_call_in_pay": {
+    "from": [
+     "D05",
+     "D07"
+    ],
+    "chosen": "D05",
+    "mergedIds": [
+     "send_home_no_call_in_pay",
+     "storm_day_no_call_in_pay"
+    ]
+   },
+   "solo_shifts_no_break": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "dock_pay_for_shortages": {
+    "from": [
+     "D05",
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "staff_pay_for_uniforms": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "manager_in_tip_pool": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "tip_credit_no_notice": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "flat_salary_no_overtime": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "punish_the_complainer": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "minors_no_papers": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "free_help_from_friends": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "unreported_cash_tips": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "fire_union_organizers": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "skip_disability_pfl_insurance": {
+    "from": [
+     "D05",
+     "D09"
+    ],
+    "chosen": "D09",
+    "mergedIds": [
+     "skip_disability_pfl_insurance",
+     "skip_disability_pfl_policy"
+    ]
+   },
+   "buy_fake_reviews": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "reward_good_reviews": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "hide_bad_grade": {
+    "from": [
+     "D06",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "hide_grade_card",
+     "hide_bad_grade"
+    ]
+   },
+   "hidden_card_fee": {
+    "from": [
+     "D06",
+     "D08",
+     "D09",
+     "D10"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "hidden_card_surcharge",
+     "hidden_card_fee",
+     "surprise_card_fee"
+    ]
+   },
+   "flyers_on_poles": {
+    "from": [
+     "D06",
+     "D07"
+    ],
+    "chosen": "D06"
+   },
+   "dogs_welcome_inside": {
+    "from": [
+     "D06",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "allow_dogs_inside",
+     "dogs_welcome_inside"
+    ]
+   },
+   "skip_snow_clearing": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "bags_on_the_curb": {
+    "from": [
+     "D07",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "bags_on_curb",
+     "bags_on_the_curb"
+    ]
+   },
+   "ac_with_open_door": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "speaker_at_the_door": {
+    "from": [
+     "D07",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "speaker_on_sidewalk",
+     "speaker_at_the_door"
+    ]
+   },
+   "candles_no_permit": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "skip_sidewalk_sweeping": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "skip_accessibility_fixes": {
+    "from": [
+     "D08",
+     "D10"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "skip_accessibility_fixes",
+     "ignore_the_step"
+    ]
+   },
+   "skip_harassment_training": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "let_permit_lapse": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "spend_payroll_withholding": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "menu_fee_line": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "ring_drinks_as_groceries": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "lowball_payroll_to_insurer": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "personal_playlist": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "backyard_seating": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "serve_without_water": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "start_work_before_permit": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   },
+   "pack_the_line_inside": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   }
+  },
+  "violations": {
+   "no_fse_permit": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "no_food_protection_cert": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "dirty_surfaces": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "pest_activity": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "spoiled_food": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "unapproved_food_source": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "tip_theft": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "unpaid_training_time": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "spread_of_hours_unpaid": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "unlicensed_sidewalk_cafe": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "grease_interceptor_neglect": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "BASE"
+   },
+   "work_without_permit": {
+    "from": [
+     "D01",
+     "D03",
+     "D08",
+     "D14"
+    ],
+    "chosen": "D08"
+   },
+   "stop_work_order_ignored": {
+    "from": [
+     "D01",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "stop_work_order_violation",
+     "stop_work_order_ignored"
+    ]
+   },
+   "unlicensed_trade_work": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "bulk_sale_not_notified": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "occupancy_contrary_to_co": {
+    "from": [
+     "D01",
+     "D02",
+     "D10"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "occupancy_contrary_to_co",
+     "cellar_used_for_customers",
+     "illegal_occupancy"
+    ]
+   },
+   "no_patron_toilet": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "toilet_not_supplied": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "ventilation_inadequate": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "sign_without_permit": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D02"
+   },
+   "sidewalk_obstruction": {
+    "from": [
+     "D02",
+     "D07",
+     "D08",
+     "D10"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "sidewalk_obstruction",
+     "sidewalk_sign_obstruction"
+    ]
+   },
+   "blocked_exit": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "blocked_egress",
+     "blocked_exit"
+    ]
+   },
+   "backflow_not_tested": {
+    "from": [
+     "D02",
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "backflow_not_tested",
+     "backflow_test_overdue"
+    ]
+   },
+   "overcrowding": {
+    "from": [
+     "D02",
+     "D08",
+     "D14"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "overcrowding_over_occupancy",
+     "overcrowding"
+    ]
+   },
+   "accessibility_barrier": {
+    "from": [
+     "D02",
+     "D08",
+     "D10"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "accessibility_barrier",
+     "access_barrier"
+    ]
+   },
+   "loud_music_noise": {
+    "from": [
+     "D02",
+     "D07",
+     "D08",
+     "D13"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "commercial_noise",
+     "commercial_music_noise",
+     "loud_music_noise",
+     "excessive_noise"
+    ]
+   },
+   "outdoor_cafe_noncompliant": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "cold_holding_inadequate": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "hand_wash_station_down": {
+    "from": [
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "no_hot_water",
+     "hand_wash_station_down"
+    ]
+   },
+   "improper_drainage": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "no_fridge_thermometer": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "fire_extinguisher_untagged": {
+    "from": [
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "extinguisher_not_serviced",
+     "fire_extinguisher_untagged"
+    ]
+   },
+   "equipment_noise": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "foam_containers": {
+    "from": [
+     "D04",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "foam_packaging",
+     "foam_containers"
+    ]
+   },
+   "single_use_handouts": {
+    "from": [
+     "D04",
+     "D08",
+     "D13"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "plastic_stirrers_straws",
+     "unrequested_takeout_extras",
+     "single_use_handouts",
+     "plastic_straw_unrequested"
+    ]
+   },
+   "no_private_carter": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "commercial_waste_in_litter_basket": {
+    "from": [
+     "D04",
+     "D07",
+     "D08"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "trash_in_litter_basket",
+     "commercial_waste_in_litter_basket",
+     "business_trash_dumped"
+    ]
+   },
+   "recycling_not_separated": {
+    "from": [
+     "D04",
+     "D07"
+    ],
+    "chosen": "D04"
+   },
+   "resale_certificate_misuse": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "banned_additive_cbd": {
+    "from": [
+     "D04",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "adulterated_drink_additive",
+     "banned_additive_cbd"
+    ]
+   },
+   "deceptive_menu_claims": {
+    "from": [
+     "D04",
+     "D06"
+    ],
+    "chosen": "D04"
+   },
+   "recalled_product_sold": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "allergen_label_missing": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "unlicensed_food_processing": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "pay_frequency_violation": {
+    "from": [
+     "D05",
+     "D09",
+     "D10"
+    ],
+    "chosen": "D05"
+   },
+   "no_wage_notice_statements": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "call_in_pay_unpaid": {
+    "from": [
+     "D05",
+     "D07"
+    ],
+    "chosen": "D05"
+   },
+   "meal_period_denied": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "illegal_deductions": {
+    "from": [
+     "D05",
+     "D09"
+    ],
+    "chosen": "D05",
+    "mergedIds": [
+     "illegal_deductions",
+     "unlawful_wage_deduction"
+    ]
+   },
+   "uniform_costs_unpaid": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "tip_pool_ineligible": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "invalid_tip_credit": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "exempt_misclassification": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "retaliation": {
+    "from": [
+     "D05",
+     "D08"
+    ],
+    "chosen": "D05",
+    "mergedIds": [
+     "retaliation",
+     "retaliation_firing"
+    ]
+   },
+   "child_labor": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "unpaid_volunteer_labor": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "unreported_tips": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "unfair_labor_practice": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "no_day_of_rest": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "no_disability_pfl_coverage": {
+    "from": [
+     "D05",
+     "D09"
+    ],
+    "chosen": "D05"
+   },
+   "no_harassment_policy_training": {
+    "from": [
+     "D05",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "harassment_complaint_ignored": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "job_ad_no_pay_range": {
+    "from": [
+     "D05",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "illegal_hiring_questions": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "fake_reviews": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "grade_card_hidden": {
+    "from": [
+     "D06",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "grade_card_not_posted",
+     "grade_card_hidden"
+    ]
+   },
+   "card_surcharge_undisclosed": {
+    "from": [
+     "D06",
+     "D08",
+     "D09",
+     "D10"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "card_surcharge_not_disclosed",
+     "card_surcharge_undisclosed",
+     "card_surcharge_violation",
+     "illegal_surcharge"
+    ]
+   },
+   "illegal_posting": {
+    "from": [
+     "D06",
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "pet_inside_shop": {
+    "from": [
+     "D06",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "live_animals_inside",
+     "pet_inside_shop"
+    ]
+   },
+   "snow_ice_not_cleared": {
+    "from": [
+     "D07",
+     "D14"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "snow_ice_not_cleared",
+     "sidewalk_snow_not_cleared"
+    ]
+   },
+   "dirty_sidewalk": {
+    "from": [
+     "D07",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "trash_setout_violation": {
+    "from": [
+     "D07",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "improper_trash_setout",
+     "trash_setout_violation"
+    ]
+   },
+   "open_door_ac": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "bare_hand_contact": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "obstructing_inspector": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "candles_without_permit": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "required_signs_missing": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "allergen_notice_missing": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "unlicensed_music": {
+    "from": [
+     "D08",
+     "D10"
+    ],
+    "chosen": "D08"
+   },
+   "smoking_vaping_allowed": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "workers_rights_poster_missing": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "payroll_tax_not_deposited": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "illegal_menu_surcharge": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "sales_tax_misclassified": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "wc_premium_misrepresentation": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "no_certificate_of_authority": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "no_running_water": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   }
+  },
+  "officials": {
+   "health_inspector": {
+    "from": [
+     "BASE",
+     "D02",
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "dot_inspector": {
+    "from": [
+     "BASE",
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "dep_inspector": {
+    "from": [
+     "BASE",
+     "D02",
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "dep_inspector",
+     "noise_inspector"
+    ]
+   },
+   "dob_inspector": {
+    "from": [
+     "D01",
+     "D02",
+     "D03",
+     "D08",
+     "D10",
+     "D14"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "dob_inspector",
+     "buildings_inspector"
+    ]
+   },
+   "fdny_inspector": {
+    "from": [
+     "D01",
+     "D02",
+     "D03",
+     "D08",
+     "D13",
+     "D14"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "fire_inspector",
+     "fdny_inspector"
+    ]
+   },
+   "dsny_agent": {
+    "from": [
+     "D02",
+     "D04",
+     "D06",
+     "D07",
+     "D08",
+     "D10",
+     "D14"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "dsny_agent",
+     "sanitation_agent",
+     "sanitation_enforcement_agent",
+     "dsny_enforcement"
+    ]
+   },
+   "human_rights_investigator": {
+    "from": [
+     "D02",
+     "D05",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "human_rights_investigator",
+     "cchr_investigator"
+    ]
+   },
+   "ag_markets_inspector": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "labor_investigator": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "wage_hour_investigator": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "irs_tip_examiner": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "nlrb_agent": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "benefits_coverage_investigator": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "civil_court": {
+    "from": [
+     "D08",
+     "D10"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "civil_court",
+     "private_plaintiff"
+    ]
+   },
+   "irs_revenue_officer": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   }
+  },
+  "reports": {
+   "report_unsanitary": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "report_no_permit": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "report_sidewalk_tables": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "report_wage_theft": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "report_illegal_construction": {
+    "from": [
+     "D01",
+     "D03",
+     "D08",
+     "D14"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "report_illegal_construction",
+     "report_illegal_work",
+     "report_work_without_permit"
+    ]
+   },
+   "report_no_restroom": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "report_overcrowding": {
+    "from": [
+     "D02",
+     "D10",
+     "D14"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "report_overcrowding",
+     "report_illegal_seating"
+    ]
+   },
+   "report_illegal_sign": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "report_blocked_sidewalk": {
+    "from": [
+     "D02",
+     "D10"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "report_blocked_sidewalk",
+     "report_sidewalk_sign"
+    ]
+   },
+   "report_access_or_job_ad": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "report_access_barrier",
+     "report_access_or_job_ad"
+    ]
+   },
+   "report_noise": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "report_no_hot_water": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "report_fire_hazard": {
+    "from": [
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "report_fire_safety",
+     "report_fire_hazard"
+    ]
+   },
+   "report_equipment_noise": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "report_trash_and_packaging": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "report_fake_reviews": {
+    "from": [
+     "D04",
+     "D06"
+    ],
+    "chosen": "D06",
+    "mergedIds": [
+     "report_menu_fraud",
+     "report_fake_reviews"
+    ]
+   },
+   "report_unlabelled_food": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "report_pay_rules": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "report_tip_pool": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "report_child_labor": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "report_retaliation": {
+    "from": [
+     "D05",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "report_hiring_practices": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "report_no_disability_cover": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "report_hidden_grade": {
+    "from": [
+     "D06",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "report_hidden_fees": {
+    "from": [
+     "D06",
+     "D08",
+     "D09",
+     "D10"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "report_hidden_fees",
+     "report_card_fee"
+    ]
+   },
+   "report_illegal_flyers": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "report_sidewalk_and_trash": {
+    "from": [
+     "D07",
+     "D08",
+     "D14"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "report_sidewalk_and_trash",
+     "report_dirty_sidewalk_trash",
+     "report_unshoveled_sidewalk"
+    ]
+   },
+   "report_open_door_ac": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "report_food_poisoning": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "report_water_and_sewer": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "report_unlicensed_music": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "report_payroll_games": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   }
+  },
+  "events": {
+   "coffee_price_spike": {
+    "from": [
+     "BASE",
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "milk_price_up": {
+    "from": [
+     "BASE",
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "restaurant_week": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "sidewalk_shed": {
+    "from": [
+     "BASE",
+     "D07",
+     "D10"
+    ],
+    "chosen": "D07"
+   },
+   "summer_power_peak": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "flu_season": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "dob_review_slowdown": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "fit_out_cost_inflation": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "eu_equipment_tariff": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "storefront_vacancy_high": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "sign_complaint_wave": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "water_rate_rise": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "payment_processor_outage": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "water_main_break": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "planned_water_shutoff": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "network_power_outage": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "internet_outage": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "heat_wave_equipment_strain": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "students_leave_for_summer": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "holiday_time_off_requests": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "summer_hiring_squeeze": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "chain_raises_pay": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "protected_time_off_enforcement": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "i9_audit_notices": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "work_permits_end": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "stomach_bug_week": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "jury_duty_summons": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "chain_opens_nearby": {
+    "from": [
+     "D06",
+     "D10"
+    ],
+    "chosen": "D06",
+    "mergedIds": [
+     "chain_opens_nearby",
+     "chain_opens_next_door"
+    ]
+   },
+   "chain_closes_nearby": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "coffee_cart_at_the_stairs": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "january_slump": {
+    "from": [
+     "D06",
+     "D07",
+     "D10"
+    ],
+    "chosen": "D06",
+    "mergedIds": [
+     "january_slump",
+     "january_trough"
+    ]
+   },
+   "autumn_drink_season": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "holiday_office_exodus": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "summer_friday_slump": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "tourist_high_season": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "delivery_orders_keep_growing": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "consumers_trade_down": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "campus_summer_break": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "world_cup_summer": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "wildfire_smoke_day": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "subway_weekend_shutdowns": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "street_dig_long": {
+    "from": [
+     "D07",
+     "D10"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "street_dig_long",
+     "street_dig"
+    ]
+   },
+   "early_dark": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "con_ed_rate_step": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "blizzard_shutdown": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "insurance_renewal_up": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "workers_comp_rates_down": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "prime_rate_change": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "card_fee_per_tap_up": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "minimum_wage_march_2027": {
+    "from": [
+     "D09",
+     "D10"
+    ],
+    "chosen": "D10",
+    "mergedIds": [
+     "minimum_wage_march_2027",
+     "wage_step_january"
+    ]
+   },
+   "office_days_up": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "rating_slide": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "delivery_enhanced_tier": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "gas_shutoff_building": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "snowstorm_month": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   }
+  },
+  "ruleCards": {
+   "letter_grade": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "fse_permit": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "no_fse_permit": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "no_food_protection_cert": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "D00"
+   },
+   "dirty_surfaces": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "pest_activity": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "spoiled_food": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "D00"
+   },
+   "unapproved_food_source": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "D00"
+   },
+   "tip_theft": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "unpaid_training_time": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "spread_of_hours_unpaid": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "unlicensed_sidewalk_cafe": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "outdoor_dining_wait": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "grease_interceptor_neglect": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "seats_20": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "tip_credit": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "sales_tax_food": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "card_fees": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "inspection_cycle": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "sign_permit": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "commercial_waste": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "fair_workweek": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "second_generation_space": {
+    "from": [
+     "BASE",
+     "D00"
+    ],
+    "chosen": "D00"
+   },
+   "rent_before_revenue": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "good_guy_guaranty": {
+    "from": [
+     "D01",
+     "D09"
+    ],
+    "chosen": "D09",
+    "mergedIds": [
+     "good_guy_guaranty",
+     "good_guy_guarantee"
+    ]
+   },
+   "security_deposit_range": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "rent_escalation": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "real_estate_tax_passthrough": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "holdover_rent": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "assignor_liability": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "broker_commission": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "lease_assistance_free": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "storefront_vacancy": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "work_without_permit": {
+    "from": [
+     "D01",
+     "D03",
+     "D08",
+     "D14"
+    ],
+    "chosen": "D08"
+   },
+   "stop_work_order_violation": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "unlicensed_trade_work": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "permit_free_work": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "dob_plan_review_time": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "asbestos_acp5": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "landmark_storefront": {
+    "from": [
+     "D01",
+     "D02",
+     "D13"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "landmark_storefront",
+     "landmarks_storefront"
+    ]
+   },
+   "gas_delay": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "capital_improvement_st124": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "scaffold_law_tenant": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "mechanics_lien": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "con_ed_deposit": {
+    "from": [
+     "D01",
+     "D09"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "con_ed_deposit",
+     "utility_deposit"
+    ]
+   },
+   "nyc_best": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "consultative_inspection": {
+    "from": [
+     "D01",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "permit_not_transferable": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D01"
+   },
+   "bulk_sale_notice": {
+    "from": [
+     "D01",
+     "D10",
+     "D14"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "bulk_sale_not_notified",
+     "bulk_sale_notice"
+    ]
+   },
+   "bulk_sale_tax_on_equipment": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "business_price_multiples": {
+    "from": [
+     "D01",
+     "D09",
+     "D14"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "business_price_multiples",
+     "what_a_cafe_sells_for",
+     "takeover_price"
+    ]
+   },
+   "key_money": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "ui_rate_transfers": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "sba_equity_injection": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "franchise_disclosure": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "franchise_costs": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "unlicensed_mobile_vending": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "cart_permit_cap": {
+    "from": [
+     "D01",
+     "D13"
+    ],
+    "chosen": "D01"
+   },
+   "cart_commissary": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "no_temporary_food_permit": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "parks_concession_fee": {
+    "from": [
+     "D01",
+     "D13"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "parks_concession_fee",
+     "park_concession_fee"
+    ]
+   },
+   "sick_leave_survives_sale": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "delivery_condition": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "health_permit_clock": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "cart_permit_black_market": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "broker_fee_business_sale": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "occupancy_contrary_to_co": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "construction_noise_plan": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "no_certificate_of_fitness": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "zoning_before_lease": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "nyc_best_services": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "no_patron_toilet": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "toilet_not_supplied": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "occupancy_75": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "occupant_load": {
+    "from": [
+     "D02",
+     "D14"
+    ],
+    "chosen": "D02"
+   },
+   "overcrowding_over_occupancy": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "cellar_used_for_customers": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "accessibility_barrier": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "ada_inside": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "ada_tax_credit": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "sign_without_permit": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "awning_lettering": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "security_grille": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "sidewalk_obstruction": {
+    "from": [
+     "D02",
+     "D07",
+     "D10"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "sidewalk_obstruction",
+     "sidewalk_sign_3_feet"
+    ]
+   },
+   "sidewalk_cafe_geometry": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "outdoor_dining_fees": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "roadway_all_year": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "storm_enclosure": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "lighting_levels": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "backflow_not_tested": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "commercial_noise": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "cellar_doors": {
+    "from": [
+     "D02",
+     "D07"
+    ],
+    "chosen": "D02"
+   },
+   "no_food_grinder": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "blocked_egress": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "ventilation_inadequate": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "two_toilet_rooms": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "one_exit_reach": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "open_door_ac": {
+    "from": [
+     "D02",
+     "D07"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "open_door_and_ac",
+     "open_door_ac"
+    ]
+   },
+   "outdoor_cafe_noncompliant": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "outdoor_seat_rules": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "open_flame_permit": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "rooftop_unit_permit": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "accessible_ramp": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "cold_holding_inadequate": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "no_hot_water": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "improper_drainage": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "no_fridge_thermometer": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "backflow_test_overdue": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "extinguisher_not_serviced": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "power_outage_food": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "outage_notify": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "con_ed_spoilage_claim": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "prolonged_outage_law": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "offline_card_payments": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "water_hardness_by_address": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "warranty_conditions": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "ice_machine_cleaning": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "dishwasher_sanitizing": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "scale_inspection": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "section_179": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "lease_sales_tax": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "con_ed_efficiency": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "used_equipment_value": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "gas_shutoff": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "water_shutoff_notice": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "roaster_equipment_deal": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "equipment_noise": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "repair_sales_tax": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "dedicated_circuits": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "demand_charge": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "water_damage_claims": {
+    "from": [
+     "D03",
+     "D07"
+    ],
+    "chosen": "D03"
+   },
+   "foam_packaging": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "plastic_stirrers_straws": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "unrequested_takeout_extras": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "no_private_carter": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "commercial_waste_in_litter_basket": {
+    "from": [
+     "D04",
+     "D07"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "trash_in_litter_basket",
+     "litter_basket"
+    ]
+   },
+   "recycling_not_separated": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "trash_setout_violation": {
+    "from": [
+     "D04",
+     "D07",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "trash_setout",
+     "trash_bins",
+     "trash_setout_violation"
+    ]
+   },
+   "resale_certificate_misuse": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "bagel_tax": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "bottle_deposit": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "adulterated_drink_additive": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "deceptive_menu_claims": {
+    "from": [
+     "D04",
+     "D06"
+    ],
+    "chosen": "D04"
+   },
+   "time_without_temperature": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "wholesale_needs_state_license": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "recalled_product_sold": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "allergen_labels_prepacked": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "chain_menu_labels": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "paper_bag_fee": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "unlicensed_food_processing": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "carter_sharing": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "comped_drinks_use_tax": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "pay_frequency_violation": {
+    "from": [
+     "D05",
+     "D09",
+     "D10"
+    ],
+    "chosen": "D09"
+   },
+   "no_wage_notice_statements": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "call_in_pay_unpaid": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "meal_period_denied": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "illegal_deductions": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "uniform_costs_unpaid": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "tip_pool_ineligible": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "invalid_tip_credit": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "exempt_misclassification": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "retaliation": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "child_labor": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "unpaid_volunteer_labor": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "unreported_tips": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "unfair_labor_practice": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "no_day_of_rest": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "no_disability_pfl_coverage": {
+    "from": [
+     "D05",
+     "D09"
+    ],
+    "chosen": "D05"
+   },
+   "no_harassment_policy_training": {
+    "from": [
+     "D05",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "harassment_complaint_ignored": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "job_ad_no_pay_range": {
+    "from": [
+     "D05",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "illegal_hiring_questions": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "protected_time_off": {
+    "from": [
+     "D05",
+     "D10"
+    ],
+    "chosen": "D05",
+    "mergedIds": [
+     "protected_time_off",
+     "unpaid_time_off_2026"
+    ]
+   },
+   "fifth_employee": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "paid_family_leave": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "jury_duty": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "termination_paperwork": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "unemployment_charges": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "six_year_lookback": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "card_tip_fee": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "owner_on_bar_tips": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "cannabis_off_duty": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "fingerprints_and_monitoring": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "secure_choice": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "fica_tip_credit": {
+    "from": [
+     "D05",
+     "D09"
+    ],
+    "chosen": "D09",
+    "mergedIds": [
+     "fica_tip_credit",
+     "tip_tax_credit"
+    ]
+   },
+   "minimum_wage_outlook": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "workers_comp_audit": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "i9_reverification": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "city_hiring_help": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "summer_youth_program": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "youth_jobs_credit": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "harassment_notice_and_factsheet": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "tip_reporting_rule": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "new_hire_report": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "delivery_fee_caps": {
+    "from": [
+     "D06",
+     "D13"
+    ],
+    "chosen": "D06",
+    "mergedIds": [
+     "delivery_fee_caps",
+     "delivery_fee_cap"
+    ]
+   },
+   "fake_reviews": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "grade_card_not_posted": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "card_surcharge_not_disclosed": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "illegal_posting": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "live_animals_inside": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "review_stars": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "queue_length": {
+    "from": [
+     "D06",
+     "D14"
+    ],
+    "chosen": "D14",
+    "mergedIds": [
+     "queue_length",
+     "queue_room"
+    ]
+   },
+   "hybrid_week": {
+    "from": [
+     "D06",
+     "D07"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "hybrid_week",
+     "office_week"
+    ]
+   },
+   "regulars": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "split_shift_pay": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "snow_clock": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "sidewalk_liability": {
+    "from": [
+     "D07",
+     "D14"
+    ],
+    "chosen": "D07"
+   },
+   "storm_day_pay": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "clean_18_inches": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "sidewalk_shed_rules": {
+    "from": [
+     "D07",
+     "D10"
+    ],
+    "chosen": "D07",
+    "mergedIds": [
+     "sidewalk_shed_rules",
+     "shed_duration"
+    ]
+   },
+   "no_pay_for_construction": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "flyers_are_tickets": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "congestion_zone": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "flood_not_insured": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "power_outage_claim": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "roadway_cafe_all_year": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "smoke_day": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "holiday_pay_custom": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "corner_lot_snow": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "music_on_the_sidewalk": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "fines_under_review": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "winter_vestibule": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "sidewalk_violation_75_days": {
+    "from": [
+     "D07"
+    ],
+    "chosen": "D07"
+   },
+   "inspection_points": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "a_grade_no_fines": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "grade_pending": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "monthly_inspections_after_c": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "health_closure": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "oath_hearing": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "oath_default": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "cure_first_time": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "grade_card_hidden": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "hand_wash_station_down": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "bare_hand_contact": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "pet_inside_shop": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "obstructing_inspector": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "required_signs_missing": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "allergen_notice_missing": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "allergen_labels_2026": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "fire_extinguisher_untagged": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "blocked_exit": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "overcrowding": {
+    "from": [
+     "D08",
+     "D14"
+    ],
+    "chosen": "D08"
+   },
+   "candles_without_permit": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "dirty_sidewalk": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "business_trash_dumped": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "sidewalk_sign_obstruction": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "single_use_rules": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "loud_music_noise": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "card_surcharge_undisclosed": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "menu_surcharges": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "unlicensed_music": {
+    "from": [
+     "D08",
+     "D10"
+    ],
+    "chosen": "D08"
+   },
+   "workers_rights_poster_missing": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "retaliation_firing": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "no_commercial_rent_control": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "eviction_process": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "tenant_harassment": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "smoking_vaping_allowed": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "banned_additive_cbd": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "alcohol_to_minor": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "fake_inspectors": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "hot_drink_liability": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "slip_and_fall": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "complaints_311": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "wage_lawsuits": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "waste_zones_2026": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "trademark_name": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "delivery_app_grade_link": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "inspection_advance_notice": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "cure_does_not_change_grade": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "free_interpreter_at_hearings": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "red_tape_reforms_2026": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "sales_tax_calendar": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "vendor_collection_credit": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "responsible_person": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "tax_debt_ladder": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "payroll_tax_not_deposited": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "startup_costs": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "estimated_tax": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "card_sales_reported": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "card_payout_timing": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "card_disputes": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "card_surcharge_violation": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "illegal_menu_surcharge": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "sba_loan": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "sba_fees": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "merchant_cash_advance": {
+    "from": [
+     "D09",
+     "D10"
+    ],
+    "chosen": "D09",
+    "mergedIds": [
+     "merchant_cash_advance",
+     "cash_advance"
+    ]
+   },
+   "personal_guarantee": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "landlord_need_not_relet": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "bulk_sale": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "lease_after_sale": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "bankruptcy_limits": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "llc_wage_liability": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "insurance_gaps": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "premium_audit": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "s_corp_in_nyc": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "closing_paperwork": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "forgiven_debt": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "owner_health_insurance": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "gift_card_money": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "ubt_return": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "city_loan_fund": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "household_taxes": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "unlawful_wage_deduction": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "unemployment_tax_front_loaded": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "lender_checks_the_books": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "no_right_to_renew": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "gas_restore": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "illegal_surcharge": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "illegal_occupancy": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "no_running_water": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "access_barrier": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "sales_tax_seizure": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "outage_insurance": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "reinspection_relief": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "wage_index_2027": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "startup_costs_tax": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "lidded_bins": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "skip_the_stuff": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "first_year_myth": {
+    "from": [
+     "D10"
+    ],
+    "chosen": "D10"
+   },
+   "cart_siting": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "commissary_rule": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "meter_rule": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "vending_decriminalized": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "liquor_30_day": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "liquor_500_foot": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "liquor_trp": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "restaurant_wine_needs_kitchen": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "liquor_city_tax": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "underage_penalty": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "temporary_food_permit": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "juice_warning": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "single_use_handouts": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "hood_and_fdny": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "ventless_needs_approval": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "bakery_two_agencies": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "propane_g23": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "wine_to_go": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "outdoor_alcohol_alteration": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "shared_kitchen_permit": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "restricted_streets": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "vendor_course": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "incubator_fee_waiver": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "tavern_wine_food": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "cart_size_limit": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "station_concession": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "no_app_customer_data": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "juice_wholesale_haccp": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "snow_four_hours": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   },
+   "storm_in_progress": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   },
+   "free_rent_buildout": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   },
+   "gas_before_lease": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   },
+   "startup_costs_195": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   }
+  },
+  "roadmap": {
+   "pick_concept": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "find_space": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "check_certificate_of_occupancy": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "plan_buildout": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "take_food_protection_course": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "get_fse_permit": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "arrange_grease_and_waste": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "check_sign_rules": {
+    "from": [
+     "BASE",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "check_sign_rules",
+     "file_sign_permit"
+    ]
+   },
+   "apply_outdoor_seating": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "buy_equipment": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "line_up_suppliers": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "set_up_pos": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "hire": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "open_doors": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "choose_entry_mode": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "pull_building_record": {
+    "from": [
+     "D01",
+     "D08"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "pull_building_record",
+     "check_building_violations"
+    ]
+   },
+   "pre_lease_site_survey": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "gas_availability_check": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "gas_availability_check",
+     "check_gas_before_lease"
+    ]
+   },
+   "letter_of_intent": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "free_lease_review": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "negotiate_guaranty": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "negotiate_free_rent": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D01"
+   },
+   "lease_tax_clause": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "nyc_best_concierge": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "hire_architect_file_dob": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "hire_architect_file_dob",
+     "file_dob_alteration"
+    ]
+   },
+   "asbestos_investigation": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "landmark_permit": {
+    "from": [
+     "D01",
+     "D02"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "landmark_permit",
+     "check_landmark_and_sign_rules"
+    ]
+   },
+   "letter_of_no_objection_step": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "bid_and_contract": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "order_long_lead_items": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "apply_utilities_early": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "inspections_and_signoff": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "soft_open_and_consult": {
+    "from": [
+     "D01",
+     "D08"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "soft_open_and_consult",
+     "book_practice_inspection"
+    ]
+   },
+   "takeover_find_listing": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "takeover_due_diligence": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D01"
+   },
+   "takeover_lease_assignment": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "takeover_lease_assignment",
+     "takeover_landlord_consent"
+    ]
+   },
+   "takeover_bulk_sale_notice": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D01"
+   },
+   "takeover_new_permits": {
+    "from": [
+     "D01",
+     "D14"
+    ],
+    "chosen": "D01",
+    "mergedIds": [
+     "takeover_new_permits",
+     "takeover_own_permit"
+    ]
+   },
+   "takeover_closing_transition": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "franchise_read_fdd": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "franchise_site_and_training": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "cart_license_and_course": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "cart_supervisory_waitlist": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "cart_commissary_and_inspection": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "popup_temporary_permit": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "popup_shared_space": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "check_zoning": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "free_plan_review": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "fdny_pre_opening": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "measure_the_room": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "decide_seat_count": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "check_power_water_air": {
+    "from": [
+     "D02",
+     "D03"
+    ],
+    "chosen": "D02",
+    "mergedIds": [
+     "check_power_water_air",
+     "check_water_and_power"
+    ]
+   },
+   "check_the_front_door": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "apply_roadway_cafe": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "check_inherited_equipment": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "book_certified_install": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "line_up_service": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "backflow_and_extinguishers": {
+    "from": [
+     "D03",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "backflow_and_extinguishers",
+     "test_backflow_device",
+     "tag_fire_extinguishers"
+    ]
+   },
+   "request_scale_inspection": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "apply_con_ed_program": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "plan_for_outages": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "cost_the_menu": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "open_supplier_accounts": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "plan_packaging_and_trash": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "set_pay_and_tip_rules": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "buy_disability_pfl_policy": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "adopt_required_policies": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "certify_shift_leads": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "post_jobs_with_pay_range": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "run_paid_trial_shifts": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "first_day_paperwork": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "set_weekly_payroll": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "build_the_schedule": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "train_before_opening": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "post_workplace_notices": {
+    "from": [
+     "D05",
+     "D08"
+    ],
+    "chosen": "D08",
+    "mergedIds": [
+     "post_workplace_notices",
+     "set_up_workplace_notices"
+    ]
+   },
+   "plan_your_own_hours": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "negotiate_exit_terms": {
+    "from": [
+     "D08",
+     "D09"
+    ],
+    "chosen": "D09",
+    "mergedIds": [
+     "negotiate_lease_law_terms",
+     "negotiate_exit_terms"
+    ]
+   },
+   "search_the_name": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "make_the_door_accessible": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "post_required_signs": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "print_allergy_notice": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "license_your_music": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "learn_the_hearing_process": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "plan_funding": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "apply_for_loan": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "open_tax_reserve_account": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "read_the_insurance_clause": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "pick_format": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "join_vending_waitlist": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "sign_commissary": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "check_power_and_gas": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "file_hood_and_suppression": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "notify_community_board": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "file_sla_and_trp": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "pick_delivery_plan": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "winter_ready": {
+    "from": [
+     "D14"
+    ],
+    "chosen": "D14"
+   }
+  },
+  "suppliers": {
+   "coffee_beans": {
+    "from": [
+     "BASE",
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "dairy": {
+    "from": [
+     "BASE",
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "pastry": {
+    "from": [
+     "BASE",
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "equipment_new": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "equipment_used": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "disposables": {
+    "from": [
+     "BASE",
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "pos_payments": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "insurance_broker": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "accountant_help": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "pest_control": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "waste_carter": {
+    "from": [
+     "BASE",
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "contractor_architect": {
+    "from": [
+     "BASE"
+    ],
+    "chosen": "BASE"
+   },
+   "business_brokers_listings": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "lease_and_deal_lawyer": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "expediter_and_asbestos": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "city_free_help": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "franchisors": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "cart_builders_commissaries": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "markets_and_concessions": {
+    "from": [
+     "D01"
+    ],
+    "chosen": "D01"
+   },
+   "hvac_contractor": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "sign_hanger_awning": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "master_plumber": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "accessibility_help": {
+    "from": [
+     "D02",
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "glass_and_gates": {
+    "from": [
+     "D02"
+    ],
+    "chosen": "D02"
+   },
+   "espresso_service_tech": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "refrigeration_hvac_service": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "plumber_backflow": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "fire_safety_service": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "ice_machine_rental": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "equipment_leasing": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "roaster_equipment_program": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "backup_internet": {
+    "from": [
+     "D03"
+    ],
+    "chosen": "D03"
+   },
+   "cafe_distributor": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "broadline_distributor": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "cash_and_carry": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "alt_milk": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "syrups_tea_matcha": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "frozen_bakeoff": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "custom_cups": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "surplus_food_app": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "bagels_bread": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "bottled_drinks": {
+    "from": [
+     "D04"
+    ],
+    "chosen": "D04"
+   },
+   "job_boards": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "payroll_providers": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "scheduling_apps": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "temp_staffing": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "barista_training": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "hr_compliance_help": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "health_benefit_options": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "employment_practices_insurance": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "city_hiring_programs": {
+    "from": [
+     "D05"
+    ],
+    "chosen": "D05"
+   },
+   "delivery_platforms": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "online_ordering_loyalty": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "catering_marketplace": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "review_listings": {
+    "from": [
+     "D06"
+    ],
+    "chosen": "D06"
+   },
+   "backflow_tester": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "fire_extinguisher_service": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "business_music": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "hospitality_lawyer": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "food_safety_consultant": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "sign_hanger": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "free_posters": {
+    "from": [
+     "D08"
+    ],
+    "chosen": "D08"
+   },
+   "sba_lender": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "microlender": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "city_financing": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "business_broker": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "equipment_liquidator": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "debt_and_closing_help": {
+    "from": [
+     "D09"
+    ],
+    "chosen": "D09"
+   },
+   "commissaries": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "shared_kitchens": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "boba_ingredients": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "wine_beer_wholesalers": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   },
+   "fire_suppression_contractors": {
+    "from": [
+     "D13"
+    ],
+    "chosen": "D13"
+   }
+  }
+ },
  "counts": {
   "setup": 107,
   "monthlyCosts": 30,
   "staff": 8,
   "taxes": 12,
   "levers": 94,
-  "shortcuts": 78,
+  "shortcuts": 79,
   "violations": 87,
   "officials": 14,
   "reports": 32,
   "events": 55,
   "ruleCards": 352,
-  "roadmap": 109,
+  "roadmap": 76,
   "suppliers": 73,
-  "eventCatalog": 693,
+  "eventCatalog": 484,
   "mechanics": 121,
   "formatRecords": {
    "setup": 40,
@@ -4725,7 +11863,7 @@
    "staff": 4,
    "taxes": 1,
    "levers": 14,
-   "shortcuts": 12,
+   "shortcuts": 11,
    "violations": 14,
    "officials": 2,
    "reports": 3,
@@ -4734,7 +11872,7 @@
   "conditionalMonthlyCosts": 22,
   "preOpeningChoices": 16,
   "reference": {
-   "eventCatalog": 193,
+   "eventCatalog": 402,
    "nonObvious": 640,
    "failureStories": 177
   }

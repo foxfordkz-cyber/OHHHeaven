@@ -176,7 +176,21 @@ export const alias = {
     shed_duration: 'sidewalk_shed_rules',
     sidewalk_sign_3_feet: 'sidewalk_obstruction',
   },
-  roadmap: {},
+  roadmap: {
+    check_building_violations: 'pull_building_record',
+    check_water_and_power: 'check_power_water_air',
+    check_gas_before_lease: 'gas_availability_check',
+    file_dob_alteration: 'hire_architect_file_dob',
+    takeover_own_permit: 'takeover_new_permits',
+    takeover_landlord_consent: 'takeover_lease_assignment',
+    check_landmark_and_sign_rules: 'landmark_permit',
+    file_sign_permit: 'check_sign_rules',
+    negotiate_lease_law_terms: 'negotiate_exit_terms',
+    book_practice_inspection: 'soft_open_and_consult',
+    set_up_workplace_notices: 'post_workplace_notices',
+    test_backflow_device: 'backflow_and_extinguishers',
+    tag_fire_extinguishers: 'backflow_and_extinguishers',
+  },
   suppliers: {},
   staff: {},
   taxes: {},
@@ -237,6 +251,34 @@ export const conditionalCosts = {
 
 // Решения до открытия: в extra.preOpeningChoices, а не в levers (движок считает levers каждый месяц).
 export const preOpening = ['entry_mode', 'franchise_brand', 'contingency_level', 'contractor_choice', 'construction_pace', 'free_rent_deal', 'guaranty_type', 'lease_contingencies', 'lease_terms', 'site_due_diligence', 'opening_mode', 'takeover_due_diligence', 'takeover_permit_timing', 'takeover_transition', 'utility_concept', 'tax_structure', 'loan_rate_type'];
+
+// Порядок основного пути: открыть кафе с нуля в бывшем кафе (как в жизни, по шагам).
+// Общие шаги (LLC, EIN, аренда, страховка) — в _common.roadmap; sign_lease из _common идёт после negotiate_exit_terms.
+export const roadmapOrder = [
+  'pick_concept', 'choose_entry_mode', 'cost_the_menu', 'plan_funding', 'apply_for_loan',
+  'find_space', 'check_zoning', 'check_certificate_of_occupancy', 'pull_building_record', 'measure_the_room', 'decide_seat_count',
+  'check_the_front_door', 'check_power_water_air', 'gas_availability_check', 'check_inherited_equipment', 'pre_lease_site_survey',
+  'landmark_permit', 'letter_of_intent', 'free_lease_review', 'negotiate_guaranty', 'negotiate_free_rent', 'lease_tax_clause',
+  'negotiate_exit_terms', 'read_the_insurance_clause',
+  'nyc_best_concierge', 'plan_buildout', 'free_plan_review', 'asbestos_investigation', 'hire_architect_file_dob',
+  'letter_of_no_objection_step', 'bid_and_contract', 'order_long_lead_items', 'apply_utilities_early', 'apply_con_ed_program',
+  'check_sign_rules', 'apply_outdoor_seating', 'apply_roadway_cafe', 'arrange_grease_and_waste', 'plan_packaging_and_trash',
+  'inspections_and_signoff', 'fdny_pre_opening', 'backflow_and_extinguishers', 'take_food_protection_course', 'get_fse_permit',
+  'search_the_name', 'buy_equipment', 'book_certified_install', 'line_up_service', 'line_up_suppliers', 'open_supplier_accounts',
+  'set_up_pos', 'pick_delivery_plan', 'license_your_music', 'open_tax_reserve_account',
+  'buy_disability_pfl_policy', 'adopt_required_policies', 'set_pay_and_tip_rules', 'set_weekly_payroll', 'post_jobs_with_pay_range',
+  'run_paid_trial_shifts', 'hire', 'first_day_paperwork', 'certify_shift_leads', 'build_the_schedule', 'plan_your_own_hours',
+  'train_before_opening', 'post_workplace_notices', 'post_required_signs', 'print_allergy_notice', 'make_the_door_accessible',
+  'request_scale_inspection', 'plan_for_outages', 'learn_the_hearing_process', 'open_doors', 'soft_open_and_consult', 'winter_ready',
+];
+// Шаги других путей входа: в extra.roadmapPaths.<path>, а не в основной план.
+export const roadmapPaths = {
+  takeover: ['takeover_find_listing', 'takeover_due_diligence', 'takeover_lease_assignment', 'takeover_bulk_sale_notice', 'takeover_new_permits', 'takeover_closing_transition'],
+  franchise: ['franchise_read_fdd', 'franchise_site_and_training'],
+  cart: ['cart_license_and_course', 'cart_supervisory_waitlist', 'cart_commissary_and_inspection', 'join_vending_waitlist', 'sign_commissary'],
+  popup: ['popup_temporary_permit', 'popup_shared_space'],
+  formats: ['pick_format', 'check_power_and_gas', 'file_hood_and_suppression', 'notify_community_board', 'file_sla_and_trp'],
+};
 
 // Записи, которые не берём совсем (причина в MERGE.md).
 export const drop = {
