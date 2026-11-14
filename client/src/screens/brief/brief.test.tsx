@@ -2,6 +2,9 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Ack, Action } from '@ohh/shared/types';
 import { RULES } from '@ohh/shared/rules';
+import { MemoryRouter } from 'react-router-dom';
+import { createStaticStore, StoreProvider } from '../../app/store';
+import { BriefEntry } from './BriefEntry';
 import { BriefScreen } from './BriefScreen';
 import { briefFixture, BRIEF_FIXTURES } from './fixtures';
 import { calendarText } from './ics';
@@ -259,5 +262,30 @@ describe('/brief on screen', () => {
     expect(screen.getByText('February report')).toBeTruthy();
     expect(screen.getByText('New')).toBeTruthy();
     expect(screen.getByText(/vs last month/)).toBeTruthy();
+  });
+});
+
+describe('BriefEntry — the door to /brief on other screens', () => {
+  it('keeps the away summary, so the brief has it after the poll erases it', () => {
+    const away = briefFixture('notice');
+    const store = createStaticStore(away);
+    const onOpen = vi.fn();
+    const { rerender } = render(<MemoryRouter><StoreProvider store={store}><BriefEntry view={away} onOpen={onOpen} /></StoreProvider></MemoryRouter>);
+    expect(readMemory('local:dev:u-maya').away?.cashThen).toBe(35_180);
+    const card = screen.getByLabelText('Your brief');
+    expect(card.textContent).toContain('6 days since your last look');
+    expect(card.textContent).toContain('Fine notice: $1,200');
+    expect(card.textContent).toContain('+$3,240');
+    fireEvent.click(screen.getByRole('button', { name: 'See what happened' }));
+    expect(onOpen).toHaveBeenCalled();
+    // the next poll: no away in the view, the door still knows the gap
+    rerender(<MemoryRouter><StoreProvider store={store}><BriefEntry view={{ ...away, away: null }} onOpen={onOpen} /></StoreProvider></MemoryRouter>);
+    expect(screen.getByLabelText('Your brief').textContent).toContain('6 days since your last look');
+  });
+
+  it('renders nothing without a business', () => {
+    const v = briefFixture('none');
+    const { container } = render(<MemoryRouter><StoreProvider store={createStaticStore(v)}><BriefEntry view={v} /></StoreProvider></MemoryRouter>);
+    expect(container.textContent).toBe('');
   });
 });

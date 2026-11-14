@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { Ack, Action, OwnerView } from '@ohh/shared/types';
 import { dateOf } from '@ohh/shared/rules';
 import { Badge, Banner, Button, Card, List, ListRow, MoneyText, Stat, TopBar, formatMoney, formatNumber, useT, type IconName } from '../../ui';
-import { readMemory, writeMemory, type BriefMemory } from './memory';
+import { keepAway, readMemory, writeMemory, type BriefMemory } from './memory';
 import { calendarFile } from './ics';
 import {
   clockAt, dayLabel, happenings, inTime, lookNow, monthLength, monthName, monthNews, myStanding, nextReport, pickDecision, resolveSince, rival, round2, snapshotAway, upcoming,
@@ -36,12 +36,8 @@ export function BriefScreen({ deps }: { deps: BriefDeps }) {
   // The away summary comes once: keep it before the next poll replaces the view.
   useEffect(() => {
     const snap = snapshotAway(view);
-    if (!snap) return;
-    const cur = readMemory(memoryKey);
-    if (cur.away?.toDay === snap.toDay && cur.away.fromDay === snap.fromDay) return;
-    const next = { ...cur, away: snap };
-    writeMemory(memoryKey, next);
-    setMem(next);
+    const next = snap ? keepAway(memoryKey, snap) : null;
+    if (next) setMem(next);
   }, [view, memoryKey]);
 
   const since = useMemo(() => resolveSince(view, mem), [view, mem]);

@@ -28,6 +28,9 @@ export interface BriefMemory {
 
 const PREFIX = 'ohh.brief.v1:';
 
+/** One brief per mode (remote or local), city and player. */
+export const briefKey = (mode: string, worldId: string, playerId: string): string => `${mode}:${worldId}:${playerId}`;
+
 function storage(): Storage | null {
   try {
     return typeof localStorage === 'undefined' ? null : localStorage;
@@ -52,4 +55,13 @@ export function writeMemory(key: string, m: BriefMemory): void {
   } catch {
     /* storage blocked: the brief falls back to "since the month began" next time */
   }
+}
+
+/** Keep a fresh away summary; returns the new memory, or null when it was already kept. */
+export function keepAway(key: string, snap: AwaySnapshot): BriefMemory | null {
+  const cur = readMemory(key);
+  if (cur.away?.toDay === snap.toDay && cur.away.fromDay === snap.fromDay) return null;
+  const next = { ...cur, away: snap };
+  writeMemory(key, next);
+  return next;
 }
