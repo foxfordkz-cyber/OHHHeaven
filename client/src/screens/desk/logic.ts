@@ -1,7 +1,14 @@
 // Pure helpers for the official's desk (/desk): no React, no network. Every number comes from the view, the packs or RULES.
-import type { Action, Case, CaseCard, Money, OfficialRole, OfficialView, PackOfficial, PackSet, PackViolation } from '../../../../shared/src/types';
+import type { Action, Case, CaseCard, Money, NicheId, OfficialRole, OfficialView, PackOfficial, PackSet, PackViolation } from '../../../../shared/src/types';
 import { RULES, dateOf } from '../../../../shared/src/rules';
-import { money } from '../network/logic';
+
+/** Whole dollars, $1,234 (same format as the network screen). Own copy: the desk does not lean on other screens' files. */
+export const money = (n: Money): string => {
+  const s = '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  return n < 0 ? '−' + s : s;
+};
+
+export const NICHE_NAME: Record<NicheId, string> = { cafe: 'Cafe', barbershop: 'Barbershop', bodega: 'Corner store', guesthouse: 'Guesthouse', rentals: 'Rentals' };
 
 /** Same names as the engine (engine/src/law/util.ts). */
 export const ROLE_LABEL: Record<OfficialRole, string> = { inspector: 'City inspector', tax_auditor: 'Tax auditor' };
@@ -197,6 +204,115 @@ export const EMPTY_QUEUE_TEXT = [
 ];
 
 export const EMPTY_QUEUE_NEXT = `New cases appear as the city lives. A case nobody takes in ${plural(RULES.CASE_GRACE_DAYS, 'day')} goes to an AI official, so check in every day or two.`;
+
+// ───────────── today at the desk: one decision, the race, what comes tomorrow ─────────────
+
+export type DeskDecision =
+  | { kind: 'bribe'; caseId: string; title: string; detail: string }
+  | { kind: 'take'; caseId: string; title: string; detail: string }
+  | { kind: 'wait'; caseId?: string; title: string; detail: string }
+  | { kind: 'none'; title: string; detail: string };
+
+/**
+ * The one thing that waits for the official today, most urgent first: an offer that expires, a case about to go to an
+ * AI official, an inspection whose result comes tomorrow, or nothing (and when cases appear).
+ */
+export function deskDecision(view: OfficialView): DeskDecision {
+  const day = view.world.day;
+  const offer = view.mine.find((c) => c.status === 'bribe_offered') as CaseCardMaybe | undefined;
+  if (offer) {
+    const f = bribeFacts(offer);
+    return {
+      kind: 'bribe', caseId: offer.caseId,
+      title: `${offer.business.name} offers you ${money(f.amount)}`,
+      detail: `Take it: +${f.pointsIfTaken} points and the risk of Internal Affairs. Refuse: they pay ${money(f.fineIfRefused)}, you get +${f.pointsIfRefused}. No answer within ${plural(RULES.BRIBE_ANSWER_DAYS, 'day')} means you refuse.`,
+    };
+  }
+  const blocked = suspension(view).blocked;
+  const takeable = blocked ? [] : view.queue
+    .filter((c) => takeAvailability(c, view).allowed)
+    .sort((a, b) => a.openedDay - b.openedDay || Number(b.origin === 'report') - Number(a.origin === 'report'));
+  if (takeable.length) {
+    const c = takeable[0];
+    const left = Math.max(0, c.openedDay + RULES.CASE_GRACE_DAYS - day);
+    return {
+      kind: 'take', caseId: c.caseId,
+      title: `Take the case on ${c.business.name}`,
+      detail: `${ORIGIN_LABEL[c.origin]}. ${left === 0 ? 'An AI official takes it today' : `An AI official takes it in ${plural(left, 'day')}`} if you do not. +${RULES.POINTS_PER_VIOLATION} points for each violation you find, ${RULES.POINTS_EMPTY_INSPECTION} if the place is clean.`,
+    };
+  }
+  const inspecting = view.mine.find((c) => stageOf(c) === 'inspecting');
+  if (inspecting) {
+    return {
+      kind: 'wait', caseId: inspecting.caseId,
+      title: `Inspection at ${inspecting.business.name} is under way`,
+      detail: `The result comes to this desk on ${dateOf(inspecting.openedDay + RULES.INSPECTION_DAYS + 1).label} at the latest. If something is found, the owner gets a fine notice and may offer you money.`,
+    };
+  }
+  const notice = view.mine.find((c) => stageOf(c) === 'notice') as CaseCardMaybe | undefined;
+  if (notice) {
+    return {
+      kind: 'wait', caseId: notice.caseId,
+      title: `${notice.business.name} has a fine notice of ${money(totalFine(notice))}`,
+      detail: `They have ${plural(RULES.NOTICE_ANSWER_DAYS, 'day')} to pay or contest. You get +${RULES.POINTS_PER_VIOLATION * (notice.found?.length ?? 0)} points when it is paid.`,
+    };
+  }
+  if (blocked) return { kind: 'none', title: suspension(view).title ?? 'No cases for you now', detail: suspension(view).text ?? '' };
+  return { kind: 'none', title: 'Nothing waits for you right now', detail: EMPTY_QUEUE_NEXT };
+}
+
+export interface RankRace { place: number | null; of: number; points: number; above?: { name: string; points: number; gap: number; violations: number }; below?: { name: string; points: number; gap: number } }
+
+/** Who is right above and below me in the officials' ranking, and how many found violations close the gap. */
+export function rankRace(view: OfficialView): RankRace {
+  const sorted = [...view.ranking].sort((a, b) => b.points - a.points);
+  const i = sorted.findIndex((r) => !r.isAi && r.name === view.official.name);
+  const points = view.official.points;
+  if (i < 0) return { place: null, of: sorted.length, points };
+  const up = i > 0 ? sorted[i - 1] : undefined;
+  const down = sorted[i + 1];
+  const gapUp = up ? up.points - points : 0;
+  return {
+    place: i + 1, of: sorted.length, points,
+    above: up ? { name: up.name, points: up.points, gap: gapUp, violations: Math.max(1, Math.ceil((gapUp + 1) / RULES.POINTS_PER_VIOLATION)) } : undefined,
+    below: down ? { name: down.name, points: down.points, gap: points - down.points } : undefined,
+  };
+}
+
+export function rankRaceText(r: RankRace): string {
+  if (r.place == null) return 'You are not in the ranking yet: close your first case to get on it.';
+  if (!r.above) return r.below ? `You lead the city's officials. ${r.below.name} is ${plural(r.below.gap, 'point')} behind you.` : 'You lead the city\'s officials.';
+  return `#${r.place} of ${r.of}. ${r.above.name} is ${plural(r.above.gap, 'point')} ahead: ${plural(r.above.violations, 'violation')} found and paid puts you past them.`;
+}
+
+/** What tomorrow brings to this desk, from the view only: results due, cases about to leave, the next game day. */
+export function tomorrowLines(view: OfficialView): string[] {
+  const day = view.world.day;
+  const out: string[] = [];
+  const due = view.mine.filter((c) => stageOf(c) === 'inspecting');
+  if (due.length) out.push(`${plural(due.length, 'inspection result')} due: ${due.map((c) => c.business.name).join(', ')}.`);
+  const leaving = view.queue.filter((c) => c.status === 'open' && c.openedDay + RULES.CASE_GRACE_DAYS - day <= 1);
+  if (leaving.length) out.push(`${plural(leaving.length, 'case')} in the queue go${leaving.length === 1 ? 'es' : ''} to an AI official by tomorrow.`);
+  const notices = view.mine.filter((c) => stageOf(c) === 'notice');
+  if (notices.length) out.push(`${plural(notices.length, 'owner')} must pay or contest a fine soon: points come when they pay.`);
+  if (view.official.bribesThisMonth > 0) out.push(`Internal Affairs looks at this month's bribes at the month's end: you took ${plural(view.official.bribesThisMonth, 'bribe')}.`);
+  if (!out.length) out.push('New cases arrive as owners report each other and books look off. Check in every day or two.');
+  return out;
+}
+
+/** The answer on the case card right after the official acted, before the next picture of the city arrives. */
+export function afterActText(a: Action, card: CaseCardMaybe | undefined): string {
+  if (a.type === 'take_case') {
+    return `Case taken. The inspection takes ${plural(RULES.INSPECTION_DAYS, 'game day')}; the result comes here. +${RULES.POINTS_PER_VIOLATION} points for each violation when the fine is paid.`;
+  }
+  if (a.type === 'answer_bribe' && card) {
+    const f = bribeFacts(card);
+    return a.accept
+      ? `You took ${money(f.amount)}: +${f.pointsIfTaken} points. The fine is gone. Internal Affairs reviews the month's bribes at the month's end.`
+      : `You refused. The owner now owes ${money(f.fineIfRefused)}; you get +${f.pointsIfRefused} points when it is paid.`;
+  }
+  return 'Done.';
+}
 
 // ───────────── actions: the only thing the desk sends ─────────────
 

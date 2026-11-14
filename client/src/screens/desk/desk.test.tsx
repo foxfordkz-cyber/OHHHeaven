@@ -141,8 +141,50 @@ describe('desk screen', () => {
     expect(offer.textContent).toContain('Internal Affairs');
     fireEvent.click(within(offer).getByRole('button', { name: 'Take $400' }));
     expect(onAct).toHaveBeenLastCalledWith({ type: 'answer_bribe', caseId: 'c13', accept: true });
-    fireEvent.click(within(offer).getByRole('button', { name: 'Refuse' }));
-    expect(onAct).toHaveBeenLastCalledWith({ type: 'answer_bribe', caseId: 'c13', accept: false });
+    // one answer per offer: both buttons lock while it flies
+    expect((within(offer).getByRole('button', { name: 'Refuse' }) as HTMLButtonElement).disabled).toBe(true);
+    cleanup();
+    const onAct2 = setup();
+    const offer2 = within(caseRow('My cases', 'c13')).getByRole('group', { name: 'Offer from the owner' });
+    fireEvent.click(within(offer2).getByRole('button', { name: 'Refuse' }));
+    expect(onAct2).toHaveBeenLastCalledWith({ type: 'answer_bribe', caseId: 'c13', accept: false });
+  });
+
+  it('says right away what the answer did, and why when it failed', async () => {
+    const ok = vi.fn(async () => ({ ok: true }));
+    render(<Desk view={paused(officialView)} packs={packs} onAct={ok} />);
+    const offer = within(caseRow('My cases', 'c13')).getByRole('group', { name: 'Offer from the owner' });
+    await act(async () => { fireEvent.click(within(offer).getByRole('button', { name: 'Refuse' })); });
+    expect(within(offer).getByRole('note').textContent).toMatch(/You refused\. The owner now owes \$\d/);
+    cleanup();
+    const bad = vi.fn(async () => ({ ok: false, error: 'The offer expired' }));
+    render(<Desk view={paused(officialView)} packs={packs} onAct={bad} />);
+    const row = caseRow('Case queue', 'c21');
+    await act(async () => { fireEvent.click(within(row).getByRole('button', { name: /Take case/ })); });
+    expect(within(row).getByRole('note').textContent).toBe('That did not go through: The offer expired.');
+  });
+
+  it('puts one decision on top: the open offer first, then the oldest case I can take', () => {
+    setup();
+    const today = screen.getByRole('region', { name: 'Today at the desk' });
+    expect(today.textContent).toContain('Your decision');
+    expect(today.textContent).toContain('Cuppa Joe East offers you $400');
+    expect(today.textContent).toMatch(/#\d+ of \d+|You lead|not in the ranking/);
+    expect(today.textContent).toContain('Tomorrow');
+    cleanup();
+    const noOffer: OfficialView = { ...officialView, mine: officialView.mine.filter((c) => c.status !== 'bribe_offered') };
+    const onAct = setup(noOffer);
+    const t2 = screen.getByRole('region', { name: 'Today at the desk' });
+    expect(t2.textContent).toMatch(/Take the case on /);
+    fireEvent.click(within(t2).getByRole('button', { name: /Take this case/ }));
+    expect(onAct).toHaveBeenCalledWith(expect.objectContaining({ type: 'take_case' }));
+  });
+
+  it('pauses actions and says so when the connection is lost', () => {
+    render(<Desk view={paused(officialView)} packs={packs} onAct={vi.fn()} connection={{ offline: true, error: 'fetch failed' }} />);
+    expect(screen.getByRole('status').textContent).toContain('Connection lost');
+    const take = within(caseRow('Case queue', 'c21')).getByRole('button', { name: /Take case/ }) as HTMLButtonElement;
+    expect(take.disabled).toBe(true);
   });
 
   it('shows who catches bribes in real life when the packs have the rule', () => {
