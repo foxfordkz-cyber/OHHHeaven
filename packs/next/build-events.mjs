@@ -294,17 +294,29 @@ function settingMove(m, e, base, ctx) {
 
 // ───────────────────────── which events ─────────────────────────
 
-const WEATHER_WORDS = /\b(snow|blizzard|ice|icy|freez|frost|cold snap|heat|hot|rain|storm|hurricane|flood|thunder|nor.?easter|wind chill|humid)/i;
 function kindOf(e, effects) {
-  const text = `${e.id} ${e.name}`;
   const has = (f) => effects.some((x) => x.field === f);
-  if (WEATHER_WORDS.test(text) && (has('footTraffic') || has('demand') || has('staffAvailability') || has('utilities'))) return 'weather';
-  if (has('violation') || effects.some((x) => x.line === 'fine') || /inspect|permit|law|rule|ban|tax|fee|licen|code|summons|audit/i.test(text)) return 'regulation';
+  if (weatherOf(e)) return 'weather';
+  if (has('violation') || effects.some((x) => x.line === 'fine') || /\b(inspect\w*|permit\w*|law|rule|ban|tax|fee|licen\w*|code|summons|audit\w*)\b/i.test(e.name)) return 'regulation';
   if (has('cogs')) return 'supply';
   if (has('wages') || has('staffAvailability')) return 'staff';
   if (has('footTraffic')) return 'traffic';
   if (has('demand')) return 'demand';
   return 'city';
+}
+
+/** Weather the forecast must show on the first day (the engine's own conditions). Read from the name, not invented. */
+const weatherText = (e) => `${e.id} ${e.name}`.replace(/_/g, ' ');
+function weatherOf(e) {
+  const text = weatherText(e);
+  const months = Array.isArray(e.months) ? e.months : [];
+  const winterOnly = months.length > 0 && months.every((m) => [11, 12, 1, 2, 3].includes(m));
+  const summerOnly = months.length > 0 && months.every((m) => m >= 5 && m <= 9);
+  if (/\b(blizzard|nor.?easter)/i.test(text) && !summerOnly) return ['snow', 'storm'];
+  if (/\b(snow\w*|icy|freez\w*|frost)\b/i.test(text) && winterOnly) return ['snow'];
+  if (/\b(heat|hot|humid\w*)\b/i.test(text) && summerOnly) return ['heat'];
+  if (/\b(rain\w*|flood\w*|thunder\w*|hurricane|storm\w*|cloudburst)\b/i.test(text) && !/\bsnow/i.test(text)) return ['rain', 'storm'];
+  return undefined;
 }
 
 /** How the event starts. Only two ways need no chance and no state the engine lacks. */
@@ -327,6 +339,15 @@ function launchOf(e, ctx) {
   if (/^decision/i.test(t)) return { skip: 'follows from a decision the engine cannot see yet' };
   return { skip: 'the trigger needs a state the engine does not track yet' };
 }
+
+const ID_NOISE = new Set(['d00', 'equipment', 'food', 'labor', 'finance', 'premises', 'street', 'world', 'closures', 'nyc', 'event', 'law', 'the', 'in', 'a', 'of', 'at', 'on', 'to', 'and', 'for', 'is', 'are', 'your', 'you']);
+/** The words of an id, cut to four letters: "ac_fails_in_heat_wave" and "ac_failure_heat_wave" are the same event. */
+const idTokens = (id) => new Set(id.split('_').filter((w) => w && !ID_NOISE.has(w)).map((w) => w.slice(0, 4)));
+function jaccard(a, b) { let n = 0; for (const x of a) if (b.has(x)) n++; return a.size + b.size - n === 0 ? 0 : n / (a.size + b.size - n); }
+
+const directionOf = (effects) => Object.fromEntries(effects.map((x) => [x.field, x.field === 'violation' ? 0 : (x.mult ?? 1 + x.add) > 1 ? 1 : -1]));
+/** Two events point the same way: they share a field and no shared field has opposite signs. */
+function sameDirection(a, b) { const shared = Object.keys(a).filter((f) => f in b); return shared.length > 0 && shared.every((f) => a[f] === b[f]); }
 
 function scoreDeep(e, ev) {
   let s = 0;
@@ -388,20 +409,26 @@ function build() {
     }
     if (moves.length < 2) { skip('no move with a price and a result in numbers'); continue; }
     const nameKey = slug(e.name);
+    const tokens = idTokens(e.id);
+    // a twin: same scale, half of the id words in common, effects pointing the same way, at least one month in common
+    const dir = directionOf(effects);
+    const twin = fit.find((x) => x.ev.scale === e.scale && jaccard(tokens, x.tokens) >= 0.5 && sameDirection(x.dir, dir) && x.ev.months.some((m) => months.includes(m)));
+    if (twin) { skip(`near-duplicate of ${twin.ev.id}`); continue; }
     const sig = JSON.stringify([e.scale, months, effects.map((x) => [x.field, x.mult ?? x.add ?? x.id]), moves.map((m) => m.label)]);
     const ids = [e.id, ...(e.aliases ?? [])];
     if (ids.some((i) => seenId.has(i))) { skip('duplicate id or alias'); continue; }
     if (seenName.has(nameKey)) { skip('duplicate name'); continue; }
     if (seenSig.has(sig)) { skip('duplicate: same scale, months, effects and moves'); continue; }
     ids.forEach((i) => seenId.add(i)); seenName.add(nameKey); seenSig.add(sig);
+    const kind = kindOf(e, effects);
     const ev = clean({
-      id: e.id, name: e.name, text: e.text, kind: kindOf(e, effects), scale: e.scale, tier: e.tier,
+      id: e.id, name: e.name, text: e.text, kind, scale: e.scale, tier: e.tier, weather: kind === 'weather' ? weatherOf(e) : undefined,
       months, durationMonths, durationDays: durationMonths === 0 ? 1 : activeMonths * 30, noticeDays: NOTICE_DAYS[e.scale],
       launch: l.launch, requires: l.requires, trigger: e.trigger, signal: e.realSignal,
       effects, moves, source: e.source, confidence: e.confidence === 'verified' ? 'verified' : 'estimate',
       note: e.note, realFrequency: /^not estimated/i.test(e.realFrequency ?? '') ? undefined : e.realFrequency,
     });
-    fit.push({ e, ev, entry });
+    fit.push({ e, ev, entry, tokens, dir });
   }
   const core = fit.filter((x) => x.e.tier === 'core');
   const deep = fit.filter((x) => x.e.tier === 'deep').map((x) => ({ ...x, score: scoreDeep(x.e, x.ev) }))
@@ -425,7 +452,9 @@ function build() {
     rules: {
       note: 'Game rules, not facts: notice by scale, the limits of a multiplier, how many events run at once (build/EVENTS.md, section 2).',
       noticeDays: NOTICE_DAYS, multMin: MULT_MIN, multMax: MULT_MAX, softMax: SOFT_MAX,
-      maxActivePerBusiness: 3, maxActiveByScale: { world: 1, country: 1, city: 1, block: 1, point: 1 },
+      seasonDays: 360, longFromDays: 61, maxLongActive: 2,
+      maxShortActive: { wide: 1, city: 1, local: 1 },             // wide = world and country, local = block and point; per business, at once
+      newPerWindow: { wide: 1, city: 1, block: 1, pointPerBusiness: 1 }, pointEveryWindows: 2, repeatAfterMonths: 12,
     },
     counts: {
       catalog: catalog.length, events: events.length,

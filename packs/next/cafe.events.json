@@ -31,62 +31,70 @@
   "multMin": 0.5,
   "multMax": 1.5,
   "softMax": 0.15,
-  "maxActivePerBusiness": 3,
-  "maxActiveByScale": {
-   "world": 1,
-   "country": 1,
+  "seasonDays": 360,
+  "longFromDays": 61,
+  "maxLongActive": 2,
+  "maxShortActive": {
+   "wide": 1,
+   "city": 1,
+   "local": 1
+  },
+  "newPerWindow": {
+   "wide": 1,
    "city": 1,
    "block": 1,
-   "point": 1
-  }
+   "pointPerBusiness": 1
+  },
+  "pointEveryWindows": 2,
+  "repeatAfterMonths": 12
  },
  "counts": {
   "catalog": 698,
-  "events": 202,
+  "events": 197,
   "byScale": {
    "world": 8,
    "country": 27,
-   "city": 31,
-   "block": 33,
-   "point": 103
+   "city": 30,
+   "block": 32,
+   "point": 100
   },
   "byTier": {
-   "core": 105,
-   "deep": 97
+   "core": 104,
+   "deep": 93
   },
   "byConfidence": {
-   "estimate": 187,
+   "estimate": 182,
    "verified": 15
   },
   "byKind": {
-   "regulation": 37,
-   "supply": 29,
-   "demand": 45,
-   "city": 30,
-   "traffic": 31,
-   "weather": 17,
-   "staff": 13
+   "supply": 36,
+   "demand": 51,
+   "city": 32,
+   "regulation": 21,
+   "traffic": 30,
+   "weather": 15,
+   "staff": 12
   },
   "byLaunch": {
-   "calendar": 187,
+   "calendar": 182,
    "decision": 12,
    "condition": 3
   },
-  "cityAndWider": 66,
-  "moves": 539,
-  "movesWithOwnNumbers": 186,
-  "eventsWithOwnMove": 128,
+  "cityAndWider": 65,
+  "moves": 524,
+  "movesWithOwnNumbers": 179,
+  "eventsWithOwnMove": 125,
   "fieldsUsed": {
    "cogs": 39,
    "quality": 5,
-   "demand": 64,
-   "cash": 63,
-   "staffAvailability": 13,
+   "demand": 61,
+   "cash": 60,
+   "staffAvailability": 12,
    "violation": 19,
-   "footTraffic": 38,
+   "footTraffic": 37,
    "utilities": 2,
    "wages": 3,
-   "closureDays": 18,
+   "closureDays": 16,
    "reputation": 7
   }
  },
@@ -95,7 +103,7 @@
    "id": "coffee_c_rally",
    "name": "Coffee exchange up 40% in half a year",
    "text": "Arabica futures have climbed for months. Your roaster warns that the next price list will be about 20% higher and will stay there until the market comes back.",
-   "kind": "regulation",
+   "kind": "supply",
    "scale": "world",
    "tier": "core",
    "months": [
@@ -184,7 +192,7 @@
    "id": "coffee_c_slump",
    "name": "Coffee exchange down 30% in a year",
    "text": "A record Brazil crop pulls futures down. Roasters cut their lists slowly and only for customers who ask. Shops locked into last year's price keep paying it.",
-   "kind": "regulation",
+   "kind": "supply",
    "scale": "world",
    "tier": "core",
    "months": [
@@ -330,7 +338,7 @@
    "id": "d00_equipment_food_coffee_contract_reprice",
    "name": "The roaster reprices a contract after market movement",
    "text": "A coffee index is a monitoring signal; the cafe pays the supplier contract and invoice.",
-   "kind": "regulation",
+   "kind": "supply",
    "scale": "world",
    "tier": "core",
    "months": [
@@ -403,7 +411,7 @@
    "id": "d00_equipment_food_coffee_freight_surcharge",
    "name": "A coffee shipment adds a transport charge",
    "text": "Transport costs can change the delivered coffee bill independently of the selected recipe.",
-   "kind": "regulation",
+   "kind": "supply",
    "scale": "world",
    "tier": "deep",
    "months": [
@@ -471,7 +479,7 @@
    "id": "d00_equipment_food_robusta_fallback",
    "name": "The cheaper coffee fallback becomes less attractive",
    "text": "Supply disruption can narrow the usual price difference between coffee categories.",
-   "kind": "regulation",
+   "kind": "supply",
    "scale": "world",
    "tier": "deep",
    "months": [
@@ -690,7 +698,7 @@
    "id": "allergen_label_law",
    "name": "Allergen labels on grab-and-go food",
    "text": "From November 12, 2026 anything you make, pack and put in the fridge for sale must carry a label naming the major allergens in it.",
-   "kind": "regulation",
+   "kind": "supply",
    "scale": "country",
    "tier": "core",
    "months": [
@@ -1060,7 +1068,7 @@
    "id": "coffee_import_tariff",
    "name": "Tariff on Brazilian coffee",
    "text": "Washington puts a duty on goods from the world's largest coffee grower. Importers pass it on within weeks; nobody knows how long it lasts.",
-   "kind": "regulation",
+   "kind": "supply",
    "scale": "country",
    "tier": "deep",
    "months": [
@@ -2903,6 +2911,10 @@
    "kind": "weather",
    "scale": "city",
    "tier": "core",
+   "weather": [
+    "snow",
+    "storm"
+   ],
    "months": [
     1,
     2,
@@ -2982,6 +2994,10 @@
    "kind": "weather",
    "scale": "city",
    "tier": "core",
+   "weather": [
+    "snow",
+    "storm"
+   ],
    "months": [
     1,
     2
@@ -3181,7 +3197,7 @@
    "id": "congestion_delivery_fee",
    "name": "Congestion toll on your deliveries",
    "text": "Trucks pay to enter Manhattan below 60th Street, and suppliers split the toll among the shops on the route.",
-   "kind": "regulation",
+   "kind": "supply",
    "scale": "city",
    "tier": "deep",
    "months": [
@@ -3470,6 +3486,9 @@
    "kind": "weather",
    "scale": "city",
    "tier": "core",
+   "weather": [
+    "snow"
+   ],
    "months": [
     1,
     2,
@@ -3533,9 +3552,12 @@
    "id": "heat_on_the_doorstep",
    "name": "Heat advisory: milk on the doorstep",
    "text": "The dairy drops at 4 am; by 7 the crates have stood three hours in 80-degree air.",
-   "kind": "supply",
+   "kind": "weather",
    "scale": "city",
    "tier": "deep",
+   "weather": [
+    "heat"
+   ],
    "months": [
     6,
     7,
@@ -3607,6 +3629,9 @@
    "kind": "weather",
    "scale": "city",
    "tier": "core",
+   "weather": [
+    "heat"
+   ],
    "months": [
     6,
     7,
@@ -4081,9 +4106,13 @@
    "id": "no_delivery_in_the_storm",
    "name": "The milk truck does not come",
    "text": "Your dairy and pastry deliveries are cancelled for the storm. The shops that ordered a day ahead have croissants. You have filter coffee and apologies.",
-   "kind": "demand",
+   "kind": "weather",
    "scale": "city",
    "tier": "deep",
+   "weather": [
+    "rain",
+    "storm"
+   ],
    "months": [
     1,
     2,
@@ -4453,6 +4482,10 @@
    "kind": "weather",
    "scale": "city",
    "tier": "core",
+   "weather": [
+    "rain",
+    "storm"
+   ],
    "months": [
     1,
     2,
@@ -4615,6 +4648,9 @@
    "kind": "weather",
    "scale": "city",
    "tier": "core",
+   "weather": [
+    "snow"
+   ],
    "months": [
     1,
     2,
@@ -4974,6 +5010,10 @@
    "kind": "weather",
    "scale": "city",
    "tier": "deep",
+   "weather": [
+    "rain",
+    "storm"
+   ],
    "months": [
     8,
     9,
@@ -5053,94 +5093,6 @@
    "confidence": "estimate",
    "note": "All multipliers are estimates in line with the blizzard event. The game uses the watch and the two disrupted days only; it does not model loss of life or citywide destruction (rule 9). A roadway cafe platform must be secured or emptied; a storm outage is not reimbursed by Con Edison.",
    "realFrequency": "Reference only: New York is brushed by a tropical system in some years and missed in most; the season runs June to November and peaks in September."
-  },
-  {
-   "id": "visitor_low_season",
-   "name": "The tourists are gone",
-   "text": "January and February are the quietest weeks of the year for visitors.",
-   "kind": "traffic",
-   "scale": "city",
-   "tier": "deep",
-   "months": [
-    1,
-    2
-   ],
-   "durationMonths": 2,
-   "durationDays": 60,
-   "noticeDays": 7,
-   "launch": "calendar",
-   "signal": "Monthly hotel occupancy",
-   "effects": [
-    {
-     "field": "footTraffic",
-     "mult": 0.88
-    }
-   ],
-   "moves": [
-    {
-     "id": "ride_out",
-     "label": "Ride it out",
-     "cost": {
-      "cash": 0
-     },
-     "effects": [
-      {
-       "field": "footTraffic",
-       "mult": 0.88
-      }
-     ]
-    },
-    {
-     "id": "set_hours_long",
-     "label": "Opening hours: 6am - 9pm",
-     "cost": {
-      "cash": 0
-     },
-     "effects": [
-      {
-       "field": "footTraffic",
-       "mult": 0.88
-      }
-     ],
-     "setting": {
-      "kind": "lever",
-      "id": "hours",
-      "optionId": "long",
-      "monthlyCost": 2000,
-      "effects": {
-       "demand": 0.08
-      }
-     },
-     "note": "Switches a standing setting of the shop on; it stays on after the event until you switch it back. The price and the effect are the pack's."
-    },
-    {
-     "id": "set_loyalty_punch_card",
-     "label": "Loyalty program: Paper punch card: the tenth drink is free",
-     "cost": {
-      "cash": 0
-     },
-     "effects": [
-      {
-       "field": "footTraffic",
-       "mult": 0.88
-      }
-     ],
-     "setting": {
-      "kind": "lever",
-      "id": "loyalty",
-      "optionId": "punch_card",
-      "monthlyCost": 220,
-      "effects": {
-       "demand": 0.02
-      }
-     },
-     "note": "Switches a standing setting of the shop on; it stays on after the event until you switch it back. The price and the effect are the pack's."
-    }
-   ],
-   "source": "https://www.pwc.com/us/en/industries/consumer-markets/assets/pwc-manhattan-lodging-index-q2-2025.pdf",
-   "confidence": "estimate",
-   "note": "12% is extra.monthCurve.tourist for January-February against the average month, my estimate; the winter hotel numbers behind it were not seen.",
-   "realFrequency": "Every year. The January and February occupancy figures were not found in this session"
   },
   {
    "id": "voltage_reduction",
@@ -5980,7 +5932,7 @@
    "id": "chain_opens_within_250m",
    "name": "A coffee chain opens within sight",
    "text": "A national chain takes the corner unit. It will pull the commuters who only want a fast cup; your regulars are yours to keep.",
-   "kind": "regulation",
+   "kind": "demand",
    "scale": "block",
    "tier": "core",
    "months": [
@@ -6170,7 +6122,7 @@
    "id": "coffee_cart_at_subway_stairs",
    "name": "A coffee cart sets up by the subway stairs",
    "text": "A licensed cart sells drip coffee and a roll for about half your price, exactly where commuters surface.",
-   "kind": "regulation",
+   "kind": "demand",
    "scale": "block",
    "tier": "deep",
    "months": [
@@ -6469,7 +6421,7 @@
    "id": "discount_app_chain_opens",
    "name": "An app-only chain opens with $1.99 coffee",
    "text": "A new chain two blocks away runs on an app and kiosks and hands every new user a $1.99 drink. Price shoppers will try it.",
-   "kind": "regulation",
+   "kind": "demand",
    "scale": "block",
    "tier": "core",
    "months": [
@@ -7698,99 +7650,6 @@
    "realFrequency": "Garment District, Manhattan: an emergency main replacement brought shutoffs two to four days a week from 8 a.m. to 3 p.m. for up to five weeks."
   },
   {
-   "id": "planned_water_shutoff_day",
-   "name": "Planned water shut-off",
-   "text": "Notices on the doors: no water tomorrow from 8 a.m. until the end of the workday.",
-   "kind": "demand",
-   "scale": "block",
-   "tier": "deep",
-   "months": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12
-   ],
-   "durationMonths": 1,
-   "durationDays": 30,
-   "noticeDays": 5,
-   "launch": "calendar",
-   "trigger": "announced",
-   "signal": "Posted city shut-off notices for street work",
-   "effects": [
-    {
-     "field": "demand",
-     "mult": 0.983,
-     "note": "D03"
-    },
-    {
-     "field": "closureDays",
-     "add": 1,
-     "note": "catalog field \"downtimeDays\" of the event"
-    }
-   ],
-   "moves": [
-    {
-     "id": "ride_out",
-     "label": "Ride it out",
-     "cost": {
-      "cash": 0
-     },
-     "effects": [
-      {
-       "field": "demand",
-       "mult": 0.983
-      },
-      {
-       "field": "closureDays",
-       "add": 1
-      }
-     ]
-    },
-    {
-     "id": "open_early_and_close_at_noon",
-     "label": "action open_early_and_close_at_noon",
-     "cost": {
-      "cash": 0
-     },
-     "effects": [
-      {
-       "field": "demand",
-       "mult": 0.98,
-       "note": "0.3 day(s) x 1 of sales / 30 | lost sales 0.01 of the month (catalog cost \"lostSales\")"
-      }
-     ],
-     "note": "half a day of sales"
-    },
-    {
-     "id": "plan_for_outages",
-     "label": "Prepare for a day without power, water or cards",
-     "cost": {
-      "cash": 34
-     },
-     "effects": [
-      {
-       "field": "demand",
-       "mult": 0.99,
-       "note": "0.3 day(s) x 1 of sales / 30"
-      }
-     ],
-     "note": "two hours of the owner plus a $200 cash float kept in the safe"
-    }
-   ],
-   "source": "https://www.nyc.gov/site/ddc/projects/inconveniences.page",
-   "confidence": "estimate",
-   "note": "Trigger: announced by the host. D03 note: Half a day lost unless the owner shifts the hours. After the water returns, run the cold taps before reconnecting the filter.",
-   "realFrequency": "Notices are posted at least 24 hours ahead; one city project used a 72-hour advisory and a 24-hour confirmation."
-  },
-  {
    "id": "power_cut_spoilage_uninsured",
    "name": "The claim for spoiled milk is denied",
    "text": "A neighbourhood power cut spoiled the fridge. The basic policy excludes failures that start outside your premises.",
@@ -8464,6 +8323,9 @@
    "kind": "weather",
    "scale": "block",
    "tier": "core",
+   "weather": [
+    "heat"
+   ],
    "months": [
     7,
     8
@@ -8713,6 +8575,9 @@
    "kind": "weather",
    "scale": "point",
    "tier": "core",
+   "weather": [
+    "heat"
+   ],
    "months": [
     7,
     8
@@ -8792,105 +8657,10 @@
    "realFrequency": "Not found as a statistic; contractors' guides say most small leases leave the unit to the tenant"
   },
   {
-   "id": "ac_failure_heat_wave",
-   "name": "Air conditioning fails in a heat wave",
-   "text": "It is 96°F outside and 88°F at the counter. Guests take their iced coffee and leave; the fridges struggle in the hot room.",
-   "kind": "weather",
-   "scale": "point",
-   "tier": "core",
-   "months": [
-    7,
-    8
-   ],
-   "durationMonths": 1,
-   "durationDays": 30,
-   "noticeDays": 3,
-   "launch": "calendar",
-   "trigger": "decision",
-   "signal": "Days above 90°F; months since the last tune-up; age of the unit",
-   "effects": [
-    {
-     "field": "demand",
-     "mult": 0.97,
-     "note": "D03"
-    },
-    {
-     "field": "cash",
-     "add": -2040,
-     "when": "start",
-     "note": "D03 oneTimeCost | catalog field \"oneTimeCost\""
-    },
-    {
-     "field": "closureDays",
-     "add": 3,
-     "note": "catalog field \"downtimeDays\" of the event"
-    }
-   ],
-   "moves": [
-    {
-     "id": "ride_out",
-     "label": "Ride it out",
-     "cost": {
-      "cash": 0
-     },
-     "effects": [
-      {
-       "field": "demand",
-       "mult": 0.97
-      },
-      {
-       "field": "cash",
-       "add": -2040,
-       "when": "start"
-      },
-      {
-       "field": "closureDays",
-       "add": 3
-      }
-     ]
-    },
-    {
-     "id": "hvac_service_seasonal",
-     "label": "Air conditioning and heating: Tune-up before summer and before winter, filters changed monthly",
-     "cost": {
-      "cash": 0,
-      "monthly": 55
-     },
-     "effects": [],
-     "byDay": 0,
-     "note": "D03/pack lever hvac_service:seasonal: $55 a month; the trigger condition is not met, so the event does not fire; Prevents the event: it must be bought before the event starts."
-    },
-    {
-     "id": "ac_replacement",
-     "label": "Replacement air conditioner (3-5 ton unit, installed)",
-     "cost": {
-      "cash": 8500
-     },
-     "effects": [],
-     "byDay": 0,
-     "note": "setup ac_replacement; the trigger condition is not met, so the event does not fire; Prevents the event: it must be bought before the event starts."
-    },
-    {
-     "id": "check_inherited_equipment",
-     "label": "Have inherited equipment tested before you sign",
-     "cost": {
-      "cash": 250
-     },
-     "effects": [],
-     "byDay": 0,
-     "note": "one technician hour to open the machine and read data plates; the trigger condition is not met, so the event does not fire; Prevents the event: it must be bought before the event starts."
-    }
-   ],
-   "source": "https://www.fermag.com/articles/top-10-types-of-equipment-issues-in-2021",
-   "confidence": "estimate",
-   "note": "Trigger: hvac_service is none during the announced heat wave; if the unit is older than 180 months it must be replaced. D03 note: Three days at 30% fewer sales (my estimate for a room nobody wants to sit in). Replacement instead of repair: $5,000-$12,000 installed plus crane. In 2026 the owner of an East Harlem restaurant kept the air conditioning off through summer days in the 90s after the gas and electric bill reached $1,400 a month (Bloomberg, October 2026).",
-   "realFrequency": "Air conditioning had the highest average repair cost of any restaurant equipment in 2021: $1,019.90 (86 Repairs). In July 2026 a Connecticut donut shop closed early when its air conditioning gave out overnight in the heat."
-  },
-  {
    "id": "access_lawsuit_served",
    "name": "A process server brings an access lawsuit",
    "text": "A plaintiff who uses a wheelchair, or a screen reader, sues over the step at your door or your website. The same lawyer has filed dozens like it this year.",
-   "kind": "regulation",
+   "kind": "city",
    "scale": "point",
    "tier": "core",
    "months": [
@@ -9348,96 +9118,6 @@
    "realFrequency": "Not found"
   },
   {
-   "id": "breaker_trips_at_rush",
-   "name": "The breaker trips at 8:15 every morning",
-   "text": "The new oven shares a circuit with the grinder and the milk fridge. At the morning peak the breaker gives up and half the bar goes dark.",
-   "kind": "staff",
-   "scale": "point",
-   "tier": "deep",
-   "months": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12
-   ],
-   "durationMonths": 1,
-   "durationDays": 30,
-   "noticeDays": 3,
-   "launch": "calendar",
-   "trigger": "decision",
-   "signal": "Amps on each circuit against the breaker rating",
-   "effects": [
-    {
-     "field": "staffAvailability",
-     "mult": 0.97,
-     "note": "D03 capacity mapped to staffAvailability"
-    },
-    {
-     "field": "cash",
-     "add": -1200,
-     "when": "start",
-     "note": "D03 oneTimeCost | catalog field \"oneTimeCost\""
-    }
-   ],
-   "moves": [
-    {
-     "id": "ride_out",
-     "label": "Ride it out",
-     "cost": {
-      "cash": 0
-     },
-     "effects": [
-      {
-       "field": "staffAvailability",
-       "mult": 0.97
-      },
-      {
-       "field": "cash",
-       "add": -1200,
-       "when": "start"
-      }
-     ]
-    },
-    {
-     "id": "check_water_and_power",
-     "label": "Check water and power",
-     "cost": {
-      "cash": 250
-     },
-     "effects": [],
-     "byDay": 0,
-     "note": "electrician visit to measure voltage; DEP call about the water supply is free; the trigger condition is not met, so the event does not fire; Prevents the event: it must be bought before the event starts."
-    },
-    {
-     "id": "unlicensed_hookup",
-     "label": "Let a handyman plumb and wire new equipment",
-     "cost": {
-      "cash": 0,
-      "monthly": -125
-     },
-     "effects": [
-      {
-       "field": "violation",
-       "id": "work_without_permit"
-      }
-     ],
-     "note": "saving now, fine when found; violation work_without_permit"
-    }
-   ],
-   "source": "https://1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
-   "confidence": "estimate",
-   "note": "Trigger: a 1,500W or larger appliance (convection_oven, panini_grill, hot_water_dispenser, ventless_speed_oven) was added while shortcut unlicensed_hookup is on or without an electrician. D03 note: The effect lasts until a licensed electrician adds a circuit: $350-$850 on New York price pages written for homes ($600 taken; indicative only, a commercial job with a permit costs more). A full panel is worse: an upgrade to 200 amps is quoted at $2,800-$5,500 and needs a permit and two to six weeks of coordination with Con Edison. A fridge on the tripped circuit warms up unnoticed: see fridge_warm_overnight. The 3% loss of capacity is my estimate.",
-   "realFrequency": "Installers require a dedicated circuit for the espresso machine (20 amps for two groups, 30 for three) and separate circuits for grinders."
-  },
-  {
    "id": "brewer_limed_up",
    "name": "The batch brewer slows to a trickle",
    "text": "Lime has narrowed the spray head and the tank. A pot that took four minutes takes nine, and the line at the door notices.",
@@ -9766,7 +9446,7 @@
    "id": "coffee_cart_at_the_corner",
    "name": "A coffee cart parks at your corner",
    "text": "A cart selling $2 coffee and $1.50 bagels now sets up at the subway stairs every morning at six. It pays no rent, and it catches the commuters before they reach your door.",
-   "kind": "regulation",
+   "kind": "demand",
    "scale": "point",
    "tier": "deep",
    "months": [
@@ -10950,6 +10630,9 @@
    "kind": "weather",
    "scale": "point",
    "tier": "deep",
+   "weather": [
+    "heat"
+   ],
    "months": [
     7,
     8
@@ -12835,7 +12518,7 @@
    "id": "drain_clog_coffee_grounds",
    "name": "Bar sink backs up",
    "text": "Months of coffee grounds and milk fat have set in the drain line. The bar sink fills and will not empty.",
-   "kind": "regulation",
+   "kind": "demand",
    "scale": "point",
    "tier": "core",
    "months": [
@@ -13172,7 +12855,7 @@
    "id": "espresso_scale_failure",
    "name": "Scale kills the heating element",
    "text": "The espresso machine trips the breaker and will not heat. The technician finds the element caked in limescale.",
-   "kind": "weather",
+   "kind": "demand",
    "scale": "point",
    "tier": "core",
    "months": [
@@ -14033,91 +13716,10 @@
    "realFrequency": "No failure statistic found; a coffee program has four points of failure: water, machine, grinder, people (facilities company)."
   },
   {
-   "id": "heat_wave_ac_failure",
-   "name": "The air conditioner dies on the hottest day",
-   "text": "It is 97 outside and 88 inside. The unit that nobody serviced in spring has iced over. Every repair company in the city is booked for three days, and customers walk in, feel the air and walk out.",
-   "kind": "weather",
-   "scale": "point",
-   "tier": "deep",
-   "months": [
-    6,
-    7,
-    8
-   ],
-   "durationMonths": 1,
-   "durationDays": 30,
-   "noticeDays": 3,
-   "launch": "calendar",
-   "signal": "Not a public signal: follows from cooling_plan = unserviced during the first declared heat emergency of the summer",
-   "effects": [
-    {
-     "field": "demand",
-     "mult": 0.97
-    },
-    {
-     "field": "cash",
-     "add": -900,
-     "when": "start"
-    }
-   ],
-   "moves": [
-    {
-     "id": "ride_out",
-     "label": "Ride it out",
-     "cost": {
-      "cash": 0
-     },
-     "effects": [
-      {
-       "field": "demand",
-       "mult": 0.97
-      },
-      {
-       "field": "cash",
-       "add": -900,
-       "when": "start"
-      }
-     ]
-    },
-    {
-     "id": "cut_ac_with_open_door",
-     "label": "Door propped open with the air conditioning on",
-     "cost": {
-      "cash": 0
-     },
-     "effects": [
-      {
-       "field": "demand",
-       "mult": 0.97
-      },
-      {
-       "field": "cash",
-       "add": -900,
-       "when": "start"
-      }
-     ],
-     "setting": {
-      "kind": "shortcut",
-      "id": "ac_with_open_door",
-      "saves": {
-       "basis": "pct_revenue",
-       "amount": 0.01
-      },
-      "violation": "open_door_ac"
-     },
-     "note": "Cuts a corner: it saves money every month it is on and opens a violation an inspector can find. The saving and the violation are the pack's."
-    }
-   ],
-   "source": "https://amp.insurancejournal.com/news/east/2026/07/02/876132.htm",
-   "confidence": "estimate",
-   "note": "Rule 4: no dice. The failure happens only to a shop that chose unserviced, in the first heat emergency of its summer. $900 = emergency call and a part at peak-season rates (planning value; D03 owns repair prices). -30% on three days is my estimate; month value 3%.",
-   "realFrequency": "Reference only: breakdowns cluster in the first heat wave, when every unit in the city starts at once."
-  },
-  {
    "id": "heating_failure_cold_snap",
    "name": "No heat in a cold snap",
    "text": "The same rooftop unit that cools the room heats it, and it will not start. Guests keep their coats on and do not stay.",
-   "kind": "weather",
+   "kind": "demand",
    "scale": "point",
    "tier": "deep",
    "months": [
@@ -14195,6 +13797,9 @@
    "kind": "weather",
    "scale": "point",
    "tier": "core",
+   "weather": [
+    "heat"
+   ],
    "months": [
     7,
     8
@@ -14368,6 +13973,9 @@
    "kind": "weather",
    "scale": "point",
    "tier": "core",
+   "weather": [
+    "snow"
+   ],
    "months": [
     1,
     2,
@@ -15963,7 +15571,7 @@
    "id": "sidewalk_fall_claim",
    "name": "Letter from a lawyer: someone fell on your ice",
    "text": "A pedestrian slipped in front of your shop on a day you did not clear the snow. Their lawyer has written to the building owner, and your lease says you pay the owner back.",
-   "kind": "regulation",
+   "kind": "city",
    "scale": "point",
    "tier": "core",
    "months": [
@@ -16059,9 +15667,12 @@
    "id": "snowfall_clear_the_walk",
    "name": "Snow: the clock starts",
    "text": "Snow stopped falling. The law gives you 4 hours in the daytime, or until 11 AM after an overnight fall, to open a 4-foot path along your whole frontage. Sanitation agents are out writing tickets.",
-   "kind": "city",
+   "kind": "weather",
    "scale": "point",
    "tier": "core",
+   "weather": [
+    "snow"
+   ],
    "months": [
     1,
     2,
@@ -16153,7 +15764,7 @@
    "id": "staff_lawsuit_uninsured",
    "name": "A former barista sues",
    "text": "The complaint claims unpaid wages and wrongful firing. The liability policy does not cover employment claims.",
-   "kind": "regulation",
+   "kind": "city",
    "scale": "point",
    "tier": "deep",
    "months": [
@@ -16720,7 +16331,7 @@
    "id": "water_heater_end_of_life",
    "name": "The water heater leaks",
    "text": "A puddle under the tank and cold water at the hand sink. No hot water means no legal service.",
-   "kind": "weather",
+   "kind": "demand",
    "scale": "point",
    "tier": "core",
    "months": [

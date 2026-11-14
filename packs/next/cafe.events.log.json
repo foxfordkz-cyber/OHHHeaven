@@ -1,6 +1,6 @@
 {
  "builtFrom": "packs/cafe.next.json",
- "taken": 202,
+ "taken": 197,
  "skipped": {
   "no effect of the first version is left": 118,
   "the trigger needs a state the engine does not track yet": 93,
@@ -8,10 +8,14 @@
   "no move with a price and a result in numbers": 71,
   "only for \"takeover\"": 19,
   "only for \"cart\"": 3,
+  "near-duplicate of ac_fails_in_heat_wave": 2,
   "no months": 9,
   "only for \"franchise\"": 3,
   "only for \"popup\"": 3,
-  "tier exotic": 68
+  "tier exotic": 68,
+  "near-duplicate of breaker_trips_at_peak": 1,
+  "near-duplicate of planned_water_shutoff": 1,
+  "near-duplicate of tourist_low_season": 1
  },
  "events": [
   {
@@ -30,7 +34,8 @@
    "id": "ac_failure_heat_wave",
    "tier": "core",
    "scale": "point",
-   "taken": true
+   "taken": false,
+   "why": "near-duplicate of ac_fails_in_heat_wave"
   },
   {
    "id": "access_claim",
@@ -370,7 +375,8 @@
    "id": "breaker_trips_at_rush",
    "tier": "deep",
    "scale": "point",
-   "taken": true
+   "taken": false,
+   "why": "near-duplicate of breaker_trips_at_peak"
   },
   {
    "id": "brewer_limed_up",
@@ -3200,10 +3206,11 @@
    "id": "heat_wave_ac_failure",
    "tier": "deep",
    "scale": "point",
-   "taken": true,
+   "taken": false,
    "droppedMoves": [
     "hvac_service: the pack lever has no paid option to switch on"
-   ]
+   ],
+   "why": "near-duplicate of ac_fails_in_heat_wave"
   },
   {
    "id": "heat_wave_iced_rush",
@@ -4209,7 +4216,8 @@
    "id": "planned_water_shutoff_day",
    "tier": "deep",
    "scale": "block",
-   "taken": true
+   "taken": false,
+   "why": "near-duplicate of planned_water_shutoff"
   },
   {
    "id": "plastic_straw_inspection",
@@ -5462,10 +5470,11 @@
    "id": "visitor_low_season",
    "tier": "deep",
    "scale": "city",
-   "taken": true,
+   "taken": false,
    "droppedMoves": [
     "barista: a reference to something that is not a lever or a shortcut of the pack"
-   ]
+   ],
+   "why": "near-duplicate of tourist_low_season"
   },
   {
    "id": "voltage_mismatch_208",
