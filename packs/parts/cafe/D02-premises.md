@@ -59,3 +59,48 @@
 - Storm enclosure (winter vestibule): Nov 15 - Apr 15; <= 18 in beyond street line (311 KA-02227); restaurants: BC 3202.3.2.1(?) up to 25 sq ft beyond street line with 5 ft clear sidewalk path (vendor signsny). https://portal.311.nyc.gov/article/?kanumber=KA-02227
 - Heaters: DOB/FDNY bulletin 2024-005: propane heaters not permitted in sidewalk/roadway cafes(?garbled); electric radiant OK if listed for outdoor use; gas-fired radiant maybe for sidewalk, not roadway; FDNY permits & Certificate of Fitness. https://www.nyc.gov/assets/buildings/bldgs_bulletins/bb_2024-005.pdf
 - Noise: Admin Code §24-231 commercial music 42 dB(A) inside dwelling; §24-227 circulation device 42 dB(A) single / 45 aggregate inside residence; first commercial music violation $2,000 mitigable to $0 if compliance shown (DEP). https://www.nyc.gov/assets/dep/downloads/pdf/air/noise/commercial-music-noise-violation-zero-penalty.pdf
+## Health Code physical
+- §81.19 lighting: >= 540 lux (50 fc) at food prep surfaces (knives, slicers, grinders); >= 215 lux (20 fc) at self-service, inside reach-ins, hand-washing & ware-washing; >= 108 lux (10 fc) walk-ins, dry storage, during cleaning. Bulbs shatterproof/shielded. §81.19(c) mechanical vent in bathrooms. https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46238
+## Gas
+- Sesamo (Hell's Kitchen): 6+ weeks without gas after Con Ed inspection found leak; landlord fixed in days but not enough gas capacity for restaurant + 8 apts; 16 burners -> 3 hot plates. https://w42st.com/post/gas-shutoff-drags-on-at-sesamo-leaving-restaurant-in-limbo-for-over-a-month/ ; https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/
+- The Clam (2014) 4 months without gas before opening; Chop Shop II months; NY Senate report "Cooking Without Gas" https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf
+## Empty / signage
+- Sustainability 2025 (MDPI 17(18) 8400): crowdedness as social proof -> positive effect on pleasure/arousal (survey). https://www.mdpi.com/2071-1050/17/18/8400
+- UC Economics Center for Signage Foundation, Aug 2012: ~60% of businesses reported sign changes raised sales/transactions/profits, average ~10%. https://federalheath.com/company/news-insights/how-important-are-signs-anyway (secondary; original at signresearch.org)
+## ADA restroom
+- Access Board: no minimum room size; WC clearance 60 in wide x 56 in deep; sample single-user plan 7' x 5' (35 sq ft) (Plan-1B); typical 48 sq ft (7'4" x 6'6"). https://www.access-board.gov/ada/guides/chapter-6-toilet-rooms/
+## Music / dwell
+- Milliman 1986 JCR 13(2) 286-289: slow music -> patrons stay longer, more drinks; food spend same; (figures 56 vs 45 min not confirmed). 2024 Tel Aviv field experiment: slow music 80 min vs 57 min; total bill not different. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11673941/
+## Dining Out NYC fees
+- Consent fee per sq ft per year: sidewalk $6 / $10 / $18 / $31; roadway $5 / (8) / (14) / $25; lowest tier covers ~80% of city; top = parts of Manhattan. License $1,050 per 4 years each (both $2,100). Public hearing notice fee up to $1,000 (all roadway; sidewalk only if CB recommends disapproval). Deposit $1,500 sidewalk, $2,500 roadway. https://council.nyc.gov/press/wp-content/uploads/sites/56/2025/04/outdoor-dining.pdf ; https://nyc.streetsblog.org/2025/04/04/fare-fares-heres-how-much-outdoor-dining-costs-restaurants ; https://rules.cityofnewyork.us/wp-content/uploads/2024/02/DOT-Notice-of-Adoption-DOT-Dining-Out-NYC-Rules-Accessible.pdf
+- 6sqft: outdoor dining shrank by over 80% under new rules.
+## Restroom policy
+- Starbucks Coffeehouse Code of Conduct effective Jan 27, 2025: purchase required to stay or use restroom; reverses 2018 open-door policy; will comply with local laws. https://www.cnn.com/2025/01/14/food/starbucks-restroom-policy ; NYC: <= 19 seats not required to provide bathroom access to public (city site quoted by CBS).
+## Queue tolerance
+- Waitwhile 2024 survey, 1,202 US adults: 70% will wait at most 15 min in a physical line; 61% have left a line before their turn; ~1 in 7 leave more than half the time; 5% will wait > 30 min. https://waitwhile.com/blog/consumer-survey-waiting-in-line-2024/
+## To-go share
+- NRA: nearly 75% of restaurant traffic is off-premises (all restaurants). NCA 2025: drive-thru 59% of out-of-home coffee buyers. No clean cafe to-go split. https://restaurant.org/research-and-media/media/press-releases/from-trend-to-transformation-off-premises-dining-now-essential-for-restaurant-consumers,-operators/
+## Energy
+- CBECS 2018 (secondary): food service 43.8 kWh/sq ft/yr (fast food 62.8; other food service 29.0); all commercial 12.6. 800 sq ft x 43.8 = 35,040 kWh/yr = 2,920 kWh/mo; x 29.0 = 1,933/mo; x 62.8 = 4,187/mo.
+## Gate law outcome
+- Int 0910-2026 (910-A) passed Council June 30, 2026, 51-0: repeals retroactive July 1, 2026 requirement; 70% visibility only when a grille is newly installed or replaced. Awaiting/enacted (intro.nyc says enacted). https://ny1.com/nyc/all-boroughs/news/2026/07/02/city-council-votes-to-repeal-deadline-for-new-roll-down-security-gates ; https://intro.nyc/0910-2026 ; https://brooklyneagle.com/399396/city-council-repeals-july-1-mandate-for-replacing-security-gates/
+- Cost quotes: bakery owner quoted $6,000-$7,000 per gate (Gothamist); $5,000-$20,000+ (political.org); >$10,000 some. https://gothamist.com/news/nyc-council-scrambles-to-reverse-impending-ban-on-metal-storefront-security-gates
+- Storefront glass: single storefront window $500-$3,000; 4x6 ft fixed panel $800-$1,500 installed (not NYC). https://www.insightglass.com/how-much-do-storefront-windows-cost/
+## ADA costs
+- Threshold ramp: AlumiRamp 6-inch rise $112.99; 12-inch rise $156.99 (reliableramps.com). ADA slope 1:12 max new; existing: 1:10 for rise <= 6 in, 1:8 for rise <= 3 in; max rise per run 30 in. So a 7-in step needs 7 ft of ramp at 1:12.
+- NYC: ramp beyond property line needs DOT revocable consent; buildings before Dec 6, 1969: ramp may project <= 44 in beyond street line with DOT approval; consent ~10 years, annual fee + insurance. DOB "Storefront Accessibility" presentation https://www.nyc.gov/assets/buildings/pdf/Storefront_Accessibility.pdf ; https://www.nyc.gov/html/dot/html/infrastructure/revconif.shtml
+- Auto door operator: low-energy swing $2,000-$5,000 installed; full power $2,500-$6,000 (ufiredoors); NY/NJ vendor $7,500-$15,000 per opening all-in (doorautomation.com).
+## Basement
+- DEP: ~60% of NYC sewers are combined; backups when stormwater overwhelms pipes, via basement fixtures. 311: discard any food that touched sewage water; items not dried in 24-48 h discarded. Sewer backup needs separate insurance endorsement. https://portal.311.nyc.gov/article/?kanumber=KA-02997 ; https://www.nyc.gov/assets/dep/downloads/pdf/water/wastewater/sbu-report.pdf
+## FDNY
+- Egress violation VC9(?): standard first $950, mitigated $475, max $1,000; repeat $2,375/$1,185/$5,000 (third-party tfp1.com). Not primary.
+## Con Ed
+- Service upgrade: 4-12 weeks from load letter (contractor) vs 12-24 weeks (guide): 6-10 wk layout drawings + 3-5 wk inspections; ~20 days initial capacity review. Gas: utility portion ~9 weeks after inspections; 33+ weeks from drawings to open (builtbetter substack). https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/ ; https://builtbetter.substack.com/p/stop-blaming-coned
+## Misc (batch 9)
+- LL145/2026 (Int 0918-2026) enacted 9/12/2026: cafe fees payable in quarterly installments; effective 240 days later. Package: weatherproof/winterize; clean trash, keep out pests. Charter commission (COGE) 2026 final report: sidewalk cafe applications take 6-8 months, roadway 3-5 months. https://www.nyc.gov/assets/charter/html/coge-adopted-final-report-2026.html ; https://www.thecityreporter.nyc/2026/08/13/nyc-outdoor-dining-roadside-sheds-new-laws-restaraunts/
+- Old Comptroller audit (DCA era): 24 of 183 (13%) sidewalk cafes unlicensed.
+- LL79/2016: single-occupant toilet rooms open to all genders; sign on wall next to door; Admin Code §28-315.9; since Jan 1 2017; no physical alteration needed. https://www.nyc.gov/site/buildings/property-or-business-owner/single-occupant-toilet-signage.page
+- Blogs on cafe floor plans: 15-20 sq ft per seated guest (AIA 15-18 cited by one); 40-60% of floor to seating; BOH 15-25%; >= 8 linear ft of counter; typical shop 1,000-1,750 sq ft (others 1,200-2,200; or 540-750). https://pos.toasttab.com/blog/on-the-line/coffee-shop-floor-plans ; https://therestaurantwarehouse.com/blogs/restaurant-equipment/coffee-shop-layout
+- FDNY Restaurant Fire Safety Guide: PA permit renewed annually, fee rises with occupancy; F-03 Certificate of Fitness (indoor PA safety personnel); open flame permit $210 per set-up. https://www.nyc.gov/assets/fdny/downloads/pdf/business/restaurant-fire-safety-guide.pdf ; https://www.nyc.gov/site/fdny/business/all-certifications/per-openflames.page
+- Lines: Radio Bakery (135 India St, Greenpoint) 2024: weekend line spilled onto neighbors' stoops, 20+ min wait; neighbors held stoop sale. https://greenpointers.com/2024/04/01/radio-bakery-stoop-sale/ (real venue: do not use as target; use as source only)
+- Restroom & opioids: NPR/WBUR 2017 (1369 Coffee House Cambridge: key code from staff); Starbucks LA closed bathrooms. https://www.npr.org/sections/health-shots/2017/05/08/526523520/public-restrooms-become-ground-zero-in-the-opioid-epidemic
