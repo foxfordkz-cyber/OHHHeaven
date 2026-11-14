@@ -4525,6 +4525,3586 @@
     "cashExampleUSD": -36000.0,
     "tier": "deep",
     "name": "Station stalls up for bid"
+   },
+   {
+    "id": "d00_premises_use_mismatch",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "architect's CO check after signing (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 90,
+      "note": "amended Certificate of Occupancy"
+     },
+     {
+      "field": "setupCost",
+      "add": 7500,
+      "note": "architect and filing"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "letter_of_no_objection",
+      "label": "Ask DOB for a Letter of No Objection (pre-1938 buildings, small eating place)",
+      "cost": {
+       "usd": 2630,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "Delay 30 days instead of 90 when the case is clear.",
+      "resultEffects": [
+       {
+        "field": "openingDelayDays",
+        "add": 30
+       }
+      ]
+     },
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Check the CO before signing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Mismatch found before the lease; choose another space.",
+      "optionId": "survey_first"
+     },
+     {
+      "kind": "shortcut",
+      "id": "open_in_wrong_use_space",
+      "label": "Open anyway",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Saves the wait; violation occupancy_contrary_to_co and no liquor license possible."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/certificate-of-occupancy",
+    "confidence": "estimate",
+    "note": "DOB: LNO fee $130 (since December 2023), only for buildings built or altered before 1938 that never needed a CO; an architecture firm estimates at least a month in a clear case. No measured time for an amended CO was found; 90 days is my estimate. 90 days x $230 = $20,700 of carrying cost.",
+    "cashExampleUSD": -28200,
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+     "https://fontanarchitecture.com/?p=12518"
+    ],
+    "tier": "core",
+    "name": "The advertised shop is not approved for your use"
+   },
+   {
+    "id": "d00_premises_old_legal_use",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "property search finds no CO (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 30
+     },
+     {
+      "field": "setupCost",
+      "add": 2630
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "request_lno",
+      "label": "Request the Letter of No Objection with building history",
+      "cost": {
+       "usd": 2630,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "Legal use confirmed."
+     },
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Pick a space with a clear CO",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "No letter needed.",
+      "optionId": "survey_first"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+    "confidence": "verified",
+    "note": "DOB: an LNO may confirm legal use of buildings built or altered before 1938; fee $130 (DOB notice, December 2023); about one month in a clear case (architect's estimate). 30 days x $230 = $6,900.",
+    "cashExampleUSD": -9530,
+    "supportingSources": [
+     "https://fontanarchitecture.com/?p=12518"
+    ],
+    "tier": "core",
+    "name": "Older premises have no modern occupancy certificate"
+   },
+   {
+    "id": "d00_premises_temporary_occupancy",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "DOB issues a TCO (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 130,
+      "note": "TCO renewal every 90 days until the final CO"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 0
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "track_conditions",
+      "label": "Track conditions and finish the final CO items",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Final CO in about 3 months; renewals at $130 each meanwhile."
+     },
+     {
+      "kind": "choice",
+      "id": "delay_commitment",
+      "label": "Delay opening until the final CO",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 90
+      },
+      "result": "90 days x $230 = $20,700 of carrying cost."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/temporary-certificate-of-occupancy.page",
+    "confidence": "verified",
+    "note": "DOB: TCOs typically expire 90 days after issue and may be renewed if final items remain; TCO fee $100-$130; renewals without change processed in 2-4 business days on average. Opening on a TCO is lawful; letting it lapse is not.",
+    "cashExampleUSD": -2630,
+    "tier": "core",
+    "name": "Opening depends on temporary occupancy conditions"
+   },
+   {
+    "id": "d00_premises_signoffs_missing",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "final inspection missing at handover (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "professional_closeout",
+      "label": "Hire the architect or expediter to close out the job",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 21
+      },
+      "result": "Sign-offs filed; delay 21 days."
+     },
+     {
+      "kind": "choice",
+      "id": "hold_launch",
+      "label": "Hold the launch until close-out",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "30 days x $230 = $6,900."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page",
+    "confidence": "estimate",
+    "note": "Durations and fees are my estimates; DOB sign-offs are needed for a final CO, a liquor license and many leases.",
+    "cashExampleUSD": -6900,
+    "tier": "core",
+    "name": "Construction looks finished but the job is open"
+   },
+   {
+    "id": "d00_premises_swo_partial",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "DOB partial SWO (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 21
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "correct_and_rescind",
+      "label": "Have the contractor correct and request rescission",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 14
+      },
+      "result": "Delay 14 days."
+     },
+     {
+      "kind": "shortcut",
+      "id": "ignore_stop_work_order",
+      "label": "Keep working on the barred items",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "DOB civil penalty $6,000 first, $12,000 next; no rescission until paid."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+    "confidence": "verified",
+    "note": "DOB stop work order page: violating an SWO costs $6,000 for a first offense and $12,000 after, on top of OATH penalties; DOB will not rescind until these are paid. Work without a permit was 21.5% of SWO violations in Q4 2025. 21 days x $230 = $4,830.",
+    "cashExampleUSD": -4830,
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/safety/swo.page"
+    ],
+    "tier": "core",
+    "name": "A partial stop-work order divides the project"
+   },
+   {
+    "id": "d00_premises_swo_rescission",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "permit issued while SWO open (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 10
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "request_rescission",
+      "label": "Complete corrections and book the rescission inspection",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Work resumes once DOB rescinds."
+     },
+     {
+      "kind": "shortcut",
+      "id": "ignore_stop_work_order",
+      "label": "Resume because the permit exists",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Still a violated SWO: $6,000 first offense."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+    "confidence": "verified",
+    "note": "DOB: if an SWO was issued for work without a permit, work cannot resume until a permit is issued AND the SWO is rescinded. 10 days is my estimate for the rescission visit.",
+    "cashExampleUSD": -2300,
+    "tier": "core",
+    "name": "Permit arrives but stop-work order remains"
+   },
+   {
+    "id": "d00_premises_exemption_scope",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "exempt-category work with code effects (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1250,
+      "note": "OATH penalty for work without a permit (standard); $6,250 on default"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 21
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "scope_review",
+      "label": "Have the whole scope reviewed before building",
+      "cost": {
+       "usd": 1000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Permit filed where needed; no penalty."
+     },
+     {
+      "kind": "choice",
+      "id": "keep_existing_storefront",
+      "label": "Keep the existing storefront",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No work, no exposure."
+     }
+    ],
+    "source": "https://home4.nyc.gov/site/buildings/property-or-business-owner/project-requirements-owner-storefronts.page",
+    "confidence": "estimate",
+    "note": "Penalty figures from the DOB schedule quoted in D02 ($1,250 standard, $6,250 default). Review fee and delay are my estimates.",
+    "cashExampleUSD": -6080,
+    "tier": "core",
+    "name": "Permit-exempt storefront work still has code duties"
+   },
+   {
+    "id": "d00_premises_sign_relief_scope",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "sign installed relying on temporary relief (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1250,
+      "note": "sign work without a permit, standard OATH penalty"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "regularize_sign",
+      "label": "Verify eligibility and file through a licensed sign hanger",
+      "cost": {
+       "usd": 800,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Permit and hanger fee (my estimate); no penalty."
+     },
+     {
+      "kind": "choice",
+      "id": "small_sign",
+      "label": "Use a wall sign of 6 sq ft or less",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No permit needed (DOB)."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/buildings/safety/sign.page",
+    "confidence": "estimate",
+    "note": "DOB: wall signs of 6 sq ft or less need no permit; bigger signs need a permit filed by a licensed sign hanger (cafe pack signage note). Penalty per D02.",
+    "cashExampleUSD": -1250,
+    "tier": "core",
+    "name": "Sign assistance is mistaken for blanket permission"
+   },
+   {
+    "id": "d00_premises_bid_after_lease",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "firm bids after signing (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.15
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "reprice_and_fund",
+      "label": "Reprice and secure funding before committing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 21
+      },
+      "result": "21 more days of rent while rebidding ($4,200)."
+     },
+     {
+      "kind": "choice",
+      "id": "scope_reduction",
+      "label": "Cut scope (keep existing counter, simpler finishes)",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Build-out x1.05 instead of x1.15; quality -0.02.",
+      "resultEffects": [
+       {
+        "field": "buildoutCost",
+        "mult": 1.05
+       },
+       {
+        "field": "quality",
+        "add": -0.02
+       }
+      ]
+     }
+    ],
+    "source": "https://www.reddit.com/r/smallbusiness/comments/owga47/hitting_an_early_financial_roadblock_who_gave_up/",
+    "confidence": "estimate",
+    "note": "Cushman & Wakefield (Q3 2026): NYC in-line fit-out costs rose 7.0% year over year to $181 per sq ft; one trade article cites a 34% average restaurant renovation overrun without a study. 15% = one year of price growth plus a preliminary-estimate gap: my estimate ($10,500 on $70,000).",
+    "cashExampleUSD": -10500,
+    "supportingSources": [
+     "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail"
+    ],
+    "tier": "core",
+    "name": "The first firm bids break the signed-lease budget"
+   },
+   {
+    "id": "d00_premises_design_changes",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "design changes after the bid (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.1
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "price_each_change",
+      "label": "Price each change before approving",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Only changes with a payback stay: x1.03."
+     },
+     {
+      "kind": "lever",
+      "id": "contingency_level",
+      "label": "Hold a 15% contingency",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Changes paid without change-order premium.",
+      "optionId": "standard"
+     }
+    ],
+    "source": "https://www.reddit.com/r/coffeeshopowners/comments/18gcjik/coffee_shop_build_out/",
+    "confidence": "estimate",
+    "note": "10% and 14 days are my estimates; change orders on a low bid run 15-30% premium (D01).",
+    "cashExampleUSD": -10220,
+    "tier": "core",
+    "name": "Design sessions add scope beyond the initial estimate"
+   },
+   {
+    "id": "d00_premises_construction_lien",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "unpaid contractor invoice (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -8800,
+      "note": "bond at 110% of an $8,000 claim to discharge the lien"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "pay_and_release",
+      "label": "Pay the undisputed part and get a lien release",
+      "cost": {
+       "usd": 8000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Lien released."
+     },
+     {
+      "kind": "choice",
+      "id": "contest",
+      "label": "Contest with counsel",
+      "cost": {
+       "usd": 3000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Bond posted; case runs for months."
+     }
+    ],
+    "source": "https://www.katalystos.com/blog/restaurant-build-out-contract-and-liens",
+    "confidence": "estimate",
+    "note": "Same numbers as D01 mechanics_lien_filed.",
+    "cashExampleUSD": -8800,
+    "tier": "deep",
+    "name": "Unpaid construction work becomes a lien dispute"
+   },
+   {
+    "id": "d00_premises_outside_scope",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "plan review (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 15000,
+      "note": "site work outside the interior (sidewalk ramp, exterior route)"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "redesign_with_professionals",
+      "label": "Verify the requirement and redesign",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Often the requirement is narrower: $5,000 of work instead of $15,000."
+     },
+     {
+      "kind": "choice",
+      "id": "reassess_premises",
+      "label": "Reassess the premises before funding",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 14
+      },
+      "result": "May walk away before the build-out."
+     }
+    ],
+    "source": "https://www.reddit.com/r/smallbusiness/comments/ebot51/advice_for_dealing_with_building/",
+    "confidence": "estimate",
+    "note": "Ramp range $3,000-$10,000 from a 2012 S.D.N.Y. record; $15,000 adds exterior work; my estimate.",
+    "cashExampleUSD": -21900,
+    "supportingSources": [
+     "https://law.justia.com/cases/federal/district-courts/new-york/nysdce/1:2010cv07592/369172/53"
+    ],
+    "tier": "deep",
+    "name": "Plan review exposes work outside the cafe interior"
+   },
+   {
+    "id": "d00_premises_toilet_renovation",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "qualifying renovation (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -12000
+     },
+     {
+      "field": "seats",
+      "add": -3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "include_restroom",
+      "label": "Include the patron restroom in the renovation",
+      "cost": {
+       "usd": 12000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Compliant; 3 seats used for the room."
+     },
+     {
+      "kind": "choice",
+      "id": "redesign_scope",
+      "label": "Redesign so the renovation does not trigger the rule",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Narrower scope; exemption kept if the trigger is avoided."
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+    "confidence": "estimate",
+    "note": "Same numbers as D02 renovation_triggers_restroom_rules.",
+    "cashExampleUSD": -12000,
+    "tier": "deep",
+    "name": "Renovation changes an old toilet exemption"
+   },
+   {
+    "id": "d00_premises_public_landlord_use",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "NYCHA listing (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "leaseSigningDelayDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "former_food_space",
+      "label": "Choose an eligible former food-use space",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "Search continues; light build-out applies."
+     },
+     {
+      "kind": "choice",
+      "id": "other_format",
+      "label": "Use a dry-goods format such as a kiosk",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "D13 concession_kiosk path."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/nycha/business/store-leasing.page",
+    "confidence": "estimate",
+    "note": "My estimate.",
+    "cashExampleUSD": 0,
+    "tier": "exotic",
+    "name": "A public-landlord storefront cannot accept the proposed wet use"
+   },
+   {
+    "id": "plan_examiner_objections",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "first plan review (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 21
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Experienced architect and pre-filing review",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Objections answered in one round.",
+      "optionId": "survey_first"
+     },
+     {
+      "kind": "choice",
+      "id": "buildings_walk_in_help",
+      "label": "Free DOB plan help before filing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 5
+      },
+      "result": "Permit wait x0.9."
+     }
+    ],
+    "source": "https://www.osc.ny.gov/press/releases/2026/07/dinapoli-nyc-department-buildings-meets-critical-goals-lags-lower-priority-issues",
+    "confidence": "estimate",
+    "note": "Kept: one review cycle about 21 days (State Comptroller review of DOB). 21 x $230 = $4,830.",
+    "cashExampleUSD": -4830,
+    "tier": "core",
+    "name": "The plan examiner sends objections"
+   },
+   {
+    "id": "asbestos_found",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "revised",
+    "trigger": "investigation before demolition (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 21
+     },
+     {
+      "field": "buildoutCost",
+      "add": 9800
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "ACP-5 investigation before signing",
+      "cost": {
+       "usd": 1000,
+       "usdMonthly": 0,
+       "days": 7
+      },
+      "result": "Positive result known before the lease; abatement priced or landlord pays.",
+      "optionId": "survey_first"
+     },
+     {
+      "kind": "lever",
+      "id": "contingency_level",
+      "label": "15% contingency",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Abatement paid without debt.",
+      "optionId": "standard"
+     },
+     {
+      "kind": "shortcut",
+      "id": "build_without_permit",
+      "label": "Demolish without abatement",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Asbestos violations and a stop work order."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/asbestos-rules-and-regulations",
+    "confidence": "estimate",
+    "note": "Revised cost: ACP-5 investigation $400-$1,500 (contractor guide) + abatement $5-$20 per sq ft (consumer guides) on the 800 sq ft space at $11 = $8,800 + the $800 DEP fee for 160-1,000 sq ft (D01) + about $200 air testing = $9,800 (D01 used $5,600 at $6 per sq ft, below the observed range). Delay kept at 21 days (7-day notice + removal and clearance).",
+    "cashExampleUSD": -14630,
+    "supportingSources": [
+     "https://roofvista.com/resources/guides/asbestos-roof-removal-new-york",
+     "https://www.homeadvisor.com/cost/environmental-safety/remove-asbestos"
+    ],
+    "previousEffects": [
+     {
+      "field": "openingDelayDays",
+      "add": 21
+     },
+     {
+      "field": "buildoutCost",
+      "add": 5600
+     }
+    ],
+    "tier": "core",
+    "name": "The asbestos report comes back positive"
+   },
+   {
+    "id": "d00_premises_asbestos_scope",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "CAI finds asbestos in the work area (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 21
+     },
+     {
+      "field": "buildoutCost",
+      "add": 9800
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "compliant_abatement",
+      "label": "Commission licensed abatement and revise the schedule",
+      "cost": {
+       "usd": 9800,
+       "usdMonthly": 0,
+       "days": 21
+      },
+      "result": "Compliant demolition."
+     },
+     {
+      "kind": "choice",
+      "id": "redesign_to_avoid",
+      "label": "Redesign to avoid disturbing the material",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Encapsulate in place ($2-$6 per sq ft) where allowed."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/buildings/dob/project-requirements-asbestos.page",
+    "confidence": "estimate",
+    "note": "Same calibration as D01 asbestos_found.",
+    "cashExampleUSD": -14630,
+    "supportingSources": [
+     "https://nyc-business.nyc.gov/nycbusiness/description/asbestos-rules-and-regulations"
+    ],
+    "tier": "core",
+    "name": "Renovation disturbs asbestos-containing material"
+   },
+   {
+    "id": "landmark_review",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "designated building (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 21
+     },
+     {
+      "field": "setupCost",
+      "add": 320
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Check the landmarks map before signing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 1
+      },
+      "result": "Design within staff-approvable rules.",
+      "optionId": "survey_first"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+    "confidence": "estimate",
+    "note": "Kept: staff permit within 10-15 business days; $95 + $5 per $1,000 of work.",
+    "cashExampleUSD": -5150,
+    "tier": "deep",
+    "name": "The block is in a historic district"
+   },
+   {
+    "id": "d00_premises_landmark_repaint",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "exterior change at a designated building (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 15
+     },
+     {
+      "field": "setupCost",
+      "add": 95
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "apply_lpc",
+      "label": "Apply for the exterior treatment",
+      "cost": {
+       "usd": 95,
+       "usdMonthly": 0,
+       "days": 15
+      },
+      "result": "Staff-level permit; paint colors from approved ranges."
+     },
+     {
+      "kind": "choice",
+      "id": "keep_exterior",
+      "label": "Keep the existing exterior",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No delay."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+    "confidence": "estimate",
+    "note": "Fee and staff timing as D01 landmark_review (FasTrack 10 business days).",
+    "cashExampleUSD": -3545,
+    "tier": "core",
+    "name": "A quick facade refresh needs landmark review"
+   },
+   {
+    "id": "d00_premises_landmark_terrace",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "outdoor plan at a designated building (state)",
+    "months": [
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 21,
+      "note": "outdoor seats start later"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "coordinate_lpc_dot",
+      "label": "Coordinate the LPC and DOT applications",
+      "cost": {
+       "usd": 95,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Outdoor seats 21 days later than DOT alone."
+     },
+     {
+      "kind": "choice",
+      "id": "skip_outdoor",
+      "label": "Operate without outdoor seating",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Lose the D02 outdoor season lift (+10 seats, demand x1.03)."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/lpc/applications/storefronts.page",
+    "confidence": "estimate",
+    "note": "LPC: elements of an outdoor dining setup attached to the building or paving need an LPC permit even under Dining Out NYC.",
+    "cashExampleUSD": -1071.0,
+    "tier": "core",
+    "name": "Outdoor seating has a second approval path"
+   },
+   {
+    "id": "d00_premises_lpc_incomplete",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "incomplete LPC filing (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 21
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "complete_package",
+      "label": "Submit a complete package through LPC Business Express",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Clock restarts with complete drawings."
+     },
+     {
+      "kind": "choice",
+      "id": "simplify",
+      "label": "Simplify the proposal after pre-application advice",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Staff-level approval."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/lpc/applications/lpc-business-express.page",
+    "confidence": "estimate",
+    "note": "21 days = one more staff review cycle.",
+    "cashExampleUSD": -4830,
+    "tier": "core",
+    "name": "Landmark application lacks usable drawings"
+   },
+   {
+    "id": "no_certificate_of_occupancy",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "no CO found (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "label": "Cancellation clause if the LNO is refused",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Lease void without penalty.",
+      "optionId": "delivery_and_permit_clause"
+     }
+    ],
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02023",
+    "confidence": "estimate",
+    "note": "Kept; LNO fee $130 now sourced (DOB).",
+    "cashExampleUSD": -6900,
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page"
+    ],
+    "tier": "deep",
+    "name": "The building has no Certificate of Occupancy"
+   },
+   {
+    "id": "building_arrears_block_permit",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "owner arrears over $25,000 (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Search the owner's DOB and ECB arrears before signing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 2
+      },
+      "result": "Problem landlord avoided.",
+      "optionId": "survey_first"
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/buildings/pdf/ll160of2017_sn.pdf",
+    "confidence": "estimate",
+    "note": "Kept: Local Law 160 of 2017.",
+    "cashExampleUSD": -3220,
+    "tier": "deep",
+    "name": "The landlord's unpaid fines block your permit"
+   },
+   {
+    "id": "stop_work_order_served",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "DOB inspection of unpermitted work (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 45
+     },
+     {
+      "field": "cash",
+      "add": -6000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "shortcut",
+      "id": "build_without_permit",
+      "label": "Avoid it: build only under permit",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No SWO."
+     },
+     {
+      "kind": "shortcut",
+      "id": "ignore_stop_work_order",
+      "label": "Keep working",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "$6,000 first violation, $12,000 next (DOB)."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/buildings/safety/swo.page",
+    "confidence": "estimate",
+    "note": "Kept. Note: DOB's own page lists $6,000 / $12,000 for violating an SWO; the D01 note's '21 x permit fee' rule was not found on DOB pages, so the $6,000 is better tied to the SWO violation or the work-without-permit penalty schedule.",
+    "cashExampleUSD": -16350,
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page"
+    ],
+    "tier": "core",
+    "name": "An inspector tapes a Stop Work Order to the door"
+   },
+   {
+    "id": "stop_work_order",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "DOB inspection (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 45
+     },
+     {
+      "field": "cash",
+      "add": -6000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "answer_notice",
+      "label": "Pay and correct",
+      "cost": {
+       "usd": 6000,
+       "usdMonthly": 0,
+       "days": 45
+      },
+      "result": "Permit filed, SWO rescinded.",
+      "optionId": "pay"
+     },
+     {
+      "kind": "lever",
+      "id": "answer_notice",
+      "label": "Contest at OATH",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 60
+      },
+      "result": "Penalty may fall to the standard amount if the condition is corrected; work still stopped.",
+      "optionId": "contest"
+     }
+    ],
+    "source": "https://www.nyc.gov/site/buildings/property-or-business-owner/stop-work-order.page",
+    "confidence": "estimate",
+    "note": "Same calibration as D01 stop_work_order_served.",
+    "cashExampleUSD": -16350,
+    "tier": "core",
+    "name": "Stop work order"
+   },
+   {
+    "id": "dob_permit_issued",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "DOB approval (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "milestone",
+      "set": "construction may start; free-rent clock starts if the lease says so"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "shortcut",
+      "id": "start_work_before_permit",
+      "label": "Start before the permit",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Saves days now; SWO risk (stop_work_order)."
+     }
+    ],
+    "source": "https://www.osc.ny.gov/press/releases/2026/07/dinapoli-nyc-department-buildings-meets-critical-goals-lags-lower-priority-issues",
+    "confidence": "estimate",
+    "note": "Permit timing: about 21 days per review cycle (State Comptroller on DOB); milestone event with no money effect by itself.",
+    "cashExampleUSD": 0,
+    "tier": "core",
+    "name": "Building permit issued"
+   },
+   {
+    "id": "failed_trade_inspection",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "handyman trade work (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     },
+     {
+      "field": "buildoutCost",
+      "add": 12000
+     },
+     {
+      "field": "cash",
+      "add": -5000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "label": "Licensed plumber and electrician from the start",
+      "cost": {
+       "usd": 6000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No redo; the handyman saving is lost.",
+      "optionId": "food_service_specialist"
+     }
+    ],
+    "source": "https://citylandnyc.org/unlicensed-plumber-fined",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -20220,
+    "tier": "deep",
+    "name": "The plumbing fails inspection"
+   },
+   {
+    "id": "hidden_conditions",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "demolition (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.12
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contingency_level",
+      "label": "15% contingency",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Absorbed.",
+      "optionId": "standard"
+     },
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Exploratory openings before signing",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Surprises priced into the lease (landlord pays part).",
+      "optionId": "survey_first"
+     }
+    ],
+    "source": "https://blueberrybuilders.com/resources/cost-overruns-in-construction/",
+    "confidence": "estimate",
+    "note": "Kept: +$8,400 on $70,000.",
+    "cashExampleUSD": -11620,
+    "tier": "core",
+    "name": "The walls are opened and the surprises come out"
+   },
+   {
+    "id": "change_orders_pile_up",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "lowest-bid contractor (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.2
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 21
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "label": "Food-service specialist",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Change orders 5% instead of 20%; base price 12% higher than the low bid.",
+      "optionId": "food_service_specialist"
+     }
+    ],
+    "source": "https://blueberrybuilders.com/resources/cost-overruns-in-construction/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -18830,
+    "tier": "core",
+    "name": "Change orders pile up"
+   },
+   {
+    "id": "structural_surprise",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "structural failure found (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 4,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 120
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "label": "Rent abatement for landlord structural delays",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Rent stops during structural work.",
+      "optionId": "delivery_and_permit_clause"
+     }
+    ],
+    "source": "https://bisnow.com/new-york/news/retail/owners-of-landmarked-beatnik-caf-sue-landlord-for-constructive-eviction-117169",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -27600,
+    "tier": "exotic",
+    "name": "A buckling wall stops the job"
+   },
+   {
+    "id": "worker_falls_on_site",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "uninsured contractor (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -25000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "label": "Insured contractor naming the tenant",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Event removed; insured contractors bid higher.",
+      "optionId": "food_service_specialist"
+     }
+    ],
+    "source": "https://www.law.cornell.edu/nyctap/I08_0054.htm",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -25000,
+    "tier": "exotic",
+    "name": "A worker falls from a ladder on your job"
+   },
+   {
+    "id": "fit_out_prices_rise",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced each March",
+    "months": [
+     3
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.07
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "entry_mode",
+      "label": "Buy a built cafe instead",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No build-out exposure.",
+      "optionId": "buy_operating_shop"
+     }
+    ],
+    "source": "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/new-york-city-area-marketbeats/manhattan-retail",
+    "confidence": "verified",
+    "note": "Kept and re-sourced: Cushman & Wakefield Q3 2026, NYC in-line fit-out +7.0% to $181 per sq ft.",
+    "cashExampleUSD": -4900,
+    "tier": "deep",
+    "name": "Contractors raise their prices"
+   },
+   {
+    "id": "contractor_adds_sales_tax",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "contract signed (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "buildoutCost",
+      "mult": 1.053
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "label": "Capital improvement documents (exempt work)",
+      "cost": {
+       "usd": 500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Tax avoided where the work qualifies as a capital improvement."
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pubs_and_bulls/advisory_opinions/sales/24-54s.htm",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -3728,
+    "tier": "deep",
+    "name": "The contractor's invoice comes with sales tax"
+   },
+   {
+    "id": "city_cuts_red_tape",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced July 2026",
+    "months": [
+     7
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "mult": 0.9
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "opening_mode",
+      "label": "Soft open with a consultative inspection",
+      "cost": {
+       "usd": 100,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "$100 consultative inspection for a new applicant (Health Code); first-inspection points x0.6.",
+      "optionId": "soft_open_with_consult"
+     }
+    ],
+    "source": "https://www.nyc.gov/mayors-office/news/2026/07/mayor-mamdani-announces--open-for-small-business---over-50-refor.html",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": 0,
+    "tier": "deep",
+    "name": "The city cuts small-business red tape"
+   },
+   {
+    "id": "buildings_walk_in_help",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 12,
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "mult": 0.9
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 5
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Take the free plan review",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 5
+      },
+      "result": "Permit wait x0.9.",
+      "optionId": "survey_first"
+     }
+    ],
+    "source": "https://www.nyc.gov/mayors-office/news/2026/07/executive-order-no--18.html",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -1150,
+    "tier": "exotic",
+    "name": "Free permit help at the Buildings office"
+   },
+   {
+    "id": "construction_noise_complaint",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "neighbor complaint during works (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -440,
+      "note": "only if no plan is posted"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "label": "Post the Construction Noise Plan",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No penalty.",
+      "optionId": "food_service_specialist"
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/construction-noise-mitigation-plan",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -440,
+    "tier": "deep",
+    "name": "A neighbor complains about construction noise"
+   },
+   {
+    "id": "certificate_of_occupancy_mismatch",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "CO check (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Check the CO before signing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Avoided.",
+      "optionId": "survey_first"
+     },
+     {
+      "kind": "choice",
+      "id": "lno",
+      "label": "Letter of No Objection",
+      "cost": {
+       "usd": 2630,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "Use confirmed when the building qualifies."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+    "confidence": "estimate",
+    "note": "Kept; LNO $130.",
+    "cashExampleUSD": -6900,
+    "supportingSources": [
+     "https://www.nyc.gov/site/buildings/property-or-business-owner/letter-of-no-objection-or-completion.page"
+    ],
+    "tier": "core",
+    "name": "The Certificate of Occupancy does not say \"eating and drinking\""
+   },
+   {
+    "id": "mechanics_lien_filed",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "unpaid subcontractor (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -8800
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "contractor_choice",
+      "label": "Pay subcontractors against lien waivers",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No lien.",
+      "optionId": "food_service_specialist"
+     }
+    ],
+    "source": "https://www.katalystos.com/blog/restaurant-build-out-contract-and-liens",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -8800,
+    "tier": "deep",
+    "name": "A subcontractor files a lien on the building"
+   },
+   {
+    "id": "pre_permit_inspection_blocked",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "site still under construction (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "construction_pace",
+      "label": "Finish works before booking",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No rebooking.",
+      "optionId": "standard_hours"
+     }
+    ],
+    "source": "https://portal.311.nyc.gov/article/?kanumber=KA-02955",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -1610,
+    "tier": "deep",
+    "name": "The Health inspector cannot inspect a construction site"
+   },
+   {
+    "id": "renovation_triggers_restroom_rules",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "renovation (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -12000
+     },
+     {
+      "field": "seats",
+      "add": -3
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "stay_at_19_seats",
+      "label": "Stay at 19 seats",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No patron restroom required."
+     }
+    ],
+    "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-article81.pdf",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -12000,
+    "tier": "deep",
+    "name": "Your renovation wakes up the restroom rules"
+   },
+   {
+    "id": "d00_labor_finance_zero_sales_return",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "renovation quarter with no sales (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -50,
+      "note": "late no-tax-due return"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "file_zero_return",
+      "label": "File the zero return on time",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No penalty."
+     },
+     {
+      "kind": "choice",
+      "id": "surrender_certificate",
+      "label": "Surrender the certificate if closed for good",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Final return; no further filings."
+     }
+    ],
+    "source": "https://www.tax.ny.gov/pdf/2020/st/st100i_220.pdf",
+    "confidence": "verified",
+    "note": "NYS ST-100 instructions: a $50 penalty for late filing of a no-tax-due return; returns are due even when no tax is due.",
+    "cashExampleUSD": -50,
+    "tier": "core",
+    "name": "A renovation month still needs tax filing"
+   },
+   {
+    "id": "d00_premises_gas_sequence",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "gas equipment chosen (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 68
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "utility_concept",
+      "label": "All-electric design",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No gas wait; electrical load x1.3 (may need a service upgrade).",
+      "optionId": "all_electric"
+     },
+     {
+      "kind": "choice",
+      "id": "coordinate_trades",
+      "label": "Coordinate the plumber's gas authorization and inspections early",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Wait cut to about 30 days (the survey's majority minimum)."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/gas-authorizationrestaurant-equipment",
+    "confidence": "estimate",
+    "note": "State Senate survey (2017): average wait about 68 days for gas; 68 x $230 = $15,640 of carrying cost. DOB gas authorization for restaurant equipment is filed by a licensed master plumber.",
+    "cashExampleUSD": -15640,
+    "supportingSources": [
+     "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf"
+    ],
+    "tier": "core",
+    "name": "Cooking gas waits for separate agency inspections"
+   },
+   {
+    "id": "d00_premises_utility_deposit",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "service application incomplete (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1600
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "complete_submissions",
+      "label": "Complete customer and contractor submissions early",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No delay; deposit still due."
+     },
+     {
+      "kind": "choice",
+      "id": "reschedule_opening",
+      "label": "Re-date the opening",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 7
+      },
+      "result": "7 days x $230 = $1,610."
+     }
+    ],
+    "source": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/faq",
+    "confidence": "estimate",
+    "note": "Con Edison may ask a non-residential deposit up to two times the average monthly bill (D01: $800 x 2 = $1,600). Initial correspondence about a week after the contractor's work request (Con Edison Blue Book).",
+    "cashExampleUSD": -3210,
+    "supportingSources": [
+     "https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf"
+    ],
+    "tier": "core",
+    "name": "Ready wiring still waits for customer paperwork"
+   },
+   {
+    "id": "d00_premises_utility_extra",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "nonstandard service request (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 5000,
+      "note": "tariff charges for a nonstandard service request"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "standard_layout",
+      "label": "Accept the standard service layout",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No extra charge."
+     },
+     {
+      "kind": "choice",
+      "id": "budget_extra",
+      "label": "Pay the documented extra",
+      "cost": {
+       "usd": 5000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Nonstandard entry kept."
+     }
+    ],
+    "source": "https://www.coned.com/en/small-medium-size-businesses/building-project-center/faq",
+    "confidence": "estimate",
+    "note": "$5,000 is my estimate; Con Edison quotes per job.",
+    "cashExampleUSD": -5000,
+    "tier": "core",
+    "name": "Chosen service design triggers extra utility charges"
+   },
+   {
+    "id": "d00_premises_meter_not_live",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "meter not energized (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "book_final_connection",
+      "label": "Book the final connection appointment",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 7
+      },
+      "result": "Delay 7 days."
+     },
+     {
+      "kind": "choice",
+      "id": "conditional_opening_date",
+      "label": "Announce the date only after turn-on",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No marketing wasted."
+     }
+    ],
+    "source": "https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide",
+    "confidence": "estimate",
+    "note": "Capacity reviews take about 20 days in a Con Edison pilot (HPD); 14 days for the final appointment is my estimate.",
+    "cashExampleUSD": -3220,
+    "supportingSources": [
+     "https://www.nyc.gov/assets/hpd/downloads/pdfs/services/hpd-pilot-coned-load-letter.pdf"
+    ],
+    "tier": "core",
+    "name": "The new meter is not yet turned on"
+   },
+   {
+    "id": "d00_premises_backflow_install",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "DEP or engineer flags missing device (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 7350,
+      "note": "device + PE design + DEP filing"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 30
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "design_and_install",
+      "label": "PE design, DEP approval and licensed installation",
+      "cost": {
+       "usd": 7350,
+       "usdMonthly": 0,
+       "days": 30
+      },
+      "result": "Compliant; annual test after."
+     },
+     {
+      "kind": "lever",
+      "id": "lease_contingencies",
+      "label": "Make the landlord install it before delivery",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Landlord pays; delivery may slip.",
+      "optionId": "delivery_and_permit_clause"
+     }
+    ],
+    "source": "https://randpc.com/ask/mep/backflow",
+    "confidence": "estimate",
+    "note": "Device installation $3,000 (one-story) to $7,500-$15,000 (midsize buildings), DEP filing fee $350 per service connection, PE or RA design required, test report to DEP within 30 days of installation (consultant sources). $7,350 = $5,000 install + $2,000 design + $350 filing: my estimate for a storefront.",
+    "cashExampleUSD": -14250,
+    "supportingSources": [
+     "https://habitatmag.com/Archive2/340-January-2017/Backflow-Prevention-It-s-the-Law"
+    ],
+    "tier": "core",
+    "name": "Water protection device needs a separate approval"
+   },
+   {
+    "id": "gas_turn_on_wait",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "gas on the critical path (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 68
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "utility_concept",
+      "label": "All-electric",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No gas wait.",
+      "optionId": "all_electric"
+     },
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Ask Con Edison about gas availability before signing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Known before the lease.",
+      "optionId": "survey_first"
+     }
+    ],
+    "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+    "confidence": "estimate",
+    "note": "Kept: 68 days average (2017 survey; no newer measurement).",
+    "cashExampleUSD": -15640,
+    "tier": "core",
+    "name": "Waiting for the gas to be turned on"
+   },
+   {
+    "id": "gas_connection_wait",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "gas on the critical path (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 68
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "all_electric_menu",
+      "label": "All-electric menu",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No wait."
+     },
+     {
+      "kind": "lever",
+      "id": "check_gas_before_lease",
+      "label": "Check gas before the lease",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 10
+      },
+      "result": "Known in advance."
+     }
+    ],
+    "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+    "confidence": "estimate",
+    "note": "Same calibration as D01 gas_turn_on_wait.",
+    "cashExampleUSD": -15640,
+    "tier": "deep",
+    "name": "Waiting for Con Edison gas"
+   },
+   {
+    "id": "gas_turn_on_delay",
+    "sourceFragment": "D13-formats",
+    "calibrationStatus": "confirmed",
+    "trigger": "gas equipment without confirmed gas (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.8,
+      "note": "formats that depend on gas cooking only"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "hot_food",
+      "label": "Ventless electric oven",
+      "cost": {
+       "usd": 17190,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Hot menu without gas.",
+      "optionId": "ventless_oven"
+     }
+    ],
+    "source": "https://nysenate.gov/sites/default/files/press-release/attachment/cooking_without_gas.pdf",
+    "confidence": "estimate",
+    "note": "Kept for gas-dependent formats.",
+    "cashExampleUSD": -22644.0,
+    "tier": "core",
+    "name": "Con Edison gas turn-on delayed"
+   },
+   {
+    "id": "gas_shut_off_in_building",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced building shutoff",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "quality",
+      "mult": 0.9
+     },
+     {
+      "field": "capacity",
+      "mult": 0.85
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "utility_concept",
+      "label": "All-electric",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Unaffected.",
+      "optionId": "all_electric"
+     }
+    ],
+    "source": "https://abc7ny.com/post/popular-hells-kitchen-restaurant-has-been-cooking-gas-month-routine-inspection-found-leak/18837449/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -11322.0,
+    "tier": "exotic",
+    "name": "The gas to the building is shut off"
+   },
+   {
+    "id": "building_gas_shutoff",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced building shutoff",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 3,
+      "onlyIf": "the water heater is gas"
+     },
+     {
+      "field": "demand",
+      "mult": 0.9,
+      "onlyIf": "the oven is gas"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "buy_an_electric_water_heater",
+      "label": "Electric water heater",
+      "cost": {
+       "usd": 2500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Hot water without gas (my estimate of $2,500 installed)."
+     }
+    ],
+    "source": "https://w42st.com/post/gas-shutoff-drags-on-at-sesamo-leaving-restaurant-in-limbo-for-over-a-month/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -3774,
+    "tier": "deep",
+    "name": "The building's gas is locked off"
+   },
+   {
+    "id": "building_gas_shutoff",
+    "sourceFragment": "D13-formats",
+    "calibrationStatus": "confirmed",
+    "trigger": "announced",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "demand",
+      "mult": 0.85
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "hot_food",
+      "label": "Ventless oven",
+      "cost": {
+       "usd": 17190,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Unaffected.",
+      "optionId": "ventless_oven"
+     }
+    ],
+    "source": "https://bronx.news12.com/con-ed-illegal-gas-plumbing-work-forces-service-shutdown-for-fordham-restaurant-tenants-41500504",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -11322.0,
+    "tier": "deep",
+    "name": "Gas shut off for the whole building"
+   },
+   {
+    "id": "gas_red_tag",
+    "sourceFragment": "D10-deaths-nonobvious-year",
+    "calibrationStatus": "revised",
+    "trigger": "building gas red-tag (announced)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 6,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 180,
+      "onlyIf": "cooking and hot water depend on gas"
+     },
+     {
+      "field": "closureDays",
+      "add": 3,
+      "onlyIf": "only the water heater is gas"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "kitchen_energy",
+      "label": "All-electric build",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Unaffected.",
+      "optionId": "electric"
+     },
+     {
+      "kind": "choice",
+      "id": "temporary_electric",
+      "label": "Induction and an electric water heater",
+      "cost": {
+       "usd": 6000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Reopen in a week with a reduced menu (demand x0.9)."
+     }
+    ],
+    "source": "https://www.brooklynpaper.com/two-sheepshead-bay-businesses-closed-for-months-after-nearby-gas-leak",
+    "confidence": "estimate",
+    "note": "Revised form only: closureMonths 6 rewritten as closureDays 180 with the D02 split by what runs on gas, so electric shops lose 3 days, not 6 months. Brooklyn case: 7-8 months.",
+    "cashExampleUSD": -262440,
+    "previousEffects": [
+     {
+      "field": "closureMonths",
+      "value": 6
+     }
+    ],
+    "outOfBoundsReason": "Closure length is a duration from a reported case, not a multiplier.",
+    "tier": "core",
+    "name": "Gas shut off to the building"
+   },
+   {
+    "id": "electrical_service_too_small",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "equipment load above panel (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 28
+     },
+     {
+      "field": "buildoutCost",
+      "add": 9000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "site_due_diligence",
+      "label": "Load letter before signing",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 20
+      },
+      "result": "Capacity known (Con Edison needs about 20 days to confirm capacity in a pilot).",
+      "optionId": "survey_first"
+     }
+    ],
+    "source": "https://www.coned.com/en/small-medium-size-businesses/gas-and-electric-service-update-guide",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -15440,
+    "supportingSources": [
+     "https://www.nyc.gov/assets/hpd/downloads/pdfs/services/hpd-pilot-coned-load-letter.pdf"
+    ],
+    "tier": "core",
+    "name": "The panel cannot carry the equipment"
+   },
+   {
+    "id": "utility_deposit_demand",
+    "sourceFragment": "D01-entry-preopening",
+    "calibrationStatus": "confirmed",
+    "trigger": "new account (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -1600
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "good_payment_history",
+      "label": "Ask for waiver after 12 months of on-time payments",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Deposit returned later."
+     }
+    ],
+    "source": "https://www.coned.com/-/media/files/coned/documents/accountandbilling/non-res-rights-english.pdf",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -1600,
+    "tier": "deep",
+    "name": "Con Edison asks for a deposit"
+   },
+   {
+    "id": "service_upgrade_wait",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "upgrade needed (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 3,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 84
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "pick_a_space_with_enough_power",
+      "label": "Pick a space with enough power",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No wait."
+     },
+     {
+      "kind": "setup",
+      "id": "electrical_service_upgrade",
+      "label": "Upgrade service",
+      "cost": {
+       "usd": 9000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Upgrade done; 84 days if pre-opening."
+     }
+    ],
+    "source": "https://triumphelectricinc.com/con-edison-service-upgrade-guide-powering-your-nyc-property-in-2026/",
+    "confidence": "estimate",
+    "note": "Kept: 84 days x $230 = $19,320 before opening.",
+    "cashExampleUSD": -19320,
+    "tier": "core",
+    "name": "Waiting for Con Edison"
+   },
+   {
+    "id": "breaker_trips_at_peak",
+    "sourceFragment": "D02-premises",
+    "calibrationStatus": "confirmed",
+    "trigger": "machine on a shared circuit (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "staffAvailability",
+      "mult": 0.95
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "setup",
+      "id": "dedicated_espresso_circuit",
+      "label": "Dedicated 30 A circuit",
+      "cost": {
+       "usd": 1200,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No trips (my estimate of an electrician's job)."
+     }
+    ],
+    "source": "https://www.1st-line.com/customer-education/commercial-espresso-machine-basic-requirements/",
+    "confidence": "estimate",
+    "note": "Kept.",
+    "cashExampleUSD": -1887.0,
+    "tier": "core",
+    "name": "The breaker trips at 8:40"
+   },
+   {
+    "id": "d00_closures_nyc_event_building_repair_limbo",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "building repair blocks utilities (announced)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 2,
+    "effects": [
+     {
+      "field": "closureDays",
+      "add": 60
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "repair_schedule_and_abatement",
+      "label": "Agree a written repair schedule with rent abatement",
+      "cost": {
+       "usd": 1500,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Rent abated while closed (lease or negotiated)."
+     },
+     {
+      "kind": "choice",
+      "id": "surrender_or_move",
+      "label": "Negotiate surrender",
+      "cost": {
+       "usd": 3000,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Exit with deposit; build-out lost."
+     }
+    ],
+    "source": "https://ny.eater.com/2024/2/2/24053684/nyc-restaurant-closings-february-2024",
+    "confidence": "estimate",
+    "note": "60 days closed = 60 x ($1,258 margin + $200 rent) = $87,480 without abatement; my estimate.",
+    "cashExampleUSD": -87480,
+    "tier": "core",
+    "name": "Reopening depends on building repairs"
+   },
+   {
+    "id": "d00_premises_prepermit_fail",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "pre-permit inspection (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     },
+     {
+      "field": "setupCost",
+      "add": 2000
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "lever",
+      "id": "opening_mode",
+      "label": "Consultative inspection first",
+      "cost": {
+       "usd": 100,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "$100 for a new applicant (Health Code); problems found before the real visit.",
+      "optionId": "soft_open_with_consult"
+     },
+     {
+      "kind": "choice",
+      "id": "correct_and_reinspect",
+      "label": "Fix the list and request reinspection",
+      "cost": {
+       "usd": 2000,
+       "usdMonthly": 0,
+       "days": 14
+      },
+      "result": "No fines at the pre-permit stage; items must be fixed before reinspection (311)."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "confidence": "estimate",
+    "note": "Fines are not issued at pre-permit inspections (311); the $2,000 of fixes and 14 days are my estimates.",
+    "cashExampleUSD": -5220,
+    "supportingSources": [
+     "https://portal.311.nyc.gov/article/?kanumber=KA-02955"
+    ],
+    "tier": "core",
+    "name": "Pre-permit inspection lists corrections"
+   },
+   {
+    "id": "d00_premises_renewal_docs",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "renewal window (calendar)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "permitWaitDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "upload_proof",
+      "label": "Upload current workers' comp and disability proof, pay open fines",
+      "cost": {
+       "usd": 280,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Renewal at $280."
+     },
+     {
+      "kind": "choice",
+      "id": "contest_records",
+      "label": "Ask for agency review of disputed fines before expiry",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 14
+      },
+      "result": "Renewal issued after review."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "confidence": "estimate",
+    "note": "The FSE permit costs $280 a year and needs insurance proof; an expired permit is a no-permit violation. 14 days is my estimate.",
+    "cashExampleUSD": -280,
+    "tier": "core",
+    "name": "Renewal package is incomplete"
+   },
+   {
+    "id": "d00_premises_early_stock",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "delivery before pre-operational visit (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "cash",
+      "add": -500,
+      "note": "stock returned or discarded"
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 7
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "move_delivery",
+      "label": "Move the delivery after the visit",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No loss."
+     },
+     {
+      "kind": "choice",
+      "id": "confirm_pathway",
+      "label": "Confirm the inspection pathway first",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 2
+      },
+      "result": "Correct sequence."
+     }
+    ],
+    "source": "https://www.nyc.gov/site/sbs/businesses/food-establishment-form.page",
+    "confidence": "estimate",
+    "note": "My estimates.",
+    "cashExampleUSD": -2110,
+    "tier": "core",
+    "name": "Food arrives before the pre-operational visit"
+   },
+   {
+    "id": "d00_premises_toilet_route",
+    "sourceFragment": "D00-total-search",
+    "calibrationStatus": "new",
+    "trigger": "plan review (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "setupCost",
+      "add": 8000
+     },
+     {
+      "field": "openingDelayDays",
+      "add": 14
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "redesign_route",
+      "label": "Redesign the customer route",
+      "cost": {
+       "usd": 8000,
+       "usdMonthly": 0,
+       "days": 14
+      },
+      "result": "Patron route outside the prep area."
+     },
+     {
+      "kind": "choice",
+      "id": "revise_concept",
+      "label": "Stay under 20 seats with no patron restroom",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Seats capped at 19."
+     }
+    ],
+    "source": "https://codelibrary.amlegal.com/codes/newyorkcity/latest/NYCrules/0-0-0-46264",
+    "confidence": "estimate",
+    "note": "My estimates.",
+    "cashExampleUSD": -11220,
+    "tier": "core",
+    "name": "Customers reach the toilet through food preparation"
+   },
+   {
+    "id": "permit_ready_after_buildout",
+    "sourceFragment": "D14-mechanics",
+    "calibrationStatus": "new",
+    "trigger": "build-out finished (state)",
+    "months": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "durationMonths": 1,
+    "effects": [
+     {
+      "field": "openingDelayDays",
+      "formula": "max(0, 22 - days since the FSE application)"
+     }
+    ],
+    "playerMoves": [
+     {
+      "kind": "choice",
+      "id": "apply_early",
+      "label": "Apply for the permit 22 days before the build-out ends",
+      "cost": {
+       "usd": 280,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "No wait at the end."
+     },
+     {
+      "kind": "shortcut",
+      "id": "open_before_permit",
+      "label": "Open before day 22",
+      "cost": {
+       "usd": 0,
+       "usdMonthly": 0,
+       "days": 0
+      },
+      "result": "Violation no_fse_permit."
+     }
+    ],
+    "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+    "confidence": "verified",
+    "note": "NYC Business: a new applicant may open 22 days after applying even without a pre-permit inspection. Filing only when the room is finished costs 22 x $230 = $5,060.",
+    "cashExampleUSD": -5060,
+    "tier": "core",
+    "name": "Health permit ready"
    }
   ],
   "mechanics": [],
