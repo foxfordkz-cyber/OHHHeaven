@@ -605,7 +605,7 @@ async function walk(browser, width) {
     await page.getByRole('button', { name: /^(More|Increase) price$/ }).first().click({ timeout: 8000 });
     await saveBtn().click({ timeout: 5000 });
     await sleep(1200);
-    const refusedText = ((await page.locator('body').innerText()).replace(/\s+/g, ' ').match(/[^.]*\b(Pro|subscription|free month)\b[^.]*\./i) ?? [''])[0];
+    const refusedText = ((await page.locator('body').innerText()).replace(/\s+/g, ' ').match(/[^.]*(free month|First Year Pro|subscription)[^.]*\.(?:[^.]*\/pro\.)?/i) ?? [''])[0];
     const seePro = await page.getByRole('button', { name: /Pro/ }).or(page.getByRole('link', { name: /Pro/ })).count();
     await shot('pro-refused');
     const p1 = (await view()).business.orders.price;
