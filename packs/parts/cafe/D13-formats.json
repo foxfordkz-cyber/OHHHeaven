@@ -1018,9 +1018,10 @@
       "what": "You skip the waiting list. The permit holder must be at the cart; if an inspector checks, the cart is seized and the permit can be revoked.",
       "saves": {
         "basis": "fixed",
-        "amount": 0
+        "amount": 600
       },
-      "unlocks": "start vending now instead of waiting for the permit list; costs about $850 a month in rent to the permit holder (monthlyCosts.black_market_permit_rent)",
+      "unlocks": "start vending on the street now instead of waiting for the permit list; the rent to the permit holder (about $850 a month, monthlyCosts.black_market_permit_rent) is paid separately",
+      "savesNote": "Compared with the legal private-plaza route (Restricted Area permit): no $600 monthly fee to the plaza owner (lever cart_spot) and full street demand.",
       "violation": "permit_holder_absent"
     },
     {
@@ -1049,9 +1050,10 @@
       "what": "Evening sales start months early. It is a crime under state law and it can sink your pending application.",
       "saves": {
         "basis": "fixed",
-        "amount": 0
+        "amount": 107
       },
       "unlocks": "evening wine and beer sales during the 2-6 months before the temporary permit or license",
+      "savesNote": "Skips the $640 temporary retail permit: about $107 a month over its 180 days. The real gain is the evening revenue it unlocks.",
       "violation": "unlicensed_alcohol_sale"
     },
     {
@@ -1391,9 +1393,9 @@
       },
       "closureDays": 0,
       "reputationHit": 0.02,
-      "source": "https://www.nyc.gov/site/dep/environment/noise-code.page",
+      "source": "https://www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-code-fact-sheet.pdf",
       "confidence": "estimate",
-      "note": "Placeholder until checked: late wine service brings neighbour complaints to 311, DEP noise inspections and community board pressure at license renewal. Amounts to be verified."
+      "note": "DEP fact sheet: a restaurant or bar may not exceed 42 dBA measured inside a dwelling that receives the noise; DEP can mitigate a first commercial-music violation to zero if a consultant certifies the fix (limiter). The dollar amounts in DEP's penalty schedule were not readable: base and max here are my game values. Complaints also weigh on the community board's view at license renewal."
     },
     {
       "id": "time_temp_abuse",
@@ -4468,6 +4470,112 @@
           "coffee_cart",
           "food_truck"
         ]
+      },
+      {
+        "id": "grab_and_go_chain_arrives",
+        "name": "A grab-and-go chain moves in",
+        "text": "An app-first coffee chain takes the small to-go space down the block. It sells mostly through its own app, with no seats.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Broker reports: Luckin Coffee opened nine NYC stores in seven months and targets small to-go spaces vacated by Starbucks",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 0.92,
+            "formats": [
+              "takeaway_window",
+              "coffee_cart",
+              "cafe"
+            ]
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "sourcing"
+          },
+          {
+            "kind": "lever",
+            "id": "hours"
+          }
+        ],
+        "realFrequency": "Several openings a year in Manhattan",
+        "tier": "core",
+        "source": "https://meridiancapital.com/beijing-based-luckin-coffee-eyes-starbucks-shuttered-nyc-stores-as-even-more-could-be-closing-sources/",
+        "confidence": "estimate",
+        "note": "Size is my estimate; the chain's own app discounts are the threat to a window, not seats.",
+        "formats": [
+          "takeaway_window",
+          "coffee_cart",
+          "cafe"
+        ]
+      },
+      {
+        "id": "big_chain_store_closes",
+        "name": "The chain store on the corner closes",
+        "text": "The national chain shuts its store nearby. Its morning regulars look for a new place.",
+        "scale": "block",
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "realSignal": "Starbucks closing 42 NYC locations (about 12% of its city total) in its 2025 restructuring",
+        "effects": [
+          {
+            "field": "demand",
+            "mult": 1.06,
+            "formats": [
+              "takeaway_window",
+              "coffee_cart",
+              "cafe"
+            ]
+          }
+        ],
+        "durationMonths": 6,
+        "playerMoves": [
+          {
+            "kind": "lever",
+            "id": "hours"
+          },
+          {
+            "kind": "lever",
+            "id": "staff_pay"
+          }
+        ],
+        "realFrequency": "2025 wave; recurring with chain restructurings",
+        "tier": "deep",
+        "source": "https://abc7ny.com/post/starbucks-close-dozens-nyc-coffee-shop-locations-amid-restructure/17918006/",
+        "confidence": "estimate",
+        "note": "ABC7 and amNY on the closures; Dunkin' became Manhattan's largest chain. Size is my estimate.",
+        "formats": [
+          "takeaway_window",
+          "coffee_cart",
+          "cafe"
+        ]
       }
     ]
   },
@@ -4748,8 +4856,8 @@
       "checked": "2026-11-14"
     },
     {
-      "url": "https://www.nyc.gov/site/dep/environment/noise-code.page",
-      "title": "www.nyc.gov/site/dep/environment/noise-code.page",
+      "url": "https://www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-code-fact-sheet.pdf",
+      "title": "www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-co",
       "checked": "2026-11-14"
     },
     {
@@ -4988,11 +5096,6 @@
       "checked": "2026-11-14"
     },
     {
-      "url": "https://www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-code-fact-sheet.pdf",
-      "title": "www.nyc.gov/assets/dep/downloads/pdf/environment/education/nyc-noise-co",
-      "checked": "2026-11-14"
-    },
-    {
       "url": "https://www.prospectpark.org/smorgasburg-announces-new-2025-vendors/",
       "title": "www.prospectpark.org/smorgasburg-announces-new-2025-vendors/",
       "checked": "2026-11-14"
@@ -5025,6 +5128,16 @@
     {
       "url": "https://www.nyc.gov/assets/doh/downloads/pdf/rii/supervisory-licenses-what-vendors-need-to-know.pdf",
       "title": "www.nyc.gov/assets/doh/downloads/pdf/rii/supervisory-licenses-what-vend",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://meridiancapital.com/beijing-based-luckin-coffee-eyes-starbucks-shuttered-nyc-stores-as-even-more-could-be-closing-sources/",
+      "title": "meridiancapital.com/beijing-based-luckin-coffee-eyes-starbucks-shuttered-nyc-st",
+      "checked": "2026-11-14"
+    },
+    {
+      "url": "https://abc7ny.com/post/starbucks-close-dozens-nyc-coffee-shop-locations-amid-restructure/17918006/",
+      "title": "abc7ny.com/post/starbucks-close-dozens-nyc-coffee-shop-locations-amid-",
       "checked": "2026-11-14"
     }
   ]
