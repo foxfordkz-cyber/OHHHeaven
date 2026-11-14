@@ -4,7 +4,7 @@
 import type { Action, CaseNotice, Deal, OwnerView, PackSet, Place, PublicBusiness } from '../../../../shared/src/types';
 import { dateOf } from '../../../../shared/src/rules';
 import { AiBadge, Badge, Button, Card, formatDuration, List, ListRow, MoneyText, useT } from './ui';
-import { act, formatDistance, money, NICHE_LABEL, rankText, termsSummary, trustLabel, type MyReport, type NetworkExtra } from './logic';
+import { act, formatDistance, money, NICHE_LABEL, termsSummary, trustLabel, type MyReport, type NetworkExtra } from './logic';
 import {
   ladderLine, msToMonthClose, nextMonthCloseDay, noticeChoices, offerChoices, reportMove, teamUpMove,
   type Ladder, type ReportMove, type Rival, type RivalNews, type TeamUpMove,
@@ -111,7 +111,7 @@ function Choices({ choices }: { choices: { label: string; outcome: string }[] })
 // ───────────── the main rival and the two moves ─────────────
 
 export function RivalCard(props: {
-  view: View; packs: PackSet | null; rival: Rival | null; places: Place[];
+  view: View; packs: PackSet | null; rival: Rival | null; places: Place[]; myNetWorth: number | null;
   onTeamUp: (id: string, kind: DealKind | null) => void; onReport: (id: string) => void; onOpen: (id: string) => void;
 }) {
   const tr = useT();
@@ -137,20 +137,42 @@ export function RivalCard(props: {
         <button type="button" className="nw-rival" onClick={() => props.onOpen(b.id)}>
           <span className="nw-rival__name">{b.name}{b.isAi && <AiBadge />}</span>
           <span className="small muted">
-            {b.isAi ? tr('Run by AI', 'Ведёт ИИ') : tr(`Run by ${b.ownerName}`, `Владелец: ${b.ownerName}`)} · {formatDistance(rival.distanceM)} · {rival.rank ? `#${rival.rank}` : rankText(b)} · ${b.price.toFixed(2)}
-            {typeof me.orders?.price === 'number' && <> ({tr('you', 'вы')} ${me.orders.price.toFixed(2)})</>}
+            {b.isAi ? tr('Run by AI', 'Ведёт ИИ') : tr(`Run by ${b.ownerName}`, `Владелец: ${b.ownerName}`)} · {formatDistance(rival.distanceM)} {tr('from you', 'от вас')}
           </span>
-          {rival.gap !== null && (
-            <span className="small">
-              {rival.gap >= 0 ? tr('Ahead of you by ', 'Впереди вас на ') : tr('Behind you by ', 'Позади вас на ')}
-              <strong className="num">{money(Math.abs(rival.gap))}</strong> {tr('of net worth', 'стоимости')}
-            </span>
-          )}
         </button>
+        <HeadToHead view={view} rival={rival} myNetWorth={props.myNetWorth} />
         <p className="small nw-why">{rival.why}</p>
         <TwoMoves team={team} report={report} onTeamUp={() => props.onTeamUp(b.id, team.kind)} onReport={() => props.onReport(b.id)} />
       </div>
     </Card>
+  );
+}
+
+/** You against them on the four things the city compares: price, reputation, net worth and place. */
+function HeadToHead(props: { view: OwnerView; rival: Rival; myNetWorth: number | null }) {
+  const tr = useT();
+  const me = props.view.business!;
+  const b = props.rival.biz;
+  const myRank = (props.view.leaderboards[me.niche] ?? []).find((s) => s.businessId === me.id)?.rank ?? null;
+  const theirs = props.rival.gap !== null && props.myNetWorth !== null ? props.myNetWorth + props.rival.gap : null;
+  const stars = (r: number) => `★ ${(Math.round(Math.max(0, Math.min(1, r)) * 50) / 10).toFixed(1)}`;
+  // last value: above 0 — they lead on this line, below 0 — I lead (on price the cheaper one wins walk-ins)
+  const rows: [string, string, string, number | null][] = [
+    [tr('Price', 'Цена'), `$${me.orders.price.toFixed(2)}`, `$${b.price.toFixed(2)}`, me.orders.price - b.price],
+    [tr('Reputation', 'Репутация'), stars(me.reputation), stars(b.reputation), b.reputation - me.reputation],
+    [tr('Net worth', 'Стоимость'), props.myNetWorth !== null ? money(props.myNetWorth) : '—', theirs !== null ? money(theirs) : '—', props.rival.gap],
+    [tr('Place', 'Место'), myRank ? `#${myRank}` : '—', props.rival.rank ? `#${props.rival.rank}` : '—', myRank && props.rival.rank ? myRank - props.rival.rank : null],
+  ];
+  const lead = (d: number | null, mine: boolean) => (d === null || Math.abs(d) < 1e-6 ? undefined : (d > 0) !== mine ? 'nw-lead' : undefined);
+  return (
+    <table className="nw-table nw-h2h" aria-label="You against your rival">
+      <thead><tr><th><span className="sr-only">{tr('Line', 'Строка')}</span></th><th>{tr('You', 'Вы')}</th><th>{tr('Them', 'Они')}</th></tr></thead>
+      <tbody>
+        {rows.map(([label, mine, them, d]) => (
+          <tr key={label}><td>{label}</td><td className={lead(d, true)}>{mine}</td><td className={lead(d, false)}>{them}</td></tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 

@@ -88,7 +88,7 @@ export function NetworkTab(props: NetworkTabProps) {
 
       {me && (
         <RivalCard
-          view={view} packs={packs} places={places} rival={rival} onOpen={openProfile}
+          view={view} packs={packs} places={places} rival={rival} myNetWorth={ladder?.me?.netWorth ?? null} onOpen={openProfile}
           onTeamUp={(id, dealKind) => setPanel({ kind: 'deal', id, dealKind })} onReport={(id) => setPanel({ kind: 'report', id })}
         />
       )}
