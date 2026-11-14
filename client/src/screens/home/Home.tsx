@@ -10,7 +10,7 @@ import {
   type IconName, ThemeToggle, Logo, LangToggle, useT , Sheet } from '../../ui';
 import './home.css';
 
-const IDEA_EXAMPLES = ['A coffee shop near the subway', 'A barbershop with three chairs', 'A corner store with long hours'];
+const IDEA_EXAMPLES: [string, string][] = [['Coffee near the subway', 'Кофейня у метро'], ['Barbershop, three chairs', 'Барбершоп на три кресла'], ['Late-night corner store', 'Магазин допоздна']];
 
 /** All businesses the viewer may see, as public cards (an owner sees their own business too). */
 export function visibleBusinesses(view: ClientView): PublicBusiness[] {
@@ -31,8 +31,8 @@ export function Home() {
   const catalog = useCatalog();
   const navigate = useNavigate();
   // hooks stay above the early return below
-  const [guide, setGuide] = useState(firstVisit);
-  const closeGuide = () => { setGuide(false); try { window.localStorage.setItem(GUIDE_KEY, '1'); } catch { /* private mode */ } };
+  const [guide, setGuide] = useState(false);
+  const closeGuide = () => setGuide(false);
 
   if (!view) {
     return (
@@ -135,14 +135,7 @@ function CityBoard({ view, businesses, onOpen, onAll }: { view: Exclude<ClientVi
   );
 }
 
-// ───────────────────────── first visit: the whole game in four plain sentences ─────────────────────────
-
-const GUIDE_KEY = 'fy-guide-1';
-/** True on the very first visit (never in tests: the guide would cover the page under test). */
-function firstVisit(): boolean {
-  if (import.meta.env.MODE === 'test') return false;
-  try { return window.localStorage.getItem(GUIDE_KEY) !== '1'; } catch { return false; }
-}
+// ───────────────────────── “How it works”: the whole game in four plain sentences, opened from the header ─────────────────────────
 
 const GUIDE_STEPS: { title: string; text: string; titleRu: string; textRu: string }[] = [
   { title: 'You open a small business', text: 'A coffee shop or a barbershop on a real street in New York. You start with test money, not your own.', titleRu: 'Ты открываешь маленький бизнес', textRu: 'Кофейню или барбершоп на настоящей улице Нью-Йорка. Деньги на старт тестовые, не твои.' },
@@ -154,7 +147,7 @@ const GUIDE_STEPS: { title: string; text: string; titleRu: string; textRu: strin
 function Guide({ open, onClose }: { open: boolean; onClose: () => void }) {
   const tr = useT();
   return (
-    <Sheet open={open} onClose={onClose} title={tr('How First Year works', 'Как устроен First Year')} footer={<Button block onClick={onClose}>{tr('Got it — show me the city', 'Понятно — покажи город')}</Button>}>
+    <Sheet open={open} onClose={onClose} title={tr('How First Year works', 'Как устроен First Year')} footer={<Button block onClick={onClose}>{tr('Show me the city', 'Покажи город')}</Button>}>
       <ol className="home-guide">
         {GUIDE_STEPS.map((g, i) => (
           <li key={g.title}>
@@ -186,7 +179,7 @@ function HomeNav({ demo, onHelp }: { demo: boolean; onHelp: () => void }) {
       </div>
       <LangToggle />
       <ThemeToggle />
-      <Button size="sm" icon="store" onClick={() => navigate('/start')}>{tr('Start', 'Начать')}</Button>
+      <Button size="sm" variant="secondary" icon="store" onClick={() => navigate('/start')}>{tr('Start', 'Начать')}</Button>
     </nav>
   );
 }
@@ -199,14 +192,14 @@ function CityStrip({ view }: { view: ClientView }) {
   return (
     <header className="home-strip">
       <div className="row-between">
-        <div className="eyebrow">New York City · Season 0</div>
+        <div className="eyebrow">{tr('New York City · Season 0', 'Нью-Йорк · сезон 0')}</div>
         {world.config.demo && <Badge tone="accent" icon="play">{tr('Demo city', 'Демо-город')}</Badge>}
       </div>
       <Clock world={world} weather={view.weather[0]} />
       <div className="grid-3 home-counters">
-        <Stat small label="Businesses open" value={formatNumber(world.stats.open)} />
-        <Stat small label="Owners" value={formatNumber(world.stats.owners)} />
-        <Stat small label="City officials" value={formatNumber(world.stats.officials)} />
+        <Stat small label={tr('Businesses open', 'Открыто бизнесов')} value={formatNumber(world.stats.open)} />
+        <Stat small label={tr('Owners', 'Владельцы')} value={formatNumber(world.stats.owners)} />
+        <Stat small label={tr('City officials', 'Служащие города')} value={formatNumber(world.stats.officials)} />
       </div>
     </header>
   );
@@ -239,7 +232,7 @@ function IdeaBox() {
   async function submit(e?: FormEvent) {
     e?.preventDefault();
     const idea = text.trim();
-    if (!idea) return;
+    if (!idea) { navigate('/start'); return; } // nothing typed: the first step of opening asks the same question
     setBusy(true);
     const match = await query<IdeaMatch>({ type: 'idea', text: idea });
     setBusy(false);
@@ -251,14 +244,15 @@ function IdeaBox() {
       <label className="field__label" htmlFor="idea">{tr('What would you open?', 'Что бы ты открыл?')}</label>
       <div className="idea-box__row">
         <input id="idea" className="input" placeholder={tr('A coffee shop with fresh pastries…', 'Кофейня со свежей выпечкой…')} value={text} onChange={(e) => setText(e.target.value)} autoComplete="off" enterKeyHint="go" />
-        <Button type="submit" aria-label="See my plan" loading={busy} disabled={!text.trim()} className="idea-box__go">
-          {!busy && <Icon name="arrowRight" size={20} />}
+        <Button type="submit" loading={busy} className="idea-box__go">
+          {tr('See my plan', 'Показать план')}
+          {!busy && <Icon name="arrowRight" size={18} />}
         </Button>
       </div>
       <div className="row wrap">
-        {IDEA_EXAMPLES.map((ex) => (
-          <button key={ex} type="button" className="chip" onClick={() => setText(ex)}>
-            {ex}
+        {IDEA_EXAMPLES.map(([en, ru]) => (
+          <button key={en} type="button" className="chip" onClick={() => setText(tr(en, ru))}>
+            {tr(en, ru)}
           </button>
         ))}
       </div>
@@ -270,18 +264,19 @@ function Ctas() {
   const tr = useT();
   const navigate = useNavigate();
   return (
-    <div className="stack-sm">
-      <Button block size="lg" icon="store" onClick={() => navigate('/start')}>{tr('Start my business', 'Открыть свой бизнес')}</Button>
-      <Button block variant="secondary" icon="badge" onClick={() => navigate('/start?as=official')}>{tr('Work for the city — free', 'Работать на город — бесплатно')}</Button>
+    <div className="home-alt">
+      <span>{tr('Rather inspect than run a shop?', 'Хочешь проверять, а не владеть?')}</span>
+      <Button variant="secondary" size="sm" icon="badge" onClick={() => navigate('/start?as=official')}>{tr('Work for the city — free', 'Работать на город — бесплатно')}</Button>
     </div>
   );
 }
 
 function ContinueCard() {
+  const tr = useT();
   const navigate = useNavigate();
   return (
-    <Card tone="accent" title="You joined the city" subtitle="Pick a niche and a place to open your doors.">
-      <Button block icon="arrowRight" onClick={() => navigate('/start')}>Continue opening</Button>
+    <Card tone="accent" title={tr('You joined the city', 'Ты в городе')} subtitle={tr('Pick a niche and a place to open your doors.', 'Выбери вид бизнеса и место, чтобы открыться.')}>
+      <Button block icon="arrowRight" onClick={() => navigate('/start')}>{tr('Continue opening', 'Продолжить открытие')}</Button>
     </Card>
   );
 }
@@ -298,16 +293,17 @@ export function waitingCount(view: OwnerView): number {
 }
 
 function AwayCard({ view }: { view: OwnerView }) {
+  const tr = useT();
   const navigate = useNavigate();
   const b = view.business!;
   const away = view.away;
   const waiting = waitingCount(view);
-  const statusBadge = b.status === 'open' ? <Badge tone="profit">Open</Badge> : b.status === 'setup' ? <Badge tone="warn" icon="hourglass">Opening</Badge> : b.status === 'closed' ? <Badge tone="loss">Closed by inspection</Badge> : <Badge tone="loss">Bankrupt</Badge>;
+  const statusBadge = b.status === 'open' ? <Badge tone="profit">{tr('Open', 'Открыт')}</Badge> : b.status === 'setup' ? <Badge tone="warn" icon="hourglass">{tr('Opening', 'Открывается')}</Badge> : b.status === 'closed' ? <Badge tone="loss">{tr('Closed by inspection', 'Закрыт проверкой')}</Badge> : <Badge tone="loss">{tr('Bankrupt', 'Банкрот')}</Badge>;
   return (
-    <Card tone="accent" title={away ? 'While you were away' : b.name} subtitle={away ? `${formatNumber(away.days)} ${away.days === 1 ? 'day' : 'days'} passed in the city · ${b.name}` : 'Your business keeps running while you are away.'} action={statusBadge}>
+    <Card tone="accent" title={away ? tr('While you were away', 'Пока тебя не было') : b.name} subtitle={away ? tr(`${formatNumber(away.days)} ${away.days === 1 ? 'day' : 'days'} passed in the city · ${b.name}`, `В городе прошло дней: ${formatNumber(away.days)} · ${b.name}`) : tr('Your business keeps running while you are away.', 'Бизнес работает, пока тебя нет.')} action={statusBadge}>
       <div className="grid-2">
-        {away ? <Stat label="Profit while away" value={<MoneyText value={away.profit} signed />} /> : <Stat label="Place in niche" value={rankLabel(view, b)} />}
-        <Stat label="Cash now" value={<MoneyText value={b.cash} />} />
+        {away ? <Stat label={tr('Profit while away', 'Прибыль за это время')} value={<MoneyText value={away.profit} signed />} /> : <Stat label={tr('Place in niche', 'Место в нише')} value={rankLabel(view, b)} />}
+        <Stat label={tr('Cash now', 'Денег сейчас')} value={<MoneyText value={b.cash} />} />
       </div>
       {away && away.items.length > 0 && (
         <List>
@@ -318,10 +314,10 @@ function AwayCard({ view }: { view: OwnerView }) {
       )}
       {waiting > 0 && (
         <Banner tone="info" icon="bell">
-          {waiting} {waiting === 1 ? 'thing waits' : 'things wait'} for your answer
+          {tr(`${waiting} ${waiting === 1 ? 'thing waits' : 'things wait'} for your answer`, `Ждут твоего ответа: ${waiting}`)}
         </Banner>
       )}
-      <Button block size="lg" icon="store" onClick={() => navigate('/biz')}>Open my business</Button>
+      <Button block size="lg" icon="store" onClick={() => navigate('/biz')}>{tr('Open my business', 'Открыть мой бизнес')}</Button>
     </Card>
   );
 }
@@ -333,10 +329,11 @@ function rankLabel(view: OwnerView, b: BusinessState): string {
 }
 
 function DeskCard({ queue, mine }: { queue: number; mine: number }) {
+  const tr = useT();
   const navigate = useNavigate();
   return (
-    <Card tone="accent" title="Your desk" subtitle={`${queue} cases in the queue · ${mine} in progress`}>
-      <Button block size="lg" icon="badge" onClick={() => navigate('/desk')}>Open my desk</Button>
+    <Card tone="accent" title={tr('Your desk', 'Твой стол')} subtitle={tr(`${queue} cases in the queue · ${mine} in progress`, `Дел в очереди: ${queue} · в работе: ${mine}`)}>
+      <Button block size="lg" icon="badge" onClick={() => navigate('/desk')}>{tr('Open my desk', 'Открыть мой стол')}</Button>
     </Card>
   );
 }

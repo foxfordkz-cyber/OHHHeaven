@@ -47,7 +47,9 @@ export class GameServer {
     if (existing) return existing;
     const dir = this.opts.snapshotDir === undefined ? null : this.opts.snapshotDir;
     const runtimeOpts = { ctx: this.data.ctx, deps: this.opts.deps ?? serverDeps(), ai: this.opts.ai ?? defaultAi, snapshotDir: dir, now: this.opts.now, log: this.log };
-    const snap = WorldRuntime.readSnapshot(dir, p.id, this.log);
+    let snap = WorldRuntime.readSnapshot(dir, p.id, this.log);
+    // A demo city whose season is over starts again: nobody can join a finished season, and a visitor must not meet a dead city.
+    if (snap && p.demo && snap.world.phase !== 'running') { this.log(`${p.id}: the saved season is over, starting a new one`); snap = null; }
     const rt = snap
       ? new WorldRuntime(snap.world, runtimeOpts, snap)
       : new WorldRuntime(newWorld(defaultConfig(p), this.data.ctx, runtimeOpts.deps), runtimeOpts);
@@ -64,8 +66,35 @@ export class GameServer {
     return readdirSync(dir).filter((f) => /^[a-z0-9-]+\.json$/.test(f)).map((f) => f.slice(0, -5));
   }
 
+  /** Demo cities whose season ended are started again after this many ms (the end screen stays readable meanwhile). 0 = never. */
+  private readonly demoRestartMs = Math.max(0, Number(process.env.DEMO_RESTART_MIN ?? 10)) * 60_000;
+  private readonly endedAt = new Map<string, number>();
+  private recycleTimer: ReturnType<typeof setInterval> | null = null;
+
+  /** Restarts finished demo cities once their end screen has been up long enough. */
+  recycleDemos(now: number = (this.opts.now ?? Date.now)()): string[] {
+    const restarted: string[] = [];
+    for (const [id, rt] of [...this.runtimes]) {
+      const w = rt.world;
+      if (!w.config.demo || w.phase === 'running') { this.endedAt.delete(id); continue; }
+      const since = this.endedAt.get(id);
+      if (since === undefined) { this.endedAt.set(id, now); continue; }
+      if (!this.demoRestartMs || now - since < this.demoRestartMs) continue;
+      rt.stop();
+      this.runtimes.delete(id);
+      this.endedAt.delete(id);
+      this.open({ id, name: w.config.name, demo: true, seed: w.config.seed + 1 });
+      restarted.push(id);
+    }
+    return restarted;
+  }
+
   /** Живой `nyc`, быстрый `demo` и все демо-города из снимков. */
   boot(): this {
+    if (this.opts.autoStart && this.demoRestartMs && !this.recycleTimer) {
+      this.recycleTimer = setInterval(() => { for (const id of this.recycleDemos()) this.log(`${id}: season over, a new one started`); }, 20_000);
+      this.recycleTimer.unref?.();
+    }
     this.open({ id: 'nyc', name: 'New York (live)', demo: false, seed: 2026 });
     this.open({ id: 'demo', name: 'Demo City', demo: true, seed: 7 });
     for (const id of this.snapshotIds()) {
@@ -86,6 +115,7 @@ export class GameServer {
   }
 
   stopAll(): void {
+    if (this.recycleTimer) { clearInterval(this.recycleTimer); this.recycleTimer = null; }
     for (const r of this.runtimes.values()) r.stop();
   }
 

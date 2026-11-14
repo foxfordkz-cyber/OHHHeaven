@@ -32,20 +32,8 @@ export function SetupPanel({ deps, onRule }: { deps: BizDeps; onRule(id: string)
   };
 
   return (
-    <Card title="Not open yet" aside={v.roadmap.length ? `${done} of ${v.roadmap.length} steps done` : undefined}>
-      <p>Rent and other bills already run. You sell nothing until you open the doors.</p>
-      {v.roadmap.length > 0 && (
-        <div className="bz-list">
-          {v.roadmap.map((r) => (
-            <div className="bz-li" key={r.id}>
-              <div className="bz-li-main">
-                <span className="bz-li-title">{r.status === 'done' ? '✓ ' : r.status === 'waiting' ? '⏳ ' : '○ '}{r.title}</span>
-                <span className="bz-li-sub">{r.agency ? `${r.agency} · ` : ''}{r.status === 'waiting' && r.readyDay ? `ready ${dayLabel(r.readyDay)} (${relDay(r.readyDay, today)})` : r.text}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+    <Card title={waiting.length ? 'Not open yet' : 'Ready to open'} tone={waiting.length ? undefined : 'good'} aside={v.roadmap.length ? `${done} of ${v.roadmap.length} steps done` : undefined}>
+      <p>{waiting.length ? 'Rent and other bills already run. You sell nothing until you open the doors.' : 'Every permit is in. Rent runs every day you stay closed: open the doors to start selling.'}</p>
       {waiting.map((p) => {
         const item = deps.pack?.setup.find((s) => s.id === p.itemId);
         const viol = item?.withoutItViolation ? violationById(packs, item.withoutItViolation) : null;
@@ -67,6 +55,21 @@ export function SetupPanel({ deps, onRule }: { deps: BizDeps; onRule(id: string)
         </div>
       )}
       {error && <p className="bz-bad-text" role="alert">{error}</p>}
+      {v.roadmap.length > 0 && (
+        <details className="bz-details" open={waiting.length > 0 && v.roadmap.length <= 8}>
+          <summary className="bz-small bz-muted">All {v.roadmap.length} steps of the opening plan</summary>
+        <div className="bz-list">
+          {v.roadmap.map((r) => (
+            <div className="bz-li" key={r.id}>
+              <div className="bz-li-main">
+                <span className="bz-li-title">{r.status === 'done' ? '✓ ' : r.status === 'waiting' ? '⏳ ' : '○ '}{r.title}</span>
+                <span className="bz-li-sub">{r.agency ? `${r.agency} · ` : ''}{r.status === 'waiting' && r.readyDay ? `ready ${dayLabel(r.readyDay)} (${relDay(r.readyDay, today)})` : r.text}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        </details>
+      )}
     </Card>
   );
 }
