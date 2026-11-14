@@ -6,14 +6,22 @@ import type { BusinessState, CommonPack, DayReport, Pack, WorldState } from '@oh
 import { applyAction, createWorld, tickDay, type EngineCtx } from '../../src/index';
 import { hooks } from '../../src/niches/cafe';
 import { defaultStaffPower, type CafeDay } from '../../src/niches/cafe/contract';
+import { part as servicePart } from '../../src/niches/cafe/service';
 import { coverage, part, staffPower, staffingCfg, teamChange, teamKpis, teamPower, type StaffingCfg } from '../../src/niches/cafe/staffing';
 import { config, owner, place } from '../fixtures/world';
 
 const file = (name: string) => new URL(`../../../packs/${name}`, import.meta.url);
 const load = <T>(url: URL): T => JSON.parse(readFileSync(url, 'utf8')) as T;
-const plain = load<Pack>(file('cafe.json'));
+// the tests set the sections themselves, whatever the integrator has already put into packs/cafe.json
+const real = load<Pack>(file('cafe.json'));
+const { staffing: _s, service: _v, ...rest } = (real.extra ?? {}) as Record<string, unknown>;
+const plain: Pack = { ...real, extra: rest };
 const section = load<{ extra: { staffing: StaffingCfg } }>(file('parts/cafe/B03-staffing.json')).extra.staffing;
-const pack: Pack = { ...plain, extra: { ...(plain.extra ?? {}), staffing: section } };
+const pack: Pack = { ...plain, extra: { ...rest, staffing: section } };
+/** The service section of the spec (packs/parts/cafe/D20-formats.json): with it and a service part, that part counts the day. */
+const serviceSection = load<{ extra: { service: unknown } }>(file('parts/cafe/D20-formats.json')).extra.service;
+const withService: Pack = { ...pack, extra: { ...rest, staffing: section, service: serviceSection } };
+const serviceAnswers = typeof servicePart.capacityDay === 'function';
 const cfg = staffingCfg(pack)!;
 
 const shop = (staff: Record<string, number>, levers: Record<string, string> = {}, size = 18): BusinessState =>
@@ -187,6 +195,25 @@ describe('staffing: the day', () => {
     const b = shop({ barista: 2, shift_lead: 1, trainee_barista: 1 });
     expect(staffPower(day(b))).toEqual(staffPower(day(b)));
     expect(part.notes!(b, report(), pack)).toEqual(part.notes!(b, report(), pack));
+  });
+});
+
+describe('staffing next to the service part', () => {
+  it.skipIf(!serviceAnswers)('with extra.service the service part counts the day: staffing only cuts the hours nobody covers', () => {
+    const b = shop({ barista: 3, shift_lead: 1 });
+    expect(part.capacityDay!(day(b, withService, 1000))).toBeNull();            // the crew covers the day
+    const two = shop({ barista: 2 });
+    const cut = coverage(day(two, withService, 300)).lostDemandShare;
+    expect(cut).toBeGreaterThan(0);
+    expect(part.capacityDay!(day(two, withService, 300))).toBeCloseTo(300 * (1 - cut), 6);
+    expect(teamKpis(b, withService).find((k) => k.id === 'rush_bar')?.value).toBe(77);   // to-go orders: the service part's units
+    expect(teamKpis(b, withService)[0].value).toBe(306);
+  });
+
+  it('without a service part (or its section) staffing keeps the engine units and limits', () => {
+    const b = shop({ barista: 3, shift_lead: 1 });
+    const alone = serviceAnswers ? pack : withService;   // a section without code, or no section: staffing counts alone
+    expect(part.capacityDay!(day(b, alone, 1000))).toBeCloseTo((4.1 * 1700) / 30, 6);
   });
 });
 
