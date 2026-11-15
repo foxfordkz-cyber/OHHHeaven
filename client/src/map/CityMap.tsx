@@ -181,7 +181,7 @@ function updatePin(el: HTMLElement, m: BizMarker) {
  * Hide name pins that would overlap a more important one (own business, then rank). Runs after moves.
  * Measures the pins where they really are on screen (see declutterRects in geo.ts).
  */
-function declutter(_map: MapLibreMap, pins: Map<string, Marker>, markers: BizMarker[]) {
+function declutter(pins: Map<string, Marker>, markers: BizMarker[]) {
   // read every box first (the hidden class keeps the size), then write classes: no layout thrash
   const els = new Map(markers.map((m) => [m.id, pins.get(m.id)?.getElement()]));
   const boxes = new Map<string, DOMRect>();
@@ -306,7 +306,7 @@ export function CityMap(props: CityMapProps) {
     onZoom();
     // name pins must not pile up (docs/qa/BUGS.md #5): sort them out after every move, and also once the frame has its
     // real size and the first tiles are drawn — an embedded map starts at 0×0 and fires no move of its own
-    const tidy = () => declutter(map, pinsRef.current, markersRef.current);
+    const tidy = () => declutter(pinsRef.current, markersRef.current);
     map.on('moveend', tidy);
     map.on('resize', tidy);
     map.once('idle', tidy);
@@ -403,7 +403,7 @@ export function CityMap(props: CityMapProps) {
         .setLngLat([m.lng, m.lat]).addTo(map);
       pins.set(m.id, marker);
     }
-    const raf = requestAnimationFrame(() => declutter(map, pins, wanted));
+    const raf = requestAnimationFrame(() => declutter(pins, wanted));
     return () => cancelAnimationFrame(raf);
   }, [markers, mode]);
 
@@ -412,7 +412,7 @@ export function CityMap(props: CityMapProps) {
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    const tidy = () => declutter(map, pinsRef.current, markersRef.current);
+    const tidy = () => declutter(pinsRef.current, markersRef.current);
     const raf = requestAnimationFrame(tidy);
     let alive = true;
     document.fonts?.ready.then(() => { if (alive) tidy(); }).catch(() => {});
