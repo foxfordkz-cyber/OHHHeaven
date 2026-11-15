@@ -1,4 +1,36 @@
-# First minute — integrator build 4b76a07, 2026-11-14T23:26 UTC
+# First minute — freeze build 363d3ef, 2026-11-15T03:39 UTC
+
+Server http://127.0.0.1:38919, city demo-2, one game day every 2 s, width 375, 3 s of reading per screen.
+
+- First decision: 3.5 s.
+- First number that answers a decision: 3.5 s.
+- Lease signed: 25.3 s.
+- First sale on screen: 93.2 s (game day 47).
+- Decisions before the first sale: 9.
+- Longest stretch with nothing to decide: 65 s.
+
+| s | Game day | Kind | What | Note |
+|---|---|---|---|---|
+| 0.4 | 1 | screen | home: the idea field is on the page | below the fold: the player has to scroll |
+| 3.5 | 2 | decision | typed an idea, "See my plan" |  |
+| 3.5 | 2 | consequence | the game answers: the niche and the starting money | Looks like a coffee shop. |
+| 6.7 | 4 | decision | "Choose a place" |  |
+| 9.7 | 6 | decision | picked the first storefront in the list |  |
+| 9.9 | 6 | consequence | the game answers: what opening here costs | Opening here costs from $127,779 of your $224,000. |
+| 12.9 | 7 | decision | "Open here" |  |
+| 13 | 7 | screen | the opening plan (steps, fees, waits) |  |
+| 16 | 9 | decision | plan read, go on |  |
+| 19 | 10 | decision | typed a name, joined (test payment) |  |
+| 19.2 | 10 | screen | the setup: what to buy and what is left | $96,221 cash left after signing |
+| 22.3 | 12 | decision | "Use recommended for all" |  |
+| 25.3 | 13 | decision | signed the lease |  |
+| 25.5 | 13 | wait | waiting for permits: rent runs, nothing to decide but "Open early" |  |
+| 87 | 44 | screen | "Open doors" is enabled |  |
+| 90 | 46 | decision | "Open doors" |  |
+| 93.2 | 47 | consequence | first sales on Today | Orders sold 146; engine: 146 served so far |
+| 93.2 | 47 | screen | Today: advice waiting for an answer | 2 "Apply" button(s) |
+
+## Earlier: integrator build 4b76a07, 2026-11-14T23:26 UTC
 
 Server http://127.0.0.1:38299, city demo-2, one game day every 2 s, width 375, 3 s of reading per screen.
 
