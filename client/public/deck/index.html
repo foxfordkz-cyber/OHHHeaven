@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>First Year — питч</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body>
+<main class="stage">
+
+<!-- 1 · чёрный экран: цена вопроса -->
+<section class="page dark black p1" data-money="capture.story.start" data-money-label="твои сбережения">
+  <div class="num" data-v="capture.plan.allIn" data-f="usd" data-count="0" data-ms="1150"></div>
+  <h1 class="a-rise" style="--d:.75s">Столько стоит узнать, получится ли у тебя</h1>
+  <div class="brand a-rise" style="--d:1s">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#f1f1ee"/><path d="M6.5 13.2 9 8h14l2.5 5.2v.9a2.3 2.3 0 0 1-4.6.2 2.3 2.3 0 0 1-4.6 0 2.3 2.3 0 0 1-4.6 0 2.3 2.3 0 0 1-4.6-.2Z" fill="#0d0e0d"/><path d="M9 18v6.2h14V18" fill="none" stroke="#0d0e0d" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><rect x="13.6" y="19.2" width="4.8" height="5" rx=".8" fill="#d9b75a"/></svg>
+    <b>First Year</b> Репетиция первого года твоей кофейни
+  </div>
+  <p class="src">Кофейня на 18 мест, <span data-v="capture.plan.address" data-f="text"></span>, Манхэттен: открытие <span data-v="capture.plan.moneyYouNeed" data-f="usd"></span> + запас на 6 месяцев <span data-v="capture.plan.reserve" data-f="usd"></span> — личный план в игре, каждая строка со ссылкой. По США: $80 000–300 000, <a href="https://pos.toasttab.com/blog/on-the-line/how-much-does-it-cost-to-open-a-coffee-shop">Toast</a></p>
+</section>
+
+<!-- 2 · боль: цитата и десять огней -->
+<section class="page dark p2" data-money="capture.story.start" data-money-label="твои сбережения">
+  <h1 class="a-rise">«Чистая экономика: аренда, расходы. Мы&nbsp;не&nbsp;тянем»</h1>
+  <div class="shops" aria-hidden="true"></div>
+  <p class="sub a-rise" style="--d:1.1s">Половина закрывается за пять лет</p>
+  <p class="src">Albery Wu, Dandy Espresso, Madison Ave, Манхэттен — закрылась через 5 месяцев: “It was pure economics: rents, expenses. We just can't afford it.” <a href="https://www.dnainfo.com/new-york/20140701/upper-east-side/coffee-shop-on-madison-ave-shutters-after-just-5-months">dnainfo.com, 2014</a> · Общепит США: 81,6% живы через год, около 50% через пять — <a href="https://www.bls.gov/bdm/us_age_naics_72_table7.txt">BLS, Business Employment Dynamics, table 7</a></p>
+</section>
+
+<!-- 3 · продукт: город -->
+<section class="page light p3" data-money="capture.story.signed" data-money-label="после подписи аренды" data-money-chip="1">
+  <div class="win">
+    <div class="win__bar" data-nw><i></i><i></i><i></i><span>first year · east village</span></div>
+    <div class="win__view" data-nw>
+      <div class="screen"><div class="cam"><img src="img/city.jpg" alt="First Year: the shared city"></div></div>
+      <svg class="streets" viewBox="0 0 1440 900" aria-hidden="true"></svg>
+    </div>
+  </div>
+  <h1 class="a-rise">Проживи первый год до того, как рискнёшь</h1>
+  <p class="src">Экран города в игре, снят с компьютера 1440×900: настоящие улицы East Village, заведения соседей, события дня. Съёмка — docs/pitch/deck/capture.mjs</p>
+</section>
+
+<!-- 4 · продукт: решение и прогноз -->
+<section class="page light p4" data-money="capture.story.openingDay" data-money-label="в день открытия" data-money-chip="1">
+  <h1 class="a-rise">Ты решаешь — <em>и сразу видишь,</em> чем это кончится</h1>
+  <div class="win">
+    <div class="win__bar" data-nw><i></i><i></i><i></i><span>first year · maya's coffee · manage</span></div>
+    <div class="win__view" data-focus="capture.rects.forecast3" data-vw="1182" data-vh="818" data-zoom="1.62" data-at="0.5,0.4">
+      <div class="screen" data-nw><div class="cam cam--move" style="--d:.72s">
+        <img src="img/manage-1.jpg" alt="First Year: Manage, price before the change">
+        <img class="f2" src="img/manage-2.jpg" alt="">
+        <img class="f3" src="img/manage-3.jpg" alt="">
+        <div class="cursor" data-to="capture.rects.plus" data-to2="capture.rects.plus3"><svg viewBox="0 0 30 30"><path d="M4 2l20 11-9 2.6L11.5 25z" fill="#141513" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      </div></div>
+      <div class="ring" data-at="capture.rects.profitTile" style="--d:1.2s"></div>
+      <div class="tag tag--gold" data-at="capture.rects.profitTile" data-side="top" style="--d:1.25s">прогноз месяца — до решения</div>
+    </div>
+  </div>
+  <p class="src">Экран Manage: цена <span data-v="capture.manage.price.0" data-f="text"></span> → <span data-v="capture.manage.price.2" data-f="text"></span>, три настоящих снимка подряд. Прогноз считает движок игры; это модель, не обещание</p>
+</section>
+
+<!-- 5 · что настоящее -->
+<section class="page light stub p5" data-money="capture.story.month1" data-money-label="после первого месяца">
+  <h1>Здесь нет выдуманных чисел</h1>
+</section>
+
+<!-- 6 · соседи -->
+<section class="page light stub p6" data-money="capture.story.mid" data-money-label="середина года">
+  <h1>Сосед — не декорация</h1>
+</section>
+
+<!-- 7 · возвращение -->
+<section class="page light stub p7" data-money="capture.story.late" data-money-label="девятый месяц">
+  <h1>Один день в жизни — один месяц в игре</h1>
+</section>
+
+<!-- 8 · деньги: на акцентном цвете -->
+<section class="page gold p8" data-money="capture.story.yearEnd" data-money-label="касса кофейни через год">
+  <h1 class="a-rise">Путь к $100M ARR</h1>
+  <div class="unit unit--ltv a-rise" style="--d:.15s"><b class="num" data-v="model.ltv" data-f="usd" data-count="0" data-ms="900"></b><small>LTV</small></div>
+  <div class="unit unit--cac a-rise" style="--d:.3s"><b class="num" data-v="model.cac" data-f="usd" data-count="0" data-ms="900" data-delay="150"></b><small>CAC</small></div>
+  <svg class="stairs" viewBox="0 0 1280 1080" aria-hidden="true">
+    <path class="under a-fade" style="--d:1s" d="M40 960V835H440V573H840V252H1280V960Z"/>
+    <path class="a-draw" pathLength="1" style="--t:1.1s;--d:.2s" d="M40 960V835H440V573H840V252H1196"/>
+  </svg>
+  <div class="step a-rise" style="left:712px;top:852px;--d:.45s"><b data-v="model.steps.0.arr" data-f="usdM"></b>кофейни Нью-Йорка</div>
+  <div class="step a-rise" style="left:1112px;top:592px;--d:.8s"><b data-v="model.steps.1.arr" data-f="usdM"></b>любой малый бизнес</div>
+  <div class="dot a-fade" style="left:1821px;top:237px;--d:1.25s"></div>
+  <div class="goal a-rise" style="top:278px;--d:1.1s"><b class="num">$100M</b><div class="step" style="position:static;margin-top:10px">все города США</div></div>
+  <p class="src">Модель: docs/pitch/model.mjs. LTV — удержание <a href="https://www.revenuecat.com/state-of-subscription-apps">RevenueCat 2026</a>; CAC смешанный — клик <a href="https://www.wordstream.com/blog/facebook-ads-benchmarks-2025">Meta $0,70</a>, 90% органика (допущение); своя конверсия ещё не измерена. Ступени — платят 4% круга (допущение), шкала логарифмическая. $100M = <span data-v="model.payersForTarget" data-f="k"></span> платящих × $14,95 × 12 = <span data-v="model.penetrationForTarget" data-f="pct"></span> из 13,7 млн (<a href="https://www.norc.org/research/library/nationwide-entrepreneurship-survey-data-publicly-released-finds-steady-decline-interest-new-business-ventures.html">NORC</a>, Census)</p>
+</section>
+
+<!-- 9 · сделано за сутки -->
+<section class="page light stub p9" data-money="capture.story.yearEnd" data-money-label="касса кофейни через год">
+  <h1>24 часа. Проверьте сами</h1>
+</section>
+
+<!-- 10 · адрес -->
+<section class="page dark stub p10" data-money="capture.story.start" data-money-label="твои сбережения — целы">
+  <h1>Откройте и разоритесь бесплатно</h1>
+</section>
+
+</main>
+<script src="data.js"></script>
+<script src="deck.js"></script>
+</body>
+</html>
