@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { ClientView, IdeaMatch, NicheId, OfficialRole, Pack, Place, RoadmapItem } from '@ohh/shared/types';
+import type { ClientView, IdeaMatch, NicheId, OfficialRole, OpenRecommendation, Pack, Place, RoadmapItem } from '@ohh/shared/types';
 import { dateOf } from '@ohh/shared/rules';
 import { buildoutOf, isTakeover } from '@ohh/shared/place';
 import { NICHE_META, NICHE_ORDER, type Catalog } from '../../app/catalog';
@@ -173,6 +173,7 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
   const [showAll, setShowAll] = useState(false);
   const selected = catalog.places.find((p) => p.id === draft.placeId) ?? null;
   const list = showAll ? free : free.slice(0, 8);
+  const outlook = usePlaceOutlook(niche, selected?.id ?? null);
 
   return (
     <div className="stack-lg">
@@ -201,6 +202,11 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
               ? `Opening here costs at least ${formatMoney(costOf.get(selected.id) ?? 0)}. You start with ${formatMoney(budget)}: pick a smaller or cheaper place.`
               : `Opening here costs from ${formatMoney(costOf.get(selected.id) ?? 0)} of your ${formatMoney(budget)}.`}
           </p>
+          {outlook && outlook.placeId === selected.id && (
+            <p className={`small ${outlook.tone}`} data-testid="place-outlook">
+              <strong>{tr('What it earns', 'Сколько принесёт')}:</strong> {outlook.line}
+            </p>
+          )}
           {selected.note && <p className="xsmall faint">Data: {selected.note === 'unverified' ? 'estimate, not yet checked against city records' : selected.note}</p>}
           <Button block size="lg" iconRight="arrowRight" disabled={(costOf.get(selected.id) ?? 0) > budget} onClick={() => update({ step: 'plan' })}>Open here</Button>
         </Card>
@@ -232,6 +238,29 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
       {free.length === 0 && <Card tone="warn" title="No free place fits this niche right now" subtitle="Pick another niche or check back: bankrupt businesses free their places." />}
     </div>
   );
+}
+
+/**
+ * The consequence of the first decision, before it is taken (B04 for B07; docs/qa/HOOK.md, docs/qa/BUGS.md #1): what
+ * this room earns once the regulars know you and how the first year ends, from the same engine forecast the setup
+ * cards use (recommend_opening; its best kit's last line). Guests may ask it: no player is needed.
+ */
+export interface PlaceOutlook { placeId: string; line: string; tone: 'profit' | 'loss' | '' }
+export function usePlaceOutlook(niche: NicheId, placeId: string | null): PlaceOutlook | null {
+  const { query } = useGame();
+  const [outlook, setOutlook] = useState<PlaceOutlook | null>(null);
+  useEffect(() => {
+    if (!placeId) return;
+    let alive = true;
+    void query<OpenRecommendation[]>({ type: 'recommend_opening', niche, placeId }).then((recs) => {
+      const best = recs?.[0];
+      const line = best?.why[best.why.length - 1];
+      // a month that loses money is a loss; a good month after a costly first year is plain text; else profit
+      if (alive && line) setOutlook({ placeId, line, tone: /^(Even with|Projected loss)/.test(line) ? 'loss' : /a loss of/.test(line) ? '' : 'profit' });
+    });
+    return () => { alive = false; };
+  }, [query, niche, placeId]);
+  return outlook;
 }
 
 // ───────────────────────── 4. the opening plan ─────────────────────────
