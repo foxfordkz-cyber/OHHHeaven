@@ -62,7 +62,7 @@ The verdict is computed by the engine, not scripted by us.
 What is real? A pure engine: every input is an action, and the same code runs on the server and in the browser.
 No dice: the same decision gives the same result.
 Every number has a source. Seventy-three of the key numbers are verified at the primary source; the rest are marked estimates.
-Six hundred thirty-nine automated tests are green. The repo is in front of you.
+Nine hundred forty-four automated tests are green. The repo is in front of you.
 
 ## 2:42–3:14 · Страница 6 — за что платят и зачем возвращаются
 

@@ -4,7 +4,7 @@ B17, третий заход. Ответ — два предложения, по
 
 **Правила ответа.** Не обещаем того, чего нет в продукте. Оценку называем оценкой. Числа рынка — из `docs/pitch/USER.md` (B15), денег — из `docs/pitch/MONEY.md` и `node docs/pitch/model.mjs` (B16, коммит 897ac38); если модель поменялась, числа в ответах 9, 12, 13, 14 сверить с её выводом. Чего не знаем — так и говорим.
 
-Подтверждено в коде и данных на 14 ноября, 22:20 UTC: 73 из 138 ключевых чисел в пакетах помечены `verified` (`node scripts/validate-all.mjs`); один игровой месяц — одни настоящие сутки (`context/08-game-v5.md`); насыщение рынка — `npx tsx sim/audit/saturation.ts`; снимки экранов и месяц торговли — `docs/pitch/deck/img/capture.json`.
+Подтверждено в коде и данных на 15 ноября, 01:25 UTC: 73 из 139 ключевых чисел в пакетах помечены `verified` (`node scripts/validate-all.mjs`); один игровой месяц — одни настоящие сутки (`context/08-game-v5.md`); насыщение рынка — `npx tsx sim/audit/saturation.ts`; снимки экранов и месяц торговли — `docs/pitch/deck/img/capture.json`.
 
 ---
 
@@ -14,7 +14,7 @@ B17, третий заход. Ответ — два предложения, по
 The starting city is prepared; every action and every result you saw was computed live by the engine. The inspection verdict and the forecast are not stored anywhere before you ask for them.
 
 **2. Why should anyone trust your numbers?**
-Every number in the data packs carries a source and is marked verified or estimate; seventy-three of the one hundred thirty-eight key numbers are verified at the primary source today. The pack validator refuses data without a source, and the estimates are labelled on screen.
+Every number in the data packs carries a source and is marked verified or estimate; seventy-three of the one hundred thirty-nine key numbers are verified at the primary source today. The pack validator refuses data without a source, and the estimates are labelled on screen.
 
 **3. Is the value real, or is it hard-coded?**
 The bet on the setup screen — how many orders a day pay your bills against what an average shop on that corner sells — is computed from the storefront's rent, size, foot traffic and rivals, and it changes with every decision you make. Two cafés on the same block split one foot-traffic stream, so a crowded street really pays less — `sim/audit/saturation.ts` checks that.

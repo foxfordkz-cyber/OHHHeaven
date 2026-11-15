@@ -19,11 +19,7 @@ Ten pages, 1920×1080, in the order of the judging criteria. One HTML file is th
 node docs/pitch/deck/build.mjs
 ```
 
-While `docs/pitch/model.mjs` (the money model) lives only in its author's branch, take it from there without merging:
-
-```bash
-node docs/pitch/deck/build.mjs --model-ref origin/claude/nifty-davinci-j7t4c3
-```
+To try the money model from another branch without merging it: `node docs/pitch/deck/build.mjs --model-ref <git ref>`.
 
 The build fails (exit 1) when there are more than ten pages, when a page overflows, when text runs into the footer
 or spills out of its card, or when a screenshot is missing. It also prints how many numbers on each page are still
