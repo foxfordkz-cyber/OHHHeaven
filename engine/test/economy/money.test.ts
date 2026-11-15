@@ -181,7 +181,7 @@ describe("'wages' events and the headcount at the month end", () => {
   });
 });
 
-describe('the base month of the notes (research_notes/Стоимость кофейни Нью Йорка 2026/economics.md)', () => {
+describe('the base month of the notes (research/market/notes/Стоимость кофейни Нью Йорка 2026/economics.md)', () => {
   it('an honest standard cafe on an average block sells about 200 checks a day at $8.50 and keeps about $4,000 a month', () => {
     let { w, ctx } = cafeCity(6);
     w = run(w, ctx, 180 - w.day);

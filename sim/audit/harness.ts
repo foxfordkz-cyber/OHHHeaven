@@ -33,7 +33,7 @@ export interface Spec {
   staff?: Record<string, number>; levers?: Record<string, string>; place?: Place;
 }
 export const fixtureSource = {
-  source: 'build/ROUND3.md#G1; sim/audit/README.md', confidence: 'estimate',
+  source: 'sim/audit/README.md', confidence: 'estimate',
   note: 'Controlled regression inputs, not measured cafe statistics. The 800 sqft/$6000 monthly rent/0.5 foot-traffic fixture and 140-point grid preserve the earlier audit. Pedestrians = pack.market.unitsPerSlotMonth / (30 * pack.extra.footfall.captureRate): an average mature cafe without rivals starts at the old reference monthly demand. No renovation class is assigned, so the pack flat build-out cost applies. The role stress test overrides pedestrians with the largest cafe-door count in data/places.json; the bankruptcy stress test uses the smallest.',
 };
 export function fixturePlace(i = 0): Place {

@@ -290,7 +290,7 @@ function suppliersPart(b: BusinessState, pack: Pack, items: PricedItem[], equipm
       why[s.id] = fresh.length ? `You priced ${plural(fresh.length, 'item')} new: ${usd(fresh.reduce((x, i) => x + i.amount, 0))}.` : '';
     }
     else if (/equipment_used|used/.test(k)) {
-      // items whose id ends in _used are second-hand alternatives (none in packs/cafe.json yet; see agents/r3-B07.md)
+      // items whose id ends in _used are second-hand alternatives (none in packs/cafe.json yet)
       const used = items.filter((i) => /_used$/.test(i.def.id));
       why[s.id] = used.length ? `You chose ${plural(used.length, 'used piece')}: ${usd(used.reduce((x, i) => x + i.amount, 0))}.`
         : equipmentTotal > 0 ? `Your list costs ${usd(equipmentTotal)} new. Used machines and furniture are where a first owner saves most.` : '';

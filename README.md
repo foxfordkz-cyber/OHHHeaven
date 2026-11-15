@@ -6,7 +6,7 @@
 ([PDF](docs/pitch/deck/deck.pdf))
 
 A slow, persistent New York City where you live the first year of your own business — real rent, permits,
-wages, taxes and inspections — without risking your savings. Game spec: `context/08-game-v5.md`.
+wages, taxes and inspections — without risking your savings. Game spec: `docs/GAME.md`.
 How the pieces fit: `build/CONTRACT.md`.
 
 ## Run it (three commands)
@@ -40,18 +40,27 @@ Open http://localhost:8787 — the server serves the built client from `client/d
 
 ## Packages (npm workspaces)
 
-| Folder | Package | Owner |
+| Folder | Package | What it is |
 |---|---|---|
-| `shared/` | `@ohh/shared` — contract types, rules, utils | lead (types, rules), agent 01 (rest) |
-| `engine/` | `@ohh/engine` — pure game engine | agents 02, 03, 04, 13; niches 14–16 |
-| `ai/` | `@ohh/ai` — weather, events, advisor | agent 05 |
-| `host/` | `@ohh/host` — world, clock, views | agent 06 |
-| `server/` | `@ohh/server` — Express HTTP | agent 06 |
-| `bots/` | `@ohh/bots` — AI-run residents | agent 07 |
-| `client/` | `@ohh/client` — Vite + React | agents 08–12 |
+| `shared/` | `@ohh/shared` | contract types, rules, utils |
+| `engine/` | `@ohh/engine` | pure game engine: economy, law, deals, analytics, niches |
+| `ai/` | `@ohh/ai` | weather, city events, advisor |
+| `host/` | `@ohh/host` | world, clock, views |
+| `server/` | `@ohh/server` | Express HTTP API, serves the built client |
+| `bots/` | `@ohh/bots` | AI-run residents |
+| `client/` | `@ohh/client` | Vite + React |
 
-Files that start with `// @ohh-stub` are placeholders written by agent 01 with the exact signatures from
-`build/CONTRACT.md`; their owners replace them. `scripts/smoke.mjs` reports which steps ran on real code.
+## Repository layout
+
+| Folder | What is inside |
+|---|---|
+| `packs/` | niche data packs (cafe, barbershop, common NYC law) with a source for every number |
+| `data/` | NYC open data and the scripts that build places, footfall and the offline map |
+| `sim/` | season balance runner and the economy audit |
+| `scripts/` | smoke test, pack validation, production check, browser end-to-end runs |
+| `build/` | specs: contract, design guide, pack format, events, cafe formats |
+| `docs/` | game spec (`GAME.md`), deploy guide, pitch deck and materials, QA notes and screenshots |
+| `research/` | market research behind the numbers and the reports the code cites |
 
 Requires Node 20+.
 

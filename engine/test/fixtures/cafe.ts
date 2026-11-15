@@ -1,12 +1,12 @@
 // Test pack for a small NYC coffee shop until agent 14's packs/cafe.json lands in the main branch.
-// Money and volume follow the base month of the user's notes research_notes/Стоимость кофейни Нью Йорка 2026/economics.md
+// Money and volume follow the base month of the user's notes research/market/notes/Стоимость кофейни Нью Йорка 2026/economics.md
 // (800 sq ft in Brooklyn, counter service: 200 checks a day × $8.50, COGS 28%, four baristas at $21 + owner-manager hours at $30,
 // opex $3,459, card fees 4.14%, rent $6,000): an honest standard cafe earns about +$4,000 a month there.
 // The notes call these numbers 2026 model assumptions, so every line stays confidence: 'estimate'. Not a source of truth for the game.
 import type { Pack } from '@ohh/shared';
 
 const EST = 'estimate' as const;
-const NOTES = 'research_notes/Стоимость кофейни Нью Йорка 2026/economics.md';
+const NOTES = 'research/market/notes/Стоимость кофейни Нью Йорка 2026/economics.md';
 const DOL = 'https://dol.ny.gov/minimum-wage-0';
 const DTF_SALES = 'https://www.tax.ny.gov/bus/st/stidx.htm';
 const SQUARE = 'https://squareup.com/us/en/pricing';

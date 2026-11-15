@@ -7,7 +7,7 @@ import { RULES, dateOf } from '../../../../shared/src/rules';
 
 /** build/CONTRACT.md §4: cross-promo only between different niches within this distance. Not in RULES yet. */
 export const CROSS_PROMO_MAX_METERS = 400;
-/** build/tasks/13-engine-deals.md §1: partnership share bounds. */
+/** Partnership share bounds. */
 export const PARTNER_SHARE_MIN_PCT = 5;
 export const PARTNER_SHARE_MAX_PCT = 49;
 /** engine/src/deals/validate.ts DEAL_MAX_MONTHS (agent 13); the sheet also caps it by the months left in the season. */
@@ -17,7 +17,7 @@ export const LOAN_MAX_MONTHS = 12;
 export type DealKind = DealTerms['type'];
 export const DEAL_KINDS: DealKind[] = ['joint_purchase', 'cross_promo', 'loan', 'partnership'];
 
-/** Fields the Network tab needs that OwnerView does not have yet (see agents/12.md, requests to the lead). */
+/** Fields the Network tab needs that OwnerView does not have yet. */
 export interface MyReport {
   caseId?: string; targetBusinessId: string; reportId: string; day: number;
   status?: Case['status']; outcome?: Case['outcome'];
@@ -191,7 +191,7 @@ export function validateTerms(terms: DealTerms, me: BusinessState | null): strin
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
 export interface LoanRow { month: number; payment: Money; interest: Money; principal: Money; balance: Money }
-/** Equal monthly payments (annuity). Must match agent 13's loan math; see agents/12.md. */
+/** Equal monthly payments (annuity). Must match agent 13's loan math. */
 export function loanSchedule(amount: Money, monthlyRatePct: number, months: number): { payment: Money; total: Money; interest: Money; rows: LoanRow[] } {
   const n = Math.max(1, Math.round(months));
   const r = monthlyRatePct / 100;

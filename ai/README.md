@@ -1,6 +1,6 @@
 # @ohh/ai
 
-AI service for First Year (build/CONTRACT.md §8): NYC weather, city events, the advisor, niche matching and the end-of-season debrief. Journals: `agents/05.md`, `agents/r3-A4.md` (Gemini and Grok). Report: `research/reports/05-ai.md`.
+AI service for First Year (build/CONTRACT.md §8): NYC weather, city events, the advisor, niche matching and the end-of-season debrief. Report: `research/reports/05-ai.md`.
 
 | Export | What | Network |
 |---|---|---|

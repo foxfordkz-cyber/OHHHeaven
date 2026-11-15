@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// End-to-end check over HTTP — context/08-game-v5.md §10 (owner: agent 01).
+// End-to-end check over HTTP — docs/GAME.md §10 (owner: agent 01).
 // Starts the server (or uses SMOKE_URL), walks the scenario and prints, for every step,
 // whether it ran on real code or on a stub (files whose first line has the `@ohh-stub` marker).
 // Exit code 1 only when a step that runs entirely on real code fails; stub steps never turn it red.
@@ -282,7 +282,7 @@ try {
 }
 
 const icon = { pass: '✔', FAIL: '✖', 'stub-fail': '–', skip: '·' };
-console.log('\nFirst Year smoke — context/08-game-v5.md §10\n');
+console.log('\nFirst Year smoke — docs/GAME.md §10\n');
 for (const r of results) console.log(`${icon[r.status]} ${r.s.title.padEnd(52)} [${r.mode}]${r.detail ? `\n    ${r.detail}` : ''}`);
 const real = results.filter((r) => r.status === 'pass' && r.mode === 'REAL').length;
 const onStub = results.filter((r) => r.status === 'pass' && r.mode !== 'REAL').length;

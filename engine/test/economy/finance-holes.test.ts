@@ -1,4 +1,4 @@
-// Three money holes found by the logic audit of 14 November 2026 (build/ROUND3.md, holes 3, 4 and 5).
+// Three money holes found by the logic audit of 14 November 2026.
 import { describe, expect, it } from 'vitest';
 import type { Action, BusinessState, MonthReport, WorldState } from '@ohh/shared';
 import { applyAction, tickDay } from '../../src/index';

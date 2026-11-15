@@ -31,7 +31,7 @@ export const ORIGIN_TEXT: Record<Case['origin'], string> = {
   routine: `Every business is checked about every ${RULES.ROUTINE_INSPECTION_EVERY_MONTHS} months.`,
 };
 
-/** CaseCard has no outcome or fine yet (request in agents/12.md); read them if the host sends them. */
+/** CaseCard has no outcome or fine yet; read them if the host sends them. */
 export type CaseCardMaybe = CaseCard & { outcome?: Case['outcome']; fine?: Money };
 
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;

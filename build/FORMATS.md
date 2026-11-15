@@ -1,6 +1,6 @@
 # FORMATS — три формата кофейни: четыре механики
 
-Задание A1 третьего захода (`build/ROUND3.md`). Исполнитель A1, 14 ноября 2026.
+Задание A1 третьего захода. Исполнитель A1, 14 ноября 2026.
 
 - Данные: `packs/parts/cafe/D20-formats.json` — разделы `extra.guestSegments`, `extra.service`, `extra.staffing`, `extra.regulars`, `extra.profiles`.
 - Калькулятор: `node packs/parts/cafe/D20-examples.mjs`. Он печатает все таблицы этого документа из `packs/cafe.json`, `packs/_common.json`, `data/places.json` и `D20-formats.json`. Четыре механики написаны в нём так, как их нужно написать в `engine/src/niches/cafe/*.ts`: это образец расчёта, его можно переносить построчно. Эталонный месяц пакета он воспроизводит до $2 ($9,721 против $9,719).

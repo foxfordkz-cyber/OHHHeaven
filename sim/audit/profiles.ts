@@ -42,7 +42,7 @@ export function loadProfiles(): { profiles: Profile[]; source: string; provision
     return { profiles, source: path, provisional: false };
   }
   const provenance = {
-    source: 'packs/cafe.json (kits, unit.refPrice, staff, levers); build/ROUND3.md#G1', confidence: 'estimate',
+    source: 'packs/cafe.json (kits, unit.refPrice, staff, levers)', confidence: 'estimate',
     note: 'Provisional audit policy, not observed NYC financial data. Seats come from kit sizes; staffing is a chosen decision. Specialty price is refPrice + $1, an explicit grid point from the prior audit. No coefficients are added to the engine.',
   };
   return { source: 'sim/audit/profiles.ts (until A1 publishes D20)', provisional: true, profiles: [

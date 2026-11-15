@@ -1,5 +1,5 @@
 // Slots for pieces other agents build. Today they render stand-ins; switch one import when the real piece lands.
-// CityMap — agent 09 (client/src/map/). Signature from build/tasks/09-map-city.md.
+// CityMap — agent 09 (client/src/map/).
 import { useMemo } from 'react';
 import type { DayWeather, GameEvent, NicheId, Place, PublicBusiness } from '@ohh/shared/types';
 import { Icon, WEATHER_ICON } from '../ui';

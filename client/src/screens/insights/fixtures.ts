@@ -1,5 +1,5 @@
 // Sample data for agent 11 screens (/dev/insights, /dev/end, /dev/plan) and their tests.
-// The season follows the lead's worked example (context/09-demo-cycle.md): Maya's coffee shop, $224,000 of capital,
+// The season follows the lead's worked example (docs/demo/demo-cycle.md): Maya's coffee shop, $224,000 of capital,
 // $139,500 to open, a 21-day permit wait, $8.50 a ticket, rent $6,000; Leo goes bankrupt over sales tax on April 20,
 // Victor over cash wages in May. Every month is generated from a few parameters, the way the engine books it: the
 // lines of a MonthReport add up to the change in cash, sales tax owed equals the tax collected (calendar quarters, due
@@ -551,7 +551,7 @@ const LESSONS: RealWorldPlan['lessons'] = [
   { title: 'Coffee beans up 12% in September and October', amount: BEANS, lesson: 'Roasters passed the higher price of green coffee on to you for two months. Ask your roaster for a fixed price for six months, or raise a cup by 25¢ when beans jump.' },
 ];
 
-/** Maya's plan, numbers from the lead's example (context/09-demo-cycle.md). */
+/** Maya's plan, numbers from the lead's example (docs/demo/demo-cycle.md). */
 export const PLAN: RealWorldPlan = {
   niche: 'cafe', businessName: 'Maya’s Coffee',
   startupBudget: [

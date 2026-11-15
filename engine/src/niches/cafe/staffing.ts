@@ -151,7 +151,7 @@ const FULL_COVER = (open: number): TeamCoverage =>
 /**
  * Paid hours of a team against the hours the door is open, for a day with `demand` orders.
  * Hours are filled one person per hour first, then the rest of the crew. An hour with nobody is dark: its customers
- * are lost (FORMATS 4.3). An hour with one person short is thin (decision of B03, agents/r3-B03.md): its customers
+ * are lost (FORMATS 4.3). An hour with one person short is thin (decision of B03): its customers
  * are lost only beyond what one person makes in an hour. Both kinds of hours are the slow ends of the day, so their
  * customers are uncoveredHourWeight of an average hour's.
  */
@@ -287,7 +287,7 @@ const leadRole = (pack: Pack, cfg: StaffingCfg): string | null => pack.staff.fin
 /**
  * The team's numbers for the owner. Not wired into the part yet: the engine's analytics show the niche hook's KPIs
  * instead of its defaults (average check, orders a day, sales per labor hour), so any answer here would hide those.
- * Ready for the lead to join to the defaults (agents/r3-B03.md, request 1); screens may call it directly.
+ * Ready for the lead to join to the defaults; screens may call it directly.
  */
 export function teamKpis(b: BusinessState, pack: Pack): NicheKpi[] {
   const cfg = staffingCfg(pack);

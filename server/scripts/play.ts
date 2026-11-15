@@ -1,4 +1,4 @@
-// Проверка раздела 10 файла context/08-game-v5.md по HTTP: два владельца в демо-городе.
+// Проверка раздела 10 файла docs/GAME.md по HTTP: два владельца в демо-городе.
 // Запуск: сервер (`npm run dev -w @ohh/server`), затем `npx tsx server/scripts/play.ts [http://localhost:8787]`.
 import type { ClientView, Deal, OpenRecommendation, OwnerView, PackSet, Place, CityView } from '@ohh/shared';
 

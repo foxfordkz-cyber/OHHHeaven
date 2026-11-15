@@ -30,7 +30,7 @@ export const INPUTS = {
   // ---- 1. Price ------------------------------------------------------------
   priceMonthly: {
     value: 19, kind: 'assumption', label: 'Monthly plan, $',
-    note: 'Product decision (build/ROUND3.md, B14). Same as LivePlan Standard billed monthly ($20).',
+    note: 'Product decision. Same as LivePlan Standard billed monthly ($20).',
   },
   priceAnnual: {
     value: 149, kind: 'assumption', label: 'Annual plan, $',
@@ -310,7 +310,7 @@ export const SENSITIVITY = {
 
 /**
  * Whole alternative sets of benchmarks, applied together on top of INPUTS.
- * 'favourable' is the set the second B16 pass chose (agents/r3-B16.md):
+ * 'favourable' is the set the second B16 pass chose:
  * Airbridge 2026 retention, guest entry converting 1 in 5 clicks, 5% paying.
  */
 export const SCENARIOS = {

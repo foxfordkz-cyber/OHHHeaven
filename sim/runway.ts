@@ -59,7 +59,7 @@ for (const x of rows.sort((a, b) => a.r!.lowestCash - b.r!.lowestCash)) {
 }
 const broke = rows.filter((x) => x.r!.lowestCash < 0).length;
 const careful = rows.filter((x) => lastsThroughRamp(x.r)).length;
-// the request to the lead (agents/r3-B11.md): count the rent of the wait as part of the opening bill
+// the request to the lead: count the rent of the wait as part of the opening bill
 const fair = rows.filter((x) => x.rec.cashLeft - x.r!.waitRent >= 0);
 const fairBroke = fair.filter((x) => x.r!.lowestCash < 0).length;
 console.log(`\nif the rent paid while waiting counted as part of the opening bill: affordable ${fair.length}, the account goes below zero at ${fairBroke} (${Math.round((100 * fairBroke) / Math.max(1, fair.length))}%)`);

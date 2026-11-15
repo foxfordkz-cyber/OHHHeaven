@@ -1,4 +1,4 @@
-// Contract between the parts of the cafe model (build/ROUND3.md, wave B). Owner of this file: the lead.
+// Contract between the parts of the cafe model. Owner of this file: the lead.
 // A part is one file in this folder, written by one executor: segments.ts, service.ts, staffing.ts, regulars.ts.
 // Parts are pure: no network, no files, no Date, no Math.random, no writes into the business or the world.
 // Numbers come from the pack (packs/cafe.json → extra.*); constants in code are only fallbacks.

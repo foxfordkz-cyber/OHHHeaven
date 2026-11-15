@@ -307,7 +307,7 @@ export function serviceKpis(b: BusinessState, pack: Pack): NicheKpi[] {
 
 /**
  * How full the room is at the busiest hour: guests who want a seat then, per seat (above 1 — some find none).
- * For the engine's crowded / empty-room judgement when this part sets the day's capacity (agents/r3-B01.md, request 3):
+ * For the engine's crowded / empty-room judgement when this part sets the day's capacity:
  * today the engine judges it by the old seat limit, which calls every busy counter "packed".
  */
 export function seatUseDay(d: CafeDay): number | null {
@@ -394,7 +394,7 @@ function engineLimitNotes(r: DayReport): string[] {
 /**
  * The part the cafe glue reads. kpis are not in it yet: today a niche's kpis hook replaces the default key numbers
  * (analytics/analyze.ts) instead of adding to them, and the average ticket would disappear. Once the lead changes that
- * (agents/r3-B01.md, request 5), add `kpis: serviceKpis` here.
+ *, add `kpis: serviceKpis` here.
  */
 export const part: CafePart = {
   capacityDay(d) {

@@ -57,7 +57,7 @@ export const KEEP_NOW = {
   fairPriceBand: 'engine/src/economy/demand.ts marketParams',
   overpriceSteepness: 'engine/src/economy/demand.ts marketParams',
 };
-// Назначены волне B в build/ROUND3.md: код появится в этом заходе, данные нужны в пакете.
+// Назначены волне B: код появится в этом заходе, данные нужны в пакете.
 export const KEEP_WAVE_B = {
   guestSegments: 'B02 segments.ts — только из D20 (A1); раздел D11 другой формы уходит в справку',
   service: 'B01 service.ts — из D20 (A1)',

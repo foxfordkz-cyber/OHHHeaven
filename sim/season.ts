@@ -1,7 +1,7 @@
 // Balance check of the season (agent 07, Part B).
 //   npx tsx sim/season.ts --owners 40 --officials 3 --seasons 200 --seed 1
 // Options: --quick (fewer seasons in side experiments), --engine stub (force agent 07's stub engine).
-// Prints one table per question of build/tasks/07-residents-balance.md. Answers and decisions: research/reports/07-balance.md.
+// Prints one table per balance question. Answers and decisions: research/reports/07-balance.md.
 import type { NicheId, PackSet, Place } from '../shared/src/types';
 import { RULES } from '../shared/src/rules';
 import { ALL_OWNER_STRATEGIES, type OwnerStrategy } from '../bots/src/strategies';

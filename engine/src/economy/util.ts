@@ -5,7 +5,7 @@ export const round2 = (x: number): number => Math.round((x + Number.EPSILON) * 1
 export const clamp = (x: number, lo: number, hi: number): number => (x < lo ? lo : x > hi ? hi : x);
 export const sum = (xs: readonly number[]): number => xs.reduce((a, b) => a + b, 0);
 
-/** Fields the economy keeps on a business until the contract gets them (agents/02.md, requests to the lead). */
+/** Fields the economy keeps on a business until the contract gets them. */
 export interface EconMtd {
   revenue: Money; cogs: Money; salesTax: Money; taxesPaid: Money;
   capacityUnits: number; utilSum: number; utilDays: number;

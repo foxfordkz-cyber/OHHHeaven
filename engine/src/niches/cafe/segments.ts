@@ -281,7 +281,7 @@ const HEADS_UP = 0.05;
 /**
  * One number per group: how much of this offer the group buys against an average coffee buyer (100%).
  * Not wired into `part` yet: analytics replaces its own cafe numbers (avg ticket and the rest) with the hook's answer,
- * so wiring it would hide them. Request to the lead in agents/r3-B02.md.
+ * so wiring it would hide them.
  */
 export function segmentKpis(b: BusinessState, pack: Pack): NicheKpi[] {
   return offerByGroup(b, pack).map((g) => {

@@ -1,5 +1,5 @@
 // Puts the data of the cafe model parts (packs/parts/cafe/B0*-*.json) into packs/cafe.json.
-// Owner: the integrator (B04, build/ROUND3.md). Run: node packs/parts/cafe/apply-parts.mjs [B03 B01 … | file.json:key] [--dry]
+// Owner: the integrator (B04). Run: node packs/parts/cafe/apply-parts.mjs [B03 B01 … | file.json:key] [--dry]
 // With no ids it applies every B0*-*.json in this folder. `D20-formats.json:service` takes one section of any file in
 // this folder (the B01 part reads extra.service from A1's D20 file). Each part file has `extra.<key>`; that key replaces
 // packs/cafe.json → extra.<key>. `newRoles` inside it are added to pack.staff (by id, existing ids are kept as they

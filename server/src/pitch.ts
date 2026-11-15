@@ -1,4 +1,4 @@
-// Город для показа жюри на сервере (build/ROUND3.md, A5): сценарий `pitch`, управление показом одной командой,
+// Город для показа жюри на сервере: сценарий `pitch`, управление показом одной командой,
 // вход по короткому коду и QR с адресом в локальной сети. Сам город собирает хост (host/src/pitch.ts).
 import { randomBytes } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
