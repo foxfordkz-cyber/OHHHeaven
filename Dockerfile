@@ -26,7 +26,8 @@ WORKDIR /app
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=8787 SNAPSHOT_DIR=/data DATA_DIR=/data
 COPY --from=build /app ./
 RUN mkdir -p /data
-VOLUME ["/data"]
+# No VOLUME instruction: Railway rejects it ("Dockerfile failed validation"). Mount the storage from outside:
+# a Railway Volume at /data (docs/DEPLOY.md), or `docker run -v first-year-data:/data` locally.
 EXPOSE 8787
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s CMD wget -qO- "http://127.0.0.1:${PORT}/api/health" >/dev/null || exit 1
 # node itself is PID 1 (not npm): SIGTERM reaches the server, which saves every world before it exits.
