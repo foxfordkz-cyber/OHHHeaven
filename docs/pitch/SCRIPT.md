@@ -4,7 +4,7 @@ B17, третий заход. Основа — `docs/pitch/LIVE-SHOW.md` (кон
 
 **Как читать.** Обычный текст под заголовком страницы — речь, по-английски, вслух. Строки, начинающиеся с `▸`, — режиссура на русском, их не произносят. **А** — рассказчик (Maya), **Б** — управляет ноутбуком (Viktor).
 
-**Слова.** Речи — 588 английских слов (лимит 650). Темп — около 140 слов в минуту; время страницы = слова + живые действия (страницы 3 и 4 — по 15–20 секунд действий без слов). Пересчёт: `node docs/pitch/deck/words.mjs`. Числа рынка — из `USER.md` (B15), денег — из `MONEY.md` и `model.mjs` (B16).
+**Слова.** Речи — 600 английских слов (лимит 650). Темп — около 140 слов в минуту; время страницы = слова + живые действия (страницы 3 и 4 — по 15–20 секунд действий без слов). Пересчёт: `node docs/pitch/deck/words.mjs`. Числа рынка — из `USER.md` (B15), денег — из `MONEY.md` и `model.mjs` (B16).
 
 **Правило чисел.** Деньги кафе на сцене — те, что показывает игра в эту минуту, не из этого текста. Если экран показывает другое — говорим то, что на экране. Числа страницы 3 («146 в день», «150», «половина гостей») — из кадра `img/ad-bet.png` съёмки на заморозке (сборка 30cdee6), сверены с `img/capture.json` → `frames`.
 
@@ -20,21 +20,21 @@ Would you risk your family's savings on a coffee shop?
 Maya wants one. Her savings cannot survive one expensive mistake.
 First Year lets her live the first year of that coffee shop before she signs a lease.
 
-## 0:17–0:47 · Страница 2 — кто и почему болит
+## 0:17–0:46 · Страница 2 — кто и почему болит
 
 ▸ А. Числа — из `USER.md` (B15), источники на слайде.
 
 Our user is one person: an American, twenty-one to forty-five, who dreams of a place of their own.
 Americans filed a record five point seven million business applications last year. Half of new food places close within five years, and most owners start on their own savings.
-Owners don't fail on coffee. "It was pure economics: rents, expenses," said a Manhattan owner who closed after five months.
+Owners don't fail on coffee. One Manhattan owner closed after five months: "It was pure economics: rents, expenses."
 
-## 0:47–1:35 · Страница 3 → живой продукт
+## 0:46–1:32 · Страница 3 → живой продукт
 
 ▸ Страница 3 на проекторе: как Maya дошла до открытия (настоящие экраны). Говорит А.
 
 Maya typed: coffee near the subway. The game found her a real East Village storefront. She made every decision herself and saw her bet: a hundred forty-six orders a day to pay the bills. A known shop on that corner sells one fifty, and a new one starts with half the crowd.
 
-▸ Б переключает проектор на телефон Maya: город показа A5, вход по коду `/p/<код Maya>`, открыт `/biz`, город на паузе (`docs/pitch/RUNBOOK.md`). А открывает вкладку Manage и поворачивается к жюри. Если игра на публичном адресе (B05), А добавляет: “It runs on a public address — scan the code later.”
+▸ Б переключает проектор на телефон Maya: город показа A5, вход по коду `/p/<код Maya>`, открыт `/biz`, город на паузе (`docs/pitch/RUNBOOK.md`). А открывает вкладку Manage и поворачивается к жюри. Игра стоит на публичном адресе (он на страницах 1 и 10), А добавляет: “It runs on a public address — it is on the first slide.”
 
 This is her shop, live. Customers come, and some walk away. Your call: raise the price, or add seats?
 
@@ -42,7 +42,7 @@ This is her shop, live. Customers come, and some walk away. Your call: raise the
 
 The forecast updates before she commits. It is a model, not a promise. Apply.
 
-## 1:35–2:12 · Страница 4 → живой город
+## 1:32–2:07 · Страница 4 → живой город
 
 ▸ Проектор — гостевой вид города (`/p/<гостевой код>`). Говорит Б.
 
@@ -55,49 +55,52 @@ The verdict is computed by the engine, not scripted by us.
 
 ▸ Результат проверки на экране, Б оплачивает на своём телефоне. Если найдено другое нарушение: “The inspector found a different violation. Here is the record.” После показа — «Back to start» на пульте.
 
-## 2:12–2:42 · Страница 5 — что настоящее
+## 2:07–2:32 · Страница 5 — что настоящее
 
 ▸ Б возвращает презентацию. А.
 
-What is real? A pure engine: every input is an action, and the same code runs on the server and in the browser.
-No dice: the same decision gives the same result.
-Every number has a source. Seventy-three of the key numbers are verified at the primary source; the rest are marked estimates.
-Nine hundred fifty-four automated tests are green. The repo is in front of you.
+What is real? A pure engine: every input is an action, and the same decision always gives the same result — no dice.
+Every number has a source; seventy-three key numbers are verified at the primary source, the rest are marked estimates.
+Over nine hundred fifty automated tests are green. The repo is in front of you.
 
-## 2:42–3:14 · Страница 6 — за что платят и зачем возвращаются
+## 2:32–3:10 · Страница 6 — за что платят и зачем возвращаются
+
+▸ А. Убыток первого месяца называем сами, раньше жюри: он виден на левом экране страницы (отчёт февраля). Если на экране другое число — говорим то, что на экране.
 
 The city, your storefront and your first month open are free.
-For nineteen dollars a month you keep deciding for the rest of the year, and you get the advisor and your personal plan: your costs, your permits, with official links.
-At year end the game shows where you lost money. In our test run: rent above the norm, and too few hands on the busy shift.
-Why come back tomorrow? One game month passes every real day: a report, a neighbour's move, a decision waiting.
+For nineteen dollars a month you keep deciding for the rest of the year and take home your plan: your costs, your permits, official links.
+Maya's first full month closed at a loss, and at year end the game showed why: rent above the norm, too few hands on the busy shift. Better in a rehearsal than on her savings.
+Why come back tomorrow? One game month passes every real day: a report, a neighbour's move, a decision. A year takes twelve days. Then you try another block.
 
-## 3:14–3:34 · Страница 7 — как к нам приходят
+## 3:10–3:35 · Страница 7 — как к нам приходят
 
-▸ А. Три рекламных захода — черновики на настоящих кадрах, ещё не запускались; так и говорим.
+▸ А. Три момента на странице — настоящие кадры. Ими делятся игроки (у плана есть ссылка, у города — код входа); как реклама они ещё не запускались — так и говорим.
 
-Our ads show one real moment: the orders your café needs against what the corner sells, a neighbour's offer, the year-end bill.
-One question — what would you open — and you see your own storefront and its cost. First month free, then nineteen dollars.
+People find us through one real moment: the orders your café needs against what the corner sells, a neighbour's offer, the year-end bill.
+Players share them: the plan is a link, the city has a code to join. Ads only test the message.
+One question, what would you open, and you see your own storefront.
 
-## 3:34–4:07 · Страница 8 — деньги
+## 3:35–4:14 · Страница 8 — деньги
 
-▸ Числа — из модели B16 (`docs/pitch/model.mjs`, коммит 897ac38): на странице их подставляет сборка. Если модель поменялась — читаем числа со слайда, не из этого текста.
+▸ Числа — из модели B16 (`docs/pitch/model.mjs`): на странице их подставляет сборка. Если модель поменялась — читаем числа со слайда, не из этого текста. Слабое место (реклама не окупается) называем сами и сразу говорим, что из этого следует.
 
 We sell only to the person: nineteen dollars a month or one forty-nine a year.
-On public benchmarks a payer is worth one hundred twenty dollars and costs forty-seven to reach: two and a half times.
-Ads alone don't pay back, so growth must be organic: friends opening next door, the plan you show your family.
-Five hundred fifty-seven thousand payers make one hundred million: four percent of young city dwellers who consider a business.
+On public benchmarks a payer is worth one hundred twenty dollars.
+Bought with ads alone, a payer costs two sixty-five. Ads don't pay back, and we say so.
+So ads only test messages; growth must come from players sharing. Then a payer costs forty-seven: two and a half times. That share is the first thing we measure.
+One hundred million is five hundred fifty-seven thousand payers: four percent of young city dwellers considering a business.
 
-## 4:07–4:27 · Страница 9 — почему не копия
+## 4:14–4:31 · Страница 9 — почему не копия
 
-Tycoon games give fun without truth. Courses give truth without practice. Templates and chatbots give a document without consequences. A consultant costs three thousand dollars and up.
+Tycoon games give fun without truth. Courses give truth without practice. Templates and chatbots give a document without consequences.
 We are a rehearsal: your shop, on sourced local numbers, in a city you share with others.
 
-## 4:27–5:00 · Страница 10 — команда и финал
+## 4:31–5:00 · Страница 10 — команда и финал
 
-▸ На странице внизу — финальная строка и репозиторий; адрес игры там появится, если перед показом собрать презентацию с `--url` (`docs/pitch/deck/README.md`). Последнюю фразу А говорит в зал. Пауза, конец.
+▸ На странице внизу — финальная строка, адрес игры и репозиторий. Последнюю фразу А говорит в зал. Пауза, конец.
 
 Two people and a crew of AI agents built this in twenty-four hours.
-Each agent owned its files and kept a journal in the repo; nothing merged unless tests and the end-to-end check were green.
+Every agent owned named files; nothing merged unless tests and the end-to-end run were green.
 Rehearse your first year before you risk your family's savings.
 
 ---

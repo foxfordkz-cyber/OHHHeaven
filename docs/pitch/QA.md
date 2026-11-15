@@ -48,7 +48,7 @@ One person: an American, twenty-one to forty-five, who wants to open a place of 
 That would be B2B, and our user is the person whose savings are at risk, not the institution. We sell to that person directly, by subscription.
 
 **12. How will you reach them?**
-Ads that show one real moment of the year — the orders a café needs against what its corner sells, a neighbour's offer — then one question, "what would you open?", and their own storefront with its cost; the first month is free. We have not run these ads yet: the model's $47 blended cost per payer ($265 through ads alone) is built from public benchmarks, and measuring it is our first test.
+Through moments players share — the plan is a link, the city has a code to join — and ads that test the same moments: the orders a café needs against what its corner sells, a neighbour's offer. No ad has run yet: the model's $47 blended cost per payer assumes ninety percent of payers come through sharing ($265 through ads alone), and measuring that share is our first test.
 
 ## Почему это деньги (15%)
 
@@ -79,6 +79,20 @@ We show what the shortcut costs once an inspector finds it: the saving turns int
 
 **20. What is the weakest part right now?**
 We have not proven that people pay or return: price, retention and acquisition are hypotheses. And some numbers are still estimates — they are labelled as such, and replacing them with verified ones is ongoing work.
+
+## Добавлено перед сдачей (15 ноября): нестыковки, которые жюри найдёт само
+
+**21. A game year takes twelve real days. Why would anyone pay for a second month?**
+One year is one rehearsal, and nobody gets the first one right: the next run is a cheaper block, a different format or another kind of business. People prepare to open for months — that preparation is the paid period, and our model already assumes most payers leave within the year.
+
+**22. Ninety percent organic — where do those people come from?**
+From what players already produce: a personal plan with a link, a shared city with a code to join, a year-end result worth showing. None of it is measured yet, it is the first thing we test — and with ads alone the model does not work, which is why that number is on the slide.
+
+**23. Your path ends at ninety-eight million, not a hundred.**
+At four percent of the US pool the model gives ninety-eight million; a hundred needs four point one percent, 557 thousand payers. Penetration is the main assumption of the path: at two percent it is forty-nine million, and the rest would have to come from other countries.
+
+**24. I opened a café with your recommended setup and it lost money. Is the game broken?**
+No — that is the first lesson: on real rent the first months lose money until the regulars come. In our recorded run the first month open lost about three thousand dollars, and by the end of the second the thirty-day forecast was positive.
 
 ---
 
