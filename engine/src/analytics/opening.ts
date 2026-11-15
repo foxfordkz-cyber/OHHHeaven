@@ -117,8 +117,15 @@ function build(kit: PackKit, pack: Pack, niche: NicheId, place: Place | undefine
   const servable = Math.min(probe.projected.demandUnits, sizeCapMonth(pack, size));
   const per = pack.capacity.unitsPerStaffMonth;
   const need = per ? clamp(Math.ceil(servable / (per * 0.9)), pack.capacity.minStaff, pack.capacity.maxStaff) : pack.capacity.minStaff;
-  const orders: StandingOrders = { ...base, staff: staffFor(pack, need) };
-  const res = project(pack, niche, placeId, size, items, orders, total, w, ctx);
+  let orders: StandingOrders = { ...base, staff: staffFor(pack, need) };
+  let res = project(pack, niche, placeId, size, items, orders, total, w, ctx);
+  // the formula counts heads, not whether the last one pays for themselves: one fewer is tried and kept when it earns
+  // more (docs/qa/BUGS.md #1: three baristas and a lead lost $1,589 a month where two and a lead made money in play)
+  if (need - 1 >= pack.capacity.minStaff) {
+    const fewer: StandingOrders = { ...base, staff: staffFor(pack, need - 1) };
+    const alt = project(pack, niche, placeId, size, items, fewer, total, w, ctx);
+    if (alt.analytics.profit > res.analytics.profit) { orders = fewer; res = alt; }
+  }
   const monthProfit = res.analytics.profit;
   const waits = items.map((it) => pack.setup.find((d) => d.id === it.id)!).filter((d) => d.waitDays).sort((a, b) => (b.waitDays ?? 0) - (a.waitDays ?? 0));
   const build = buildoutOf(pack, place);

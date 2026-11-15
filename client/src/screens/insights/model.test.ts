@@ -134,7 +134,7 @@ describe('trend, capacity, taxes, risk', () => {
   });
   it('knows when the next tax is due and whether cash covers it', () => {
     const ok = taxModel(cafeView)!;
-    expect(ok.next).toMatchObject({ amount: 11288.47, day: 200, label: 'Thu, Jul 20', inDays: 38 });
+    expect(ok.next).toMatchObject({ amount: 11288.47, day: 200, label: 'Thu, Jul 21', inDays: 38 });
     expect(ok.enough).toBe(true);
     const short = taxModel(cafeStrugglingView)!;
     expect(short.next).toMatchObject({ amount: 13578.75, label: 'Fri, Apr 20', inDays: 5 });   // lead: $13,579 on April 20

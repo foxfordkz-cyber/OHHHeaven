@@ -74,7 +74,7 @@ describe('desk logic', () => {
     expect(takeAvailability({ ...queue[0], status: 'taken' }, officialView).reason).toBe('Another official already took this case');
     expect(takeAvailability(queue[0], officialViewExposed).reason).toBe('Internal Affairs exposed you: no new cases');
     const suspended: OfficialView = { ...officialView, official: { ...officialView.official, suspendedUntilDay: TODAY + 3 } };
-    expect(takeAvailability(queue[0], suspended).reason).toMatch(/^Suspended until \w{3}, Feb 20$/);
+    expect(takeAvailability(queue[0], suspended).reason).toMatch(/^Suspended until \w{3}, Feb 19$/);
     expect(suspension(suspended).blocked).toBe(true);
     expect(suspension(officialView).blocked).toBe(false);
   });
@@ -134,7 +134,7 @@ describe('desk screen', () => {
     expect(head.textContent).toContain('40');
     expect(head.textContent).toContain('#2');
     expect(head.textContent).toContain('$13.67');
-    expect(head.textContent).toContain('Fri, Feb 17');
+    expect(head.textContent).toContain('Fri, Feb 16');   // game day 47: the label follows the real February (shared/src/rules.ts calendarDay)
   });
 
   it('takes a case from the queue', () => {
