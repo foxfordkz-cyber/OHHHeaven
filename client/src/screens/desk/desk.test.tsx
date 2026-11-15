@@ -8,7 +8,7 @@ import { simulateDesk } from './dev';
 import { officialView, officialViewEmpty, officialViewExposed, packs, queue, TODAY } from './fixtures';
 import {
   aiTakeoverText, bribeFacts, briberyRule, bribeWarning, closedText, deskAct, earningsEstimate, foundLines, officialsForCase,
-  rankOf, suspension, takeAvailability, waitingText,
+  rankOf, rankRace, rankRaceText, suspension, takeAvailability, tomorrowLines, waitingText,
 } from './logic';
 
 afterEach(cleanup);
@@ -33,6 +33,30 @@ function setup(view: OfficialView = officialView) {
 }
 
 const caseRow = (region: string, caseId: string) => screen.getByRole('region', { name: region }).querySelector<HTMLElement>(`[data-case="${caseId}"]`)!;
+
+describe('desk: the race and tomorrow', () => {
+  const withRanking = (points: number, ranking: OfficialView['ranking']): OfficialView => ({
+    ...officialView, official: { ...officialView.official, points }, ranking,
+  });
+  it('names the official right above and how many found violations pass them', () => {
+    const v = withRanking(40, [{ name: 'Reyes', points: 55, isAi: true }, { name: officialView.official.name, points: 40, isAi: false }, { name: 'Lee', points: 20, isAi: false }]);
+    const r = rankRace(v);
+    expect(r).toMatchObject({ place: 2, of: 3, above: { name: 'Reyes', gap: 15, violations: 2 }, below: { name: 'Lee', gap: 20 } });
+    expect(rankRaceText(r)).toBe('#2 of 3. Reyes is 15 points ahead: 2 violations found and paid puts you past them.');
+  });
+  it('says "tied", not "0 points ahead"', () => {
+    const v = withRanking(0, [{ name: 'Zoe', points: 0, isAi: false }, { name: officialView.official.name, points: 0, isAi: false }]);
+    expect(rankRaceText(rankRace(v))).toBe('#2 of 2, tied with Zoe at 0 points: 1 violation found and paid puts you ahead.');
+  });
+  it('the leader hears who is behind', () => {
+    const v = withRanking(60, [{ name: officialView.official.name, points: 60, isAi: false }, { name: 'Lee', points: 20, isAi: false }]);
+    expect(rankRaceText(rankRace(v))).toBe("You lead the city's officials. Lee is 40 points behind you.");
+  });
+  it('tomorrow always has at least one line, and names results that are due', () => {
+    expect(tomorrowLines(officialViewEmpty).length).toBeGreaterThan(0);
+    expect(tomorrowLines(officialView).join(' ')).toMatch(/inspection result/);
+  });
+});
 
 describe('desk logic', () => {
   it('says how long a case waits and when an AI official takes it', () => {

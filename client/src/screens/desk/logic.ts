@@ -282,6 +282,7 @@ export function rankRace(view: OfficialView): RankRace {
 export function rankRaceText(r: RankRace): string {
   if (r.place == null) return 'You are not in the ranking yet: close your first case to get on it.';
   if (!r.above) return r.below ? `You lead the city's officials. ${r.below.name} is ${plural(r.below.gap, 'point')} behind you.` : 'You lead the city\'s officials.';
+  if (r.above.gap <= 0) return `#${r.place} of ${r.of}, tied with ${r.above.name} at ${plural(r.points, 'point')}: 1 violation found and paid puts you ahead.`;
   return `#${r.place} of ${r.of}. ${r.above.name} is ${plural(r.above.gap, 'point')} ahead: ${plural(r.above.violations, 'violation')} found and paid puts you past them.`;
 }
 
