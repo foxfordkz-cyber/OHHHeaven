@@ -77,7 +77,7 @@ h1 { margin: 0; font-size: 76px; line-height: 1.04; font-weight: 600; letter-spa
 .screen { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; transform-origin: 0 0; transform: scale(var(--ws, 1)); }
 .cam { position: absolute; inset: 0; transform-origin: 0 0; transform: translate(var(--cx, 0px), var(--cy, 0px)) scale(var(--cs, 1)); }
 .cam img { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; display: block; }
-.ring { position: absolute; border: 4px solid var(--gold); border-radius: 16px; box-shadow: 0 0 0 9999px rgba(20, 21, 19, 0.2); }
+.ring { position: absolute; border: 4px solid var(--gold); border-radius: 16px; box-shadow: 0 0 0 9999px rgba(20, 21, 19, 0.14); }
 .ring--plain { box-shadow: none; }
 .tag { position: absolute; padding: 12px 22px 14px; border-radius: 14px; background: var(--ink); color: #fff; font-size: 30px; font-weight: 500; letter-spacing: -0.01em; white-space: nowrap; }
 .tag--gold { background: var(--gold); color: var(--gold-ink); }
@@ -141,8 +141,89 @@ h1 { margin: 0; font-size: 76px; line-height: 1.04; font-weight: 600; letter-spa
 .p8 .goal .num { font-size: 210px; }
 .p8 .dot { position: absolute; width: 30px; height: 30px; border-radius: 50%; background: var(--gold-ink); }
 
-/* ── Страница-заготовка (до второго пуша) ── */
-.stub { display: flex; align-items: center; justify-content: center; padding: 0 160px; text-align: center; }
+/* ── 2. Боль: цитата и десять огней ── */
+.p2 h1 { position: absolute; left: 96px; top: 120px; width: 1560px; font-size: 108px; line-height: 1.02; }
+.shops { position: absolute; left: 96px; right: 96px; top: 400px; height: 470px; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid rgba(255, 255, 255, 0.16); }
+.shop { position: relative; width: 152px; height: 430px; border: 3px solid rgba(255, 255, 255, 0.16); border-bottom: 0; border-radius: 12px 12px 0 0; background: var(--night-card); }
+.shop::before { content: ''; position: absolute; left: -12px; right: -12px; top: 96px; height: 44px; border-radius: 8px; background: #2c2d2a; }
+.shop i { position: absolute; left: 22px; right: 22px; top: 176px; bottom: 0; border-radius: 8px 8px 0 0; background: var(--night-gold); box-shadow: 0 0 70px 14px rgba(217, 183, 90, 0.42); }
+@keyframes lightsout { to { opacity: 0.07; box-shadow: none; } }
+.is-on .shop.off i { animation: lightsout 0.3s ease-in both; }
+.is-on .shop.off1 i { animation-delay: 0.35s; }
+.is-on .shop.off2 i { animation-delay: 0.8s; }
+.p2 .sub { position: absolute; left: 96px; top: 900px; font-size: 52px; font-weight: 500; color: var(--night-ink); }
+
+/* ── 3. Город ── */
+.p3 h1 { position: absolute; left: 96px; top: 62px; font-size: 72px; white-space: nowrap; }
+.p3 .win { left: 96px; top: 188px; width: 1728px; }
+.p3 .win__view { height: 768px; }
+.streets { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; }
+.streets path { fill: none; stroke: var(--gold); stroke-width: 3.5; stroke-linecap: round; opacity: 0.9; }
+.streets .lights circle { fill: none; stroke: #fff; stroke-width: 3; }
+.streets .beat { fill: none; stroke: var(--gold); stroke-width: 4; transform-box: fill-box; transform-origin: center; animation: pulse 2.4s ease-out 1.5s infinite; opacity: 0; }
+html.static .streets .beat { animation: none; opacity: 0.9; }
+
+/* ── 5. Что настоящее ── */
+.p5 .win { left: 64px; top: 150px; width: 1060px; }
+.p5 .win__view { height: 900px; }
+.p5 h1 { position: absolute; left: 1196px; top: 150px; width: 700px; font-size: 72px; }
+.fact { position: absolute; }
+.fact .num { display: block; font-size: 210px; }
+.fact small { display: block; margin-top: 8px; font-size: 32px; font-weight: 500; color: var(--t2); letter-spacing: -0.01em; }
+.p5 .fact { left: 1190px; }
+.p5 .fact--a { top: 400px; }
+.p5 .fact--b { top: 680px; }
+.p5 .src { left: 1196px; right: 56px; bottom: 30px; font-size: 16px; }
+.p5 .pageno { display: none; }
+
+/* ── 6. Соседи ── */
+.p6 h1 { position: absolute; left: 96px; top: 56px; font-size: 112px; white-space: nowrap; }
+.p6 .win--main { left: 96px; top: 240px; width: 1728px; }
+.p6 .win--main .win__view { height: 1000px; }
+.p6 .win--pip { left: 1296px; top: 318px; width: 568px; border: 4px solid var(--ink); box-shadow: 0 30px 80px rgba(20, 21, 19, 0.3); z-index: 3; }
+.p6 .win--pip .win__view { height: 262px; }
+.vline { position: absolute; width: 6px; border-radius: 3px; background: var(--ink); transform-origin: 50% 0; }
+@keyframes grow { from { transform: scaleY(0); } to { transform: none; } }
+.is-on .vline { animation: grow 0.35s ease 1.05s both; }
+.p6 .src { left: 1296px; right: 56px; bottom: 60px; font-size: 16px; }
+.p6 .pageno { bottom: 24px; }
+
+/* ── 7. Возвращение ── */
+.p7 h1 { position: absolute; left: 96px; top: 62px; font-size: 72px; white-space: nowrap; }
+.p7 .win { left: 700px; top: 210px; width: 1500px; }
+.p7 .win__view { height: 938px; }
+.p7 .sub { position: absolute; left: 96px; top: 800px; width: 580px; font-size: 42px; line-height: 1.25; font-weight: 500; color: var(--ink); }
+.cal { position: absolute; left: 96px; top: 250px; width: 452px; height: 500px; border-radius: 26px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 20px 50px rgba(20, 21, 19, 0.12); perspective: 1400px; }
+.cal__top { height: 84px; border-radius: 26px 26px 0 0; background: var(--ink); display: flex; justify-content: center; gap: 190px; align-items: center; }
+.cal__top b { width: 22px; height: 22px; border-radius: 50%; background: var(--paper); }
+.cal__grid { display: grid; grid-template-columns: repeat(6, 54px); gap: 12px; padding: 34px 0 0 34px; }
+.cal__grid i { height: 54px; border-radius: 10px; background: var(--gold); }
+.cal__grid i:first-child { background: var(--ink); }
+.is-on .cal__grid i { animation: fade 0.15s ease var(--d) both; }
+.cal__leaf { position: absolute; left: 0; right: 0; top: 84px; bottom: 0; border-radius: 0 0 26px 26px; background: var(--card); transform-origin: 50% 0; display: flex; align-items: center; justify-content: center; opacity: 0; transform: rotateX(-96deg); }
+.cal__leaf i { width: 150px; height: 150px; border-radius: 24px; background: var(--ink); }
+@keyframes flip { 0% { opacity: 1; transform: none; } 80% { opacity: 1; } 100% { opacity: 0; transform: rotateX(-96deg); } }
+.is-on .cal__leaf { animation: flip 0.5s cubic-bezier(0.5, 0, 0.8, 0.4) 0.1s both; }
+
+/* ── 9. Сутки ── */
+.p9 h1 { position: absolute; left: 96px; top: 56px; font-size: 112px; white-space: nowrap; }
+.day { position: absolute; left: 96px; top: 250px; width: 1728px; height: 330px; overflow: visible; }
+.day line { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.day .axis { stroke-width: 5; }
+.day text { font-size: 22px; fill: var(--ink-3); font-family: var(--font); }
+.is-on .day .tick { animation: fade 0.12s linear var(--d) both; }
+.p9 .fact--a { left: 96px; top: 640px; }
+.p9 .fact--b { left: 640px; top: 640px; }
+.p9 .not { position: absolute; left: 1180px; top: 668px; font-size: 40px; line-height: 1.2; color: var(--ink-2); }
+.p9 .not p { margin: 0 0 22px; }
+.p9 .not b { font-weight: 600; color: var(--ink); text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-color: var(--loss); }
+
+/* ── 10. Адрес ── */
+.p10 .qr { position: absolute; left: 120px; top: 150px; width: 780px; height: 780px; padding: 44px; border-radius: 40px; background: #fff; }
+.p10 .qr svg { display: block; width: 100%; height: 100%; }
+.p10 h1 { position: absolute; left: 1000px; top: 250px; width: 820px; font-size: 116px; line-height: 1; color: #fff; }
+.p10 .addr { position: absolute; left: 1000px; top: 690px; width: 860px; font-size: 52px; font-weight: 600; letter-spacing: -0.02em; color: var(--night-gold); overflow-wrap: anywhere; line-height: 1.1; }
+.p10 .src { left: 1000px; right: 96px; bottom: 96px; }
 
 /* ── Конечный вид сразу: печать, prefers-reduced-motion, ?static ── */
 html.static *, html.static *::before, html.static *::after { animation-duration: 0s !important; animation-delay: 0s !important; transition: none !important; }

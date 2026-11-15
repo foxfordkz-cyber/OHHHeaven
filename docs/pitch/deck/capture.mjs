@@ -5,7 +5,7 @@
 //
 // Скрипт создаёт свой демо-город (POST /api/worlds), проходит открытие как новый игрок (идея → место → план →
 // вход → настройка → подпись аренды), доводит часы города до открытия, открывает двери, даёт городу прожить месяц
-// и снимает: управление (цена до и после нажатий), соседей, возвращение, город, таблицу мест, личный план.
+// и снимает: управление (цена до и после нажатий), соседей, возвращение, город, личный план с карточкой правила.
 // На экранах ничего не правится. img/capture.json хранит коммит, город, числа с экранов и прямоугольники мест,
 // на которые в презентации наезжает камера (в точках снимка 1440×900).
 import { createRequire } from 'node:module';
@@ -121,7 +121,6 @@ try {
   await shot('place');
   await click('Open here');
   await page.getByText('Step 3 of 6').waitFor();
-  await shot('plan-open');
   await page.getByRole('button', { name: /See what to buy|Go on with this address/i }).first().click({ timeout: 15000 });
   await page.getByText('Step 4 of 6').waitFor();
   await page.locator('input').first().fill('Maya');
@@ -141,7 +140,6 @@ try {
 
   await page.getByRole('button', { name: /Open with recommended setup|Sign the lease/i }).first().click({ timeout: 15000 });
   await page.getByText('Step 6 of 6').waitFor({ timeout: 20000 });
-  await shot('waiting', 2000);
 
   // ── День открытия: двигаем часы города, двери открывает игрок ──
   const session = await page.evaluate(() => JSON.parse(localStorage.getItem('ohh.sessions.v1') ?? '{}'));
@@ -184,16 +182,17 @@ try {
   await sleep(1000);
   await page.goto(`${BASE}/brief?world=${worldId}`);
   await page.waitForTimeout(3000);
-  if (/brief/.test(page.url())) await shot('brief', 500); else note('no /brief screen in this build');
+  if (/brief/.test(page.url())) {
+    await shot('brief', 500);
+    await rect('briefCash', 'Cash then', 110);
+    log.brief = { line: (await text()).match(/(\d+ days since you were here[^$]*?)(?= Cash then)/)?.[1]?.trim() ?? null };
+  } else note('no /brief screen in this build');
   await page.goto(`${BASE}/biz?world=${worldId}`);
   await page.waitForTimeout(3000);
   const away = page.getByRole('dialog', { name: /while you were away/i });
   if (await away.count()) {
-    await shot('away', 300);
-    await rectOf('away', away);
     await away.getByRole('button', { name: /got it/i }).first().click();
   } else note('no "While you were away" card');
-  await shot('today');
 
   // ── Управление: цена до нажатия, после двух и после пяти нажатий «+». Прогноз месяца меняется до Apply ──
   if (await tab('Manage')) {
@@ -233,21 +232,36 @@ try {
     const minus = page.locator('button', { hasText: /^[−-]$/ }).first();
     for (let i = 0; i < 5; i++) await minus.click();
   }
-  for (const name of ['Books', 'Insights', 'Network']) {
-    if (await tab(name)) {
-      await shot(name.toLowerCase(), 800);
-      writeFileSync(join(out, `${name.toLowerCase()}.txt`), await page.innerText('body'));
+  // ── Соседи: соперник с ценой ниже нашей, кнопка жалобы, затем лестница призовых мест ──
+  if (await tab('Network')) {
+    await shot('network-1', 800);
+    await rect('rivalCard', 'Your rival', 300);
+    await rect('priceRow', 'Price', 30);
+    await rectOf('priceRow', page.locator('tr', { hasText: 'Price' }));
+    await rectOf('report', page.getByRole('button', { name: /^Report/ }));
+    await rect('reportNote', 'If you are right', 40);
+    const row = (await page.locator('tr', { hasText: 'Price' }).first().innerText().catch(() => '')).replace(/\s+/g, ' ');
+    log.network = { priceRow: row, rival: (await text()).match(/Closest in the table (.+?) AI/)?.[1] ?? null };
+    const place = page.getByText('Your place', { exact: true }).first();
+    if (await place.count()) {
+      await place.evaluate((e) => window.scrollTo(0, window.scrollY + e.getBoundingClientRect().top - 150));
+      await shot('network-2', 800);
+      await rect('placeCard', 'Your place', 220);
+      await rect('prize', 'Prize today', 20);
+      await rect('ladder', '(you)', 200);
+      await rect('youRow', '(you)', 60);
+      // лента «Next door»: жалоба на соседа и проверка инспектора, если город их уже прожил
+      await rect('reported', 'reported', 70);
+      await rect('inspected', 'inspector', 70);
+      await rect('nextDoor', 'Next door', 200);
     }
+    note(`network: ${JSON.stringify(log.network)}`);
   }
   save();
 
   // ── Общий город: живая карта с заведениями и событиями ──
   await page.goto(`${BASE}/city/${worldId}`);
   await shot('city', 4500);
-  await page.goto(`${BASE}/map?world=${worldId}`);
-  await shot('map', 4500);
-  await page.goto(`${BASE}/leaderboards?world=${worldId}`);
-  await shot('leaders', 2500);
   save();
 
   // ── Год до конца: касса каждые два месяца — шаги сквозного счётчика ──
@@ -267,11 +281,10 @@ try {
   // ── Конец сезона и личный план (Pro в тестовом режиме: ключа нет, ничего не списывается) ──
   await page.goto(`${BASE}/pro?world=${worldId}`);
   await page.waitForTimeout(2500);
-  await shot('pro', 300);
   const getPro = page.getByRole('button', { name: /Get Pro/i }).first();
   if (await getPro.count()) { await getPro.click(); await page.waitForTimeout(2500); }
   await page.goto(`${BASE}/end?world=${worldId}`);
-  await shot('end', 3500);
+  await page.waitForTimeout(3500);
   const open = page.getByText('Open my plan').first();
   if (await open.count()) {
     await open.click();
@@ -285,6 +298,22 @@ try {
     };
     note(`plan: ${JSON.stringify(log.plan)}`);
     await rect('allIn', 'All in, have', 30);
+    // Карточка правила: разрешение департамента здравоохранения с ценой, сроком и ссылкой на официальную страницу.
+    const rule = page.getByText('NYC Department of Health and Mental Hygiene (DOHMH)').first();
+    if (await rule.count()) {
+      await rule.evaluate((e) => {
+        let n = e; while (n.parentElement && !n.querySelector('a[href^="http"]')) n = n.parentElement;
+        n.setAttribute('data-deck-rule', '1');
+        window.scrollTo(0, window.scrollY + n.getBoundingClientRect().top - 240);
+      });
+      const card = page.locator('[data-deck-rule]').first();
+      await shot('rule', 900);
+      await rectOf('ruleCard', card);
+      const link = card.locator('a[href^="http"]').first();
+      await rectOf('ruleLink', link);
+      log.rule = { href: await link.getAttribute('href'), text: (await card.innerText()).replace(/\s+/g, ' ').slice(0, 500) };
+      note(`rule: ${JSON.stringify(log.rule).slice(0, 400)}`);
+    } else note('no permit card on the plan');
     await page.screenshot({ path: join(out, 'plan-full.jpg'), type: 'jpeg', quality: 60, fullPage: true });
     writeFileSync(join(out, 'plan.txt'), await page.innerText('body'));
   } else note('no "Open my plan" button');

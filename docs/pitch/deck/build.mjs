@@ -33,20 +33,57 @@ if (cash.length) {
   capture.story.lateDay = near(270)?.day;
 }
 const times = sh('git log --format=%ct').split('\n').map(Number);
+const t0 = Math.min(...times);
+const utc = (t) => new Date(t * 1000).toISOString().slice(0, 16).replace('T', ' ');
+const inDay = times.filter((t) => t - t0 <= 86400);
 const repoFacts = {
-  commits: times.length,
-  hours: Math.round((Math.max(...times) - Math.min(...times)) / 360) / 10,
-  first: new Date(Math.min(...times) * 1000).toISOString(),
-  last: new Date(Math.max(...times) * 1000).toISOString(),
+  commits: inDay.length,
+  commitsAll: times.length,
+  hours: Math.round((Math.max(...inDay) - t0) / 360) / 10,
+  span: `${utc(t0)} — ${utc(Math.max(...inDay))} UTC`,
+  ticks: inDay.map((t) => Math.round(((t - t0) / 86400) * 10000) / 10000).sort((a, b) => a - b),
   head: sh('git rev-parse --short HEAD'),
+  shallow: sh('git rev-parse --is-shallow-repository') === 'true',
 };
-const url = flag('--url') ?? facts.url ?? null;
-let qr = null;
-if (url) {
-  // тот же генератор QR, что у сервера игры (server/src/qr.ts) — без сети
-  qr = sh(`npx tsx -e "import('./server/src/qr.ts').then((m) => console.log(m.qrSvg(${JSON.stringify(url)}, 8)))"`);
+if (repoFacts.shallow) console.warn('ВНИМАНИЕ: история неполная (shallow clone) — счёт коммитов занижен; git fetch --unshallow');
+// Адрес игры: --url или facts.json. Пока игра не выложена, последняя страница честно ведёт в репозиторий.
+const gameUrl = flag('--url') || facts.url || null;
+const repoUrl = sh('git remote get-url origin').replace(/^.*github\.com[:/]/, 'https://github.com/').replace(/\.git$/, '');
+const url = gameUrl ?? repoUrl;
+// тот же генератор QR, что у сервера игры (server/src/qr.ts) — без сети
+const qr = sh(`npx tsx docs/pitch/deck/qr.ts ${JSON.stringify(url)}`);
+const urlShort = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+const urlNote = gameUrl ? 'Первый месяц своей кофейни — бесплатно, без карты.' : 'Игра ещё не выложена на публичный адрес: QR ведёт в репозиторий. После выкладки — node docs/pitch/deck/build.mjs --url https://<адрес>';
+if (!gameUrl) console.warn('ВНИМАНИЕ: адрес игры не задан — страница 10 ведёт в репозиторий. Пересобери с --url https://<адрес>');
+// Метки на снимке города: ищем кружки заведений по цвету на самом снимке, чтобы обводки стояли там, где они есть.
+{
+  const require = createRequire(import.meta.url);
+  const { chromium } = require('playwright');
+  const br = await chromium.launch();
+  const pg = await br.newPage();
+  const src = `data:image/jpeg;base64,${readFileSync(join(here, 'img/city.jpg')).toString('base64')}`;
+  capture.cityDots = await pg.evaluate(async (url) => {
+    const im = new Image(); im.src = url; await im.decode();
+    const c = document.createElement('canvas'); c.width = 1440; c.height = 900;
+    const g = c.getContext('2d'); g.drawImage(im, 0, 0, 1440, 900);
+    const W = 950, d = g.getImageData(0, 0, W, 900).data, groups = [];
+    for (let y = 110; y < 850; y += 2) for (let x = 4; x < W - 4; x += 2) {
+      const i = (y * W + x) * 4, r = d[i], gr = d[i + 1], b = d[i + 2];
+      const cafe = r > 170 && r < 228 && gr > 120 && gr < 178 && b > 50 && b < 118 && r - b > 80;
+      const barber = b > 150 && b < 208 && gr > 128 && gr < 172 && r > 82 && r < 132 && b - r > 45;
+      if (!cafe && !barber) continue;
+      const k = groups.find((q) => Math.hypot(q.sx / q.n - x, q.sy / q.n - y) < 12);
+      if (k) { k.sx += x; k.sy += y; k.n++; k.x0 = Math.min(k.x0, x); k.x1 = Math.max(k.x1, x); k.y0 = Math.min(k.y0, y); k.y1 = Math.max(k.y1, y); }
+      else groups.push({ sx: x, sy: y, n: 1, x0: x, x1: x, y0: y, y1: y });
+    }
+    // кружок заведения — круглое пятно 8–20 точек в поперечнике; плашки мест и пунктир сделок отсеиваются
+    return groups.filter((q) => q.n >= 10 && q.x1 - q.x0 <= 20 && q.y1 - q.y0 <= 20 && q.x1 - q.x0 >= 6 && q.y1 - q.y0 >= 6)
+      .map((q) => ({ x: Math.round(q.sx / q.n), y: Math.round(q.sy / q.n) })).sort((a, b) => a.x - b.x);
+  }, src);
+  await br.close();
+  console.log(`метки на снимке города: ${capture.cityDots.length}`);
 }
-const data = { model: { ...model.outputs, inputs: Object.fromEntries(Object.entries(model.inputs).map(([k, v]) => [k, v.value])) }, capture, repo: repoFacts, facts, url, qr, builtAt: new Date().toISOString() };
+const data = { urlShort, urlNote, gameUrl, model: { ...model.outputs, inputs: Object.fromEntries(Object.entries(model.inputs).map(([k, v]) => [k, v.value])) }, capture, repo: repoFacts, facts, url, qr, builtAt: new Date().toISOString() };
 writeFileSync(join(here, 'data.js'), `// Пишет build.mjs. Руками не править.\nwindow.DECK = ${JSON.stringify(data)};\n`);
 console.log(`data.js: модель, съёмка ${capture.commit} (${capture.world}), ${repoFacts.commits} коммитов за ${repoFacts.hours} ч`);
 if (args.includes('--data')) process.exit(0);

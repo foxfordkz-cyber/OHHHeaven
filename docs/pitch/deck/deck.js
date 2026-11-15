@@ -10,7 +10,17 @@
   if (printAll) root.classList.add('print');
 
   const pages = [...document.querySelectorAll('.page')];
-  const get = (path) => String(path).split('.').reduce((o, k) => (o == null ? o : o[k]), D);
+  const one = (path) => String(path).split('.').reduce((o, k) => (o == null ? o : o[k]), D);
+  // путь в данных; «x,y,w,h» — прямоугольник, набранный на месте; «a+b» — прямоугольник вокруг двух
+  const get = (path) => {
+    path = String(path);
+    if (/^\d+(,\d+){3}$/.test(path)) { const [x, y, w, h] = path.split(',').map(Number); return { x, y, w, h }; }
+    if (!path.includes('+')) return one(path);
+    const rs = path.split('+').map(one);
+    if (rs.some((r) => !r)) return undefined;
+    const x = Math.min(...rs.map((r) => r.x)), y = Math.min(...rs.map((r) => r.y));
+    return { x, y, w: Math.max(...rs.map((r) => r.x + r.w)) - x, h: Math.max(...rs.map((r) => r.y + r.h)) - y };
+  };
   const usd = (n) => '$' + Math.round(n).toLocaleString('en-US');
   const formats = {
     usd,
@@ -29,6 +39,7 @@
     el.textContent = v == null ? '—' : fmt(el, v);
     if (v == null) el.dataset.missing = '1';
   }
+  for (const el of document.querySelectorAll('[data-html]')) { const v = get(el.dataset.html); if (v) el.innerHTML = v; else el.dataset.missing = '1'; }
   for (const el of document.querySelectorAll('[data-href]')) { const v = get(el.dataset.href); if (v) el.setAttribute('href', v); }
 
   // Сквозной счётчик денег: на каждой странице свой шаг истории, от стартового капитала до конца года.
@@ -79,12 +90,20 @@
       const g = Number(el.dataset.grow || 6);
       const x = ws * (tx + s * r.x), y = ws * (ty + s * r.y), w = ws * s * r.w, h = ws * s * r.h;
       if (el.classList.contains('ring')) Object.assign(el.style, { left: x - g + 'px', top: y - g + 'px', width: w + g * 2 + 'px', height: h + g * 2 + 'px' });
+      else if (el.dataset.side === 'in') Object.assign(el.style, { left: x + Number(el.dataset.dx || 0) + 'px', top: y + h / 2 - el.offsetHeight / 2 + 'px' });
+      else if (el.dataset.side === 'corner') Object.assign(el.style, { left: x + w - el.offsetWidth + 16 + 'px', top: y - el.offsetHeight / 2 + 'px' });
       else if (el.dataset.side === 'top') Object.assign(el.style, { left: x + Number(el.dataset.dx || 0) + 'px', top: y - el.offsetHeight - Number(el.dataset.dy || 22) + 'px' });
       else if (el.dataset.side === 'left') Object.assign(el.style, { left: x - el.offsetWidth - Number(el.dataset.dx || 26) + 'px', top: y + h / 2 - el.offsetHeight / 2 + 'px' });
       else if (el.dataset.side === 'right') Object.assign(el.style, { left: x + w + Number(el.dataset.dx || 26) + 'px', top: y + h / 2 - el.offsetHeight / 2 + 'px' });
       else Object.assign(el.style, { left: x + Number(el.dataset.dx || 0) + 'px', top: y + h + Number(el.dataset.dy || 18) + 'px' });
     };
     win.querySelectorAll('.ring, .tag').forEach(place);
+    for (const el of win.querySelectorAll('.vline')) {
+      const a = get(el.dataset.from), b = get(el.dataset.to);
+      if (!a || !b) { el.dataset.missing = '1'; el.dataset.v = el.dataset.from; continue; }
+      const y0 = ws * (ty + s * (a.y + a.h / 2)), y1 = ws * (ty + s * (b.y + b.h / 2));
+      Object.assign(el.style, { left: ws * (tx + s * (a.x + a.w)) + 18 + 'px', top: y0 + 'px', height: y1 - y0 + 'px' });
+    }
     // курсор едет в точках снимка: от data-from к середине data-to
     const cur = win.querySelector('.cursor');
     if (cur) {
@@ -98,6 +117,26 @@
         cur.style.setProperty('--x2', to2.x + to2.w / 2 + 'px'); cur.style.setProperty('--y2', to2.y + to2.h / 2 + 'px');
       }
     }
+  }
+
+  // Метки города: места заведений найдены на самом снимке (build.mjs → capture.cityDots), загораются по очереди.
+  const lights = document.querySelector('.streets .lights');
+  const dots = D.capture?.cityDots ?? [];
+  if (lights && dots.length) {
+    lights.innerHTML = dots.map((d, i) => `<circle class="a-fade" style="--d:${(0.7 + (i / dots.length) * 0.6).toFixed(2)}s" cx="${d.x}" cy="${d.y}" r="12"/>`).join('');
+    const me = dots[Math.floor(dots.length / 2)];
+    // единственный бесконечный цикл презентации: тихий пульс на карте
+    lights.insertAdjacentHTML('afterend', `<circle class="beat" cx="${me.x}" cy="${me.y}" r="18"/>`);
+  }
+
+  // Лента суток: каждая черта — настоящий коммит; линия рисуется слева направо за секунду.
+  const day = document.querySelector('.day');
+  if (day && D.repo?.ticks) {
+    const W = 1728, H = 250;
+    let h = `<line class="axis a-draw" pathLength="1" style="--t:1s;--d:.1s" x1="0" y1="${H}" x2="${W}" y2="${H}"/>`;
+    for (const t of D.repo.ticks) h += `<line class="tick" style="--d:${(0.1 + t).toFixed(3)}s" x1="${(t * W).toFixed(1)}" y1="${H - 12}" x2="${(t * W).toFixed(1)}" y2="${H - 12 - 200}" opacity="0.5"/>`;
+    for (const hr of [0, 6, 12, 18, 24]) h += `<text x="${(hr / 24) * W}" y="${H + 44}" text-anchor="${hr === 0 ? 'start' : hr === 24 ? 'end' : 'middle'}">${hr}:00</text>`;
+    day.innerHTML = h;
   }
 
   // Счётчик: число набегает за секунду и останавливается.
