@@ -13,7 +13,7 @@ import type { BlockFundStatus, DayWeather, GameEvent, NicheId, PackSet, Place, P
 import { dateOf } from '@ohh/shared/rules';
 import {
   NICHE_META, WEATHER_ICON, activeFundBlocks, blockLines, blockSegments, businessFeatures, businessMarkers, centerOf,
-  closedBlocks, liveEvents, partnerLines, placeFeatures, realFeatures, todayWeather, type BizMarker, type LngLat,
+  closedBlocks, declutterRects, liveEvents, partnerLines, placeFeatures, realFeatures, todayWeather, type BizMarker, type LngLat,
   type RealBusinessLabel,
 } from './geo';
 import { cityStyle, isTileFailure, mapPalette, offlineStyle, OFFLINE_STYLE_NAME, type MapTheme, type StyleSpecification } from './mapStyle';
@@ -166,7 +166,9 @@ function pinElement(m: BizMarker, onOpen?: (id: string) => void): HTMLElement {
 
 function updatePin(el: HTMLElement, m: BizMarker) {
   el.dataset.id = m.id;
-  el.className = `cm-pin${m.mine ? ' cm-pin--mine' : ''}${m.dim ? ' cm-pin--dim' : ''}${m.isAi ? ' cm-pin--ai' : ''}${!m.dim && m.rank > 0 && m.rank <= 3 ? ' cm-pin--top' : ''}`;
+  // keep a pin that the declutter pass hid hidden until the next pass: a city update must not flash every label on
+  const hidden = el.classList.contains('cm-pin--hidden') && !m.mine;
+  el.className = `cm-pin${m.mine ? ' cm-pin--mine' : ''}${m.dim ? ' cm-pin--dim' : ''}${m.isAi ? ' cm-pin--ai' : ''}${!m.dim && m.rank > 0 && m.rank <= 3 ? ' cm-pin--top' : ''}${hidden ? ' cm-pin--hidden' : ''}`;
   el.style.setProperty('--pin', m.color);
   (el.children[0] as HTMLElement).textContent = m.status === 'bankrupt' ? '✕' : m.status === 'closed' ? '⛔' : `#${m.rank}`;
   (el.children[1] as HTMLElement).textContent = m.name;
@@ -175,23 +177,20 @@ function updatePin(el: HTMLElement, m: BizMarker) {
 }
 
 /** Hide name pins that would overlap a more important one (own business, then rank). Runs after moves. */
-function declutter(map: MapLibreMap, pins: Map<string, Marker>, markers: BizMarker[]) {
-  const order = [...markers].sort((x, y) =>
-    Number(y.mine) - Number(x.mine) || Number(x.dim) - Number(y.dim) || x.rank - y.rank || x.name.localeCompare(y.name));
-  const placed: { x: number; y: number; w: number; h: number }[] = [];
-  // read every size first, then write classes: no layout thrash
-  const measured = order.map((m) => {
-    const el = pins.get(m.id)?.getElement();
-    return { m, el, w: el ? el.offsetWidth || Math.min(180, 40 + m.name.length * 6.4) : 0, h: el ? el.offsetHeight || 24 : 0 };
+/**
+ * Hide name pins that would overlap a more important one (own business, then rank). Runs after moves.
+ * Measures the pins where they really are on screen (see declutterRects in geo.ts).
+ */
+function declutter(_map: MapLibreMap, pins: Map<string, Marker>, markers: BizMarker[]) {
+  // read every box first (the hidden class keeps the size), then write classes: no layout thrash
+  const els = new Map(markers.map((m) => [m.id, pins.get(m.id)?.getElement()]));
+  const boxes = new Map<string, DOMRect>();
+  els.forEach((el, id) => { if (el) boxes.set(id, el.getBoundingClientRect()); });
+  const hide = declutterRects(markers, (m) => {
+    const b = boxes.get(m.id);
+    return b ? { x: b.left, y: b.top, w: b.width, h: b.height } : null;
   });
-  for (const { m, el, w, h } of measured) {
-    if (!el) continue;
-    const p = map.project([m.lng, m.lat]);
-    const r = { x: p.x - w / 2, y: p.y - 10 - h, w, h };
-    const hit = placed.some((q) => r.x < q.x + q.w + 4 && q.x < r.x + r.w + 4 && r.y < q.y + q.h + 2 && q.y < r.y + r.h + 2);
-    el.classList.toggle('cm-pin--hidden', hit && !m.mine);
-    if (!hit || m.mine) placed.push(r);
-  }
+  els.forEach((el, id) => el?.classList.toggle('cm-pin--hidden', hide.has(id)));
 }
 
 export function CityMap(props: CityMapProps) {
@@ -303,7 +302,12 @@ export function CityMap(props: CityMapProps) {
     const onZoom = () => { setZoomedOut(map.getZoom() < 14.6); setNear(map.getZoom() >= 16.3); };
     map.on('zoomend', onZoom);
     onZoom();
-    map.on('moveend', () => declutter(map, pinsRef.current, markersRef.current));
+    // name pins must not pile up (docs/qa/BUGS.md #5): sort them out after every move, and also once the frame has its
+    // real size and the first tiles are drawn — an embedded map starts at 0×0 and fires no move of its own
+    const tidy = () => declutter(map, pinsRef.current, markersRef.current);
+    map.on('moveend', tidy);
+    map.on('resize', tidy);
+    map.once('idle', tidy);
 
     // fly-over on open, then optional orbit
     let orbitRaf = 0, idleUntil = 0, lastT = 0;
@@ -401,6 +405,18 @@ export function CityMap(props: CityMapProps) {
     return () => cancelAnimationFrame(raf);
   }, [markers, mode]);
 
+  // zooming in or out switches which pins the CSS shows (cm-root--near / --far), and web fonts change their width:
+  // sort the labels out again after either
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const tidy = () => declutter(map, pinsRef.current, markersRef.current);
+    const raf = requestAnimationFrame(tidy);
+    let alive = true;
+    document.fonts?.ready.then(() => { if (alive) tidy(); }).catch(() => {});
+    return () => { alive = false; cancelAnimationFrame(raf); };
+  }, [near, zoomedOut]);
+
   // the opened business keeps a ring and its name, so it is clear which pin the card is about
   useEffect(() => {
     pinsRef.current.forEach((marker, id) => {
@@ -457,12 +473,12 @@ export function CityMap(props: CityMapProps) {
             </div>
           );
         })}
-        {offline && <div className="cm-chip cm-chip--offline" title="Map tiles did not load; showing the saved snapshot">Offline map</div>}
+        {offline && <div className="cm-chip cm-chip--offline" title="Map tiles did not load: a schematic map drawn from the street grid">Offline map</div>}
       </div>
       {legend.length > 0 && (
         <ul className="cm-legend" aria-label="Legend">
           {legend.map((l) => <li key={l.label}><i style={{ background: l.color }} />{l.label}</li>)}
-          {mode === 'live' && <li className="cm-legend__hint">#1–3 lead their niche · zoom in to see everyone</li>}
+          {mode === 'live' && !embedded && <li className="cm-legend__hint">#1–3 lead their niche · zoom in to see everyone</li>}
           {canBrowseFree && (
             <li>
               <button type="button" className="cm-legend__toggle" aria-pressed={showFree} onClick={() => setShowFree((v) => !v)}>

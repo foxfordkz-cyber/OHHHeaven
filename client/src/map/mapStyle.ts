@@ -158,7 +158,7 @@ export function offlineStyle(a: OfflineAssets, _theme: MapTheme = 'dark'): Style
     sky: c.sky,
     sources: {
       'offline-image': { type: 'image', url: a.imageUrl, coordinates: a.coordinates },
-      'offline-shapes': { type: 'geojson', data: a.buildingsUrl, attribution: 'Schematic offline map from the street grid · street names © OpenStreetMap contributors' },
+      'offline-shapes': { type: 'geojson', data: a.buildingsUrl, attribution: 'Street names © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors' },
     },
     layers: [
       { id: 'bg', type: 'background', paint: { 'background-color': c.bg } },
