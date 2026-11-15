@@ -54,11 +54,11 @@
           <g class="lights"></g>
         </svg>
       </div></div>
-      <div class="tag" data-step="2" data-xy="1130,572" style="--d:1.1s">настоящие улицы, живые соседи</div>
+      <div class="tag" data-step="2" data-xy="1130,572" style="--d:1.1s">настоящие улицы, соседи — игроки и ИИ</div>
       <div class="tag tag--gold" data-step="3" data-at="capture.me" data-side="right" data-dx="30" style="--d:.45s">аренда подписана</div>
     </div>
   </div>
-  <p class="src">Экраны игры, сняты с компьютера 1440×900: город (улицы East Village © OpenStreetMap, заведения соседей, погода и события дня) — docs/pitch/deck/capture.mjs. Аренда: <span data-v="capture.place" data-f="text"></span></p>
+  <p class="src">Экраны игры, сняты с компьютера 1440×900: город (улицы East Village © OpenStreetMap, заведения соседей — без игрока ими управляет ИИ, они помечены AI, — погода и события дня) — docs/pitch/deck/capture.mjs. Аренда: <span data-v="capture.place" data-f="text"></span></p>
 </section>
 
 <!-- 4 · продукт: решение и прогноз -->
@@ -66,7 +66,7 @@
   <h1 class="a-rise">Ты решаешь —<br>и сразу видишь,<br><mark>чем это кончится</mark></h1>
   <div class="result" data-step="3">
     <b class="num" data-cur data-v="capture.manage.delta" data-f="usdPlus" data-count="0" data-ms="800"></b>
-    <small>прибыль за 30 дней</small>
+    <small>к прибыли за 30 дней</small>
   </div>
   <div class="win a-rise" style="--d:.1s" id="w4">
     <div class="win__bar" data-nw><i></i><i></i><i></i><span>firstyear · maya's coffee · manage</span></div>
@@ -100,11 +100,11 @@
   <div class="lawdoc a-pop" style="--d:1.25s" data-nw><i>official page</i><b>Food Service Establishment Permit</b><u data-v="capture.rule.hrefShort" data-f="text"></u></div>
   <div class="fact fact--a" data-step="2">
     <b class="num" data-v="facts.verified" data-count="0" data-ms="900"></b>
-    <div><small>числа сверены с первоисточником</small><div class="cells cells--src" data-n="facts.numbers" data-on="facts.verified" data-nw></div></div>
+    <div><small>из <span data-v="facts.numbers"></span> чисел сверены с первоисточником</small><div class="cells cells--src" data-n="facts.numbers" data-on="facts.verified" data-nw></div></div>
   </div>
   <div class="fact fact--b" data-step="3">
     <b class="num" data-v="facts.tests" data-count="0" data-ms="1000"></b>
-    <div><small>тестов зелёные</small><div class="cells cells--tests" data-n="facts.tests" data-on="facts.tests" data-nw></div></div>
+    <div><small data-plural="facts.tests" data-forms="зелёный тест|зелёных теста|зелёных тестов"></small><div class="cells cells--tests" data-n="facts.tests" data-on="facts.tests" data-nw></div></div>
   </div>
   <p class="src">Правило из личного плана в игре: <a data-href="capture.rule.href" href="#"><span data-v="capture.rule.href" data-f="text"></span></a>. <span data-v="facts.verified"></span> из <span data-v="facts.numbers"></span> чисел помечены verified, остальные показаны штрихом — это оценка, так и подписана: node scripts/validate-all.mjs. Тесты: npm test, <span data-v="facts.measured" data-f="text"></span></p>
 </section>
@@ -135,17 +135,17 @@
     <div class="win__view" data-focus="capture.rects.ladder" data-pad="10">
       <div class="screen" data-nw><div class="cam"><img src="img/network-2.jpg" alt="First Year: prize places"></div></div>
       <div class="ring" data-at="capture.rects.youRow" data-grow="2" style="--d:.5s"></div>
-      <div class="tag tag--gold" data-at="capture.rects.youRow" data-side="in" data-dx="236" style="--d:.6s">призовое место</div>
+      <div class="tag tag--gold" data-at="capture.rects.youRow" data-side="in" data-dx="236" style="--d:.6s">твоё место в таблице</div>
     </div>
   </div>
-  <p class="src">Экран Network, два снимка: соперник с его ценой и кнопка Report («they pay $50–$1,160 and can be closed for up to 5 days»), ниже — таблица мест с призом дня. Исход проверки считает движок, не сценарий</p>
+  <p class="src">Экран Network, два снимка: соперник с его ценой и кнопка Report («they pay $50–$1,160 and can be closed for up to 5 days»), ниже — таблица мест. Исход проверки считает движок, не сценарий</p>
 </section>
 
 <!-- 7 · возвращение -->
 <section class="page light p7" data-sec="Ритм" data-steps="3" data-money="capture.story.late" data-money-label="девятый месяц">
   <h1 class="a-rise">Один день в жизни — <mark>один месяц</mark> в игре</h1>
   <svg class="rhythm" viewBox="0 0 900 560" data-nw aria-hidden="true"></svg>
-  <p class="sub a-rise" data-step="3">Первый месяц <b>бесплатно</b>.<br>Дальше — <b><span data-v="model.inputs.priceMonthly" data-f="usd"></span> в месяц</b></p>
+  <p class="sub a-rise" data-step="3">Игровой месяц — <b>бесплатно</b>.<br>Дальше — <b><span data-v="model.inputs.priceMonthly" data-f="usd"></span> в месяц</b></p>
   <div class="win a-rise" style="--d:.1s">
     <div class="win__bar" data-nw><i></i><i></i><i></i><span>firstyear · while you were away</span></div>
     <div class="win__view" data-focus="366,98,708,520" data-pad="0">
@@ -153,7 +153,7 @@
       <div class="ring" data-step="2" data-at="722,158,116,72" data-grow="10" style="--d:.9s"></div>
     </div>
   </div>
-  <p class="src">Экран возвращения: <span data-v="capture.brief.line" data-f="text"></span>. Игровой день идёт 48 минут, 30 дней — сутки. Цена — решение продукта: $19 в месяц или $149 в год, docs/pitch/MONEY.md</p>
+  <p class="src">Экран возвращения: <span data-v="capture.brief.line" data-f="text"></span>. Игровой день идёт 48 минут, 30 дней — сутки, год — 12 суток; после него год можно прожить заново на другом месте. Бесплатен первый месяц после открытия дверей. Цена — решение продукта: $19 в месяц или $149 в год, docs/pitch/MONEY.md</p>
 </section>
 
 <!-- 8 · деньги: на горчичном -->
@@ -166,7 +166,7 @@
   <div class="rung a-pop" data-step="3" data-rung="0" style="--d:.5s"><b data-v="model.steps.0.arr" data-f="usdM"></b>кофейни Нью-Йорка</div>
   <div class="rung a-pop" data-step="3" data-rung="1" style="--d:.95s"><b data-v="model.steps.1.arr" data-f="usdM"></b>любой малый бизнес</div>
   <div class="rung rung--top a-pop" data-step="4" data-rung="2" style="--d:.75s"><b data-v="model.inputs.targetArr" data-f="usdM"></b>все города США</div>
-  <p class="src">Модель: docs/pitch/model.mjs. LTV — удержание <a href="https://www.revenuecat.com/state-of-subscription-apps">RevenueCat 2026</a>; CAC смешанный — клик <a href="https://www.wordstream.com/blog/facebook-ads-benchmarks-2025">Meta $0,70</a>, 90% органика (допущение); своя конверсия ещё не измерена. Ступени — платят 4% круга (допущение), шкала логарифмическая. $100M = <span data-v="model.payersForTarget" data-f="k"></span> платящих × $14,95 × 12 = <span data-v="model.penetrationForTarget" data-f="pct"></span> из 13,7 млн (<a href="https://www.norc.org/research/library/nationwide-entrepreneurship-survey-data-publicly-released-finds-steady-decline-interest-new-business-ventures.html">NORC</a>, Census)</p>
+  <p class="src">Модель: docs/pitch/model.mjs. LTV — удержание <a href="https://www.revenuecat.com/state-of-subscription-apps">RevenueCat 2026</a>; CAC смешанный — клик <a href="https://www.wordstream.com/blog/facebook-ads-benchmarks-2025">Meta $0,70</a>, 90% платящих приходят без рекламы (допущение): на одной рекламе CAC <span data-v="model.cacPaidAds" data-f="usd"></span>, она только проверяет посыл; своя конверсия ещё не измерена. Ступени — платят 4% круга (допущение), шкала логарифмическая; третья при 4% даёт <span data-v="model.steps.2.arr" data-f="usdM"></span>, для $100M нужно <span data-v="model.penetrationForTarget" data-f="pct"></span>: <span data-v="model.payersForTarget" data-f="k"></span> платящих × $14,95 × 12 из 13,7 млн (<a href="https://www.norc.org/research/library/nationwide-entrepreneurship-survey-data-publicly-released-finds-steady-decline-interest-new-business-ventures.html">NORC</a>, Census)</p>
 </section>
 
 <!-- 9 · сделано за сутки -->
@@ -174,7 +174,7 @@
   <h1 class="a-rise">24 часа. <mark>Проверьте сами</mark></h1>
   <svg class="dayline a-host" viewBox="0 0 1728 400" data-nw aria-hidden="true"></svg>
   <div class="fact fact--a a-rise" style="--d:.5s"><b class="num" data-v="repo.commits" data-count="0" data-ms="1200"></b><small data-plural="repo.commits" data-forms="коммит|коммита|коммитов"></small></div>
-  <div class="fact fact--b" data-step="2"><b class="num" data-v="facts.tests" data-count="0" data-ms="900"></b><small>тестов</small></div>
+  <div class="fact fact--b" data-step="2"><b class="num" data-v="facts.tests" data-count="0" data-ms="900"></b><small data-plural="facts.tests" data-forms="тест|теста|тестов"></small></div>
   <div class="versus" data-step="3">
     <div class="a-pop" style="--d:.05s"><svg viewBox="0 0 58 58" data-nw><rect x="5" y="17" width="48" height="26" rx="13"/><path d="M17 25v10M12 30h10"/><circle cx="38" cy="27" r="2"/><circle cx="44" cy="33" r="2"/><path class="x" d="M8 50 50 8"/></svg><b>игры</b><span>без правды</span></div>
     <div class="a-pop" style="--d:.25s"><svg viewBox="0 0 58 58" data-nw><path d="M29 14c-6-4-14-5-22-4v34c8-1 16 0 22 4 6-4 14-5 22-4V10c-8-1-16 0-22 4Z"/><path d="M29 14v34"/><path class="x" d="M8 50 50 8"/></svg><b>курсы</b><span>без практики</span></div>

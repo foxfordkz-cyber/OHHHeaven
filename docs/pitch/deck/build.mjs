@@ -66,7 +66,7 @@ const url = gameUrl ?? repoUrl;
 // тот же генератор QR, что у сервера игры (server/src/qr.ts) — без сети
 const qr = sh(`npx tsx docs/pitch/deck/qr.ts ${JSON.stringify(url)}`);
 const urlShort = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
-const urlNote = gameUrl ? 'Первый месяц своей кофейни — бесплатно, без карты.' : 'Игра ещё не выложена на публичный адрес: QR ведёт в репозиторий. После выкладки — node docs/pitch/deck/build.mjs --url https://<адрес>';
+const urlNote = gameUrl ? 'Первый месяц своей кофейни — бесплатно, без карты.' : 'QR ведёт в репозиторий. Адрес игры ставит сборка: node docs/pitch/deck/build.mjs --url https://<адрес>';
 if (!gameUrl) console.warn('ВНИМАНИЕ: адрес игры не задан — страница 10 ведёт в репозиторий. Пересобери с --url https://<адрес>');
 // Метки на снимке города: ищем кружки заведений по цвету на самом снимке, чтобы обводки стояли там, где они есть.
 {

@@ -86,7 +86,7 @@ We have not proven that people pay or return: price, retention and acquisition a
 One year is one rehearsal, and nobody gets the first one right: the next run is a cheaper block, a different format or another kind of business. People prepare to open for months — that preparation is the paid period, and our model already assumes most payers leave within the year.
 
 **22. Ninety percent organic — where do those people come from?**
-From what players already produce: a personal plan with a link, a shared city with a code to join, a year-end result worth showing. None of it is measured yet, it is the first thing we test — and with ads alone the model does not work, which is why that number is on the slide.
+From what players already produce: a personal plan with a link, a shared city with a code to join, a year-end result worth showing. None of it is measured yet, it is the first thing we test — and with ads alone the model does not work: the footnote of the money page gives that cost, $265 a payer.
 
 **23. Your path ends at ninety-eight million, not a hundred.**
 At four percent of the US pool the model gives ninety-eight million; a hundred needs four point one percent, 557 thousand payers. Penetration is the main assumption of the path: at two percent it is forty-nine million, and the rest would have to come from other countries.
