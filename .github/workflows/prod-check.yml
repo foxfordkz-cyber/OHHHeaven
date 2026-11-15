@@ -1,0 +1,53 @@
+# The public address, checked from outside (round 3, B05).
+# Set the address once: Settings → Secrets and variables → Actions → Variables → New repository variable
+#   PROD_URL = https://<your-app>.up.railway.app      (optional: secret CLOCK_KEY, if the server has one)
+# Every 30 minutes: --quick — health, the page, the city; read only, so it never shows up as an owner on the public page.
+# Run workflow by hand: the full walk — "Prod Check" joins the shared demo city, opens a cafe and trades a month
+# (2–4 minutes). It is visible in the game until the demo season restarts: run it before a show, not during.
+# Scheduled runs start only from the default branch.
+name: Prod check
+
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+    inputs:
+      full:
+        description: 'Full walk: open a cafe and trade a month (2–4 min)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  prod-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      PROD_URL: ${{ vars.PROD_URL }}
+      CLOCK_KEY: ${{ secrets.CLOCK_KEY }}
+    steps:
+      - name: Is there an address to check?
+        id: url
+        run: |
+          if [ -z "$PROD_URL" ]; then
+            echo "::notice::PROD_URL is not set (Settings → Secrets and variables → Actions → Variables). Nothing to check yet."
+            echo "set=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "set=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.url.outputs.set == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.url.outputs.set == 'true'
+        with:
+          node-version: 22
+      - name: Check ${{ vars.PROD_URL }}
+        if: steps.url.outputs.set == 'true'
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.full }}" = "true" ]; then
+            node scripts/prod-check.mjs "$PROD_URL" --wait 60
+          else
+            node scripts/prod-check.mjs "$PROD_URL" --wait 60 --quick
+          fi

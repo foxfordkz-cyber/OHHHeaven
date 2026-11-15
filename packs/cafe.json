@@ -972,6 +972,18 @@
       "source": "https://dol.ny.gov/minimum-wage-0",
       "confidence": "estimate",
       "note": "My estimate: a $3 premium over the barista wage for opening, closing and cash-out. A shift lead with a Food Protection Certificate covers the rule that a certified supervisor is on site every open hour."
+    },
+    {
+      "id": "trainee_barista",
+      "name": "New barista (first 90 days)",
+      "hourlyWage": 18,
+      "tipped": true,
+      "cashWage": 18,
+      "hoursPerMonth": 120,
+      "licenseRequired": null,
+      "source": "https://culinaryagents.com/jobs/716734-Barista",
+      "confidence": "estimate",
+      "note": "D05: 2026 postings start at $17.00 (the legal minimum) and $18.50 plus tips; $18 is the midpoint for a hire with little bar experience. 120 hours is 28 hours a week."
     }
   ],
   "taxes": [
@@ -1050,6 +1062,14 @@
           "monthlyCost": 2300,
           "effects": {
             "demand": 0.08
+          }
+        },
+        {
+          "id": "short",
+          "label": "7am - 3pm",
+          "monthlyCost": 0,
+          "effects": {
+            "demand": -0.2
           }
         }
       ]
@@ -2572,16 +2592,16 @@
       "confidence": "estimate"
     },
     "footfall": {
-      "captureRate": 0.088,
+      "captureRate": 0.095,
       "outside": 1.5,
       "priceSensitivity": 2.7,
       "radiusM": 250,
       "staticWeight": 0.5,
-      "rampDays": 75,
-      "awarenessStart": 0.35,
+      "rampDays": 60,
+      "awarenessStart": 0.5,
       "source": "https://data.cityofnewyork.us/d/cqsj-cfgu",
       "confidence": "estimate",
-      "note": "Demand = people walking the block a day (data/places.json, modelled from MTA station entries and DOHMH food places and scaled to DOT sidewalk counts: data/open/fit.json) x the share who buy here. captureRate is that share for a known, average shop with no rival in sight at the reference price; real coffee shops within 250 m (DOHMH) and playing shops split the same people, and 'outside' is everyone who buys coffee somewhere else or not at all. No public statistic of cafe conversion exists. The rate, the price sensitivity and the ramp were set on the bench (sim/calibrate.ts) against three targets: an established shop on a sound block clears a few thousand dollars a month at about $9 an order, the best price sits within 10% of the reference price, and a careful newcomer ends the first year alive but far below the starting capital. A new shop starts at 35% of its regular crowd and closes about two thirds of the gap every 75 days. Every one of these is an estimate waiting for evidence: research/prompts/80-codex-real-factors.md, part A."
+      "note": "Demand = people walking the block a day (data/places.json, modelled from MTA station entries and DOHMH food places and scaled to DOT sidewalk counts: data/open/fit.json) x the share who buy here. captureRate is that share for a known, average shop with no rival in sight at the reference price; real coffee shops within 250 m (DOHMH) and playing shops split the same people, and 'outside' is everyone who buys coffee somewhere else or not at all. No public statistic of cafe conversion exists. The rate, the price sensitivity and the ramp were set on the bench against three targets: an established shop on a sound block clears a few thousand dollars a month at about $9 an order, the best price sits within 10% of the reference price at doors where the room is not full, and about one newcomer in five who follows the recommended plan closes in the first year (the game's target, build/ROUND3.md B11; not a measured rate). A new shop starts at half of its regular crowd (opening-week curiosity; most affordable rooms are former cafes whose block already buys coffee at that door) and closes about two thirds of the gap every 60 days. Bench, 14 Nov 2026 (agents/r3-B11.md): with 0.088 / 0.35 / 75 days, 13 of 18 newcomer cafes closed in four simulated seasons (npx tsx sim/trace.ts 2 --no-runway, seeds 100 and 200); with 0.095 / 0.5 / 60 days, 6 of 18, three of them before the doors opened because the plan left less cash than the rent of the wait. Every one of these is an estimate waiting for evidence: research/prompts/80-codex-real-factors.md, part A."
     },
     "buildout": {
       "itemId": "buildout",
@@ -2620,6 +2640,382 @@
       "refreshDays": 10,
       "confidence": "estimate",
       "note": "Buying an operating coffee shop: the price covers the finished room, the equipment and the furniture, and nine in ten regulars stay. The research notes list key money as quote-only with no public figure; the asking price here is 20% of a year of sales the address supports at the reference price, between $80,000 and $200,000 - a planning rule of thumb, not a listing. The buyer still signs a lease (new deposit), applies for a new Health Department permit (it does not transfer), restocks and hires. Estimate waiting for evidence: research/prompts/80-codex-real-factors.md, part A."
+    },
+    "guestSegments": {
+      "note": "Four groups of guests. D06 has five; remote workers with laptops are folded into residents (see residents.note). Shares by block are D06 planning values: nobody publishes this split. The shifts are deviations from the average customer the engine already models (footfall.priceSensitivity 2.7; quality 0.93 and reputation 0.74 per unit), so a shop at the reference price with quality 0.5, the reference room and no walk-aways gets a fit of exactly 1. priceShift rule: each group's shift is set so that the price that earns most from that group alone sits at the group's ticket in D06 (commuters $6.50, residents $9, students $6, tourists $12). With a marginal cost of about $4.90 an order (goods $2.21, cups and card fees $0.50, labor $2.20) the best price is e / (e - 1) x 4.90, where e is the group's sensitivity x 0.75 (the share of the block's buyers a shop does not already hold). D06 bounds a cafe's elasticity between 1.3 and 4.7; the cap is used for students.",
+      "source": "packs/parts/cafe/D06-demand.json (extra.guestSegments, extra.weekdayProfiles, extra.monthCurve, extra.hourCurve)",
+      "confidence": "estimate",
+      "segments": [
+        {
+          "id": "office",
+          "name": "Office commuters",
+          "sitShare": 0.1,
+          "morningShare": 0.55,
+          "dwellHours": 0.25,
+          "priceShift": 2.7,
+          "qualityShift": -1.2,
+          "seatPull": 0.03,
+          "waitPull": 2,
+          "regularShare": 0.55,
+          "week": [
+            1.15,
+            1.45,
+            1.41,
+            1.33,
+            0.91,
+            0.44,
+            0.31
+          ],
+          "months": [
+            0.9,
+            0.96,
+            1.02,
+            1.04,
+            1.05,
+            1.03,
+            0.95,
+            0.9,
+            1.07,
+            1.09,
+            1.02,
+            0.97
+          ],
+          "source": "https://www.globest.com/amp/2025/11/24/hybrid-habits-hold-firm-as-friday-office-visits-lag/",
+          "confidence": "estimate",
+          "note": "sitShare 0.1: D06 seatUse. week and months: D06 office profiles (Placer.ai share of weekday office visits 2025: Tue 24.3%, Wed 23.7%, Thu 21.8%, Fri 12.4%). morningShare 0.55 is set so that an office block (60% commuters) has 44% of its orders between 7 and 10 am, the sum of the D06 office hour curve 0.12 + 0.18 + 0.14: 0.6 x 0.55 + 0.15 x 0.15 + 0.2 x 0.38 + 0.05 x 0.2 = 0.44. dwellHours 0.25: my estimate, a quarter of an hour at a window stool. priceShift +2.7: ticket $6.50 gives e x 0.75 = 6.5 / (6.5 - 4.9) = 4.06, e = 5.4, shift = 5.4 - 2.7. D06 says commuters pay for speed before 9 am: that is waitPull; over a month they buy about 20 cups, so the price of the cup is the largest line of their coffee budget. qualityShift -1.2: the cup is fuel; cancels the engine's quality term and a third of its reputation term. My estimate. seatPull 0.03: nobody sits. waitPull 2.0: a week in which 10% of customers walked away from the line costs exp(-0.2) = 18% of this group; D06: they leave at more than about five people in line. regularShare 0.55: low end of D06's 55-65% steady share of regulars."
+        },
+        {
+          "id": "residents",
+          "name": "Residents and regulars",
+          "sitShare": 0.53,
+          "morningShare": 0.38,
+          "dwellHours": 0.75,
+          "priceShift": 0.4,
+          "qualityShift": -0.4,
+          "seatPull": 0.2,
+          "waitPull": 0.5,
+          "regularShare": 0.65,
+          "week": [
+            0.9,
+            0.93,
+            0.96,
+            0.98,
+            1.09,
+            1.15,
+            0.99
+          ],
+          "months": [
+            0.9,
+            0.94,
+            1.02,
+            1.04,
+            1.03,
+            1.04,
+            0.97,
+            0.93,
+            1.03,
+            1.08,
+            1.01,
+            1.01
+          ],
+          "source": "https://www.businesswire.com/news/home/20231207135338/en",
+          "confidence": "estimate",
+          "note": "D06 residents (55% of a residential block, seatUse 0.4) plus remote workers with laptops (15%, seatUse 1.0): sitShare = (0.55 x 0.4 + 0.15 x 1.0) / 0.70 = 0.53. dwellHours: D14 gives half an hour for an ordinary visit and one hour with laptops; D06 says a remote worker holds a seat two to four hours. Weighted by seated guests: (0.22 x 0.5 + 0.15 x 1.1) / 0.37 = 0.74, rounded to 0.75. week: D06 neighborhood profile (Toast 2023: Saturday +15%, Friday +9%, Monday -10%). months: D06 neighborhood curve, which follows the subway index computed from MTA data. morningShare 0.38: D06 neighborhood hour curve has 0.36 between 7 and 10 am for the whole block. priceShift +0.4: ticket $9 gives e x 0.75 = 9 / 4.1 = 2.2, e = 2.9, shift +0.2; raised to +0.4 because D06 says they notice every price change. qualityShift -0.4 on a mid block: the engine already pays +40% demand for quality and reputation 0.7; on a mid-rent block part of that is not there. The tier of the block moves both (tierPriceShift, tierQualityShift). seatPull 0.2 (a room of 30 seats against 18 draws +22% of this group; remote workers are in it), waitPull 0.5 (D06: they forgive a line): my estimates. regularShare 0.65: top of D06's 55-65%."
+        },
+        {
+          "id": "students",
+          "name": "Students",
+          "sitShare": 0.8,
+          "morningShare": 0.2,
+          "dwellHours": 1.5,
+          "priceShift": 3.6,
+          "qualityShift": -1,
+          "seatPull": 0.4,
+          "waitPull": 0.5,
+          "regularShare": 0.4,
+          "week": [
+            1.1,
+            1.15,
+            1.15,
+            1.15,
+            1.05,
+            0.75,
+            0.65
+          ],
+          "months": [
+            0.91,
+            1.18,
+            1.18,
+            1.18,
+            1.07,
+            0.64,
+            0.59,
+            0.64,
+            1.23,
+            1.23,
+            1.18,
+            0.97
+          ],
+          "source": "https://www.governor.ny.gov/news/governor-hochul-announces-third-consecutive-rise-student-enrollment-city-university-new-york",
+          "confidence": "estimate",
+          "note": "sitShare 0.8: D06 seatUse. D06: afternoons and evenings, term time only, high price sensitivity, leave if prices rise or seats are gone. dwellHours 1.5: my estimate between an ordinary visit (0.5 h) and D06's two to four hours for a laptop seat. week and months: my estimates from the academic calendar (fall term September to mid-December, spring term late January to mid-May, summer at about half); months average 1. morningShare 0.2: my estimate. priceShift +3.6: ticket $6 would give e = 7.3; capped at the top of D06's range, e x 0.75 = 4.7, e = 6.3, shift = 6.3 - 2.7. qualityShift -1.0: my estimate (a cheap drink and a table). seatPull 0.4: a room of 30 seats against 18 draws exp(0.4) = +49% of this group. regularShare 0.4: my estimate (they leave every summer)."
+        },
+        {
+          "id": "tourists",
+          "name": "Tourists and day visitors",
+          "sitShare": 0.5,
+          "morningShare": 0.15,
+          "dwellHours": 0.5,
+          "priceShift": -1,
+          "qualityShift": 1.2,
+          "seatPull": 0.12,
+          "waitPull": 1,
+          "regularShare": 0.05,
+          "week": [
+            0.87,
+            0.87,
+            0.88,
+            0.88,
+            1.1,
+            1.25,
+            1.15
+          ],
+          "months": [
+            0.85,
+            0.88,
+            0.97,
+            1.02,
+            1.06,
+            1.06,
+            1.04,
+            1.04,
+            1.02,
+            1.05,
+            0.99,
+            1.02
+          ],
+          "source": "https://www.6sqft.com/nyc-tourism-in-2025-decline-in-international-visitors/",
+          "confidence": "estimate",
+          "note": "sitShare 0.5 and the $12 ticket: D06. D06: low price sensitivity, 10 am to 5 pm, they choose by the map rating and come once. week and months: D06 tourist profiles (estimates). dwellHours 0.5: D14 standard visit. priceShift -1.0: ticket $12 gives e x 0.75 = 12 / 7.1 = 1.69, e = 2.25, shift -0.45; lowered to -1.0 because a one-time visitor has no remembered price to compare with (my estimate). qualityShift +1.2: quality stands in for the map rating, my estimate. regularShare 0.05: they do not come back (D06)."
+        }
+      ],
+      "mixByBlock": {
+        "residential": {
+          "residents": 0.7,
+          "students": 0.12,
+          "tourists": 0.1,
+          "office": 0.08
+        },
+        "office": {
+          "office": 0.6,
+          "residents": 0.2,
+          "tourists": 0.15,
+          "students": 0.05
+        },
+        "campus": {
+          "students": 0.45,
+          "residents": 0.35,
+          "office": 0.15,
+          "tourists": 0.05
+        },
+        "tourist": {
+          "tourists": 0.45,
+          "office": 0.25,
+          "residents": 0.25,
+          "students": 0.05
+        }
+      },
+      "mixNote": "D06 extra.guestSegments.mixByBlock with remote workers added to residents. Planning values.",
+      "blockRules": {
+        "residentialBase": 1,
+        "office": {
+          "anchor": "subway",
+          "reachM": 250,
+          "ridersRef": 2500,
+          "maxWeight": 8
+        },
+        "campus": {
+          "anchor": "college",
+          "reachM": 400,
+          "weight": 8
+        },
+        "tourist": {
+          "museum": 8,
+          "plaza": 6,
+          "park": 2,
+          "reachM": 200
+        },
+        "note": "Weights of the four block types for one place; the guest mix is the weighted average of mixByBlock. residential is always 1. office = min(maxWeight, sum over subway stations within reachM of riders a day / ridersRef x nearness). campus = weight x nearness of the nearest college. tourist = the largest of museum, plaza and park weights x nearness. nearness = 1 - distance / reach, the same shape as the engine's overlap(). Reach distances repeat ANCHOR_REACH_M in shared/src/place.ts where they exist (subway 250, college 400); 200 m for tourist anchors is the park reach. The weights are my estimates, chosen so that the 116 storefronts of the East Village map split into all four types: 67 residential, 10 office, 23 campus, 16 tourist (node packs/parts/cafe/D20-examples.mjs, section A). The map has no true office district: the most commuter-heavy door has 49% commuters.",
+        "confidence": "estimate"
+      },
+      "tierPriceShift": {
+        "prime": -0.8,
+        "mid": 0,
+        "cheap": 0.5
+      },
+      "tierNote": "Added to the residents' priceShift and qualityShift: residents of a prime block (rent $326 per sq ft in pack.extra.rentByTier) mind the price less and pay for quality; residents of a cheap block the opposite. My estimates.",
+      "refSeats": 18,
+      "seatSpan": 12,
+      "seatNote": "seatIndex = clamp((seats - refSeats) / seatSpan, -1, 1). 18 is pack.sizing.default; 6 seats (pack.sizing.min) give -1, 30 seats give +1.",
+      "waitWindowDays": 7,
+      "multBounds": [
+        0.5,
+        1.6
+      ],
+      "tierQualityShift": {
+        "prime": 1,
+        "mid": 0,
+        "cheap": -0.3
+      }
+    },
+    "staffing": {
+      "note": "What a shift lead and an experienced barista give, what a trainee costs, and whether the paid hours cover the open hours.",
+      "source": "packs/parts/cafe/D05-people.json (extra.staffModel, staff)",
+      "confidence": "estimate",
+      "roles": {
+        "barista": {
+          "speed": 1,
+          "quality": 0
+        },
+        "shift_lead": {
+          "speed": 1.1,
+          "quality": 0.02,
+          "lead": true
+        },
+        "trainee_barista": {
+          "speed": 0.55,
+          "speedWithLead": 0.75,
+          "quality": -0.025,
+          "trainee": true
+        }
+      },
+      "rolesNote": "D05 skillRamp (reading of Perfect Daily Grind time marks, not measurements): after twelve months a barista works at 1.1 of the trained speed, adds 0.02 to quality, can train others and open alone: that is the shift lead. A new hire works at 0.4 in weeks 1-2, 0.7 in weeks 3-6 and 0.85 in months 2-3, with quality -0.03 to -0.02. Averaged over the first 13 weeks with someone to train them: (2 x 0.4 + 4 x 0.7 + 7 x 0.85) / 13 = 0.73, rounded to 0.75. Without a lead the new hire stays on register and bar-back longer: I take the mean of the first two stages, (0.4 + 0.7) / 2 = 0.55. https://perfectdailygrind.com/2019/08/how-long-should-it-take-you-to-train-your-baristas/",
+      "ordersPerPaidHour": 14,
+      "ordersPerPaidHourNote": "Takeaway orders per paid hour of a trained barista, averaged over the month. The pack's 1,700 orders per person a month / 160 hours = 10.6 is for a shop where 40% of orders are seated; with a seated order costing 1.8 of a takeaway order (service.sitInLaborMult) the same team makes 10.625 x (1 + 0.4 x 0.8) = 14.0 takeaway orders an hour. The reference shop keeps its 1,700.",
+      "rushOrdersPerPersonHour": 25,
+      "rushNote": "D14 and D06: one barista alone makes about 30 drinks an hour on a two-group machine, 1.2 drinks an order: 25 orders an hour per person on the floor in the rush. https://www.ekuep.com/en/two-groups",
+      "rushCrewShare": 0.5,
+      "rushCrewOwner": 1,
+      "rushCrewNote": "People at the bar in the morning rush = rushCrewOwner + rushCrewShare x workers. D14 puts half the team on the rush; the pack counts the owner or the hired manager as a fifth pair of hands (pack.capacity.note).",
+      "leadNeededFrom": 3,
+      "withLead": {
+        "quality": 0.03
+      },
+      "noLead": {
+        "speedMult": 0.9,
+        "quality": -0.03
+      },
+      "leadNote": "With three or more workers and no shift lead nobody assigns the stations. speedMult: D05 stations, a two-barista bar makes 35 to 45 drinks an hour; the bottom of the band against its middle is 35 / 40 = 0.875, rounded to 0.9. The two quality numbers are my estimates of the same size as the engine's penalty for a short-staffed day (0.04).",
+      "minOnFloor": 2,
+      "minOnFloorNote": "pack.capacity.minStaff: two people is the legal and practical floor (a Food Protection Certificate holder on site every open hour).",
+      "openHoursPerDay": {
+        "standard": 12,
+        "long": 15,
+        "short": 8
+      },
+      "leverPaidHours": {
+        "hours": {
+          "long": 90
+        }
+      },
+      "openHoursNote": "By option of the pack lever 'hours': 7am-7pm is 12 hours, 6am-9pm is 15. The long option already costs $2,300 a month in the pack, which is three more hours a day for one person (90 hours at about $25.50 with payroll taxes), so it brings 90 paid hours with it. 'short' (7am-3pm) is a proposed new option: see newLeverOptions.",
+      "ownerHoursPerMonth": 160,
+      "ownerHoursNote": "pack.extra.referenceMonth prices the owner's 160 hours at $4,800; a hired manager works the same hours.",
+      "uncoveredHourWeight": 0.69,
+      "uncoveredNote": "Hours nobody can cover are cut from the end of the day. D06 neighborhood hour curve: the last four open hours carry 0.07 + 0.06 + 0.05 + 0.05 = 0.23 of the day, 0.0575 an hour against the average 1 / 12 = 0.0833: 0.69.",
+      "newRoles": [
+        {
+          "id": "trainee_barista",
+          "name": "New barista (first 90 days)",
+          "hourlyWage": 18,
+          "tipped": true,
+          "cashWage": 18,
+          "hoursPerMonth": 120,
+          "licenseRequired": null,
+          "source": "https://culinaryagents.com/jobs/716734-Barista",
+          "confidence": "estimate",
+          "note": "D05: 2026 postings start at $17.00 (the legal minimum) and $18.50 plus tips; $18 is the midpoint for a hire with little bar experience. 120 hours is 28 hours a week."
+        }
+      ],
+      "newLeverOptions": [
+        {
+          "leverId": "hours",
+          "option": {
+            "id": "short",
+            "label": "7am - 3pm",
+            "monthlyCost": 0,
+            "effects": {
+              "demand": -0.2
+            }
+          },
+          "source": "packs/parts/cafe/D06-demand.json (extra.hourCurve)",
+          "confidence": "estimate",
+          "note": "Closing at 3 pm gives up the hours 3 to 7 pm: 23% of the day on a neighborhood block and 16% on an office block (D06 hour curves); 0.2 is the mean. The saving is in people: 8 open hours need 480 floor hours a month instead of 720."
+        }
+      ],
+      "leverSpeed": {
+        "sourcing": {
+          "specialty": 0.85
+        }
+      },
+      "leverSpeedNote": "Speed of the bar by lever option. Specialty sourcing: D06 gives one minute for an espresso and two for a milk drink; a house menu at half and half is 1.5 minutes a drink, a specialty menu at one quarter and three quarters is 1.75: 1.5 / 1.75 = 0.86, rounded to 0.85. The split of the menus is my estimate."
+    },
+    "service": {
+      "note": "Seats limit only guests who sit; takeaway is limited by the team's speed; the morning rush is where orders are lost. Replaces the engine's seat limit, which divided by (1 - takeaway) and so cut takeaway orders too (D14).",
+      "source": "packs/parts/cafe/D14-mechanics.json (extra.floorZones), packs/parts/cafe/D06-demand.json (extra.queue, extra.hourCurve)",
+      "confidence": "estimate",
+      "rushHours": [
+        7,
+        8,
+        9
+      ],
+      "rushHourWeights": [
+        0.31,
+        0.38,
+        0.31
+      ],
+      "rushNote": "D14 hourProfile: 12%, 15% and 12% of the day's orders at 7, 8 and 9 am; as shares of the rush: 0.12 / 0.39 = 0.31, 0.15 / 0.39 = 0.38. How much of the day falls into the rush comes from the guests (guestSegments.morningShare), not from here.",
+      "peak15Factor": 0.75,
+      "peak15Note": "D14: the busiest quarter-hour carries a third of the hour (commuter waves off the trains). An estimate; traffic engineering uses 0.85-0.95 for cars.",
+      "machineOrdersPerHour": 90,
+      "machineNote": "D14: ceiling of one two-group machine and its grinders, in orders (about 108 drinks at 1.2 drinks an order). D06: 100 drinks an hour is the practical top of a two-group machine. https://www.seattlecoffeegear.com/blogs/scg-blog/drinks-per-hour",
+      "walkAwayByLine": [
+        {
+          "line": 5,
+          "share": 0
+        },
+        {
+          "line": 10,
+          "share": 0.1
+        },
+        {
+          "line": 15,
+          "share": 0.3
+        },
+        {
+          "line": 20,
+          "share": 0.5
+        }
+      ],
+      "walkAwayNote": "Share of arriving customers who walk on when this many people stand in line; straight lines between the points, 0 below 5, 0.5 above 20. D06 extra.queue.walkAwayByPeopleAhead with the steps joined: up to five people nobody leaves (Lu, Musalem, Olivares, Schilkrut, deli counter study, paper opened by D06); a line of 10 costs like a 3.2% price rise and a line of 15 like 11.5%, which D06 converts to 10% and 30% of buyers. These are shares of the flow, not chances: the day's result is fixed by its inputs.",
+      "walkAwaySource": "https://business.columbia.edu/sites/default/files-efs/pubfiles/4642/deli_paper%200523_2011-%20post.pdf",
+      "seatPeakHourShare": 0.14,
+      "seatPeakNote": "Share of a day's seated guests who arrive in the busiest hour: the peak of the D06 neighborhood hour curve (0.14 at 8 am).",
+      "seatFill": 0.85,
+      "seatFillNote": "Share of seats that can be filled at once: a table for two often holds one guest. My estimate.",
+      "seatBusyHours": 3,
+      "seatBusyNote": "Hours a day a full room stays full. My estimate: the D06 neighborhood curve has three hours at or above 0.10 of the day.",
+      "noSeatTakesAway": 0.6,
+      "noSeatNote": "D14: of the guests who find no seat, 60% take the order away and 40% leave. An estimate.",
+      "sitInLaborMult": 1.8,
+      "sitInLaborNote": "Work per seated order against a takeaway order: ceramic, the table, the dishes, the restroom. My estimate: in a cafe where 40% of orders are seated (pack.sizing.takeawayShare 0.6) one person in four works the room, not the bar: seated order = (0.75 + 0.25 / 0.4) / 0.75 = 1.83, rounded to 1.8.",
+      "crowdAbove": 0.9,
+      "crowdQualityDrop": 0.08,
+      "crowdNote": "The pack's sizing.crowdPenaltyAbove and the engine's 0.08 quality drop, judged by seats in use at the busiest hour, not by the day's average.",
+      "fixedCoreSqft": 395,
+      "sqftPerSeat": 18,
+      "floorNote": "Seats that fit = floor((sqft - fixedCoreSqft) / sqftPerSeat). D02 extra.floorPlan: the fixed core of a counter-service cafe is 395 sq ft (bar 120, line and pickup 70, restroom 60, back of house 120, entry 25) and barely changes with the size of the space; 18 net sq ft a seat is D02's 'comfortable' and pack.sizing.sqftPerUnit. A 500 sq ft door fits 5 seats, 600 fits 11, 830 fits 24. Seats above that number do not exist for the service part.",
+      "floorSource": "https://www.nyc.gov/assets/buildings/codes-pdf/cons_codes_2022/2022BC_Chapter10_EgressWBwm.pdf"
     }
   }
 }

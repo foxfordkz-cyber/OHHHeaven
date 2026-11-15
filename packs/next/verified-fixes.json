@@ -1,0 +1,890 @@
+{
+  "note": "Verified number fixes for the live packs/cafe.json and packs/_common.json from D12 (packs/parts/cafe/D12-number-check*.json, branch claude/jolly-volta-dv0cll). Only records whose D12 version is confidence: verified with a source page D12 opened, and where an existing number changes. Built and applied by packs/next/verified-fixes.mjs.",
+  "builtFrom": {
+    "d12Cafe": "origin/claude/jolly-volta-dv0cll:packs/parts/cafe/D12-number-check.json",
+    "d12Common": "origin/claude/jolly-volta-dv0cll:packs/parts/cafe/D12-number-check.common.json",
+    "cafe": "packs/cafe.json v2",
+    "common": "packs/_common.json v1"
+  },
+  "apply": "node packs/next/verified-fixes.mjs --apply",
+  "fixes": [
+    {
+      "pack": "cafe",
+      "record": "setup[grinder]",
+      "numbers": [
+        {
+          "field": "cost",
+          "from": 2099,
+          "to": 3099
+        }
+      ],
+      "fields": [
+        "name",
+        "cost",
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "set": {
+        "name": "Espresso grinder (Mahlkonig E65W)",
+        "cost": 3099,
+        "note": "Mahlkonig E65W Grind-by-Sync: $3,099.00 at Visions Espresso (sale price; list $3,199), seen November 14, 2026. The E65S at $2,099 that the first pass used is marked discontinued (2025 update) and out of stock, so a new shop cannot buy it. Lifespan is my estimate."
+      }
+    },
+    {
+      "pack": "cafe",
+      "record": "setup[decaf_grinder]",
+      "numbers": [
+        {
+          "field": "cost",
+          "from": 2099,
+          "to": 3099
+        }
+      ],
+      "fields": [
+        "name",
+        "cost",
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://visionsespresso.com/coffee-grinders/brands/mahlkonig/",
+      "set": {
+        "name": "Second grinder for decaf (Mahlkonig E65W)",
+        "cost": 3099,
+        "note": "A second Mahlkonig E65W at $3,099.00 seen at Visions Espresso on November 14, 2026 (the E65S at $2,099 is discontinued and out of stock). A cheaper used or entry-level grinder is the usual way to save here; no listing was checked for it."
+      }
+    },
+    {
+      "pack": "cafe",
+      "record": "setup[fse_permit]",
+      "numbers": [
+        {
+          "field": "waitDays",
+          "from": 21,
+          "to": 22
+        }
+      ],
+      "fields": [
+        "waitDays",
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "set": {
+        "waitDays": 22,
+        "note": "NYC Business, seen November 14, 2026: the permit fee for most food service establishments is $280.00 a year, plus $25.00 if you make frozen desserts (soft serve, gelato); you can open 22 days after you submit the application even if no pre-permit inspection has taken place, or call 212-676-1600 for a pre-operating inspection to open sooner. The application asks for proof of workers' compensation and disability insurance, a Food Protection Certificate or course registration, and the sales tax Certificate of Authority. The clock starts when the build-out is finished: the Health Department checks the finished room. The permit does not pass to a buyer of an operating business: the new owner applies again."
+      }
+    },
+    {
+      "pack": "cafe",
+      "record": "roadmap[get_fse_permit]",
+      "numbers": [
+        {
+          "field": "waitDays",
+          "from": 21,
+          "to": 22
+        }
+      ],
+      "fields": [
+        "waitDays"
+      ],
+      "confidence": "verified",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/description/food-service-establishment-permit",
+      "follows": "setup[fse_permit]",
+      "set": {
+        "waitDays": 22
+      }
+    },
+    {
+      "pack": "cafe",
+      "record": "violations[pest_activity]",
+      "numbers": [
+        {
+          "field": "fine.base",
+          "from": 300,
+          "to": 350
+        },
+        {
+          "field": "fine.max",
+          "from": 450,
+          "to": 550
+        }
+      ],
+      "fields": [
+        "fine",
+        "source",
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://rules.cityofnewyork.us/wp-content/uploads/2021/09/Full-Text-Chapter-23-NOA_Penalty-Schedule_9-2-21-1.pdf",
+      "set": {
+        "fine": {
+          "base": 350,
+          "perMonth": 50,
+          "pctOfSaved": 0,
+          "max": 550
+        },
+        "source": "https://rules.cityofnewyork.us/wp-content/uploads/2021/09/Full-Text-Chapter-23-NOA_Penalty-Schedule_9-2-21-1.pdf",
+        "note": "Penalty schedule (24 RCNY Chapter 23, Appendix 23-C; adopted rule text on rules.cityofnewyork.us): rats, mice or live roaches (04K, 04L, 04M) $200, $200, $250, $300 or $350 by condition level I-V; the contract with a pest management professional and the service records not kept on the premises (28-06) $200, or $400 on default. Skipping pest control means both: $200-$350 + $200 = $400-$550. Game formula: $400 in the first month, up to $550. Scoring: 5 to 8 points, 28 at the worst level, which alone means a C. The NYC Business restaurant page (seen November 14, 2026) states $500-$1,000 for evidence of pests and that the fine doubles after the second violation: it disagrees with the schedule, and the schedule is the legal text. The Health Code requires a contract with a state-licensed exterminator (§81.23(b)). The 2 closure days are my estimate for an infestation that cannot be fixed during the inspection."
+      }
+    },
+    {
+      "pack": "_common",
+      "record": "violations[no_i9]",
+      "numbers": [
+        {
+          "field": "fine.base",
+          "from": 1160,
+          "to": 1152
+        },
+        {
+          "field": "fine.max",
+          "from": 11600,
+          "to": 11444
+        }
+      ],
+      "fields": [
+        "fine",
+        "source",
+        "confidence",
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+      "set": {
+        "fine": {
+          "base": 1152,
+          "perMonth": 0,
+          "pctOfSaved": 0,
+          "max": 11444
+        },
+        "source": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+        "confidence": "verified",
+        "note": "28 CFR §85.5, table 1, seen on eCFR November 14, 2026: an I-9 paperwork violation (8 U.S.C. 1324a(e)(5)) costs $288 to $2,861 per form for penalties assessed after July 3, 2025 (90 FR 29447). Knowingly employing a worker without authorization is $716 to $5,724 per worker on a first order. Every employer must complete Form I-9 for every person hired and keep it three years after hire or one year after employment ends, whichever is later. Game formula: four forms at the low end ($1,152), capped at four forms at the high end ($11,444)."
+      }
+    }
+  ],
+  "sourcesToAdd": {
+    "cafe": [
+      {
+        "url": "https://rules.cityofnewyork.us/wp-content/uploads/2021/09/Full-Text-Chapter-23-NOA_Penalty-Schedule_9-2-21-1.pdf",
+        "title": "DOHMH: Chapter 23 penalty schedule, adopted rule text (effective October 4, 2021)",
+        "checked": "2026-11-14"
+      }
+    ],
+    "_common": [
+      {
+        "url": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+        "title": "28 CFR 85.5: DOJ civil monetary penalties, adjusted July 3, 2025",
+        "checked": "2026-11-14"
+      }
+    ]
+  },
+  "notApplied": [
+    {
+      "pack": "cafe",
+      "record": "setup[sinks]",
+      "numbers": [
+        {
+          "field": "cost",
+          "from": 1720,
+          "to": 1519
+        }
+      ],
+      "fields": [
+        "cost",
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.webstaurantstore.com/regency-60-16-gauge-stainless-steel-three-compartment-commercial-sink-without-drainboards-17-x-17-x-12-bowls/600S31717X.html",
+      "reason": "у новой версии confidence: estimate — число получено расчётом, а не увидено в первоисточнике"
+    },
+    {
+      "pack": "cafe",
+      "record": "staff[barista]",
+      "numbers": [
+        {
+          "field": "hourlyWage",
+          "from": 21,
+          "to": 18
+        },
+        {
+          "field": "cashWage",
+          "from": 21,
+          "to": 18
+        }
+      ],
+      "fields": [
+        "hourlyWage",
+        "cashWage",
+        "source",
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://dol.ny.gov/statistics-oewswagezip",
+      "reason": "у новой версии confidence: estimate — число получено расчётом, а не увидено в первоисточнике"
+    },
+    {
+      "pack": "cafe",
+      "record": "monthlyCosts[sick_leave_cover]",
+      "numbers": [
+        {
+          "field": "amount",
+          "from": 70,
+          "to": 60
+        }
+      ],
+      "fields": [
+        "amount",
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "reason": "у новой версии confidence: estimate — число получено расчётом, а не увидено в первоисточнике"
+    },
+    {
+      "pack": "cafe",
+      "record": "events[sidewalk_shed]",
+      "numbers": [
+        {
+          "field": "effect.mult",
+          "from": 0.9,
+          "to": 0.93
+        },
+        {
+          "field": "months",
+          "from": 3,
+          "to": 6
+        }
+      ],
+      "fields": [
+        "effect",
+        "months",
+        "source",
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.nyc.gov/mayors-office/news/2024/08/mayor-adams-releases-new-study-finding-sidewalk-sheds-scaffolding-cost-manhattan-businesses",
+      "reason": "у новой версии confidence: estimate — число получено расчётом, а не увидено в первоисточнике"
+    },
+    {
+      "pack": "cafe",
+      "record": "extra.takeover",
+      "numbers": [
+        {
+          "field": "multipleOfAnnualSales",
+          "from": 0.2,
+          "to": 0.4
+        },
+        {
+          "field": "max",
+          "from": 200000,
+          "to": 300000
+        }
+      ],
+      "fields": [
+        "multipleOfAnnualSales",
+        "max",
+        "note",
+        "source"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.bizbuysell.com/learning-center/valuation-benchmarks/coffee-shops-cafes/",
+      "reason": "у новой версии confidence: estimate — число получено расчётом, а не увидено в первоисточнике"
+    },
+    {
+      "pack": "cafe",
+      "record": "levers[hours].options[long]",
+      "numbers": [
+        {
+          "field": "monthlyCost",
+          "from": 2300,
+          "to": 2000
+        }
+      ],
+      "fields": [
+        "monthlyCost",
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://dol.ny.gov/statistics-oewswagezip",
+      "reason": "у новой версии confidence: estimate — число получено расчётом, а не увидено в первоисточнике"
+    }
+  ],
+  "textOnly": [
+    {
+      "pack": "cafe",
+      "record": "setup[batch_brewer]",
+      "numbers": [],
+      "fields": [
+        "source",
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.webstaurantstore.com/search/bunn-cwtf15-aps.html",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "setup[sidewalk_cafe_license]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://www.diningoutnyc.info/apply/fees",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "staff[shift_lead]",
+      "numbers": [],
+      "fields": [
+        "source",
+        "confidence",
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://dol.ny.gov/statistics-oewswagezip",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "violations[unlicensed_sidewalk_cafe]",
+      "numbers": [],
+      "fields": [
+        "law",
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://www.diningoutnyc.info/enforcement",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "violations[spoiled_food]",
+      "numbers": [],
+      "fields": [
+        "source",
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://rules.cityofnewyork.us/wp-content/uploads/2021/09/Full-Text-Chapter-23-NOA_Penalty-Schedule_9-2-21-1.pdf",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "violations[no_food_protection_cert]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://www.nyc.gov/assets/doh/downloads/pdf/about/healthcode/health-code-chapter23.pdf",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "events[coffee_price_spike]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://fred.stlouisfed.org/series/APU0000717311",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "events[milk_price_up]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://fred.stlouisfed.org/series/APU0000709112",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "events[restaurant_week]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.nyctourism.com/restaurant-week/",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "extra.tipCredit",
+      "numbers": [],
+      "fields": [
+        "note",
+        "confidence"
+      ],
+      "confidence": "verified",
+      "source": "https://dol.ny.gov/minimum-wage-tipped-workers",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "unit",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://order.online/en-US/store/ten-thousand-coffee-24834959",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "levers[cleaning].options[standard]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.airtasker.com/us/costs/commercial-cleaning/commercial-cleaner-cost/",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "levers[cleaning].options[deep]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.airtasker.com/us/costs/commercial-cleaning/commercial-cleaner-cost/",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "levers[cleaning].options[minimal]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://rules.cityofnewyork.us/wp-content/uploads/2021/09/Full-Text-Chapter-23-NOA_Penalty-Schedule_9-2-21-1.pdf",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "levers[sourcing].options[specialty]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://fred.stlouisfed.org/series/APU0000717311",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "levers[pest_control].options[monthly]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://broadwaypest.pages.dev/faq/",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "levers[pest_control].options[none]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "verified",
+      "source": "https://rules.cityofnewyork.us/wp-content/uploads/2021/09/Full-Text-Chapter-23-NOA_Penalty-Schedule_9-2-21-1.pdf",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "levers[staff_pay].options[above]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://dol.ny.gov/statistics-oewswagezip",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "shortcuts[skip_food_protection_cert]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://dol.ny.gov/statistics-oewswagezip",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "shortcuts[keep_old_food]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://rules.cityofnewyork.us/wp-content/uploads/2021/09/Full-Text-Chapter-23-NOA_Penalty-Schedule_9-2-21-1.pdf",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "shortcuts[home_baked_pastries]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://rules.cityofnewyork.us/wp-content/uploads/2021/09/Full-Text-Chapter-23-NOA_Penalty-Schedule_9-2-21-1.pdf",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "shortcuts[keep_tips]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/196-D",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "shortcuts[unpaid_trial_shifts]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "shortcuts[no_spread_of_hours]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "shortcuts[sidewalk_tables]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.diningoutnyc.info/enforcement",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "cafe",
+      "record": "shortcuts[skip_grease_trap_cleaning]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "violations[returns_not_filed]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.irs.gov/payments/failure-to-file-penalty",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "violations[no_wc_insurance]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://www.wcb.ny.gov/content/main/Employers/violations-wclaw.jsp",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "violations[sick_leave_denied]",
+      "numbers": [],
+      "fields": [
+        "law",
+        "source",
+        "note"
+      ],
+      "confidence": "verified",
+      "source": "https://rules.cityofnewyork.us/wp-content/uploads/2026/06/DCWP-NOA-Rules-Relating-to-Earned-Safe-and-Sick-Time-Act.pdf",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "taxes[disability_pfl]",
+      "numbers": [],
+      "fields": [
+        "source",
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://ww3.nysif.com/-/media/Files/DISABILITY_BENEFITS/PDF/UDB-SOC_2026.pdf",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "taxes[futa]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.irs.gov/taxtopics/tc759",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "taxes[workers_comp]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.wcb.ny.gov/content/main/Employers/workers-compensation-insurance.jsp",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "taxes[ny_unemployment]",
+      "numbers": [],
+      "fields": [
+        "note"
+      ],
+      "confidence": "estimate",
+      "source": "https://dol.ny.gov/bizserve/ui/prg/rate",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "extra.statutory",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "verified",
+      "source": "https://dol.ny.gov/minimum-wage-0",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[cash_wages]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.irs.gov/publications/p15",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[contractor_1099]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.irs.gov/publications/p15",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[underreport_sales]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[keep_sales_tax]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.nysenate.gov/legislation/laws/TAX/1145",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[no_workers_comp]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.insureon.com/food-business-insurance/coffee-shops-cafes/cost",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[skip_overtime_pay]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[off_the_clock]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.nysenate.gov/legislation/laws/LAB/198",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[personal_on_business]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.irs.gov/payments/accuracy-related-penalty",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[skip_i9]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.ecfr.gov/current/title-28/chapter-I/part-85/section-85.5",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[skip_tax_filings]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.irs.gov/payments/failure-to-file-penalty",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[no_paid_sick_leave]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://www.nyc.gov/site/dca/about/paid-sick-leave-FAQs.page",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    },
+    {
+      "pack": "_common",
+      "record": "shortcuts[card_only]",
+      "numbers": [],
+      "fields": [
+        "note",
+        "source",
+        "confidence"
+      ],
+      "confidence": "estimate",
+      "source": "https://nyc-business.nyc.gov/nycbusiness/resources-by-industry/restaurant",
+      "reason": "числа не меняются: источник, закон, пометка или расчёт"
+    }
+  ],
+  "missing": []
+}

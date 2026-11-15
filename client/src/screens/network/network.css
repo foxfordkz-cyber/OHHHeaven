@@ -63,3 +63,27 @@
 .nw-report__name { font-weight: 650; }
 .nw-report__text { color: var(--text-2); font-size: var(--fs-xs); line-height: var(--lh); }
 .nw-report__who { color: var(--text-3); font-size: var(--fs-xs); }
+
+/* B18: rivals, the ladder, the neighbors' feed and incoming answers. Tokens only. */
+.nw-offer--loss { border-color: var(--loss); }
+.nw-choices { display: grid; gap: var(--s-2); margin: 0; }
+.nw-choices div { display: grid; grid-template-columns: 72px 1fr; gap: var(--s-2); align-items: baseline; }
+.nw-choices dt { font-weight: 650; font-size: var(--fs-sm); }
+.nw-choices dd { margin: 0; font-size: var(--fs-xs); color: var(--text-2); line-height: var(--lh); }
+.nw-rival { display: grid; gap: 4px; text-align: left; padding: 0; border: 0; background: none; color: var(--text); font: inherit; cursor: pointer; }
+.nw-rival__name { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-lg, 1.125rem); font-weight: 700; }
+.nw-why { margin: 0; line-height: var(--lh); }
+.nw-moves { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+.nw-move { display: grid; align-content: start; gap: var(--s-2); min-width: 0; }
+.nw-move .xsmall { line-height: var(--lh); }
+.nw-ladderline { margin: 0; font-weight: 650; }
+.nw-meaning { color: var(--text-2); }
+.nw-meaning--good { color: var(--profit); }
+.nw-meaning--bad { color: var(--loss); }
+@media (max-width: 380px) { .nw-moves { grid-template-columns: 1fr; } }
+.nw-offer { grid-template-columns: minmax(0, 1fr); }
+.nw-offer > .row-between { flex-wrap: wrap; gap: var(--s-2); }
+.nw-offer > .row-between > .row { margin-left: auto; }
+.nw-h2h td, .nw-h2h th { font-size: var(--fs-sm); }
+.nw-h2h .nw-lead { color: var(--profit); font-weight: 700; }
+.nw-strip { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }

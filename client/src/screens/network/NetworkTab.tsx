@@ -6,10 +6,13 @@ import { CityMapSlot, useCatalog, useGame, useOwnerView } from './deps';
 import { Lines, Stars } from './fields';
 import { ProposeDealSheet } from './ProposeDealSheet';
 import { ReportSheet } from './ReportSheet';
+import { IncomingCard, LadderCard, NewsCard, RivalCard, TwoMoves } from './RivalsPanel';
+import { changesSince, footfallRadius, ladderOf, mainRival, reportMove, rivalNews, teamUpMove } from './rivals';
+import { useLastLook } from './memory';
 import {
   act, blockFundInfo, daysLeftText, dealEffect, dealEndDay, endEarlyWarning, formatDistance, groupDeals, lastMonthDealMoney,
-  monthBase, myReports, neighborRows, NICHE_LABEL, otherId, pendingBlockFund, reportEligibility, reportInboxItems, reportLimit, reportName,
-  rankText, reportOutcomeText, sideOf, termsSummary, trustLabel, type DealGroups, type NeighborRow, type NetworkExtra,
+  monthBase, myReports, neighborRows, NICHE_LABEL, otherId, pendingBlockFund, reportInboxItems, reportLimit, reportName,
+  rankText, reportOutcomeText, sideOf, termsSummary, trustLabel, type DealGroups, type DealKind, type NeighborRow, type NetworkExtra,
 } from './logic';
 import './network.css';
 
@@ -24,7 +27,7 @@ export interface NetworkTabProps {
 
 type Panel =
   | { kind: 'profile'; id: string }
-  | { kind: 'deal'; id: string }
+  | { kind: 'deal'; id: string; dealKind?: DealKind | null }
   | { kind: 'report'; id?: string }
   | { kind: 'end'; dealId: string }
   | null;
@@ -64,6 +67,14 @@ export function NetworkTab(props: NetworkTabProps) {
   const rowOf = (id: string) => rows.find((r) => r.biz.id === id);
   const close = () => setPanel(null);
   const panelBiz = panel && 'id' in panel && panel.id ? bizOf(panel.id) : undefined;
+  const ladder = useMemo(() => ladderOf(view), [view]);
+  const rival = useMemo(() => mainRival(view, places, packs, ladder), [view, places, packs, ladder]);
+  const news = useMemo(() => rivalNews(view, places, packs), [view, places, packs]);
+  const lastLook = useLastLook(view);
+  const changes = useMemo(() => changesSince(view, places, packs, lastLook), [view, places, packs, lastLook]);
+  const openProfile = (id: string) => { if (rowOf(id)) setPanel({ kind: 'profile', id }); };
+  const radius = footfallRadius(packs, me?.niche);
+  const sharesStreet = (r: NeighborRow) => Boolean(me) && r.biz.niche === me!.niche && r.biz.status !== 'bankrupt' && r.distanceM !== null && r.distanceM <= radius;
 
   return (
     <div className="stack nw" data-screen="network">
@@ -75,15 +86,23 @@ export function NetworkTab(props: NetworkTabProps) {
       )}
       {!me && <p className="muted">Open your business to make deals with neighbors. You can already look around.</p>}
 
-      {groups.incoming.length > 0 && me && (
-        <Card title="Offers for you" subtitle={`${groups.incoming.length} waiting for your answer`} tone="accent" aria-label="Offers for you">
-          <div className="stack">
-            {groups.incoming.map((d) => (
-              <IncomingOffer key={d.id} deal={d} view={view} author={bizOf(d.fromBusinessId)} onAct={onAct} />
-            ))}
-          </div>
-        </Card>
+      {me && (
+        <IncomingCard
+          view={view} packs={packs} offers={groups.incoming} nameOf={bizOf} onAct={onAct} distanceOf={(id) => rowOf(id)?.distanceM ?? null}
+          onTeamUp={(id, dealKind) => setPanel({ kind: 'deal', id, dealKind })} onReport={(id) => setPanel({ kind: 'report', id })}
+        />
       )}
+
+      {me && (
+        <RivalCard
+          view={view} packs={packs} places={places} rival={rival} myNetWorth={ladder?.me?.netWorth ?? null} onOpen={openProfile}
+          onTeamUp={(id, dealKind) => setPanel({ kind: 'deal', id, dealKind })} onReport={(id) => setPanel({ kind: 'report', id })}
+        />
+      )}
+
+      {me && <LadderCard view={view} ladder={ladder} onOpen={openProfile} />}
+
+      {me && <NewsCard changes={changes} news={news} lastDay={lastLook?.day ?? null} onOpen={openProfile} />}
 
       <Card
         title="Neighbors" subtitle={`${rows.length} in the neighborhood, closest first`} aria-label="Neighbors"
@@ -95,7 +114,7 @@ export function NetworkTab(props: NetworkTabProps) {
           ) : (
             <>
               <List>
-                {(showAll ? rows : rows.slice(0, LIST_FIRST)).map((r) => <NeighborListRow key={r.biz.id} row={r} onOpen={() => setPanel({ kind: 'profile', id: r.biz.id })} />)}
+                {(showAll ? rows : rows.slice(0, LIST_FIRST)).map((r) => <NeighborListRow key={r.biz.id} row={r} street={sharesStreet(r)} onOpen={() => setPanel({ kind: 'profile', id: r.biz.id })} />)}
               </List>
               {rows.length > LIST_FIRST && (
                 <Button block variant="ghost" onClick={() => setShowAll((v) => !v)}>
@@ -121,12 +140,12 @@ export function NetworkTab(props: NetworkTabProps) {
 
       {panel?.kind === 'profile' && rowOf(panel.id) && (
         <NeighborProfile
-          row={rowOf(panel.id)!} view={view} places={places} nameOf={nameOf} onClose={close}
-          onPropose={() => setPanel({ kind: 'deal', id: panel.id })} onReport={() => setPanel({ kind: 'report', id: panel.id })}
+          row={rowOf(panel.id)!} view={view} places={places} packs={packs} nameOf={nameOf} onClose={close}
+          onPropose={(dealKind) => setPanel({ kind: 'deal', id: panel.id, dealKind })} onReport={() => setPanel({ kind: 'report', id: panel.id })}
         />
       )}
       {panel?.kind === 'deal' && panelBiz && (
-        <ProposeDealSheet key={panelBiz.id} onClose={close} view={view} target={panelBiz} distanceM={rowOf(panelBiz.id)?.distanceM ?? null} onAct={onAct} />
+        <ProposeDealSheet key={panelBiz.id} onClose={close} view={view} target={panelBiz} distanceM={rowOf(panelBiz.id)?.distanceM ?? null} onAct={onAct} initialKind={panel.dealKind} />
       )}
       {panel?.kind === 'report' && (
         <ReportSheet key={panel.id ?? 'pick'} onClose={close} view={view} packs={packs} target={panelBiz} onAct={onAct} />
@@ -160,12 +179,12 @@ const price = (n: number) => `$${n.toFixed(2)}`;
 const LIST_FIRST = 12;
 const money0 = (n: number) => `$${Math.round(n).toLocaleString('en-US')}`;
 
-function NeighborListRow({ row, onOpen }: { row: NeighborRow; onOpen: () => void }) {
+function NeighborListRow({ row, onOpen, street }: { row: NeighborRow; onOpen: () => void; street: boolean }) {
   const b = row.biz;
   return (
     <ListRow
       onClick={onOpen}
-      title={<span className="nw-name">{b.name}{b.isAi && <AiBadge />}<StatusBadge biz={b} /></span>}
+      title={<span className="nw-name">{b.name}{b.isAi && <AiBadge />}<StatusBadge biz={b} />{street && <Badge tone="warn" title="Same trade within the foot-traffic radius: you split the people walking by">Shares your street</Badge>}</span>}
       subtitle={`${NICHE_LABEL[b.niche]} · ${formatDistance(row.distanceM)} · ${price(b.price)} · ${rankText(b)}`}
       value={<span className="nw-rowvalue"><Stars value={b.reputation} /><span className="xsmall faint">{trustLabel(b.trust)}</span></span>}
     />
@@ -173,21 +192,25 @@ function NeighborListRow({ row, onOpen }: { row: NeighborRow; onOpen: () => void
 }
 
 function NeighborProfile(props: {
-  row: NeighborRow; view: ViewWithExtra; places: Place[]; nameOf: (id: string) => string;
-  onClose: () => void; onPropose: () => void; onReport: () => void;
+  row: NeighborRow; view: ViewWithExtra; places: Place[]; packs: PackSet | null; nameOf: (id: string) => string;
+  onClose: () => void; onPropose: (kind: DealKind | null) => void; onReport: () => void;
 }) {
   const b = props.row.biz;
   const place = props.places.find((p) => p.id === b.placeId);
-  const report = reportEligibility(props.view.business, b, reportLimit(props.view));
+  const team = teamUpMove(props.view, b, props.row.distanceM);
+  const report = reportMove(props.view, props.packs, b);
   const canDeal = Boolean(props.view.business) && b.status !== 'bankrupt';
   return (
     <Sheet
       open onClose={props.onClose} title={b.name}
       footer={
         <div className="stack-sm">
-          <Button block icon="handshake" onClick={props.onPropose} disabled={!canDeal}>Propose a deal</Button>
-          <Button block variant="danger" icon="flag" onClick={props.onReport} disabled={!report.allowed} title={report.reason}>Report to the city</Button>
-          {!report.allowed && <p className="xsmall muted nw-center">{report.reason}</p>}
+          {props.view.business
+            ? <TwoMoves team={team} report={report} onTeamUp={() => props.onPropose(team.kind)} onReport={props.onReport} />
+            : <p className="xsmall muted nw-center">Open your business to make deals or report to the city.</p>}
+          {props.view.business && canDeal && (
+            <Button block variant="ghost" onClick={() => props.onPropose(null)}>All deal kinds: loan, partner up…</Button>
+          )}
         </div>
       }
     >
@@ -213,29 +236,6 @@ function NeighborProfile(props: {
         {b.isAi && <p className="small muted">The computer runs this business. It answers offers by fixed rules and never wins prizes.</p>}
       </div>
     </Sheet>
-  );
-}
-
-function IncomingOffer(props: { deal: Deal; view: OwnerView; author?: PublicBusiness; onAct: (a: Action) => unknown }) {
-  const { deal, view, author } = props;
-  const effect = dealEffect(deal.terms, 'to', monthBase(view.business, view.analytics));
-  return (
-    <div className="nw-offer" data-deal={deal.id}>
-      <div className="nw-offer__head">
-        <strong>{author?.name ?? 'A neighbor'}</strong>
-        {author?.isAi && <AiBadge />}
-        <span className="xsmall faint nw-push">{author ? trustLabel(author.trust) : ''}</span>
-      </div>
-      <div className="nw-offer__terms">{termsSummary(deal.terms)}</div>
-      <Lines lines={effect.lines} />
-      <div className="row-between">
-        <Badge tone="warn" icon="hourglass">{daysLeftText(deal.expiresDay, view.world.day)}</Badge>
-        <div className="row">
-          <Button size="sm" variant="secondary" onClick={() => props.onAct(act.answerDeal(deal.id, false))}>Decline</Button>
-          <Button size="sm" onClick={() => props.onAct(act.answerDeal(deal.id, true))}>Accept</Button>
-        </div>
-      </div>
-    </div>
   );
 }
 

@@ -1,14 +1,19 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { PackRuleCard, Query, RealWorldPlan } from '@ohh/shared/types';
-import { Button, Card, Icon, RuleCard, Skeleton } from '../../ui';
-import { useGame } from '../../app/store';
+import { Button, Card, Icon, RuleCard, Skeleton, useT } from '../../ui';
+import { useGame, useOwnerView } from '../../app/store';
 import { int, money, nicheName, unitWord } from '../insights/format';
 import { decodePlan, planLink, planTokenFromHash } from './plan-link';
 import { useRuleCards } from './rulecards';
 import { PLAN_PRINT_CSS } from './print';
+import { loadProgress, personalOf, progressKey, saveProgress, type ReserveMonths } from './personal';
+import { NextRealStep, PlanPlaceBlock, PlanRisks, PlanSummaryBlock, SavingsCheck, StepMine } from './PlanPersonal';
+import { useNavigate } from 'react-router-dom';
+import type { PlanTeaser as ProTeaser } from '../paywall/billing';
+import { useBilling } from '../paywall/useBilling';
 import './plan.css';
 
-type AskFn = (q: Query) => Promise<unknown>;
+export type AskFn = (q: Query) => Promise<unknown>;
 const unwrap = (res: unknown): RealWorldPlan | null => {
   const v = res && typeof res === 'object' && 'ok' in (res as object) ? (res as { data?: unknown }).data : res;
   return v && typeof v === 'object' && 'startupBudget' in (v as object) ? (v as RealWorldPlan) : null;
@@ -37,6 +42,8 @@ export function lessonsTitle(n: number): string {
   const k = Math.min(3, n);
   return k === 0 ? 'Lessons from your season' : `${['One lesson', 'Two lessons', 'Three lessons'][k - 1]} from your season`;
 }
+
+const idx = (order: string[], id: string) => { const i = order.indexOf(id); return i < 0 ? order.length : i; };
 
 /** A text as a sentence: trimmed, with one full stop at the end. */
 const sentence = (t: string) => (/[.!?]$/.test(t.trim()) ? t.trim() : `${t.trim()}.`);
@@ -67,29 +74,59 @@ function Lead({ text }: { text: string }) {
   return <>{lead}{rest && <span className="plan-more"> {rest}</span>}</>;
 }
 
-/** The page a person takes home. Pure: everything comes from the RealWorldPlan. */
-export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards: Map<string, PackRuleCard>; actions?: ReactNode }) {
+/** What the person decided on this page, kept on this device: steps done in real life, savings, months of reserve. */
+export function usePlanProgress(plan: RealWorldPlan) {
+  const me = useMemo(() => personalOf(plan), [plan]);
+  const key = progressKey(plan, me);
+  const [state, setState] = useState(() => loadProgress(key));
+  useEffect(() => setState(loadProgress(key)), [key]);
+  const update = (next: typeof state) => { setState(next); saveProgress(key, next); };
+  const done = useMemo(() => new Set(state.done), [state.done]);
+  return {
+    me, done,
+    savings: state.savings ?? null,
+    reserveMonths: (state.reserveMonths ?? 6) as ReserveMonths,
+    toggle: (id: string) => update({ ...state, done: done.has(id) ? state.done.filter((x) => x !== id) : [...state.done, id] }),
+    setSavings: (n: number | null) => update({ ...state, savings: n ?? undefined }),
+    setReserve: (m: ReserveMonths) => update({ ...state, reserveMonths: m }),
+  };
+}
+
+/** The page a person takes home. Everything comes from the RealWorldPlan; the ticks and the savings stay on this device. */
+export function PlanView({ plan, cards, actions, day }: { plan: RealWorldPlan; cards: Map<string, PackRuleCard>; actions?: ReactNode; day?: number }) {
   const one = unitWord(plan.niche, 1);
   const many = unitWord(plan.niche, 2);
+  const tr = useT();
+  const progress = usePlanProgress(plan);
+  const { me, done } = progress;
+  const suppliers = me && me.supplierOrder.length
+    ? [...plan.suppliers].sort((a, b) => idx(me.supplierOrder, a.id) - idx(me.supplierOrder, b.id))
+    : plan.suppliers;
   return (
     <article className="plan" aria-label="Your real-world plan">
       <style data-plan-print="">{PLAN_PRINT_CSS}</style>
       <header className="plan-block plan-header">
         <div className="eyebrow">First Year · {nicheName(plan.niche)}</div>
-        <h1 className="h1">Your real-world plan</h1>
-        <p className="muted">{plan.businessName} — built from your season in a learning simulation of real New York rents, permits, wages and taxes.</p>
+        <h1 className="h1">{tr('Your real-world plan', 'Ваш план для жизни')}</h1>
+        <p className="muted">{plan.businessName}{me?.place ? ` at ${me.place.address}` : ''} — built from your season in a learning simulation of real New York rents, permits, wages and taxes.</p>
         {actions}
+        <NextRealStep steps={plan.checklist} done={done} />
       </header>
+
+      {me && <PlanSummaryBlock me={me} />}
+      {me && <SavingsCheck me={me} savings={progress.savings} reserveMonths={progress.reserveMonths} onSavings={progress.setSavings} onReserve={progress.setReserve} />}
+      {me && <PlanRisks me={me} />}
+      {me && <PlanPlaceBlock me={me} />}
 
       <div className="plan-pair">
       <section className="plan-block plan-half" aria-labelledby="plan-budget">
-        <h2 id="plan-budget" className="h3">Money to start</h2>
-        <MoneyTable rows={plan.startupBudget} total={plan.startupTotal} totalLabel="Total to open" />
+        <h2 id="plan-budget" className="h3">{tr('Money to start', 'Деньги на открытие')}</h2>
+        <MoneyTable rows={plan.startupBudget} total={plan.startupTotal} totalLabel={tr('Total to open', 'Всего на открытие')} />
       </section>
 
       <section className="plan-block plan-half" aria-labelledby="plan-monthly">
-        <h2 id="plan-monthly" className="h3">Every month</h2>
-        <MoneyTable rows={plan.monthlyCosts} total={plan.monthlyTotal} totalLabel="Monthly costs" />
+        <h2 id="plan-monthly" className="h3">{tr('Every month', 'Каждый месяц')}</h2>
+        <MoneyTable rows={plan.monthlyCosts} total={plan.monthlyTotal} totalLabel={tr('Monthly costs', 'Расходы в месяц')} />
         <p className="plan-note">
           <strong>Keep {money(plan.reserveAdvised)} in reserve</strong>{reserveMonths(plan) ? ` — about ${reserveMonths(plan)} of these costs —` : ''} so one slow season does not close you.
           All in, have <strong className="num">{money(plan.startupTotal + plan.reserveAdvised)}</strong> before you sign a lease.
@@ -103,30 +140,39 @@ export function PlanView({ plan, cards, actions }: { plan: RealWorldPlan; cards:
       </section>
 
       <section className="plan-block plan-long" aria-labelledby="plan-docs">
-        <h2 id="plan-docs" className="h3">Documents, in this order</h2>
+        <h2 id="plan-docs" className="h3">{tr('Documents, in this order', 'Документы — по порядку')}</h2>
         <ol className="plan-steps">
           {plan.checklist.map((s, i) => (
-            <li key={s.id} className="plan-row plan-step">
-              <div className="plan-step__title"><span className="plan-num" aria-hidden="true">{i + 1}</span>{s.title}</div>
+            <li key={s.id} className="plan-row plan-step" data-done={done.has(s.id) || undefined}>
+              <div className="plan-step__title">
+                <span className="plan-num" aria-hidden="true">{done.has(s.id) ? <Icon name="check" size={11} /> : i + 1}</span>
+                <span className="grow">{s.title}</span>
+                <label className="plan-tick no-print"><input type="checkbox" checked={done.has(s.id)} onChange={() => progress.toggle(s.id)} /> <span className="xsmall">{tr('Done in real life', 'Сделано в жизни')}</span></label>
+              </div>
               <div className="plan-step__meta small">
                 {s.agency && <span>{s.agency}</span>}
                 {s.fee !== undefined && <span>{s.fee === 0 ? 'free' : money(s.fee, { cents: s.fee % 1 !== 0 })}</span>}
                 {s.waitDays !== undefined && <span>{s.waitDays} {s.waitDays === 1 ? 'day' : 'days'}</span>}
               </div>
-              <div className="small"><Lead text={s.text} /></div>
-              {s.link && <PlanLink href={s.link}>Official page <Icon name="arrowRight" size={12} /></PlanLink>}
+              <StepMine mine={me?.steps[s.id]} day={day} />
+              {me?.steps[s.id]?.mine
+                ? <div className="small muted plan-general"><span className="plan-general__tag">{tr('In general', 'В общем случае')}:</span> <Lead text={s.text} /></div>
+                : <div className="small"><Lead text={s.text} /></div>}
+              {s.link ? <PlanLink href={s.link}>{tr('Official page', 'Официальная страница')} <Icon name="arrowRight" size={12} /></PlanLink> : <span className="xsmall faint">{tr('No official page in our data yet: ask the agency.', 'Официальной страницы в наших данных пока нет: спросите ведомство.')}</span>}
             </li>
           ))}
         </ol>
       </section>
 
       <section className="plan-block plan-long" aria-labelledby="plan-suppliers">
-        <h2 id="plan-suppliers" className="h3">Where to find suppliers</h2>
+        <h2 id="plan-suppliers" className="h3">{tr('Where to find suppliers', 'Где найти поставщиков')}</h2>
+        {me && Object.keys(me.supplierWhy).length > 0 && <p className="small muted plan-sub">{tr('The ones your choices need come first.', 'Сначала — те, что нужны под ваши выборы.')}</p>}
         <ul className="plan-suppliers">
-          {plan.suppliers.map((s) => (
-            <li key={s.id} className="plan-row plan-supplier">
+          {suppliers.map((s) => (
+            <li key={s.id} className="plan-row plan-supplier" data-mine={me?.supplierWhy[s.id] ? '' : undefined}>
               <strong>{s.category}</strong> — {sentence(s.what)} <span className="muted"><Lead text={sentence(s.whereToFind)} />{s.examples && <span className="plan-examples"> Examples: {sentence(s.examples)}</span>}</span>
               {s.link && <> <PlanLink href={s.link}>Link</PlanLink></>}
+              {me?.supplierWhy[s.id] && <div className="plan-for-you small"><strong>{tr('For you', 'Вам')}:</strong> {me.supplierWhy[s.id]}</div>}
             </li>
           ))}
         </ul>
@@ -179,7 +225,13 @@ export function usePlan(ask: AskFn | null): { plan: RealWorldPlan | null; loadin
   return state;
 }
 
-export function PlanScreen({ ask, cards, toast }: { ask: AskFn | null; cards?: PackRuleCard[]; toast?: (text: string, tone?: 'info' | 'success' | 'error') => void }) {
+export function PlanScreen({ ask, cards, toast, day, locked, onPro }: {
+  ask: AskFn | null; cards?: PackRuleCard[]; toast?: (text: string, tone?: 'info' | 'success' | 'error') => void; day?: number;
+  /** The plan is built but sits in Pro (server/src/billing.ts): what is in it, so the free player sees what they get. */
+  locked?: { teaser: ProTeaser | null } | null;
+  onPro?: () => void;
+}) {
+  const tr = useT();
   const { plan, loading, fromLink } = usePlan(ask);
   const ruleCards = useRuleCards(cards);
   const [copied, setCopied] = useState(false);
@@ -198,6 +250,7 @@ export function PlanScreen({ ask, cards, toast }: { ask: AskFn | null; cards?: P
   }
 
   if (loading) return <main className="screen plan-root stack" aria-busy="true"><Skeleton height={120} /><Skeleton height={200} /><Skeleton height={200} /></main>;
+  if (!plan && locked) return <main className="screen plan-root"><PlanLocked teaser={locked.teaser} onPro={onPro} tr={tr} /></main>;
   if (!plan) {
     return (
       <main className="screen plan-root">
@@ -214,12 +267,35 @@ export function PlanScreen({ ask, cards, toast }: { ask: AskFn | null; cards?: P
   );
   return (
     <main className="screen plan-root">
-      <PlanView plan={plan} cards={ruleCards} actions={actions} />
+      <PlanView plan={plan} cards={ruleCards} actions={actions} day={fromLink ? undefined : day} />
     </main>
+  );
+}
+
+/** A free player after the free month: the plan exists, it is in Pro. Its own numbers and one button (docs/qa/BUGS.md #13). */
+export function PlanLocked({ teaser, onPro, tr }: { teaser: ProTeaser | null; onPro?: () => void; tr: (en: string, ru: string) => string }) {
+  const lines = teaser ? [
+    tr(`Opening budget for ${teaser.businessName}: ${money(teaser.startupTotal)}`, `Бюджет открытия «${teaser.businessName}»: ${money(teaser.startupTotal)}`),
+    tr(`Monthly bills: ${money(teaser.monthlyTotal)}; keep ${money(teaser.reserveAdvised)} in reserve`, `Расходы в месяц: ${money(teaser.monthlyTotal)}; в запасе держать ${money(teaser.reserveAdvised)}`),
+    tr(`${teaser.steps} real-life steps in order, ${teaser.stepsWithLinks} with the official page`, `${teaser.steps} шагов в жизни по порядку, у ${teaser.stepsWithLinks} — официальная страница`),
+    tr(`${teaser.suppliers} suppliers for your choices, ${teaser.lessons} lessons from your season`, `${teaser.suppliers} поставщиков под ваш выбор, ${teaser.lessons} уроков вашего сезона`),
+  ] : [];
+  return (
+    <Card tone="accent" title={tr('Your plan is ready — it is in First Year Pro', 'Ваш план готов — он в First Year Pro')}
+      subtitle={tr('Built from your own season: your address, your rent, your kit and your mistakes.', 'Собран из вашего сезона: ваш адрес, ваша аренда, ваш набор и ваши ошибки.')}>
+      <div className="stack-sm" data-testid="plan-locked">
+        {lines.length > 0 && <ul className="small" style={{ margin: 0, paddingLeft: '1.2em' }}>{lines.map((l) => <li key={l}>{l}</li>)}</ul>}
+        {onPro && <Button block icon="arrowRight" onClick={onPro}>{tr('See Pro', 'Посмотреть Pro')}</Button>}
+      </div>
+    </Card>
   );
 }
 
 export function PlanConnected() {
   const { query, toast } = useGame();
-  return <PlanScreen ask={query} toast={toast} />;
+  const view = useOwnerView();
+  const navigate = useNavigate();
+  const { status } = useBilling({ day: view?.world.day });
+  const locked = status?.locked.includes('plan') ? { teaser: status.teaser } : null;
+  return <PlanScreen ask={query} toast={toast} day={view?.world.day} locked={locked} onPro={() => navigate('/pro')} />;
 }

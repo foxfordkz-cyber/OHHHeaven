@@ -1,5 +1,5 @@
 // Today tab helpers: pick days, name the reasons for lost customers, order recommendations and events.
-import type { DayReport, GameEvent, NicheId, PackSizing, Recommendation } from '@ohh/shared/types';
+import type { DayReport, GameEvent, NicheId, NicheKpi, PackSizing, Recommendation } from '@ohh/shared/types';
 
 export function pickDays(days: DayReport[], worldDay: number): { today: DayReport | null; yesterday: DayReport | null } {
   const byDay = new Map(days.map((d) => [d.day, d]));
@@ -44,6 +44,20 @@ export function upcomingEvents(events: GameEvent[], niche: NicheId, today: numbe
     .filter((e) => e.endDay >= today)
     .filter((e) => e.effects.some((f) => !f.niches || f.niches.includes(niche)))
     .sort((a, b) => a.startDay - b.startDay);
+}
+
+/** A niche KPI in words: 62.5% · $4,200/mo · 9.1x. */
+export function kpiText(k: NicheKpi): string {
+  const v = Math.round(k.value * 10) / 10;
+  const n = v.toLocaleString('en-US', { maximumFractionDigits: 1 });
+  if (k.unit === '%') return `${n}%`;
+  if (k.unit.startsWith('$')) {
+    const money = `$${Math.round(Math.abs(v)).toLocaleString('en-US')}`;
+    return `${v < 0 ? '−' : ''}${money}${k.unit.slice(1)}`;
+  }
+  // short units stay (9.1x, 4 min); a word like "order" repeats the label and is dropped
+  if (!k.unit || k.unit.length > 3) return n;
+  return `${n}${k.unit.length <= 2 ? '' : ' '}${k.unit}`;
 }
 
 /** Bar chart data: last 30 days, served and lost. */

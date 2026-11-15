@@ -123,11 +123,13 @@ const fewSeats: Rule = (rc) => {
   if (target > b.size) {
     const extra = itemsCost(pack, b.items.filter((i) => pack.setup.find((d) => d.id === i.id)?.scalesWithSize), target) - itemsCost(pack, b.items.filter((i) => pack.setup.find((d) => d.id === i.id)?.scalesWithSize), b.size);
     const d = rc.delta({ size: target });
+    if (d <= 0) return null;   // advice that loses money is not advice (docs/qa/BUGS.md #2)
     return rec('few_seats', sev, `Too few ${pack.sizing.unitName}s`, `${head} Add ${target - b.size} (${b.size} → ${target}); the furniture costs ${usd(extra)} once.`, { type: 'resize', size: target }, d);
   }
   const p = roundPrice(b.orders.price * 1.08, pack);
   if (p <= b.orders.price) return null;
   const d = rc.delta({ orders: { price: p } });
+  if (d <= 0) return null;
   return rec('few_seats', sev, `Too few ${pack.sizing.unitName}s`, `${head} This space fits no more than ${max}. Raise the price to ${usd2(p)} so the room earns more per seat.`, orders({ price: p }), d);
 };
 
@@ -143,6 +145,7 @@ const manySeats: Rule = (rc) => {
   const resale = r2((itemsCost(pack, scaled, b.size) - itemsCost(pack, scaled, target)) * RULES.RESALE_SHARE);
   const upkeep = (b.size - target) * pack.sizing.cleaningCostPerSizeMonth;
   const d = rc.delta({ size: target });
+  if (d <= 0) return null;   // shrinking that loses money is not advice (docs/qa/BUGS.md #2)
   return rec('many_seats', 'warn', `Too many empty ${pack.sizing.unitName}s`, `Your room is only ${pct(a.sizeUtilization)} full. ${b.size - target} empty ${pack.sizing.unitName}s cost ${usd(upkeep)} a month in upkeep and make the place feel dead. Shrink to ${target}; the furniture sells back for ${usd(resale)}.`, { type: 'resize', size: target }, d);
 };
 

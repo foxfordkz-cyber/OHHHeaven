@@ -407,7 +407,12 @@ export function answer(w: WorldState, ctx: EngineCtx, playerId: string | null, q
       if (!isObj(q.orders)) throw new HostError('orders must be an object');
       const err = checkActionShape({ type: 'set_orders', orders: q.orders });
       if (err) throw new HostError(err);
-      return engine.whatIf(w, ctx, b.id, q.orders);
+      // size: the forecast with another room (the Resize sheet); same bounds as the resize action
+      if (q.size !== undefined) {
+        const sizing = ctx.packs.niches[b.niche]?.sizing;
+        if (!Number.isInteger(q.size) || !sizing || q.size < sizing.min || q.size > sizing.max) throw new HostError(`size must be a whole number from ${sizing?.min ?? 1} to ${sizing?.max ?? 1}`);
+      }
+      return engine.whatIf(w, ctx, b.id, q.orders, q.size);
     }
     case 'roadmap': {
       const niche = needNiche(q.niche);

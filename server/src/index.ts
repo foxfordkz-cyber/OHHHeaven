@@ -8,7 +8,12 @@ import { checkActionShape, defaultConfig, newWorld, type AiApi, type HostDeps } 
 import { loadData, REPO_ROOT, SERVER_DIR, type GameData } from './data';
 import { ai as defaultAi, serverDeps, usingStubs } from './deps';
 import { RateLimiter } from './rate';
+import { mountBilling } from './billing';
 import { WorldRuntime } from './runtime';
+import { PitchDirector, enterPage, joinBase, joinPage, type PitchCommand, type PitchHost } from './pitch';
+import { qrSvg } from './qr';
+import { compressedJson, compressedStatic } from './compress';
+import { deskPage } from './desk';
 
 export const CLIENT_DIST = resolve(REPO_ROOT, 'client/dist');
 export const DEFAULT_SNAPSHOT_DIR = join(SERVER_DIR, '.snapshots');
@@ -40,6 +45,40 @@ export class GameServer {
   }
 
   readonly log = (m: string): void => { (this.opts.log ?? ((x: string) => console.log(`[server] ${x}`)))(m); };
+
+  /** Город показа жюри (scenario: "pitch"), если он поднят. */
+  pitch: PitchDirector | null = null;
+
+  private runtimeOpts(deps?: HostDeps) {
+    const dir = this.opts.snapshotDir === undefined ? null : this.opts.snapshotDir;
+    return { ctx: this.data.ctx, deps: deps ?? this.opts.deps ?? serverDeps(), ai: this.opts.ai ?? defaultAi, snapshotDir: dir, now: this.opts.now, log: this.log };
+  }
+
+  private pitchHost(): PitchHost {
+    return {
+      snapshotDir: this.opts.snapshotDir ?? null, log: this.log, ctx: this.data.ctx,
+      baseDeps: () => this.opts.deps ?? serverDeps(),
+      openPitch: (id, world, deps, onDay) => {
+        const old = this.runtimes.get(id);
+        if (old) { old.stop(); this.runtimes.delete(id); }
+        const ro = { ...this.runtimeOpts(deps), aiEvents: false, onDay };
+        const snap = world ? null : WorldRuntime.readSnapshot(ro.snapshotDir, id, this.log);
+        if (!world && !snap) throw new Error(`${id}: no snapshot to restore the pitch city from`);
+        const rt = snap ? new WorldRuntime(snap.world, ro, snap) : new WorldRuntime(world!, ro);
+        this.runtimes.set(id, rt);
+        if (this.opts.autoStart) rt.start();
+        rt.saveSoon(true);
+        return rt;
+      },
+    };
+  }
+
+  /** Собрать город показа (или вернуть уже собранный). Расчёт синхронный, около 20 секунд. */
+  createPitch(fresh = false): PitchDirector {
+    if (this.pitch && !fresh) return this.pitch;
+    this.pitch = PitchDirector.create(this.pitchHost());
+    return this.pitch;
+  }
 
   /** Поднимает мир: из снимка, если он есть, иначе новый. */
   open(p: { id: string; name: string; demo: boolean; seed: number }): WorldRuntime {
@@ -76,7 +115,8 @@ export class GameServer {
     const restarted: string[] = [];
     for (const [id, rt] of [...this.runtimes]) {
       const w = rt.world;
-      if (!w.config.demo || w.phase === 'running') { this.endedAt.delete(id); continue; }
+      // город показа возвращает в начало только ведущий (команда reset): у него стартовая копия и коды
+      if (!w.config.demo || w.phase === 'running' || id === this.pitch?.id) { this.endedAt.delete(id); continue; }
       const since = this.endedAt.get(id);
       if (since === undefined) { this.endedAt.set(id, now); continue; }
       if (!this.demoRestartMs || now - since < this.demoRestartMs) continue;
@@ -101,6 +141,12 @@ export class GameServer {
       if (this.runtimes.has(id) || !/^demo-\d+$/.test(id)) continue;
       const n = Number(id.slice(5));
       this.open({ id, name: `Demo City ${n}`, demo: true, seed: 7 + n });
+    }
+    // город показа: из снимка, если он есть (быстро); PITCH=1 собирает новый уже после старта — см. startServer
+    try {
+      this.pitch = PitchDirector.restore(this.pitchHost());
+    } catch (e) {
+      this.log(`pitch: ${(e as Error).message}`);
     }
     return this;
   }
@@ -147,11 +193,12 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
     if (!limiter.take(key)) { res.status(429).set('Retry-After', '1').json({ ok: false, error: 'Too many requests' }); return; }
     next();
   });
+  mountBilling(app, game); // тариф Pro: проверки перед /action и /query, маршруты /billing (server/src/billing.ts)
 
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true, name: 'First Year', stubs: usingStubs, uptimeS: Math.round((Date.now() - game.startedAt) / 1000), worlds: [...game.runtimes.values()].map((x) => x.stats()), data: game.data.sources });
   });
-  app.get('/api/packs', (_req, res) => { res.json(game.data.packs); });
+  app.get('/api/packs', compressedJson(() => game.data.packs)); // сжато: ~220 КБ при каждом входе (server/src/compress.ts)
   app.get('/api/places', (_req, res) => { res.json(game.data.places); });
   app.get('/api/worlds', (_req, res) => {
     res.json([...game.runtimes.values()].map((x) => ({
@@ -159,7 +206,30 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
       owners: x.world.players.filter((p) => p.kind === 'owner' && !p.isAi).length, day: x.world.day,
     })));
   });
+  const clockOk = (req: Request): boolean => {
+    const key = game.clockKey;
+    return !key || req.headers['x-clock-key'] === key || req.query.key === key;
+  };
+  // город показа на публичном адресе без ключа часов: любой из зала мог бы сбросить город или войти за Maya
+  const pitchKeyOk = (req: Request): boolean => (game.clockKey ? clockOk(req) : process.env.NODE_ENV !== 'production');
+  const pitchKeyError = () => (game.clockKey ? 'Wrong clock key' : 'Set CLOCK_KEY on the server to control the pitch city');
+  const baseOf = (req: Request) => joinBase(req.socket.localPort ?? Number(process.env.PORT ?? 8787), {
+    host: String(req.headers['x-forwarded-host'] ?? req.headers.host ?? '').split(',')[0]!.trim(),
+    proto: String(req.headers['x-forwarded-proto'] ?? req.protocol ?? 'http').split(',')[0]!.trim(),
+  });
+
   app.post('/api/worlds', (req, res) => {
+    if (req.body?.scenario === 'pitch') {
+      if (!pitchKeyOk(req)) { res.status(403).json({ ok: false, error: pitchKeyError() }); return; }
+      try {
+        const d = game.createPitch(req.body?.fresh === true);
+        res.status(201).json({ ok: true, data: { id: d.id, pitch: d.status({ base: baseOf(req), secrets: true }) } });
+      } catch (e) {
+        game.log(`pitch: ${(e as Error).stack ?? e}`);
+        res.status(500).json({ ok: false, error: `The pitch city could not be built: ${(e as Error).message}` });
+      }
+      return;
+    }
     const name = typeof req.body?.name === 'string' ? req.body.name.trim().slice(0, 40) : '';
     const rt = game.createDemo(name);
     if (!rt) { res.status(429).json({ ok: false, error: 'Too many demo cities' }); return; }
@@ -221,9 +291,44 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
     res.json({ ok: true, data: req.rt!.stats() });
   });
 
+  // город показа: состояние и команды ведущего (тот же ключ, что у часов)
+  const pitchOf = (req: Request, res: Response): PitchDirector | null => {
+    const d = game.pitch;
+    if (!d || d.id !== String(req.params.id)) { res.status(404).json({ ok: false, error: 'This world has no pitch scenario. POST /api/worlds { "scenario": "pitch" }' }); return null; }
+    return d;
+  };
+  app.get('/api/worlds/:id/pitch', (req, res) => {
+    const d = pitchOf(req, res);
+    if (d) res.json({ ok: true, data: d.status({ base: baseOf(req), secrets: pitchKeyOk(req) }) });
+  });
+  app.post('/api/worlds/:id/pitch', (req, res) => {
+    const d = pitchOf(req, res);
+    if (!d) return;
+    if (!pitchKeyOk(req)) { res.status(403).json({ ok: false, error: pitchKeyError() }); return; }
+    const r = d.run((req.body ?? {}) as PitchCommand);
+    if (!r.ok) { res.status(400).json(r); return; }
+    res.json({ ok: true, data: d.status({ base: baseOf(req), secrets: true }) });
+  });
+
   app.use('/api', (_req, res) => { res.status(404).json({ ok: false, error: 'Not found' }); });
 
+  // вход по короткому коду: /p — поле для кода, /p/<код> — вход, /p/<код>/qr.svg — QR с адресом в локальной сети
+  app.get('/p', (_req, res) => { res.type('html').send(enterPage()); });
+  // пульт ведущего: кнопки паузы, перемотки, возврата, веток жюри и жалобы; команды всё равно требуют ключ часов
+  app.get('/pitch', (_req, res) => { res.set('Cache-Control', 'no-store').type('html').send(deskPage()); });
+  app.get('/p/:code/qr.svg', (req, res) => {
+    const r = game.pitch?.resolve(String(req.params.code));
+    if (!r) { res.status(404).type('text').send('Unknown code'); return; }
+    res.type('image/svg+xml').set('Cache-Control', 'no-store').send(qrSvg(`${baseOf(req)}/p/${String(req.params.code).toUpperCase()}`));
+  });
+  app.get('/p/:code', (req, res) => {
+    const r = game.pitch?.resolve(String(req.params.code));
+    if (!r) { res.status(404).type('html').send(enterPage('Code not found. Check the letters on the screen.')); return; }
+    res.set('Cache-Control', 'no-store').type('html').send(joinPage(r));
+  });
+
   if (existsSync(CLIENT_DIST)) {
+    app.use(compressedStatic(CLIENT_DIST)); // br/gzip и долгий кэш для /assets/ (docs/qa/BUGS.md #11)
     app.use(express.static(CLIENT_DIST));
     app.get(/^(?!\/api\/).*/, (_req, res) => res.sendFile(resolve(CLIENT_DIST, 'index.html')));
   }
@@ -244,11 +349,20 @@ export function startServer(port = Number(process.env.PORT ?? 8787), host = proc
   const game = opts.game ?? new GameServer({ ...opts, snapshotDir }).boot();
   const app = createApp(game);
   return new Promise((ok) => {
-    const server = app.listen(port, host, () => ok(Object.assign(server, { game })));
+    const server = app.listen(port, host, () => {
+      ok(Object.assign(server, { game }));
+      // PITCH=1: собрать город показа уже после старта — сборка считает ~20–25 с и не должна задерживать проверку здоровья
+      if (process.env.PITCH === '1' && !game.pitch) {
+        setTimeout(() => {
+          try { game.createPitch(); } catch (e) { game.log(`pitch: ${(e as Error).message}`); }
+        }, 50).unref?.();
+      }
+    });
     server.on('close', () => game.stopAll());
   });
 }
 
 export { WorldRuntime } from './runtime';
+export { PitchDirector, joinBase, lanBase } from './pitch';
 export { loadData } from './data';
 export { RateLimiter } from './rate';

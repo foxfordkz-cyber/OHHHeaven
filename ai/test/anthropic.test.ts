@@ -83,7 +83,7 @@ describe('gateway with a key: real SDK path end to end', () => {
     expect(await p.complete(req, new AbortController().signal)).toMatchObject({ ok: false, reason: 'parse' });
   });
 
-  it('plans events through callAi and the Claude provider when ANTHROPIC_API_KEY is set', async () => {
+  it('plans events through callAi and the Claude provider when AI_PROVIDER=anthropic and ANTHROPIC_API_KEY are set', async () => {
     const { planEvents } = await import('../src/events/plan');
     const { aiLog, resetAi, setProvider } = await import('../src/provider');
     const { dateOf } = await import('../src/shared');
@@ -92,6 +92,7 @@ describe('gateway with a key: real SDK path end to end', () => {
     resetAi();
     const prev = process.env.ANTHROPIC_API_KEY;
     process.env.ANTHROPIC_API_KEY = 'test-key';
+    process.env.AI_PROVIDER = 'anthropic'; // off by default since round 3: the game runs on Gemini and Grok
     try {
       reply = {
         stop_reason: 'end_turn',
@@ -104,6 +105,7 @@ describe('gateway with a key: real SDK path end to end', () => {
       expect(JSON.stringify(aiLog())).not.toContain('test-key');
     } finally {
       if (prev === undefined) delete process.env.ANTHROPIC_API_KEY; else process.env.ANTHROPIC_API_KEY = prev;
+      delete process.env.AI_PROVIDER;
     }
   });
 });

@@ -4,7 +4,8 @@ import { WithStore } from '../../app/dev';
 import { useOwnerView } from '../../app/store';
 import { devStore } from '../insights/dev-store';
 import { cafeEndedView, cafeView, RULE_CARDS } from '../insights/fixtures';
-import type { OwnerView } from '@ohh/shared/types';
+import type { OwnerView, RealWorldPlan } from '@ohh/shared/types';
+import realPlan from './plan.sample.json';
 import { EndConnected, EndScreen } from './EndScreen';
 import { Leaderboards } from './Leaderboards';
 import { PlanConnected, PlanScreen } from './PlanScreen';
@@ -21,7 +22,7 @@ function LeaderboardsPage() {
 }
 
 function DevEnd({ view }: { view: OwnerView }) {
-  const store = useMemo(() => devStore(view, { delayMs: 700 }), [view]);
+  const store = useMemo(() => devStore(view, { delayMs: 700, plan: realPlan as unknown as RealWorldPlan }), [view]);
   return <WithStore store={store}><DevEndInner view={view} /></WithStore>;
 }
 function DevEndInner({ view }: { view: OwnerView }) {
@@ -29,8 +30,8 @@ function DevEndInner({ view }: { view: OwnerView }) {
   return <EndScreen view={view} ask={query} cards={RULE_CARDS} planHref="/dev/plan" />;
 }
 
-function DevPlan() {
-  const store = useMemo(() => devStore(cafeEndedView, { delayMs: 500 }), []);
+function DevPlan({ plan }: { plan?: RealWorldPlan }) {
+  const store = useMemo(() => devStore(cafeEndedView, { delayMs: 500, plan }), [plan]);
   return <WithStore store={store}><DevPlanInner /></WithStore>;
 }
 function DevPlanInner() {
@@ -53,6 +54,7 @@ export const screen: ScreenModule = {
     { id: 'end', title: 'End of season — 2nd of 20 coffee shops', render: () => <DevEnd view={cafeEndedView} /> },
     { id: 'end-running', title: 'End screen during the season', render: () => <DevEnd view={cafeView} /> },
     { id: 'plan', title: 'Your real-world plan', render: () => <DevPlan /> },
+    { id: 'plan-real', title: 'Your real-world plan — a real engine plan (St Marks Pl, day 180)', render: () => <DevPlan plan={realPlan as unknown as RealWorldPlan} /> },
     { id: 'leaderboards', title: 'Leaderboards', render: () => <DevLeaderboards /> },
   ],
 };

@@ -232,5 +232,5 @@ describe('a finished demo city', () => {
     expect(fresh.phase).toBe('running');
     expect(fresh.day).toBeLessThan(5);
     expect(game.runtimes.get('nyc')!.world.phase).toBe('running');
-  });
+  }, 180_000); // a whole year of the full cafe model is computed here
 });

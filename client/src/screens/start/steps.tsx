@@ -1,12 +1,15 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { ClientView, IdeaMatch, NicheId, OfficialRole, RoadmapItem, RoadmapKind } from '@ohh/shared/types';
+import type { ClientView, IdeaMatch, NicheId, OfficialRole, OpenRecommendation, Pack, Place, RoadmapItem } from '@ohh/shared/types';
+import { dateOf } from '@ohh/shared/rules';
+import { buildoutOf, isTakeover } from '@ohh/shared/place';
 import { NICHE_META, NICHE_ORDER, type Catalog } from '../../app/catalog';
 import { CityMapSlot } from '../../app/slots';
 import { useGame } from '../../app/store';
-import { AiBadge, Badge, Button, Card, Field, Icon, List, ListRow, MoneyText, NICHE_ICON, SegmentedControl, Skeleton, Stat, formatMoney, formatPct, type IconName } from '../../ui';
+import { AiBadge, Badge, Button, Card, Field, Icon, List, ListRow, MoneyText, NICHE_ICON, SegmentedControl, Skeleton, Stat, formatMoney, formatPct, pick, useT } from '../../ui';
+import { PlannedPath, stagesOf } from './Path';
 import { visibleBusinesses } from '../home/Home';
-import { cheapestOpening, competitorsNear, freePlaces, maxSizeFor, rentPerMonth, trafficLabel } from './kit';
+import { cheapestOpening, competitorsNear, daysToOpen, freePlaces, maxSizeFor, rentPerMonth, trafficLabel } from './kit';
 import type { Draft } from './Start';
 
 type StepProps = { draft: Draft; update: (p: Partial<Draft>) => void; catalog: Catalog };
@@ -146,7 +149,17 @@ export function IdeaStep({ draft, update, catalog }: StepProps) {
 
 // ───────────────────────── 3. place ─────────────────────────
 
+/** What stood in the room before: it sets the price and the length of the build-out. */
+function wasBefore(pack: Pack, p: Place): string {
+  if (isTakeover(pack, p)) return pick('Operating shop for sale', 'Работающее заведение продаётся');
+  const label = buildoutOf(pack, p)?.label;
+  return label ? label.split(':')[0] : pick('Storefront', 'Помещение');
+}
+
+const openDays = (pack: Pack, p: Place): number => daysToOpen(pack, pack.setup.filter((s) => s.required).map((s) => ({ id: s.id, qty: 1 })), p);
+
 export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: ClientView }) {
+  const tr = useT();
   const niche = draft.niche as NicheId;
   const pack = catalog.packs.niches[niche]!;
   const businesses = visibleBusinesses(view);
@@ -160,6 +173,7 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
   const [showAll, setShowAll] = useState(false);
   const selected = catalog.places.find((p) => p.id === draft.placeId) ?? null;
   const list = showAll ? free : free.slice(0, 8);
+  const outlook = usePlaceOutlook(niche, selected?.id ?? null, pack);
 
   return (
     <div className="stack-lg">
@@ -177,11 +191,22 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
             <Stat small label="Foot traffic" value={trafficLabel(selected.footTraffic)} hint={`${formatPct(selected.footTraffic)} of the busiest corner`} />
             <Stat small label="Competitors" value={`${competitorsNear(selected, niche, businesses, catalog.places)} nearby`} hint="same niche within 400 m" />
           </div>
+          <p className="small" data-testid="place-before">
+            <strong>{wasBefore(pack, selected)}.</strong>{' '}
+            {isTakeover(pack, selected)
+              ? tr(`You buy the room, the equipment and the regulars as they stand; doors reopen in ${openDays(pack, selected)} days.`, `Вы покупаете зал, оборудование и постоянных гостей как есть; двери откроются через ${openDays(pack, selected)} дн.`)
+              : tr(`Build-out ${formatMoney(buildoutOf(pack, selected)?.cost ?? 0)}, ${buildoutOf(pack, selected)?.days ?? 0} days of construction; doors open in ${openDays(pack, selected)} days. Rent runs the whole time.`, `Ремонт ${formatMoney(buildoutOf(pack, selected)?.cost ?? 0)}, ${buildoutOf(pack, selected)?.days ?? 0} дн. стройки; открытие через ${openDays(pack, selected)} дн. Аренда идёт всё это время.`)}
+          </p>
           <p className={`small ${(costOf.get(selected.id) ?? 0) > budget ? 'loss' : 'muted'}`}>
             {(costOf.get(selected.id) ?? 0) > budget
               ? `Opening here costs at least ${formatMoney(costOf.get(selected.id) ?? 0)}. You start with ${formatMoney(budget)}: pick a smaller or cheaper place.`
               : `Opening here costs from ${formatMoney(costOf.get(selected.id) ?? 0)} of your ${formatMoney(budget)}.`}
           </p>
+          {outlook && outlook.placeId === selected.id && (
+            <p className={`small ${outlook.tone}`} data-testid="place-outlook">
+              <strong>{tr('What it earns', 'Сколько принесёт')}:</strong> {outlook.line}
+            </p>
+          )}
           {selected.note && <p className="xsmall faint">Data: {selected.note === 'unverified' ? 'estimate, not yet checked against city records' : selected.note}</p>}
           <Button block size="lg" iconRight="arrowRight" disabled={(costOf.get(selected.id) ?? 0) > budget} onClick={() => update({ step: 'plan' })}>Open here</Button>
         </Card>
@@ -194,10 +219,13 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
             icon="pin"
             iconTone={p.id === draft.placeId ? 'accent' : undefined}
             title={p.address}
-            subtitle={`${p.sqft.toLocaleString('en-US')} sq ft · ${trafficLabel(p.footTraffic)} · ${competitorsNear(p, niche, businesses, catalog.places)} rivals · rent ${formatMoney(rentPerMonth(p))}/mo`}
+            subtitle={<>
+              <span style={{ display: 'block' }}>{wasBefore(pack, p)} · {tr(`doors open in ${openDays(pack, p)} days`, `открытие через ${openDays(pack, p)} дн.`)}</span>
+              <span style={{ display: 'block' }}>{p.sqft.toLocaleString('en-US')} sq ft · {tr('rent', 'аренда')} {formatMoney(rentPerMonth(p))}/mo · {competitorsNear(p, niche, businesses, catalog.places)} {tr('rivals', 'соперников')}</span>
+            </>}
             value={(costOf.get(p.id) ?? 0) > budget
-              ? <Badge tone="loss">Over budget</Badge>
-              : <span className="num"><span className="xsmall faint">opens from </span>{formatMoney(costOf.get(p.id) ?? 0)}</span>}
+              ? <Badge tone="loss">{tr('Over budget', 'Не по карману')}</Badge>
+              : <span className="num" title={tr('The least it costs to open here', 'Минимум, чтобы открыться здесь')}>{formatMoney(costOf.get(p.id) ?? 0, { compact: true })}</span>}
             onClick={() => update({ placeId: p.id })}
           />
         ))}
@@ -212,13 +240,53 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
   );
 }
 
+/**
+ * The consequence of the first decision, before it is taken (B04 for B07; docs/qa/HOOK.md, docs/qa/BUGS.md #1): what
+ * this room earns once the regulars know you and how the first year ends, from the same engine forecast the setup
+ * cards use (recommend_opening; its best kit's last line). Guests may ask it: no player is needed.
+ */
+export interface PlaceOutlook { placeId: string; line: string; tone: 'profit' | 'loss' | '' }
+export function usePlaceOutlook(niche: NicheId, placeId: string | null, pack?: Pack): PlaceOutlook | null {
+  const { query } = useGame();
+  const [outlook, setOutlook] = useState<PlaceOutlook | null>(null);
+  useEffect(() => {
+    if (!placeId) return;
+    let alive = true;
+    void query<OpenRecommendation[]>({ type: 'recommend_opening', niche, placeId }).then((recs) => {
+      const best = recs?.[0];
+      const said = best?.why[best.why.length - 1];
+      // the number holds for this setup only: the team is the biggest bill, and the next step lets the player change it
+      // (docs/qa/BUGS.md #1: the forecast with three baristas lost money where two made money in play)
+      const line = best && said ? `${setupLabel(best, pack)}: ${said.charAt(0).toLowerCase()}${said.slice(1)}` : undefined;
+      // a month that loses money is a loss; a good month after a costly first year is plain text; else profit
+      if (alive && line) setOutlook({ placeId, line, tone: /^(Even with|Projected loss)/.test(said!) ? 'loss' : /a loss of/.test(said!) ? '' : 'profit' });
+    });
+    return () => { alive = false; };
+  }, [query, niche, placeId, pack]);
+  return outlook;
+}
+
+/** 'With 18 seats, 3 baristas and 1 shift lead, at $8.50' — the setup a forecast is for: seats, team and price. */
+export function setupLabel(rec: OpenRecommendation, pack?: Pack): string {
+  const unit = pack?.sizing.unitName ?? 'seat';
+  const team = Object.entries(rec.orders.staff).filter(([, n]) => n > 0).map(([id, n]) => {
+    const name = (pack?.staff.find((r) => r.id === id)?.name ?? id.replace(/_/g, ' ')).toLowerCase();
+    return `${n} ${name}${n === 1 ? '' : 's'}`;
+  });
+  const parts = [`${rec.size} ${unit}${rec.size === 1 ? '' : 's'}`, ...team];
+  const who = parts.length > 1 ? `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}` : parts[0];
+  return `With ${who}, at ${formatMoney(rec.orders.price, { cents: true })}`;
+}
+
 // ───────────────────────── 4. the opening plan ─────────────────────────
 
-const KIND_ICON: Record<RoadmapKind, IconName> = { idea: 'sparkle', legal: 'doc', permit: 'badge', space: 'building', money: 'money', supplier: 'truck', people: 'users', launch: 'store' };
-
-export function PlanStep({ draft, update, catalog }: StepProps) {
+/** The plan laid out by the day each step closes at this address. The decision here: go on with this place, or pick another. */
+export function PlanStep({ draft, update, catalog, today }: StepProps & { today: number }) {
+  const tr = useT();
   const { query } = useGame();
   const niche = draft.niche as NicheId;
+  const pack = catalog.packs.niches[niche]!;
+  const place = catalog.places.find((p) => p.id === draft.placeId);
   const [items, setItems] = useState<RoadmapItem[] | null>(null);
 
   useEffect(() => {
@@ -238,48 +306,41 @@ export function PlanStep({ draft, update, catalog }: StepProps) {
     );
   }
 
+  const stages = stagesOf(pack, place, items);
   const fees = items.reduce((s, i) => s + (i.fee ?? 0), 0);
-  const longest = items.reduce((m, i) => Math.max(m, i.waitDays ?? 0), 0);
+  const days = stages.length ? stages[stages.length - 1].day : 0;
+  const build = buildoutOf(pack, place);
+  const rentDay = place ? rentPerMonth(place) / 30 : 0;
+  const takeover = isTakeover(pack, place);
 
   return (
     <div className="stack-lg">
       <div className="stack-sm">
-        <h1 className="h2">Your path to open doors</h1>
-        <p className="muted">Every step a real {catalog.packs.niches[niche]?.name.toLowerCase() ?? 'business'} takes in New York City, in order, with the agency, the fee and the wait.</p>
+        <h1 className="h2">{tr(`${days} days from the lease to open doors`, `${days} дней от аренды до открытых дверей`)}</h1>
+        <p className="muted">
+          {place ? `${place.address}. ` : ''}
+          {tr(`Every step a real ${pack.name.toLowerCase()} takes in New York City, on the day it closes here. Tap a day to see its steps.`, `Каждый шаг, который проходит настоящее заведение в Нью-Йорке, в день, когда он закрывается здесь. Нажмите на день, чтобы увидеть шаги.`)}
+        </p>
       </div>
       <div className="grid-3">
-        <Stat small label="Steps" value={items.length} />
-        <Stat small label="Fees" value={<MoneyText value={fees} />} />
-        <Stat small label="Longest wait" value={`${longest} days`} />
+        <Stat small label={tr('Steps', 'Шагов')} value={items.length} />
+        <Stat small label={tr('City fees', 'Сборы города')} value={<MoneyText value={fees} />} />
+        <Stat small label={tr('Doors open', 'Открытие')} value={dateOf(today + days).label.replace(/^\w+, /, '')} />
       </div>
-      <ol className="roadmap">
-        {items.map((it, i) => (
-          <li key={it.id} className={`roadmap__item roadmap__item--${it.status}`}>
-            <span className="roadmap__rail">
-              <span className="roadmap__dot">{it.status === 'done' ? <Icon name="check" size={14} strokeWidth={2.6} /> : i + 1}</span>
-            </span>
-            <div className="roadmap__body">
-              <div className="row" style={{ gap: 8 }}>
-                <Icon name={KIND_ICON[it.kind]} size={16} className="faint" />
-                <span className="roadmap__title">{it.title}</span>
-              </div>
-              <p className="small muted">{it.text}</p>
-              <div className="row wrap" style={{ gap: 6 }}>
-                {it.agency && <Badge icon="building">{it.agency}</Badge>}
-                {it.fee !== undefined && <Badge tone={it.fee > 0 ? 'warn' : 'profit'}>{it.fee > 0 ? `Fee ${formatMoney(it.fee)}` : 'Free'}</Badge>}
-                {it.waitDays ? <Badge icon="hourglass">{it.waitDays} days</Badge> : null}
-                {it.status === 'waiting' && <Badge tone="info">In progress</Badge>}
-              </div>
-              {it.link && (
-                <a className="rule-card__link" href={it.link} target="_blank" rel="noreferrer noopener">
-                  Official page <Icon name="external" size={14} />
-                </a>
-              )}
-            </div>
-          </li>
-        ))}
-      </ol>
-      <Button block size="lg" iconRight="arrowRight" onClick={() => update({ step: 'kit' })}>See what to buy</Button>
+      {place && (
+        <Card tone="flat" title={tr('What the wait costs at this address', 'Во что обходится ожидание по этому адресу')}>
+          <ul className="start-notes">
+            {build && <li>{takeover ? tr(`An operating shop: ${build.days} days of handover and cleaning, no construction.`, `Работающее заведение: ${build.days} дней на передачу и уборку, без стройки.`) : `${build.label}: ${tr(`${build.days} days of construction`, `${build.days} дней стройки`)}, ${formatMoney(build.cost)}.`}</li>}
+            <li>{tr(`Rent is due from the day you sign: ${days} days × ${formatMoney(rentDay)} = ${formatMoney(rentDay * days)} before the first sale.`, `Аренда идёт со дня подписи: ${days} дн. × ${formatMoney(rentDay)} = ${formatMoney(rentDay * days)} до первой продажи.`)}</li>
+            <li>{tr('The build-out is set by what the space was before: another address means another price and another wait.', 'Ремонт зависит от того, чем помещение было раньше: другой адрес — другая цена и другой срок.')}</li>
+          </ul>
+        </Card>
+      )}
+      <PlannedPath stages={stages} startDay={today} />
+      <div className="stack-sm">
+        <Button block size="lg" iconRight="arrowRight" onClick={() => update({ step: 'kit' })}>{tr('Go on with this address', 'Идти дальше с этим адресом')}</Button>
+        <Button block variant="ghost" icon="pin" onClick={() => update({ step: 'place' })}>{tr('Pick another place', 'Выбрать другое место')}</Button>
+      </div>
     </div>
   );
 }

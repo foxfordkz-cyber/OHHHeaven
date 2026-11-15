@@ -6,6 +6,7 @@ import { fakeWhatIf } from './__stubs__/fakeDeps';
 import { BusinessScreen } from './BusinessScreen';
 import type { BizDeps } from './deps';
 import { DevBiz } from './DevBiz';
+import { shortDate } from './format';
 import { fixture, FIXTURE_NAMES, type FixtureName } from './fixtures';
 import { topRecommendations } from './today';
 import { useWhatIf } from './useWhatIf';
@@ -82,6 +83,19 @@ describe('main scenario: look at what happened, apply the advice', () => {
     await screen.findAllByText(/Applied ✓/);
   });
 
+  it('Apply on a change of standing orders keeps its forecast: Today shows "Your change" at once', async () => {
+    const view = fixture('open');
+    const { deps, sent } = makeDeps(view);
+    render(<BusinessScreen deps={deps} />);
+    const price = topRecommendations(view.recommendations).find((r) => r.id === 'rec_price')!;
+    const card = screen.getByText(price.title).closest('.bz-card') as HTMLElement;
+    fireEvent.click(within(card).getByRole('button', { name: 'Apply' }));
+    await waitFor(() => expect(sent).toEqual([price.suggested]));
+    await screen.findByText('Your change');
+    expect(screen.getByText(/Price \$6\.50 → \$6\.90/)).toBeTruthy();
+    expect(screen.getByText(/Forecast: about \d+ a day \(was \d+\)/)).toBeTruthy();
+  });
+
   it('Apply sends exactly the suggested action of that card', async () => {
     const view = fixture('open');
     const { deps, sent } = makeDeps(view);
@@ -92,7 +106,7 @@ describe('main scenario: look at what happened, apply the advice', () => {
   });
 });
 
-describe('Manage → Save settings', () => {
+describe('Manage → Apply', () => {
   it('price + staff + shortcut make one set_orders', async () => {
     const { deps, sent } = makeDeps(fixture('open'));
     render(<BusinessScreen deps={deps} initialTab="manage" />);
@@ -100,9 +114,38 @@ describe('Manage → Save settings', () => {
     fireEvent.click(screen.getByRole('button', { name: 'More Barista' }));
     fireEvent.click(screen.getByRole('switch', { name: 'Pay staff in cash, off the books' }));
     expect(screen.getByText(/3 changes/)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Save settings' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
     await waitFor(() => expect(sent).toEqual([{ type: 'set_orders', orders: { price: 6.6, staff: { barista: 4, shift_lead: 1 }, shortcuts: [] } }]));
-    await screen.findByText(/your business runs on the new settings/);
+    await screen.findByText(/Applied: Price \$6\.50 → \$6\.60; Barista 3 → 4; Back to the rules: Pay staff in cash, off the books\. The shop runs on it from/);
+  });
+
+  it('a refusal that points to Pro carries a See Pro button (docs/qa/BUGS.md #14)', async () => {
+    const refusal = 'Your free month ended on day 90. Your cafe keeps running on your last orders; to change them, open First Year Pro on /pro.';
+    const { deps } = makeDeps(fixture('open'), { act: vi.fn(async (): Promise<Ack> => ({ ok: false, error: refusal })) });
+    render(<BusinessScreen deps={deps} initialTab="manage" />);
+    fireEvent.click(screen.getByRole('button', { name: 'More price' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'See Pro' }));
+    expect(deps.navigate).toHaveBeenCalledWith('/pro');
+  });
+
+  it('Resize shows the month with the new room before it is pressed (docs/qa/BUGS.md #17)', async () => {
+    const { deps, queries } = makeDeps(fixture('open'));
+    render(<BusinessScreen deps={deps} initialTab="manage" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Resize' }));
+    fireEvent.click(screen.getByRole('button', { name: /^More seats$/ }));
+    const line = await screen.findByTestId('resize-forecast', {}, { timeout: 2000 });
+    expect(line.textContent).toMatch(/Next 30 days:.*now → with \d+ seats.*orders a day.*profit/);
+    expect(queries.some((q) => q.type === 'what_if' && q.size === fixture('open').business!.size + 1)).toBe(true);
+  });
+
+  it('an ordinary refusal has no See Pro button', async () => {
+    const { deps } = makeDeps(fixture('open'), { act: vi.fn(async (): Promise<Ack> => ({ ok: false, error: 'Price must be above zero' })) });
+    render(<BusinessScreen deps={deps} initialTab="manage" />);
+    fireEvent.click(screen.getByRole('button', { name: 'More price' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
+    await screen.findByText('Price must be above zero');
+    expect(screen.queryByRole('button', { name: 'See Pro' })).toBeNull();
   });
 
   it('offline: banner, Save waits, the draft survives a remount', () => {
@@ -118,9 +161,44 @@ describe('Manage → Save settings', () => {
   });
 
   it('forecast shows numbers from what_if', async () => {
-    const { deps } = makeDeps(fixture('open'));
+    const view = fixture('open');
+    const { deps } = makeDeps(view);
     render(<BusinessScreen deps={deps} initialTab="manage" />);
-    await screen.findByText(/cash on Apr 30/);
+    await screen.findByText(new RegExp(`cash on ${shortDate(view.world.day + 30)}`));
+  });
+
+  it('price change: forecast now → with the change next to the price, then Apply, then Today keeps the promise', async () => {
+    const view = fixture('open');
+    const { deps, sent, queries } = makeDeps(view);
+    const { unmount } = render(<BusinessScreen deps={deps} initialTab="manage" />);
+    await screen.findByText(/Next 30 days if nothing changes/);
+    fireEvent.click(screen.getByRole('button', { name: 'More price' }));
+    await screen.findByText(/Next 30 days: now → with your changes/);
+    const line = await screen.findByText(/This change:/);
+    expect(line.textContent).toMatch(/a day \([+−±]\d*\) · profit [+−$]/);
+    expect(queries.some((q) => q.type === 'what_if' && JSON.stringify(q.orders) === '{}')).toBe(true);
+    expect(queries.some((q) => q.type === 'what_if' && (q.orders as { price?: number }).price === 6.6)).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
+    await waitFor(() => expect(sent).toEqual([{ type: 'set_orders', orders: { price: 6.6 } }]));
+    await screen.findByText(/Applied: Price \$6\.50 → \$6\.60\. The shop runs on it from .*Forecast: about \d+ a day/);
+    unmount();
+
+    // The next game day: the shop ran one day on $6.60. Today compares it with the forecast.
+    const day = view.world.day + 1;
+    const ran = { ...view.business!.days[view.business!.days.length - 1], day, servedUnits: 150 };
+    const next = { ...view, world: { ...view.world, day }, business: { ...view.business!, orders: { ...view.business!.orders, price: 6.6 }, days: [...view.business!.days, ran] } };
+    render(<BusinessScreen deps={makeDeps(next).deps} />);
+    expect(screen.getByText('Your change')).toBeTruthy();
+    expect(screen.getByText(/1 day on the new settings: 150 a day/)).toBeTruthy();
+    expect(screen.getByText(/Forecast was/)).toBeTruthy();
+  });
+
+  it('paid lever option says it is charged by the day', () => {
+    render(<BusinessScreen deps={makeDeps(fixture('open')).deps} initialTab="manage" />);
+    const paid = screen.getAllByRole('radio').filter((r) => /a day while on/.test(r.textContent ?? '') && r.getAttribute('aria-checked') === 'false');
+    expect(paid.length).toBeGreaterThan(0);
+    fireEvent.click(paid[0]);
+    expect(screen.getAllByText(/Charged only for the days it is on: \$[\d.,]+ a day/).length).toBeGreaterThan(0);
   });
 });
 

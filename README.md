@@ -1,5 +1,7 @@
 # First Year
 
+[![CI](https://github.com/foxfordkz-cyber/OHHHeaven/actions/workflows/ci.yml/badge.svg)](https://github.com/foxfordkz-cyber/OHHHeaven/actions/workflows/ci.yml)
+
 A slow, persistent New York City where you live the first year of your own business — real rent, permits,
 wages, taxes and inspections — without risking your savings. Game spec: `context/08-game-v5.md`.
 How the pieces fit: `build/CONTRACT.md`.
@@ -52,9 +54,12 @@ Requires Node 20+.
 
 ## Deploy
 
-One Node service on one port; the world lives in memory and is snapshotted to `DATA_DIR` (JSON, once a second
+Step by step for someone who has never deployed, with variables and checks: [`docs/DEPLOY.md`](docs/DEPLOY.md).
+After a deploy: `node scripts/prod-check.mjs <url>` walks health → city → join → opening → a month of trading.
+
+One Node service on one port; the world lives in memory and is snapshotted to `SNAPSHOT_DIR` (JSON, once a second
 when it changed) and restored on restart. The `Dockerfile` builds the client and runs the server with
-`DATA_DIR=/data` — mount a volume there.
+`SNAPSHOT_DIR=/data` — mount a volume there.
 
 ```bash
 docker build -t first-year .

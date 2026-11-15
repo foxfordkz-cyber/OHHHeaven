@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Action, PnlLine, StandingOrders } from '@ohh/shared/types';
-import { dateOf, RULES } from '@ohh/shared/rules';
+import { RULES } from '@ohh/shared/rules';
 import { Button, Card, Segmented, Sheet, Stepper, Toggle } from './__stubs__/ui';
 import type { BizDeps } from './deps';
-import { dayLabel, num, plural, shortDate, signedUsd, usd, usd2 } from './format';
+import { num, plural, usd, usd2 } from './format';
+import { perDayCost, type FieldKey } from './forecast';
+import { ImpactLine, OutlookCard, type OutlookPair } from './Outlook';
+import { pick } from '../../ui/i18n';
 import { allShortcuts, leverViolations, savesRule, trailFor, violationById, whoCatches, type Packs } from './lookup';
 import { setAutopilot, setLever, setPrice, setStaff, toggleShortcut, totalStaff, type Draft } from './orders';
-import { useWhatIf, type WhatIfState } from './useWhatIf';
+import { useWhatIf, type WhatIf } from './useWhatIf';
 
 export interface ManageProps {
   deps: BizDeps;
@@ -14,6 +17,8 @@ export interface ManageProps {
   diff: Partial<StandingOrders>;
   setDraft(d: Draft): void;
   onRule(id: string): void;
+  /** The next 30 days now and with the draft (BusinessScreen asks what_if, so Apply can keep the promise). */
+  pair: OutlookPair;
 }
 
 /** Mean price of the other businesses in my niche, for the slider caption only. */
@@ -31,39 +36,14 @@ export function savingFor(lines: PnlLine[] | undefined, shortcutId: string, name
   return hit.length ? hit.reduce((a, l) => a + l.amount, 0) : null;
 }
 
-export function Forecast({ state, changed, today }: { state: WhatIfState; changed: boolean; today: number }) {
-  const d = state.data;
-  const monthEnd = dateOf(today).month * RULES.DAYS_PER_MONTH;
-  return (
-    <Card title={changed ? 'Projected month with your changes' : 'Projected month'} aside={state.status === 'loading' ? 'updating…' : undefined}>
-      {d ? (
-        <div className={`bz-forecast${state.status === 'loading' ? ' bz-loading' : ''}`} aria-live="polite">
-          <p className="bz-forecast-line">
-            <span className={d.projected.profit >= 0 ? 'bz-good-text' : 'bz-bad-text'}>{signedUsd(d.projected.profit)}</span>
-            {' · '}cash on {shortDate(monthEnd)}: <span className={d.projected.cashEnd < 0 ? 'bz-bad-text' : ''}>{usd(d.projected.cashEnd)}</span>
-            {d.analytics.taxDueNext && <>{' · '}tax due {shortDate(d.analytics.taxDueNext.day)}: {usd(d.analytics.taxDueNext.amount)}</>}
-          </p>
-          <p className="bz-small bz-muted">
-            {num(d.projected.servedUnits)} served · {num(d.projected.lost.size + d.projected.lost.staff + d.projected.lost.closure)} walked away · break-even {d.analytics.breakEvenPrice ? usd2(d.analytics.breakEvenPrice) : '—'}
-          </p>
-        </div>
-      ) : state.status === 'error' ? (
-        <p className="bz-bad-text">No forecast right now: {state.error}</p>
-      ) : (
-        <p className="bz-muted">Counting…</p>
-      )}
-      {changed && <p className="bz-small">Changes start on {dayLabel(today + 1)}, the next game day, after you save.</p>}
-    </Card>
-  );
-}
-
-export function ManageTab({ deps, draft, diff, setDraft, onRule }: ManageProps) {
+export function ManageTab({ deps, draft, diff, setDraft, onRule, pair }: ManageProps) {
   const v = deps.view;
   const b = v.business!;
   const pack = deps.pack;
   const packs: Packs = { pack, common: deps.common };
-  const changed = Object.keys(diff).length > 0;
-  const forecast = useWhatIf(deps.query, diff, deps.online);
+  const [last, setLast] = useState<FieldKey | null>(null);
+  const edit = (field: FieldKey, d: Draft) => { setLast(field); setDraft(d); };
+  const impact = (field: FieldKey) => <ImpactLine deps={deps} pair={pair} field={field} last={last} diff={diff} />;
   const shortcuts = allShortcuts(packs);
   const allOn = useWhatIf(deps.query, { shortcuts: shortcuts.map((s) => s.id) }, deps.online && shortcuts.length > 0);
   const avg = nicheAverage(deps);
@@ -73,41 +53,47 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule }: ManageProps) 
 
   return (
     <div className="bz-pad">
-      <Forecast state={forecast} changed={changed} today={v.world.day} />
+      <OutlookCard pair={pair} deps={deps} />
 
-      <Card title="Price" aside={pack ? `per ${pack.unit.name}` : undefined}>
+      <Card title={pick('Price', 'Цена')} aside={pack ? pick(`per ${pack.unit.name}`, 'за заказ') : undefined}>
         <div className="bz-between">
           <Stepper label="price" value={draft.price} step={0.1} min={pack?.unit.priceMin ?? 0} max={pack?.unit.priceMax ?? 999}
-            format={usd2} onChange={(p) => setDraft(setPrice(draft, p, pack))} />
-          <span className="bz-small bz-muted">{avg !== null ? `niche average ${usd2(avg)}` : ''}{lastAvg !== null ? `${avg !== null ? ' · ' : ''}last month ${usd2(lastAvg)}` : ''}</span>
+            format={usd2} onChange={(p) => edit('price', setPrice(draft, p, pack))} />
+          <span className="bz-small bz-muted">{avg !== null ? pick(`niche average ${usd2(avg)}`, `в среднем у соседей ${usd2(avg)}`) : ''}{lastAvg !== null ? `${avg !== null ? ' · ' : ''}${pick('last month', 'прошлый месяц')} ${usd2(lastAvg)}` : ''}</span>
         </div>
         {pack && (
           <input className="bz-range" type="range" aria-label="Price slider" min={pack.unit.priceMin} max={pack.unit.priceMax} step={0.05}
-            value={draft.price} onChange={(e) => setDraft(setPrice(draft, Number(e.target.value), pack))} />
+            value={draft.price} onChange={(e) => edit('price', setPrice(draft, Number(e.target.value), pack))} />
         )}
+        {impact('price')}
       </Card>
 
-      <Card title="Staff" aside={pack ? `${totalStaff(draft.staff)} of max ${pack.capacity.maxStaff}` : undefined}>
+      <Card title={pick('Staff', 'Персонал')} aside={pack ? pick(`${totalStaff(draft.staff)} of max ${pack.capacity.maxStaff}`, `${totalStaff(draft.staff)} из ${pack.capacity.maxStaff}`) : undefined}>
         {roles.map((r) => (
-          <div className="bz-between" key={r.id}>
+          <div key={r.id}>
+          <div className="bz-between">
             <div className="bz-li-main">
               <span className="bz-li-title">{r.name}</span>
-              {r.hourlyWage > 0 && <span className="bz-li-sub">{usd2(r.hourlyWage)}/hr · {r.hoursPerMonth} h a month</span>}
+              {r.hourlyWage > 0 && <span className="bz-li-sub">{usd2(r.hourlyWage)}{pick('/hr', ' в час')} · {r.hoursPerMonth} {pick('h a month', 'ч в месяц')}</span>}
             </div>
-            <Stepper label={r.name} value={draft.staff[r.id] ?? 0} min={0} max={pack?.capacity.maxStaff ?? 99} onChange={(n) => setDraft(setStaff(draft, r.id, n, pack))} />
+            <Stepper label={r.name} value={draft.staff[r.id] ?? 0} min={0} max={pack?.capacity.maxStaff ?? 99} onChange={(n) => edit(`staff:${r.id}`, setStaff(draft, r.id, n, pack))} />
+          </div>
+          {impact(`staff:${r.id}`)}
           </div>
         ))}
-        {b.mtd.lost.staff > 0 && <p className="bz-small bz-bad-text">This month {num(b.mtd.lost.staff)} customers left because nobody could serve them.</p>}
+        {b.mtd.lost.staff > 0 && <p className="bz-small bz-bad-text">{pick(`This month ${num(b.mtd.lost.staff)} customers left because nobody could serve them.`, `В этом месяце ушли ${num(b.mtd.lost.staff)} гостей: некому было обслужить.`)}</p>}
       </Card>
 
       {(pack?.levers ?? []).map((l) => (
         <Card key={l.id} title={l.name}>
           <Segmented label={l.name} value={draft.levers[l.id] ?? l.options[0].id}
-            options={l.options.map((o) => ({ id: o.id, label: o.label, hint: <>{usd(o.monthlyCost)}/mo{o.causes ? ' · breaks a rule' : ''}</>, warn: !!o.causes }))}
-            onChange={(id) => setDraft(setLever(draft, l.id, id, pack))} />
+            options={l.options.map((o) => ({ id: o.id, label: o.label, hint: <>{o.monthlyCost > 0 ? `${usd(o.monthlyCost)}/mo · ${usd2(perDayCost(o.monthlyCost))}${pick(' a day while on', ' в день, пока включено')}` : pick('free', 'бесплатно')}{o.causes ? pick(' · breaks a rule', ' · нарушает правило') : ''}</>, warn: !!o.causes }))}
+            onChange={(id) => edit(`lever:${l.id}`, setLever(draft, l.id, id, pack))} />
+          <PaidByDay lever={l} chosen={draft.levers[l.id] ?? l.options[0].id} />
+          {impact(`lever:${l.id}`)}
           {leverViol.get(`${l.id}:${draft.levers[l.id]}`) && (
             <button type="button" className="bz-linkbtn bz-small bz-bad-text" onClick={() => onRule(leverViol.get(`${l.id}:${draft.levers[l.id]}`)!)}>
-              Why this breaks a rule
+              {pick('Why this breaks a rule', 'Почему это нарушает правило')}
             </button>
           )}
         </Card>
@@ -116,8 +102,8 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule }: ManageProps) 
       <SizeCard deps={deps} />
 
       {shortcuts.length > 0 && (
-        <Card tone="warn" title="Cut corners" aside="saves money now">
-          <p className="bz-small">Each of these saves money now and breaks a real rule. If someone catches it, the fine grows with every month.</p>
+        <Card tone="warn" title={pick('Cut corners', 'Срезать углы')} aside={pick('saves money now', 'экономит сейчас')}>
+          <p className="bz-small">{pick('Each of these saves money now and breaks a real rule. If someone catches it, the fine grows with every month.', 'Каждое экономит деньги сейчас и нарушает настоящее правило. Если поймают, штраф растёт с каждым месяцем.')}</p>
           <div className="bz-list">
             {shortcuts.map((s) => {
               const viol = violationById(packs, s.violation);
@@ -141,7 +127,7 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule }: ManageProps) 
 
       <OneOffs deps={deps} />
 
-      <Card title="While you're away">
+      <Card title={pick('While you\'re away', 'Пока тебя нет')}>
         <Segmented<StandingOrders['autopilot']> label="Autopilot" value={draft.autopilot} onChange={(m) => setDraft(setAutopilot(draft, m))}
           options={[
             { id: 'hold', label: 'Hold my settings', hint: 'Nothing changes until you come back' },
@@ -150,6 +136,32 @@ export function ManageTab({ deps, draft, diff, setDraft, onRule }: ManageProps) 
       </Card>
     </div>
   );
+}
+
+/** The chosen paid option is charged by the day it is on (engine/src/economy/day.ts), not by the setting at month close. */
+function PaidByDay({ lever, chosen }: { lever: { options: { id: string; monthlyCost: number }[] }; chosen: string }) {
+  const o = lever.options.find((x) => x.id === chosen);
+  if (!o || o.monthlyCost <= 0) return null;
+  return <p className="bz-small bz-muted">{pick(`Charged only for the days it is on: ${usd2(perDayCost(o.monthlyCost))} a day. Switching it off before the month closes does not erase the days it ran.`, `Списывается только за дни, когда включено: ${usd2(perDayCost(o.monthlyCost))} в день. Выключить перед закрытием месяца — не значит не платить за дни, когда работало.`)}</p>;
+}
+
+/**
+ * The month with another room, before Resize is pressed (docs/qa/BUGS.md #17: the jury's "more seats" branch on stage).
+ * Two what_if answers — the room as it is and the room with `size` — asked 400 ms after the stepper stops.
+ */
+export function useSizeForecast(query: BizDeps['query'], size: number, current: number, enabled: boolean): { size: number; now: WhatIf; next: WhatIf } | null {
+  const [got, setGot] = useState<{ size: number; now: WhatIf; next: WhatIf } | null>(null);
+  useEffect(() => {
+    if (!enabled || size === current) return;
+    let live = true;
+    const t = setTimeout(() => {
+      void Promise.all([query<WhatIf>({ type: 'what_if', orders: {} }), query<WhatIf>({ type: 'what_if', orders: {}, size })]).then(([a, b]) => {
+        if (live && a.ok && a.data && b.ok && b.data) setGot({ size, now: a.data, next: b.data });
+      }).catch(() => undefined);
+    }, 400);
+    return () => { live = false; clearTimeout(t); };
+  }, [query, size, current, enabled]);
+  return got && got.size === size && size !== current ? got : null;
 }
 
 function SizeCard({ deps }: { deps: BizDeps }) {
@@ -165,6 +177,7 @@ function SizeCard({ deps }: { deps: BizDeps }) {
   const lostSeats = b.days.reduce((a, d) => a + d.lost.size, 0);
   const util = deps.view.analytics?.sizeUtilization;
   const delta = size - b.size;
+  const forecast = useSizeForecast(deps.query, size, b.size, open && Boolean(sizing));
 
   const send = async () => {
     setBusy(true); setMsg(null);
@@ -180,7 +193,7 @@ function SizeCard({ deps }: { deps: BizDeps }) {
   };
 
   return (
-    <Card title="Room size" aside={plural(b.size, unit)}>
+    <Card title={pick('Room size', 'Размер зала')} aside={plural(b.size, unit)}>
       <p className="bz-small">
         {lostSeats > 0 ? <><b className="bz-bad-text">{num(lostSeats)}</b> customers walked away in 30 days: not enough {unit}s. </> : null}
         {util !== undefined ? <>Room is full {Math.round(util * 100)}% of the time.</> : null}
@@ -202,6 +215,15 @@ function SizeCard({ deps }: { deps: BizDeps }) {
             </div>
           )}
           {delta < 0 && <p className="bz-small">You sell {plural(-delta, unit)} of furniture for {Math.round(RULES.RESALE_SHARE * 100)}% of what it cost.</p>}
+          {forecast && (
+            <p className="bz-small" data-testid="resize-forecast">
+              <b>{pick('Next 30 days', 'Следующие 30 дней')}:</b>{' '}
+              {pick(`now → with ${plural(size, unit)}`, `сейчас → с ${size} мест.`)}
+              {' · '}{pick('orders a day', 'заказов в день')} {num(forecast.now.projected.servedUnits / RULES.DAYS_PER_MONTH)} → {num(forecast.next.projected.servedUnits / RULES.DAYS_PER_MONTH)}
+              {' · '}{pick('profit', 'прибыль')} {usd(forecast.now.analytics.profit)} →{' '}
+              <span className={forecast.next.analytics.profit > forecast.now.analytics.profit ? 'bz-good-text' : forecast.next.analytics.profit < forecast.now.analytics.profit ? 'bz-bad-text' : ''}>{usd(forecast.next.analytics.profit)}</span>
+            </p>
+          )}
           <p className="bz-small">
             Too few {unit}s: a queue and customers who walk away. Too many: an empty room that still costs {usd(sizing.cleaningCostPerSizeMonth)} per {unit} a month to clean.
           </p>
@@ -242,7 +264,7 @@ function OneOffs({ deps }: { deps: BizDeps }) {
   };
 
   return (
-    <Card title="One-off actions" aside="paid today">
+    <Card title={pick('One-off actions', 'Разовые действия')} aside={pick('paid today', 'оплата сегодня')}>
       <div className="bz-list">
         {SPEND.map((s) => (
           <div className="bz-li bz-li-col" key={s.kind}>

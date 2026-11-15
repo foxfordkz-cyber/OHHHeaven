@@ -12,11 +12,28 @@
 .roadmap__rail { position: relative; display: flex; justify-content: center; }
 .roadmap__rail::after { content: ''; position: absolute; top: 30px; bottom: -4px; width: 2px; background: var(--border); }
 .roadmap__item:last-child .roadmap__rail::after { display: none; }
-.roadmap__dot { position: relative; z-index: 1; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-2); }
+.roadmap__dot { position: relative; z-index: 1; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: var(--fs-xs); font-weight: 600; background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-2); }
 .roadmap__item--done .roadmap__dot { background: var(--profit-soft); border-color: var(--profit-line); color: var(--profit); }
 .roadmap__item--waiting .roadmap__dot { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
 .roadmap__body { display: flex; flex-direction: column; gap: 6px; padding-bottom: var(--s-5); min-width: 0; }
-.roadmap__title { font-weight: 700; }
+.roadmap__title { font-weight: 600; }
+
+/* a step of the plan: tap to see the agency, the fee and the official page */
+.path-step { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); width: 100%; min-height: 28px; padding: 0; text-align: left; font: inherit; color: var(--text); background: none; border: 0; cursor: pointer; }
+.path-step .roadmap__title { flex: 1 1 60%; min-width: 0; }
+.path-step:hover .roadmap__title { text-decoration: underline; }
+
+/* the plan before signing: one row per day something closes */
+.path-stages { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--r-3); background: var(--card); overflow: hidden; }
+.path-stage + .path-stage { border-top: 1px solid var(--hairline); }
+.path-stage__head { display: grid; grid-template-columns: 64px minmax(0, 1fr) 16px; gap: var(--s-3); align-items: center; width: 100%; min-height: 56px; padding: var(--s-3) var(--s-4); text-align: left; font: inherit; color: var(--text); background: none; border: 0; cursor: pointer; }
+.path-stage__head:hover { background: var(--hover); }
+.path-stage__day { font-weight: 600; }
+.path-stage__what { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.path-stage__title { font-weight: 600; }
+.path-stage__chev { transition: rotate var(--t-fast); }
+.path-stage--open .path-stage__chev { rotate: 90deg; }
+.path-stage .roadmap { padding: var(--s-2) var(--s-4) 0; }
 
 /* setup kit */
 .kit-groups { display: flex; flex-direction: column; gap: var(--s-3); }

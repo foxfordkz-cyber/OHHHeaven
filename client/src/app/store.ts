@@ -1,7 +1,8 @@
 import { createContext, createElement, useContext, useEffect, useSyncExternalStore, type ReactNode } from 'react';
 import type { Ack, Action, ClientView, GameClient, OfficialRole, OwnerView, OfficialView, CityView, Query } from '@ohh/shared/types';
 import { getClient } from './api';
-import { detectMode, detectWorld, getSession, rememberMode, type Mode } from './session';
+import { detectMode, detectWorld, getSession, rememberMode, rememberWorld, type Mode } from './session';
+import { addressNamesCity, openFreshCity, wantsFreshCity } from './fresh-city';
 
 export type Status = 'idle' | 'loading' | 'live' | 'offline';
 export interface Toast { id: number; text: string; tone: 'error' | 'info' | 'success' }
@@ -46,6 +47,11 @@ export interface StoreOptions {
   worldId: string;
   setTimer?: (fn: () => void, ms: number) => unknown;
   clearTimer?: (t: unknown) => void;
+  /**
+   * Asked once, with the first view of the city: the id of a city to move into instead (a fresh demo city when this
+   * one no longer takes a guest — app/fresh-city.ts), or null to stay.
+   */
+  freshCity?: (view: ClientView) => Promise<string | null>;
 }
 
 export function createStore(opts: StoreOptions): GameStore {
@@ -57,6 +63,7 @@ export function createStore(opts: StoreOptions): GameStore {
   let running = false;
   let toastSeq = 0;
   let inflight: Promise<void> | null = null;
+  let freshAsked = false;
 
   const set = (patch: Partial<StoreState>) => {
     state = { ...state, ...patch };
@@ -79,6 +86,16 @@ export function createStore(opts: StoreOptions): GameStore {
             if (state.status !== 'live') set({ status: 'live', error: null });
           } else {
             set({ view: res, version: res.world.version, status: 'live', error: null });
+            if (opts.freshCity && !freshAsked) {
+              freshAsked = true;
+              const id = await opts.freshCity(res);
+              if (id && id !== state.worldId) {
+                rememberWorld(id);
+                set({ worldId: id, view: null, version: null, status: 'loading' });
+                const next = await opts.client.view(id);
+                if (!('unchanged' in next)) set({ view: next, version: next.world.version, status: 'live', error: null });
+              }
+            }
           }
         } catch (e) {
           set({ status: 'offline', error: e instanceof Error ? e.message : String(e) });
@@ -193,7 +210,13 @@ let appStore: GameStore | null = null;
 export function getAppStore(): GameStore {
   if (!appStore) {
     const mode = detectMode();
-    appStore = createStore({ client: getClient(mode), mode, worldId: detectWorld() });
+    appStore = createStore({
+      client: getClient(mode), mode, worldId: detectWorld(),
+      // a guest is never left in a demo city that will refuse them on the last step (docs/qa/BUGS.md #18)
+      freshCity: mode === 'remote'
+        ? (view) => (wantsFreshCity({ world: view.world, joined: Boolean(getSession(mode, view.world.config.id)), explicit: addressNamesCity() }) ? openFreshCity('', fetch, view.world.config.id) : Promise.resolve(null))
+        : undefined,
+    });
   }
   return appStore;
 }

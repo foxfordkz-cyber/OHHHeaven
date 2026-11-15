@@ -2,6 +2,7 @@
 //   npx tsx sim/calibrate.ts doors      — what every kind of door looks like before anyone opens there
 //   npx tsx sim/calibrate.ts price      — which price earns the most at a typical door
 //   npx tsx sim/calibrate.ts season [n] — n full seasons: the city's established shops plus newcomers
+//   any mode: --capture=0.095 --start=0.5 --ramp=60 try other footfall numbers without editing the pack
 // The targets it is read against are printed with every table.
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -20,6 +21,12 @@ import { createWorld, netWorth } from '../engine/src/index';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const json = <T>(p: string): T => JSON.parse(readFileSync(join(ROOT, p), 'utf8')) as T;
 const packs: PackSet = { common: json('packs/_common.json'), niches: { cafe: json<Pack>('packs/cafe.json'), barbershop: json<Pack>('packs/barbershop.json') } };
+// what-if: --capture= --start= --ramp= override pack.extra.footfall of every niche that has it (nothing is written)
+for (const k of [['capture', 'captureRate'], ['start', 'awarenessStart'], ['ramp', 'rampDays'], ['sens', 'priceSensitivity']] as const) {
+  const a = process.argv.find((x) => x.startsWith(`--${k[0]}=`));
+  if (!a) continue;
+  for (const p of Object.values(packs.niches)) { const f = (p!.extra as { footfall?: Record<string, number> } | undefined)?.footfall; if (f) f[k[1]] = Number(a.slice(k[0].length + 3)); }
+}
 const places = json<Place[]>('data/places.json');
 const ctx = { packs, places };
 const usd = (x: number): string => (x < 0 ? '-$' : '$') + Math.round(Math.abs(x)).toLocaleString('en-US');

@@ -2,10 +2,11 @@
 // Action and decide only from ownerSight / officialSight (what a human in their seat would see).
 import type { Action, BusinessState, DealTerms, NicheId, OfficialRole, OpenRecommendation, Pack, Place, Player, PublicBusiness, StandingOrders, WorldState } from '../../shared/src/types';
 import { RULES } from '../../shared/src/rules';
-import { baselineOrdersDay } from '../../shared/src/place';
+import { baselineOrdersDay, overlap } from '../../shared/src/place';
 import { FIRST, LAST, businessName } from './names';
 import { officialSight, ownerSight, type OwnerSight } from './observe';
 import { hashStr, mulberry32, rngFor, shuffle } from './rng';
+import { lastsThroughRamp, obviouslyShort, runwayOf } from './runway';
 import { OFFICIAL_PROFILES, OWNER_STRATEGIES, PROFILES, officialStrategyFromName, ownerStrategyFromName, type OfficialStrategy, type OwnerProfile, type OwnerStrategy } from './strategies';
 import type { EngineCtx } from './__stubs__/engine';
 import { recommendOpening as stubRecommendOpening, recommendedPrice as stubRecommendedPrice } from './__stubs__/engine';
@@ -23,6 +24,8 @@ export interface BrainOptions {
   strategyOf?: (p: Player) => OwnerStrategy | OfficialStrategy | undefined;
   /** Override the niche (simulator). Default: derived from the player's name. */
   nicheOf?: (p: Player) => NicheId | undefined;
+  /** Careful characters check that the savings last through the wait and the ramp before signing (default true; the simulator turns it off to measure a newcomer who opens anyway). */
+  runwayCheck?: boolean;
   /** Agent 04's recommendOpening when available; the stub picks the pack's standard kit. */
   recommendOpening?: (niche: NicheId, placeId: string, w: WorldState, ctx: EngineCtx) => OpenRecommendation[];
   /** Price the analytics screen suggests (agent 04's recommend → set_orders.price). Default: stub Lerner-rule advice. */
@@ -103,6 +106,14 @@ export function choosePlace(ctx: EngineCtx, name: string, niche: NicheId, profil
   return best;
 }
 
+/** Weight of the shops of the niche already trading or fitting out around a door (public map data). */
+function rivalsAround(ctx: EngineCtx, niche: NicheId, neighbours: PublicBusiness[]): (p: Place) => number {
+  const radius = (ctx.packs.niches[niche]?.extra as { footfall?: { radiusM?: number } } | undefined)?.footfall?.radiusM ?? 0;
+  const spots = neighbours.filter((n) => n.niche === niche && n.status !== 'bankrupt').map((n) => placeOf(ctx, n.placeId)).filter((x): x is Place => !!x);
+  // each one counts as an average known shop, weighted like the engine weighs it: full next door, nothing at the radius
+  return (p) => (radius > 0 ? spots.reduce((s, q) => s + (q.id === p.id ? 0 : overlap(distanceM(p, q), radius)), 0) : 0);
+}
+
 function fixedCostsMonth(pack: Pack, place: Place, b: BusinessState): number {
   const payroll = pack.staff.reduce((s, r) => s + (b.orders.staff[r.id] ?? 0) * r.hourlyWage * r.hoursPerMonth, 0);
   const fixed = pack.monthlyCosts.filter((c) => c.basis === 'fixed').reduce((s, c) => s + c.amount, 0);
@@ -167,11 +178,16 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     // a newcomer walks past the doors it cannot pay for: the build-out of a space that never had this trade can cost more than the savings
     let place: Place | undefined;
     let recs: OpenRecommendation[] = [];
+    // a careful one also does the napkin sum: rent while the room is built, then the slow first months — does the
+    // money last until the shop pays for itself? (bots/src/runway.ts). A newbie with a random plan does not.
+    const careful = opts.runwayCheck !== false && profile.price !== 'fixed_random';
+    const rivals = careful ? rivalsAround(ctx, niche, sight.neighbors()) : () => 0;
     for (let tries = 0; tries < 40; tries++) {
       const p = choosePlace(ctx, sight.me.name, niche, profile, occupied);
       if (!p) break;
-      const r = recommend(niche, p.id, w, ctx);
-      if (r.length && r.some((x) => x.cashLeft >= 0)) { place = p; recs = r.filter((x) => x.cashLeft >= 0); break; }
+      if (careful && obviouslyShort(ctx, niche, p)) { occupied.add(p.id); continue; }
+      const r = recommend(niche, p.id, w, ctx).filter((x) => x.cashLeft >= 0 && (!careful || lastsThroughRamp(runwayOf(ctx, niche, p, x, rivals(p)))));
+      if (r.length) { place = p; recs = r; break; }
       occupied.add(p.id);
     }
     if (!place || !recs.length) return [];
@@ -197,7 +213,9 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
     const phase = hashStr(playerId) % 7;
     if (profile.loginEvery > 1 && (w.day - sight.me.joinedDay) % profile.loginEvery !== 0 && sight.business) return [];
     const b = sight.business;
-    if (!b) return sight.hadBusiness ? [] : openingActions(w, ctx, sight, strategy);
+    // no business yet: look through the listings on the day of joining and then once a month, not every day
+    // (each look prices up to 40 doors; a careful newcomer may find none it would sign for)
+    if (!b) return sight.hadBusiness || (w.day - sight.me.joinedDay) % RULES.DAYS_PER_MONTH !== 0 ? [] : openingActions(w, ctx, sight, strategy);
     const pack = ctx.packs.niches[b.niche]!;
     const place = placeOf(ctx, b.placeId)!;
     const acts: Action[] = [];
@@ -224,6 +242,9 @@ export function createBotBrain(opts: BrainOptions = {}): BotBrain {
       if (r) acts.push(r);
     }
     if (profile.proposesDeals && w.day % 7 === (phase + 5) % 7) acts.push(...proposals(w, sight, ctx, b, place, strategy));
+    // 4. a shop of the same trade has just opened its doors nearby: a dealmaker greets it with an offer within two days
+    //    (the newcomer — often a human — meets a named neighbour and a decision on the first days, not a silent map)
+    else if (profile.proposesDeals) acts.push(...welcome(w, sight, ctx, b, place));
     if (profile.breaksDeals && w.day % 7 === (phase + 1) % 7) {
       for (const d of sight.myDeals) if (d.status === 'active' && d.terms.type !== 'loan' && w.day - (d.startDay ?? w.day) >= 20 && rng() < 0.5) acts.push({ type: 'cancel_deal', dealId: d.id });
     }
@@ -379,6 +400,28 @@ function complaint(sight: OwnerSight, ctx: EngineCtx, b: BusinessState, harass: 
   if (!harass && !(cheap || dirty || finedRecently)) return null;
   const pick = dirty ? healthReport : harass && sight.day % 14 < 7 ? healthReport : taxReport;
   return pick ? { type: 'report', targetBusinessId: leader.id, reportId: pick.id } : null;
+}
+
+/** How far a dealmaker looks for a new shop of its trade to greet, in metres (the reach of a cross promotion). */
+export const WELCOME_M = 400;
+
+/** A joint purchase offered to the nearest shop of the same trade that opened its doors in the last two days. */
+function welcome(w: WorldState, sight: OwnerSight, ctx: EngineCtx, b: BusinessState, place: Place): Action[] {
+  if (sight.myDeals.length >= RULES.MAX_ACTIVE_DEALS - 1) return [];
+  const fresh = new Set<string>();
+  for (let i = sight.feed.length - 1; i >= 0 && w.day - sight.feed[i].day <= 2; i--) {
+    const f = sight.feed[i];
+    // day 1 is the founding of the city: everyone opens at once, nobody is new
+    if (f.kind === 'opening' && f.businessId && f.businessId !== b.id && f.day > 1) fresh.add(f.businessId);
+  }
+  if (!fresh.size) return [];
+  const partners = new Set(sight.myDeals.flatMap((d) => [d.fromBusinessId, d.toBusinessId]));
+  const near = sight.neighbors()
+    .filter((n) => fresh.has(n.id) && n.niche === b.niche && n.status === 'open' && !partners.has(n.id) && n.partners.length < RULES.MAX_ACTIVE_DEALS)
+    .map((n) => ({ n, d: distanceM(place, placeOf(ctx, n.placeId) ?? place) }))
+    .filter((x) => x.n.placeId !== place.id && x.d <= WELCOME_M)
+    .sort((x, y) => x.d - y.d)[0];
+  return near ? [{ type: 'propose_deal', toBusinessId: near.n.id, terms: { type: 'joint_purchase', months: 3 } }] : [];
 }
 
 function proposals(w: WorldState, sight: OwnerSight, ctx: EngineCtx, b: BusinessState, place: Place, strategy: OwnerStrategy): Action[] {
