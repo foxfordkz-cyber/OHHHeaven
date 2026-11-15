@@ -87,7 +87,9 @@ async function startServer() {
   // Start the server with node + tsx directly: `spawn('npm')` does not exist on Windows (npm is npm.cmd there).
   child = spawn(process.execPath, [join(ROOT, 'node_modules', 'tsx', 'dist', 'cli.mjs'), join('server', 'src', 'main.ts')], {
     cwd: ROOT, detached: process.platform !== 'win32', stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, PORT: String(port), HOST: '127.0.0.1', DATA_DIR: dataDir, NODE_ENV: 'test' },
+    // SNAPSHOT_DIR is what the server reads: without it every run left its demo city in server/.snapshots, and after
+    // about 19 runs POST /api/worlds answered "Too many demo cities" (B04, docs/qa/BUGS.md #15)
+    env: { ...process.env, PORT: String(port), HOST: '127.0.0.1', DATA_DIR: dataDir, SNAPSHOT_DIR: dataDir, NODE_ENV: 'test' },
   });
   let log = '';
   child.stdout.on('data', (d) => { log += d; });
