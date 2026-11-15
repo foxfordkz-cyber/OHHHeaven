@@ -62,7 +62,10 @@ console.log(model ? `model: ${modelPath}` : `model: not found at ${modelPath} �
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
-  await page.goto(pathToFileURL(html).href, { waitUntil: 'load' });
+  // ?static: every page on the page in its final state (deck.js does not take over); ?url=: the game's address
+  const url = (argAfter('--url') ?? process.env.DECK_URL ?? '').trim();
+  await page.goto(`${pathToFileURL(html).href}?static${url ? `&url=${encodeURIComponent(url)}` : ''}`, { waitUntil: 'load' });
+  await page.waitForFunction(() => document.documentElement.classList.contains('static'));
   await page.evaluate(() => document.fonts.ready);
 
   const missingKeys = await page.evaluate((m) => {
@@ -99,11 +102,6 @@ try {
   // recorded for that frame (img/capture.json → frames). A pattern that no longer matches leaves a dashed TBD.
   // The public address of the game: --url https://... (or DECK_URL). Without it the "Play: ..." lines are left out
   // rather than printed with a placeholder.
-  const url = (argAfter('--url') ?? process.env.DECK_URL ?? '').trim();
-  await page.evaluate((u) => {
-    for (const el of document.querySelectorAll('[data-url]')) el.textContent = u.replace(/^https?:\/\//, '').replace(/\/$/, '');
-    if (!u) for (const el of document.querySelectorAll('[data-url-wrap]')) el.remove();
-  }, url);
   console.log(url ? `public address: ${url}` : 'public address: none given (--url) — the "Play:" lines are left out');
 
   const capturePath = join(here, 'img', 'capture.json');
@@ -121,6 +119,21 @@ try {
     return stale;
   }, frames);
   if (staleFrames.length) console.log(`ad numbers not found in the frames: ${staleFrames.join('; ')}`);
+
+  // Bake the filled numbers (and the address, if given) into index.html, so the live deck opened straight from
+  // the file or from the game's /deck/ shows the same numbers as the PDF. The data-* attributes stay for the next build.
+  const filled = await page.$$eval('[data-model], [data-frame]', (els) => els.map((el) => ({ text: el.textContent, tbd: el.classList.contains('tbd') })));
+  let source = readFileSync(html, 'utf8');
+  let k = 0;
+  source = source.replace(/(<(span|tspan)\b[^>]*\bdata-(?:model|frame)="[^"]*"[^>]*>)([^<]*)(<\/\2>)/g, (whole, open, tag, _old, close) => {
+    const f = filled[k++];
+    if (!f) return whole;
+    const tagOpen = f.tbd ? open : open.replace(/\sclass="tbd"/, '').replace(/class="tbd /, 'class="').replace(/ tbd"/, '"');
+    return `${tagOpen}${f.text.replace(/[<&]/g, (c) => (c === '<' ? '&lt;' : '&amp;'))}${close}`;
+  });
+  if (url) source = source.replace(/(<span data-url>)[^<]*(<\/span>)/g, `$1${url.replace(/^https?:\/\//, '').replace(/\/$/, '')}$2`);
+  if (k !== filled.length) console.log(`warning: baked ${k} of ${filled.length} filled numbers`);
+  writeFileSync(html, source);
 
   const report = await page.$$eval('section.page', (pages) =>
     pages.map((el, i) => ({
