@@ -158,6 +158,20 @@ function wasBefore(pack: Pack, p: Place): string {
 
 const openDays = (pack: Pack, p: Place): number => daysToOpen(pack, pack.setup.filter((s) => s.required).map((s) => ({ id: s.id, qty: 1 })), p);
 
+/**
+ * Money left on opening day (the start money − the cheapest opening − rent while the room and permits are not ready)
+ * against three months of rent and the smallest legal team's wages. A newcomer who opens with less goes broke in the
+ * first months: Codex's honest player at ev-031 had $6,732 left against a first rent of $16,638.
+ */
+export function reserveAt(pack: Pack, p: Place, openingCost: number): { left: number; need: number; enough: boolean } {
+  const rent = rentPerMonth(p);
+  const main = pack.staff[0];
+  const wages = main ? Math.max(1, pack.capacity.minStaff) * main.hourlyWage * main.hoursPerMonth : 0;
+  const left = Math.round(pack.startCapital - openingCost - (rent * openDays(pack, p)) / 30);
+  const need = Math.round(3 * (rent + wages));
+  return { left, need, enough: left >= need };
+}
+
 export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: ClientView }) {
   const tr = useT();
   const niche = draft.niche as NicheId;
@@ -168,8 +182,10 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
   const priced = freePlaces(catalog.places, niche, businesses).map((p) => ({ p, cost: cheapestOpening(pack, p) }));
   const costOf = new Map(priced.map((x) => [x.p.id, x.cost]));
   const within = priced.filter((x) => x.cost <= budget).length;
-  // within the budget: the cheapest to open first — it leaves the most money to live through the first months
-  const free = [...priced].sort((a, b) => Number(a.cost > budget) - Number(b.cost > budget) || (a.cost <= budget ? a.cost - b.cost : 0)).map((x) => x.p);
+  const reserveOf = new Map(priced.map((x) => [x.p.id, reserveAt(pack, x.p, x.cost)]));
+  // within the budget: rooms whose reserve lasts three months first, the biggest reserve first; a thin reserve never leads
+  const free = [...priced].sort((a, b) => Number(a.cost > budget) - Number(b.cost > budget)
+    || (a.cost <= budget ? Number(!reserveOf.get(a.p.id)!.enough) - Number(!reserveOf.get(b.p.id)!.enough) || reserveOf.get(b.p.id)!.left - reserveOf.get(a.p.id)!.left : 0)).map((x) => x.p);
   const [showAll, setShowAll] = useState(false);
   const selected = catalog.places.find((p) => p.id === draft.placeId) ?? null;
   const list = showAll ? free : free.slice(0, 8);
@@ -179,7 +195,7 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
     <div className="stack-lg">
       <div className="stack-sm">
         <h1 className="h2">Where will it be?</h1>
-        <p className="muted">{within} of {free.length} free storefronts in the East Village fit your {formatMoney(budget)} to start. The cheapest to open come first: the money left over is what you live on until the regulars come.</p>
+        <p className="muted">{within} of {free.length} free storefronts in the East Village fit your {formatMoney(budget)} to start. The ones that leave the biggest reserve come first: the money left over is what you live on until the regulars come.</p>
       </div>
       <CityMapSlot mode="pick" niche={niche} places={catalog.places} businesses={businesses} weather={view.weather[0]} onPick={(placeId) => update({ placeId })} selectedPlaceId={draft.placeId ?? undefined} height={220} />
 
@@ -202,6 +218,13 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
               ? `Opening here costs at least ${formatMoney(costOf.get(selected.id) ?? 0)}. You start with ${formatMoney(budget)}: pick a smaller or cheaper place.`
               : `Opening here costs from ${formatMoney(costOf.get(selected.id) ?? 0)} of your ${formatMoney(budget)}.`}
           </p>
+          {(costOf.get(selected.id) ?? 0) <= budget && (
+            <p className={`small ${reserveOf.get(selected.id)?.enough ? 'muted' : 'loss'}`} data-testid="place-reserve">
+              {reserveOf.get(selected.id)?.enough
+                ? tr(`On opening day about ${formatMoney(reserveOf.get(selected.id)!.left)} is left: three months of rent and wages (${formatMoney(reserveOf.get(selected.id)!.need)}) are covered.`, `В день открытия останется около ${formatMoney(reserveOf.get(selected.id)!.left)}: три месяца аренды и зарплаты (${formatMoney(reserveOf.get(selected.id)!.need)}) покрыты.`)
+                : tr(`Reserve too thin: about ${formatMoney(reserveOf.get(selected.id)?.left ?? 0)} is left on opening day, three months of rent and wages are ${formatMoney(reserveOf.get(selected.id)?.need ?? 0)}.`, `Запаса не хватит: в день открытия останется около ${formatMoney(reserveOf.get(selected.id)?.left ?? 0)}, а три месяца аренды и зарплаты — ${formatMoney(reserveOf.get(selected.id)?.need ?? 0)}.`)}
+            </p>
+          )}
           {outlook && outlook.placeId === selected.id && (
             <p className={`small ${outlook.tone}`} data-testid="place-outlook">
               <strong>{tr('What it earns', 'Сколько принесёт')}:</strong> {outlook.line}
@@ -225,7 +248,9 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
             </>}
             value={(costOf.get(p.id) ?? 0) > budget
               ? <Badge tone="loss">{tr('Over budget', 'Не по карману')}</Badge>
-              : <span className="num" title={tr('The least it costs to open here', 'Минимум, чтобы открыться здесь')}>{formatMoney(costOf.get(p.id) ?? 0, { compact: true })}</span>}
+              : !reserveOf.get(p.id)!.enough
+                ? <Badge tone="warn" title={tr(`Leaves ${formatMoney(reserveOf.get(p.id)!.left)} on opening day; three months of rent and wages are ${formatMoney(reserveOf.get(p.id)!.need)}`, `В день открытия останется ${formatMoney(reserveOf.get(p.id)!.left)}; три месяца аренды и зарплаты — ${formatMoney(reserveOf.get(p.id)!.need)}`)}>{tr('Reserve too thin', 'Запаса не хватит')}</Badge>
+                : <span className="num" title={tr('The least it costs to open here', 'Минимум, чтобы открыться здесь')}>{formatMoney(costOf.get(p.id) ?? 0, { compact: true })}</span>}
             onClick={() => update({ placeId: p.id })}
           />
         ))}
