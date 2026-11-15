@@ -185,6 +185,9 @@ export function createApp(game: GameServer = new GameServer({ snapshotDir: null,
   const r = game.rateOptions();
   const limiter = new RateLimiter(r.perSec, r.burst);
   app.disable('x-powered-by');
+  // one proxy in front (Railway): req.ip is the visitor, not the proxy. Without it every guest without a token shared
+  // one rate-limit bucket: 25 guests polling the city got 17% "Too many requests", 40 got 55% (agents/r3-B05.md, 1)
+  app.set('trust proxy', 1);
   app.use(express.json({ limit: '64kb' }));
 
   app.use('/api', (req: Req, res: Response, next: NextFunction) => {
