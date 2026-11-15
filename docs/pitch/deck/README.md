@@ -1,11 +1,24 @@
 # Pitch deck
 
-Ten pages, 1920×1080, in the order of the judging criteria. One HTML file is the source; the PDF is printed from it.
+A live HTML deck in Russian: ten pages, 1920×1080, in the order of the judging criteria, each with its own drawing and
+one animation that shows the page's point. No network: no CDN, no web fonts. The PDF is printed from the same page.
+
+**Show it.** Open `index.html` in a browser (straight from the file works), or the game's own `/deck/` when the server
+runs (`npm run build && npm start` → `http://<address>:8787/deck/`). → / Space / click / swipe — next; ← — back;
+F — full screen; the page number is in the address (`#3`). The stage scales to any 16:9 screen. Served from the game,
+the last page shows the game's address and a QR code to it.
+
+**Final state.** Every element's normal style is its final state; an animation only plays into it, on the page you
+enter, and is over within 1.5 s. The PDF (`?static`), print and `prefers-reduced-motion` show the final page at once.
 
 | File | What it is |
 |---|---|
-| `index.html` | the deck: one `<section class="page">` per page |
+| `index.html` | the deck: one `<section class="page">` per page, drawings as inline SVG |
 | `deck.css` | its look — the light "paper" theme of the product (`client/src/ui/glass.css`, `build/DESIGN.md`) at deck scale |
+| `live.css` | the stage, the animations and their final states |
+| `deck.js` | navigation, scaling, counters, the game's address and QR |
+| `qr.js` | QR encoder without dependencies, compiled from `server/src/qr.ts` |
+| `publish.mjs` | copies the deck to `client/public/deck` — the game serves it at `/deck/` |
 | `deck.pdf` | the printed deck |
 | `pages/page-NN.png` | each page as a picture, for reading on GitHub |
 | `img/` | real screenshots of the product and how they were taken (`img/README.md`, `img/capture.json`) |
@@ -27,7 +40,8 @@ Once the game has a public address, put it on pages 1 and 10 (without it, the "P
 node docs/pitch/deck/build.mjs --url https://<address>
 ```
 
-The build fails (exit 1) when there are more than ten pages, when a page overflows, when text runs into the footer
+The build also writes the filled numbers back into `index.html` (so the live deck shows them too) and copies the deck to
+`client/public/deck`. It fails (exit 1) when there are more than ten pages, when a page overflows, when text runs into the footer
 or spills out of its card, or when a screenshot is missing. It also prints how many numbers on each page are still
 waiting for their source (dashed boxes).
 

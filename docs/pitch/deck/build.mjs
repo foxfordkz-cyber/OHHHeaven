@@ -4,6 +4,7 @@
 //   node docs/pitch/deck/build.mjs --no-png         → PDF only
 //   node docs/pitch/deck/build.mjs --model <path>   → money numbers from another copy of the model
 //   node docs/pitch/deck/build.mjs --url https://…  → the public address on pages 1 and 10 (or DECK_URL)
+//   It also copies the live deck to client/public/deck (served by the game at /deck/); --no-publish skips that.
 //
 // Uses the Playwright that is already installed (require('playwright') works from any directory).
 // Fails if a page overflows 1920×1080, if content runs into the footer, if an image is missing,
@@ -188,6 +189,13 @@ try {
       await sections[i].screenshot({ path: join(pagesDir, `page-${String(i + 1).padStart(2, '0')}.png`) });
     }
     console.log(`PNG: ${pagesDir}/page-01..${String(sections.length).padStart(2, '0')}.png`);
+  }
+
+  // the same deck, served by the game at /deck/ (client/public/deck → client/dist/deck)
+  if (!process.argv.includes('--no-publish')) {
+    const { publish } = await import('./publish.mjs');
+    const r = publish();
+    console.log(`published ${r.files} files to client/public/deck → /deck/`);
   }
 
   if (bad) process.exitCode = 1;
