@@ -8,6 +8,9 @@ import { useRuleCards } from './rulecards';
 import { PLAN_PRINT_CSS } from './print';
 import { loadProgress, personalOf, progressKey, saveProgress, type ReserveMonths } from './personal';
 import { NextRealStep, PlanPlaceBlock, PlanRisks, PlanSummaryBlock, SavingsCheck, StepMine } from './PlanPersonal';
+import { useNavigate } from 'react-router-dom';
+import type { PlanTeaser as ProTeaser } from '../paywall/billing';
+import { useBilling } from '../paywall/useBilling';
 import './plan.css';
 
 export type AskFn = (q: Query) => Promise<unknown>;
@@ -222,7 +225,13 @@ export function usePlan(ask: AskFn | null): { plan: RealWorldPlan | null; loadin
   return state;
 }
 
-export function PlanScreen({ ask, cards, toast, day }: { ask: AskFn | null; cards?: PackRuleCard[]; toast?: (text: string, tone?: 'info' | 'success' | 'error') => void; day?: number }) {
+export function PlanScreen({ ask, cards, toast, day, locked, onPro }: {
+  ask: AskFn | null; cards?: PackRuleCard[]; toast?: (text: string, tone?: 'info' | 'success' | 'error') => void; day?: number;
+  /** The plan is built but sits in Pro (server/src/billing.ts): what is in it, so the free player sees what they get. */
+  locked?: { teaser: ProTeaser | null } | null;
+  onPro?: () => void;
+}) {
+  const tr = useT();
   const { plan, loading, fromLink } = usePlan(ask);
   const ruleCards = useRuleCards(cards);
   const [copied, setCopied] = useState(false);
@@ -241,6 +250,7 @@ export function PlanScreen({ ask, cards, toast, day }: { ask: AskFn | null; card
   }
 
   if (loading) return <main className="screen plan-root stack" aria-busy="true"><Skeleton height={120} /><Skeleton height={200} /><Skeleton height={200} /></main>;
+  if (!plan && locked) return <main className="screen plan-root"><PlanLocked teaser={locked.teaser} onPro={onPro} tr={tr} /></main>;
   if (!plan) {
     return (
       <main className="screen plan-root">
@@ -262,8 +272,30 @@ export function PlanScreen({ ask, cards, toast, day }: { ask: AskFn | null; card
   );
 }
 
+/** A free player after the free month: the plan exists, it is in Pro. Its own numbers and one button (docs/qa/BUGS.md #13). */
+export function PlanLocked({ teaser, onPro, tr }: { teaser: ProTeaser | null; onPro?: () => void; tr: (en: string, ru: string) => string }) {
+  const lines = teaser ? [
+    tr(`Opening budget for ${teaser.businessName}: ${money(teaser.startupTotal)}`, `Бюджет открытия «${teaser.businessName}»: ${money(teaser.startupTotal)}`),
+    tr(`Monthly bills: ${money(teaser.monthlyTotal)}; keep ${money(teaser.reserveAdvised)} in reserve`, `Расходы в месяц: ${money(teaser.monthlyTotal)}; в запасе держать ${money(teaser.reserveAdvised)}`),
+    tr(`${teaser.steps} real-life steps in order, ${teaser.stepsWithLinks} with the official page`, `${teaser.steps} шагов в жизни по порядку, у ${teaser.stepsWithLinks} — официальная страница`),
+    tr(`${teaser.suppliers} suppliers for your choices, ${teaser.lessons} lessons from your season`, `${teaser.suppliers} поставщиков под ваш выбор, ${teaser.lessons} уроков вашего сезона`),
+  ] : [];
+  return (
+    <Card tone="accent" title={tr('Your plan is ready — it is in First Year Pro', 'Ваш план готов — он в First Year Pro')}
+      subtitle={tr('Built from your own season: your address, your rent, your kit and your mistakes.', 'Собран из вашего сезона: ваш адрес, ваша аренда, ваш набор и ваши ошибки.')}>
+      <div className="stack-sm" data-testid="plan-locked">
+        {lines.length > 0 && <ul className="small" style={{ margin: 0, paddingLeft: '1.2em' }}>{lines.map((l) => <li key={l}>{l}</li>)}</ul>}
+        {onPro && <Button block icon="arrowRight" onClick={onPro}>{tr('See Pro', 'Посмотреть Pro')}</Button>}
+      </div>
+    </Card>
+  );
+}
+
 export function PlanConnected() {
   const { query, toast } = useGame();
   const view = useOwnerView();
-  return <PlanScreen ask={query} toast={toast} day={view?.world.day} />;
+  const navigate = useNavigate();
+  const { status } = useBilling({ day: view?.world.day });
+  const locked = status?.locked.includes('plan') ? { teaser: status.teaser } : null;
+  return <PlanScreen ask={query} toast={toast} day={view?.world.day} locked={locked} onPro={() => navigate('/pro')} />;
 }

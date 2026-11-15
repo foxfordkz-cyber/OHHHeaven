@@ -119,6 +119,25 @@ describe('Manage → Apply', () => {
     await screen.findByText(/Applied: Price \$6\.50 → \$6\.60; Barista 3 → 4; Back to the rules: Pay staff in cash, off the books\. The shop runs on it from/);
   });
 
+  it('a refusal that points to Pro carries a See Pro button (docs/qa/BUGS.md #14)', async () => {
+    const refusal = 'Your free month ended on day 90. Your cafe keeps running on your last orders; to change them, open First Year Pro on /pro.';
+    const { deps } = makeDeps(fixture('open'), { act: vi.fn(async (): Promise<Ack> => ({ ok: false, error: refusal })) });
+    render(<BusinessScreen deps={deps} initialTab="manage" />);
+    fireEvent.click(screen.getByRole('button', { name: 'More price' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'See Pro' }));
+    expect(deps.navigate).toHaveBeenCalledWith('/pro');
+  });
+
+  it('an ordinary refusal has no See Pro button', async () => {
+    const { deps } = makeDeps(fixture('open'), { act: vi.fn(async (): Promise<Ack> => ({ ok: false, error: 'Price must be above zero' })) });
+    render(<BusinessScreen deps={deps} initialTab="manage" />);
+    fireEvent.click(screen.getByRole('button', { name: 'More price' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
+    await screen.findByText('Price must be above zero');
+    expect(screen.queryByRole('button', { name: 'See Pro' })).toBeNull();
+  });
+
   it('offline: banner, Save waits, the draft survives a remount', () => {
     const view = fixture('open');
     const { deps } = makeDeps(view, { online: false });

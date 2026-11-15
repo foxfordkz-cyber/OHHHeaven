@@ -18,6 +18,7 @@ import { firstUnseen, markRuleSeen } from './seen';
 import { BankruptScreen, NoBusiness } from './StatusScreens';
 import { TodayTab } from './TodayTab';
 import { pick } from '../../ui/i18n';
+import { isPaywallError } from '../paywall/billing';
 import './biz.css';
 
 /** One plain sentence per tab, shown under the tab bar: a first-time owner should not have to guess. */
@@ -216,7 +217,12 @@ export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { de
         {tab === 'books' && <BooksTab deps={deps} />}
         {tab !== 'today' && tab !== 'manage' && tab !== 'books' && (current?.element ?? <Slot title={current?.label ?? 'Coming soon'} text={SLOT_TEXT[tab] ?? 'This part of your business is on its way.'} />)}
         {saveMsg && !showSave && (
-          <div className="bz-pad" style={{ marginTop: 12 }}><Banner tone={saveMsg.ok ? 'good' : 'bad'}>{saveMsg.text}</Banner></div>
+          <div className="bz-pad" style={{ marginTop: 12 }}>
+            <Banner tone={saveMsg.ok ? 'good' : 'bad'}>{saveMsg.text}</Banner>
+            {!saveMsg.ok && isPaywallError(saveMsg.text) && deps.navigate && (
+              <div style={{ marginTop: 8 }}><Button variant="primary" onClick={() => deps.navigate!('/pro')}>{pick('See Pro', 'Посмотреть Pro')}</Button></div>
+            )}
+          </div>
         )}
       </div>
 
@@ -231,6 +237,10 @@ export function BusinessScreen({ deps, initialTab = 'today', onTabChange }: { de
               {tab !== 'manage' && <button type="button" className="bz-linkbtn" onClick={() => setTab('manage')}>{pick('Review', 'Посмотреть')}</button>}
             </div>
             {saveMsg && !saveMsg.ok && <span className="bz-small bz-bad-text" role="alert">{saveMsg.text}</span>}
+            {/* the one place where the player decides to pay: a button, not a path written in text (docs/qa/BUGS.md #14) */}
+            {saveMsg && !saveMsg.ok && isPaywallError(saveMsg.text) && deps.navigate && (
+              <Button variant="primary" onClick={() => deps.navigate!('/pro')}>{pick('See Pro', 'Посмотреть Pro')}</Button>
+            )}
             <div className="bz-btn-row">
               <Button onClick={() => { reset(); setSaveMsg(null); }} disabled={saving}>{pick('Discard', 'Отменить')}</Button>
               <Button variant="primary" onClick={save} disabled={saving || !deps.online}>{!deps.online ? 'Waiting for connection…' : saving ? 'Applying…' : 'Apply'}</Button>
