@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import type { CommonPack, Pack, PackSet, Place, Player, WorldConfig, WorldState } from '@ohh/shared';
 import { applyAction, createWorld, tickDay } from '../../src/index';
 import { recommend } from '../../src/analytics';
-import { recommendOpening } from '../../src/analytics/opening';
+import { project, recommendOpening, staffFor } from '../../src/analytics/opening';
 import { seatRuleBroken } from '../../src/economy/actions';
 
 const read = <T>(p: string): T => JSON.parse(readFileSync(new URL(`../../../${p}`, import.meta.url), 'utf8')) as T;
@@ -48,6 +48,22 @@ describe('recommend_opening on the real packs', () => {
     for (const placeId of ['ev-005', 'ev-016', 'ev-053', 'ev-058', 'ev-062']) {
       for (const r of recommendOpening('cafe', placeId, w, ctx)) {
         expect(seatRuleBroken(packs.niches.cafe!, r.size, r.items), `${placeId} ${r.kitId}`).toBeNull();
+      }
+    }
+  });
+});
+
+describe('recommend_opening staffing on the real packs (docs/qa/BUGS.md #1)', () => {
+  it('the recommended team is not one person too big: one fewer never forecasts more profit', () => {
+    const pack = packs.niches.cafe!;
+    const w = { ...createWorld(cfg), players: [] } as WorldState;
+    for (const placeId of ['ev-015', 'ev-087', 'ev-094']) {
+      for (const r of recommendOpening('cafe', placeId, w, ctx)) {
+        const heads = Object.values(r.orders.staff).reduce((a, n) => a + n, 0);
+        if (heads - 1 < pack.capacity.minStaff) continue;
+        const now = project(pack, 'cafe', placeId, r.size, r.items, r.orders, r.total, w, ctx).analytics.profit;
+        const fewer = project(pack, 'cafe', placeId, r.size, r.items, { ...r.orders, staff: staffFor(pack, heads - 1) }, r.total, w, ctx).analytics.profit;
+        expect(fewer, `${placeId} ${r.kitId}`).toBeLessThanOrEqual(now + 0.01);
       }
     }
   });

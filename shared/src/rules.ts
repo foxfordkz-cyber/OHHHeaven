@@ -59,7 +59,19 @@ export function dateOf(day: number): GameDate {
   const month = Math.floor((d - 1) / RULES.DAYS_PER_MONTH) + 1;
   const dayOfMonth = ((d - 1) % RULES.DAYS_PER_MONTH) + 1;
   const weekday = (d - 1) % 7;
-  return { day: d, month, dayOfMonth, weekday, label: `${WEEKDAYS[weekday]}, ${MONTHS[(month - 1) % 12]} ${dayOfMonth}` };
+  return { day: d, month, dayOfMonth, weekday, label: `${WEEKDAYS[weekday]}, ${MONTHS[(month - 1) % 12]} ${calendarDay(month, dayOfMonth)}` };
+}
+
+const MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+/**
+ * The day of a real month a game day is shown as. Game months have 30 days; the label scales them onto the real
+ * month, so the month ends on Feb 28 and Jan 31, never on "Feb 30" (docs/qa/BUGS.md #3). Only the label: every count
+ * of days (dayOfMonth, month ends, rent, reports) stays on the 30-day month.
+ */
+export function calendarDay(month: number, dayOfMonth: number): number {
+  const len = MONTH_DAYS[(month - 1) % 12];
+  return Math.min(len, Math.max(1, Math.round((dayOfMonth * len) / RULES.DAYS_PER_MONTH)));
 }
 
 export const isMonthEnd = (day: number): boolean => day % RULES.DAYS_PER_MONTH === 0;
