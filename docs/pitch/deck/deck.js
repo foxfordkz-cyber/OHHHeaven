@@ -1,6 +1,6 @@
 // Live deck: one page at a time, scaled to the screen.
 //   → / Space / PageDown / click — next; ← / PageUp / click on the left quarter — back; Home / End;
-//   F — full screen; the page number lives in the address (#3); swipe on a phone.
+//   F — full screen; L — the other language; the page number lives in the address (#3); swipe on a phone.
 // ?static (used by build.mjs for the PDF and the pictures) keeps every page on the page, in its final state.
 // A classic script (not a module), so the deck also runs when opened straight from the file on a laptop.
 (function () {
@@ -105,6 +105,11 @@ if (isStatic) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
     else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); back(); }
+    else if (e.key === 'l' || e.key === 'L' || e.key === 'д' || e.key === 'Д') {
+      // L: the same page in the other language (index.html is Russian, index.en.html English)
+      const en = document.documentElement.lang === 'en';
+      location.href = `${en ? 'index.html' : 'index.en.html'}#${current + 1}`;
+    }
     else if (e.key === 'Home') show(0);
     else if (e.key === 'End') show(pages.length - 1);
     else if (e.key === 'f' || e.key === 'F' || e.key === 'а' || e.key === 'А') {

@@ -5,7 +5,7 @@ one animation that shows the page's point. No network: no CDN, no web fonts. The
 
 **Show it.** Open `index.html` in a browser (straight from the file works), or the game's own `/deck/` when the server
 runs (`npm run build && npm start` → `http://<address>:8787/deck/`). → / Space / click / swipe — next; ← — back;
-F — full screen; the page number is in the address (`#3`). The stage scales to any 16:9 screen. Served from the game,
+F — full screen; L — the English version (`index.en.html`, made from the Russian one by `make-en.py`); the page number is in the address (`#3`). The stage scales to any 16:9 screen. Served from the game,
 the last page shows the game's address and a QR code to it.
 
 **Final state.** Every element's normal style is its final state; an animation only plays into it, on the page you
@@ -19,6 +19,7 @@ enter, and is over within 1.5 s. The PDF (`?static`), print and `prefers-reduced
 | `deck.js` | navigation, scaling, counters, the game's address and QR |
 | `qr.js` | QR encoder without dependencies, compiled from `server/src/qr.ts` |
 | `publish.mjs` | copies the deck to `client/public/deck` — the game serves it at `/deck/` |
+| `index.en.html`, `make-en.py` | the English version (L) and the script that makes it from `index.html` |
 | `deck.pdf` | the printed deck |
 | `pages/page-NN.png` | each page as a picture, for reading on GitHub |
 | `img/` | real screenshots of the product and how they were taken (`img/README.md`, `img/capture.json`) |

@@ -4,7 +4,7 @@
 //   node docs/pitch/deck/publish.mjs      (build.mjs runs it at the end)
 //
 // Copies index.html, the styles, the scripts and only the screenshots the page uses.
-import { copyFileSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -16,8 +16,8 @@ export function publish() {
   const images = [...new Set([...html.matchAll(/src="(img\/[^"]+)"/g)].map((m) => m[1]))];
   rmSync(out, { recursive: true, force: true });
   mkdirSync(join(out, 'img'), { recursive: true });
-  for (const f of ['index.html', 'deck.css', 'live.css', 'deck.js', 'qr.js', ...images]) copyFileSync(join(here, f), join(out, f));
-  return { out, files: 5 + images.length };
+  for (const f of ['index.html', ...(existsSync(join(here, 'index.en.html')) ? ['index.en.html'] : []), 'deck.css', 'live.css', 'deck.js', 'qr.js', ...images]) copyFileSync(join(here, f), join(out, f));
+  return { out, files: 5 + images.length + (existsSync(join(here, 'index.en.html')) ? 1 : 0) };
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {

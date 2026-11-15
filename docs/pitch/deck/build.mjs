@@ -26,6 +26,7 @@ const { chromium } = require('playwright');
 
 const here = dirname(fileURLToPath(import.meta.url));
 const html = join(here, 'index.html');
+const htmlEn = join(here, 'index.en.html');
 const pdf = join(here, 'deck.pdf');
 const pagesDir = join(here, 'pages');
 const wantPng = !process.argv.includes('--no-png');
@@ -61,11 +62,11 @@ const model = await loadModel();
 console.log(model ? `model: ${modelPath}` : `model: not found at ${modelPath} — money numbers stay TBD`);
 
 const browser = await chromium.launch();
-try {
+async function prepare(file) {
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   // ?static: every page on the page in its final state (deck.js does not take over); ?url=: the game's address
   const url = (argAfter('--url') ?? process.env.DECK_URL ?? '').trim();
-  await page.goto(`${pathToFileURL(html).href}?static${url ? `&url=${encodeURIComponent(url)}` : ''}`, { waitUntil: 'load' });
+  await page.goto(`${pathToFileURL(file).href}?static${url ? `&url=${encodeURIComponent(url)}` : ''}`, { waitUntil: 'load' });
   await page.waitForFunction(() => document.documentElement.classList.contains('static'));
   await page.evaluate(() => document.fonts.ready);
 
@@ -124,7 +125,7 @@ try {
   // Bake the filled numbers (and the address, if given) into index.html, so the live deck opened straight from
   // the file or from the game's /deck/ shows the same numbers as the PDF. The data-* attributes stay for the next build.
   const filled = await page.$$eval('[data-model], [data-frame]', (els) => els.map((el) => ({ text: el.textContent, tbd: el.classList.contains('tbd') })));
-  let source = readFileSync(html, 'utf8');
+  let source = readFileSync(file, 'utf8');
   let k = 0;
   source = source.replace(/(<(span|tspan)\b[^>]*\bdata-(?:model|frame)="[^"]*"[^>]*>)([^<]*)(<\/\2>)/g, (whole, open, tag, _old, close) => {
     const f = filled[k++];
@@ -134,8 +135,10 @@ try {
   });
   if (url) source = source.replace(/(<span data-url>)[^<]*(<\/span>)/g, `$1${url.replace(/^https?:\/\//, '').replace(/\/$/, '')}$2`);
   if (k !== filled.length) console.log(`warning: baked ${k} of ${filled.length} filled numbers`);
-  writeFileSync(html, source);
-
+  writeFileSync(file, source);
+  return page;
+}
+async function check(page, label) {
   const report = await page.$$eval('section.page', (pages) =>
     pages.map((el, i) => ({
       n: i + 1,
@@ -175,8 +178,17 @@ try {
       bad = true;
     }
     if (r.tbd) notes.push(`${r.tbd} number(s) still TBD`);
-    console.log(`page ${String(r.n).padStart(2)} ${r.id.padEnd(10)} ${notes.length ? notes.join('; ') : 'ok'}`);
+    console.log(`${label}page ${String(r.n).padStart(2)} ${r.id.padEnd(10)} ${notes.length ? notes.join('; ') : 'ok'}`);
   }
+
+  return bad;
+}
+
+try {
+  const page = await prepare(html);
+
+
+  let bad = await check(page, '');
 
   await page.pdf({ path: pdf, width: '1920px', height: '1080px', printBackground: true, preferCSSPageSize: true });
   console.log(`PDF: ${pdf}`);
@@ -189,6 +201,13 @@ try {
       await sections[i].screenshot({ path: join(pagesDir, `page-${String(i + 1).padStart(2, '0')}.png`) });
     }
     console.log(`PNG: ${pagesDir}/page-01..${String(sections.length).padStart(2, '0')}.png`);
+  }
+
+  // the English deck (L in the live deck): same numbers baked in, same page checks; the PDF stays Russian
+  if (existsSync(htmlEn)) {
+    const en = await prepare(htmlEn);
+    if (await check(en, 'en ')) bad = true;
+    await en.close();
   }
 
   // the same deck, served by the game at /deck/ (client/public/deck → client/dist/deck)
