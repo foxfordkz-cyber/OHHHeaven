@@ -14,7 +14,7 @@
 // dashed TBD look and the report names the key.
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -92,6 +92,25 @@ try {
     return missing;
   }, model);
   if (missingKeys.length) console.log(`model keys not filled: ${[...new Set(missingKeys)].join(', ')}`);
+
+  // Ad lines quote numbers from the screenshots next to them. They are not typed either: an element with
+  // data-frame="ad-bet" data-re="pay those bills · (\d+)" takes group 1 of that pattern from the text the capture
+  // recorded for that frame (img/capture.json → frames). A pattern that no longer matches leaves a dashed TBD.
+  const capturePath = join(here, 'img', 'capture.json');
+  const frames = existsSync(capturePath) ? (JSON.parse(readFileSync(capturePath, 'utf8')).frames ?? {}) : {};
+  const staleFrames = await page.evaluate((fr) => {
+    const stale = [];
+    for (const el of document.querySelectorAll('[data-frame]')) {
+      const m = new RegExp(el.dataset.re).exec(fr[el.dataset.frame] ?? '');
+      if (m) el.textContent = m[1];
+      else {
+        el.classList.add('tbd');
+        stale.push(`${el.dataset.frame}: /${el.dataset.re}/`);
+      }
+    }
+    return stale;
+  }, frames);
+  if (staleFrames.length) console.log(`ad numbers not found in the frames: ${staleFrames.join('; ')}`);
 
   const report = await page.$$eval('section.page', (pages) =>
     pages.map((el, i) => ({
