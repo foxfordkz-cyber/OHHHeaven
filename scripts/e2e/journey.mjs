@@ -613,6 +613,12 @@ async function walk(browser, width) {
     await shot('pro-refused');
     const p1 = (await view()).business.orders.price;
     if (p1 !== p0) throw new Error(`the change went through on day ${day} without Pro (${p0} → ${p1})`);
+    // The personal plan as a free player after the free month (BUGS.md, №13): an offer of Pro, or "not ready yet"?
+    await page.goto(`${base.url}/end/plan?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await sleep(2500);
+    const planFree = (await page.locator('body').innerText()).replace(/\s+/g, ' ');
+    const planVerdict = /not ready yet/i.test(planFree) ? 'plan for a free player: "not ready yet" (BUGS №13)' : /Pro/.test(planFree) ? `plan for a free player offers Pro: "${(planFree.match(/[^.]*Pro[^.]*\./) ?? [''])[0].trim().slice(0, 90)}"` : `plan for a free player: "${planFree.slice(0, 90)}"`;
+    await shot('plan-free');
     // The tariff screen.
     await page.goto(`${base.url}/pro?world=${W}`, { waitUntil: 'domcontentloaded' });
     const buy = await visible(btn(/^Get Pro/), 15000);
@@ -633,7 +639,7 @@ async function walk(browser, width) {
     await sleep(1000);
     const p2 = (await view()).business.orders.price;
     if (p2 === p0) throw new Error('Pro is on, but the change still does not go through');
-    return `day ${day}: refused${refusedText ? ` ("${refusedText.trim().slice(0, 110)}")` : ' with no word about Pro on screen'}; ${seePro ? 'a Pro button/link next to it' : 'NO button to /pro next to the refusal'}; /pro: "${offer.slice(0, 90)}"; after Get Pro (${after.pro.via}) price ${p0} → ${p2}`;
+    return `${planVerdict}; day ${day}: refused${refusedText ? ` ("${refusedText.trim().slice(0, 110)}")` : ' with no word about Pro on screen'}; ${seePro ? 'a Pro button/link next to it' : 'NO button to /pro next to the refusal'}; /pro: "${offer.slice(0, 90)}"; after Get Pro (${after.pro.via}) price ${p0} → ${p2}`;
   });
 
   // 12. End of season → debrief → personal plan
