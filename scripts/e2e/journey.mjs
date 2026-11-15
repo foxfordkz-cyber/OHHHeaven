@@ -30,7 +30,8 @@ const SCHEME = opt('scheme', 'light');
 const PLAYER = opt('name', 'Jordan');
 const RIVAL = 'Sam\'s Cuts';
 const base = { url: (opt('url', process.env.E2E_URL ?? '') || '').replace(/\/$/, '') };
-const { call } = api(base);
+// A server started with CLOCK_KEY takes clock commands (pause, advance) only with the key.
+const { call } = api(base, opt('key', process.env.CLOCK_KEY ?? ''));
 const log = (...a) => console.log(...a);
 let server = null;
 const stopServer = () => server?.stop();

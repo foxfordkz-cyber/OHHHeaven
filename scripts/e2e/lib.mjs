@@ -17,10 +17,13 @@ export const opt = (name, dflt) => { const i = argv.indexOf(`--${name}`); return
 export const flag = (name) => argv.includes(`--${name}`);
 export const stamp = () => new Date().toISOString().replace(/[-:]/g, '').slice(0, 13).replace('T', '-');
 
-/** The game's HTTP API (build/CONTRACT.md §6) at `base`. */
-export function api(base) {
+/**
+ * The game's HTTP API (build/CONTRACT.md §6) at `base`. `clockKey`: a server started with CLOCK_KEY accepts clock commands
+ * (pause, advance) only with it, for every city — the walk needs it against a deployed server.
+ */
+export function api(base, clockKey = '') {
   const call = async (method, path, body, token) => {
-    const r = await fetch(base.url + path, { method, headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: body === undefined ? undefined : JSON.stringify(body) });
+    const r = await fetch(base.url + path, { method, headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}), ...(clockKey && path.endsWith('/clock') ? { 'x-clock-key': clockKey } : {}) }, body: body === undefined ? undefined : JSON.stringify(body) });
     const text = await r.text();
     try { return JSON.parse(text); } catch { return { ok: false, error: `HTTP ${r.status}: ${text.slice(0, 120)}` }; }
   };

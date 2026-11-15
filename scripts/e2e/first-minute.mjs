@@ -17,7 +17,8 @@ const READ = Number(opt('read', 3000));
 const WIDTH = Number(opt('width', 375));
 const OUT = opt('out', join(HERE, 'docs/qa/runs', `${stamp()}-first-minute`));
 const base = { url: (opt('url', process.env.E2E_URL ?? '') || '').replace(/\/$/, '') };
-const { call } = api(base);
+// A server started with CLOCK_KEY takes clock commands (pause, advance) only with the key.
+const { call } = api(base, opt('key', process.env.CLOCK_KEY ?? ''));
 
 (async () => {
   mkdirSync(OUT, { recursive: true });
