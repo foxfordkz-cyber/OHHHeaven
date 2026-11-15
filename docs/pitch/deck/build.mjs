@@ -104,12 +104,24 @@ try {
   await page.waitForFunction(() => document.documentElement.dataset.ready === '1');
   await page.evaluate(() => document.fonts.ready);
   const report = await page.evaluate(() => [...document.querySelectorAll('.page')].map((p, i) => {
-    const copy = p.cloneNode(true);
-    copy.querySelectorAll('.src, .money, .pageno, [data-nw], svg, script').forEach((e) => e.remove());
-    const words = (copy.textContent.match(/[^\s—–·«»"“”().,:;!?→]+/g) ?? []).filter((w) => /\p{L}/u.test(w) && !/^[$\d]/.test(w));
+    const steps = Number(p.dataset.steps || 1);
+    const skip = (el) => el.closest('.src, .money, .pageno, [data-nw], svg, script');
+    const stepOf = (el) => { const s = el.closest('[data-step]'); return s ? Number(s.dataset.step) : 1; };
+    const untilOf = (el) => { const s = el.closest('[data-until]'); return s ? Number(s.dataset.until) : Infinity; };
+    // слова на каждом шаге: только то, что на этом шаге видно
+    const words = [];
+    for (let b = 1; b <= steps; b++) {
+      let n = 0;
+      const walk = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+      for (let t = walk.nextNode(); t; t = walk.nextNode()) {
+        const el = t.parentElement;
+        if (skip(el) || stepOf(el) > b || untilOf(el) <= b) continue;
+        n += (t.textContent.match(/[^\s—–·«»"“”().,:;!?→]+/g) ?? []).filter((w) => /\p{L}/u.test(w) && !/^[$\d]/.test(w)).length;
+      }
+      words.push(n);
+    }
     return {
-      n: i + 1,
-      words: words.length,
+      n: i + 1, steps, words,
       missing: [...p.querySelectorAll('[data-missing]')].map((e) => e.dataset.v),
       images: [...p.querySelectorAll('img')].map((im) => ({ src: im.getAttribute('src'), w: im.naturalWidth, h: im.naturalHeight })),
       h1: Math.round(parseFloat(getComputedStyle(p.querySelector('h1') ?? p).fontSize)),
@@ -117,7 +129,7 @@ try {
   }));
   if (report.length !== 10) problems.push(`страниц ${report.length}, нужно 10`);
   for (const r of report) {
-    if (r.words > 15) problems.push(`страница ${r.n}: ${r.words} слов, предел 15`);
+    r.words.forEach((w, k) => { if (w > 15) problems.push(`страница ${r.n}, шаг ${k + 1}: ${w} слов, предел 15`); });
     for (const m of r.missing) problems.push(`страница ${r.n}: нет данных для ${m}`);
     for (const im of r.images) {
       if (!im.w) problems.push(`страница ${r.n}: снимок ${im.src} не загрузился`);
@@ -126,22 +138,38 @@ try {
     if (r.h1 < 72) problems.push(`страница ${r.n}: заголовок ${r.h1} px, нужно от 72`);
   }
   for (const f of failed) problems.push(`не загрузилось: ${f}`);
-  console.log(report.map((r) => `  ${String(r.n).padStart(2)} · слов ${String(r.words).padStart(2)} · заголовок ${r.h1} px · снимков ${r.images.length}`).join('\n'));
+  const beats = report.reduce((n, r) => n + r.steps, 0);
+  console.log(report.map((r) => `  ${String(r.n).padStart(2)} · шагов ${r.steps} · слов по шагам ${r.words.join(', ')} · заголовок ${r.h1} px · снимков ${r.images.length}`).join('\n'));
+  console.log(`  всего шагов: ${beats}`);
 
+  // каждая страница в конечном виде (pages/page-NN.png) и каждый шаг (pages/beats/NN-K.png)
   rmSync(join(here, 'pages'), { recursive: true, force: true });
-  mkdirSync(join(here, 'pages'), { recursive: true });
-  for (let n = 1; n <= report.length; n++) {
-    await page.goto(`${index}?static#${n}`);
-    await page.evaluate((k) => { location.hash = '#' + k; }, n);
-    await page.waitForTimeout(250);
-    await page.screenshot({ path: join(here, 'pages', `page-${String(n).padStart(2, '0')}.png`) });
+  mkdirSync(join(here, 'pages', 'beats'), { recursive: true });
+  const cells = [];
+  for (const r of report) {
+    for (let k = 1; k <= r.steps; k++) {
+      await page.goto(`${index}?static#${r.n}.${k}`);
+      await page.evaluate((h) => { location.hash = h; }, `#${r.n}.${k}`);
+      await page.waitForTimeout(200);
+      const file = `beats/${String(r.n).padStart(2, '0')}-${k}.jpg`;
+      await page.screenshot({ path: join(here, 'pages', file), type: 'jpeg', quality: 72 });
+      cells.push(file);
+      if (k === r.steps) await page.screenshot({ path: join(here, 'pages', `page-${String(r.n).padStart(2, '0')}.png`) });
+    }
   }
-  // раскадровка: все десять разом
-  const sheet = await browser.newPage({ viewport: { width: 1960, height: 842 }, deviceScaleFactor: 1 });
-  writeFileSync(join(here, 'pages', 'storyboard.html'), `<body style="margin:0;background:#777;display:grid;grid-template-columns:repeat(4,480px);gap:8px;padding:8px">${report.map((r) => `<img src="page-${String(r.n).padStart(2, '0')}.png" style="width:480px;height:270px;display:block">`).join('')}</body>`);
-  await sheet.goto(pathToFileURL(join(here, 'pages', 'storyboard.html')).href);
-  await sheet.waitForTimeout(400);
-  await sheet.screenshot({ path: join(here, 'pages', 'storyboard.png') });
+  // раскадровки: десять страниц разом и все шаги разом
+  const sheetOf = async (name, files, cols, w) => {
+    const h = Math.round((w * 9) / 16), rows = Math.ceil(files.length / cols);
+    const sheet = await browser.newPage({ viewport: { width: cols * (w + 8) + 8, height: rows * (h + 8) + 8 }, deviceScaleFactor: 1 });
+    writeFileSync(join(here, 'pages', `${name}.html`), `<body style="margin:0;background:#777;display:grid;grid-template-columns:repeat(${cols},${w}px);gap:8px;padding:8px">${files.map((f) => `<img src="${f}" style="width:${w}px;height:${h}px;display:block">`).join('')}</body>`);
+    await sheet.goto(pathToFileURL(join(here, 'pages', `${name}.html`)).href);
+    await sheet.waitForTimeout(500);
+    await sheet.screenshot({ path: join(here, 'pages', `${name}.png`) });
+    rmSync(join(here, 'pages', `${name}.html`));
+    await sheet.close();
+  };
+  await sheetOf('storyboard', report.map((r) => `page-${String(r.n).padStart(2, '0')}.png`), 4, 480);
+  await sheetOf('beats', cells, 5, 384);
 
   // ── 3. Печать ──
   const print = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
@@ -152,7 +180,7 @@ try {
   await print.pdf({ path: join(here, 'deck.pdf'), width: '1920px', height: '1080px', printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
   const pdfPages = (readFileSync(join(here, 'deck.pdf')).toString('latin1').match(/\/Type\s*\/Page[^s]/g) ?? []).length;
   if (pdfPages !== 10) problems.push(`в deck.pdf ${pdfPages} страниц, нужно 10`);
-  console.log(`deck.pdf: ${pdfPages} страниц; pages/: ${readdirSync(join(here, 'pages')).length} файлов`);
+  console.log(`deck.pdf: ${pdfPages} страниц; pages/: 10 страниц, ${beats} шагов, две раскадровки`);
 } finally {
   await browser.close();
 }
@@ -169,6 +197,20 @@ mkdirSync(join(pub, 'img'), { recursive: true });
 for (const f of used) cpSync(join(here, f), join(pub, f));
 if (existsSync(join(repo, 'client/dist'))) cpSync(pub, join(repo, 'client/dist/deck'), { recursive: true });
 console.log(`client/public/deck: ${used.size} снимков; сервер игры отдаёт /deck/ после npm run build`);
+
+// ── 5. Один файл: шрифт, снимки и данные внутри — открыть двойным щелчком, переслать, показать без сети ──
+{
+  const b64 = (f) => readFileSync(join(here, f)).toString('base64');
+  const inline = (f) => readFileSync(join(here, f), 'utf8').replace(/<\/(script)/gi, '<\\/$1');
+  const css = readFileSync(join(here, 'deck.css'), 'utf8').replace(/url\('(fonts\/[^']+)'\)/g, (_, f) => `url('data:font/woff2;base64,${b64(f)}')`);
+  const one = html
+    .replace('<link rel="stylesheet" href="deck.css">', () => `<style>\n${css}\n</style>`)
+    .replace(/src="(img\/[^"]+\.jpg)"/g, (_, f) => `src="data:image/jpeg;base64,${b64(f)}"`)
+    .replace('<script src="data.js"></script>', () => `<script>\n${inline('data.js')}\n</script>`)
+    .replace('<script src="deck.js"></script>', () => `<script>\n${inline('deck.js')}\n</script>`);
+  writeFileSync(join(here, 'first-year-deck.html'), one);
+  console.log(`first-year-deck.html: один файл, ${(one.length / 1e6).toFixed(1)} МБ (в репозиторий не идёт)`);
+}
 
 if (problems.length) {
   console.error(`\nНЕ ГОТОВО:\n${problems.map((p) => `  · ${p}`).join('\n')}`);

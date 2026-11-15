@@ -130,6 +130,10 @@ try {
   const useRecommended = page.getByRole('button', { name: /Use recommended for all/i }).first();
   if (await useRecommended.count()) { await useRecommended.click(); await page.waitForTimeout(2500); }
   await shot('setup', 2000);
+  // «Where the money goes»: куда уходят сбережения в момент подписи — кадр для страницы 3
+  await rect('moneyCard', 'Where the money goes', 300);
+  await rect('startRow', 'You start with', 30);
+  await rect('signedRow', 'Cash left after signing', 30);
   const setup = await text();
   // Сквозной счётчик денег презентации: числа с экрана настройки, не из головы.
   log.story.start = dollars(setup, /You start with \$([\d,]+)/);
