@@ -2,6 +2,9 @@
 
 [![CI](https://github.com/foxfordkz-cyber/OHHHeaven/actions/workflows/ci.yml/badge.svg)](https://github.com/foxfordkz-cyber/OHHHeaven/actions/workflows/ci.yml)
 
+**Play it: https://ohhheaven-production.up.railway.app** · pitch deck: https://ohhheaven-production.up.railway.app/deck/
+([PDF](docs/pitch/deck/deck.pdf))
+
 A slow, persistent New York City where you live the first year of your own business — real rent, permits,
 wages, taxes and inspections — without risking your savings. Game spec: `context/08-game-v5.md`.
 How the pieces fit: `build/CONTRACT.md`.
