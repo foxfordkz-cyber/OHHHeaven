@@ -1,0 +1,368 @@
+/* First Year — питч-презентация: десять кадров на холсте 1920×1080.
+   Цвета — токены продукта (build/DESIGN.md, client/src/ui/glass.css): «бумага», «асфальт», горчичный знак,
+   зелёный прибыли, красный убытка, синий справки. Заголовки — Geologica, подписи — JetBrains Mono, текст — Inter.
+   Все шрифты лежат рядом в fonts/ (лицензия OFL), сети нет. */
+@font-face { font-family: 'Geologica'; src: url('fonts/geologica-latin-wght-normal.woff2') format('woff2-variations'); font-weight: 100 900; font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Geologica'; src: url('fonts/geologica-cyrillic-wght-normal.woff2') format('woff2-variations'); font-weight: 100 900; font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'JetBrains Mono'; src: url('fonts/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations'); font-weight: 100 800; font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; src: url('fonts/jetbrains-mono-cyrillic-wght-normal.woff2') format('woff2-variations'); font-weight: 100 800; font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Inter Variable'; src: url('fonts/inter-latin-wght-normal.woff2') format('woff2-variations'); font-weight: 100 900; font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Inter Variable'; src: url('fonts/inter-cyrillic-wght-normal.woff2') format('woff2-variations'); font-weight: 100 900; font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+
+:root {
+  --fd: 'Geologica', 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --fb: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --fm: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --swift: cubic-bezier(0.6, 0, 0.2, 1);
+  /* общие для всех страниц: снимок продукта всегда на светлой «бумаге» */
+  --paper: #f3f2ee;
+  --ink: #141513;
+  --gold: #e3c260;
+  --gold-ink: #1a1503;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+body { font-family: var(--fb); -webkit-font-smoothing: antialiased; cursor: default; user-select: none; }
+
+/* ── Холст и три мира: асфальт (боль), бумага (продукт), горчичный (деньги) ── */
+.stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform: translate(-50%, -50%) scale(var(--k, 1)); }
+.page { position: absolute; inset: 0; overflow: hidden; visibility: hidden; opacity: 0; background-color: var(--bg); color: var(--fg);
+  background-image: radial-gradient(circle, var(--dot) 1.6px, transparent 2.1px); background-size: 32px 32px; background-position: 16px 20px;
+  transform: scale(1.035); transition: opacity 0.45s ease, transform 0.6s var(--ease), visibility 0s linear 0.6s; }
+.page.is-on { visibility: visible; opacity: 1; z-index: 2; transform: none; transition: opacity 0.45s ease, transform 0.6s var(--ease); }
+.page.dark { --bg: #0d0e0d; --fg: #f1f1ee; --fg2: #abaea8; --fg3: #80837d; --card: #191a19; --line: rgba(255, 255, 255, 0.14); --dot: rgba(255, 255, 255, 0.075);
+  --hi: #d9b75a; --hi-ink: #1a1503; --pos: #74b592; --neg: #d67d70; --inf: #8ba6c8; --neg-soft: rgba(214, 125, 112, 0.16); --pos-soft: rgba(116, 181, 146, 0.16); }
+.page.light { --bg: #f3f2ee; --fg: #141513; --fg2: #4e514b; --fg3: #767972; --card: #ffffff; --line: rgba(20, 21, 19, 0.16); --dot: rgba(20, 21, 19, 0.13);
+  --hi: #e3c260; --hi-ink: #1a1503; --pos: #2c7256; --neg: #a2463c; --inf: #3a618c; --neg-soft: rgba(162, 70, 60, 0.12); --pos-soft: rgba(44, 114, 86, 0.13); }
+.page.gold { --bg: #e3c260; --fg: #1a1503; --fg2: rgba(26, 21, 3, 0.8); --fg3: rgba(26, 21, 3, 0.62); --card: #fffdf5; --line: rgba(26, 21, 3, 0.26); --dot: rgba(26, 21, 3, 0.16);
+  --hi: #1a1503; --hi-ink: #e3c260; --pos: #1a1503; --neg: #1a1503; --inf: #1a1503; --neg-soft: rgba(26, 21, 3, 0.12); --pos-soft: rgba(26, 21, 3, 0.12); }
+
+h1 { margin: 0; font: 760 76px/1.04 var(--fd); letter-spacing: -0.035em; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--hi); }
+/* выделенное слово — мазок маркера, проезжает слева направо */
+mark { color: inherit; padding: 0 0.1em 0.04em; margin: 0 -0.06em; border-radius: 12px; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  background: linear-gradient(var(--hi), var(--hi)) no-repeat 0 50% / 0% 100%; transition: background-size 0.6s var(--swift) 0.45s; }
+.go mark, mark.go { background-size: 100% 100%; }
+/* на асфальте и на горчичном слово под маркером меняет цвет вместе с мазком */
+.page.gold mark, .page.dark mark { color: var(--fg); transition: background-size 0.6s var(--swift) 0.45s, color 0.25s ease 0.7s; }
+.page.gold .go mark, .page.dark .go mark { color: var(--hi-ink); }
+.sub { margin: 0; font: 500 36px/1.22 var(--fb); color: var(--fg2); letter-spacing: -0.015em; }
+.sub b { font-weight: 700; color: var(--fg); }
+.num { font-family: var(--fd); font-weight: 800; letter-spacing: -0.05em; line-height: 0.9; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.num .cur { font-style: normal; color: var(--hi); margin-right: 0.02em; }
+.cap { font: 600 15px/1.2 var(--fm); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg3); }
+.src { position: absolute; left: 96px; right: 330px; bottom: 30px; margin: 0; font: 400 15px/1.42 var(--fb); color: var(--fg3); z-index: 20; }
+.src a { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+
+/* ── Рамка кадра: знак, раздел, десять делений, номер, уголки ── */
+.chrome { position: absolute; inset: 0; pointer-events: none; z-index: 25; }
+.chrome__brand { position: absolute; left: 96px; top: 40px; display: flex; align-items: center; gap: 14px; font: 600 14px/1 var(--fm); letter-spacing: 0.13em; text-transform: uppercase; color: var(--fg3); }
+.chrome__brand b { font-weight: 700; color: var(--fg); }
+.chrome__brand span { color: var(--fg); padding: 6px 10px 5px; border-radius: 7px; background: var(--hi); color: var(--hi-ink); }
+.logo { width: 36px; height: 36px; display: block; }
+.logo__tile { fill: var(--fg); } .logo__ink { fill: var(--bg); } .logo__line { stroke: var(--bg); } .logo__door { fill: #e3c260; }
+.page.gold .logo__door { fill: #e3c260; }
+.chrome__prog { position: absolute; left: 50%; top: 55px; transform: translateX(-50%); display: flex; gap: 6px; }
+.chrome__prog i { width: 46px; height: 5px; border-radius: 3px; background: var(--line); }
+.chrome__prog i.done { background: var(--fg3); }
+.chrome__prog i.now { background: var(--fg); width: 76px; }
+.chrome__no { position: absolute; right: 96px; bottom: 36px; font: 600 14px/1 var(--fm); letter-spacing: 0.13em; color: var(--fg3); }
+.chrome__no b { color: var(--fg); font-weight: 700; }
+.crop { position: absolute; width: 20px; height: 20px; border: 0 solid var(--line); }
+.crop--tl { left: 30px; top: 30px; border-left-width: 2px; border-top-width: 2px; }
+.crop--tr { right: 30px; top: 30px; border-right-width: 2px; border-top-width: 2px; }
+.crop--bl { left: 30px; bottom: 30px; border-left-width: 2px; border-bottom-width: 2px; }
+.crop--br { right: 30px; bottom: 30px; border-right-width: 2px; border-bottom-width: 2px; }
+
+/* ── Сквозной счётчик денег: один на все десять страниц ── */
+.money { position: absolute; right: 96px; top: 28px; z-index: 30; display: flex; flex-direction: column; align-items: flex-end; gap: 7px; }
+.money__label { font: 600 13px/1 var(--fm); letter-spacing: 0.13em; text-transform: uppercase; color: var(--fg3); }
+.money__row { display: flex; align-items: center; gap: 12px; }
+.money__value { font: 760 38px/1 var(--fd); letter-spacing: -0.035em; font-variant-numeric: tabular-nums; transform-origin: 100% 50%; }
+.money__value::before { content: ''; display: inline-block; width: 12px; height: 12px; margin-right: 11px; border-radius: 50%; background: #e3c260; vertical-align: 0.14em; box-shadow: 0 0 0 5px rgba(227, 194, 96, 0.25); }
+.page.gold .money__value::before { background: var(--fg); box-shadow: 0 0 0 5px rgba(26, 21, 3, 0.16); }
+.money__delta { font: 700 15px/1 var(--fm); padding: 6px 9px 5px; border-radius: 8px; background: var(--neg-soft); color: var(--neg); }
+.money__delta.up { background: var(--pos-soft); color: var(--pos); }
+.money__delta:empty { display: none; }
+
+/* ── Окно браузера со снимком продукта: снимок яркий и резкий, без затемнения ── */
+.win { position: absolute; border-radius: 20px; background: #fff; border: 1px solid rgba(20, 21, 19, 0.18); overflow: hidden;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 50px 90px -30px rgba(20, 21, 19, 0.38), 0 14px 30px -12px rgba(20, 21, 19, 0.18); }
+.win__bar { height: 44px; display: flex; align-items: center; gap: 9px; padding: 0 18px; background: #e7e5df; border-bottom: 1px solid rgba(20, 21, 19, 0.12); }
+.win__bar i { width: 12px; height: 12px; border-radius: 50%; background: #a2463c; opacity: 0.75; }
+.win__bar i:nth-child(2) { background: #e3c260; opacity: 1; }
+.win__bar i:nth-child(3) { background: #2c7256; opacity: 0.75; }
+.win__bar span { margin-left: 16px; padding: 6px 16px 5px; border-radius: 8px; background: rgba(255, 255, 255, 0.72); font: 500 13px/1 var(--fm); letter-spacing: 0.02em; color: #4e514b; }
+.win__view { position: relative; overflow: hidden; background: var(--paper); }
+/* снимок живёт в своих координатах 1440×900; .screen масштабирует их под окно, .cam — «камера» */
+.screen { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; transform-origin: 0 0; transform: scale(var(--ws, 1)); }
+.cam { position: absolute; inset: 0; transform-origin: 0 0; transform: translate(var(--cx, 0px), var(--cy, 0px)) scale(var(--cs, 1)); transition: transform 1s var(--swift) var(--cd, 0s); }
+.cam img { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; display: block; }
+.ring { position: absolute; border: 5px solid var(--gold); border-radius: 16px; box-shadow: 0 0 0 7px rgba(227, 194, 96, 0.3), 0 12px 30px rgba(20, 21, 19, 0.18); z-index: 4; }
+.ring--red { border-color: #a2463c; box-shadow: 0 0 0 7px rgba(162, 70, 60, 0.2); }
+.tag { position: absolute; z-index: 6; padding: 12px 20px 13px; border-radius: 13px; background: var(--ink); color: #fff; font: 650 27px/1 var(--fd); letter-spacing: -0.02em; white-space: nowrap; box-shadow: 0 12px 26px -8px rgba(20, 21, 19, 0.5); }
+.tag--gold { background: var(--gold); color: var(--gold-ink); }
+.tag--red { background: #a2463c; }
+.cursor { position: absolute; left: 0; top: 0; width: 30px; height: 30px; z-index: 5; transform: translate(var(--x2, var(--x1)), var(--y2, var(--y1))); }
+.cursor svg { display: block; width: 30px; height: 30px; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35)); }
+.cursor::after { content: ''; position: absolute; left: -17px; top: -17px; width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--gold); opacity: 0; }
+/* линия от снимка к нарисованному: путь считает deck.js */
+.wire { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; z-index: 7; overflow: visible; }
+.wire path { fill: none; stroke: var(--fg); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.wire circle { fill: var(--fg); opacity: 0; }
+.wire--red path { stroke: var(--neg); } .wire--red circle { fill: var(--neg); }
+.wire--gold path { stroke: #b8922c; } .wire--gold circle { fill: #b8922c; }
+
+/* ── Язык движения: счётчик · камера · линия · деньги ──
+   Страница — несколько шагов. Элемент получает .go, когда наступил его шаг (deck.js), и играет своё движение;
+   .out — когда его шаг прошёл и место занял следующий текст. Каждый шаг заканчивается за полторы секунды. */
+@keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop { 0% { opacity: 0; transform: scale(0.7); } 70% { opacity: 1; transform: scale(1.04); } 100% { opacity: 1; transform: none; } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes grow { from { transform: scaleY(0); } to { transform: none; } }
+@keyframes growx { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes glide { 0% { opacity: 1; transform: translate(var(--x0), var(--y0)); } 52%, 62% { transform: translate(var(--x1), var(--y1)); } 78%, 100% { opacity: 1; transform: translate(var(--x2), var(--y2)); } }
+@keyframes click { 0% { opacity: 0.9; transform: scale(0.4); } 100% { opacity: 0; transform: scale(1.5); } }
+@keyframes ring { from { opacity: 0; transform: scale(1.08); } to { opacity: 1; transform: none; } }
+@keyframes pulse { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.8); opacity: 0; } }
+@keyframes bump { 0% { transform: scale(1); } 35% { transform: scale(1.14); } 100% { transform: scale(1); } }
+@keyframes flicker { 0% { opacity: 1; } 12% { opacity: 0.25; } 22% { opacity: 0.95; } 38% { opacity: 0.15; } 50% { opacity: 0.7; } 64% { opacity: 0.1; } 100% { opacity: 0; } }
+@keyframes feed { from { transform: translateY(-101%); } to { transform: none; } }
+@keyframes scan { 0% { opacity: 0; transform: translateY(0); } 12% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; transform: translateY(var(--scan, 600px)); } }
+@keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes flip { 0% { transform: rotateX(0deg); opacity: 1; } 100% { transform: rotateX(-92deg); opacity: 0; } }
+
+.a-rise, .a-fade, .a-pop, .ring, .tag, .f2, .f3, .cursor, [data-step] { opacity: 0; }
+[data-step].go { opacity: 1; transition: opacity 0.4s ease var(--d, 0s); }
+.a-rise.go { animation: rise 0.55s var(--ease) var(--d, 0s) both; }
+.a-fade.go { animation: fade 0.45s ease var(--d, 0s) both; }
+.a-pop.go { animation: pop 0.45s var(--ease) var(--d, 0s) both; }
+.a-draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.a-draw.go { animation: draw var(--t, 1s) var(--swift) var(--d, 0s) both; }
+.f2.go, .f3.go { animation: fade 0.14s linear var(--d, 0s) both; }
+.cursor.go { animation: glide 0.75s var(--ease) 0.04s both; }
+.cursor.go::after { animation: click 0.22s ease-out 0.42s 2 both; }
+.ring.go { animation: ring 0.35s ease var(--d, 0s) both; }
+.tag.go { animation: pop 0.35s var(--ease) var(--d, 0s) both; }
+.wire.go path { animation: draw 0.7s var(--swift) var(--d, 0s) both; }
+.wire.go circle { animation: fade 0.2s ease calc(var(--d, 0s) + 0.6s) both; }
+.out, .out.go { opacity: 0 !important; visibility: hidden; transition: opacity 0.3s ease, visibility 0s linear 0.3s; animation: none !important; }
+.money.moved .money__value { animation: bump 0.6s ease 0.2s both; }
+.progress { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; z-index: 50; }
+.progress i { display: block; height: 100%; background: #e3c260; transform-origin: 0 50%; transform: scaleX(0); transition: transform 0.5s ease; }
+.playing .progress i { background: #d67d70; }
+
+/* ── 1. Цена вопроса: число набегает, чек печатается ── */
+.p1 { background-image: radial-gradient(900px 620px at 30% 42%, rgba(217, 183, 90, 0.09), transparent 70%), radial-gradient(circle, var(--dot) 1.6px, transparent 2.1px); background-size: auto, 32px 32px; background-position: 0 0, 16px 20px; }
+.p1 .num { position: absolute; left: 86px; top: 214px; font-size: 282px; color: #fff; }
+.p1 h1 { position: absolute; left: 96px; top: 520px; width: 1240px; color: var(--fg); font-size: 80px; }
+.lockup { position: absolute; left: 96px; top: 800px; display: flex; align-items: center; gap: 26px; padding: 22px 34px 22px 24px; border-radius: 24px; background: var(--card); border: 1px solid var(--line); }
+.lockup svg { width: 84px; height: 84px; }
+.lockup .logo__tile { fill: #f1f1ee; } .lockup .logo__ink { fill: #0d0e0d; } .lockup .logo__line { stroke: #0d0e0d; }
+.lockup b { display: block; font: 800 50px/1 var(--fd); letter-spacing: -0.03em; color: #fff; }
+.lockup span { display: block; margin-top: 10px; font: 500 30px/1.1 var(--fb); color: var(--fg2); letter-spacing: -0.01em; }
+.printer { position: absolute; left: 1392px; top: 148px; width: 432px; height: 800px; }
+.printer__slot { position: absolute; left: 0; right: 0; top: 0; height: 26px; border-radius: 13px; background: #232421; border: 1px solid rgba(255, 255, 255, 0.16); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6); z-index: 2; }
+.printer__slot::after { content: ''; position: absolute; left: 18px; right: 18px; top: 11px; height: 4px; border-radius: 2px; background: #000; }
+.printer__feed { position: absolute; left: 24px; right: 24px; top: 13px; bottom: 0; overflow: hidden; }
+.receipt { position: relative; padding: 34px 26px 44px; background: #f6f2e6; color: #141513; font: 500 16.5px/1 var(--fm); transform: translateY(-101%);
+  -webkit-mask: linear-gradient(#000, #000) top / 100% calc(100% - 14px) no-repeat, conic-gradient(from -45deg at 50% 100%, #000 90deg, transparent 0) bottom / 24px 14px repeat-x;
+  mask: linear-gradient(#000, #000) top / 100% calc(100% - 14px) no-repeat, conic-gradient(from -45deg at 50% 0%, transparent 0, transparent 0) bottom / 24px 14px repeat-x; }
+.receipt { -webkit-mask: none; mask: none; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), 96.9% 100%, 93.8% calc(100% - 14px), 90.6% 100%, 87.5% calc(100% - 14px), 84.4% 100%, 81.3% calc(100% - 14px), 78.1% 100%, 75% calc(100% - 14px), 71.9% 100%, 68.8% calc(100% - 14px), 65.6% 100%, 62.5% calc(100% - 14px), 59.4% 100%, 56.3% calc(100% - 14px), 53.1% 100%, 50% calc(100% - 14px), 46.9% 100%, 43.8% calc(100% - 14px), 40.6% 100%, 37.5% calc(100% - 14px), 34.4% 100%, 31.3% calc(100% - 14px), 28.1% 100%, 25% calc(100% - 14px), 21.9% 100%, 18.8% calc(100% - 14px), 15.6% 100%, 12.5% calc(100% - 14px), 9.4% 100%, 6.3% calc(100% - 14px), 3.1% 100%, 0 calc(100% - 14px)); }
+.receipt.go { animation: feed 1.25s cubic-bezier(0.3, 0.1, 0.2, 1) 0.05s both; }
+.rc__head { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: 0.1em; font-size: 15px; }
+.rc__head svg { width: 30px; height: 30px; }
+.rc__head .logo__tile { fill: #141513; } .rc__head .logo__ink { fill: #f6f2e6; } .rc__head .logo__line { stroke: #f6f2e6; }
+.rc__addr { margin-top: 14px; font-size: 14px; color: #4e514b; line-height: 1.35; }
+.rc__rule { margin: 18px 0; border-top: 2px dashed rgba(20, 21, 19, 0.35); }
+.rc__row { display: flex; align-items: baseline; gap: 8px; margin: 15px 0; white-space: nowrap; }
+.rc__row i { flex: 1; border-bottom: 2px dotted rgba(20, 21, 19, 0.28); transform: translateY(-3px); }
+.rc__row b { font-weight: 700; }
+.rc__sub { font-weight: 700; }
+.rc__total { margin: 20px -10px 0; padding: 16px 10px 15px; border-radius: 8px; background: #e3c260; font-size: 22px; font-weight: 800; }
+.rc__total b { font-weight: 800; }
+.rc__total i { border: 0; }
+.rc__bars { margin-top: 24px; height: 46px; background: repeating-linear-gradient(90deg, #141513 0 3px, transparent 3px 5px, #141513 5px 6px, transparent 6px 10px, #141513 10px 14px, transparent 14px 16px, #141513 16px 17px, transparent 17px 21px); }
+.rc__foot { margin-top: 10px; font-size: 12px; letter-spacing: 0.14em; color: #4e514b; text-align: center; }
+
+/* ── 2. Боль: цитата и улица из десяти витрин ── */
+.p2 { background-image: radial-gradient(1500px 420px at 50% 96%, rgba(217, 183, 90, 0.1), transparent 70%), radial-gradient(circle, var(--dot) 1.6px, transparent 2.1px); background-size: auto, 32px 32px; background-position: 0 0, 16px 20px; }
+.quote-mark { position: absolute; left: 80px; top: 86px; font: 800 380px/1 var(--fd); color: var(--hi); opacity: 0.95; }
+.p2 h1 { position: absolute; left: 286px; top: 150px; width: 1000px; font-size: 86px; line-height: 1.03; }
+.who { position: absolute; left: 290px; top: 458px; margin: 0; font: 500 30px/1.2 var(--fb); color: var(--fg2); letter-spacing: -0.01em; }
+.who::before { content: ''; display: inline-block; width: 44px; height: 3px; margin-right: 16px; background: var(--hi); vertical-align: 0.32em; }
+.stat { position: absolute; right: 96px; top: 150px; text-align: right; }
+.stat .num { display: block; font-size: 250px; color: var(--neg); }
+.stat small { position: absolute; right: 0; top: 246px; font: 650 40px/1.1 var(--fd); letter-spacing: -0.02em; color: var(--fg); white-space: nowrap; }
+.street { position: absolute; left: 96px; top: 560px; width: 1728px; height: 420px; overflow: visible; }
+.shop .lit { transition: none; }
+.shop[data-go].go .lit { animation: flicker 0.9s linear var(--d, 0s) both; }
+.shop .shut { opacity: 0; }
+.shop[data-go].go .shut { animation: fade 0.3s ease calc(var(--d, 0s) + 0.75s) both; }
+.shop .lease { opacity: 0; transform-box: fill-box; transform-origin: center; }
+.shop[data-go].go .lease { animation: pop 0.35s var(--ease) calc(var(--d, 0s) + 0.95s) both; }
+
+/* ── 3. Продукт: город во всю страницу, квартал дорисовывается ── */
+.p3 h1 { position: absolute; left: 96px; top: 122px; white-space: nowrap; font-size: 78px; }
+.p3 .win { left: 96px; top: 240px; width: 1728px; }
+.p3 .win__view { height: 706px; background: #161614; }
+.streets { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; }
+.streets path { fill: none; stroke: #e3c260; stroke-width: 3.5; stroke-linecap: round; opacity: 0.95; }
+.streets .lights circle { fill: none; stroke: #fff3d6; stroke-width: 3; opacity: 0; }
+.streets .lights circle.go { animation: fade 0.3s ease var(--d, 0s) both; }
+.streets .me { fill: #e3c260; stroke: #141513; stroke-width: 3; opacity: 0; }
+.streets .me { transform-box: fill-box; transform-origin: center; }
+.streets .me.go { animation: pop 0.45s var(--ease) 0.1s both; }
+.streets .beat { fill: none; stroke: #e3c260; stroke-width: 4; transform-box: fill-box; transform-origin: center; opacity: 0; }
+.streets .beat.go { animation: pulse 2.4s ease-out 0.5s infinite; }
+html.static .streets .beat.go, .noanim .streets .beat.go { animation: none !important; opacity: 0.9; }
+
+/* ── 4. Решение: курсор двигает цену, камера наезжает на прогноз ── */
+.p4 h1 { position: absolute; left: 96px; top: 116px; width: 700px; font-size: 72px; line-height: 1.16; text-wrap: nowrap; }
+.p4 .win { left: 800px; top: 128px; width: 1024px; }
+.p4 .win__view { height: 800px; }
+.result { position: absolute; left: 86px; top: 604px; }
+.result .num { display: block; font-size: 204px; color: var(--pos); }
+.result .num .cur { color: inherit; }
+.result small { display: block; margin: 20px 0 0 12px; font: 600 34px/1 var(--fd); letter-spacing: -0.02em; color: var(--fg2); }
+
+/* ── 5. Правда: правило со ссылкой, числа с источником, тесты ── */
+.p5 h1 { position: absolute; left: 96px; top: 122px; white-space: nowrap; font-size: 78px; }
+.p5 .win { left: 96px; top: 240px; width: 1180px; }
+.p5 .win__view { height: 336px; }
+.lawdoc { position: absolute; left: 1392px; top: 262px; width: 432px; padding: 26px 28px 28px; border-radius: 20px; background: var(--card); border: 2px solid var(--fg); box-shadow: 10px 10px 0 var(--hi); }
+.lawdoc i { display: flex; align-items: center; gap: 10px; font: 700 14px/1 var(--fm); font-style: normal; letter-spacing: 0.12em; text-transform: uppercase; color: var(--inf); }
+.lawdoc i::before { content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--inf); }
+.lawdoc b { display: block; margin-top: 16px; font: 760 30px/1.12 var(--fd); letter-spacing: -0.025em; }
+.lawdoc u { display: block; margin-top: 16px; font: 500 15px/1.4 var(--fm); text-decoration: none; color: var(--inf); word-break: break-all; }
+.fact { position: absolute; top: 650px; display: flex; align-items: flex-start; gap: 34px; }
+.fact .num { font-size: 230px; margin-top: 6px; }
+.fact small { display: block; font: 650 34px/1.1 var(--fd); letter-spacing: -0.02em; color: var(--fg); }
+.fact--a { left: 86px; }
+.fact--b { left: 1010px; }
+.fact--a small { width: 420px; margin-top: 18px; } .fact--b small { width: 330px; margin-top: 18px; }
+.cells { display: grid; margin-top: 22px; }
+.cells i { display: block; border-radius: 3px; background: var(--line); opacity: 0.35; }
+.cells.go i { opacity: 1; transition: opacity 0.01s linear calc(var(--i) * var(--st, 4ms)), background-color 0.01s linear calc(var(--i) * var(--st, 4ms)); }
+.cells--src { grid-template-columns: repeat(28, 12px); gap: 4px; }
+.cells--src i { height: 26px; }
+.cells--src.go i.on { background: var(--hi); box-shadow: inset 0 0 0 1.5px rgba(26, 21, 3, 0.55); }
+.cells--src.go i:not(.on) { background: repeating-linear-gradient(135deg, var(--line) 0 2px, transparent 2px 5px); }
+.cells--tests { grid-template-columns: repeat(40, 6px); gap: 3px; --st: 0.9ms; }
+.cells--tests i { height: 6px; border-radius: 2px; }
+.cells--tests.go i { background: var(--pos); }
+
+/* ── 6. Соседи: цена соседа, жалоба, проверка, призовые места ── */
+.p6 h1 { position: absolute; left: 96px; top: 122px; white-space: nowrap; font-size: 84px; }
+.p6 .win--main { left: 96px; top: 246px; width: 990px; }
+.p6 .win--main .win__view { height: 690px; }
+.inspect { position: absolute; left: 1186px; top: 246px; width: 638px; height: 300px; padding: 28px 32px; border-radius: 22px; background: var(--card); border: 2px solid var(--neg); box-shadow: 10px 10px 0 var(--neg-soft); }
+.inspect svg { position: absolute; right: 30px; top: 28px; width: 112px; height: 112px; }
+.inspect b { display: block; width: 430px; font: 800 58px/1 var(--fd); letter-spacing: -0.035em; color: var(--neg); }
+.inspect .cap { margin-top: 14px; color: var(--neg); }
+.inspect ul { list-style: none; margin: 26px 0 0; padding: 0; display: flex; gap: 9px; }
+.inspect li { padding: 9px 11px 8px; border-radius: 9px; background: var(--neg-soft); color: var(--neg); font: 600 15px/1 var(--fm); white-space: nowrap; }
+.p6 .win--pip { left: 1186px; top: 600px; width: 638px; }
+.p6 .win--pip .win__view { height: 292px; }
+
+/* ── 7. Ритм: сутки → месяц, экран возвращения ── */
+.p7 h1 { position: absolute; left: 96px; top: 122px; white-space: nowrap; font-size: 76px; }
+.rhythm { position: absolute; left: 86px; top: 262px; width: 756px; height: 470px; overflow: visible; }
+.rhythm .dial { fill: var(--card); stroke: var(--fg); stroke-width: 5; }
+.rhythm .tk { stroke: var(--fg3); stroke-width: 3; stroke-linecap: round; }
+.rhythm .tk.big { stroke: var(--fg); stroke-width: 5; }
+.rhythm .arc { fill: none; stroke: #e3c260; stroke-width: 26; stroke-linecap: butt; }
+.rhythm .hand { stroke: var(--fg); stroke-width: 8; stroke-linecap: round; transform-origin: 250px 290px; }
+.rhythm .hand.go { animation: sweep 1.25s var(--swift) 0.15s both; }
+.rhythm .hub { fill: var(--fg); }
+.rhythm text { font-family: var(--fm); font-weight: 700; fill: var(--fg3); font-size: 18px; letter-spacing: 0.1em; }
+.rhythm .big-t { font-family: var(--fd); font-weight: 800; font-size: 76px; fill: var(--fg); letter-spacing: -0.04em; }
+.rhythm .eq path { fill: none; stroke: var(--fg); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.rhythm .sheet { fill: var(--card); stroke: var(--fg); stroke-width: 5; }
+.rhythm .band { fill: var(--fg); }
+.rhythm .band-t { fill: var(--bg); font-size: 20px; }
+.rhythm .day { fill: var(--line); opacity: 0.4; }
+.rhythm .cal.go .day { fill: #e3c260; opacity: 1; transition: fill 0.01s linear calc(0.15s + var(--i) * 40ms), opacity 0.01s linear calc(0.15s + var(--i) * 40ms); }
+.rhythm .cal.go .day.last { fill: var(--fg); }
+.p7 .sub { position: absolute; left: 96px; top: 790px; width: 740px; font-size: 44px; line-height: 1.24; }
+.p7 .win { left: 884px; top: 246px; width: 940px; }
+.p7 .win__view { height: 690px; }
+
+/* ── 8. Деньги: на горчичном, лестница до $100M ── */
+.p8 h1 { position: absolute; left: 96px; top: 122px; font-size: 84px; white-space: nowrap; }
+.unit { position: absolute; left: 86px; }
+.unit .num { display: block; font-size: 236px; }
+.unit .num .cur { color: inherit; opacity: 0.55; }
+.unit small { position: absolute; left: 14px; top: -34px; font: 700 22px/1 var(--fm); letter-spacing: 0.14em; }
+.unit--ltv { top: 330px; }
+.unit--cac { top: 640px; }
+.ratio { position: absolute; left: 520px; top: 716px; width: 150px; height: 150px; border-radius: 50%; background: var(--fg); color: #e3c260; display: flex; align-items: center; justify-content: center; font: 800 54px/1 var(--fd); letter-spacing: -0.04em; transform: rotate(-8deg); box-shadow: 0 16px 30px -10px rgba(26, 21, 3, 0.5); }
+.stairs { position: absolute; left: 700px; top: 150px; width: 1124px; height: 830px; overflow: visible; }
+.stairs .grid { stroke: rgba(26, 21, 3, 0.3); stroke-width: 2; stroke-dasharray: 2 9; stroke-linecap: round; }
+.stairs text { font-family: var(--fm); font-weight: 700; font-size: 17px; letter-spacing: 0.08em; fill: rgba(26, 21, 3, 0.62); }
+.stairs .under { fill: rgba(26, 21, 3, 0.1); opacity: 0; }
+.stairs .under.go { animation: fade 0.5s ease var(--d, 0s) both; }
+.stairs .line { fill: none; stroke: #1a1503; stroke-width: 9; stroke-linejoin: round; stroke-linecap: round; }
+.stairs .knot { fill: #fffdf5; stroke: #1a1503; stroke-width: 6; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.stairs .knot.go { animation: pop 0.35s var(--ease) var(--d, 0s) both; }
+.rung { position: absolute; padding: 16px 22px 17px; border-radius: 16px; background: var(--card); border: 2px solid #1a1503; box-shadow: 7px 7px 0 rgba(26, 21, 3, 0.9); white-space: nowrap; font: 600 26px/1.1 var(--fb); letter-spacing: -0.01em; }
+.rung b { display: block; margin-bottom: 6px; font: 800 44px/1 var(--fd); letter-spacing: -0.035em; }
+.rung--top { padding: 20px 28px 22px; font-size: 32px; font-weight: 700; background: #1a1503; color: #e3c260; box-shadow: 7px 7px 0 rgba(255, 253, 245, 0.9); }
+.rung--top b { font-size: 104px; margin-bottom: 8px; color: #fffdf5; }
+
+/* ── 9. Сутки: каждый столбик — коммиты за четверть часа ── */
+.p9 h1 { position: absolute; left: 96px; top: 122px; white-space: nowrap; font-size: 84px; }
+.dayline { position: absolute; left: 96px; top: 250px; width: 1728px; height: 400px; overflow: visible; }
+.dayline .bar { fill: var(--fg); transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); }
+.dayline .bar.peak { fill: #e3c260; stroke: var(--fg); stroke-width: 2; }
+.dayline.go .bar { animation: grow 0.5s var(--ease) calc(0.1s + var(--i) * 9ms) both; }
+.dayline .axis { stroke: var(--fg); stroke-width: 4; stroke-linecap: round; }
+.dayline text { font-family: var(--fm); font-weight: 700; font-size: 17px; letter-spacing: 0.08em; fill: var(--fg3); }
+.dayline .now { stroke: var(--neg); stroke-width: 3; stroke-dasharray: 6 7; }
+.dayline .now-t { fill: var(--neg); }
+.p9 .fact { top: 680px; display: block; }
+.p9 .fact .num { display: block; font-size: 224px; margin: 0; }
+.p9 .fact--a { left: 86px; } .p9 .fact--b { left: 560px; }
+.p9 .fact small { margin: 16px 0 0 12px; width: auto; font-size: 36px; color: var(--fg2); }
+.versus { position: absolute; left: 1060px; top: 700px; width: 764px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.versus div { position: relative; padding: 22px 20px 22px; border-radius: 18px; background: var(--card); border: 2px solid var(--fg); }
+.versus svg { width: 58px; height: 58px; display: block; }
+.versus svg * { fill: none; stroke: var(--fg); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.versus svg .x { stroke: var(--neg); stroke-width: 5; }
+.versus b { display: block; margin-top: 16px; font: 760 28px/1 var(--fd); letter-spacing: -0.03em; }
+.versus span { display: block; margin-top: 8px; font: 500 21px/1.15 var(--fb); color: var(--neg); letter-spacing: -0.01em; }
+
+/* ── 10. Адрес: QR во всю страницу ── */
+.p10 { background-image: radial-gradient(900px 700px at 26% 50%, rgba(217, 183, 90, 0.12), transparent 70%), radial-gradient(circle, var(--dot) 1.6px, transparent 2.1px); background-size: auto, 32px 32px; background-position: 0 0, 16px 20px; }
+.qr { position: absolute; left: 130px; top: 164px; width: 740px; height: 740px; padding: 44px; border-radius: 44px; background: #fff; }
+.qr svg { display: block; width: 100%; height: 100%; }
+.qr::before, .qr::after { content: ''; position: absolute; width: 96px; height: 96px; border: 0 solid #e3c260; }
+.qr::before { left: -26px; top: -26px; border-left-width: 9px; border-top-width: 9px; border-top-left-radius: 62px; }
+.qr::after { right: -26px; bottom: -26px; border-right-width: 9px; border-bottom-width: 9px; border-bottom-right-radius: 62px; }
+.qr__scan { position: absolute; left: 30px; right: 30px; top: 40px; height: 8px; border-radius: 4px; background: #e3c260; box-shadow: 0 0 34px 8px rgba(227, 194, 96, 0.75); opacity: 0; --scan: 650px; }
+.qr.go .qr__scan { animation: scan 1.2s var(--swift) 0.35s both; }
+.p10 h1 { position: absolute; left: 980px; top: 190px; width: 860px; font-size: 116px; font-weight: 800; line-height: 1.14; letter-spacing: -0.045em; }
+.addr { position: absolute; left: 984px; top: 660px; max-width: 840px; padding: 22px 30px 22px; border-radius: 18px; border: 2px solid var(--hi); color: var(--hi); font: 700 38px/1.15 var(--fm); letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.addr::before { content: '→'; margin-right: 16px; font-family: var(--fb); }
+
+/* нет данных — видно сразу */
+[data-missing] { outline: 6px solid #f0f; }
+
+/* ── Конечный вид сразу: печать, prefers-reduced-motion, ?static; .noanim — шаг назад без проигрывания ── */
+html.static *, html.static *::before, html.static *::after, .noanim, .noanim *, .noanim *::before, .noanim *::after { animation-duration: 0s !important; animation-delay: 0s !important; transition: none !important; }
+html.static .cursor::after, .noanim .cursor::after { animation: none !important; }
+html.print, html.print body { height: auto; overflow: visible; background: none; }
+html.print .stage { position: static; transform: none; width: 1920px; height: auto; }
+html.print .page { position: relative; inset: auto; width: 1920px; height: 1080px; visibility: visible; opacity: 1; transform: none; break-after: page; page-break-after: always; }
+html.print .progress { display: none; }
+@page { size: 1920px 1080px; margin: 0; }
+@media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
