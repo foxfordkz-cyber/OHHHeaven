@@ -1,51 +1,50 @@
-# Pitch deck
+# Питч-презентация
 
-Ten pages, 1920×1080, in the order of the judging criteria. One HTML file is the source; the PDF is printed from it.
+Десять страниц на холсте 1920×1080 — не документ, а пятиминутное кино: каждая страница — сцена из двух–четырёх шагов
+(всего 29), на каждом шаге одна мысль, один образ и не больше 15 слов.
+Страницы 1–2 тёмные (боль), с третьей светлые (продукт), восьмая на горчичном (деньги). Цвета и шрифт — из `build/DESIGN.md`.
 
-| File | What it is |
+| Файл | Что это |
 |---|---|
-| `index.html` | the deck: one `<section class="page">` per page |
-| `deck.css` | its look — the light "paper" theme of the product (`client/src/ui/glass.css`, `build/DESIGN.md`) at deck scale |
-| `deck.pdf` | the printed deck |
-| `pages/page-NN.png` | each page as a picture, for reading on GitHub |
-| `img/` | real screenshots of the product and how they were taken (`img/README.md`, `img/capture.json`) |
-| `build.mjs` | prints the PDF and the pictures, checks every page |
-| `capture.mjs` | takes the screenshots from the running product |
-| `words.mjs` | counts the spoken words of `docs/pitch/SCRIPT.md` (limit 650) |
+| `index.html`, `deck.css`, `deck.js` | сама презентация; работает без сети (шрифт Inter лежит в `fonts/`) |
+| `data.js` | все числа страниц; пишет `build.mjs`, руками не править |
+| `capture.mjs` | снимает экраны продукта: только компьютер, окно 1440×900, плотность 2, светлая тема |
+| `img/` | снимки и `capture.json`: коммит, город, числа с экранов, прямоугольники для наезда камеры |
+| `facts.json` | измеренное руками: тесты (`npm test`), проверенные числа (`node scripts/validate-all.mjs`), адрес игры |
+| `build.mjs` | собирает `data.js`, проверяет страницы, снимает `pages/`, печатает `deck.pdf`, кладёт копию в `client/public/deck` |
+| `pages/page-NN.png`, `pages/storyboard.png` | каждая страница в конечном виде и все десять разом |
+| `pages/beats/NN-K.jpg`, `pages/beats.png` | каждый шаг каждой страницы и все шаги разом |
+| `first-year-deck.html` | вся презентация одним файлом (шрифт, снимки и данные внутри); пишет сборка, в репозиторий не идёт |
+| `deck.pdf` | печать, 10 страниц |
+| `words.mjs` | счёт слов речи `docs/pitch/SCRIPT.md` |
 
-## Build
+## Показ
+
+Открыть `index.html`, `first-year-deck.html` или адрес игры `/deck/`.
+
+- **→, пробел, клик, свайп влево** — следующий шаг; когда шаги страницы кончились — следующая страница.
+- **←, клик по левому краю, свайп вправо** — шаг назад (без проигрывания).
+- **P** — кино само: шаг раз в 2,8 секунды, около полутора минут на всё. Любая клавиша листания останавливает. То же — `?play` в адресе.
+- **F** — весь экран. Адрес хранит место: `#4` — страница, `#4.2` — её второй шаг. Серая линия внизу — сколько шагов пройдено.
+- `?static` — страницы сразу в конечном виде; то же при печати и при `prefers-reduced-motion`.
+
+## Сборка
 
 ```bash
 node docs/pitch/deck/build.mjs
 ```
 
-To try the money model from another branch without merging it: `node docs/pitch/deck/build.mjs --model-ref <git ref>`.
-
-Once the game has a public address, put it on pages 1 and 10 (without it, the "Play:" lines are left out):
+Когда игра выложена, адрес и QR на странице 10 (до этого QR честно ведёт в репозиторий):
 
 ```bash
-node docs/pitch/deck/build.mjs --url https://<address>
+node docs/pitch/deck/build.mjs --url https://<адрес>
 ```
 
-The build fails (exit 1) when there are more than ten pages, when a page overflows, when text runs into the footer
-or spills out of its card, or when a screenshot is missing. It also prints how many numbers on each page are still
-waiting for their source (dashed boxes).
+Сборка падает, если страниц не десять, на каком-то шаге больше 15 слов, заголовок мельче 72 px, числу не хватило данных,
+снимок не 2880×1800 или страница тянет что-то из сети. Сервер игры отдаёт `client/dist` как статические файлы,
+поэтому копия в `client/public/deck` после `npm run build` открывается по адресу `/deck/`.
 
-## Where the numbers come from
-
-- **Money** (pages 7–8) is never typed in: every element with `data-model="outputs.ltv"`, `data-model="inputs.cacPaid"`,
-  `data-model="outputs.steps.2.payers"` and so on is filled at build time from `docs/pitch/model.mjs`. Change an
-  assumption there and rebuild.
-- **Ad lines** (page 7) quote the screenshots next to them: `data-frame="ad-bet" data-re="pay those bills · (\d+)"`
-  takes the number from the text the capture recorded for that frame (`img/capture.json` → `frames`), so a retake
-  cannot leave an ad line that disagrees with its picture.
-- **Market and pain** (pages 2 and 9) — `docs/pitch/USER.md` and `docs/pitch/COMPETITORS.md`, each number with a link.
-- **What is real** (page 5) — `node scripts/validate-all.mjs` (verified numbers), `npm test` (tests),
-  `npx tsx sim/audit/saturation.ts` (the shared market).
-- **Screens** (pages 3–7) — one recorded run of the real product: `img/capture.json` keeps the commit, the city and
-  every number the run produced. The cafe's numbers on stage are whatever the game shows at that moment.
-
-## Retake the screenshots
+## Пересъёмка
 
 ```bash
 npm run build && npm start
@@ -55,9 +54,24 @@ npm run build && npm start
 node docs/pitch/deck/capture.mjs
 ```
 
-Against a deployed city: `CAPTURE_URL=https://<address> node docs/pitch/deck/capture.mjs`.
+Затем `node docs/pitch/deck/build.mjs`. Город живой: место в таблице, цена соседа и прогноз меняются от съёмки к съёмке —
+страницы берут их из `img/capture.json`, а не из текста.
 
-## The talk and the questions
+## Откуда числа
 
-- `docs/pitch/SCRIPT.md` — five minutes, page by page, with what is shown live (the pitch city: `docs/pitch/RUNBOOK.md`).
-- `docs/pitch/QA.md` — twenty hard questions, two sentences each.
+- **Страница 1** — личный план в игре (`capture.plan`): открытие и запас на 6 месяцев для выбранной витрины.
+- **Страница 2** — цитата и выживаемость: `docs/pitch/USER.md`, ссылки на странице.
+- **Страницы 3–7** — экраны одной записанной игры; счётчик в углу — касса этой игры по дням сезона (`capture.story`).
+- **Страница 5** — `facts.json`: сколько чисел в данных помечены verified и сколько тестов зелёные.
+- **Страница 8** — `docs/pitch/model.mjs`: LTV, CAC, ступени к $100M ARR.
+- **Страница 9** — `git log`: каждая черта на ленте — коммит.
+
+## Движение
+
+Четыре приёма: число набегает; камера наезжает на часть снимка; линия рисуется; счётчик денег в углу идёт через все страницы
+и показывает, на сколько изменился. Шаг заканчивается за полторы секунды. Бесконечный цикл один — пульс на карте города.
+
+В разметке: `data-steps` у страницы — сколько шагов; `data-step="2"` — элемент появляется на втором шаге;
+`data-go="2"` — виден сразу, двигаться начинает на втором; `data-until="3"` — уходит на третьем (его место занимает следующий текст);
+`data-seq="1:путь,2:путь"` — число набегает к новому значению на каждом названном шаге;
+`data-cam-step`, `data-focus2`, `data-cam-step2` у окна — на каком шаге и куда едет камера.
