@@ -66,13 +66,13 @@ const url = gameUrl ?? repoUrl;
 // тот же генератор QR, что у сервера игры (server/src/qr.ts) — без сети
 const qr = sh(`npx tsx docs/pitch/deck/qr.ts ${JSON.stringify(url)}`);
 const urlShort = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
-const urlNote = gameUrl ? 'Первый месяц своей кофейни — бесплатно, без карты.' : 'QR ведёт в репозиторий. Адрес игры ставит сборка: node docs/pitch/deck/build.mjs --url https://<адрес>';
+const urlNote = gameUrl ? 'The first month of your own coffee shop is free, no card needed.' : 'QR ведёт в репозиторий. Адрес игры ставит сборка: node docs/pitch/deck/build.mjs --url https://<адрес>';
 if (!gameUrl) console.warn('ВНИМАНИЕ: адрес игры не задан — страница 10 ведёт в репозиторий. Пересобери с --url https://<адрес>');
 // Метки на снимке города: ищем кружки заведений по цвету на самом снимке, чтобы обводки стояли там, где они есть.
 {
   const require = createRequire(import.meta.url);
   const { chromium } = require('playwright');
-  const br = await chromium.launch();
+  const br = await chromium.launch(process.env.DECK_CHANNEL ? { channel: process.env.DECK_CHANNEL } : {});
   const pg = await br.newPage();
   const src = `data:image/jpeg;base64,${readFileSync(join(here, 'img/city.jpg')).toString('base64')}`;
   capture.cityDots = await pg.evaluate(async (url) => {
@@ -104,7 +104,7 @@ if (args.includes('--data')) process.exit(0);
 // ── 2. Проверки и снимки страниц ──
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.DECK_CHANNEL ? { channel: process.env.DECK_CHANNEL } : {});
 const problems = [];
 const index = pathToFileURL(join(here, 'index.html')).href;
 try {

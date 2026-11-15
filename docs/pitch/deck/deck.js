@@ -25,14 +25,14 @@
     return { x, y, w: Math.max(...rs.map((r) => r.x + r.w)) - x, h: Math.max(...rs.map((r) => r.y + r.h)) - y };
   };
   const usd = (n) => (n < 0 ? '−$' : '$') + Math.abs(Math.round(n)).toLocaleString('en-US');
-  const usdM = (n) => '$' + (n / 1e6 >= 10 ? Math.round(n / 1e6) : (n / 1e6).toFixed(n / 1e6 >= 1 ? 1 : 2).replace('.', ',')) + 'M';
+  const usdM = (n) => '$' + (n / 1e6 >= 10 ? Math.round(n / 1e6) : (n / 1e6).toFixed(n / 1e6 >= 1 ? 1 : 2)) + 'M';
   const formats = {
     usd, usdM,
     usdPlus: (n) => (n < 0 ? '−$' : '+$') + Math.abs(Math.round(n)).toLocaleString('en-US'),
-    int: (n) => Math.round(n).toLocaleString('ru-RU').replace(/ /g, ' '),
-    k: (n) => (n >= 1e4 ? Math.round(n / 1e3) + ' тыс.' : Math.round(n).toLocaleString('ru-RU')),
-    x: (n) => '×' + n.toFixed(1).replace('.', ','),
-    pct: (n) => (n * 100).toFixed(1).replace('.', ',') + '%',
+    int: (n) => Math.round(n).toLocaleString('en-US').replace(/ /g, ' '),
+    k: (n) => (n >= 1e4 ? Math.round(n / 1e3) + 'k' : Math.round(n).toLocaleString('en-US')),
+    x: (n) => '×' + n.toFixed(1),
+    pct: (n) => (n * 100).toFixed(1) + '%',
     pct0: (n) => Math.round(n * 100) + '%',
     text: (s) => String(s),
   };
@@ -135,7 +135,7 @@
     }
     [['6', 112, 7], ['12', 0, 126], ['18', -112, 7]].forEach(([t, dx, dy]) => { h += `<text x="${cx + dx}" y="${cy + dy}" text-anchor="middle">${t}</text>`; });
     h += `<line class="hand" data-go="1" x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy - 122}"/><circle class="hub" cx="${cx}" cy="${cy}" r="13"/>`;
-    h += `<text x="${cx}" y="548" text-anchor="middle">1 ДЕНЬ · 24 ЧАСА</text>`;
+    h += `<text x="${cx}" y="548" text-anchor="middle">1 DAY · 24 HOURS</text>`;
     h += '<g class="eq a-fade" style="--d:.9s"><path d="M486 290h76M538 262l28 28-28 28"/></g>';
     // лист календаря: тридцать клеток, последняя — день, когда ты вернулся
     h += '<g class="cal" data-go="1"><rect class="sheet" x="596" y="86" width="300" height="408" rx="24"/><path class="band" d="M596 110a24 24 0 0 1 24-24h252a24 24 0 0 1 24 24v58h-300z"/><circle cx="662" cy="127" r="10" fill="#e3c260"/><circle cx="830" cy="127" r="10" fill="#e3c260"/>';
@@ -143,7 +143,7 @@
       const c = i % 6, r = Math.floor(i / 6);
       h += `<rect class="day${i === 29 ? ' last' : ''}" style="--i:${i}" x="${614 + c * 45.6}" y="${196 + r * 56}" width="36" height="44" rx="7"/>`;
     }
-    h += '</g><text x="746" y="548" text-anchor="middle">1 МЕСЯЦ · 30 ДНЕЙ</text>';
+    h += '</g><text x="746" y="548" text-anchor="middle">1 MONTH · 30 DAYS</text>';
     svg(rhythm, h);
   }
 
@@ -192,9 +192,9 @@
         h += `<rect class="bar${n >= max * 0.6 ? ' peak' : ''}" style="--i:${i}" x="${(i * (W / B) + 2).toFixed(1)}" y="${(base - bh).toFixed(1)}" width="${W / B - 4}" height="${bh.toFixed(1)}" rx="3"/>`;
       });
       h += `<line class="axis" x1="0" y1="${base + 4}" x2="${W}" y2="${base + 4}"/>`;
-      for (let hr = 0; hr <= 24; hr += 3) h += `<text x="${(hr / 24) * W}" y="${base + 40}" text-anchor="${hr === 0 ? 'start' : hr === 24 ? 'end' : 'middle'}">${hr} ч</text>`;
+      for (let hr = 0; hr <= 24; hr += 3) h += `<text x="${(hr / 24) * W}" y="${base + 40}" text-anchor="${hr === 0 ? 'start' : hr === 24 ? 'end' : 'middle'}">${hr} h</text>`;
       const last = t[t.length - 1] * W;
-      h += `<line class="now a-fade" style="--d:1.1s" x1="${last}" x2="${last}" y1="${base - 120}" y2="${base}"/><text class="now-t a-fade" style="--d:1.1s" x="${last + 12}" y="${base - 104}">HEAD · ${String(D.repo.hours).replace('.', ',')} ч</text>`;
+      h += `<line class="now a-fade" style="--d:1.1s" x1="${last}" x2="${last}" y1="${base - 120}" y2="${base}"/><text class="now-t a-fade" style="--d:1.1s" x="${last + 12}" y="${base - 104}">HEAD · ${String(D.repo.hours)} h</text>`;
       svg(dayline, h);
     }
   }
