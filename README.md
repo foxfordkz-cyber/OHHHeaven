@@ -1,9 +1,10 @@
 # First Year
 
-[![CI](https://github.com/foxfordkz-cyber/OHHHeaven/actions/workflows/ci.yml/badge.svg)](https://github.com/foxfordkz-cyber/OHHHeaven/actions/workflows/ci.yml)
+## ▶ [Презентация — открыть](https://ohhheaven-production.up.railway.app/deck/) · [PDF](docs/pitch/deck/deck.pdf)
 
-**Play it: https://ohhheaven-production.up.railway.app** · pitch deck: https://ohhheaven-production.up.railway.app/deck/
-([PDF](docs/pitch/deck/deck.pdf))
+**Играть / Play it: https://ohhheaven-production.up.railway.app**
+
+[![CI](https://github.com/foxfordkz-cyber/OHHHeaven/actions/workflows/ci.yml/badge.svg)](https://github.com/foxfordkz-cyber/OHHHeaven/actions/workflows/ci.yml)
 
 A slow, persistent New York City where you live the first year of your own business — real rent, permits,
 wages, taxes and inspections — without risking your savings. Game spec: `context/08-game-v5.md`.

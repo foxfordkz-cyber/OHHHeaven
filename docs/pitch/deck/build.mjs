@@ -185,11 +185,22 @@ try {
   await sheetOf('beats', cells, 5, 384);
 
   // ── 3. Печать ──
+  // PDF из снимков страниц (плотность 2, JPEG): шрифты презентации переменные, и при печати Chromium кладёт их
+  // в PDF как Type 3 — Telegram, телефоны и Preview показывают такой текст криво. Снимок выглядит одинаково везде.
+  const shot = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 2 });
+  const sheets = [];
+  for (const r of report) {
+    await shot.goto(`${index}?static#${r.n}.${r.steps}`);
+    await shot.evaluate((h) => { location.hash = h; }, `#${r.n}.${r.steps}`);
+    await shot.evaluate(() => document.fonts.ready);
+    await shot.addStyleTag({ content: '.progress { display: none !important; }' });
+    await shot.waitForTimeout(500);
+    sheets.push((await shot.screenshot({ type: 'jpeg', quality: 90 })).toString('base64'));
+  }
+  await shot.close();
   const print = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
-  await print.goto(`${index}?print`);
-  await print.waitForFunction(() => document.documentElement.dataset.ready === '1');
-  await print.evaluate(() => document.fonts.ready);
-  await print.waitForTimeout(600);
+  await print.setContent(`<!doctype html><title>First Year — питч</title><style>@page { size: 1920px 1080px; margin: 0; } html, body { margin: 0; } img { display: block; width: 1920px; height: 1080px; } img + img { break-before: page; }</style>${sheets.map((b) => `<img src="data:image/jpeg;base64,${b}">`).join('')}`);
+  await print.waitForFunction(() => [...document.images].every((i) => i.complete && i.naturalWidth > 0));
   await print.pdf({ path: join(here, 'deck.pdf'), width: '1920px', height: '1080px', printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
   const pdfPages = (readFileSync(join(here, 'deck.pdf')).toString('latin1').match(/\/Type\s*\/Page[^s]/g) ?? []).length;
   if (pdfPages !== 10) problems.push(`в deck.pdf ${pdfPages} страниц, нужно 10`);
