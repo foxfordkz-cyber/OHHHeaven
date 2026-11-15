@@ -501,6 +501,34 @@ async function walk(browser, width) {
     const st = ((await view()).deals ?? []).find((d) => d.id === deal.id)?.status;
     return `${offerLine ? `sheet says "${offerLine}"; ` : ''}deal ${deal.id} ${JSON.stringify(deal.terms).slice(0, 80)}; neighbour answer ${acc.ok ? 'ok' : acc.error}; status ${st}`;
   });
+  // 10a. An incoming offer: the neighbour offers a loan; the player sees "Waiting for you" on Today and accepts it in Network.
+  await step('offer', 'Incoming offer: the neighbour offers a loan → Today says an offer waits → Accept in Network → the deal is active', async () => {
+    if (!rival.biz) throw new Error('no neighbour to make an offer');
+    const r = await call('POST', `/api/worlds/${W}/action`, { type: 'propose_deal', toBusinessId: state.biz.id, terms: { type: 'loan', amount: 10000, monthlyRatePct: 1, months: 6 } }, rival.token);
+    if (!r.ok) throw new Error(`the neighbour could not offer a loan: ${r.error}`);
+    const deal = ((await view()).deals ?? []).find((d) => d.fromBusinessId === rival.biz.id && d.status === 'proposed' && d.terms.type === 'loan');
+    if (!deal) throw new Error('the offer is not in my view');
+    await page.goto(`${base.url}/biz?world=${W}`, { waitUntil: 'domcontentloaded' });
+    await visible(page.getByRole('tablist', { name: 'My business' }), 15000);
+    await dismissAway();
+    await page.getByRole('tab', { name: /^Today/ }).first().click({ timeout: 8000 });
+    await sleep(800);
+    const onToday = /Answer the offer|offer/i.test((await page.getByRole('tabpanel').first().innerText().catch(() => '')));
+    await page.getByRole('tab', { name: /^Network/ }).first().click({ timeout: 8000 });
+    await sleep(1200);
+    // Several offers can wait (AI neighbours make them too); the list shows one and hides the rest behind "Show all".
+    const box = page.getByRole('region', { name: /Waiting for your answer|Offers for you/ }).first();
+    const all = box.getByRole('button', { name: /^Show all/ });
+    if (await all.count()) { await all.first().click(); await sleep(400); }
+    const item = box.locator('div').filter({ hasText: rival.name }).filter({ has: page.getByRole('button', { name: /^Accept$/ }) }).last();
+    await shot('offer');
+    await item.getByRole('button', { name: /^Accept$/ }).first().click({ timeout: 8000 });
+    await sleep(1000);
+    const st = ((await view()).deals ?? []).find((d) => d.id === deal.id)?.status;
+    if (st !== 'active') throw new Error(`after Accept the deal is ${st}`);
+    return `loan $10,000 at 1%/month for 6 months: ${onToday ? 'Today shows that an offer waits' : 'Today does NOT mention the offer'}; accepted in Network, deal ${deal.id} active`;
+  });
+
   await step('report', 'Network: report the neighbour to the city, the case reaches an inspector', async () => {
     if (!rival.biz) throw new Error('no neighbour to report');
     await page.goto(`${base.url}/biz/network?world=${W}`, { waitUntil: 'domcontentloaded' });
