@@ -6,6 +6,7 @@ import type { CommonPack, Pack, PackSet, Place, Player, WorldConfig, WorldState 
 import { applyAction, createWorld, tickDay } from '../../src/index';
 import { recommend } from '../../src/analytics';
 import { recommendOpening } from '../../src/analytics/opening';
+import { seatRuleBroken } from '../../src/economy/actions';
 
 const read = <T>(p: string): T => JSON.parse(readFileSync(new URL(`../../../${p}`, import.meta.url), 'utf8')) as T;
 const packs: PackSet = { common: read<CommonPack>('packs/_common.json'), niches: { cafe: read<Pack>('packs/cafe.json') } };
@@ -35,6 +36,18 @@ describe('recommend on the real packs', () => {
       expect(b.status).toBe('open');
       for (const r of recommend(b, w, ctx)) {
         if (r.id === 'many_seats' || r.id === 'few_seats') expect(r.impact!.profitDeltaMonth).toBeGreaterThan(0);
+      }
+    }
+  });
+});
+
+describe('recommend_opening on the real packs', () => {
+  it('never offers a kit that open_business refuses for the seat rules (docs/qa/BUGS.md #12)', () => {
+    const w = { ...createWorld(cfg), players: [] } as WorldState;
+    // the rooms where premium was offered with 24 seats and no customer restroom
+    for (const placeId of ['ev-005', 'ev-016', 'ev-053', 'ev-058', 'ev-062']) {
+      for (const r of recommendOpening('cafe', placeId, w, ctx)) {
+        expect(seatRuleBroken(packs.niches.cafe!, r.size, r.items), `${placeId} ${r.kitId}`).toBeNull();
       }
     }
   });

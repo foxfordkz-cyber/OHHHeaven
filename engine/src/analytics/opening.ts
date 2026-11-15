@@ -11,6 +11,15 @@ import { plural, usd } from './text';
 
 export const CANDIDATE_ID = '__candidate__';
 
+/** Seat rules that ask for a setup item (the same pack field open_business checks with seatRuleBroken), lowest first. */
+function seatRules(pack: Pack): { seats: number; setupItemId: string }[] {
+  const raw = (pack.extra as { seatThresholds?: unknown } | undefined)?.seatThresholds;
+  if (!Array.isArray(raw)) return [];
+  return (raw as { seats?: unknown; setupItemId?: unknown }[])
+    .filter((t): t is { seats: number; setupItemId: string } => typeof t?.seats === 'number' && typeof t.setupItemId === 'string' && pack.setup.some((d) => d.id === t.setupItemId))
+    .sort((a, b) => a.seats - b.seats);
+}
+
 function pickOption(legal: PackLeverOption[], kit: PackKit['id']): PackLeverOption {
   if (kit === 'lean') return [...legal].sort((a, b) => a.monthlyCost - b.monthlyCost)[0];
   if (kit === 'premium') {
@@ -89,6 +98,15 @@ function build(kit: PackKit, pack: Pack, niche: NicheId, place: Place | undefine
     if (itemsCost(pack, items, size, place) <= capital - reserve) break;
   }
   items = withSize(size);
+  // seat rules of the law (pack.extra.seatThresholds, checked by open_business): never offer a kit the city refuses.
+  // The item the rule asks for goes in if the money allows, otherwise the room stays under the threshold
+  // (docs/qa/BUGS.md #12: premium with 24 seats and no customer restroom was offered and then refused).
+  for (const t of seatRules(pack)) {
+    if (size < t.seats || items.some((i) => i.id === t.setupItemId && i.qty > 0)) continue;
+    const withItem = [...items, { id: t.setupItemId, qty: 1 }];
+    if (itemsCost(pack, withItem, size, place) <= capital) { items = withItem; continue; }
+    if (!takeover && t.seats - 1 >= pack.sizing.min) { size = t.seats - 1; items = withSize(size); }
+  }
   const total = itemsCost(pack, items, size, place);
   const cashLeft = r2(capital - total);
   const priceMult = kit.id === 'premium' ? 1.1 : kit.id === 'lean' ? 0.95 : 1;
