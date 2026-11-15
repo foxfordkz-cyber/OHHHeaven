@@ -208,5 +208,7 @@
   font: 700 12px/1 var(--cm-font);
 }
 .cm-legend__toggle[aria-pressed='true'] { background: transparent; color: var(--cm-text); }
+/* an open card sits above the zoom buttons (glass.css puts them at z-index 5): they covered its numbers on phones */
+.cm-root .cm-card { z-index: 6; }
 .cm-card--biz .cm-place__stake { margin: 0 0 10px; }
 .cm-place__stake--rival { background: var(--loss-soft, rgba(248, 113, 113, 0.14)); }

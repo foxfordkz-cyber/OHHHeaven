@@ -268,6 +268,8 @@ export function CityMap(props: CityMapProps) {
       canvasContextAttributes: { antialias: budget.antialias },
     });
     mapRef.current = map;
+    // dev builds only: the map object for browser checks (scripts in docs/qa read the camera and the layers)
+    if (import.meta.env.DEV) (window as unknown as { __ohhMap?: MapLibreMap }).__ohhMap = map;
     let isOffline = startOffline;
     const goOffline = () => {
       if (isOffline) return;
