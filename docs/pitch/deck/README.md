@@ -21,6 +21,12 @@ node docs/pitch/deck/build.mjs
 
 To try the money model from another branch without merging it: `node docs/pitch/deck/build.mjs --model-ref <git ref>`.
 
+Once the game has a public address, put it on pages 1 and 10 (without it, the "Play:" lines are left out):
+
+```bash
+node docs/pitch/deck/build.mjs --url https://<address>
+```
+
 The build fails (exit 1) when there are more than ten pages, when a page overflows, when text runs into the footer
 or spills out of its card, or when a screenshot is missing. It also prints how many numbers on each page are still
 waiting for their source (dashed boxes).

@@ -6,7 +6,7 @@ B17, третий заход. Основа — `docs/pitch/LIVE-SHOW.md` (кон
 
 **Слова.** Речи — 588 английских слов (лимит 650). Темп — около 140 слов в минуту; время страницы = слова + живые действия (страницы 3 и 4 — по 15–20 секунд действий без слов). Пересчёт: `node docs/pitch/deck/words.mjs`. Числа рынка — из `USER.md` (B15), денег — из `MONEY.md` и `model.mjs` (B16).
 
-**Правило чисел.** Деньги кафе на сцене — те, что показывает игра в эту минуту, не из этого текста. Если экран показывает другое — говорим то, что на экране. Числа страницы 3 («146 в день», «150», «половина гостей») — из кадра `img/ad-bet.png` последней съёмки; в финальном проходе сверить с `img/capture.json` → `frames`.
+**Правило чисел.** Деньги кафе на сцене — те, что показывает игра в эту минуту, не из этого текста. Если экран показывает другое — говорим то, что на экране. Числа страницы 3 («146 в день», «150», «половина гостей») — из кадра `img/ad-bet.png` съёмки на заморозке (сборка 30cdee6), сверены с `img/capture.json` → `frames`.
 
 **До выхода.** Город показа и коды телефонов — по `docs/pitch/RUNBOOK.md` (A5): `node scripts/pitch.mjs` должен закончиться `PASS: 16/16 steps in their windows`, затем «Back to start».
 
@@ -62,7 +62,7 @@ The verdict is computed by the engine, not scripted by us.
 What is real? A pure engine: every input is an action, and the same code runs on the server and in the browser.
 No dice: the same decision gives the same result.
 Every number has a source. Seventy-three of the key numbers are verified at the primary source; the rest are marked estimates.
-Nine hundred forty-four automated tests are green. The repo is in front of you.
+Nine hundred fifty-four automated tests are green. The repo is in front of you.
 
 ## 2:42–3:14 · Страница 6 — за что платят и зачем возвращаются
 
@@ -94,7 +94,7 @@ We are a rehearsal: your shop, on sourced local numbers, in a city you share wit
 
 ## 4:27–5:00 · Страница 10 — команда и финал
 
-▸ На странице внизу — финальная строка, адрес игры и репозиторий. Последнюю фразу А говорит в зал. Пауза, конец.
+▸ На странице внизу — финальная строка и репозиторий; адрес игры там появится, если перед показом собрать презентацию с `--url` (`docs/pitch/deck/README.md`). Последнюю фразу А говорит в зал. Пауза, конец.
 
 Two people and a crew of AI agents built this in twenty-four hours.
 Each agent owned its files and kept a journal in the repo; nothing merged unless tests and the end-to-end check were green.
