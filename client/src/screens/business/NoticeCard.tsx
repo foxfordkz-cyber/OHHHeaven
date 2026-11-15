@@ -1,5 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import type { Ack, Action, CaseNotice } from '@ohh/shared/types';
+import { Icon } from '../../ui';
+import { pick } from '../../ui/i18n';
 import { Button, Card } from './__stubs__/ui';
 import { bribeAction, CONTEST, contestAction, payAction } from './actions';
 import { dayLabel, plural, relDay, usd } from './format';
@@ -50,18 +52,31 @@ export function NoticeCard({ notice, packs, today, onAnswer, onRule }: {
 
   if (notice.status !== 'notice') return <NoticeOutcome notice={notice} findings={findings} />;
 
+  const left = notice.answerByDay - today;
   return (
-    <Card tone="bad" title={`${ROLE_TITLE[notice.role]}: ${plural(notice.found.length, 'violation')} found`} aside={`Answer by ${dayLabel(notice.answerByDay)}`}>
+    <section className="bz-card bz-tone-bad nt-card" aria-label={ROLE_TITLE[notice.role]}>
+      <header className="nt-head">
+        <span className="nt-seal" aria-hidden="true"><Icon name="badge" size={22} /></span>
+        <div className="nt-head__text">
+          <div className="nt-eyebrow">{pick('City of New York · notice of violation', 'Город Нью-Йорк · уведомление о нарушении')}</div>
+          <h3 className="bz-card-title">{`${ROLE_TITLE[notice.role]}: ${plural(notice.found.length, 'violation')} found`}</h3>
+        </div>
+      </header>
+      <div className="nt-sum">
+        <span className="nt-sum__fine">{usd(notice.fine)}</span>
+        <span className="nt-sum__what">
+          {pick('fine', 'штраф')}{notice.closureDays ? <> {pick('and', 'и')} <b>{plural(notice.closureDays, 'day')} closed</b></> : null}
+        </span>
+        <span className={`nt-deadline${left <= 1 ? ' nt-deadline--soon' : ''}`}><Icon name="clock" size={14} /> Answer by {dayLabel(notice.answerByDay)}</span>
+      </div>
       {findings}
-      <p>
-        Fine <b>{usd(notice.fine)}</b>
-        {notice.closureDays ? <> and <b>{plural(notice.closureDays, 'day')} closed</b></> : null}.
-        {' '}Answer {relDay(notice.answerByDay, today)}. If you don't answer, you pay.
+      <p className="bz-small">
+        Answer {relDay(notice.answerByDay, today)}. If you don't answer, the fine is taken from your cash.
       </p>
       <div className="bz-btn-row">
         <Button variant="primary" disabled={busy} onClick={() => send(payAction(notice))}>Pay {usd(notice.fine)}</Button>
         <Button disabled={busy} onClick={() => send(contestAction(notice))}>Contest — lawyer {usd(CONTEST.fee)}, fine −{CONTEST.fineCutPct}%</Button>
-        <Button variant="danger" disabled={busy} aria-expanded={bribeOpen} onClick={() => setBribeOpen((o) => !o)}>Offer a bribe…</Button>
+        <Button variant="ghost" className="nt-bribe" disabled={busy} aria-expanded={bribeOpen} onClick={() => setBribeOpen((o) => !o)}>Offer a bribe…</Button>
       </div>
       {bribeOpen && (
         <div className="bz-card bz-inner">
@@ -79,7 +94,7 @@ export function NoticeCard({ notice, packs, today, onAnswer, onRule }: {
         </div>
       )}
       {error && <p className="bz-bad-text" role="alert">{error}</p>}
-    </Card>
+    </section>
   );
 }
 

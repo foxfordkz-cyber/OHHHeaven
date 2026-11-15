@@ -103,7 +103,9 @@ export function Paywall({ view, status, statusError, busy, result, offline, embe
           title={tr('Your personal plan, from your game', 'Ваш личный план — из вашей игры')}
           subtitle={isPro ? undefined : status.locked.includes('plan')
             ? tr('In Pro: every line with its source and official link.', 'В Pro: каждая строка с источником и ссылкой на ведомство.')
-            : tr(`Open in your free month. After day ${status.freeEndsDay ?? '—'} it stays in Pro.`, `Открыт в бесплатный месяц. После ${status.freeEndsDay ?? '—'}-го дня — в Pro.`)}
+            : status.freeEndsDay == null
+              ? tr('Open until the end of your first full month after the doors open. After that it stays in Pro.', 'Открыт до конца первого полного месяца после открытия. Дальше — в Pro.')
+              : tr(`Open in your free month. After day ${status.freeEndsDay} it stays in Pro.`, `Открыт в бесплатный месяц. После ${status.freeEndsDay}-го дня — в Pro.`)}
         >
           <div className="grid-3">
             <Stat small label={tr('Before the first sale', 'До первой продажи')} value={<MoneyText value={status.teaser.startupTotal} tone="none" />} />

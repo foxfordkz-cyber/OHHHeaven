@@ -64,7 +64,7 @@ export function CityScreen({ view, places, worldId, joinUrl, receivedAt, onClock
             <div className="cs-weather__now">
               <span className="cs-weather__icon" aria-hidden="true">{WEATHER_ICON[today.condition]}</span>
               <div>
-                <strong>{Math.round(today.tempF)}°F</strong> <span>{today.label}</span>
+                <strong>{Math.round(today.tempF)}°F</strong> <span>{today.label.replace(/,\s*-?\d+°F$/, '')}</span>
                 <div className={today.footTrafficMult < 1 ? 'cs-down' : 'cs-up'}>
                   Foot traffic {today.footTrafficMult >= 1 ? '+' : '−'}{Math.round(Math.abs(today.footTrafficMult - 1) * 100)}%
                 </div>

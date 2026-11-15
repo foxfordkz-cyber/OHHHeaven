@@ -422,7 +422,7 @@ export function CityMap(props: CityMapProps) {
       <div className="cm-top">
         {wx && (
           <div className="cm-chip cm-chip--weather" title={wx.label}>
-            <span aria-hidden="true">{WEATHER_ICON[wx.condition]}</span> {Math.round(wx.tempF)}°F · {wx.label}
+            <span aria-hidden="true">{WEATHER_ICON[wx.condition]}</span> {wx.label}
             {wx.footTrafficMult !== 1 && <span className={wx.footTrafficMult < 1 ? 'cm-down' : 'cm-up'}> {wx.footTrafficMult < 1 ? '▼' : '▲'} foot traffic {Math.round(Math.abs(wx.footTrafficMult - 1) * 100)}%</span>}
           </div>
         )}

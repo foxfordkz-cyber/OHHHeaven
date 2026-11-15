@@ -3,6 +3,7 @@ import type { NicheId, OwnerView } from '@ohh/shared/types';
 import { AiBadge, Badge, Card, Icon, NICHE_ICON, SegmentedControl } from '../../ui';
 import { compactMoney, money, nicheName, nicheShort, ordinal } from '../insights/format';
 import { allBoards, myResult, officialsBoard, type BoardRow, type NicheBoard } from './prizes';
+import { rankMove, readRank } from '../business/moments';
 import './end.css';
 
 export type RankingRow = { name: string; points: number; isAi: boolean };
@@ -12,7 +13,9 @@ export function rankingOf(view: OwnerView): RankingRow[] {
   return view.officialsRanking ?? [];
 }
 
-function Row({ r, testMoney }: { r: BoardRow; testMoney: boolean }) {
+function Row({ r, testMoney, day }: { r: BoardRow; testMoney: boolean; day?: number }) {
+  // my own row says where it moved this game week (the same memory the business header keeps)
+  const move = r.mine && day !== undefined ? rankMove(readRank(r.businessId), r.rank, day) : 0;
   return (
     <li className={`lb-row${r.podium ? ` lb-row--p${r.podium}` : ''}${r.mine ? ' lb-row--mine' : ''}`} data-rank={r.rank}>
       <span className="lb-rank num" aria-label={`Rank ${r.rank}`}>{r.podium ? <span className={`lb-medal lb-medal--${r.podium}`}>{r.rank}</span> : r.rank}</span>
@@ -20,6 +23,7 @@ function Row({ r, testMoney }: { r: BoardRow; testMoney: boolean }) {
         <span className="lb-title">{r.name}{r.mine && <span className="lb-you"> · you</span>}</span>
         <span className="lb-sub">
           {r.isAi ? <AiBadge /> : r.owner}
+          {move !== 0 && <span className={`lb-move ${move > 0 ? 'lb-move--up' : 'lb-move--down'}`}>{move > 0 ? `▲ up ${move}` : `▼ down ${-move}`}</span>}
           {r.bankrupt && <Badge tone="loss">Bankrupt</Badge>}
         </span>
       </span>
@@ -40,18 +44,18 @@ export function splitText(split: number[]): string {
 }
 
 /** One niche: podium highlighted, prize per place, AI marked without prize, my row pinned at the bottom if it is far down. */
-export function NicheTable({ board, testMoney, limit }: { board: NicheBoard; testMoney: boolean; limit?: number }) {
+export function NicheTable({ board, testMoney, limit, day }: { board: NicheBoard; testMoney: boolean; limit?: number; day?: number }) {
   const shown = limit ? board.rows.slice(0, limit) : board.rows;
   const pinned = board.mine && !shown.some((r) => r.mine) ? board.mine : null;
   return (
     <div className="lb">
       <div className="lb-head small faint"><span>#</span><span className="grow">Business</span><span title="Cash + half of equipment − debts">Worth</span><span>Prize</span></div>
       <ol className="lb-list">
-        {shown.map((r) => <Row key={r.businessId} r={r} testMoney={testMoney} />)}
+        {shown.map((r) => <Row key={r.businessId} r={r} testMoney={testMoney} day={day} />)}
       </ol>
       {pinned && (
         <ol className="lb-list lb-list--pinned" aria-label="Your place">
-          <Row r={pinned} testMoney={testMoney} />
+          <Row r={pinned} testMoney={testMoney} day={day} />
         </ol>
       )}
       <p className="xsmall faint lb-note">
@@ -94,7 +98,7 @@ export function Leaderboards({ view }: { view: OwnerView }) {
     <div className="stack">
       <SegmentedControl label="Leaderboard" value={tab} onChange={setTab}
         options={[...boards.map((b) => ({ value: b.niche as string, label: <span className="row" title={nicheName(b.niche)}><Icon name={NICHE_ICON[b.niche as NicheId]} size={16} />{nicheShort(b.niche)}</span> })), { value: 'officials', label: 'Officials' }]} />
-      {board ? <NicheTable board={board} testMoney={testMoney} /> : <OfficialsTable view={view} />}
+      {board ? <NicheTable board={board} testMoney={testMoney} day={view.world.day} /> : <OfficialsTable view={view} />}
       {testMoney && <p className="xsmall faint">Demo city: all money is test money.</p>}
     </div>
   );
@@ -112,7 +116,7 @@ export function LeaderboardCard({ view, onOpen }: { view: OwnerView; onOpen?: ()
   return (
     <Card title="Leaderboard" subtitle={subtitle}
       action={onOpen ? <button type="button" className="chip" onClick={onOpen}>All <Icon name="chevronRight" size={14} /></button> : undefined}>
-      <NicheTable board={board} testMoney={view.world.config.demo} limit={3} />
+      <NicheTable board={board} testMoney={view.world.config.demo} limit={3} day={view.world.day} />
     </Card>
   );
 }

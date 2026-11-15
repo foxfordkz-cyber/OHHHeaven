@@ -6,7 +6,8 @@ import { applyAll, applyRecommendation, pendingNotices, type ApplyResult } from 
 import { nextDecision, type Decision } from './decision';
 import type { BizDeps, BizTabId } from './deps';
 import { signedCount } from './forecast';
-import { dayLabel, effectIsGood, effectText, multChange, num, plural, realWait, relDay, shortDate, signedUsd, usd, WEATHER_ICON } from './format';
+import { dayLabel, effectIsGood, effectText, multChange, nichePlural, num, plural, realWait, relDay, shortDate, signedUsd, usd, WEATHER_ICON } from './format';
+import { MonthReveal } from './MonthReveal';
 import { NoticeCard } from './NoticeCard';
 import { diffOrders, draftFrom, mergeOrders } from './orders';
 import { forecastPromise } from './Outlook';
@@ -38,6 +39,10 @@ export function TodayTab({ deps, onRule, onGo }: { deps: BizDeps; onRule(id: str
       {notices.map((n) => (
         <NoticeCard key={n.caseId} notice={n} packs={packs} today={today} onAnswer={deps.act} onRule={onRule} />
       ))}
+      {open && (
+        <MonthReveal bizId={b.id} history={b.history} nicheLabel={nichePlural(deps.pack?.name ?? b.niche)}
+          total={(v.leaderboards[b.niche] ?? []).length} onBooks={() => onGo('books')} quiet={pendingNotices(notices).length > 0} />
+      )}
       {!open && <SetupPanel deps={deps} onRule={onRule} />}
       {open && live && check && (
         <PromiseCard promise={live} check={check} onGo={onGo} onHide={() => { clearPromise(b.id); setPromise(null); }} />

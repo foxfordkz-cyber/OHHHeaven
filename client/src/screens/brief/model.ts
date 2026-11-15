@@ -242,7 +242,7 @@ export function pickDecision(view: OwnerView): Decision | null {
       title: ready ? pick('Your permits are ready', 'Разрешения готовы') : pick('You are not open yet', 'Ты ещё не открылся'),
       text: ready
         ? pick('Every day closed costs rent and earns nothing.', 'Каждый закрытый день — аренда без выручки.')
-        : pick(`${formatNumber(waiting.length)} steps are still waiting. Opening before the permits arrive is a violation.`, `Ждут шагов: ${formatNumber(waiting.length)}. Открыться без разрешений — нарушение.`),
+        : pick(`${formatNumber(waiting.length)} ${waiting.length === 1 ? 'step is' : 'steps are'} still waiting. Opening before the permits arrive is a violation.`, `Ждут шагов: ${formatNumber(waiting.length)}. Открыться без разрешений — нарушение.`),
       options: [{ id: 'go', label: ready ? pick('Open the doors', 'Открыть двери') : pick('See the steps', 'Посмотреть шаги'), result: pick('Opens your business screen.', 'Откроет экран бизнеса.'), to: '/biz/today', primary: true }],
     };
   }

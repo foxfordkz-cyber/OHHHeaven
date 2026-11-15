@@ -656,3 +656,77 @@ button.list-row:active { background: var(--press); }
   .bz-root .bz-tab { flex: 1 1 0; padding: 8px 4px; font-size: 14px; text-align: center; white-space: nowrap; }
   .bz-root .bz-tab[aria-selected='true'] { padding: 8px 10px; flex: 1.25 1 0; }
 }
+
+/* ═════════ Three staged moments: the month report opens, an inspection lands, the place in the table moves ═════════
+   The only places where lines follow one another. Each step is still 0.25s and moves only opacity and transform. */
+@keyframes mo-in { from { opacity: 0; transform: translate3d(0, 8px, 0); } }
+@keyframes mo-stamp { from { opacity: 0; scale: 1.5; } }
+@keyframes mo-flip { from { opacity: 0; transform: translate3d(0, 70%, 0); } }
+
+.mo-card { gap: 14px; }
+.mo-eyebrow, .nt-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
+.mo-title { margin: 2px 0 4px; font-size: 18px; font-weight: 650; line-height: 1.25; letter-spacing: -0.01em; }
+.mo-seal, .nt-seal { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; }
+.mo-seal { background: var(--accent-soft); color: var(--text); border: 1px solid var(--hairline); }
+
+.mo-card--sealed { grid-template-columns: 44px minmax(0, 1fr); align-items: start; border-color: var(--border-strong); }
+.mo-card--sealed .mo-open { grid-column: 1 / -1; }
+@media (min-width: 620px) {
+  .mo-card--sealed { grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; }
+  .mo-card--sealed .mo-open { grid-column: auto; }
+}
+
+.mo-card--open > * { animation: mo-in var(--t-slow) var(--ease) both; animation-delay: calc(var(--i, 0) * 0.14s); }
+.mo-card--good { border-color: var(--profit); }
+.mo-card--bad { border-color: var(--loss); }
+.mo-lines { list-style: none; margin: 0; padding: 0; display: grid; animation: none !important; }
+.mo-lines li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; font-size: 15px; animation: mo-in var(--t-slow) var(--ease) both; animation-delay: calc(var(--i, 0) * 0.14s); }
+.mo-lines li + li { border-top: 1px solid var(--hairline); }
+.mo-lines li > span { color: var(--text-2); min-width: 0; }
+.mo-lines li > b { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mo-result { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 12px; border-top: 1px solid var(--border-strong); }
+.mo-result__label { font-size: 15px; font-weight: 650; }
+.mo-result__value { font-size: clamp(32px, 9vw, 44px); font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mo-verdict { margin: 0; font-size: 15px; line-height: 1.45; }
+.mo-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.mo-fact { display: grid; gap: 2px; align-content: start; padding: 12px; border-radius: 12px; background: var(--surface-2); min-width: 0; }
+.mo-fact__k { font-size: 12px; color: var(--text-2); line-height: 1.3; }
+.mo-fact > b { font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.mo-place { display: inline-flex; align-items: center; gap: 6px; }
+.mo-place s { color: var(--text-3, var(--text-2)); font-weight: 500; }
+.mo-place__now { display: inline-block; animation: mo-flip var(--t-slow) var(--ease) both; animation-delay: 0.75s; }
+.mo-actions .bz-btn { flex: 1 1 auto; }
+
+/* the inspection */
+.nt-card { gap: 14px; animation: mo-in var(--t-slow) var(--ease) both; }
+.nt-head { display: flex; align-items: center; gap: 12px; }
+.nt-head__text { min-width: 0; display: grid; gap: 2px; }
+.nt-seal { background: var(--loss); color: var(--on-loss, #fff); animation: mo-stamp var(--t-slow) var(--ease) both; animation-delay: 0.12s; }
+.nt-sum { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.nt-sum__fine { font-size: clamp(30px, 8.5vw, 40px); font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--loss); font-variant-numeric: tabular-nums; }
+.nt-sum__what { font-size: 15px; color: var(--text); }
+.nt-deadline { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 600; background: var(--surface); border: 1px solid var(--border); white-space: nowrap; }
+.nt-deadline--soon { border-color: var(--loss); color: var(--loss); }
+.bz-root .nt-bribe { color: var(--loss); }
+
+/* the place in the table */
+.bz-rank { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.bz-rank__n { display: inline-block; animation: mo-flip var(--t-slow) var(--ease) both; }
+.bz-rank__move { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 8px; font-size: 12px; font-weight: 650; white-space: nowrap; animation: mo-in var(--t-slow) var(--ease) both; animation-delay: 0.15s; }
+.bz-rank__move--up { background: var(--profit-soft); color: var(--profit); }
+.bz-rank__move--down { background: var(--loss-soft); color: var(--loss); }
+.lb-move { font-weight: 650; white-space: nowrap; }
+.lb-move--up { color: var(--profit); }
+.lb-move--down { color: var(--loss); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mo-card--open > *, .mo-lines li, .mo-place__now, .nt-card, .nt-seal, .bz-rank__n, .bz-rank__move { animation: none; }
+}
+
+/* a button beside a list row keeps its own height instead of stretching to the text next to it */
+.bz-li > .bz-btn { align-self: center; }
+.nt-deadline { margin-left: 0; }
+@media (min-width: 620px) { .nt-deadline { margin-left: auto; } }
+
+/* every tab of /biz keeps the same 16px gutter: Network and Insights are plugged in without their own */
+.bz-tabpanel > .nw, .bz-tabpanel > .ins { padding-left: 16px; padding-right: 16px; }
