@@ -97,6 +97,29 @@ export function businessMarkers(businesses: PublicBusiness[], places: Place[], m
   return out.sort((x, y) => Number(x.mine) - Number(y.mine));
 }
 
+export interface Box { x: number; y: number; w: number; h: number }
+
+/**
+ * Which name pins to hide so none overlaps a more important one: own business first, then live before closed, then
+ * rank, then name. Boxes are where the pins really are on screen — the app's CSS can resize pins or hide whole groups
+ * (glass.css shows only each niche's top three until the map is zoomed in) — and a pin not displayed takes no room.
+ */
+export function declutterRects<T extends { id: string; mine: boolean; dim: boolean; rank: number; name: string }>(
+  markers: T[], rectOf: (m: T) => Box | null,
+): Set<string> {
+  const order = [...markers].sort((x, y) =>
+    Number(y.mine) - Number(x.mine) || Number(x.dim) - Number(y.dim) || (x.rank || 999) - (y.rank || 999) || x.name.localeCompare(y.name));
+  const placed: Box[] = [];
+  const hidden = new Set<string>();
+  for (const m of order) {
+    const r = rectOf(m);
+    if (!r || r.w === 0 || r.h === 0) continue;
+    const hit = placed.some((q) => r.x < q.x + q.w + 4 && q.x < r.x + r.w + 4 && r.y < q.y + q.h + 2 && q.y < r.y + r.h + 2);
+    if (hit && !m.mine) hidden.add(m.id); else placed.push(r);
+  }
+  return hidden;
+}
+
 export function businessFeatures(markers: BizMarker[]): FeatureCollection<Point> {
   return {
     type: 'FeatureCollection',

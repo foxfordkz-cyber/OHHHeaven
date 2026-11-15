@@ -13,13 +13,16 @@ export interface PlaceCardProps {
   compact?: boolean;
   /** The player's own business does not count as a rival of its own place. */
   myBusinessId?: string;
+  /** Text of the main button instead of "Open here" (the live map says "Open my business here"). */
+  actionLabel?: string;
 }
 
 const pct = (x: number) => `${Math.round(x * 100)}%`;
 const n0 = (x: number) => Math.round(x).toLocaleString('en-US');
+const price = (x: number) => `$${x.toFixed(2)}`;
 const plural = (n: number, unit: string) => (n === 1 || unit.endsWith('s') ? unit : `${unit}s`);
 
-export function PlaceCard({ place, places, businesses, niche, packs, onOpen, onClose, compact = false, myBusinessId }: PlaceCardProps) {
+export function PlaceCard({ place, places, businesses, niche, packs, onOpen, onClose, compact = false, myBusinessId, actionLabel }: PlaceCardProps) {
   const tr = useT();
   const taken = occupiedPlaceIds(businesses).has(place.id);
   const fits = niche ? place.suitableFor.includes(niche) : place.suitableFor.length > 0;
@@ -28,7 +31,7 @@ export function PlaceCard({ place, places, businesses, niche, packs, onOpen, onC
   const facts = placeFacts(place, pack, businesses, places, { exceptBusinessId: myBusinessId, taken });
   const cap = n ? capacityFor(place, n, packs) : null;
   const meta = n ? NICHE_META[n] : null;
-  const label = taken ? tr('Taken', 'Занято') : !fits ? null : compact ? tr('Choose this place', 'Выбрать это место') : tr('Open here', 'Открыться здесь');
+  const label = taken ? tr('Taken', 'Занято') : !fits ? null : compact ? tr('Choose this place', 'Выбрать это место') : actionLabel ?? tr('Open here', 'Открыться здесь');
   const notFit = tr(`Not for a ${niche ? NICHE_META[niche].label.toLowerCase() : 'business'}`, 'Не подходит для этого дела');
 
   return (
@@ -79,8 +82,8 @@ export function PlaceFactsBody({ facts: f, cap, unitLabel, place, budget }: { fa
           <div className="cm-place__big"><strong>≈{n0(f.ordersDay)}</strong> {tr('orders a day', 'заказов в день')}</div>
           <div className="cm-card__sub">
             {tr(
-              `estimate for an average ${shopWord} at ${money(f.refPrice)}, once the regulars know it · about ${money(monthlySales(f.ordersDay, f.refPrice))} of sales a month`,
-              `оценка для средней точки по ${money(f.refPrice)}, когда постоянные её узнают · около ${money(monthlySales(f.ordersDay, f.refPrice))} продаж в месяц`,
+              `estimate for an average ${shopWord} at ${price(f.refPrice)}, once the regulars know it · about ${money(monthlySales(f.ordersDay, f.refPrice))} of sales a month`,
+              `оценка для средней точки по ${price(f.refPrice)}, когда постоянные её узнают · около ${money(monthlySales(f.ordersDay, f.refPrice))} продаж в месяц`,
             )}
           </div>
         </div>
@@ -103,7 +106,7 @@ export function PlaceFactsBody({ facts: f, cap, unitLabel, place, budget }: { fa
         <div>
           <dt>{tr('Rivals within', 'Соперники в')} {f.radiusM} m</dt>
           <dd>{f.playingRivals.length}<small> {tr('in the game', 'в игре')}</small></dd>
-          {f.realRivals && <span className="cm-card__sub">{tr(`+ ${f.realRivals.within150m} real ones within 150 m`, `+ ${f.realRivals.within150m} настоящих в 150 м`)}</span>}
+          {f.realRivals && <span className="cm-card__sub">{tr(`+${f.realRivals.within150m} real one${f.realRivals.within150m === 1 ? '' : 's'} within 150 m`, `+${f.realRivals.within150m} настоящих в 150 м`)}</span>}
         </div>
         <div>
           <dt>{tr('Doors open in', 'Открытие через')}</dt>

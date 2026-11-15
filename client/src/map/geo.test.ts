@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { GameEvent, PackSet, Place, PublicBusiness } from '@ohh/shared/types';
 import {
-  activeFundBlocks, blockSegments, businessMarkers, capacityFor, closedBlocks, competitorsNearby, distanceM, liveEvents,
+  activeFundBlocks, blockSegments, businessMarkers, capacityFor, closedBlocks, competitorsNearby, declutterRects, distanceM, liveEvents,
   occupiedPlaceIds, partnerLines, placeFeatures, rentPerMonth, todayWeather, trafficLabel,
 } from './geo';
 
@@ -99,5 +99,27 @@ describe('blocks, events, weather', () => {
     expect(todayWeather(w)?.condition).toBe('rain');
     expect(todayWeather(w[1])?.day).toBe(6);
     expect(todayWeather(undefined)).toBeUndefined();
+  });
+});
+
+describe('declutterRects — name pins never pile up (BUGS #5)', () => {
+  const pin = (id: string, rank: number, extra: Partial<{ mine: boolean; dim: boolean }> = {}) => ({ id, name: id, rank, mine: false, dim: false, ...extra });
+  const at = (x: number, y: number) => ({ x, y, w: 160, h: 24 });
+  it('keeps the better-ranked of two overlapping pins and hides the other', () => {
+    const boxes: Record<string, ReturnType<typeof at>> = { nadia: at(126, 121), hannah: at(145, 139), elena: at(116, 152), far: at(10, 400) };
+    const hide = declutterRects([pin('nadia', 1), pin('hannah', 1), pin('elena', 2), pin('far', 5)], (m) => boxes[m.id]);
+    expect([...hide].sort()).toEqual(['elena', 'nadia']); // same rank: by name hannah wins; both labels that touch hers hide
+  });
+  it('my own business always shows, even over a #1', () => {
+    const hide = declutterRects([pin('top', 1), pin('me', 9, { mine: true })], () => at(0, 0));
+    expect([...hide]).toEqual(['top']);
+  });
+  it('a pin that is not displayed takes no room', () => {
+    const hide = declutterRects([pin('a', 1), pin('b', 2)], (m) => (m.id === 'a' ? { x: 0, y: 0, w: 0, h: 0 } : at(0, 0)));
+    expect(hide.size).toBe(0);
+  });
+  it('closed and bankrupt businesses give way to live ones', () => {
+    const hide = declutterRects([pin('gone', 1, { dim: true }), pin('live', 7)], () => at(0, 0));
+    expect([...hide]).toEqual(['gone']);
   });
 });
