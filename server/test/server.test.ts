@@ -204,6 +204,15 @@ describe('reliability', () => {
     expect(codes).toContain(429);
   });
 
+  it('behind one proxy, guests are counted by their own address, not the proxy one (B05 request 1)', async () => {
+    const app = createApp(newGame({ rate: { perSec: 1, burst: 3 } }));
+    const from = (ip: string) => request(app).get('/api/worlds').set('X-Forwarded-For', ip);
+    for (let i = 0; i < 3; i++) expect((await from('203.0.113.1')).status).toBe(200);
+    expect((await from('203.0.113.1')).status).toBe(429);
+    // another visitor behind the same proxy still gets in
+    expect((await from('203.0.113.2')).status).toBe(200);
+  });
+
   it('an error in one world does not stop the other or the process', () => {
     const base = defaultDeps();
     const broken = defaultDeps({ forecast: (seed, from, days) => { if (from > 1) throw new Error('boom'); return base.forecast(seed, from, days); } });

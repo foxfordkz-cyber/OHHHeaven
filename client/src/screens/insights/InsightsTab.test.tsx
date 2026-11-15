@@ -30,7 +30,7 @@ describe('Insights tab', () => {
   });
   it('shows taxes, lost sales and the leaderboard', () => {
     show();
-    expect(screen.getByText(/\$11,288 due Thu, Jul 20 · in 38 days/)).toBeTruthy();
+    expect(screen.getByText(/\$11,288 due Thu, Jul 21 · in 38 days/)).toBeTruthy();
     expect(screen.getByText('Your cash ($103,321) covers it.')).toBeTruthy();
     expect(screen.getByText('No open violations: an inspection would find nothing.')).toBeTruthy();
     expect(screen.getByText(/orders lost in the last 30 days/)).toBeTruthy();

@@ -4,7 +4,7 @@ import type { CityView, GameClient, Place } from '@ohh/shared/types';
 import { dateOf } from '@ohh/shared/rules';
 import placesJson from '../../../../data/places.json';
 import realJson from '../../../../data/real-businesses.json';
-import { CityMap } from '../../map/CityMap';
+import { CityMap } from '../../map/LazyCityMap';
 import { WEATHER_ICON, type RealBusinessLabel } from '../../map/geo';
 import { FEED_ICON, clockState, closestRaces, dayProgress, daysToReports, feedRows, formatCountdown, leaderBoards, money, msLeft, seasonDays } from './cityModel';
 import { QrCode } from './QrCode';

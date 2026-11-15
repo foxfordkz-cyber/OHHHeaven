@@ -3,6 +3,7 @@
 //   node docs/pitch/deck/build.mjs                  → docs/pitch/deck/deck.pdf, docs/pitch/deck/pages/page-NN.png
 //   node docs/pitch/deck/build.mjs --no-png         → PDF only
 //   node docs/pitch/deck/build.mjs --model <path>   → money numbers from another copy of the model
+//   node docs/pitch/deck/build.mjs --url https://…  → the public address on pages 1 and 10 (or DECK_URL)
 //
 // Uses the Playwright that is already installed (require('playwright') works from any directory).
 // Fails if a page overflows 1920×1080, if content runs into the footer, if an image is missing,
@@ -96,6 +97,15 @@ try {
   // Ad lines quote numbers from the screenshots next to them. They are not typed either: an element with
   // data-frame="ad-bet" data-re="pay those bills · (\d+)" takes group 1 of that pattern from the text the capture
   // recorded for that frame (img/capture.json → frames). A pattern that no longer matches leaves a dashed TBD.
+  // The public address of the game: --url https://... (or DECK_URL). Without it the "Play: ..." lines are left out
+  // rather than printed with a placeholder.
+  const url = (argAfter('--url') ?? process.env.DECK_URL ?? '').trim();
+  await page.evaluate((u) => {
+    for (const el of document.querySelectorAll('[data-url]')) el.textContent = u.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    if (!u) for (const el of document.querySelectorAll('[data-url-wrap]')) el.remove();
+  }, url);
+  console.log(url ? `public address: ${url}` : 'public address: none given (--url) — the "Play:" lines are left out');
+
   const capturePath = join(here, 'img', 'capture.json');
   const frames = existsSync(capturePath) ? (JSON.parse(readFileSync(capturePath, 'utf8')).frames ?? {}) : {};
   const staleFrames = await page.evaluate((fr) => {

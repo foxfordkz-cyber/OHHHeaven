@@ -6,18 +6,21 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { BusinessCard, type BusinessCta } from './BusinessCard';
 import './map.css';
-import offlineImageUrl from '../../../data/offline-map.png';
+// data/offline-map.png (1.27 MB) re-encoded as WebP quality 85 (118 KB, same picture). If data/build-offline-map.mjs
+// rebuilds the PNG, re-encode it: python3 -c "from PIL import Image; Image.open('data/offline-map.png').save('client/src/map/assets/offline-map.webp', quality=85, method=6)"
+import offlineImageUrl from './assets/offline-map.webp';
 import offlineMeta from '../../../data/offline-map.json';
 import offlineBuildingsUrl from '../../../data/offline-buildings.json?url';
 import type { BlockFundStatus, DayWeather, GameEvent, NicheId, PackSet, Place, PublicBusiness } from '@ohh/shared/types';
 import { dateOf } from '@ohh/shared/rules';
 import {
   NICHE_META, WEATHER_ICON, activeFundBlocks, blockLines, blockSegments, businessFeatures, businessMarkers, centerOf,
-  closedBlocks, liveEvents, partnerLines, placeFeatures, realFeatures, todayWeather, type BizMarker, type LngLat,
+  closedBlocks, declutterRects, liveEvents, partnerLines, placeFeatures, realFeatures, todayWeather, type BizMarker, type LngLat,
   type RealBusinessLabel,
 } from './geo';
 import { cityStyle, isTileFailure, mapPalette, offlineStyle, OFFLINE_STYLE_NAME, type MapTheme, type StyleSpecification } from './mapStyle';
 import { getTheme, useTheme } from '../ui/theme';
+import { useT } from '../ui/i18n';
 import { PlaceCard } from './PlaceCard';
 import { WeatherLayer } from './WeatherLayer';
 
@@ -41,6 +44,11 @@ export interface CityMapProps {
   initialBusinessId?: string;
   /** Pick mode: open this place's card right away (a link to one storefront). */
   initialPlaceId?: string;
+  /**
+   * Live mode, full screen: the "Free storefronts" switch shows the places nobody runs yet; a tap opens the place card.
+   * Its button calls this; without it the button goes to /start for that niche.
+   */
+  onStartHere?: (placeId: string, niche: NicheId) => void;
   /** The map sits inside a scrolling page: scroll and one finger move the page, ctrl+scroll or two fingers move the map. */
   embedded?: boolean;
   /** Today's game day: filters events and weather. Without it every event passed in is shown. */
@@ -160,7 +168,9 @@ function pinElement(m: BizMarker, onOpen?: (id: string) => void): HTMLElement {
 
 function updatePin(el: HTMLElement, m: BizMarker) {
   el.dataset.id = m.id;
-  el.className = `cm-pin${m.mine ? ' cm-pin--mine' : ''}${m.dim ? ' cm-pin--dim' : ''}${m.isAi ? ' cm-pin--ai' : ''}${!m.dim && m.rank > 0 && m.rank <= 3 ? ' cm-pin--top' : ''}`;
+  // keep a pin that the declutter pass hid hidden until the next pass: a city update must not flash every label on
+  const hidden = el.classList.contains('cm-pin--hidden') && !m.mine;
+  el.className = `cm-pin${m.mine ? ' cm-pin--mine' : ''}${m.dim ? ' cm-pin--dim' : ''}${m.isAi ? ' cm-pin--ai' : ''}${!m.dim && m.rank > 0 && m.rank <= 3 ? ' cm-pin--top' : ''}${hidden ? ' cm-pin--hidden' : ''}`;
   el.style.setProperty('--pin', m.color);
   (el.children[0] as HTMLElement).textContent = m.status === 'bankrupt' ? '✕' : m.status === 'closed' ? '⛔' : `#${m.rank}`;
   (el.children[1] as HTMLElement).textContent = m.name;
@@ -169,28 +179,25 @@ function updatePin(el: HTMLElement, m: BizMarker) {
 }
 
 /** Hide name pins that would overlap a more important one (own business, then rank). Runs after moves. */
-function declutter(map: MapLibreMap, pins: Map<string, Marker>, markers: BizMarker[]) {
-  const order = [...markers].sort((x, y) =>
-    Number(y.mine) - Number(x.mine) || Number(x.dim) - Number(y.dim) || x.rank - y.rank || x.name.localeCompare(y.name));
-  const placed: { x: number; y: number; w: number; h: number }[] = [];
-  // read every size first, then write classes: no layout thrash
-  const measured = order.map((m) => {
-    const el = pins.get(m.id)?.getElement();
-    return { m, el, w: el ? el.offsetWidth || Math.min(180, 40 + m.name.length * 6.4) : 0, h: el ? el.offsetHeight || 24 : 0 };
+/**
+ * Hide name pins that would overlap a more important one (own business, then rank). Runs after moves.
+ * Measures the pins where they really are on screen (see declutterRects in geo.ts).
+ */
+function declutter(pins: Map<string, Marker>, markers: BizMarker[]) {
+  // read every box first (the hidden class keeps the size), then write classes: no layout thrash
+  const els = new Map(markers.map((m) => [m.id, pins.get(m.id)?.getElement()]));
+  const boxes = new Map<string, DOMRect>();
+  els.forEach((el, id) => { if (el) boxes.set(id, el.getBoundingClientRect()); });
+  const hide = declutterRects(markers, (m) => {
+    const b = boxes.get(m.id);
+    return b ? { x: b.left, y: b.top, w: b.width, h: b.height } : null;
   });
-  for (const { m, el, w, h } of measured) {
-    if (!el) continue;
-    const p = map.project([m.lng, m.lat]);
-    const r = { x: p.x - w / 2, y: p.y - 10 - h, w, h };
-    const hit = placed.some((q) => r.x < q.x + q.w + 4 && q.x < r.x + r.w + 4 && r.y < q.y + q.h + 2 && q.y < r.y + r.h + 2);
-    el.classList.toggle('cm-pin--hidden', hit && !m.mine);
-    if (!hit || m.mine) placed.push(r);
-  }
+  els.forEach((el, id) => el?.classList.toggle('cm-pin--hidden', hide.has(id)));
 }
 
 export function CityMap(props: CityMapProps) {
   const {
-    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness, businessCta, onExpand, embedded = false, initialBusinessId, initialPlaceId,
+    places, businesses, myBusinessId, weather, events, day, mode, niche, onPick, onOpenBusiness, businessCta, onExpand, embedded = false, initialBusinessId, initialPlaceId, onStartHere,
     blockFunds, packs, realBusinesses, offline: forceOffline = false, intro = true, orbit = false, className, style,
   } = props;
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -198,13 +205,17 @@ export function CityMap(props: CityMapProps) {
   const pinsRef = useRef(new Map<string, Marker>());
   const closedPinsRef = useRef<Marker[]>([]);
   const markersRef = useRef<BizMarker[]>([]);
-  const handlersRef = useRef({ onPick, onOpenBusiness, mode });
-  handlersRef.current = { onPick, onOpenBusiness, mode };
-  const openBusiness = (id: string) => { setOpenBiz(id); handlersRef.current.onOpenBusiness?.(id); };
+  const [showFree, setShowFree] = useState(!!initialPlaceId);
+  // places are tappable in pick mode, and in live mode while the free-storefronts switch is on
+  const placesOn = mode === 'pick' || showFree;
+  const handlersRef = useRef({ onPick, onOpenBusiness, mode, placesOn });
+  handlersRef.current = { onPick, onOpenBusiness, mode, placesOn };
+  const openBusiness = (id: string) => { setSelected(null); setOpenBiz(id); handlersRef.current.onOpenBusiness?.(id); };
   const openBusinessRef = useRef(openBusiness);
   openBusinessRef.current = openBusiness;
   const [styleEpoch, setStyleEpoch] = useState(0);
   const theme = useTheme();
+  const tr = useT();
   const themeRef = useRef<MapTheme>(theme);
   const shownThemeRef = useRef<MapTheme>(theme);
   themeRef.current = theme;
@@ -218,7 +229,10 @@ export function CityMap(props: CityMapProps) {
 
   const segments = useMemo(() => blockSegments(places), [places]);
   const realFC = useMemo(() => realFeatures(realBusinesses), [realBusinesses]);
-  const placeFC = useMemo(() => placeFeatures(places, businesses, niche), [places, businesses, niche]);
+  // live mode looks at storefronts as a café owner would (the product line); pick mode uses the niche being opened
+  const placeNiche: NicheId | undefined = mode === 'pick' ? niche : niche ?? 'cafe';
+  const placeFC = useMemo(() => placeFeatures(places, businesses, placeNiche), [places, businesses, placeNiche]);
+  const freeCount = useMemo(() => placeFC.features.filter((f) => f.properties.state === 'free').length, [placeFC]);
   const markers = useMemo(() => businessMarkers(businesses, places, myBusinessId), [businesses, places, myBusinessId]);
   const bizFC = useMemo(() => businessFeatures(markers), [markers]);
   const dealsFC = useMemo(() => partnerLines(businesses, places), [businesses, places]);
@@ -256,6 +270,8 @@ export function CityMap(props: CityMapProps) {
       canvasContextAttributes: { antialias: budget.antialias },
     });
     mapRef.current = map;
+    // dev builds only: the map object for browser checks (scripts in docs/qa read the camera and the layers)
+    if (import.meta.env.DEV) (window as unknown as { __ohhMap?: MapLibreMap }).__ohhMap = map;
     let isOffline = startOffline;
     const goOffline = () => {
       if (isOffline) return;
@@ -274,9 +290,9 @@ export function CityMap(props: CityMapProps) {
 
     // interaction: pick a place, open a business
     map.on('click', 'ohh-places-hit', (e: MapLayerMouseEvent) => {
-      if (handlersRef.current.mode !== 'pick') return;
+      if (!handlersRef.current.placesOn) return;
       const id = e.features?.[0]?.properties?.id;
-      if (typeof id === 'string') setSelected(id);
+      if (typeof id === 'string') { setOpenBiz(null); setSelected(id); }
     });
     map.on('click', 'ohh-biz-dot', (e: MapLayerMouseEvent) => {
       if (handlersRef.current.mode !== 'live') return;
@@ -290,7 +306,12 @@ export function CityMap(props: CityMapProps) {
     const onZoom = () => { setZoomedOut(map.getZoom() < 14.6); setNear(map.getZoom() >= 16.3); };
     map.on('zoomend', onZoom);
     onZoom();
-    map.on('moveend', () => declutter(map, pinsRef.current, markersRef.current));
+    // name pins must not pile up (docs/qa/BUGS.md #5): sort them out after every move, and also once the frame has its
+    // real size and the first tiles are drawn — an embedded map starts at 0×0 and fires no move of its own
+    const tidy = () => declutter(pinsRef.current, markersRef.current);
+    map.on('moveend', tidy);
+    map.on('resize', tidy);
+    map.once('idle', tidy);
 
     // fly-over on open, then optional orbit
     let orbitRaf = 0, idleUntil = 0, lastT = 0;
@@ -351,9 +372,11 @@ export function CityMap(props: CityMapProps) {
     setData(map, 'ohh-deals', mode === 'live' ? dealsFC : EMPTY);
     setData(map, 'ohh-fund', fundFC);
     setData(map, 'ohh-closed', closedFC);
-    for (const id of LAYERS_PICK) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', mode === 'pick' ? 'visible' : 'none');
+    for (const id of LAYERS_PICK) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', placesOn ? 'visible' : 'none');
+    // live mode: taken places already carry a business pin; show only the free ones
+    for (const id of ['ohh-places-dot', 'ohh-places-hit']) if (map.getLayer(id)) map.setFilter(id, mode === 'live' ? ['!=', ['get', 'state'], 'taken'] : null);
     if (map.getLayer('ohh-biz-halo')) map.setLayoutProperty('ohh-biz-halo', 'visibility', mode === 'live' ? 'visible' : 'none');
-  }, [styleEpoch, realFC, placeFC, bizFC, dealsFC, fundFC, closedFC, mode]);
+  }, [styleEpoch, realFC, placeFC, bizFC, dealsFC, fundFC, closedFC, mode, placesOn]);
 
   // selection highlight
   useEffect(() => {
@@ -364,7 +387,7 @@ export function CityMap(props: CityMapProps) {
     if (idx >= 0) map.setFeatureState({ source: 'ohh-places', id: idx }, { selected: true });
   }, [selected, places, styleEpoch]);
 
-  useEffect(() => { if (mode !== 'pick') setSelected(null); }, [mode]);
+  useEffect(() => { if (!placesOn) setSelected(null); }, [placesOn]);
 
   // HTML name pins for live mode
   useEffect(() => {
@@ -382,9 +405,21 @@ export function CityMap(props: CityMapProps) {
         .setLngLat([m.lng, m.lat]).addTo(map);
       pins.set(m.id, marker);
     }
-    const raf = requestAnimationFrame(() => declutter(map, pins, wanted));
+    const raf = requestAnimationFrame(() => declutter(pins, wanted));
     return () => cancelAnimationFrame(raf);
   }, [markers, mode]);
+
+  // zooming in or out switches which pins the CSS shows (cm-root--near / --far), and web fonts change their width:
+  // sort the labels out again after either
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const tidy = () => declutter(pinsRef.current, markersRef.current);
+    const raf = requestAnimationFrame(tidy);
+    let alive = true;
+    document.fonts?.ready.then(() => { if (alive) tidy(); }).catch(() => {});
+    return () => { alive = false; cancelAnimationFrame(raf); };
+  }, [near, zoomedOut]);
 
   // the opened business keeps a ring and its name, so it is clear which pin the card is about
   useEffect(() => {
@@ -410,9 +445,16 @@ export function CityMap(props: CityMapProps) {
     });
   }, [closed, segments]);
 
+  const freeLegend = [{ color: mapPalette(theme).free, label: placeNiche ? `Free for a ${NICHE_META[placeNiche].label.toLowerCase()}` : 'Free' }, { color: mapPalette(theme).other, label: 'Other niche' }];
   const legend = mode === 'pick'
-    ? [{ color: mapPalette(theme).free, label: niche ? `Free for a ${NICHE_META[niche].label.toLowerCase()}` : 'Free' }, { color: mapPalette(theme).other, label: 'Other niche' }, { color: mapPalette(theme).taken, label: 'Taken' }]
-    : [...new Set(markers.map((m) => m.niche))].map((n) => ({ color: NICHE_META[n].color, label: NICHE_META[n].label }));
+    ? [...freeLegend, { color: mapPalette(theme).taken, label: 'Taken' }]
+    : [...[...new Set(markers.map((m) => m.niche))].map((n) => ({ color: NICHE_META[n].color, label: NICHE_META[n].label })), ...(showFree ? freeLegend : [])];
+  const canBrowseFree = mode === 'live' && !embedded && !orbit;
+  const startHere = (id: string) => {
+    const n = placeNiche ?? 'cafe';
+    if (onStartHere) onStartHere(id, n);
+    else window.location.assign(`/start?niche=${encodeURIComponent(n)}&place=${encodeURIComponent(id)}`);
+  };
 
   return (
     <div className={`cm-root${zoomedOut ? ' cm-root--far' : ''}${near ? ' cm-root--near' : ''}${offline ? ' cm-root--offline' : ''}${className ? ` ${className}` : ''}`} style={style}>
@@ -435,12 +477,19 @@ export function CityMap(props: CityMapProps) {
             </div>
           );
         })}
-        {offline && <div className="cm-chip cm-chip--offline" title="Map tiles did not load; showing the saved snapshot">Offline map</div>}
+        {offline && <div className="cm-chip cm-chip--offline" title="Map tiles did not load: a schematic map drawn from the street grid">Offline map</div>}
       </div>
       {legend.length > 0 && (
         <ul className="cm-legend" aria-label="Legend">
           {legend.map((l) => <li key={l.label}><i style={{ background: l.color }} />{l.label}</li>)}
-          {mode === 'live' && <li className="cm-legend__hint">#1–3 lead their niche · zoom in to see everyone</li>}
+          {mode === 'live' && !embedded && <li className="cm-legend__hint">#1–3 lead their niche · zoom in to see everyone</li>}
+          {canBrowseFree && (
+            <li>
+              <button type="button" className="cm-legend__toggle" aria-pressed={showFree} onClick={() => setShowFree((v) => !v)}>
+                {showFree ? tr('Hide free storefronts', 'Скрыть свободные помещения') : tr(`Free storefronts · ${freeCount}`, `Свободные помещения · ${freeCount}`)}
+              </button>
+            </li>
+          )}
         </ul>
       )}
       <div className="cm-ctl" role="group" aria-label="Map controls">
@@ -463,10 +512,12 @@ export function CityMap(props: CityMapProps) {
           me={myBusinessId ? businesses.find((x) => x.id === myBusinessId) : undefined} places={places}
         />
       )}
-      {mode === 'pick' && selectedPlace && (
+      {placesOn && selectedPlace && (
         <PlaceCard
-          place={selectedPlace} places={places} businesses={businesses} niche={niche} packs={packs}
-          onOpen={onPick} onClose={() => setSelected(null)} compact={short} myBusinessId={myBusinessId}
+          place={selectedPlace} places={places} businesses={businesses} niche={placeNiche} packs={packs}
+          onOpen={mode === 'pick' ? onPick : myBusinessId ? undefined : startHere} onClose={() => setSelected(null)}
+          compact={short} myBusinessId={myBusinessId}
+          actionLabel={mode === 'live' ? (myBusinessId ? tr('You already run a business', 'У тебя уже есть бизнес') : tr('Open my business here', 'Открыть здесь свой бизнес')) : undefined}
         />
       )}
     </div>

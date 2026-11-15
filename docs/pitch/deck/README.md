@@ -19,10 +19,12 @@ Ten pages, 1920×1080, in the order of the judging criteria. One HTML file is th
 node docs/pitch/deck/build.mjs
 ```
 
-While `docs/pitch/model.mjs` (the money model) lives only in its author's branch, take it from there without merging:
+To try the money model from another branch without merging it: `node docs/pitch/deck/build.mjs --model-ref <git ref>`.
+
+Once the game has a public address, put it on pages 1 and 10 (without it, the "Play:" lines are left out):
 
 ```bash
-node docs/pitch/deck/build.mjs --model-ref origin/claude/nifty-davinci-j7t4c3
+node docs/pitch/deck/build.mjs --url https://<address>
 ```
 
 The build fails (exit 1) when there are more than ten pages, when a page overflows, when text runs into the footer

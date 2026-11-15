@@ -42,4 +42,15 @@ describe('shared utils', () => {
     expect(dateOf(31).month).toBe(2);
     expect(isMonthEnd(30)).toBe(true);
   });
+  it('a date label never names a day the real month does not have (docs/qa/BUGS.md #3)', () => {
+    expect(dateOf(60).label).toMatch(/Feb 28$/);     // the end of game month 2: Feb 28, not "Feb 30"
+    expect(dateOf(30).label).toMatch(/Jan 31$/);
+    expect(dateOf(120).label).toMatch(/Apr 30$/);
+    expect(dateOf(31).label).toMatch(/Feb 1$/);
+    expect(dateOf(60).dayOfMonth).toBe(30);           // the counting stays on the 30-day month
+    for (let d = 1; d <= 360; d++) {
+      const [, mon, day] = dateOf(d).label.match(/, (\w{3}) (\d+)$/)!;
+      expect(Number(day)).toBeLessThanOrEqual({ Feb: 28, Apr: 30, Jun: 30, Sep: 30, Nov: 30 }[mon] ?? 31);
+    }
+  });
 });
