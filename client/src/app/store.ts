@@ -214,7 +214,7 @@ export function getAppStore(): GameStore {
       client: getClient(mode), mode, worldId: detectWorld(),
       // a guest is never left in a demo city that will refuse them on the last step (docs/qa/BUGS.md #18)
       freshCity: mode === 'remote'
-        ? (view) => (wantsFreshCity({ world: view.world, joined: Boolean(getSession(mode, view.world.config.id)), explicit: addressNamesCity() }) ? openFreshCity() : Promise.resolve(null))
+        ? (view) => (wantsFreshCity({ world: view.world, joined: Boolean(getSession(mode, view.world.config.id)), explicit: addressNamesCity() }) ? openFreshCity('', fetch, view.world.config.id) : Promise.resolve(null))
         : undefined,
     });
   }

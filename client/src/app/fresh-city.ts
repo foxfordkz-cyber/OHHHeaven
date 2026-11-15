@@ -25,8 +25,27 @@ export function wantsFreshCity({ world, joined, explicit }: FreshCityInput): boo
   return world.phase !== 'running' || world.date.month > FRESH_AFTER_MONTH;
 }
 
-/** Opens a fresh demo city on the server. Null if the server refused (too many cities) or could not be reached. */
-export async function openFreshCity(base = '', doFetch: typeof fetch = fetch): Promise<string | null> {
+interface WorldRow { id?: unknown; demo?: unknown; day?: unknown }
+
+/**
+ * A young demo city for a guest: one that another late guest already opened (so twenty visitors do not make twenty
+ * cities — the server keeps at most 20), else a new one (POST /api/worlds). Null if neither works.
+ */
+export async function openFreshCity(base = '', doFetch: typeof fetch = fetch, current = 'demo'): Promise<string | null> {
+  try {
+    const list = await doFetch(`${base}/api/worlds`);
+    if (list.ok) {
+      const body = (await list.json()) as WorldRow[] | { data?: WorldRow[] };
+      const rows = Array.isArray(body) ? body : body.data ?? [];
+      const young = rows
+        .filter((w): w is { id: string; demo: true; day: number } => typeof w.id === 'string' && w.demo === true && typeof w.day === 'number')
+        .filter((w) => w.id !== current && !w.id.startsWith('pitch') && w.day <= FRESH_AFTER_MONTH * RULES.DAYS_PER_MONTH)
+        .sort((a, b) => a.day - b.day);
+      if (young[0]) return young[0].id;
+    }
+  } catch {
+    // no list: try to open one
+  }
   try {
     const res = await doFetch(`${base}/api/worlds`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
     if (res.status !== 201) return null;

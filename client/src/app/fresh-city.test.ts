@@ -35,11 +35,21 @@ describe('wantsFreshCity', () => {
 });
 
 describe('openFreshCity', () => {
-  it('returns the new id on 201 and null when the server refuses or is away', async () => {
-    const ok = vi.fn(async () => new Response(JSON.stringify({ ok: true, data: { id: 'demo-3' } }), { status: 201 }));
-    expect(await openFreshCity('', ok as unknown as typeof fetch)).toBe('demo-3');
-    expect(ok).toHaveBeenCalledWith('/api/worlds', expect.objectContaining({ method: 'POST' }));
-    const full = vi.fn(async () => new Response(JSON.stringify({ ok: false, error: 'Too many demo cities' }), { status: 429 }));
+  const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status });
+  it('takes a young demo city another guest already opened, the youngest first', async () => {
+    const f = vi.fn(async () => json([
+      { id: 'nyc', demo: false, day: 3 }, { id: 'demo', demo: true, day: 300 }, { id: 'pitch', demo: true, day: 2 },
+      { id: 'demo-2', demo: true, day: 40 }, { id: 'demo-3', demo: true, day: 9 }, { id: 'demo-4', demo: true, day: 350 },
+    ]));
+    expect(await openFreshCity('', f as unknown as typeof fetch, 'demo')).toBe('demo-3');
+    expect(f).toHaveBeenCalledTimes(1);
+  });
+
+  it('opens a new one when none is young enough; null when the server refuses or is away', async () => {
+    const ok = vi.fn(async (_u: string, init?: RequestInit) => (init?.method === 'POST' ? json({ ok: true, data: { id: 'demo-5' } }, 201) : json([{ id: 'demo', demo: true, day: 300 }])));
+    expect(await openFreshCity('', ok as unknown as typeof fetch)).toBe('demo-5');
+    expect(ok).toHaveBeenLastCalledWith('/api/worlds', expect.objectContaining({ method: 'POST' }));
+    const full = vi.fn(async (_u: string, init?: RequestInit) => (init?.method === 'POST' ? json({ ok: false, error: 'Too many demo cities' }, 429) : json([])));
     expect(await openFreshCity('', full as unknown as typeof fetch)).toBeNull();
     const away = vi.fn(async () => { throw new Error('offline'); });
     expect(await openFreshCity('', away as unknown as typeof fetch)).toBeNull();
