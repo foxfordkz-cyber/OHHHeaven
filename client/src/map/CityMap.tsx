@@ -6,7 +6,9 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { BusinessCard, type BusinessCta } from './BusinessCard';
 import './map.css';
-import offlineImageUrl from '../../../data/offline-map.png';
+// data/offline-map.png (1.27 MB) re-encoded as WebP quality 85 (118 KB, same picture). If data/build-offline-map.mjs
+// rebuilds the PNG, re-encode it: python3 -c "from PIL import Image; Image.open('data/offline-map.png').save('client/src/map/assets/offline-map.webp', quality=85, method=6)"
+import offlineImageUrl from './assets/offline-map.webp';
 import offlineMeta from '../../../data/offline-map.json';
 import offlineBuildingsUrl from '../../../data/offline-buildings.json?url';
 import type { BlockFundStatus, DayWeather, GameEvent, NicheId, PackSet, Place, PublicBusiness } from '@ohh/shared/types';
