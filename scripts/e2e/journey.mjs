@@ -30,7 +30,8 @@ const SCHEME = opt('scheme', 'light');
 const PLAYER = opt('name', 'Jordan');
 const RIVAL = 'Sam\'s Cuts';
 const base = { url: (opt('url', process.env.E2E_URL ?? '') || '').replace(/\/$/, '') };
-const { call } = api(base);
+// A server started with CLOCK_KEY takes clock commands (pause, advance) only with the key.
+const { call } = api(base, opt('key', process.env.CLOCK_KEY ?? ''));
 const log = (...a) => console.log(...a);
 let server = null;
 const stopServer = () => server?.stop();
@@ -348,7 +349,9 @@ async function walk(browser, width) {
       if (body.length < 40) throw new Error(`tab "${tab}" is almost empty: "${body}"`);
       if (/on its way|Coming soon/i.test(body)) throw new Error(`tab "${tab}" is a placeholder: "${body.slice(0, 120)}"`);
       const buttons = await panel.locator('button:not([disabled]), input:not([disabled]), select:not([disabled])').count();
-      return `${body.length} chars, ${buttons} enabled controls; starts: "${body.slice(0, 110)}"`;
+      // Advice that promises a loss (BUGS.md, №2): an amount like "−$902/mo" on a card with "Apply".
+      const negative = tab === 'Today' ? (body.match(/[−-]\$[\d,]+\/mo/g) ?? []) : [];
+      return `${body.length} chars, ${buttons} enabled controls${negative.length ? `; ADVICE WITH A LOSS: ${negative.join(', ')}` : ''}; starts: "${body.slice(0, 110)}"`;
     });
   }
 
@@ -605,7 +608,7 @@ async function walk(browser, width) {
     await page.getByRole('button', { name: /^(More|Increase) price$/ }).first().click({ timeout: 8000 });
     await saveBtn().click({ timeout: 5000 });
     await sleep(1200);
-    const refusedText = ((await page.locator('body').innerText()).replace(/\s+/g, ' ').match(/[^.]*\b(Pro|subscription|free month)\b[^.]*\./i) ?? [''])[0];
+    const refusedText = ((await page.locator('body').innerText()).replace(/\s+/g, ' ').match(/[^.]*(free month|First Year Pro|subscription)[^.]*\.(?:[^.]*\/pro\.)?/i) ?? [''])[0];
     const seePro = await page.getByRole('button', { name: /Pro/ }).or(page.getByRole('link', { name: /Pro/ })).count();
     await shot('pro-refused');
     const p1 = (await view()).business.orders.price;

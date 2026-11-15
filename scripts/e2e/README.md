@@ -6,6 +6,7 @@
 node scripts/e2e/journey.mjs                    # starts its own server on a free port
 node scripts/e2e/journey.mjs --url https://…    # the same walk against a deployed game
 scripts/e2e/cycle.sh <branch>                   # a fresh worktree of a branch: install, build, walk
+scripts/e2e/prod.sh https://… [CLOCK_KEY]      # everything against a deployed game: walk, first minute, speed, stage show
 ```
 
 Options: `--scheme dark` (dark system theme and the app's own dark theme), `--widths 375,1440`, `--out <dir>`, `--shots <dir>` (retina screenshots of what the player sees, for the deck), `--no-end` (stop before the season ends), `--root <checkout>` (serve the game from another checkout).
@@ -35,9 +36,12 @@ Each run creates its own demo city through the API and pauses its clock, so the 
 
 On every step: a full-page screenshot, horizontal overflow, page errors, console errors, failed requests and 5xx answers from the API. A step that fails in the UI is written down with a screenshot and then done through the API, so one broken button does not hide everything after it. Exit code 1 when any UI step failed.
 
-## Two more measurements
+## Three more checks
 
 - `first-minute.mjs` — a newcomer on a phone with the demo city running at its own speed (no paused clock): seconds until the first decision, the first number that answers it, the signed lease, the open doors and the first sale; the longest stretch with nothing to decide. Writes `TIMELINE.md`.
+- `pitch-show.mjs` — the five-minute stage show from `docs/pitch/RUNBOOK.md` in four browsers: Maya's and Viktor's phones by their codes, the projector by the guest code, the presenter desk `/pitch`. Maya takes the jury's branch on her phone (`--branch price` or `seats`), reports Viktor; the desk runs the city to the fine notice; Viktor pays on his phone; the desk goes back to the start. Writes `PITCH.md` and screenshots.
 - `perf.mjs` — the first screen on a desktop and on a phone throttled like Lighthouse mobile (Slow 4G, CPU ×4): bytes over the wire, which files are large and whether they are compressed, time until the idea field is ready, LCP, long tasks.
 
 Output: `RUN.md` (one line per step) and `results.json` in `docs/qa/runs/<time>/` (not committed). Findings live in `docs/qa/BUGS.md`; whether each screen gives the player a decision, a visible consequence and a reason to come back is in `docs/qa/HOOK.md`.
+
+Only Chromium is installed here: Safari (WebKit) and Firefox are not covered.
