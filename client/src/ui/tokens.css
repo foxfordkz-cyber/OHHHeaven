@@ -126,7 +126,11 @@ p {
   margin: 0 auto;
   min-height: 100dvh;
   position: relative;
+  /* clip, not hidden: hidden makes .app its own scroll box and every position: sticky inside stops sticking to the
+     screen (the "Next" bar of the opening decisions fell below the fold on phones, docs/qa/BUGS.md #16). Browsers
+     without clip keep hidden. */
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .app--wide {
