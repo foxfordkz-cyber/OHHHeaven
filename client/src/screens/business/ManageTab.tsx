@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Action, PnlLine, StandingOrders } from '@ohh/shared/types';
 import { RULES } from '@ohh/shared/rules';
 import { Button, Card, Segmented, Sheet, Stepper, Toggle } from './__stubs__/ui';
@@ -9,7 +9,7 @@ import { ImpactLine, OutlookCard, type OutlookPair } from './Outlook';
 import { pick } from '../../ui/i18n';
 import { allShortcuts, leverViolations, savesRule, trailFor, violationById, whoCatches, type Packs } from './lookup';
 import { setAutopilot, setLever, setPrice, setStaff, toggleShortcut, totalStaff, type Draft } from './orders';
-import { useWhatIf } from './useWhatIf';
+import { useWhatIf, type WhatIf } from './useWhatIf';
 
 export interface ManageProps {
   deps: BizDeps;
@@ -145,6 +145,25 @@ function PaidByDay({ lever, chosen }: { lever: { options: { id: string; monthlyC
   return <p className="bz-small bz-muted">{pick(`Charged only for the days it is on: ${usd2(perDayCost(o.monthlyCost))} a day. Switching it off before the month closes does not erase the days it ran.`, `Списывается только за дни, когда включено: ${usd2(perDayCost(o.monthlyCost))} в день. Выключить перед закрытием месяца — не значит не платить за дни, когда работало.`)}</p>;
 }
 
+/**
+ * The month with another room, before Resize is pressed (docs/qa/BUGS.md #17: the jury's "more seats" branch on stage).
+ * Two what_if answers — the room as it is and the room with `size` — asked 400 ms after the stepper stops.
+ */
+export function useSizeForecast(query: BizDeps['query'], size: number, current: number, enabled: boolean): { size: number; now: WhatIf; next: WhatIf } | null {
+  const [got, setGot] = useState<{ size: number; now: WhatIf; next: WhatIf } | null>(null);
+  useEffect(() => {
+    if (!enabled || size === current) return;
+    let live = true;
+    const t = setTimeout(() => {
+      void Promise.all([query<WhatIf>({ type: 'what_if', orders: {} }), query<WhatIf>({ type: 'what_if', orders: {}, size })]).then(([a, b]) => {
+        if (live && a.ok && a.data && b.ok && b.data) setGot({ size, now: a.data, next: b.data });
+      }).catch(() => undefined);
+    }, 400);
+    return () => { live = false; clearTimeout(t); };
+  }, [query, size, current, enabled]);
+  return got && got.size === size && size !== current ? got : null;
+}
+
 function SizeCard({ deps }: { deps: BizDeps }) {
   const b = deps.view.business!;
   const pack = deps.pack;
@@ -158,6 +177,7 @@ function SizeCard({ deps }: { deps: BizDeps }) {
   const lostSeats = b.days.reduce((a, d) => a + d.lost.size, 0);
   const util = deps.view.analytics?.sizeUtilization;
   const delta = size - b.size;
+  const forecast = useSizeForecast(deps.query, size, b.size, open && Boolean(sizing));
 
   const send = async () => {
     setBusy(true); setMsg(null);
@@ -195,6 +215,15 @@ function SizeCard({ deps }: { deps: BizDeps }) {
             </div>
           )}
           {delta < 0 && <p className="bz-small">You sell {plural(-delta, unit)} of furniture for {Math.round(RULES.RESALE_SHARE * 100)}% of what it cost.</p>}
+          {forecast && (
+            <p className="bz-small" data-testid="resize-forecast">
+              <b>{pick('Next 30 days', 'Следующие 30 дней')}:</b>{' '}
+              {pick(`now → with ${plural(size, unit)}`, `сейчас → с ${size} мест.`)}
+              {' · '}{pick('orders a day', 'заказов в день')} {num(forecast.now.projected.servedUnits / RULES.DAYS_PER_MONTH)} → {num(forecast.next.projected.servedUnits / RULES.DAYS_PER_MONTH)}
+              {' · '}{pick('profit', 'прибыль')} {usd(forecast.now.analytics.profit)} →{' '}
+              <span className={forecast.next.analytics.profit > forecast.now.analytics.profit ? 'bz-good-text' : forecast.next.analytics.profit < forecast.now.analytics.profit ? 'bz-bad-text' : ''}>{usd(forecast.next.analytics.profit)}</span>
+            </p>
+          )}
           <p className="bz-small">
             Too few {unit}s: a queue and customers who walk away. Too many: an empty room that still costs {usd(sizing.cleaningCostPerSizeMonth)} per {unit} a month to clean.
           </p>

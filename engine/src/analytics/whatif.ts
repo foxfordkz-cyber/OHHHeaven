@@ -93,7 +93,8 @@ export function whatIfWith(w: WorldState, ctx: EngineCtx, businessId: string, s:
   return res;
 }
 
-export function whatIf(w: WorldState, ctx: EngineCtx, businessId: string, orders: Partial<StandingOrders>): { projected: MonthReport; analytics: Analytics } {
-  const r = whatIfWith(w, ctx, businessId, { orders });
+/** `size` — the month with a different room (the what_if query's `size`, shared/src/types.ts). */
+export function whatIf(w: WorldState, ctx: EngineCtx, businessId: string, orders: Partial<StandingOrders>, size?: number): { projected: MonthReport; analytics: Analytics } {
+  const r = whatIfWith(w, ctx, businessId, size == null ? { orders } : { orders, size });
   return { projected: r.projected, analytics: r.analytics };
 }

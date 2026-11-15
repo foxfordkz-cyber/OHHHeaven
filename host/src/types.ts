@@ -31,7 +31,7 @@ export interface EngineApi {
   analyze(b: BusinessState, w: WorldState, ctx: EngineCtx): Analytics;
   recommend(b: BusinessState, w: WorldState, ctx: EngineCtx): Recommendation[];
   recommendOpening(niche: NicheId, placeId: string, w: WorldState, ctx: EngineCtx, opts?: { established?: boolean }): OpenRecommendation[];
-  whatIf(w: WorldState, ctx: EngineCtx, businessId: string, orders: Partial<StandingOrders>): { projected: MonthReport; analytics: Analytics };
+  whatIf(w: WorldState, ctx: EngineCtx, businessId: string, orders: Partial<StandingOrders>, size?: number): { projected: MonthReport; analytics: Analytics };
   roadmapFor(niche: NicheId, b: BusinessState | null, w: WorldState, ctx: EngineCtx): RoadmapItem[];
   realWorldPlan(b: BusinessState, w: WorldState, ctx: EngineCtx): RealWorldPlan;
   managerOrders(b: BusinessState, w: WorldState, ctx: EngineCtx): Partial<StandingOrders>;

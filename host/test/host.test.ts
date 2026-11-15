@@ -209,6 +209,13 @@ describe('answer and managers', () => {
     w = run(w, 3);
     const wi = answer(w, ctx, a.playerId, { type: 'what_if', orders: { price: 9 } }) as { projected: { revenue: number } };
     expect(wi.projected).toBeTruthy();
+    // what_if with another room (the Resize sheet, B04): the size reaches the forecast, a size out of bounds is refused
+    const b = w.businesses.find((x) => x.managerPlayerId === a.playerId)!;
+    const sized = answer(w, ctx, a.playerId, { type: 'what_if', orders: {}, size: ctx.packs.niches.cafe!.sizing.min }) as { projected: { capacityUnits: number } };
+    const asIs = answer(w, ctx, a.playerId, { type: 'what_if', orders: {} }) as { projected: { capacityUnits: number } };
+    if (b.size !== ctx.packs.niches.cafe!.sizing.min) expect(sized.projected.capacityUnits).not.toBe(asIs.projected.capacityUnits);
+    expect(() => answer(w, ctx, a.playerId, { type: 'what_if', orders: {}, size: 0.5 })).toThrow(/size/);
+    expect(() => answer(w, ctx, a.playerId, { type: 'what_if', orders: {}, size: 100_000 })).toThrow(/size/);
     expect(answer(w, ctx, a.playerId, { type: 'real_world_plan' })).toHaveProperty('startupTotal');
     expect(() => answer(w, ctx, a.playerId, { type: 'advisor', question: 'hi' })).toThrow(/AI service/);
     expect(() => answer(w, ctx, a.playerId, { type: 'recommend_opening', niche: 'cafe', placeId: 'nowhere' })).toThrow(/place/);

@@ -129,6 +129,16 @@ describe('Manage → Apply', () => {
     expect(deps.navigate).toHaveBeenCalledWith('/pro');
   });
 
+  it('Resize shows the month with the new room before it is pressed (docs/qa/BUGS.md #17)', async () => {
+    const { deps, queries } = makeDeps(fixture('open'));
+    render(<BusinessScreen deps={deps} initialTab="manage" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Resize' }));
+    fireEvent.click(screen.getByRole('button', { name: /^More seats$/ }));
+    const line = await screen.findByTestId('resize-forecast', {}, { timeout: 2000 });
+    expect(line.textContent).toMatch(/Next 30 days:.*now → with \d+ seats.*orders a day.*profit/);
+    expect(queries.some((q) => q.type === 'what_if' && q.size === fixture('open').business!.size + 1)).toBe(true);
+  });
+
   it('an ordinary refusal has no See Pro button', async () => {
     const { deps } = makeDeps(fixture('open'), { act: vi.fn(async (): Promise<Ack> => ({ ok: false, error: 'Price must be above zero' })) });
     render(<BusinessScreen deps={deps} initialTab="manage" />);
