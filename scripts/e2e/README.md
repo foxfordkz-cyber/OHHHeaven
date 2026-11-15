@@ -29,7 +29,10 @@ Each run creates its own demo city through the API and pauses its clock, so the 
 | advice | "Apply" on the first advice on Today | orders or size change in the engine |
 | live-edit | edit the price while the city runs | the unsaved edit survives new days |
 | deal | cross-promo to a neighbour from the Network tab | the neighbour accepts, the deal is active |
+| offer | the neighbour offers a loan (API); "Accept" in Network | Today says an offer waits; the deal is active |
 | report | report the neighbour | the case is in the inspector's queue |
+| brief | come back after 3 weeks, `/brief` | cash then → now, one decision, the rival |
+| pro | after the free month: save a change, `/pro`, "Get Pro" (test) | the change is refused, then goes through; the free player's plan screen |
 | desk | an inspector's own browser at /desk | the case is listed and can be taken |
 | month | 32 days later, Books | a month report exists |
 | end, plan-final | season over, "Open my plan" | rank, debrief, plan with links and print |
