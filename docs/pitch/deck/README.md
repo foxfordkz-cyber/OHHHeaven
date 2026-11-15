@@ -34,6 +34,9 @@ waiting for their source (dashed boxes).
 - **Money** (pages 7–8) is never typed in: every element with `data-model="outputs.ltv"`, `data-model="inputs.cacPaid"`,
   `data-model="outputs.steps.2.payers"` and so on is filled at build time from `docs/pitch/model.mjs`. Change an
   assumption there and rebuild.
+- **Ad lines** (page 7) quote the screenshots next to them: `data-frame="ad-bet" data-re="pay those bills · (\d+)"`
+  takes the number from the text the capture recorded for that frame (`img/capture.json` → `frames`), so a retake
+  cannot leave an ad line that disagrees with its picture.
 - **Market and pain** (pages 2 and 9) — `docs/pitch/USER.md` and `docs/pitch/COMPETITORS.md`, each number with a link.
 - **What is real** (page 5) — `node scripts/validate-all.mjs` (verified numbers), `npm test` (tests),
   `npx tsx sim/audit/saturation.ts` (the shared market).

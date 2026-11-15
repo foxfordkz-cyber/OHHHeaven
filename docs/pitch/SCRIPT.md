@@ -4,9 +4,9 @@ B17, третий заход. Основа — `docs/pitch/LIVE-SHOW.md` (кон
 
 **Как читать.** Обычный текст под заголовком страницы — речь, по-английски, вслух. Строки, начинающиеся с `▸`, — режиссура на русском, их не произносят. **А** — рассказчик (Maya), **Б** — управляет ноутбуком (Viktor).
 
-**Слова.** Речи — 580 английских слов (лимит 650). Темп — около 140 слов в минуту; время страницы = слова + живые действия (страницы 3 и 4 — по 15–20 секунд действий без слов). Пересчёт: `node docs/pitch/deck/words.mjs`. Числа рынка — из `USER.md` (B15), денег — из `MONEY.md` и `model.mjs` (B16).
+**Слова.** Речи — 588 английских слов (лимит 650). Темп — около 140 слов в минуту; время страницы = слова + живые действия (страницы 3 и 4 — по 15–20 секунд действий без слов). Пересчёт: `node docs/pitch/deck/words.mjs`. Числа рынка — из `USER.md` (B15), денег — из `MONEY.md` и `model.mjs` (B16).
 
-**Правило чисел.** Деньги кафе на сцене — те, что показывает игра в эту минуту, не из этого текста. Если экран показывает другое — говорим то, что на экране.
+**Правило чисел.** Деньги кафе на сцене — те, что показывает игра в эту минуту, не из этого текста. Если экран показывает другое — говорим то, что на экране. Числа страницы 3 («146 в день», «150», «половина гостей») — из кадра `img/ad-bet.png` последней съёмки; в финальном проходе сверить с `img/capture.json` → `frames`.
 
 **До выхода.** Город показа и коды телефонов — по `docs/pitch/RUNBOOK.md` (A5): `node scripts/pitch.mjs` должен закончиться `PASS: 16/16 steps in their windows`, затем «Back to start».
 
@@ -32,7 +32,7 @@ Owners don't fail on coffee. "It was pure economics: rents, expenses," said a Ma
 
 ▸ Страница 3 на проекторе: как Maya дошла до открытия (настоящие экраны). Говорит А.
 
-Maya typed: coffee near the subway. The game found her a real East Village storefront. She made every decision herself and saw her bet: a hundred forty-six orders a day to pay the bills, where the average shop on that corner sells one thirty-nine.
+Maya typed: coffee near the subway. The game found her a real East Village storefront. She made every decision herself and saw her bet: a hundred forty-six orders a day to pay the bills. A known shop on that corner sells one fifty, and a new one starts with half the crowd.
 
 ▸ Б переключает проектор на телефон Maya: город показа A5, вход по коду `/p/<код Maya>`, открыт `/biz`, город на паузе (`docs/pitch/RUNBOOK.md`). А открывает вкладку Manage и поворачивается к жюри. Если игра на публичном адресе (B05), А добавляет: “It runs on a public address — scan the code later.”
 
