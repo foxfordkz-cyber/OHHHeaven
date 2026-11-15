@@ -266,7 +266,7 @@ export function usePlaceOutlook(niche: NicheId, placeId: string | null, pack?: P
   return outlook;
 }
 
-/** 'With 18 seats, 3 baristas and 1 shift lead' — the setup a forecast is for. */
+/** 'With 18 seats, 3 baristas and 1 shift lead, at $8.50' — the setup a forecast is for: seats, team and price. */
 export function setupLabel(rec: OpenRecommendation, pack?: Pack): string {
   const unit = pack?.sizing.unitName ?? 'seat';
   const team = Object.entries(rec.orders.staff).filter(([, n]) => n > 0).map(([id, n]) => {
@@ -274,7 +274,8 @@ export function setupLabel(rec: OpenRecommendation, pack?: Pack): string {
     return `${n} ${name}${n === 1 ? '' : 's'}`;
   });
   const parts = [`${rec.size} ${unit}${rec.size === 1 ? '' : 's'}`, ...team];
-  return `With ${parts.length > 1 ? `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}` : parts[0]}`;
+  const who = parts.length > 1 ? `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}` : parts[0];
+  return `With ${who}, at ${formatMoney(rec.orders.price, { cents: true })}`;
 }
 
 // ───────────────────────── 4. the opening plan ─────────────────────────

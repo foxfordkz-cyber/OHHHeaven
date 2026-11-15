@@ -29,7 +29,8 @@ describe('place step: what the room earns', () => {
     const p = await screen.findByTestId('place-outlook');
     expect(p.textContent).toContain('$5,977/month');
     // the number is tied to the setup it assumes: the next step lets the player change it
-    expect(p.textContent).toMatch(/With 24 seats, 3 baristas and 1 shift lead: once the regulars know you/i);
+    expect(p.textContent).toContain('With 24 seats, 3 baristas and 1 shift lead, at $');
+    expect(p.textContent).toContain(': once the regulars know you');
     expect(p.className).toContain('profit');
   });
 
