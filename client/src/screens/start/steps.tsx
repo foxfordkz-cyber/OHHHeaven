@@ -173,7 +173,7 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
   const [showAll, setShowAll] = useState(false);
   const selected = catalog.places.find((p) => p.id === draft.placeId) ?? null;
   const list = showAll ? free : free.slice(0, 8);
-  const outlook = usePlaceOutlook(niche, selected?.id ?? null);
+  const outlook = usePlaceOutlook(niche, selected?.id ?? null, pack);
 
   return (
     <div className="stack-lg">
@@ -246,7 +246,7 @@ export function PlaceStep({ draft, update, catalog, view }: StepProps & { view: 
  * cards use (recommend_opening; its best kit's last line). Guests may ask it: no player is needed.
  */
 export interface PlaceOutlook { placeId: string; line: string; tone: 'profit' | 'loss' | '' }
-export function usePlaceOutlook(niche: NicheId, placeId: string | null): PlaceOutlook | null {
+export function usePlaceOutlook(niche: NicheId, placeId: string | null, pack?: Pack): PlaceOutlook | null {
   const { query } = useGame();
   const [outlook, setOutlook] = useState<PlaceOutlook | null>(null);
   useEffect(() => {
@@ -254,13 +254,27 @@ export function usePlaceOutlook(niche: NicheId, placeId: string | null): PlaceOu
     let alive = true;
     void query<OpenRecommendation[]>({ type: 'recommend_opening', niche, placeId }).then((recs) => {
       const best = recs?.[0];
-      const line = best?.why[best.why.length - 1];
+      const said = best?.why[best.why.length - 1];
+      // the number holds for this setup only: the team is the biggest bill, and the next step lets the player change it
+      // (docs/qa/BUGS.md #1: the forecast with three baristas lost money where two made money in play)
+      const line = best && said ? `${setupLabel(best, pack)}: ${said.charAt(0).toLowerCase()}${said.slice(1)}` : undefined;
       // a month that loses money is a loss; a good month after a costly first year is plain text; else profit
-      if (alive && line) setOutlook({ placeId, line, tone: /^(Even with|Projected loss)/.test(line) ? 'loss' : /a loss of/.test(line) ? '' : 'profit' });
+      if (alive && line) setOutlook({ placeId, line, tone: /^(Even with|Projected loss)/.test(said!) ? 'loss' : /a loss of/.test(said!) ? '' : 'profit' });
     });
     return () => { alive = false; };
-  }, [query, niche, placeId]);
+  }, [query, niche, placeId, pack]);
   return outlook;
+}
+
+/** 'With 18 seats, 3 baristas and 1 shift lead' — the setup a forecast is for. */
+export function setupLabel(rec: OpenRecommendation, pack?: Pack): string {
+  const unit = pack?.sizing.unitName ?? 'seat';
+  const team = Object.entries(rec.orders.staff).filter(([, n]) => n > 0).map(([id, n]) => {
+    const name = (pack?.staff.find((r) => r.id === id)?.name ?? id.replace(/_/g, ' ')).toLowerCase();
+    return `${n} ${name}${n === 1 ? '' : 's'}`;
+  });
+  const parts = [`${rec.size} ${unit}${rec.size === 1 ? '' : 's'}`, ...team];
+  return `With ${parts.length > 1 ? `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}` : parts[0]}`;
 }
 
 // ───────────────────────── 4. the opening plan ─────────────────────────
