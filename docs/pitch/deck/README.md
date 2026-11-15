@@ -9,7 +9,7 @@ F — full screen; L — the English version (`index.en.html`, made from the Rus
 the last page shows the game's address and a QR code to it.
 
 **Final state.** Every element's normal style is its final state; an animation only plays into it, on the page you
-enter, and is over within 1.5 s. The PDF (`?static`), print and `prefers-reduced-motion` show the final page at once.
+enter, and is over within 1.5 s (one tempo, `--k` in `live.css`; the build measures every page). The PDF (`?static`), print and `prefers-reduced-motion` show the final page at once.
 
 | File | What it is |
 |---|---|

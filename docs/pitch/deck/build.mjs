@@ -210,6 +210,25 @@ try {
     await en.close();
   }
 
+  // the live deck: each page must be complete within 1.5 s of entering it (CSS animations and number counters)
+  const nPages = await page.$$eval('section.page', (els) => els.length);
+  for (const file of [html, ...(existsSync(htmlEn) ? [htmlEn] : [])]) {
+    const live = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+    for (let n = 1; n <= nPages; n++) {
+      await live.goto(`${pathToFileURL(file).href}#${n}`);
+      await live.waitForTimeout(60);
+      const ms = await live.evaluate(() => Math.max(0,
+        ...document.getAnimations().map((a) => a.effect.getComputedTiming().endTime),
+        ...[...document.querySelectorAll('.is-active [data-count]')].map((e) => Number(e.dataset.delay ?? 0) * 780 + 900)));
+      if (ms > 1500) {
+        console.log(`${file === html ? '' : 'en '}page ${n}: animations end at ${Math.round(ms)} ms, over 1.5 s`);
+        bad = true;
+      }
+    }
+    await live.close();
+  }
+  console.log('live deck: checked that every page is complete within 1.5 s of entering it');
+
   // the same deck, served by the game at /deck/ (client/public/deck → client/dist/deck)
   if (!process.argv.includes('--no-publish')) {
     const { publish } = await import('./publish.mjs');

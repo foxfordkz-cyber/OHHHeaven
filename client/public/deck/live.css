@@ -114,7 +114,10 @@ html.live .deck-hint.is-hidden { opacity: 0; }
   font-weight: 500;
 }
 
-/* ---------- animations: only on the active page of the live deck ---------- */
+/* ---------- animations: only on the active page of the live deck ----------
+   One tempo for the whole deck: every delay and duration is multiplied by --k, so each page is complete
+   (readable as a whole) within 1.5 s of entering it. build checks it is. */
+:root { --k: 0.78; }
 @keyframes draw { from { stroke-dasharray: 1; stroke-dashoffset: 1; } to { stroke-dasharray: 1; stroke-dashoffset: 0; } }
 @keyframes drop { from { opacity: 0; transform: translateY(-70px); } 70% { opacity: 1; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
@@ -141,18 +144,18 @@ html.live .deck-hint.is-hidden { opacity: 0; }
 .ill .pulse { opacity: 0; }
 .leaf { opacity: 0; }
 
-html.live .is-active .draw { animation: draw var(--t, 0.9s) var(--ease, ease) var(--d, 0s) both; }
-html.live .is-active .drop { animation: drop var(--t, 0.55s) var(--ease, ease) var(--d, 0s) both; }
-html.live .is-active .fade-in { animation: fade-in var(--t, 0.5s) ease var(--d, 0s) both; }
-html.live .is-active .rise { animation: rise var(--t, 0.5s) var(--ease, ease) var(--d, 0s) both; }
-html.live .is-active .slide-in { animation: slide-in var(--t, 0.55s) var(--ease, ease) var(--d, 0s) both; }
-html.live .is-active .grow-y { animation: grow-y var(--t, 0.5s) var(--ease, ease) var(--d, 0s) both; }
-html.live .is-active .grow-x { animation: grow-x var(--t, 0.6s) var(--ease, ease) var(--d, 0s) both; }
-html.live .is-active .go-dark { animation: go-dark var(--t, 0.4s) ease var(--d, 0s) both; }
-html.live .is-active .pulse { animation: pulse 0.7s ease-out var(--d, 0s) 2 both; }
-html.live .is-active .leaf { animation: flip 0.6s ease-in var(--d, 0s) both; }
-html.live .is-active .pop { animation: pop var(--t, 0.4s) var(--ease, ease) var(--d, 0s) both; }
-html.live .is-active .light { animation: light 0.3s ease var(--d, 0s) both; }
+html.live .is-active .draw { animation: draw calc(var(--t, 0.9s) * var(--k)) var(--ease, ease) calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .drop { animation: drop calc(var(--t, 0.55s) * var(--k)) var(--ease, ease) calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .fade-in { animation: fade-in calc(var(--t, 0.5s) * var(--k)) ease calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .rise { animation: rise calc(var(--t, 0.5s) * var(--k)) var(--ease, ease) calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .slide-in { animation: slide-in calc(var(--t, 0.55s) * var(--k)) var(--ease, ease) calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .grow-y { animation: grow-y calc(var(--t, 0.5s) * var(--k)) var(--ease, ease) calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .grow-x { animation: grow-x calc(var(--t, 0.6s) * var(--k)) var(--ease, ease) calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .go-dark { animation: go-dark calc(var(--t, 0.4s) * var(--k)) ease calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .pulse { animation: pulse calc(0.7s * var(--k)) ease-out calc(var(--d, 0s) * var(--k)) 2 both; }
+html.live .is-active .leaf { animation: flip calc(0.6s * var(--k)) ease-in calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .pop { animation: pop calc(var(--t, 0.4s) * var(--k)) var(--ease, ease) calc(var(--d, 0s) * var(--k)) both; }
+html.live .is-active .light { animation: light calc(0.3s * var(--k)) ease calc(var(--d, 0s) * var(--k)) both; }
 
 /* the static view, print and reduced motion show every page in its final state */
 @media (prefers-reduced-motion: reduce) {

@@ -48,8 +48,8 @@ function runCounters(page) {
     const target = Number(el.dataset.count);
     const fmt = (v) => final.replace(/[\d,. ]*\d/, Math.round(v).toLocaleString('en-US'));
     const start = performance.now();
-    const delay = Number(el.dataset.delay ?? 0) * 1000;
-    const dur = 1000;
+    const delay = Number(el.dataset.delay ?? 0) * 1000 * 0.78; // same tempo as live.css --k
+    const dur = 900;
     el.textContent = fmt(0);
     const tick = (now) => {
       const t = Math.min(1, Math.max(0, (now - start - delay) / dur));
