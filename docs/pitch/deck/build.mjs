@@ -32,6 +32,19 @@ if (cash.length) {
   capture.story.late = near(270)?.cash;
   capture.story.lateDay = near(270)?.day;
 }
+// Чек на первой странице: строки личного плана из игры. Сумма строк обязана сойтись с итогом на том же экране.
+{
+  const text = capture.frames?.plan ?? '';
+  const names = [['Buying the business', 'Buying the business'], ['Lease deposit', 'Lease deposit'], ['Rent before the first sale', 'Rent before 1st sale'], ['Legal, hiring, insurance and other', 'Legal, hiring, other'], ['Opening order', 'Opening order'], ['Permits and licenses', 'Permits and licenses']];
+  const lines = names.map(([full, label]) => { const m = text.match(new RegExp(full.replace(/[.,]/g, '\\$&') + ' \\$([\\d,]+)')); return m ? { label, amount: Number(m[1].replace(/,/g, '')) } : null; });
+  const sum = lines.reduce((n, l) => n + (l?.amount ?? NaN), 0);
+  if (sum !== capture.plan?.moneyYouNeed || capture.plan.moneyYouNeed + capture.plan.reserve !== capture.plan.allIn) throw new Error(`чек не сходится: строки ${sum}, на экране ${capture.plan?.moneyYouNeed} + ${capture.plan?.reserve} = ${capture.plan?.allIn}`);
+  capture.plan.lines = lines;
+}
+if (capture.manage) capture.manage.delta = capture.manage.profitThen - capture.manage.profitNow;
+if (capture.rule?.href) capture.rule.hrefShort = capture.rule.href.replace(/^https?:\/\//, '');
+// Доля закрывшихся: из выживаемости по BLS (facts.json → survival, источник в docs/pitch/USER.md)
+const closed = facts.survival ? { year: 1 - facts.survival.year1, five: 1 - facts.survival.year5 } : null;
 const times = sh('git log --format=%ct').split('\n').map(Number);
 const t0 = Math.min(...times);
 const utc = (t) => new Date(t * 1000).toISOString().slice(0, 16).replace('T', ' ');
@@ -83,7 +96,7 @@ if (!gameUrl) console.warn('ВНИМАНИЕ: адрес игры не зада�
   await br.close();
   console.log(`метки на снимке города: ${capture.cityDots.length}`);
 }
-const data = { urlShort, urlNote, gameUrl, model: { ...model.outputs, inputs: Object.fromEntries(Object.entries(model.inputs).map(([k, v]) => [k, v.value])) }, capture, repo: repoFacts, facts, url, qr, builtAt: new Date().toISOString() };
+const data = { urlShort, urlNote, gameUrl, closed, model: { ...model.outputs, inputs: Object.fromEntries(Object.entries(model.inputs).map(([k, v]) => [k, v.value])) }, capture, repo: repoFacts, facts, url, qr, builtAt: new Date().toISOString() };
 writeFileSync(join(here, 'data.js'), `// Пишет build.mjs. Руками не править.\nwindow.DECK = ${JSON.stringify(data)};\n`);
 console.log(`data.js: модель, съёмка ${capture.commit} (${capture.world}), ${repoFacts.commits} коммитов за ${repoFacts.hours} ч`);
 if (args.includes('--data')) process.exit(0);
