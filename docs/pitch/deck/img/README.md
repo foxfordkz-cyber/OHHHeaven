@@ -2,7 +2,7 @@
 
 Only real screens of the running product, taken by `docs/pitch/deck/capture.mjs`. Nothing is drawn over them. Wide map screens are JPEG, phone screens PNG. The ad frames (`ad-*.png`) are one card of a real screen, cut out by the script around a piece of text; `capture.json` → `frames` keeps the text of each, so the ad lines on page 7 can be checked against them.
 
-Current set: the integration build of the night (`claude/cool-archimedes-blis6z`, commit 4a2cc1b, 23:25 UTC), the build the main branch is fast-forwarded to — `capture.json` says which.
+Current set: the integration build at the feature freeze (`claude/cool-archimedes-blis6z`, commit 30cdee6), the build the main branch is fast-forwarded to; `capture.json` keeps the commit and every number of the run.
 
 How they were made (the exact run is in `capture.json`: commit, city id, every step and the month report):
 
