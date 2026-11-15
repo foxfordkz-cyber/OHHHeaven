@@ -4,7 +4,8 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import type { OpenRecommendation } from '@ohh/shared/types';
 import { DevStore } from '../../app/dev';
-import { fixtureIdea, fixtureOpenRecommendations, ownerViewNew } from '../../app/fixtures';
+import { fixtureIdea, fixtureOpenRecommendations, fixturePacks, fixturePlaces, ownerViewNew } from '../../app/fixtures';
+import { reserveAt } from './steps';
 import { Start } from './Start';
 
 const withLine = (line: string): OpenRecommendation[] => fixtureOpenRecommendations.map((r, i) => (i === 0 ? { ...r, why: [...r.why, line] } : r));
@@ -39,5 +40,24 @@ describe('place step: what the room earns', () => {
     const p = await screen.findByTestId('place-outlook');
     expect(p.textContent).toContain('loses $475/month');
     expect(p.className).toContain('loss');
+  });
+});
+
+describe('place step: the reserve on opening day (lead request, 15 Nov)', () => {
+  it('a room that leaves less than three months of rent and wages is marked and the reserve line says so', async () => {
+    renderPlace(withLine('Once the regulars know you: $1,000/month. First year, with the wait and a slow start: $2,000'));
+    const line = await screen.findByTestId('place-reserve');
+    expect(line.textContent).toMatch(/three months of rent and wages/);
+  });
+
+  it('reserveAt: start money − opening − rent while waiting, against 3 × (rent + the smallest team)', () => {
+    const pack = fixturePacks.niches.cafe!;
+    const place = fixturePlaces.find((p) => p.id === 'p12')!;
+    const cheap = reserveAt(pack, place, 1_000);
+    const dear = reserveAt(pack, place, pack.startCapital - 1_000);
+    expect(cheap.left).toBeGreaterThan(dear.left);
+    expect(dear.enough).toBe(false);
+    expect(cheap.need).toBe(dear.need);
+    expect(cheap.enough).toBe(cheap.left >= cheap.need);
   });
 });

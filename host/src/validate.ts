@@ -11,6 +11,8 @@ const OFFICIAL_ACTIONS = new Set(['take_case', 'dismiss_case', 'answer_bribe']);
 const str = (x: unknown, max = 80): x is string => typeof x === 'string' && x.length > 0 && x.length <= max;
 const num = (x: unknown): x is number => typeof x === 'number' && Number.isFinite(x);
 const int = (x: unknown, lo: number, hi: number): x is number => num(x) && Number.isInteger(x) && x >= lo && x <= hi;
+/** Money in whole cents: 1500 and 1500.25 pass, 1500.255 does not (a loan or a stake is paid to the cent). */
+const cents = (x: unknown): x is number => num(x) && Math.abs(x * 100 - Math.round(x * 100)) < 1e-6;
 const bool = (x: unknown): x is boolean => typeof x === 'boolean';
 
 function ordersError(o: unknown): string | null {
@@ -32,8 +34,8 @@ function termsError(t: unknown): string | null {
   const d = t as DealTerms;
   switch (d.type) {
     case 'joint_purchase': case 'cross_promo': return int(d.months, 1, 12) ? null : 'months must be 1-12';
-    case 'loan': return num(d.amount) && d.amount > 0 && num(d.monthlyRatePct) && int(d.months, 1, 12) ? null : 'loan needs amount, monthlyRatePct and months';
-    case 'partnership': return num(d.amount) && d.amount > 0 && num(d.sharePct) ? null : 'partnership needs amount and sharePct';
+    case 'loan': return num(d.amount) && d.amount > 0 && num(d.monthlyRatePct) && int(d.months, 1, 12) ? (cents(d.amount) ? null : 'loan amount must be in whole cents') : 'loan needs amount, monthlyRatePct and months';
+    case 'partnership': return num(d.amount) && d.amount > 0 && num(d.sharePct) ? (cents(d.amount) ? null : 'partnership amount must be in whole cents') : 'partnership needs amount and sharePct';
     default: return 'Unknown deal type';
   }
 }
