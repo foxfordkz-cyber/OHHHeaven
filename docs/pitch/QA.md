@@ -94,6 +94,9 @@ At four percent of the US pool the model gives ninety-eight million; a hundred n
 **24. I opened a café with your recommended setup and it lost money. Is the game broken?**
 No — that is the first lesson: on real rent the first months lose money until the regulars come. In our recorded run the first month open lost about three thousand dollars, and by the end of the second the thirty-day forecast was positive.
 
+**25. Your storefront card says this address loses money, and two screens later the shop is in profit.**
+The card is a rough estimate shown before opening, and it runs more pessimistic than the engine, which computes the month from the street and from your own decisions. We list that mismatch in `docs/qa/BUGS.md` and treat the engine's number as the truth.
+
 ---
 
 ## Если спросят то, чего нет в списке
